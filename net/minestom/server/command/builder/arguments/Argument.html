@@ -106,9 +106,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>protected final boolean</code></div>
 <div class="col-second even-row-color"><code><a href="#allowSpace" class="member-name-link">allowSpace</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#useRemaining" class="member-name-link">useRemaining</a></code></div>
+<div class="col-first odd-row-color"><code>protected <a href="minecraft/SuggestionType.html" title="enum class in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#suggestionType" class="member-name-link">suggestionType</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected final boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#useRemaining" class="member-name-link">useRemaining</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -204,54 +207,49 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Maps this argument's output to another result.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="Argument.html" title="type parameter in Argument">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parse(java.lang.String)" class="member-name-link">parse</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @Nullable []</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nodeProperties()" class="member-name-link">nodeProperties</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="Argument.html" title="type parameter in Argument">T</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parse(java.lang.String)" class="member-name-link">parse</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be converted to <code>T</code></div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(net.minestom.server.command.builder.arguments.Argument)" class="member-name-link">parse</a><wbr>(@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parse(net.minestom.server.command.builder.arguments.Argument)" class="member-name-link">parse</a><wbr>(@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Parses an argument, using <a href="#getId()"><code>getId()</code></a> as the input</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)" class="member-name-link">processNodes</a><wbr>(@NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
- boolean&nbsp;executable)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Turns the argument into a list of nodes for command dispatching.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCallback(net.minestom.server.command.builder.ArgumentCallback)" class="member-name-link">setCallback</a><wbr>(@Nullable <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parser()" class="member-name-link">parser</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCallback(net.minestom.server.command.builder.ArgumentCallback)" class="member-name-link">setCallback</a><wbr>(@Nullable <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDefaultValue(java.util.function.Supplier)" class="member-name-link">setDefaultValue</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;defaultValue)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the default value supplier of the argument.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDefaultValue(T)" class="member-name-link">setDefaultValue</a><wbr>(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDefaultValue(java.util.function.Supplier)" class="member-name-link">setDefaultValue</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;defaultValue)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the default value supplier of the argument.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)" class="member-name-link">setSuggestionCallback</a><wbr>(@NotNull <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDefaultValue(T)" class="member-name-link">setDefaultValue</a><wbr>(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the default value supplier of the argument.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)" class="member-name-link">setSuggestionCallback</a><wbr>(@NotNull <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the suggestion callback (for dynamic tab completion) of this argument.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>protected static <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)" class="member-name-link">simpleArgumentNode</a><wbr>(@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
- boolean&nbsp;executable,
- boolean&nbsp;redirect,
- boolean&nbsp;suggestion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Builds an argument node.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#useRemaining()" class="member-name-link">useRemaining</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="minecraft/SuggestionType.html" title="enum class in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#suggestionType()" class="member-name-link">suggestionType</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#useRemaining()" class="member-name-link">useRemaining</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the argument always use all the remaining characters.</div>
 </div>
 </div>
@@ -281,6 +279,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="useRemaining">
 <h3>useRemaining</h3>
 <div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">useRemaining</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="suggestionType">
+<h3>suggestionType</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="minecraft/SuggestionType.html" title="enum class in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></span>&nbsp;<span class="element-name">suggestionType</span></div>
 </section>
 </li>
 </ul>
@@ -382,36 +386,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
-<h3>processNodes</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">processNodes</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
- boolean&nbsp;executable)</span></div>
-<div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
-<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
-</dl>
+<section class="detail" id="parser()">
+<h3>parser</h3>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">parser</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">
-<h3>simpleArgumentNode</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">protected static</span>&nbsp;<span class="return-type"><a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></span>&nbsp;<span class="element-name">simpleArgumentNode</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
- boolean&nbsp;executable,
- boolean&nbsp;redirect,
- boolean&nbsp;suggestion)</span></div>
-<div class="block">Builds an argument node.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>argument</code> - the argument</dd>
-<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
-<dt>Returns:</dt>
-<dd>the created <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play"><code>DeclareCommandsPacket.Node</code></a></dd>
-</dl>
+<section class="detail" id="nodeProperties()">
+<h3>nodeProperties</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte @Nullable []</span>&nbsp;<span class="element-name">nodeProperties</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="suggestionType()">
+<h3>suggestionType</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="minecraft/SuggestionType.html" title="enum class in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></span>&nbsp;<span class="element-name">suggestionType</span>()</div>
 </section>
 </li>
 <li>
