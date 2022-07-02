@@ -1,9 +1,7 @@
 package net.minestom.server.command.builder.arguments.number;
 
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,19 +65,19 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+    public String parser() {
+        return parserName;
+    }
 
-        argumentNode.parser = parserName;
-        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
+    @Override
+    public byte @Nullable [] nodeProperties() {
+        return BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 propertiesWriter.accept(packetWriter, getMin());
             if (this.hasMax())
                 propertiesWriter.accept(packetWriter, getMax());
         });
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     @NotNull
