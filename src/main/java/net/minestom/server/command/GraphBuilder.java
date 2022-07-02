@@ -24,18 +24,18 @@ final class GraphBuilder {
         return rootNode;
     }
 
-    public Node createLiteralNode(String name, boolean isCommand, boolean executable, @Nullable String[] aliases, @Nullable Integer redirectTo) {
+    public Node createLiteralNode(String name, boolean addToRoot, boolean executable, @Nullable String[] aliases, @Nullable Integer redirectTo) {
         if (aliases != null) {
-            final Node node = createLiteralNode(name, isCommand, executable, null, null);
+            final Node node = createLiteralNode(name, addToRoot, executable, null, null);
             for (String alias : aliases) {
-                createLiteralNode(alias, isCommand, false, null, node.getId());
+                createLiteralNode(alias, addToRoot, false, null, node.getId());
             }
             return node;
         } else {
             final Node literalNode = new Node(idSource.getAndIncrement(), name, redirectTo);
             literalNode.setExecutable(executable);
             nodes.add(literalNode);
-            if (isCommand) root.addChild(literalNode);
+            if (addToRoot) root.addChild(literalNode);
             return literalNode;
         }
     }
@@ -52,7 +52,7 @@ final class GraphBuilder {
             nodes = argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
         } else {
             if (argument instanceof ArgumentCommand) {
-                overrideRedirectTarget = root.getId();
+                return new Node[]{createLiteralNode(argument.getId(), false, false, null, 0)};
             }
             final int id = idSource.getAndIncrement();
             nodes = new Node[] {argument instanceof ArgumentLiteral ? new Node(id, argument.getId(), null) : new Node(id, argument)};
