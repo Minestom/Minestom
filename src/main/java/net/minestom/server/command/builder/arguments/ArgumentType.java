@@ -31,6 +31,21 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentGroup
+     */
+    public static ArgumentGroup Group(@NotNull String id, @NotNull Argument<?>... arguments) {
+        return new ArgumentGroup(id, arguments);
+    }
+
+    /**
+     * @see ArgumentLoop
+     */
+    @SafeVarargs
+    public static <T> ArgumentLoop<T> Loop(@NotNull String id, @NotNull Argument<T>... arguments) {
+        return new ArgumentLoop<>(id, arguments);
+    }
+
+    /**
      * @see ArgumentBoolean
      */
     public static ArgumentBoolean Boolean(@NotNull String id) {
