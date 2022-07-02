@@ -30,7 +30,7 @@ public class ArgumentStringArray extends Argument<String[]> {
     }
 
     @Override
-    public byte @Nullable [] getProperties() {
+    public byte @Nullable [] nodeProperties() {
         return BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeVarInt(2); // Greedy phrase
         });

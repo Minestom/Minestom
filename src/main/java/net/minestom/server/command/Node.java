@@ -1,11 +1,11 @@
-package net.minestom.server.command.builder.graph;
+package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 
-public final class Node {
+final class Node {
     private final int id;
     private final IntSet children;
     private final DeclareCommandsPacket.NodeType type;
@@ -76,7 +76,7 @@ public final class Node {
             node.redirectedNode = redirectTarget;
         }
         if (type == DeclareCommandsPacket.NodeType.ARGUMENT) {
-            node.properties = argument.getProperties();
+            node.properties = argument.nodeProperties();
             node.parser = argument.parser();
             if (argument.hasSuggestion()) {
                 //noinspection ConstantConditions

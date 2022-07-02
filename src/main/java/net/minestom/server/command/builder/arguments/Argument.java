@@ -93,7 +93,7 @@ public abstract class Argument<T> {
 
     public abstract String parser();
 
-    public byte @Nullable [] getProperties() {
+    public byte @Nullable [] nodeProperties() {
         return null;
     }
 

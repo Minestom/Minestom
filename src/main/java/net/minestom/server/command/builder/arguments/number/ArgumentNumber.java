@@ -70,7 +70,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public byte @Nullable [] getProperties() {
+    public byte @Nullable [] nodeProperties() {
         return BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())

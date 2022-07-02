@@ -6,8 +6,6 @@ import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.graph.GraphBuilder;
-import net.minestom.server.command.builder.graph.Node;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;

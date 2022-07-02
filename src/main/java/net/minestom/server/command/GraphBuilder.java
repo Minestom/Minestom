@@ -1,4 +1,4 @@
-package net.minestom.server.command.builder.graph;
+package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class GraphBuilder {
+final class GraphBuilder {
     private final AtomicInteger idSource = new AtomicInteger();
     private final ObjectSet<Node> nodes = new ObjectOpenHashSet<>();
     private final ObjectSet<Supplier<Boolean>> redirectWaitList = new ObjectOpenHashSet<>();

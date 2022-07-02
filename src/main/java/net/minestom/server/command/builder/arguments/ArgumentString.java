@@ -35,7 +35,7 @@ public class ArgumentString extends Argument<String> {
     }
 
     @Override
-    public byte @Nullable [] getProperties() {
+    public byte @Nullable [] nodeProperties() {
         return BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeVarInt(1); // Quotable phrase
         });

@@ -12,7 +12,6 @@ public class RedirectTestCommand extends Command {
         final ArgumentLiteral b = new ArgumentLiteral("b");
         final ArgumentLiteral c = new ArgumentLiteral("c");
         final ArgumentLiteral d = new ArgumentLiteral("d");
-//        d.setRedirectTarget(new String[] {"redirect", "a"});
 
         addSyntax(((sender, context) -> {}), new ArgumentLoop<>("test", a,b,c,d));
     }

@@ -76,7 +76,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     @Override
-    public byte @Nullable [] getProperties() {
+    public byte @Nullable [] nodeProperties() {
         return BinaryWriter.makeArray(packetWriter -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
