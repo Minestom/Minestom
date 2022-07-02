@@ -1,8 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.item.Enchantment;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,16 +13,13 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
     }
 
     @Override
-    public Enchantment getRegistry(@NotNull String value) {
-        return Enchantment.fromNamespaceId(value);
+    public String parser() {
+        return "minecraft:item_enchantment";
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:item_enchantment";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    public Enchantment getRegistry(@NotNull String value) {
+        return Enchantment.fromNamespaceId(value);
     }
 
     @Override
