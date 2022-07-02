@@ -65,7 +65,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return parserName;
     }
 

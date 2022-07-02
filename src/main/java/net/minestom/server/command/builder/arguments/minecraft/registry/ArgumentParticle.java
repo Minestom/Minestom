@@ -13,7 +13,7 @@ public class ArgumentParticle extends ArgumentRegistry<Particle> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:particle";
     }
 

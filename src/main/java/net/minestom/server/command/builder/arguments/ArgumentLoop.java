@@ -61,7 +61,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return null;
     }
 }

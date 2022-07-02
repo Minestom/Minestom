@@ -39,7 +39,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return null;
     }
 

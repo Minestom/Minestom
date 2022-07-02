@@ -77,7 +77,7 @@ public final class Node {
         }
         if (type == DeclareCommandsPacket.NodeType.ARGUMENT) {
             node.properties = argument.getProperties();
-            node.parser = argument.getParser();
+            node.parser = argument.parser();
             if (argument.hasSuggestion()) {
                 //noinspection ConstantConditions
                 node.suggestionsType = argument.suggestionType().getIdentifier();

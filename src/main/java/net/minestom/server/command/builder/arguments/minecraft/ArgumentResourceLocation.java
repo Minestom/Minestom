@@ -23,7 +23,7 @@ public class ArgumentResourceLocation extends Argument<String> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:resource_location";
     }
 

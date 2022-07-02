@@ -26,7 +26,7 @@ public class ArgumentComponent extends Argument<Component> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:component";
     }
 

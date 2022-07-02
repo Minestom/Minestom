@@ -92,7 +92,7 @@ public abstract class Argument<T> {
      */
     public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
 
-    public abstract String getParser();
+    public abstract String parser();
 
     public byte @Nullable [] getProperties() {
         return null;
@@ -311,8 +311,8 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public String getParser() {
-            return argument.getParser();
+        public String parser() {
+            return argument.parser();
         }
     }
 
@@ -340,8 +340,8 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public String getParser() {
-            return argument.getParser();
+        public String parser() {
+            return argument.parser();
         }
     }
 }

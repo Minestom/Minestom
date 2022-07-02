@@ -28,7 +28,7 @@ public class ArgumentBoolean extends Argument<Boolean> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "brigadier:bool";
     }
     @Override

@@ -68,7 +68,7 @@ public class ArgumentWord extends Argument<String> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "brigadier:string";
     }
 

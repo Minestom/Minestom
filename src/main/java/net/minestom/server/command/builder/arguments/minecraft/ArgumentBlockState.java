@@ -23,7 +23,7 @@ public class ArgumentBlockState extends Argument<Block> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:block_state";
     }
 

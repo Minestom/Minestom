@@ -13,7 +13,7 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:item_enchantment";
     }
 

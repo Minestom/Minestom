@@ -39,7 +39,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:nbt_compound_tag";
     }
 

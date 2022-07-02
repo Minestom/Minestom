@@ -37,7 +37,7 @@ public class ArgumentGroup extends Argument<CommandContext> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return null;
     }
 

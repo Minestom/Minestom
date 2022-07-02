@@ -17,7 +17,7 @@ public class ArgumentRelativeVec3 extends ArgumentRelativeVec {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:vec3";
     }
 

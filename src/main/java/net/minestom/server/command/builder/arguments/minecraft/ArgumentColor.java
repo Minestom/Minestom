@@ -39,7 +39,7 @@ public class ArgumentColor extends Argument<Style> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:color";
     }
 

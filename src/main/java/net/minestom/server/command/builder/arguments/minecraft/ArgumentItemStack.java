@@ -35,7 +35,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:item_stack";
     }
 

@@ -36,7 +36,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return null;
     }
 

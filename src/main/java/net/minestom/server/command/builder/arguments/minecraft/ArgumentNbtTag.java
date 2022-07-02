@@ -35,7 +35,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:nbt_tag";
     }
 

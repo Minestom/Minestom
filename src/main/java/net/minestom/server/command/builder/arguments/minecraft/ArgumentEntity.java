@@ -71,7 +71,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:entity";
     }
 

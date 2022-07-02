@@ -15,7 +15,7 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:resource_location";
     }
 

@@ -16,7 +16,7 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelativeVec {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:block_pos";
     }
 

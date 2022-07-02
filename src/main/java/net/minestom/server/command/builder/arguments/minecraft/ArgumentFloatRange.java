@@ -14,7 +14,7 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange, Float> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:float_range";
     }
 

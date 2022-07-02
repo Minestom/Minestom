@@ -13,7 +13,7 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:mob_effect";
     }
 

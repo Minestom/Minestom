@@ -60,7 +60,7 @@ public class ArgumentTime extends Argument<Duration> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:time";
     }
 

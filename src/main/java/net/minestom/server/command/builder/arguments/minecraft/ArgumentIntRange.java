@@ -14,7 +14,7 @@ public class ArgumentIntRange extends ArgumentRange<IntRange, Integer> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:int_range";
     }
 

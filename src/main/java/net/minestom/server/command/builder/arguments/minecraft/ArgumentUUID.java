@@ -25,7 +25,7 @@ public class ArgumentUUID extends Argument<UUID> {
     }
 
     @Override
-    public String getParser() {
+    public String parser() {
         return "minecraft:uuid";
     }
 
