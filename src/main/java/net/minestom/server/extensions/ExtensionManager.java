@@ -93,7 +93,7 @@ public class ExtensionManager {
 
     @Nullable
     public Extension getExtension(@NotNull String name) {
-        return extensions.get(name.toLowerCase());
+        return extensions.get(name.toLowerCase(Locale.ROOT));
     }
 
     public boolean hasExtension(@NotNull String name) {
@@ -272,7 +272,7 @@ public class ExtensionManager {
 
         ExtensionClassLoader loader = discoveredExtension.getClassLoader();
 
-        if (extensions.containsKey(extensionName.toLowerCase())) {
+        if (extensions.containsKey(extensionName.toLowerCase(Locale.ROOT))) {
             LOGGER.error("An extension called '{}' has already been registered.", extensionName);
             return null;
         }
@@ -364,7 +364,7 @@ public class ExtensionManager {
 
         // add dependents to pre-existing extensions, so that they can easily be found during reloading
         for (String dependencyName : discoveredExtension.getDependencies()) {
-            Extension dependency = extensions.get(dependencyName.toLowerCase());
+            Extension dependency = extensions.get(dependencyName.toLowerCase(Locale.ROOT));
             if (dependency == null) {
                 LOGGER.warn("Dependency {} of {} is null? This means the extension has been loaded without its dependency, which could cause issues later.", dependencyName, discoveredExtension.getName());
             } else {
@@ -373,7 +373,7 @@ public class ExtensionManager {
         }
 
         // add to a linked hash map, as they preserve order
-        extensions.put(extensionName.toLowerCase(), extension);
+        extensions.put(extensionName.toLowerCase(Locale.ROOT), extension);
 
         return extension;
     }
@@ -481,7 +481,7 @@ public class ExtensionManager {
 
             // go through all the discovered extensions and assign their name in a map.
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-                extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
+                extensionMap.put(discoveredExtension.getName().toLowerCase(Locale.ROOT), discoveredExtension);
             }
 
             allExtensions:
@@ -493,14 +493,14 @@ public class ExtensionManager {
                 // Map the dependencies into DiscoveredExtensions.
                 for (String dependencyName : discoveredExtension.getDependencies()) {
 
-                    DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
+                    DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase(Locale.ROOT));
                     // Specifies an extension we don't have.
                     if (dependencyExtension == null) {
 
                         // attempt to see if it is not already loaded (happens with dynamic (re)loading)
-                        if (extensions.containsKey(dependencyName.toLowerCase())) {
+                        if (extensions.containsKey(dependencyName.toLowerCase(Locale.ROOT))) {
 
-                            dependencies.add(extensions.get(dependencyName.toLowerCase()).getOrigin());
+                            dependencies.add(extensions.get(dependencyName.toLowerCase(Locale.ROOT)).getOrigin());
                             continue; // Go to the next loop in this dependency loop, this iteration is done.
 
                         } else {
@@ -581,7 +581,7 @@ public class ExtensionManager {
         return
                 extensions.isEmpty() // Don't waste CPU on checking an empty array
                         // Make sure the internal extensions list contains all of these.
-                        || extensions.stream().allMatch(ext -> this.extensions.containsKey(ext.getName().toLowerCase()));
+                        || extensions.stream().allMatch(ext -> this.extensions.containsKey(ext.getName().toLowerCase(Locale.ROOT)));
     }
 
     private void loadDependencies(@NotNull List<DiscoveredExtension> extensions) {
@@ -705,7 +705,7 @@ public class ExtensionManager {
     }
 
     private void unloadExtension(@NotNull String extensionName) {
-        Extension ext = extensions.get(extensionName.toLowerCase());
+        Extension ext = extensions.get(extensionName.toLowerCase(Locale.ROOT));
 
         if (ext == null) {
             throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
@@ -714,7 +714,7 @@ public class ExtensionManager {
         List<String> dependents = new LinkedList<>(ext.getDependents()); // copy dependents list
 
         for (String dependentID : dependents) {
-            Extension dependentExt = extensions.get(dependentID.toLowerCase());
+            Extension dependentExt = extensions.get(dependentID.toLowerCase(Locale.ROOT));
             if ( dependentExt != null ) { // check if extension isn't already unloaded.
                 LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
                 unload(dependentExt);
@@ -736,7 +736,7 @@ public class ExtensionManager {
         ext.postTerminate();
 
         // remove from loaded extensions
-        String id = ext.getOrigin().getName().toLowerCase();
+        String id = ext.getOrigin().getName().toLowerCase(Locale.ROOT);
         extensions.remove(id);
 
         // cleanup classloader

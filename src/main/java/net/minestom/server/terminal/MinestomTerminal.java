@@ -18,6 +18,7 @@ import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class MinestomTerminal {
     private static final String PROMPT = "> ";
@@ -77,11 +78,11 @@ public class MinestomTerminal {
             final var commandManager = MinecraftServer.getCommandManager();
             final var consoleSender = commandManager.getConsoleSender();
             if (line.wordIndex() == 0) {
-                final String commandString = line.word().toLowerCase();
+                final String commandString = line.word().toLowerCase(Locale.ROOT);
                 candidates.addAll(
                         commandManager.getDispatcher().getCommands().stream()
                                 .map(Command::getName)
-                                .filter(name -> commandString.isBlank() || name.toLowerCase().startsWith(commandString))
+                                .filter(name -> commandString.isBlank() || name.toLowerCase(Locale.ROOT).startsWith(commandString))
                                 .map(Candidate::new)
                                 .toList()
                 );

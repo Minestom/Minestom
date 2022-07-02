@@ -96,8 +96,8 @@ public class StairsPlacementRule extends BlockPlacementRule {
             Block state = instance.getBlock(blockPosition);
             try {
                 // TODO: Get properties from state
-//                Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase());
-//                Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase());
+//                Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase(Locale.ROOT));
+//                Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase(Locale.ROOT));
 //                return Pair.of(shape, facing);
                 return Pair.of(null, null);
             } catch (Exception ex) {

@@ -15,6 +15,8 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 /**
  * Manager used to register {@link Command commands}.
  * <p>
@@ -79,7 +81,7 @@ public final class CommandManager {
      * @return true if the command does exist
      */
     public boolean commandExists(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
+        commandName = commandName.toLowerCase(Locale.ROOT);
         return dispatcher.findCommand(commandName) != null;
     }
 

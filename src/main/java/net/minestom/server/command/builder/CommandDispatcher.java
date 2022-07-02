@@ -36,13 +36,13 @@ public class CommandDispatcher {
      * @param command the command to register
      */
     public void register(@NotNull Command command) {
-        this.commandMap.put(command.getName().toLowerCase(), command);
+        this.commandMap.put(command.getName().toLowerCase(Locale.ROOT), command);
 
         // Register aliases
         final String[] aliases = command.getAliases();
         if (aliases != null) {
             for (String alias : aliases) {
-                this.commandMap.put(alias.toLowerCase(), command);
+                this.commandMap.put(alias.toLowerCase(Locale.ROOT), command);
             }
         }
 
@@ -50,12 +50,12 @@ public class CommandDispatcher {
     }
 
     public void unregister(@NotNull Command command) {
-        this.commandMap.remove(command.getName().toLowerCase());
+        this.commandMap.remove(command.getName().toLowerCase(Locale.ROOT));
 
         final String[] aliases = command.getAliases();
         if (aliases != null) {
             for (String alias : aliases) {
-                this.commandMap.remove(alias.toLowerCase());
+                this.commandMap.remove(alias.toLowerCase(Locale.ROOT));
             }
         }
 
@@ -76,7 +76,7 @@ public class CommandDispatcher {
      * @return the {@link Command} associated with the name, null if not any
      */
     public @Nullable Command findCommand(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
+        commandName = commandName.toLowerCase(Locale.ROOT);
         return commandMap.getOrDefault(commandName, null);
     }
 

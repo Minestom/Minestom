@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -220,7 +221,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 final boolean include = !value.startsWith("!");
                 final String gameModeName = include ? value : value.substring(1);
                 try {
-                    final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase());
+                    final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase(Locale.ROOT));
                     entityFinder.setGameMode(gameMode, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
                 } catch (IllegalArgumentException e) {
                     throw new ArgumentSyntaxException("Invalid entity game mode", input, INVALID_ARGUMENT_VALUE);
@@ -241,7 +242,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "sort":
                 try {
-                    EntityFinder.EntitySort entitySort = EntityFinder.EntitySort.valueOf(value.toUpperCase());
+                    EntityFinder.EntitySort entitySort = EntityFinder.EntitySort.valueOf(value.toUpperCase(Locale.ROOT));
                     entityFinder.setEntitySort(entitySort);
                 } catch (IllegalArgumentException e) {
                     throw new ArgumentSyntaxException("Invalid entity sort", input, INVALID_ARGUMENT_VALUE);

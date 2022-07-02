@@ -67,7 +67,7 @@ public final class ItemSerializers {
             // Find slot, default to the main hand if the nbt tag is invalid
             AttributeSlot attributeSlot;
             try {
-                attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
+                attributeSlot = AttributeSlot.valueOf(slot.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException e) {
                 attributeSlot = AttributeSlot.MAINHAND;
             }

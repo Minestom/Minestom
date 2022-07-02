@@ -2,6 +2,7 @@ package net.minestom.server.map;
 
 import net.minestom.server.MinecraftServer;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -87,7 +88,7 @@ public enum MapColors {
             strategy = ColorMappingStrategy.LAZY;
         } else {
             try {
-                strategy = ColorMappingStrategy.valueOf(strategyStr.toUpperCase());
+                strategy = ColorMappingStrategy.valueOf(strategyStr.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException e) {
                 System.err.println("Unknown color mapping strategy: " + strategyStr);
                 System.err.println("Defaulting to LAZY.");

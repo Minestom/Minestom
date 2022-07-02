@@ -10,6 +10,8 @@ import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.Player;
 
+import java.util.Locale;
+
 public class HealthCommand extends Command {
 
     public HealthCommand() {
@@ -61,7 +63,7 @@ public class HealthCommand extends Command {
         final String mode = context.get("mode");
         final int value = context.get("value");
 
-        switch (mode.toLowerCase()) {
+        switch (mode.toLowerCase(Locale.ROOT)) {
             case "set":
                 player.setHealth(value);
                 break;
