@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -45,29 +44,28 @@ public final class GraphBuilder {
 
     public Node[] createArgumentNode(Argument<?> argument, boolean executable) {
         final Node[] nodes;
-        boolean onlyApplyRedirectToLast = false;
         Integer overrideRedirectTarget = null;
         if (argument instanceof ArgumentEnum<?> argumentEnum) {
             nodes = Arrays.stream(argumentEnum.entries()).map(x -> createLiteralNode(x, false, executable, null, null)).toArray(Node[]::new);
         } else if (argument instanceof ArgumentGroup argumentGroup) {
             nodes = Arrays.stream(argumentGroup.group()).map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
-            onlyApplyRedirectToLast = true;
         } else if (argument instanceof ArgumentLoop<?> argumentLoop) {
             overrideRedirectTarget = idSource.get()-1;
             nodes = argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
-        } else  {
+        } else {
+            if (argument instanceof ArgumentCommand) {
+                overrideRedirectTarget = root.getId();
+            }
             final int id = idSource.getAndIncrement();
             nodes = new Node[] {argument instanceof ArgumentLiteral ? new Node(id, argument.getId(), null) : new Node(id, argument)};
         }
-        for (int i = 0; i < nodes.length; i++) {
-            Node node = nodes[i];
+        for (Node node : nodes) {
             node.setExecutable(executable);
             this.nodes.add(node);
-            String[] finalRedirectTarget = argument.getRedirectTarget();
             Integer finalOverrideRedirectTarget = overrideRedirectTarget;
-            if ((finalOverrideRedirectTarget != null || finalRedirectTarget != null) && (!onlyApplyRedirectToLast || i + 1 == nodes.length)) {
+            if (finalOverrideRedirectTarget != null) {
                 redirectWaitList.add(() -> {
-                    int target = Objects.requireNonNullElseGet(finalOverrideRedirectTarget, () -> tryResolveId(finalRedirectTarget));
+                    int target = finalOverrideRedirectTarget;
                     if (target != -1) {
                         node.setRedirectTarget(target);
                         return true;

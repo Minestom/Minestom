@@ -35,7 +35,6 @@ public abstract class Argument<T> {
 
     private SuggestionCallback suggestionCallback;
     protected SuggestionType suggestionType;
-    protected String[] redirectTarget;
 
     /**
      * Creates a new argument.
@@ -96,14 +95,6 @@ public abstract class Argument<T> {
 
     public byte @Nullable [] getProperties() {
         return null;
-    }
-
-    public void setRedirectTarget(String[] redirectTarget) {
-        this.redirectTarget = redirectTarget;
-    }
-
-    public String @Nullable [] getRedirectTarget() {
-        return redirectTarget;
     }
 
     public @Nullable SuggestionType suggestionType() {

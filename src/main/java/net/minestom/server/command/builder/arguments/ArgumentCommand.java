@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ArgumentCommand extends Argument<CommandResult> {
 
@@ -38,11 +37,6 @@ public class ArgumentCommand extends Argument<CommandResult> {
     @Override
     public String parser() {
         return null;
-    }
-
-    @Override
-    public String @Nullable [] getRedirectTarget() {
-        return new String[0];
     }
 
     public boolean isOnlyCorrect() {

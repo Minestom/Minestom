@@ -1,14 +1,13 @@
 package net.minestom.demo.commands;
 
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
+import net.minestom.server.command.builder.arguments.ArgumentCommand;
 
 public class ExecuteCommand extends Command {
 
     public ExecuteCommand() {
         super("execute");
-        ArgumentLiteral run = new ArgumentLiteral("run");
-        run.setRedirectTarget(new String[0]);
+        ArgumentCommand run = new ArgumentCommand("run");
 
         addSyntax(((sender, context) -> {}), run);
     }
