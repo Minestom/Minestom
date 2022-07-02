@@ -1,5 +1,7 @@
 package net.minestom.server.utils.math;
 
+import java.util.Objects;
+
 /**
  * Represents the base for any data type that is numeric.
  *
@@ -74,4 +76,18 @@ public abstract class Range<T> {
    *     otherwise {@code false}.
    */
   public abstract boolean isInRange(T value);
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Range<?> range = (Range<?>) o;
+    return Objects.equals(minimum, range.minimum) && Objects.equals(maximum, range.maximum);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(minimum, maximum);
+  }
+
 }

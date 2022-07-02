@@ -56,7 +56,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
                     if (type == null) {
                         type = modifierChar == LOCAL_CHAR ? LOCAL : RELATIVE;
-                    } else if (type != (modifierChar == LOCAL_CHAR ? LOCAL : RELATIVE)) {
+                    } else if ((type == LOCAL) != (modifierChar == LOCAL_CHAR)) {
                         throw new ArgumentSyntaxException("Cannot mix world & local coordinates (everything must either use ^ or not)", input, MIXED_TYPE_ERROR);
                     }
 
