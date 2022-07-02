@@ -4,6 +4,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.UnaryOperator;
 
@@ -43,8 +44,8 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         return null;
     }
 
-    public String[] entries() {
-        return Arrays.stream(values).map(x -> format.formatter.apply(x.name())).toArray(String[]::new);
+    public List<String> entries() {
+        return Arrays.stream(values).map(x -> format.formatter.apply(x.name())).toList();
     }
 
     public enum Format {

@@ -41,7 +41,7 @@ public class ArgumentGroup extends Argument<CommandContext> {
         return null;
     }
 
-    public Argument<?>[] group() {
-        return group;
+    public List<Argument<?>> group() {
+        return List.of(group);
     }
 }

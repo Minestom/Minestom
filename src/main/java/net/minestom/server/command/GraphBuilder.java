@@ -6,12 +6,10 @@ import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 final class GraphBuilder {
@@ -46,9 +44,9 @@ final class GraphBuilder {
         final Node[] nodes;
         Integer overrideRedirectTarget = null;
         if (argument instanceof ArgumentEnum<?> argumentEnum) {
-            nodes = Arrays.stream(argumentEnum.entries()).map(x -> createLiteralNode(x, false, executable, null, null)).toArray(Node[]::new);
+            nodes = argumentEnum.entries().stream().map(x -> createLiteralNode(x, false, executable, null, null)).toArray(Node[]::new);
         } else if (argument instanceof ArgumentGroup argumentGroup) {
-            nodes = Arrays.stream(argumentGroup.group()).map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
+            nodes = argumentGroup.group().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
         } else if (argument instanceof ArgumentLoop<?> argumentLoop) {
             overrideRedirectTarget = idSource.get()-1;
             nodes = argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
@@ -105,6 +103,6 @@ final class GraphBuilder {
     public DeclareCommandsPacket createCommandPacket() {
         finalizeStructure();
         return new DeclareCommandsPacket(nodes.stream().sorted(Comparator.comparingInt(Node::getId))
-                .map(Node::getPacketNode).collect(Collectors.toList()), root.getId());
+                .map(Node::getPacketNode).toList(), root.getId());
     }
 }
