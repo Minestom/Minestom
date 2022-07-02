@@ -10,7 +10,7 @@ import net.minestom.server.utils.math.FloatRange;
 public class ArgumentFloatRange extends ArgumentRange<FloatRange, Float> {
 
     public ArgumentFloatRange(String id) {
-        super(id, "minecraft:float_range", Float.MIN_VALUE, Float.MAX_VALUE, Float::parseFloat, FloatRange::new);
+        super(id, "minecraft:float_range", -Float.MAX_VALUE, Float.MAX_VALUE, Float::parseFloat, FloatRange::new);
     }
 
     @Override
