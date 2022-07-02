@@ -3,12 +3,11 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ArgumentCommand extends Argument<CommandResult> {
 
@@ -37,22 +36,13 @@ public class ArgumentCommand extends Argument<CommandResult> {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLatestNodes();
+    public String getParser() {
+        return null;
+    }
 
-        if (!shortcut.isEmpty()) {
-            nodeMaker.request(shortcut, (id) -> {
-                for (DeclareCommandsPacket.Node node : lastNodes) {
-                    node.flags |= 0x08; // Redirection mask
-                    node.redirectedNode = id;
-                }
-            });
-        } else {
-            for (DeclareCommandsPacket.Node node : lastNodes) {
-                node.flags |= 0x08; // Redirection mask
-                node.redirectedNode = 0; // Redirect to root
-            }
-        }
+    @Override
+    public String @Nullable [] getRedirectTarget() {
+        return new String[0];
     }
 
     public boolean isOnlyCorrect() {

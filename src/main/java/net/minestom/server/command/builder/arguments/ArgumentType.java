@@ -1,7 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -25,21 +28,6 @@ public class ArgumentType {
      */
     public static ArgumentLiteral Literal(@NotNull String id) {
         return new ArgumentLiteral(id);
-    }
-
-    /**
-     * @see ArgumentGroup
-     */
-    public static ArgumentGroup Group(@NotNull String id, @NotNull Argument<?>... arguments) {
-        return new ArgumentGroup(id, arguments);
-    }
-
-    /**
-     * @see ArgumentLoop
-     */
-    @SafeVarargs
-    public static <T> ArgumentLoop<T> Loop(@NotNull String id, @NotNull Argument<T>... arguments) {
-        return new ArgumentLoop<>(id, arguments);
     }
 
     /**
