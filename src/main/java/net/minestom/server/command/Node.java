@@ -2,12 +2,14 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.ints.IntSets;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 
 final class Node {
     private final int id;
-    private final IntSet children;
+    private final IntSet children = new IntOpenHashSet();
+    private final IntSet childrenView = IntSets.unmodifiable(children);
     private final DeclareCommandsPacket.NodeType type;
     private String name;
     private Integer redirectTarget;
@@ -16,7 +18,6 @@ final class Node {
 
     Node(int id, DeclareCommandsPacket.NodeType type) {
         this.id = id;
-        this.children = new IntOpenHashSet();
         this.type = type;
     }
 
@@ -59,11 +60,27 @@ final class Node {
     }
 
     public boolean isParentOf(Node node) {
-        return children.contains(node.getId());
+        return children.contains(node.id());
     }
 
-    public int getId() {
+    public int id() {
         return id;
+    }
+
+    public DeclareCommandsPacket.NodeType type() {
+        return type;
+    }
+
+    public IntSet children() {
+        return childrenView;
+    }
+
+    public Integer redirectTarget() {
+        return redirectTarget;
+    }
+
+    public boolean isRoot() {
+        return type == DeclareCommandsPacket.NodeType.ROOT;
     }
 
     public DeclareCommandsPacket.Node getPacketNode() {
