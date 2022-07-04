@@ -3,9 +3,6 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
-import net.minestom.server.command.builder.CommandSyntax;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -160,43 +157,6 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
-        final GraphBuilder factory = new GraphBuilder();
-
-        for (Command command : this.dispatcher.getCommands()) {
-            // Check if user can use the command
-            final CommandCondition condition = command.getCondition();
-            if (condition != null && !condition.canUse(player, null)) continue;
-
-            // Add command to the graph
-            // Create the command's root node
-            final Node cmdNode = factory.createLiteralNode(command.getName(), true,
-                    command.getDefaultExecutor() != null, command.getAliases(), null);
-
-            // Add syntax to the command
-            for (CommandSyntax syntax : command.getSyntaxes()) {
-                boolean executable = false;
-                Node[] lastArgNodes = new Node[] {cmdNode}; // First arg links to cmd root
-                @NotNull Argument<?>[] arguments = syntax.getArguments();
-                for (int i = 0; i < arguments.length; i++) {
-                    Argument<?> argument = arguments[i];
-                    // Determine if command is executable here
-                    if (executable && argument.getDefaultValue() == null) {
-                        // Optional arg was followed by a non-optional
-                        throw new RuntimeException("");//todo exception
-                    }
-                    if (!executable && i < arguments.length-1 && arguments[i+1].getDefaultValue() != null || i+1 == arguments.length) {
-                        executable = true;
-                    }
-                    // Append current node to previous
-                    final Node[] argNodes = factory.createArgumentNode(argument, executable);
-                    for (Node lastArgNode : lastArgNodes) {
-                        lastArgNode.addChild(argNodes);
-                    }
-                    lastArgNodes = argNodes;
-                }
-            }
-        }
-
-        return factory.createCommandPacket();
+        return GraphBuilder.forPlayer(this.dispatcher.getCommands(), player).createPacket();
     }
 }
