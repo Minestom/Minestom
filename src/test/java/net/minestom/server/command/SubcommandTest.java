@@ -1,12 +1,14 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.exception.IllegalCommandStructureException;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SubcommandTest {
 
@@ -64,6 +66,18 @@ public class SubcommandTest {
         assertTrue(childConditionTriggered.get());
         assertFalse(parentExecuted.get());
         assertFalse(childExecuted.get());
+    }
+
+    @Test
+    public void testRecursionDetection() {
+        final Command foo = new Command("foo");
+        final Command bar = new Command("bar");
+        bar.addSubcommand(foo);
+        assertDoesNotThrow(() -> GraphBuilder.forServer(Set.of(foo, bar)));
+        foo.addSubcommand(bar);
+        assertTimeout(Duration.ofSeconds(5), () -> assertThrows(IllegalCommandStructureException.class,
+                () -> GraphBuilder.forServer(Set.of(foo, bar)), "Builder didn't detect infinite recursion."),
+                "Is your stack fine?!");
     }
 
 }
