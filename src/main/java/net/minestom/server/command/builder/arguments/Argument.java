@@ -305,6 +305,11 @@ public abstract class Argument<T> {
         public String parser() {
             return argument.parser();
         }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return argument.nodeProperties();
+        }
     }
 
     private static final class ArgumentFilter<T> extends Argument<T> {
@@ -333,6 +338,11 @@ public abstract class Argument<T> {
         @Override
         public String parser() {
             return argument.parser();
+        }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return argument.nodeProperties();
         }
     }
 }
