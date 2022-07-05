@@ -203,11 +203,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
+            final Point loweredPosition = position.sub(0, -.5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        if (expandedBoundingBox.intersectEntity(position, itemEntity)) {
+                        if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                             EventDispatcher.callCancellable(pickupItemEvent, () -> {
                                 final ItemStack item = itemEntity.getItemStack();
@@ -524,7 +525,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void setBoundingBox(BoundingBox boundingBox) {
         super.setBoundingBox(boundingBox);
-        this.expandedBoundingBox = boundingBox.expand(1, 0.5f, 1);
+        this.expandedBoundingBox = boundingBox.expand(1, .5, 1);
     }
 
     /**
