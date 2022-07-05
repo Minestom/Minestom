@@ -116,8 +116,8 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                     }
                 });
                 case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
-                case "brigadier:entity", "brigadier:score_holder" -> reader.extractBytes(reader::readByte);
-                case "brigadier:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+                case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(reader::readByte);
+                case "minecraft:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
                 default -> new byte[0]; // unknown
             };
         }
