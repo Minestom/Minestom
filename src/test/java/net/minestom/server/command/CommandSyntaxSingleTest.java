@@ -1,15 +1,18 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.junit.jupiter.api.Test;
 
+import java.lang.String;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
 import static net.minestom.server.command.builder.arguments.ArgumentType.String;
+import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -52,6 +55,58 @@ public class CommandSyntaxSingleTest {
                 """, ExpectedExecution.SYNTAX, Map.of("string", "unescaped", "string2", "esc\"aped"));
         assertSyntax(args, "5 5", ExpectedExecution.SYNTAX);
         assertSyntax(args, "", ExpectedExecution.DEFAULT);
+    }
+
+    @Test
+    public void singleGroup() {
+        List<Argument<?>> args = List.of(Group("loop", Integer("first"), Integer("second")));
+        // 1 2
+        {
+            var context = new CommandContext("1 2");
+            context.setArg("first", 1, "1");
+            context.setArg("second", 2, "2");
+            assertSyntax(args, "1 2", ExpectedExecution.SYNTAX, Map.of("loop", context));
+        }
+        // Incomplete group
+        assertSyntax(args, "1", ExpectedExecution.DEFAULT);
+    }
+
+    @Test
+    public void singleLoop() {
+        List<Argument<?>> stringLoop = List.of(Loop("loop", String("value")));
+        assertSyntax(stringLoop, "one two three", ExpectedExecution.SYNTAX, Map.of("loop", List.of("one", "two", "three")));
+
+        List<Argument<?>> intLoop = List.of(Loop("loop", Integer("value")));
+        assertSyntax(intLoop, "1 2 3", ExpectedExecution.SYNTAX, Map.of("loop", List.of(1, 2, 3)));
+    }
+
+    @Test
+    public void singleLoopGroup() {
+        List<Argument<?>> groupLoop = List.of(Loop("loop", Group("group", Integer("first"), Integer("second"))));
+        // 1 2
+        {
+            var context = new CommandContext("1 2");
+            context.setArg("first", 1, "1");
+            context.setArg("second", 2, "2");
+            assertSyntax(groupLoop, "1 2", ExpectedExecution.SYNTAX, Map.of("loop", List.of(context)));
+        }
+        // 1 2 3 4
+        {
+            var context1 = new CommandContext("1 2");
+            var context2 = new CommandContext("3 4");
+
+            context1.setArg("first", 1, "1");
+            context1.setArg("second", 2, "2");
+
+            context2.setArg("first", 3, "3");
+            context2.setArg("second", 4, "4");
+
+            assertSyntax(groupLoop, "1 2 3 4", ExpectedExecution.SYNTAX, Map.of("loop", List.of(context1, context2)));
+        }
+        // Incomplete loop
+        assertSyntax(groupLoop, "1", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "1 2 3", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "1 2 3 4 5", ExpectedExecution.DEFAULT);
     }
 
     private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
