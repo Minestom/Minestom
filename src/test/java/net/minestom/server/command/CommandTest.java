@@ -51,5 +51,4 @@ public class CommandTest {
         assertTrue(checkSet.get());
 
     }
-
 }
