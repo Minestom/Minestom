@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+/**
+ * Test string version of arguments.
+ */
 public class ArgumentParserTest {
 
     @Test
     public void testArgumentParser() {
-
         // Test each argument
         assertParserEquals("Literal<example>", ArgumentType.Literal("example"));
         assertParserEquals("Boolean<example>", ArgumentType.Boolean("example"));
@@ -54,5 +56,4 @@ public class ArgumentParserTest {
     private static void assertParserEquals(@NotNull String input, @NotNull Argument<?> @NotNull ... args) {
         assertArrayEquals(ArgumentParser.generate(input), args);
     }
-
 }
