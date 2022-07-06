@@ -133,6 +133,12 @@ final class GraphBuilder {
 
         // Add syntax to the command
         for (CommandSyntax syntax : command.getSyntaxes()) {
+            if (player != null) {
+                // Check if user can use the syntax
+                final CommandCondition condition = syntax.getCommandCondition();
+                if (condition != null && !condition.canUse(player, null)) continue;
+            }
+
             boolean executable = false;
             Node[] lastArgNodes = new Node[] {cmdNode}; // First arg links to cmd root
             @NotNull Argument<?>[] arguments = syntax.getArguments();
