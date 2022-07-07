@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.math.Range;
@@ -30,13 +31,14 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
         this.rangeConstructor = rangeConstructor;
     }
 
-    @NotNull
     @Override
-    public T parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
+        final String input = reader.getWord();
         try {
             final String[] split = input.split(Pattern.quote(".."), -1);
 
             if (split.length == 2) {
+                reader.consume();
                 final N min;
                 final N max;
                 if (split[0].length() == 0 && split[1].length() > 0) {
@@ -58,6 +60,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
                 return rangeConstructor.apply(min, max);
             } else if (split.length == 1) {
                 final N number = parser.apply(input);
+                reader.consume();
                 return rangeConstructor.apply(number, number);
             }
         } catch (NumberFormatException e2) {

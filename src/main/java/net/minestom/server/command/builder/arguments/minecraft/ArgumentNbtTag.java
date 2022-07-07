@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
@@ -21,16 +22,25 @@ public class ArgumentNbtTag extends Argument<NBT> {
     public static final int INVALID_NBT = 1;
 
     public ArgumentNbtTag(String id) {
-        super(id, true);
+        super(id);
     }
 
-    @NotNull
     @Override
-    public NBT parse(@NotNull String input) throws ArgumentSyntaxException {
-        try {
-            return new SNBTParser(new StringReader(input)).parse();
-        } catch (NBTException e) {
-            throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
+    public @NotNull NBT parse(CommandReader reader) throws ArgumentSyntaxException {
+        int end = reader.getClosingIndexOfJsonObject(0);
+        if (end == -1) {
+            end = reader.getClosingIndexOfJsonArray(0);
+        }
+        if (end == -1) {
+            throw new ArgumentSyntaxException("Invalid NBT", "", INVALID_NBT);
+        } else {
+            final String input = reader.get(end);
+            reader.consume();
+            try {
+                return new SNBTParser(new StringReader(input)).parse();
+            } catch (NBTException e) {
+                throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
+            }
         }
     }
 

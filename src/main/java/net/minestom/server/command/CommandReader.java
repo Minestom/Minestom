@@ -91,6 +91,36 @@ public final class CommandReader {
         return -1;
     }
 
+    public int getClosingIndexOfJsonArray(int fromOffset) {
+        int count = 1;
+        boolean insideString = false;
+        boolean lastWasEscape = false;
+        final int start = nextIndexOf('[', fromOffset);
+        if (start == -1) return -1;
+        for (int i = start+1; i < input.length(); i++) {
+            final char current = getCharAt(i);
+            if (insideString) {
+                if (current == '"')
+                    if (lastWasEscape)
+                        lastWasEscape = false;
+                    else
+                        insideString = false;
+                else if (current == '\\')
+                    lastWasEscape = !lastWasEscape;
+                else
+                    lastWasEscape = false;
+            } else {
+                if (current == '[')
+                    count++;
+                else if (current == ']' && --count == 0)
+                    return i;
+                else if (current == '"')
+                    insideString = true;
+            }
+        }
+        return -1;
+    }
+
     public String get(int exclusiveAbsoluteEnd) {
         if (!hasRemaining()) throw new BufferUnderflowException();
         final String s = input.subSequence(cursor, exclusiveAbsoluteEnd).toString();

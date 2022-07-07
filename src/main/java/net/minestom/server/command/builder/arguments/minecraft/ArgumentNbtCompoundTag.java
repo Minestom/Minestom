@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
@@ -20,21 +21,27 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
     public static final int INVALID_NBT = 1;
 
     public ArgumentNbtCompoundTag(String id) {
-        super(id, true);
+        super(id);
     }
 
-    @NotNull
     @Override
-    public NBTCompound parse(@NotNull String input) throws ArgumentSyntaxException {
-        try {
-            NBT nbt = new SNBTParser(new StringReader(input)).parse();
+    public @NotNull NBTCompound parse(CommandReader reader) throws ArgumentSyntaxException {
+        int end = reader.getClosingIndexOfJsonObject(0);
+        if (end == -1) {
+            throw new ArgumentSyntaxException("Invalid NBT", "", INVALID_NBT);
+        } else {
+            final String input = reader.get(end);
+            reader.consume();
+            try {
+                NBT nbt = new SNBTParser(new StringReader(input)).parse();
 
-            if (!(nbt instanceof NBTCompound))
+                if (!(nbt instanceof NBTCompound))
+                    throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
+
+                return (NBTCompound) nbt;
+            } catch (NBTException e) {
                 throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
-
-            return (NBTCompound) nbt;
-        } catch (NBTException e) {
-            throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
+            }
         }
     }
 
