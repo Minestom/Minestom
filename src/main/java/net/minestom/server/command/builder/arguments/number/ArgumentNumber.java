@@ -43,7 +43,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     @Override
     public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
         final char start = reader.getNextChar();
-        if (start < '0' || start > '9') throw new ArgumentSyntaxException("Numbers cannot start with", start+"", NOT_NUMBER_ERROR);
+        if ((start < '0' || start > '9') && start != '-') throw new ArgumentSyntaxException("Numbers cannot start with", start+"", NOT_NUMBER_ERROR);
         final String input = reader.getWord();
         try {
             final T value;
