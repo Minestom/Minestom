@@ -1,7 +1,5 @@
 package net.minestom.server.command;
 
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -21,11 +19,6 @@ record NodeGraph(List<Node> nodes, Node root) {
     public @Nullable Node getRedirectTarget(Node node) {
         if (node.redirectTarget() == null) return null;
         return resolveId(node.redirectTarget().get());
-    }
-
-    @Contract("-> new")
-    public DeclareCommandsPacket createPacket() {
-        return new DeclareCommandsPacket(nodes.stream().map(Node::getPacketNode).toList(), root.id());
     }
 
     public String exportGarphvizDot() {
@@ -65,6 +58,6 @@ record NodeGraph(List<Node> nodes, Node root) {
     }
 
     private static String graphvizName(Node node) {
-        return '"' + (node.isRoot() ? "root" : node.name()) + '"';
+        return '"' + (node.isRoot() ? "root" : node.arg().getId()) + '"';
     }
 }

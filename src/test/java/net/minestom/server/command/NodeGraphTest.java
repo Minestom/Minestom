@@ -19,7 +19,7 @@ public class NodeGraphTest {
         final Command foo = new Command("foo");
         foo.addSyntax(NodeGraphTest::dummyExecutor, ArgumentType.Integer("bar"));
 
-        final DeclareCommandsPacket packet = GraphBuilder.forServer(Set.of(foo)).createPacket();
+        final DeclareCommandsPacket packet = GraphConverter.createPacket(GraphBuilder.forServer(Set.of(foo)));
         assertEquals(3, packet.nodes().size());
         final DeclareCommandsPacket.Node root = packet.nodes().get(packet.rootIndex());
         assertNotNull(root);

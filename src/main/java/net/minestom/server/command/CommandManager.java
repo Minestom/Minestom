@@ -159,6 +159,6 @@ public final class CommandManager {
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
         final NodeGraph nodeGraph = GraphBuilder.forPlayer(this.dispatcher.getCommands(), player);
         System.out.println(nodeGraph.exportGarphvizDot()); //TODO remove before merging
-        return nodeGraph.createPacket();
+        return GraphConverter.createPacket(nodeGraph);
     }
 }
