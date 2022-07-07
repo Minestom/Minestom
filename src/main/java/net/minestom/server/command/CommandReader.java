@@ -91,8 +91,7 @@ public final class CommandReader {
         return -1;
     }
 
-    @VisibleForTesting
-    String get(int exclusiveAbsoluteEnd) {
+    public String get(int exclusiveAbsoluteEnd) {
         if (!hasRemaining()) throw new BufferUnderflowException();
         final String s = input.subSequence(cursor, exclusiveAbsoluteEnd).toString();
         pendingData = s.length();
