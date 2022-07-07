@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.client.handshake;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -27,14 +28,14 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     public HandshakePacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255),
+        this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.getMaxHandshakeLength()),
                 reader.readUnsignedShort(), reader.readVarInt());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(protocolVersion);
-        int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
+        int maxLength = BungeeCordProxy.getMaxHandshakeLength();
         if (serverAddress.length() > maxLength) {
             throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
@@ -52,7 +53,28 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
             if (address != null) {
                 final String[] split = address.split("\00");
 
-                if (split.length == 3 || split.length == 4) {
+                boolean hasProperties = split.length == 4;
+                if (split.length == 3 || hasProperties) {
+                    PlayerSkin playerSkin;
+                    if (BungeeCordProxy.isBungeeGuardEnabled()) {
+                        if (!hasProperties) {
+                            socketConnection.sendPacket(new LoginDisconnectPacket(BungeeCordProxy.NO_BUNGEE_GUARD_TOKEN));
+                            socketConnection.disconnect();
+                            return;
+                        } else {
+                            Pair<PlayerSkin, Component> skinMessagePair = BungeeCordProxy.readSkinBungeeGuard(split[3]);
+                            if (skinMessagePair.right() != null) {
+                                socketConnection.sendPacket(new LoginDisconnectPacket(skinMessagePair.right()));
+                                socketConnection.disconnect();
+                                return;
+                            } else {
+                                playerSkin = skinMessagePair.left();
+                            }
+                        }
+                    } else {
+                        playerSkin = BungeeCordProxy.readSkin(split[3]);
+                    }
+
                     address = split[0];
 
                     final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
@@ -65,11 +87,6 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                                             "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
                                     )
                     );
-                    PlayerSkin playerSkin = null;
-
-                    if (split.length == 4) {
-                        playerSkin = BungeeCordProxy.readSkin(split[3]);
-                    }
 
                     socketConnection.UNSAFE_setBungeeUuid(playerUuid);
                     socketConnection.UNSAFE_setBungeeSkin(playerSkin);
