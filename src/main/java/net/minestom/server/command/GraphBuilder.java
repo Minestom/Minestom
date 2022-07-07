@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-final class GraphBuilder {
+public final class GraphBuilder {
     private static final List<Class<? extends Argument<?>>> argPriorities = List.of(
             ArgumentInteger.class, ArgumentLong.class, ArgumentFloat.class, ArgumentDouble.class //TODO the rest
     );
@@ -53,6 +53,7 @@ final class GraphBuilder {
     }
 
     private Node[] createArgumentNode(Argument<?> argument, boolean executable, @Nullable AtomicInteger redirectTarget) {
+        // TODO Ensure node args are overridden properly where necessary
         final Node[] nodes;
         if (argument instanceof ArgumentEnum<?> argumentEnum) {
             return argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null)).toArray(Node[]::new);
@@ -101,12 +102,14 @@ final class GraphBuilder {
         final Node cmdNode = createLiteralNode(command.getName(), parent,
                 command.getDefaultExecutor() != null, command.getAliases(), null);
 
+        cmdNode.executionInfo().set(new Node.ExecutionInfo(command.getCondition(), command.getDefaultExecutor()));
+
         // Add syntax to the command
         for (CommandSyntax syntax : command.getSyntaxes()) {
+            final CommandCondition syntaxCondition = syntax.getCommandCondition();
             if (player != null) {
                 // Check if user can use the syntax
-                final CommandCondition condition = syntax.getCommandCondition();
-                if (condition != null && !condition.canUse(player, null)) continue;
+                if (syntaxCondition != null && !syntaxCondition.canUse(player, null)) continue;
             }
 
             boolean executable = false;
@@ -126,6 +129,14 @@ final class GraphBuilder {
                 final Node[] argNodes = createArgumentNode(argument, executable, null);
                 for (Node lastArgNode : lastArgNodes) {
                     lastArgNode.addChildren(argNodes);
+                }
+                // Populate execution info
+                for (Node argNode : argNodes) {
+                    argNode.executionInfo().set(new Node.ExecutionInfo(
+                            // Syntax or command condition
+                            syntaxCondition == null ? command.getCondition() : syntaxCondition,
+                            // Syntax executor or default
+                            executable ? syntax.getExecutor() : command.getDefaultExecutor()));
                 }
                 lastArgNodes = argNodes;
             }

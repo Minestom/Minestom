@@ -1,8 +1,10 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,22 @@ record NodeGraph(List<Node> nodes, Node root) {
     public @Nullable Node getRedirectTarget(Node node) {
         if (node.redirectTarget() == null) return null;
         return resolveId(node.redirectTarget().get());
+    }
+
+    public @Nullable Map.Entry<Node, Object> parseChild(Node parent, CommandReader reader) {
+        for (Node child : getChildren(parent)) {
+            final int remaining = reader.remaining();
+            try {
+                final Object parse = child.arg().parse(reader);
+                return Map.entry(child, parse);
+            } catch (ArgumentSyntaxException e) {
+                if (remaining != reader.remaining()) {
+                    // Node accepted the input, but it was malformed or otherwise failed validation
+                    return Map.entry(child, e);
+                }
+            }
+        }
+        return null;
     }
 
     public String exportGarphvizDot() {

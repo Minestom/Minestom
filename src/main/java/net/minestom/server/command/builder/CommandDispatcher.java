@@ -3,7 +3,9 @@ package net.minestom.server.command.builder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.GraphBuilder;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
@@ -88,12 +90,10 @@ public class CommandDispatcher {
      * @return the command result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
-        CommandResult commandResult = parse(commandString);
-        ParsedCommand parsedCommand = commandResult.parsedCommand;
-        if (parsedCommand != null) {
-            commandResult.commandData = parsedCommand.execute(source);
-        }
-        return commandResult;
+        //todo caching
+        final net.minestom.server.command.CommandParser.Result result = net.minestom.server.command.CommandParser.parse(GraphBuilder.forServer(this.commands), commandString);
+        result.execute(source, new CommandContext(commandString).setArgs(result.arguments()), MinecraftServer.getCommandManager().getUnknownCommandCallback());
+        return new CommandResult(); //todo rework result object
     }
 
     /**
