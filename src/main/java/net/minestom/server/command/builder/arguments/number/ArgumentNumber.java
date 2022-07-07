@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -40,7 +41,10 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
+        final char start = reader.getNextChar();
+        if (start < '0' || start > '9') throw new ArgumentSyntaxException("Numbers cannot start with", start+"", NOT_NUMBER_ERROR);
+        final String input = reader.getWord();
         try {
             final T value;
             final int radix = getRadix(input);
@@ -49,6 +53,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
             } else {
                 value = radixParser.apply(parseValue(input), radix);
             }
+            reader.consume();
 
             // Check range
             if (hasMin && comparator.compare(value, min) < 0) {
