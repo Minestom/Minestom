@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket.NodeType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,15 +17,21 @@ record Node(int id, IntList children, NodeType type, String name, boolean execut
     public static Node root(int id) {
         return new Node(id, new IntArrayList(), NodeType.ROOT, null, false, null, null);
     }
+
     public static Node literal(int id, String name, boolean executable, @Nullable AtomicInteger redirectTarget) {
-        return new Node(id, new IntArrayList(), NodeType.LITERAL, name, executable, new ArgumentLiteral(name), redirectTarget);
+        return literal(id, name, executable, new ArgumentLiteral(name), redirectTarget);
+    }
+
+    public static Node literal(int id, String name, boolean executable, @NotNull Argument<?> backingArg, @Nullable AtomicInteger redirectTarget) {
+        return new Node(id, new IntArrayList(), NodeType.LITERAL, name, executable, backingArg, redirectTarget);
     }
 
     public static Node argument(int id, Argument<?> argument, boolean executable, @Nullable AtomicInteger redirectTarget) {
-        return new Node(id, new IntArrayList(), NodeType.ARGUMENT, argument.getId(), executable, argument, redirectTarget);
+        return new Node(id, new IntArrayList(), argument instanceof ArgumentLiteral ? NodeType.LITERAL :
+                NodeType.ARGUMENT, argument.getId(), executable, argument, redirectTarget);
     }
 
-    public void addChild(Node ...nodes) {
+    public void addChildren(Node ...nodes) {
         for (Node node : nodes) {
             children.add(node.id);
         }

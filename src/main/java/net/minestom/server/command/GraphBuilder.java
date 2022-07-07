@@ -2,8 +2,6 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
@@ -19,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 final class GraphBuilder {
@@ -28,7 +25,6 @@ final class GraphBuilder {
     );
     private final AtomicInteger idSource = new AtomicInteger();
     private final ObjectList<Node> nodes = new ObjectArrayList<>();
-    private final ObjectSet<Supplier<Boolean>> redirectWaitList = new ObjectOpenHashSet<>();
     private final Node root = rootNode();
 
     private GraphBuilder() {
@@ -51,72 +47,31 @@ final class GraphBuilder {
         } else {
             final Node literalNode = Node.literal(idSource.getAndIncrement(), name, executable, redirectTo);
             nodes.add(literalNode);
-            if (parent != null) parent.addChild(literalNode);
+            if (parent != null) parent.addChildren(literalNode);
             return literalNode;
         }
     }
 
-    private Node[] createArgumentNode(Argument<?> argument, boolean executable) {
+    private Node[] createArgumentNode(Argument<?> argument, boolean executable, @Nullable AtomicInteger redirectTarget) {
         final Node[] nodes;
-        Integer overrideRedirectTarget = null;
         if (argument instanceof ArgumentEnum<?> argumentEnum) {
-            nodes = argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null)).toArray(Node[]::new);
+            return argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null)).toArray(Node[]::new);
         } else if (argument instanceof ArgumentGroup argumentGroup) {
-            nodes = argumentGroup.group().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
+            return argumentGroup.group().stream().map(x -> createArgumentNode(x, executable, redirectTarget)).flatMap(Stream::of).toArray(Node[]::new);
         } else if (argument instanceof ArgumentLoop<?> argumentLoop) {
-            overrideRedirectTarget = idSource.get()-1;
-            nodes = argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
+            final AtomicInteger target = new AtomicInteger(idSource.get() - 1);
+            return argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable, target)).flatMap(Stream::of).toArray(Node[]::new);
         } else {
             if (argument instanceof ArgumentCommand) {
                 return new Node[]{createLiteralNode(argument.getId(), null, false, null, new AtomicInteger(0))};
             }
-            final int id = idSource.getAndIncrement();
-            nodes = new Node[] {argument instanceof ArgumentLiteral ?
-                    Node.literal(id, argument.getId(), executable, null) :
-                    Node.argument(id, argument, executable, null)};
+            nodes = new Node[] {Node.argument(idSource.getAndIncrement(), argument, executable, redirectTarget)};
         }
-        for (Node node : nodes) {
-            this.nodes.add(node);
-            Integer finalOverrideRedirectTarget = overrideRedirectTarget;
-            if (finalOverrideRedirectTarget != null) {
-                redirectWaitList.add(() -> {
-                    int target = finalOverrideRedirectTarget;
-                    if (target != -1) {
-                        node.redirectTarget().set(target);
-                        return true;
-                    }
-                    return false;
-                });
-            }
-        }
+        this.nodes.addAll(Arrays.asList(nodes));
         return nodes;
     }
 
-    private int tryResolveId(String[] path) {
-        if (path.length == 0) {
-            return root.id();
-        } else {
-            Node target = root;
-            for (String next : path) {
-                Node finalTarget = target;
-                final Optional<Node> result = nodes.stream().filter(finalTarget::isParentOf)
-                        .filter(x -> x.name().equals(next)).findFirst();
-                if (result.isEmpty()) {
-                    return -1;
-                } else {
-                    target = result.get();
-                }
-            }
-            return target.id();
-        }
-    }
-
     private void finalizeStructure(boolean forParsing) {
-        redirectWaitList.removeIf(Supplier::get);
-        if (redirectWaitList.size() > 0)
-            throw new IllegalCommandStructureException("Could not set redirects for all arguments! Did you provide a " +
-                    "correct id path which doesn't rely on redirects?");
-
         nodes.sort(Comparator.comparing(Node::id));
 
         if (forParsing) {
@@ -168,9 +123,9 @@ final class GraphBuilder {
                     executable = true;
                 }
                 // Append current node to previous
-                final Node[] argNodes = createArgumentNode(argument, executable);
+                final Node[] argNodes = createArgumentNode(argument, executable, null);
                 for (Node lastArgNode : lastArgNodes) {
-                    lastArgNode.addChild(argNodes);
+                    lastArgNode.addChildren(argNodes);
                 }
                 lastArgNodes = argNodes;
             }
