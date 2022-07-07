@@ -172,6 +172,9 @@ public final class PacketUtils {
                 if (compressed) {
                     final int dataLength = readBuffer.readVarInt();
                     final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
+                    if (payloadLength < 0) {
+                        throw new DataFormatException("Negative payload length " + payloadLength);
+                    }
                     if (dataLength == 0) {
                         // Data is too small to be compressed, payload is following
                         decompressedSize = payloadLength;
