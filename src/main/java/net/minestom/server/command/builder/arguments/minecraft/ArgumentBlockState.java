@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
@@ -14,24 +15,12 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY_VALUE = 4;
 
     public ArgumentBlockState(@NotNull String id) {
-        super(id, true, false);
+        super(id);
     }
 
     @Override
-    public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
-    }
-
-    @Override
-    public String parser() {
-        return "minecraft:block_state";
-    }
-
-    /**
-     * @deprecated use {@link Argument#parse(Argument)}
-     */
-    @Deprecated
-    public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Block parse(CommandReader reader) throws ArgumentSyntaxException {
+        final String input = reader.getWord();
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0)
             throw new ArgumentSyntaxException("No block type", input, NO_BLOCK);
@@ -41,8 +30,10 @@ public class ArgumentBlockState extends Argument<Block> {
             final Block block = Block.fromNamespaceId(input);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
+            reader.consume();
             return block;
         } else {
+            reader.consume();
             if (!input.endsWith("]"))
                 throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
@@ -60,6 +51,11 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Invalid property values", input, INVALID_PROPERTY_VALUE);
             }
         }
+    }
+
+    @Override
+    public String parser() {
+        return "minecraft:block_state";
     }
 
     @Override
