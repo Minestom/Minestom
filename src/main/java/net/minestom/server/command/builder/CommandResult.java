@@ -1,31 +1,6 @@
 package net.minestom.server.command.builder;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-public class CommandResult {
-
-    protected Type type = Type.UNKNOWN;
-    protected String input;
-    protected ParsedCommand parsedCommand;
-    protected CommandData commandData;
-
-    public @NotNull Type getType() {
-        return type;
-    }
-
-    public @NotNull String getInput() {
-        return input;
-    }
-
-    public @Nullable ParsedCommand getParsedCommand() {
-        return parsedCommand;
-    }
-
-    public @Nullable CommandData getCommandData() {
-        return commandData;
-    }
-
+public record CommandResult(Type type, String input, CommandData commandData) {
     public enum Type {
         /**
          * Command and syntax successfully found.
@@ -41,15 +16,12 @@ public class CommandResult {
          */
         CANCELLED,
         /**
+         * Either {@link Command#getCondition()} or {@link CommandSyntax#getCommandCondition()} failed
+         */
+        PRECONDITION_FAILED,
+        /**
          * Command is not registered, it is also the default result type.
          */
         UNKNOWN
-    }
-
-    public static @NotNull CommandResult of(@NotNull Type type, @NotNull String input) {
-        CommandResult result = new CommandResult();
-        result.type = type;
-        result.input = input;
-        return result;
     }
 }

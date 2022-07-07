@@ -1,11 +1,8 @@
 package net.minestom.server.command;
 
-import net.minestom.server.command.builder.ArgumentCallback;
-import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.callback.CommandCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,21 +73,24 @@ public final class CommandParser {
         @NotNull String input();
         @NotNull Map<String, Object> arguments();
 
-        default void execute(CommandSender sender, CommandContext context, @Nullable CommandCallback unknownCommandCallback) {
+        default CommandResult execute(CommandSender sender, CommandContext context) {
             if (this instanceof UnknownCommandResult) {
-                if (unknownCommandCallback == null) return;
-                unknownCommandCallback.apply(sender, input());
+                return new CommandResult(CommandResult.Type.UNKNOWN, input(), null);
             } else if (this instanceof KnownCommandResult result) {
                 final CommandCondition condition = result.condition();
+                final CommandData data = new CommandData(arguments());
                 if (condition != null && !condition.canUse(sender, input())) {
-                    return; // TODO Should we call a callback here or just let the condition do the notifying?
+                    return new CommandResult(CommandResult.Type.PRECONDITION_FAILED, input(), data);
                 }
                 if (result instanceof ValidCommandResult valid) {
                     valid.executor().apply(sender, context);
+                    return new CommandResult(CommandResult.Type.SUCCESS, input(), data);
                 } else if (result instanceof SyntaxErrorResult invalid) {
                     invalid.callback().apply(sender, invalid.exception());
+                    return new CommandResult(CommandResult.Type.INVALID_SYNTAX, input(), data);
                 }
             }
+            return null;
         }
     }
 

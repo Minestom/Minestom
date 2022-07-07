@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-record NodeGraph(List<Node> nodes, Node root) {
+public record NodeGraph(List<Node> nodes, Node root) {
 
     public Node resolveId(int id) {
         return nodes.get(id);
