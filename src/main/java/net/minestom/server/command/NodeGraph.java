@@ -42,6 +42,9 @@ record NodeGraph(List<Node> nodes, Node root) {
             if (node.isRoot()) {
                 builder.append(",shape=rectangle");
             }
+            if (node.executable()) {
+                builder.append(",bgcolor=gray,style=filled");
+            }
             builder.append("]");
             builder.append(statementSeparator);
             if (node.children().isEmpty() && redirectTarget == null) continue;
