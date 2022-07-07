@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -19,15 +20,13 @@ import java.util.function.Supplier;
  * <p>
  * You can create your own with your own special conditions.
  * <p>
- * Arguments are parsed using {@link #parse(String)}.
+ * Arguments are parsed using {@link #parse(CommandReader)}.
  *
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
 
     private final String id;
-    protected final boolean allowSpace;
-    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
@@ -39,33 +38,10 @@ public abstract class Argument<T> {
     /**
      * Creates a new argument.
      *
-     * @param id           the id of the argument, used to retrieve the parsed value
-     * @param allowSpace   true if the argument can/should have spaces in it
-     * @param useRemaining true if the argument will always take the rest of the command arguments
-     */
-    public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
-        this.id = id;
-        this.allowSpace = allowSpace;
-        this.useRemaining = useRemaining;
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} sets to false.
-     *
-     * @param id         the id of the argument, used to retrieve the parsed value
-     * @param allowSpace true if the argument can/should have spaces in it
-     */
-    public Argument(@NotNull String id, boolean allowSpace) {
-        this(id, allowSpace, false);
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} and {@code allowSpace} sets to false.
-     *
      * @param id the id of the argument, used to retrieve the parsed value
      */
     public Argument(@NotNull String id) {
-        this(id, false, false);
+        this.id = id;
     }
 
     /**
@@ -78,18 +54,23 @@ public abstract class Argument<T> {
      */
     @ApiStatus.Experimental
     public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
-        return argument.parse(argument.getId());
+        return argument.parse(new CommandReader(argument.getId()));
     }
 
     /**
-     * Parses the given input, and throw an {@link ArgumentSyntaxException}
-     * if the input cannot be converted to {@code T}
+     * Tries to read the value from {@code reader}, if the next readable arg
+     * is incompatible with this type (e.g. for an int arg the next word is a string)
+     * it should throw {@link ArgumentSyntaxException} without moving the reader cursor
+     * indicating that the type is incompatible, however if this method threw the exception
+     * and also moved the cursor then the type considered compatible and parsing will stop
+     * here resulting in a syntax error which on execution will call this argument's
+     * {@link #getCallback()} if there is one.
      *
-     * @param input the argument to parse
+     * @param reader the command
      * @return the parsed argument
      * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public abstract @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException;
 
     public abstract String parser();
 
@@ -110,27 +91,6 @@ public abstract class Argument<T> {
     @NotNull
     public String getId() {
         return id;
-    }
-
-    /**
-     * Gets if the argument can contain space.
-     *
-     * @return true if the argument allows space, false otherwise
-     */
-    public boolean allowSpace() {
-        return allowSpace;
-    }
-
-    /**
-     * Gets if the argument always use all the remaining characters.
-     * <p>
-     * ex: /help I am a test - will always give you "I am a test"
-     * if the first and single argument does use the remaining.
-     *
-     * @return true if the argument use all the remaining characters, false otherwise
-     */
-    public boolean useRemaining() {
-        return useRemaining;
     }
 
     /**
@@ -283,7 +243,7 @@ public abstract class Argument<T> {
         final Function<I, O> mapper;
 
         private ArgumentMap(@NotNull Argument<I> argument, @NotNull Function<I, O> mapper) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -293,11 +253,11 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
-            final I value = argument.parse(input);
+        public @NotNull O parse(CommandReader reader) throws ArgumentSyntaxException {
+            final I value = argument.parse(reader);
             final O mappedValue = mapper.apply(value);
             if (mappedValue == null)
-                throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
+                throw new ArgumentSyntaxException("Couldn't be converted to map type", value.toString(), INVALID_MAP);
             return mappedValue;
         }
 
@@ -318,7 +278,7 @@ public abstract class Argument<T> {
         final Predicate<T> predicate;
 
         private ArgumentFilter(@NotNull Argument<T> argument, @NotNull Predicate<T> predicate) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -328,10 +288,10 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-            final T result = argument.parse(input);
+        public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
+            final T result = argument.parse(reader);
             if (!predicate.test(result))
-                throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
+                throw new ArgumentSyntaxException("Predicate failed", result.toString(), INVALID_FILTER);
             return result;
         }
 
