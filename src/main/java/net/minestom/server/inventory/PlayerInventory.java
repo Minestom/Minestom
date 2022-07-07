@@ -186,8 +186,11 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
+        if (convertedSlot >= getSize()) {
+            return false;
+        }
         final ItemStack clicked = getItemStack(convertedSlot);
+        final ItemStack cursor = getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, convertedSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
@@ -202,8 +205,11 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public boolean rightClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
+        if (convertedSlot >= getSize()) {
+            return false;
+        }
         final ItemStack clicked = getItemStack(convertedSlot);
+        final ItemStack cursor = getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, convertedSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
@@ -225,9 +231,17 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
-        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(convertedSlot);
+        final ItemStack clicked;
+        if (outsideDrop) {
+            clicked = ItemStack.AIR;
+        } else {
+            if (convertedSlot >= getSize()) {
+                return false;
+            }
+            clicked = getItemStack(convertedSlot);
+        }
+        final ItemStack cursor = getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.drop(player, this,
                 all, convertedSlot, button, clicked, cursor);
         if (clickResult.isCancel()) {
@@ -245,8 +259,11 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public boolean shiftClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
+        if (convertedSlot >= getSize()) {
+            return false;
+        }
         final ItemStack clicked = getItemStack(convertedSlot);
+        final ItemStack cursor = getCursorItem();
         final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
         final int start = hotBarClick ? 9 : 0;
         final int end = hotBarClick ? getSize() - 9 : 8;
@@ -270,6 +287,9 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+        if (convertedSlot >= getSize()) {
+            return false;
+        }
         final ItemStack heldItem = getItemStack(convertedKey);
         final ItemStack clicked = getItemStack(convertedSlot);
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, convertedKey, clicked, heldItem);
@@ -285,10 +305,20 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public boolean dragging(@NotNull Player player, int slot, int button) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+        final boolean outside = slot == -999;
+        final ItemStack clicked;
+        if (outside) {
+            clicked = ItemStack.AIR;
+        } else {
+            if (convertedSlot >= getSize()) {
+                return false;
+            }
+            clicked = getItemStack(convertedSlot);
+        }
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                convertPlayerInventorySlot(slot, OFFSET), button, clicked, cursor);
+                convertedSlot, button, clicked, cursor);
         if (clickResult == null || clickResult.isCancel()) {
             update();
             return false;
@@ -301,8 +331,11 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
+        if (convertedSlot >= getSize()) {
+            return false;
+        }
         final ItemStack clicked = getItemStack(convertedSlot);
+        final ItemStack cursor = getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
@@ -311,15 +344,5 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         setCursorItem(clickResult.getCursor());
         update(); // FIXME: currently not properly client-predicted
         return true;
-    }
-
-    private void setItemStackFromPacketSlot(int slot, @NotNull ItemStack itemStack) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        setItemStack(convertedSlot, itemStack);
-    }
-
-    private ItemStack getItemStackFromPacketSlot(int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        return itemStacks[convertedSlot];
     }
 }
