@@ -293,7 +293,7 @@ final class BlockCollision {
                 continue;
 
             final boolean intersects;
-            if (type == EntityType.PLAYER) {
+            if (entity instanceof Player) {
                 // Ignore spectators
                 if (((Player) entity).getGameMode() == GameMode.SPECTATOR)
                     continue;
