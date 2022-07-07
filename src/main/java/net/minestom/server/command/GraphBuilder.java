@@ -1,27 +1,33 @@
 package net.minestom.server.command;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
+import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
+import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.command.builder.arguments.number.ArgumentLong;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.IllegalCommandStructureException;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 final class GraphBuilder {
+    private static final List<Class<? extends Argument<?>>> argPriorities = List.of(
+            ArgumentInteger.class, ArgumentLong.class, ArgumentFloat.class, ArgumentDouble.class //TODO the rest
+    );
     private final AtomicInteger idSource = new AtomicInteger();
-    private final ObjectSet<Node> nodes = new ObjectOpenHashSet<>();
+    private final ObjectList<Node> nodes = new ObjectArrayList<>();
     private final ObjectSet<Supplier<Boolean>> redirectWaitList = new ObjectOpenHashSet<>();
     private final Node root = rootNode();
 
@@ -30,21 +36,20 @@ final class GraphBuilder {
     }
 
     private Node rootNode() {
-        final Node rootNode = new Node(idSource.getAndIncrement());
+        final Node rootNode = Node.root(idSource.getAndIncrement());
         nodes.add(rootNode);
         return rootNode;
     }
 
-    private Node createLiteralNode(String name, @Nullable Node parent, boolean executable, @Nullable String[] aliases, @Nullable Integer redirectTo) {
+    private Node createLiteralNode(String name, @Nullable Node parent, boolean executable, @Nullable String[] aliases, @Nullable AtomicInteger redirectTo) {
         if (aliases != null) {
             final Node node = createLiteralNode(name, parent, executable, null, null);
             for (String alias : aliases) {
-                createLiteralNode(alias, parent, executable, null, node.id());
+                createLiteralNode(alias, parent, executable, null, new AtomicInteger(node.id()));
             }
             return node;
         } else {
-            final Node literalNode = new Node(idSource.getAndIncrement(), name, redirectTo);
-            literalNode.setExecutable(executable);
+            final Node literalNode = Node.literal(idSource.getAndIncrement(), name, executable, redirectTo);
             nodes.add(literalNode);
             if (parent != null) parent.addChild(literalNode);
             return literalNode;
@@ -63,20 +68,21 @@ final class GraphBuilder {
             nodes = argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
         } else {
             if (argument instanceof ArgumentCommand) {
-                return new Node[]{createLiteralNode(argument.getId(), null, false, null, 0)};
+                return new Node[]{createLiteralNode(argument.getId(), null, false, null, new AtomicInteger(0))};
             }
             final int id = idSource.getAndIncrement();
-            nodes = new Node[] {argument instanceof ArgumentLiteral ? new Node(id, argument.getId(), null) : new Node(id, argument)};
+            nodes = new Node[] {argument instanceof ArgumentLiteral ?
+                    Node.literal(id, argument.getId(), executable, null) :
+                    Node.argument(id, argument, executable, null)};
         }
         for (Node node : nodes) {
-            node.setExecutable(executable);
             this.nodes.add(node);
             Integer finalOverrideRedirectTarget = overrideRedirectTarget;
             if (finalOverrideRedirectTarget != null) {
                 redirectWaitList.add(() -> {
                     int target = finalOverrideRedirectTarget;
                     if (target != -1) {
-                        node.setRedirectTarget(target);
+                        node.redirectTarget().set(target);
                         return true;
                     }
                     return false;
@@ -105,11 +111,20 @@ final class GraphBuilder {
         }
     }
 
-    private void finalizeStructure() {
+    private void finalizeStructure(boolean forParsing) {
         redirectWaitList.removeIf(Supplier::get);
         if (redirectWaitList.size() > 0)
             throw new IllegalCommandStructureException("Could not set redirects for all arguments! Did you provide a " +
                     "correct id path which doesn't rely on redirects?");
+
+        nodes.sort(Comparator.comparing(Node::id));
+
+        if (forParsing) {
+            for (Node node : nodes) {
+                node.children().sort((k1, k2) -> Integer.compare(argPriorities.indexOf(nodes.get(k1).arg().getClass()),
+                        argPriorities.indexOf(nodes.get(k2).arg().getClass())));
+            }
+        }
     }
 
 
@@ -193,9 +208,9 @@ final class GraphBuilder {
             }
         }
 
-        builder.finalizeStructure();
+        builder.finalizeStructure(player == null);
 
-        return new NodeGraph(builder.nodes, builder.root.id());
+        return new NodeGraph(builder.nodes, builder.root);
     }
 
     public static NodeGraph forServer(@NotNull Set<Command> commands) {
