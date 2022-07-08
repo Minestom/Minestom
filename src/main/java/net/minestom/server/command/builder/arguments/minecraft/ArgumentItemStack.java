@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -25,54 +25,50 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static final int INVALID_MATERIAL = 3;
 
     public ArgumentItemStack(String id) {
-        super(id, true);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
+        super(id);
     }
 
     @Override
-    public String parser() {
-        return "minecraft:item_stack";
-    }
-
-    /**
-     * @deprecated use {@link Argument#parse(Argument)}
-     */
-    @Deprecated
-    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
-        final int nbtIndex = input.indexOf("{");
+    public @NotNull Result<ItemStack> parse(CommandReader reader) {
+        final int cursor = reader.cursor();
+        final String input = reader.readWord();
+        int nbtIndex = input.indexOf("{");
 
         if (nbtIndex == 0)
-            throw new ArgumentSyntaxException("The item needs a material", input, NO_MATERIAL);
+            return Result.syntaxError("The item needs a material", input, NO_MATERIAL);
 
         if (nbtIndex == -1) {
             // Only material name
             final Material material = Material.fromNamespaceId(input);
             if (material == null)
-                throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
-            return ItemStack.of(material);
+                return Result.incompatibleType();
+            return Result.success(ItemStack.of(material));
         } else {
             // Material plus additional NBT
             final String materialName = input.substring(0, nbtIndex);
             final Material material = Material.fromNamespaceId(materialName);
             if (material == null)
-                throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
+                return Result.syntaxError("Material is invalid", input, INVALID_MATERIAL);
 
-            final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
+            // Move cursor to start of nbt data
+            reader.setCursor(cursor+nbtIndex);
+            nbtIndex = reader.getClosingIndexOfJsonObject(0);
 
-            NBTCompound compound;
+            if (nbtIndex == -1) return Result.syntaxError("Item NBT is invalid", input, INVALID_NBT);
+
+            final String sNBT = reader.read(nbtIndex).replace("\\\"", "\"");
+
             try {
-                compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
+                return Result.success(ItemStack.fromNBT(material, (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse()));
             } catch (NBTException e) {
-                throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
+                return Result.syntaxError("Item NBT is invalid", input, INVALID_NBT);
             }
-
-            return ItemStack.fromNBT(material, compound);
         }
+    }
+
+    @Override
+    public String parser() {
+        return "minecraft:item_stack";
     }
 
     @Override

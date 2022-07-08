@@ -21,12 +21,10 @@ public final class CommandReader {
     }
 
     public String readWord() {
-        final int i = nextIndexOf(SPACE, 0);
-        final String s = read(i == -1 ? input.length() : i);
-        cursor++;
-        return s;
+        return readUntil(SPACE);
     }
 
+    //fixme single quotes are also valid
     public String readQuotedString() {
         if (peekNextChar() != QUOTE) throw new RuntimeException("Tried to read an unquoted string as quoted.");
         int end = cursor;
@@ -124,6 +122,33 @@ public final class CommandReader {
         final String s = input.subSequence(cursor, exclusiveAbsoluteEnd).toString();
         cursor += s.length();
         return s;
+    }
+
+    /**
+     * Reads until the supplied character or end of input is encountered, target char
+     * will not be included in the result, but the cursor will skip it
+     *
+     * @param c end char
+     * @return string from current position until end char
+     */
+    public String readUntil(char c) {
+        final int i = nextIndexOf(c, 0);
+        final String read = read(i == -1 ? input.length() : i);
+        cursor++; // skip target char
+        return read;
+    }
+
+    public String readUntilAny(char ...c) {
+        int end = -1;
+        for (char c1 : c) {
+            final int i1 = nextIndexOf(c1, 0);
+            if (i1 != -1 && i1 < end) {
+                end = i1;
+            }
+        }
+        final String read = read(end == -1 ? input.length() : end);
+        cursor++; // skip target char
+        return read;
     }
 
     @VisibleForTesting
