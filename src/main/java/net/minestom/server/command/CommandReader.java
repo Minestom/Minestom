@@ -11,7 +11,6 @@ public final class CommandReader {
     static final char ESCAPE = '\\';
     private final CharSequence input;
     private int cursor = 0;
-    private int pendingData = 0;
 
     public CommandReader(CharSequence input) {
         this.input = input;
@@ -21,44 +20,43 @@ public final class CommandReader {
         return remaining() > 0;
     }
 
-    public String getWord() {
+    public String readWord() {
         final int i = nextIndexOf(SPACE, 0);
-        final String s = get(i == -1 ? input.length() : i);
-        pendingData = s.length()+1;
+        final String s = read(i == -1 ? input.length() : i);
+        cursor++;
         return s;
     }
 
-    public String getQuotedString() {
-        if (getNextChar() != QUOTE) throw new RuntimeException("Tried to read an unquoted string as quoted.");
+    public String readQuotedString() {
+        if (peekNextChar() != QUOTE) throw new RuntimeException("Tried to read an unquoted string as quoted.");
         int end = cursor;
         do {
             end = nextIndexOf(QUOTE, end-cursor+1);
             if (end == -1) throw new RuntimeException("Quoted string doesn't have a closing quote.");
         } while (getCharAt(end - 1) == ESCAPE);
-        final String s = get(end+1);
-        pendingData = s.length()+1;
+        final String s = read(end+1);
+        cursor++;
         return s.substring(1, s.length()-1).replaceAll("\\\\\"", "\"");
     }
 
     public String getRemaining() {
-        return get(input.length());
+        return read(input.length());
     }
 
-    public char getNextChar() {
+    public char peekNextChar() {
         return getCharAt(cursor);
     }
 
     public char getCharAt(int position) {
-        pendingData = 1;
         return input.charAt(position);
     }
 
-    public void consume() {
-        cursor += pendingData;
+    public int cursor() {
+        return cursor;
     }
 
-    public void consume(int amount) {
-        cursor += amount;
+    public void setCursor(int cursor) {
+        this.cursor = cursor;
     }
 
     public int getClosingIndexOfJsonObject(int fromOffset) {
@@ -121,10 +119,10 @@ public final class CommandReader {
         return -1;
     }
 
-    public String get(int exclusiveAbsoluteEnd) {
+    public String read(int exclusiveAbsoluteEnd) {
         if (!hasRemaining()) throw new BufferUnderflowException();
         final String s = input.subSequence(cursor, exclusiveAbsoluteEnd).toString();
-        pendingData = s.length();
+        cursor += s.length();
         return s;
     }
 

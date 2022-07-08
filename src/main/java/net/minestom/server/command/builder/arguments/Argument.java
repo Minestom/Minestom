@@ -310,7 +310,7 @@ public abstract class Argument<T> {
             return null;
         }
 
-        static <T> Result.Success<T> success(T result) {
+        static <T> Result.Success<T> success(@NotNull T result) {
             return new SuccessResult<>(result);
         }
 
@@ -323,7 +323,7 @@ public abstract class Argument<T> {
         }
 
         sealed interface Success<T> extends Result<T> {
-            T value();
+            @NotNull T value();
         }
 
         sealed interface IncompatibleType<T> extends Result<T> {}

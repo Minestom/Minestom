@@ -20,60 +20,42 @@ public class CommandReaderTest {
     @Test
     public void readRaw() {
         final CommandReader reader = new CommandReader("0123456789ABCDEF");
-        assertEquals("01", reader.get(2));
-        reader.consume();
-        assertEquals("23456", reader.get(7));
-        reader.consume();
-        assertEquals("7", reader.get(8));
-        reader.consume();
-        assertEquals("89ABCD", reader.get(14));
-        reader.consume();
-        assertEquals("EF", reader.get(16));
-        reader.consume();
+        assertEquals("01", reader.read(2));
+        assertEquals("23456", reader.read(7));
+        assertEquals("7", reader.read(8));
+        assertEquals("89ABCD", reader.read(14));
+        assertEquals("EF", reader.read(16));
         assertFalse(reader.hasRemaining());
     }
 
     @Test
     public void readWords() {
         final CommandReader reader = new CommandReader("test 15 foo bar a");
-        assertEquals("test", reader.getWord());
-        reader.consume();
-        assertEquals("15", reader.getWord());
-        reader.consume();
-        assertEquals("foo", reader.getWord());
-        reader.consume();
-        assertEquals("bar", reader.getWord());
-        reader.consume();
-        assertEquals("a", reader.getWord());
-        reader.consume();
+        assertEquals("test", reader.readWord());
+        assertEquals("15", reader.readWord());
+        assertEquals("foo", reader.readWord());
+        assertEquals("bar", reader.readWord());
+        assertEquals("a", reader.readWord());
         assertFalse(reader.hasRemaining());
     }
 
     @Test
     public void readQuotedStrings() {
         final CommandReader reader = new CommandReader("\"test 15\" \"foo \\\\\"bar\" \"a\"");
-        assertEquals("test 15", reader.getQuotedString());
-        reader.consume();
-        assertEquals("foo \\\"bar", reader.getQuotedString());
-        reader.consume();
-        assertEquals("a", reader.getQuotedString());
-        reader.consume();
+        assertEquals("test 15", reader.readQuotedString());
+        assertEquals("foo \\\"bar", reader.readQuotedString());
+        assertEquals("a", reader.readQuotedString());
         assertFalse(reader.hasRemaining());
     }
 
     @Test
     public void readWordsAndQuotedStringsMixed() {
         final CommandReader reader = new CommandReader("\"te\\\"st\" 15 foo \"bar\" \"\\\"a\\\"\"");
-        assertEquals("te\"st", reader.getQuotedString());
-        reader.consume();
-        assertEquals("15", reader.getWord());
-        reader.consume();
-        assertEquals("foo", reader.getWord());
-        reader.consume();
-        assertEquals("bar", reader.getQuotedString());
-        reader.consume();
-        assertEquals("\"a\"", reader.getQuotedString());
-        reader.consume();
+        assertEquals("te\"st", reader.readQuotedString());
+        assertEquals("15", reader.readWord());
+        assertEquals("foo", reader.readWord());
+        assertEquals("bar", reader.readQuotedString());
+        assertEquals("\"a\"", reader.readQuotedString());
         assertFalse(reader.hasRemaining());
     }
 

@@ -1,8 +1,8 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.*;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static net.minestom.server.command.builder.arguments.Argument.Result.SyntaxError;
 
 public final class CommandParser {
     private static final String COMMAND_PREFIX = "/";
@@ -29,7 +31,7 @@ public final class CommandParser {
 
         while (result != null) {
             syntax.add(result);
-            if (result.getValue() instanceof ArgumentSyntaxException e) {
+            if (result.getValue() instanceof SyntaxError e) {
                 // Syntax error stop at this arg
                 return new SyntaxErrorResult(withoutPrefix.toString(), result.getKey().executionInfo().get().condition(),
                         result.getKey().arg().getCallback(), e, syntaxMapper(syntax));
@@ -55,15 +57,20 @@ public final class CommandParser {
 
     private static @Nullable Map.Entry<Node, Object> parseChild(NodeGraph graph, Node parent, CommandReader reader) {
         for (Node child : graph.getChildren(parent)) {
-            final int remaining = reader.remaining();
+            final int start = reader.cursor();
             try {
-                final Object parse = child.arg().parse(reader);
-                return Map.entry(child, parse);
-            } catch (ArgumentSyntaxException e) {
-                if (remaining != reader.remaining()) {
-                    // Node accepted the input, but it was malformed or otherwise failed validation
-                    return Map.entry(child, e);
+                final Argument.Result<?> parse = child.arg().parse(reader);
+                if (parse instanceof Argument.Result.Success<?> success) {
+                    return Map.entry(child, success.value());
+                } else if (parse instanceof Argument.Result.SyntaxError<?> syntaxError) {
+                    return Map.entry(child, syntaxError);
+                } else {
+                    // Reset cursor & try next
+                    reader.setCursor(start);
                 }
+            } catch (Exception e) {
+                // Reset cursor & try next
+                reader.setCursor(start);
             }
         }
         return null;
@@ -86,7 +93,7 @@ public final class CommandParser {
                     valid.executor().apply(sender, context);
                     return new CommandResult(CommandResult.Type.SUCCESS, input(), data);
                 } else if (result instanceof SyntaxErrorResult invalid) {
-                    invalid.callback().apply(sender, invalid.exception());
+                    invalid.callback().apply(sender, invalid.error);
                     return new CommandResult(CommandResult.Type.INVALID_SYNTAX, input(), data);
                 }
             }
@@ -106,7 +113,7 @@ public final class CommandParser {
     }
 
     private record SyntaxErrorResult(String input, CommandCondition condition, ArgumentCallback callback,
-                                     ArgumentSyntaxException exception, Map<String, Object> arguments) implements KnownCommandResult {
+                                     SyntaxError<?> error, Map<String, Object> arguments) implements KnownCommandResult {
     }
 
     private record ValidCommandResult(String input, CommandCondition condition, CommandExecutor executor,
