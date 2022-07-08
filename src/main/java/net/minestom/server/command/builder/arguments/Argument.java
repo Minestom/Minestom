@@ -50,27 +50,20 @@ public abstract class Argument<T> {
      * @param argument the argument, with the input as id
      * @param <T>      the result type
      * @return the parsed result
-     * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
      */
     @ApiStatus.Experimental
-    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
+    public static <T> @NotNull Result<T> parse(@NotNull Argument<T> argument) {
         return argument.parse(new CommandReader(argument.getId()));
     }
 
     /**
-     * Tries to read the value from {@code reader}, if the next readable arg
-     * is incompatible with this type (e.g. for an int arg the next word is a string)
-     * it should throw {@link ArgumentSyntaxException} without moving the reader cursor
-     * indicating that the type is incompatible, however if this method threw the exception
-     * and also moved the cursor then the type considered compatible and parsing will stop
-     * here resulting in a syntax error which on execution will call this argument's
-     * {@link #getCallback()} if there is one.
+     * Tries to read the value from {@code reader}, if the method throws
+     * an exception its handled like it returned {@link Result.IncompatibleType}
      *
      * @param reader the command
      * @return the parsed argument
-     * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    public abstract @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException;
+    public abstract @NotNull Result<T> parse(CommandReader reader);
 
     public abstract String parser();
 
@@ -253,12 +246,16 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull O parse(CommandReader reader) throws ArgumentSyntaxException {
-            final I value = argument.parse(reader);
-            final O mappedValue = mapper.apply(value);
-            if (mappedValue == null)
-                throw new ArgumentSyntaxException("Couldn't be converted to map type", value.toString(), INVALID_MAP);
-            return mappedValue;
+        public @NotNull Result<O> parse(CommandReader reader) throws ArgumentSyntaxException {
+            final Result<I> value = argument.parse(reader);
+            if (value instanceof Result.Success<I> success) {
+                final O mappedValue = mapper.apply(success.value());
+                if (mappedValue == null)
+                    return Result.syntaxError("Couldn't be converted to map type", value.toString(), INVALID_MAP);
+                return Result.success(mappedValue);
+            } else {
+                return (Result<O>) value;
+            }
         }
 
         @Override
@@ -288,10 +285,12 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
-            final T result = argument.parse(reader);
-            if (!predicate.test(result))
-                throw new ArgumentSyntaxException("Predicate failed", result.toString(), INVALID_FILTER);
+        public @NotNull Result<T> parse(CommandReader reader) throws ArgumentSyntaxException {
+            final Result<T> result = argument.parse(reader);
+            if (result instanceof Result.Success<T> success) {
+                if (!predicate.test(success.value()))
+                    Result.syntaxError("Predicate failed", result.toString(), INVALID_FILTER);
+            }
             return result;
         }
 
@@ -305,4 +304,43 @@ public abstract class Argument<T> {
             return argument.nodeProperties();
         }
     }
+
+    public sealed interface Result<R> {
+        default @Nullable R value() {
+            if (this instanceof Result.Success<R> result) {
+                return result.value();
+            } else {
+                return null;
+            }
+        }
+
+        static <T> Result.Success<T> success(T result) {
+            return new SuccessResult<>(result);
+        }
+
+        static <T> Result.IncompatibleType<T> incompatibleType() {
+            return new IncompatibleTypeResult<>();
+        }
+
+        static <T> Result.SyntaxError<T> syntaxError(String message, String input, int code) {
+            return new SyntaxErrorResult<>(code, message, input);
+        }
+
+        sealed interface Success<T> extends Result<T> {
+            T value();
+        }
+
+        sealed interface IncompatibleType<T> extends Result<T> {}
+
+        sealed interface SyntaxError<T> extends Result<T> {
+            int code();
+            String message();
+            String input();
+        }
+    }
+
+    private record SuccessResult<R>(R value) implements Result.Success<R> {}
+    private record IncompatibleTypeResult<R>() implements Result.IncompatibleType<R> {}
+    private record SyntaxErrorResult<R>(int code, String message, String input) implements Result.SyntaxError<R> {}
+
 }
