@@ -30,15 +30,16 @@ public class ArgumentNbtTag extends Argument<NBT> {
         if (end == -1) {
             end = reader.getClosingIndexOfJsonArray(0);
         }
+        final String input;
         if (end == -1) {
-            return Result.syntaxError("Invalid NBT", "", INVALID_NBT);
+            input = reader.readWord();
         } else {
-            final String input = reader.read(end+1);
-            try {
-                return Result.success(new SNBTParser(new StringReader(input)).parse());
-            } catch (NBTException e) {
-                return Result.syntaxError("Invalid NBT", input, INVALID_NBT);
-            }
+            input = reader.read(end + 1);
+        }
+        try {
+            return Result.success(new SNBTParser(new StringReader(input)).parse());
+        } catch (NBTException e) {
+            return Result.syntaxError("Invalid NBT", input, INVALID_NBT);
         }
     }
 
