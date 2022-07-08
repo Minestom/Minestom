@@ -25,7 +25,7 @@ public class ArgumentComponent extends Argument<Component> {
             return Result.syntaxError("Invalid JSON", reader.readRemaining(), INVALID_JSON_ERROR);
         }
 
-        final String s = reader.read(end);
+        final String s = reader.read(end+1);
         try {
             return Result.success(GsonComponentSerializer.gson().deserialize(s));
         } catch (Exception e) {

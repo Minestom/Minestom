@@ -29,7 +29,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
         if (end == -1) {
             return Result.syntaxError("Invalid NBT", "", INVALID_NBT);
         } else {
-            final String input = reader.read(end);
+            final String input = reader.read(end+1);
             try {
                 NBT nbt = new SNBTParser(new StringReader(input)).parse();
 

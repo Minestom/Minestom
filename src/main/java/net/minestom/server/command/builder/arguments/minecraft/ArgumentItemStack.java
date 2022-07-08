@@ -56,7 +56,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             if (nbtIndex == -1) return Result.syntaxError("Item NBT is invalid", input, INVALID_NBT);
 
-            final String sNBT = reader.read(nbtIndex).replace("\\\"", "\"");
+            final String sNBT = reader.read(nbtIndex+1).replace("\\\"", "\"");
 
             try {
                 return Result.success(ItemStack.fromNBT(material, (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse()));

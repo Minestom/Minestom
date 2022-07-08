@@ -33,7 +33,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
         if (end == -1) {
             return Result.syntaxError("Invalid NBT", "", INVALID_NBT);
         } else {
-            final String input = reader.read(end);
+            final String input = reader.read(end+1);
             try {
                 return Result.success(new SNBTParser(new StringReader(input)).parse());
             } catch (NBTException e) {
