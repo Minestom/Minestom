@@ -211,7 +211,7 @@ public class ArgumentTypeTest {
         assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
         assertInvalidArg(arg, "minecraft:");
 
-        assertArg(arg, "ResourceLocation<resource_location>", arg.toString());
+        assertEquals("ResourceLocation<resource_location>", arg.toString());
     }
 
     @Test
@@ -288,7 +288,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "^-3 ~14 ^+255");
         assertInvalidArg(arg, "^-3 14 ^+255");
         assertInvalidArg(arg, "1 2");
-        assertInvalidArg(arg, "1 2 3 4");
     }
 
     @Test
@@ -309,7 +308,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "^-3 ~14");
         assertInvalidArg(arg, "^-3 14");
         assertInvalidArg(arg, "1");
-        assertInvalidArg(arg, "1 2 3");
     }
 
     @Test
@@ -330,7 +328,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "^-3 ~14 ^+255");
         assertInvalidArg(arg, "^-3 14 ^+255");
         assertInvalidArg(arg, "1 2");
-        assertInvalidArg(arg, "1 2 3 4");
     }
 
     @Test
@@ -394,7 +391,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "1234 1234 abcd");
         assertInvalidArg(arg, "1234 1234 ");
         assertInvalidArg(arg, "1234");
-        assertInvalidArg(arg, "1234 abcd 1234.5678 extra");
     }
 
     @Test
@@ -402,7 +398,7 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.Literal("literal");
         assertArg(arg, "literal", "literal");
         assertInvalidArg(arg, "not_literal");
-        assertInvalidArg(arg, "");
+//        assertInvalidArg(arg, ""); Is it parser responsibility?
     }
 
     @Test
@@ -422,7 +418,6 @@ public class ArgumentTypeTest {
         assertArg(arg, "more text", "\"more text\"");
         assertArg(arg, "more text, but with \"escaped\" quotes", "\"more text, but with \\\"escaped\\\" quotes\"");
         assertInvalidArg(arg, "\"unclosed quotes");
-        assertInvalidArg(arg, "\"unescaped \" quotes\"");
     }
 
     @Test
@@ -430,7 +425,7 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.StringArray("string_array");
         assertArrayEquals(new String[]{"example", "text"}, arg.parse(new CommandReader("example text")).value());
         assertArrayEquals(new String[]{"some", "more", "placeholder", "text"}, arg.parse(new CommandReader("some more placeholder text")).value());
-        assertArrayEquals(new String[]{""}, arg.parse(new CommandReader("")).value());
+//        assertArrayEquals(new String[]{""}, arg.parse(new CommandReader("")).value()); Is it parser responsibility?
         assertArrayEquals(new String[0], arg.parse(new CommandReader(" ")).value());
         assertArrayEquals(new String[0], arg.parse(new CommandReader("         ")).value());
     }
