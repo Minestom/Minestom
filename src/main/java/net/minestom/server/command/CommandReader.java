@@ -142,7 +142,7 @@ public final class CommandReader {
         int end = -1;
         for (char c1 : c) {
             final int i1 = nextIndexOf(c1, 0);
-            if (i1 != -1 && i1 < end) {
+            if (i1 != -1 && (end == -1 || i1 < end)) {
                 end = i1;
             }
         }
