@@ -1,8 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,13 +28,9 @@ public class ArgumentBoolean extends Argument<Boolean> {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "brigadier:bool";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    public String parser() {
+        return "brigadier:bool";
     }
-
     @Override
     public String toString() {
         return String.format("Boolean<%s>", getId());

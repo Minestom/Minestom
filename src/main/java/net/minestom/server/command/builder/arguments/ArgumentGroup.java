@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
@@ -38,10 +37,11 @@ public class ArgumentGroup extends Argument<CommandContext> {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        for (int i = 0; i < group.length; i++) {
-            final boolean isLast = i == group.length - 1;
-            group[i].processNodes(nodeMaker, executable && isLast);
-        }
+    public String parser() {
+        return null;
+    }
+
+    public List<Argument<?>> group() {
+        return List.of(group);
     }
 }

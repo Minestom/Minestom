@@ -9,6 +9,7 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Function;
 
 public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                                     int rootIndex) implements ServerPacket {
@@ -96,28 +97,24 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         }
 
         private byte[] getProperties(BinaryReader reader, String parser) {
+            final Function<Function<BinaryReader, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes(() -> {
+                byte flags = reader.readByte();
+                if ((flags & 0x01) == 0x01) {
+                    via.apply(reader); // min
+                }
+                if ((flags & 0x02) == 0x02) {
+                    via.apply(reader); // max
+                }
+            });
             return switch (parser) {
-                case "brigadier:double" -> reader.extractBytes(() -> {
-                    byte flags = reader.readByte();
-                    if ((flags & 0x01) == 0x01) {
-                        reader.readDouble(); // min
-                    }
-                    if ((flags & 0x02) == 0x02) {
-                        reader.readDouble(); // max
-                    }
-                });
-                case "brigadier:integer" -> reader.extractBytes(() -> {
-                    byte flags = reader.readByte();
-                    if ((flags & 0x01) == 0x01) {
-                        reader.readInt(); // min
-                    }
-                    if ((flags & 0x02) == 0x02) {
-                        reader.readInt(); // max
-                    }
-                });
+                case "brigadier:double" -> minMaxExtractor.apply(BinaryReader::readDouble);
+                case "brigadier:integer" -> minMaxExtractor.apply(BinaryReader::readInt);
+                case "brigadier:float" -> minMaxExtractor.apply(BinaryReader::readFloat);
+                case "brigadier:long" -> minMaxExtractor.apply(BinaryReader::readLong);
                 case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
-                case "brigadier:entity", "brigadier:score_holder" -> reader.extractBytes(reader::readByte);
-                case "brigadier:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+                case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(reader::readByte);
+                case "minecraft:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+                case "minecraft:resource_or_tag", "minecraft:registry" -> reader.extractBytes(reader::readSizedString);
                 default -> new byte[0]; // unknown
             };
         }
