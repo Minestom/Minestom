@@ -307,11 +307,7 @@ public abstract class Argument<T> {
 
     public sealed interface Result<R> {
         default @Nullable R value() {
-            if (this instanceof Result.Success<R> result) {
-                return result.value();
-            } else {
-                return null;
-            }
+            return null;
         }
 
         static <T> Result.Success<T> success(T result) {
