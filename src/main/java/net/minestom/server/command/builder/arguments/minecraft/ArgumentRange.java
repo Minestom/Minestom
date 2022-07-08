@@ -58,7 +58,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
                     max = parser.apply(split[1]);
                 } else {
                     // Format ..
-                    throw new ArgumentSyntaxException("Invalid range format", input, FORMAT_ERROR);
+                    return Result.syntaxError("Invalid range format", input, FORMAT_ERROR);
                 }
                 return Result.success(rangeConstructor.apply(min, max));
             } else if (split.length == 1) {
