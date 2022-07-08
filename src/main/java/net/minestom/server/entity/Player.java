@@ -1446,17 +1446,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        CloseWindowPacket closeWindowPacket;
-        if (openInventory == null) {
-            closeWindowPacket = new CloseWindowPacket((byte) 0);
-        } else {
-            closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-            openInventory.removeViewer(this); // Clear cache
-            this.openInventory = null;
+        if (openInventory == getOpenInventory()) {
+            CloseWindowPacket closeWindowPacket;
+            if (openInventory == null) {
+                closeWindowPacket = new CloseWindowPacket((byte) 0);
+            } else {
+                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
+                openInventory.removeViewer(this); // Clear cache
+                this.openInventory = null;
+            }
+            sendPacket(closeWindowPacket);
+            inventory.update();
+            this.didCloseInventory = true;
         }
-        sendPacket(closeWindowPacket);
-        inventory.update();
-        this.didCloseInventory = true;
     }
 
     /**
