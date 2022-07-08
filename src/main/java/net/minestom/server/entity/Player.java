@@ -333,7 +333,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
-            final Point loweredPosition = position.sub(0, -.5, 0);
+            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
                         if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
