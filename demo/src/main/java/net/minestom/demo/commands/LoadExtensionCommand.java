@@ -5,9 +5,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.ExtensionManager;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class LoadExtensionCommand extends Command {
         }
     }
 
-    private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid extension name!"));
+    private void extensionCallback(CommandSender sender, Argument.Result.SyntaxError<?> exception) {
+        sender.sendMessage(Component.text("'" + exception.input() + "' is not a valid extension name!"));
     }
 }

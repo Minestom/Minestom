@@ -4,9 +4,9 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -35,22 +35,22 @@ public class HorseCommand extends Command {
         sender.sendMessage(Component.text("Correct usage: /horse <baby> <marking> <color>"));
     }
 
-    private void onBabyError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'true' or 'false'"));
+    private void onBabyError(CommandSender sender, Argument.Result.SyntaxError<?> exception) {
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.input() + "' should be replaced by 'true' or 'false'"));
     }
 
-    private void onMarkingError(CommandSender sender, ArgumentSyntaxException exception) {
+    private void onMarkingError(CommandSender sender, Argument.Result.SyntaxError<?> exception) {
         String values = Stream.of(HorseMeta.Marking.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.input() + "' should be replaced by " + values + "."));
     }
 
-    private void onColorError(CommandSender sender, ArgumentSyntaxException exception) {
+    private void onColorError(CommandSender sender, Argument.Result.SyntaxError<?> exception) {
         String values = Stream.of(HorseMeta.Color.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.input() + "' should be replaced by " + values + "."));
     }
 
     private void onHorseCommand(CommandSender sender, CommandContext context) {
