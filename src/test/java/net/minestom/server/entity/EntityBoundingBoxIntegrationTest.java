@@ -4,6 +4,10 @@ import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.item.PickupItemEvent;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,5 +51,32 @@ public class EntityBoundingBoxIntegrationTest {
 
         player.setPose(Entity.Pose.FALL_FLYING);
         assertEquals(0.4, player.getEyeHeight());
+    }
+
+    @Test
+    public void pickupItem(Env env) {
+        final var instance = env.createFlatInstance();
+        final var listener = env.listen(PickupItemEvent.class);
+        final var spawnPos = new Pos(0, 42, 0);
+        final var entity = new LivingEntity(EntityType.ZOMBIE);
+        entity.setCanPickupItem(true);
+        entity.setInstance(instance, spawnPos).join();
+
+        var time = System.currentTimeMillis();
+
+        dropItem(instance, spawnPos);
+        listener.followup();
+        entity.update(time += 1_000L);
+
+        dropItem(instance, spawnPos.sub(.5));
+        listener.followup();
+        entity.update(time += 1_000L);
+    }
+
+    private void dropItem(final Instance instance, final Pos position) {
+        final var entity = new ItemEntity(ItemStack.of(Material.STONE));
+        entity.hasPhysics = false;
+        entity.setNoGravity(true);
+        entity.setInstance(instance, position).join();
     }
 }
