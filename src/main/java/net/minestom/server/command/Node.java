@@ -12,25 +12,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-record Node(int id, IntList children, boolean executable, Argument<?> arg, AtomicInteger redirectTarget,
+record Node(int id, IntList children, boolean executable, Argument<?> arg, Argument<?> realArg, AtomicInteger redirectTarget,
             AtomicReference<ExecutionInfo> executionInfo) {
 
     public static Node root(int id) {
-        return new Node(id, new IntArrayList(), false, null, null,
+        return new Node(id, new IntArrayList(), false, null, null, null,
                 new AtomicReference<>());
     }
 
     public static Node literal(int id, String name, boolean executable, @Nullable AtomicInteger redirectTarget) {
-        return literal(id, executable, new ArgumentLiteral(name), redirectTarget);
+        final ArgumentLiteral literal = new ArgumentLiteral(name);
+        return new Node(id, new IntArrayList(), executable, literal, literal, redirectTarget, new AtomicReference<>());
     }
 
-    public static Node literal(int id, boolean executable, @NotNull Argument<?> backingArg,
-                               @Nullable AtomicInteger redirectTarget) {
-        return new Node(id, new IntArrayList(), executable, backingArg, redirectTarget, new AtomicReference<>());
+    public static Node literal(int id, String name, boolean executable, @Nullable AtomicInteger redirectTarget, @NotNull Argument<?> backingArg) {
+        return new Node(id, new IntArrayList(), executable, new ArgumentLiteral(name), backingArg, redirectTarget, new AtomicReference<>());
     }
 
     public static Node argument(int id, Argument<?> argument, boolean executable, @Nullable AtomicInteger redirectTarget) {
-        return new Node(id, new IntArrayList(), executable, argument, redirectTarget, new AtomicReference<>());
+        return new Node(id, new IntArrayList(), executable, argument, argument, redirectTarget, new AtomicReference<>());
     }
 
     public void addChildren(Node ...nodes) {

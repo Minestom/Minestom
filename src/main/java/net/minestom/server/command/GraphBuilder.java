@@ -37,15 +37,17 @@ public final class GraphBuilder {
         return rootNode;
     }
 
-    private Node createLiteralNode(String name, @Nullable Node parent, boolean executable, @Nullable String[] aliases, @Nullable AtomicInteger redirectTo) {
+    private Node createLiteralNode(String name, @Nullable Node parent, boolean executable, @Nullable String[] aliases,
+                                   @Nullable AtomicInteger redirectTo, @Nullable Argument<?> argOverride) {
         if (aliases != null) {
-            final Node node = createLiteralNode(name, parent, executable, null, null);
+            final Node node = createLiteralNode(name, parent, executable, null, null, argOverride);
             for (String alias : aliases) {
-                createLiteralNode(alias, parent, executable, null, new AtomicInteger(node.id()));
+                createLiteralNode(alias, parent, executable, null, new AtomicInteger(node.id()), argOverride);
             }
             return node;
         } else {
-            final Node literalNode = Node.literal(idSource.getAndIncrement(), name, executable, redirectTo);
+            final Node literalNode = Node.literal(idSource.getAndIncrement(), name, executable, redirectTo,
+                    Objects.requireNonNullElseGet(argOverride, () -> new ArgumentLiteral(name)));
             nodes.add(literalNode);
             if (parent != null) parent.addChildren(literalNode);
             return literalNode;
@@ -56,7 +58,7 @@ public final class GraphBuilder {
         // TODO Ensure node args are overridden properly where necessary
         final Node[] nodes;
         if (argument instanceof ArgumentEnum<?> argumentEnum) {
-            return argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null)).toArray(Node[]::new);
+            return argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null, argumentEnum)).toArray(Node[]::new);
         } else if (argument instanceof ArgumentGroup argumentGroup) {
             return argumentGroup.group().stream().map(x -> createArgumentNode(x, executable, redirectTarget)).flatMap(Stream::of).toArray(Node[]::new);
         } else if (argument instanceof ArgumentLoop<?> argumentLoop) {
@@ -64,7 +66,7 @@ public final class GraphBuilder {
             return argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable, target)).flatMap(Stream::of).toArray(Node[]::new);
         } else {
             if (argument instanceof ArgumentCommand) {
-                return new Node[]{createLiteralNode(argument.getId(), null, false, null, new AtomicInteger(0))};
+                return new Node[]{createLiteralNode(argument.getId(), null, false, null, new AtomicInteger(0), argument)};
             }
             nodes = new Node[] {Node.argument(idSource.getAndIncrement(), argument, executable, redirectTarget)};
         }
@@ -100,7 +102,7 @@ public final class GraphBuilder {
 
         // Create the command's root node
         final Node cmdNode = createLiteralNode(command.getName(), parent,
-                command.getDefaultExecutor() != null, command.getAliases(), null);
+                command.getDefaultExecutor() != null, command.getAliases(), null, null);
 
         cmdNode.executionInfo().set(new Node.ExecutionInfo(command.getCondition(), command.getDefaultExecutor()));
 

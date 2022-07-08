@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static net.minestom.server.command.builder.arguments.Argument.Result.SyntaxError;
@@ -39,7 +40,7 @@ public final class CommandParser {
             result = parseChild(graph, result.getKey(), reader);
         }
 
-        if (syntax.isEmpty()) {
+        if (syntax.size() < 1) {
             return new UnknownCommandResult(withoutPrefix.toString());
         } else {
             final Node lastNode = syntax.get(syntax.size() - 1).getKey();
@@ -51,15 +52,15 @@ public final class CommandParser {
     private static Map<String, Object> syntaxMapper(List<Map.Entry<Node, Object>> syntax) {
         return syntax.stream()
                 .skip(1) // skip root
-                .map(x -> Map.entry(x.getKey().arg().getId(), x.getValue()))
+                .map(x -> Map.entry(x.getKey().realArg().getId(), x.getValue()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private static @Nullable Map.Entry<Node, Object> parseChild(NodeGraph graph, Node parent, CommandReader reader) {
-        for (Node child : graph.getChildren(parent)) {
+        for (Node child : graph.getChildren(Objects.requireNonNullElse(graph.getRedirectTarget(parent), parent))) {
             final int start = reader.cursor();
             try {
-                final Argument.Result<?> parse = child.arg().parse(reader);
+                final Argument.Result<?> parse = child.realArg().parse(reader);
                 if (parse instanceof Argument.Result.Success<?> success) {
                     return Map.entry(child, success.value());
                 } else if (parse instanceof Argument.Result.SyntaxError<?> syntaxError) {
