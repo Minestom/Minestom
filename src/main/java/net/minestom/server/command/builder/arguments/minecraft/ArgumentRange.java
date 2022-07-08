@@ -32,13 +32,12 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
     }
 
     @Override
-    public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
-        final String input = reader.getWord();
+    public @NotNull Result<T> parse(CommandReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readWord();
         try {
             final String[] split = input.split(Pattern.quote(".."), -1);
 
             if (split.length == 2) {
-                reader.consume();
                 final N min;
                 final N max;
                 if (split[0].length() == 0 && split[1].length() > 0) {
@@ -47,8 +46,12 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
                     max = parser.apply(split[1]);
                 } else if (split[0].length() > 0 && split[1].length() == 0) {
                     // Format NUMBER..
-                    min = parser.apply(split[0]);
-                    max = this.max;
+                    try {
+                        min = parser.apply(split[0]);
+                        max = this.max;
+                    } catch (NumberFormatException e) {
+                        return Result.incompatibleType();
+                    }
                 } else if (split[0].length() > 0) {
                     // Format NUMBER..NUMBER
                     min = parser.apply(split[0]);
@@ -57,15 +60,15 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
                     // Format ..
                     throw new ArgumentSyntaxException("Invalid range format", input, FORMAT_ERROR);
                 }
-                return rangeConstructor.apply(min, max);
+                return Result.success(rangeConstructor.apply(min, max));
             } else if (split.length == 1) {
                 final N number = parser.apply(input);
-                reader.consume();
-                return rangeConstructor.apply(number, number);
+                return Result.success(rangeConstructor.apply(number, number));
+            } else {
+                return Result.syntaxError("Invalid range format", input, FORMAT_ERROR);
             }
         } catch (NumberFormatException e2) {
-            throw new ArgumentSyntaxException("Invalid number", input, FORMAT_ERROR);
+            return Result.syntaxError("Invalid number", input, FORMAT_ERROR);
         }
-        throw new ArgumentSyntaxException("Invalid range format", input, FORMAT_ERROR);
     }
 }

@@ -16,23 +16,20 @@ public class ArgumentComponent extends Argument<Component> {
     }
 
     @Override
-    public @NotNull Component parse(CommandReader reader) throws ArgumentSyntaxException {
-        final char start = reader.getNextChar();
-        if (start != '{') throw new ArgumentSyntaxException("Invalid component start", start+"", INVALID_JSON_ERROR);
+    public @NotNull Result<Component> parse(CommandReader reader) throws ArgumentSyntaxException {
+        final char start = reader.peekNextChar();
+        if (start != '{') Result.incompatibleType();
         final int end = reader.getClosingIndexOfJsonObject(0);
 
         if (end == -1) {
-            final String remaining = reader.getRemaining();
-            reader.consume();
-            throw new ArgumentSyntaxException("Invalid JSON", remaining, INVALID_JSON_ERROR);
+            return Result.syntaxError("Invalid JSON", reader.getRemaining(), INVALID_JSON_ERROR);
         }
 
-        final String s = reader.get(end);
-        reader.consume();
+        final String s = reader.read(end);
         try {
-            return GsonComponentSerializer.gson().deserialize(s);
+            return Result.success(GsonComponentSerializer.gson().deserialize(s));
         } catch (Exception e) {
-            throw new ArgumentSyntaxException("Invalid component", s, INVALID_JSON_ERROR);
+            return Result.syntaxError("Invalid component", s, INVALID_JSON_ERROR);
         }
     }
 
