@@ -10,27 +10,22 @@ import org.jetbrains.annotations.NotNull;
  * Example: true
  */
 public class ArgumentBoolean extends Argument<Boolean> {
-
-    public static final int NOT_BOOLEAN_ERROR = 1;
-
     public ArgumentBoolean(String id) {
         super(id);
     }
 
     @Override
-    public @NotNull Boolean parse(CommandReader reader) throws ArgumentSyntaxException {
-        final String word = reader.getWord();
+    public @NotNull Result<Boolean> parse(CommandReader reader) throws ArgumentSyntaxException {
+        final String word = reader.readWord();
 
         if (word.equalsIgnoreCase("true")) {
-            reader.consume();
-            return true;
+            return Result.success(true);
         }
         if (word.equalsIgnoreCase("false")) {
-            reader.consume();
-            return false;
+            return Result.success(false);
         }
 
-        throw new ArgumentSyntaxException("Not a boolean", word, NOT_BOOLEAN_ERROR);
+        return Result.incompatibleType();
     }
 
     @Override

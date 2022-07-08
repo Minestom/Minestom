@@ -2,7 +2,6 @@ package net.minestom.server.command.builder.arguments.minecraft.registry;
 
 import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ArgumentRegistry<T> extends Argument<T> {
@@ -16,13 +15,13 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
     public abstract T getRegistry(@NotNull String value);
 
     @Override
-    public @NotNull T parse(CommandReader reader) throws ArgumentSyntaxException {
-        final String input = reader.getWord();
+    public @NotNull Result<T> parse(CommandReader reader) {
+        final String input = reader.readWord();
         final T registryValue = getRegistry(input);
         if (registryValue == null)
-            throw new ArgumentSyntaxException("Registry value is invalid", input, INVALID_NAME);
+            return Result.syntaxError("Registry value is invalid", input, INVALID_NAME);
+        //fixme check vanilla incompatible/syntax error and in every other arg too
 
-        reader.consume();
-        return registryValue;
+        return Result.success(registryValue);
     }
 }

@@ -22,7 +22,7 @@ public class ArgumentComponent extends Argument<Component> {
         final int end = reader.getClosingIndexOfJsonObject(0);
 
         if (end == -1) {
-            return Result.syntaxError("Invalid JSON", reader.getRemaining(), INVALID_JSON_ERROR);
+            return Result.syntaxError("Invalid JSON", reader.readRemaining(), INVALID_JSON_ERROR);
         }
 
         final String s = reader.read(end);
