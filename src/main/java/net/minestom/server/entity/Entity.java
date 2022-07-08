@@ -581,11 +581,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // World border collision
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
-        final boolean flying = this instanceof Player player && player.isFlying();
+        final boolean isPlayer = this instanceof Player;
+        final boolean flying = isPlayer && ((Player) this).isFlying();
         if (!positionChanged) {
             if (flying) {
                 this.velocity = Vec.ZERO;
-                sendPacketToViewers(getVelocityPacket());
                 return;
             } else if (hasVelocity || newVelocity.isZero()) {
                 this.velocity = noGravity ? Vec.ZERO : new Vec(
@@ -593,7 +593,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                sendPacketToViewers(getVelocityPacket());
+                if (!isPlayer) sendPacketToViewers(getVelocityPacket());
                 return;
             }
         }
@@ -620,7 +620,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
+        if (!isPlayer && (hasVelocity || gravityTickCount > 0)) {
             sendPacketToViewers(getVelocityPacket());
         }
     }
@@ -1381,11 +1381,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) { // Update visible chunks
-                player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
-                ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
-                        MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
-            }
+            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
             refreshCurrentChunk(newChunk);
         }
     }

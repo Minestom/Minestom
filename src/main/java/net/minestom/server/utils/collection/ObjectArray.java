@@ -38,4 +38,6 @@ public sealed interface ObjectArray<T>
     }
 
     void trim();
+
+    @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type);
 }

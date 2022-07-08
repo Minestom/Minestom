@@ -4,6 +4,8 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class SuggestionEntry {
     private final String entry;
     private final Component tooltip;
@@ -23,5 +25,18 @@ public class SuggestionEntry {
 
     public @Nullable Component getTooltip() {
         return tooltip;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SuggestionEntry that = (SuggestionEntry) o;
+        return Objects.equals(entry, that.entry) && Objects.equals(tooltip, that.tooltip);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entry, tooltip);
     }
 }

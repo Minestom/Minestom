@@ -67,7 +67,7 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
 
     record Builder(TagHandler tagHandler) implements ItemMeta.Builder {
         @Override
-        public @NotNull ItemMeta build() {
+        public @NotNull ItemMetaImpl build() {
             return new ItemMetaImpl(tagHandler.copy());
         }
     }

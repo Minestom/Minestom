@@ -213,7 +213,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
      */
     default void callCancellable(@NotNull T event, @NotNull Runnable successCallback) {
         call(event);
-        if (!(event instanceof CancellableEvent) || !((CancellableEvent) event).isCancelled()) {
+        if (!(event instanceof CancellableEvent cancellableEvent) || !cancellableEvent.isCancelled()) {
             successCallback.run();
         }
     }

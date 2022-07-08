@@ -322,6 +322,12 @@ public class InstanceContainer extends Instance {
                                 final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
                                 if (forkChunk != null) {
                                     applyFork(forkChunk, sectionModifier);
+                                    // Update players
+                                    if (forkChunk instanceof DynamicChunk dynamicChunk) {
+                                        dynamicChunk.chunkCache.invalidate();
+                                        dynamicChunk.lightCache.invalidate();
+                                    }
+                                    forkChunk.sendChunk();
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);
                                     this.generationForks.compute(index, (i, sectionModifiers) -> {
@@ -339,7 +345,6 @@ public class InstanceContainer extends Instance {
                     MinecraftServer.getExceptionManager().handleException(e);
                 } finally {
                     // End generation
-                    chunk.sendChunk();
                     refreshLastBlockChangeTime();
                     resultFuture.complete(chunk);
                 }

@@ -85,8 +85,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.workerQueue = worker.queue();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
-        POOL.register(this, tickBuffer);
-        POOL.register(this, waitingBuffers);
     }
 
     public void processPackets(BinaryBuffer readBuffer, PacketProcessor packetProcessor) {
@@ -203,7 +201,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void disconnect() {
         super.disconnect();
-        this.workerQueue.relaxedOffer(() -> this.worker.disconnect(this, channel));
+        this.workerQueue.relaxedOffer(() -> {
+            this.worker.disconnect(this, channel);
+            final BinaryBuffer tick = tickBuffer.getAndSet(null);
+            if (tick != null) POOL.add(tick);
+            for (BinaryBuffer buffer : waitingBuffers) POOL.add(buffer);
+            this.waitingBuffers.clear();
+        });
     }
 
     public @NotNull SocketChannel getChannel() {
@@ -345,7 +349,9 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
             final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
-            outgoing.call(new PlayerPacketOutEvent(player, serverPacket));
+            PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+            outgoing.call(event);
+            if (event.isCancelled()) return;
         }
         // Write packet
         if (packet instanceof ServerPacket serverPacket) {
@@ -398,6 +404,8 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void writeBufferSync0(@NotNull ByteBuffer buffer, int index, int length) {
         BinaryBuffer localBuffer = tickBuffer.getPlain();
+        if (localBuffer == null)
+            return; // Socket is closed
         final int capacity = localBuffer.capacity();
         if (length <= capacity) {
             if (!localBuffer.canWrite(length)) localBuffer = updateLocalBuffer();
@@ -418,7 +426,10 @@ public class PlayerSocketConnection extends PlayerConnection {
         final List<BinaryBuffer> waitingBuffers = this.waitingBuffers;
         if (!channel.isConnected()) throw new ClosedChannelException();
         if (waitingBuffers.isEmpty()) {
-            tickBuffer.getPlain().writeChannel(channel);
+            BinaryBuffer localBuffer = tickBuffer.getPlain();
+            if (localBuffer == null)
+                return; // Socket is closed
+            localBuffer.writeChannel(channel);
         } else {
             // Write as much as possible from the waiting list
             Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();

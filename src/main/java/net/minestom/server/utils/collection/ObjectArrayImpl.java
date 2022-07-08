@@ -1,5 +1,6 @@
 package net.minestom.server.utils.collection;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -36,6 +37,12 @@ final class ObjectArrayImpl {
         public void trim() {
             this.array = Arrays.copyOf(array, max + 1);
         }
+
+        @Override
+        public @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type) {
+            //noinspection unchecked,rawtypes
+            return (T[]) Arrays.<T, T>copyOf(array, max + 1, (Class) type.arrayType());
+        }
     }
 
     static final class Concurrent<T> implements ObjectArray<T> {
@@ -67,6 +74,12 @@ final class ObjectArrayImpl {
         @Override
         public synchronized void trim() {
             this.array = Arrays.copyOf(array, max + 1);
+        }
+
+        @Override
+        public @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type) {
+            //noinspection unchecked,rawtypes
+            return (T[]) Arrays.<T, T>copyOf(array, max + 1, (Class) type.arrayType());
         }
     }
 }
