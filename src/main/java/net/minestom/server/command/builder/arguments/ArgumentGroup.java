@@ -1,39 +1,47 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.command.builder.parser.CommandParser;
-import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class ArgumentGroup extends Argument<CommandContext> {
+    //todo don't return context
 
     public static final int INVALID_ARGUMENTS_ERROR = 1;
 
     private final Argument<?>[] group;
 
     public ArgumentGroup(@NotNull String id, @NotNull Argument<?>... group) {
-        super(id, true, false);
+        super(id);
         this.group = group;
     }
 
-    @NotNull
+
     @Override
-    public CommandContext parse(@NotNull String input) throws ArgumentSyntaxException {
-        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
-        CommandParser.parse(null, group, input.split(StringUtils.SPACE), input, validSyntaxes, null);
-
-        CommandContext context = new CommandContext(input);
-        CommandParser.findMostCorrectSyntax(validSyntaxes, context);
-        if (validSyntaxes.isEmpty()) {
-            throw new ArgumentSyntaxException("Invalid arguments", input, INVALID_ARGUMENTS_ERROR);
+    public @NotNull Result<CommandContext> parse(CommandReader reader) {
+        final Map<String, Object> results = new HashMap<>();
+        for (Argument<?> argument : group) {
+            if (!reader.hasRemaining()) {
+                final Supplier<?> supplier = argument.getDefaultValue();
+                if (supplier != null) {
+                    results.put(argument.getId(), supplier.get());
+                } else {
+                    return Result.syntaxError("Required arg isn't specified", "", INVALID_ARGUMENTS_ERROR);
+                }
+            }
+            final Result<?> result = argument.parse(reader);
+            if (result instanceof Result.Success<?> success) {
+                results.put(argument.getId(), success.value());
+            } else {
+                return (Result<CommandContext>) result;
+            }
         }
-
-        return context;
+        return Result.success(new CommandContext("").setArgs(results));
     }
 
     @Override

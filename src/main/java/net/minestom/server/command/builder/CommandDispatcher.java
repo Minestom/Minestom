@@ -85,8 +85,12 @@ public class CommandDispatcher { //Todo maybe merge with manager?
      * @return the command result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
-        final CommandParser.Result result = cache.get(commandString, command -> CommandParser.parse(graph, command));
+        final CommandParser.Result result = parse(commandString);
         final CommandContext context = new CommandContext(commandString).setArgs(result.arguments());
         return result.execute(source, context);
+    }
+
+    public @NotNull CommandParser.Result parse(@NotNull String commandString) {
+        return cache.get(commandString, command -> CommandParser.parse(graph, command));
     }
 }

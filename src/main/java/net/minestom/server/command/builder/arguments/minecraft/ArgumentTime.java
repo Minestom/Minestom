@@ -2,8 +2,8 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +26,9 @@ public class ArgumentTime extends Argument<Duration> {
         super(id);
     }
 
-    @NotNull
     @Override
-    public Duration parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Result<Duration> parse(CommandReader reader) {
+        String input = reader.readWord();
         final char lastChar = input.charAt(input.length() - 1);
 
         TemporalUnit timeUnit;
@@ -44,19 +44,18 @@ public class ArgumentTime extends Argument<Duration> {
             } else if (lastChar == 't') {
                 timeUnit = TimeUnit.SERVER_TICK;
             } else {
-                throw new ArgumentSyntaxException("Time needs to have the unit d, s, t, or none", input, NO_NUMBER);
+                return Result.syntaxError("Time needs to have the unit d, s, t, or none", input, INVALID_TIME_FORMAT);
             }
-        } else
-            throw new ArgumentSyntaxException("Time needs to have a unit", input, NO_NUMBER);
-
+        } else {
+            return Result.syntaxError("Unknown time unit", input, INVALID_TIME_FORMAT);
+        }
         try {
             // Check if value is a number
             final int time = Integer.parseInt(input);
-            return Duration.of(time, timeUnit);
+            return Result.success(Duration.of(time, timeUnit));
         } catch (NumberFormatException e) {
-            throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
+            return Result.syntaxError("Time needs to be a number", input, NO_NUMBER);
         }
-
     }
 
     @Override

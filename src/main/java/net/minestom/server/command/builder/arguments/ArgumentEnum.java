@@ -1,6 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.CommandReader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -10,16 +10,11 @@ import java.util.function.UnaryOperator;
 
 @SuppressWarnings("rawtypes")
 public class ArgumentEnum<E extends Enum> extends Argument<E> {
-
-    public final static int NOT_ENUM_VALUE_ERROR = 1;
-
-    private final Class<E> enumClass;
     private final E[] values;
     private Format format = Format.DEFAULT;
 
     public ArgumentEnum(@NotNull String id, Class<E> enumClass) {
         super(id);
-        this.enumClass = enumClass;
         this.values = enumClass.getEnumConstants();
     }
 
@@ -28,15 +23,15 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         return this;
     }
 
-    @NotNull
     @Override
-    public E parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Result<E> parse(CommandReader reader) {
+        final String input = reader.readWord();
         for (E value : this.values) {
             if (this.format.formatter.apply(value.name()).equals(input)) {
-                return value;
+                return Result.success(value);
             }
         }
-        throw new ArgumentSyntaxException("Not a " + this.enumClass.getSimpleName() + " value", input, NOT_ENUM_VALUE_ERROR);
+        return Result.incompatibleType();
     }
 
     @Override
