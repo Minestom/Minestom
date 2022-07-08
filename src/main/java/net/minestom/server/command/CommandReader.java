@@ -39,7 +39,7 @@ public final class CommandReader {
         return s.substring(1, s.length()-1).replaceAll("\\\\\"", "\"");
     }
 
-    public String getRemaining() {
+    public String readRemaining() {
         return read(input.length());
     }
 

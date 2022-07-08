@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.CommandReader;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -27,21 +26,19 @@ public class ArgumentWord extends Argument<String> {
     }
 
     @Override
-    public @NotNull String parse(CommandReader reader) throws ArgumentSyntaxException {
-        final String word = reader.getWord();
+    public @NotNull Result<String> parse(CommandReader reader) {
+        final String word = reader.readWord();
 
         // Check restrictions (acting as literal)
         if (hasRestrictions()) {
             for (String r : restrictions) {
                 if (word.equals(r)) {
-                    reader.consume();
-                    return word;
+                    return Result.success(word);
                 }
             }
-            throw new ArgumentSyntaxException("Word needs to be in the restriction list", word, RESTRICTION_ERROR);
+            return Result.incompatibleType();
         }
-        reader.consume();
-        return word;
+        return Result.success(word);
     }
 
     /**

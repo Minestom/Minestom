@@ -2,7 +2,6 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentResourceLocation extends Argument<String> {
@@ -12,10 +11,9 @@ public class ArgumentResourceLocation extends Argument<String> {
     }
 
     @Override
-    public @NotNull String parse(CommandReader reader) throws ArgumentSyntaxException {
-        final String input = reader.getWord();
-        reader.consume();
-        return input;
+    public @NotNull Result<String> parse(CommandReader reader) {
+        //todo shouldn't this have some syntax checks?
+        return Result.success(reader.readWord());
     }
 
     @Override
