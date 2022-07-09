@@ -43,7 +43,7 @@ record GraphImpl(Node root) implements Graph {
         });
     }
 
-    static GraphImpl merge(Graph... graphs) {
+    static GraphImpl merge(List<Graph> graphs) {
         BuilderImpl builder = new BuilderImpl(Literal(""));
         for (Graph graph : graphs) {
             recursiveMerge(graph.root(), builder);

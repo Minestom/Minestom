@@ -18,8 +18,12 @@ sealed interface Graph permits GraphImpl {
         return graph;
     }
 
-    static @NotNull Graph merge(@NotNull Graph @NotNull ... graphs) {
+    static @NotNull Graph merge(@NotNull List<@NotNull Graph> graphs) {
         return GraphImpl.merge(graphs);
+    }
+
+    static @NotNull Graph merge(@NotNull Graph @NotNull ... graphs) {
+        return merge(List.of(graphs));
     }
 
     @NotNull Node root();
