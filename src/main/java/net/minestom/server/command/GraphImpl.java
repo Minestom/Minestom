@@ -103,7 +103,10 @@ record GraphImpl(Node root) implements Graph {
     }
 
     static Node builderToNode(BuilderImpl builder) {
-        return new NodeImpl(builder.argument, builder.children.stream().map(GraphImpl::builderToNode).toList());
+        final List<BuilderImpl> children = builder.children;
+        Node[] nodes = new NodeImpl[children.size()];
+        for (int i = 0; i < children.size(); i++) nodes[i] = builderToNode(children.get(i));
+        return new NodeImpl(builder.argument, List.of(nodes));
     }
 
     record NodeImpl(Argument<?> argument, List<Graph.Node> next) implements Graph.Node {
