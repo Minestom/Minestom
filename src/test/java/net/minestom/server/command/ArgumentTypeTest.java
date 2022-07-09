@@ -209,7 +209,7 @@ public class ArgumentTypeTest {
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
 
-        assertArg(arg, "minecraft:resource_location_example", arg.parse("minecraft:resource_location_example"));
+        assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
         assertInvalidArg(arg, "minecraft:invalid resource location");
 
         assertArg(arg, "ResourceLocation<resource_location>", arg.toString());
@@ -399,7 +399,7 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentLiteral() {
         var arg = ArgumentType.Literal("literal");
-        assertArg(arg, "literal", arg.parse("literal"));
+        assertArg(arg, "literal", "literal");
         assertInvalidArg(arg, "not_literal");
         assertInvalidArg(arg, "");
     }
