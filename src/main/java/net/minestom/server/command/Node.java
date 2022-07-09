@@ -1,59 +1,39 @@
 package net.minestom.server.command;
 
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.ints.IntSets;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
+import net.minestom.server.command.builder.condition.CommandCondition;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-final class Node {
-    private final int id;
-    private final IntSet children = new IntOpenHashSet();
-    private final IntSet childrenView = IntSets.unmodifiable(children);
-    private final DeclareCommandsPacket.NodeType type;
-    private String name;
-    private Integer redirectTarget;
-    private Argument<?> argument;
-    private boolean executable;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
-    Node(int id, DeclareCommandsPacket.NodeType type) {
-        this.id = id;
-        this.type = type;
+record Node(int id, IntList children, boolean executable, Argument<?> arg, Argument<?> realArg, AtomicInteger redirectTarget,
+            AtomicReference<ExecutionInfo> executionInfo) {
+
+    public static Node root(int id) {
+        return new Node(id, new IntArrayList(), false, null, null, null,
+                new AtomicReference<>());
     }
 
-    Node(int id) {
-        this(id, DeclareCommandsPacket.NodeType.ROOT);
+    public static Node literal(int id, String name, boolean executable, @Nullable AtomicInteger redirectTarget) {
+        final ArgumentLiteral literal = new ArgumentLiteral(name);
+        return new Node(id, new IntArrayList(), executable, literal, literal, redirectTarget, new AtomicReference<>());
     }
 
-    Node(int id, String name, Integer redirectTarget) {
-        this(id, DeclareCommandsPacket.NodeType.LITERAL);
-        setName(name);
-        setRedirectTarget(redirectTarget);
+    public static Node literal(int id, String name, boolean executable, @Nullable AtomicInteger redirectTarget, @NotNull Argument<?> backingArg) {
+        return new Node(id, new IntArrayList(), executable, new ArgumentLiteral(name), backingArg, redirectTarget, new AtomicReference<>());
     }
 
-    Node(int id, Argument<?> argument) {
-        this(id, DeclareCommandsPacket.NodeType.ARGUMENT);
-        setName(argument.getId());
-        this.argument = argument;
+    public static Node argument(int id, Argument<?> argument, boolean executable, @Nullable AtomicInteger redirectTarget) {
+        return new Node(id, new IntArrayList(), executable, argument, argument, redirectTarget, new AtomicReference<>());
     }
 
-    public void setExecutable(boolean executable) {
-        this.executable = executable;
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setRedirectTarget(Integer redirectTarget) {
-        this.redirectTarget = redirectTarget;
-    }
-
-    public void addChild(Node ...nodes) {
+    public void addChildren(Node ...nodes) {
         for (Node node : nodes) {
             children.add(node.id);
         }
@@ -63,43 +43,9 @@ final class Node {
         return children.contains(node.id());
     }
 
-    public int id() {
-        return id;
-    }
-
-    public DeclareCommandsPacket.NodeType type() {
-        return type;
-    }
-
-    public IntSet children() {
-        return childrenView;
-    }
-
-    public Integer redirectTarget() {
-        return redirectTarget;
-    }
-
     public boolean isRoot() {
-        return type == DeclareCommandsPacket.NodeType.ROOT;
+        return arg == null;
     }
 
-    public DeclareCommandsPacket.Node getPacketNode() {
-        final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
-        node.children = children.toIntArray();
-        node.flags = DeclareCommandsPacket.getFlag(type, executable, redirectTarget != null,
-                type == DeclareCommandsPacket.NodeType.ARGUMENT && argument.hasSuggestion());
-        node.name = name;
-        if (redirectTarget != null) {
-            node.redirectedNode = redirectTarget;
-        }
-        if (type == DeclareCommandsPacket.NodeType.ARGUMENT) {
-            node.properties = argument.nodeProperties();
-            node.parser = argument.parser();
-            if (argument.hasSuggestion()) {
-                //noinspection ConstantConditions
-                node.suggestionsType = argument.suggestionType().getIdentifier();
-            }
-        }
-        return node;
-    }
+    public record ExecutionInfo(@Nullable CommandCondition condition, @Nullable CommandExecutor executor) {}
 }

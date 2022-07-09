@@ -1,28 +1,30 @@
 package net.minestom.server.command;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
+import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
+import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.command.builder.arguments.number.ArgumentLong;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.IllegalCommandStructureException;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-final class GraphBuilder {
+public final class GraphBuilder {
+    private static final List<Class<? extends Argument<?>>> argPriorities = List.of(
+            ArgumentInteger.class, ArgumentLong.class, ArgumentFloat.class, ArgumentDouble.class //TODO the rest
+    );
     private final AtomicInteger idSource = new AtomicInteger();
-    private final ObjectSet<Node> nodes = new ObjectOpenHashSet<>();
-    private final ObjectSet<Supplier<Boolean>> redirectWaitList = new ObjectOpenHashSet<>();
+    private final ObjectList<Node> nodes = new ObjectArrayList<>();
     private final Node root = rootNode();
 
     private GraphBuilder() {
@@ -30,86 +32,57 @@ final class GraphBuilder {
     }
 
     private Node rootNode() {
-        final Node rootNode = new Node(idSource.getAndIncrement());
+        final Node rootNode = Node.root(idSource.getAndIncrement());
         nodes.add(rootNode);
         return rootNode;
     }
 
-    private Node createLiteralNode(String name, @Nullable Node parent, boolean executable, @Nullable String[] aliases, @Nullable Integer redirectTo) {
+    private Node createLiteralNode(String name, @Nullable Node parent, boolean executable, @Nullable String[] aliases,
+                                   @Nullable AtomicInteger redirectTo, @Nullable Argument<?> argOverride) {
         if (aliases != null) {
-            final Node node = createLiteralNode(name, parent, executable, null, null);
+            final Node node = createLiteralNode(name, parent, executable, null, null, argOverride);
             for (String alias : aliases) {
-                createLiteralNode(alias, parent, executable, null, node.id());
+                createLiteralNode(alias, parent, executable, null, new AtomicInteger(node.id()), argOverride);
             }
             return node;
         } else {
-            final Node literalNode = new Node(idSource.getAndIncrement(), name, redirectTo);
-            literalNode.setExecutable(executable);
+            final Node literalNode = Node.literal(idSource.getAndIncrement(), name, executable, redirectTo,
+                    Objects.requireNonNullElseGet(argOverride, () -> new ArgumentLiteral(name)));
             nodes.add(literalNode);
-            if (parent != null) parent.addChild(literalNode);
+            if (parent != null) parent.addChildren(literalNode);
             return literalNode;
         }
     }
 
-    private Node[] createArgumentNode(Argument<?> argument, boolean executable) {
+    private Node[] createArgumentNode(Argument<?> argument, boolean executable, @Nullable AtomicInteger redirectTarget) {
+        // TODO Ensure node args are overridden properly where necessary
         final Node[] nodes;
-        Integer overrideRedirectTarget = null;
         if (argument instanceof ArgumentEnum<?> argumentEnum) {
-            nodes = argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null)).toArray(Node[]::new);
+            return argumentEnum.entries().stream().map(x -> createLiteralNode(x, null, executable, null, null, argumentEnum)).toArray(Node[]::new);
         } else if (argument instanceof ArgumentGroup argumentGroup) {
-            nodes = argumentGroup.group().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
+            return argumentGroup.group().stream().map(x -> createArgumentNode(x, executable, redirectTarget)).flatMap(Stream::of).toArray(Node[]::new);
         } else if (argument instanceof ArgumentLoop<?> argumentLoop) {
-            overrideRedirectTarget = idSource.get()-1;
-            nodes = argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable)).flatMap(Stream::of).toArray(Node[]::new);
+            final AtomicInteger target = new AtomicInteger(idSource.get() - 1);
+            return argumentLoop.arguments().stream().map(x -> createArgumentNode(x, executable, target)).flatMap(Stream::of).toArray(Node[]::new);
         } else {
             if (argument instanceof ArgumentCommand) {
-                return new Node[]{createLiteralNode(argument.getId(), null, false, null, 0)};
+                return new Node[]{createLiteralNode(argument.getId(), null, false, null, new AtomicInteger(0), argument)};
             }
-            final int id = idSource.getAndIncrement();
-            nodes = new Node[] {argument instanceof ArgumentLiteral ? new Node(id, argument.getId(), null) : new Node(id, argument)};
+            nodes = new Node[] {Node.argument(idSource.getAndIncrement(), argument, executable, redirectTarget)};
         }
-        for (Node node : nodes) {
-            node.setExecutable(executable);
-            this.nodes.add(node);
-            Integer finalOverrideRedirectTarget = overrideRedirectTarget;
-            if (finalOverrideRedirectTarget != null) {
-                redirectWaitList.add(() -> {
-                    int target = finalOverrideRedirectTarget;
-                    if (target != -1) {
-                        node.setRedirectTarget(target);
-                        return true;
-                    }
-                    return false;
-                });
-            }
-        }
+        this.nodes.addAll(Arrays.asList(nodes));
         return nodes;
     }
 
-    private int tryResolveId(String[] path) {
-        if (path.length == 0) {
-            return root.id();
-        } else {
-            Node target = root;
-            for (String next : path) {
-                Node finalTarget = target;
-                final Optional<Node> result = nodes.stream().filter(finalTarget::isParentOf)
-                        .filter(x -> x.name().equals(next)).findFirst();
-                if (result.isEmpty()) {
-                    return -1;
-                } else {
-                    target = result.get();
-                }
-            }
-            return target.id();
-        }
-    }
+    private void finalizeStructure(boolean forParsing) {
+        nodes.sort(Comparator.comparing(Node::id));
 
-    private void finalizeStructure() {
-        redirectWaitList.removeIf(Supplier::get);
-        if (redirectWaitList.size() > 0)
-            throw new IllegalCommandStructureException("Could not set redirects for all arguments! Did you provide a " +
-                    "correct id path which doesn't rely on redirects?");
+        if (forParsing) {
+            for (Node node : nodes) {
+                node.children().sort((k1, k2) -> Integer.compare(argPriorities.indexOf(nodes.get(k1).arg().getClass()),
+                        argPriorities.indexOf(nodes.get(k2).arg().getClass())));
+            }
+        }
     }
 
 
@@ -129,14 +102,16 @@ final class GraphBuilder {
 
         // Create the command's root node
         final Node cmdNode = createLiteralNode(command.getName(), parent,
-                command.getDefaultExecutor() != null, command.getAliases(), null);
+                command.getDefaultExecutor() != null, command.getAliases(), null, null);
+
+        cmdNode.executionInfo().set(new Node.ExecutionInfo(command.getCondition(), command.getDefaultExecutor()));
 
         // Add syntax to the command
         for (CommandSyntax syntax : command.getSyntaxes()) {
+            final CommandCondition syntaxCondition = syntax.getCommandCondition();
             if (player != null) {
                 // Check if user can use the syntax
-                final CommandCondition condition = syntax.getCommandCondition();
-                if (condition != null && !condition.canUse(player, null)) continue;
+                if (syntaxCondition != null && !syntaxCondition.canUse(player, null)) continue;
             }
 
             boolean executable = false;
@@ -153,9 +128,17 @@ final class GraphBuilder {
                     executable = true;
                 }
                 // Append current node to previous
-                final Node[] argNodes = createArgumentNode(argument, executable);
+                final Node[] argNodes = createArgumentNode(argument, executable, null);
                 for (Node lastArgNode : lastArgNodes) {
-                    lastArgNode.addChild(argNodes);
+                    lastArgNode.addChildren(argNodes);
+                }
+                // Populate execution info
+                for (Node argNode : argNodes) {
+                    argNode.executionInfo().set(new Node.ExecutionInfo(
+                            // Syntax or command condition
+                            syntaxCondition == null ? command.getCondition() : syntaxCondition,
+                            // Syntax executor or default
+                            executable ? syntax.getExecutor() : command.getDefaultExecutor()));
                 }
                 lastArgNodes = argNodes;
             }
@@ -193,9 +176,9 @@ final class GraphBuilder {
             }
         }
 
-        builder.finalizeStructure();
+        builder.finalizeStructure(player == null);
 
-        return new NodeGraph(builder.nodes, builder.root.id());
+        return new NodeGraph(builder.nodes, builder.root);
     }
 
     public static NodeGraph forServer(@NotNull Set<Command> commands) {
