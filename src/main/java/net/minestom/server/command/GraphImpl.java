@@ -4,10 +4,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
@@ -15,23 +12,13 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.Literal
 record GraphImpl(Node root) implements Graph {
 
     record ConversionNode(Map<Argument<?>, ConversionNode> next) {
+        ConversionNode() {
+            this(new HashMap<>());
+        }
     }
 
     static GraphImpl fromCommand(Command command) {
-        ConversionNode root = new ConversionNode(new HashMap<>());
-        for (var syntax : command.getSyntaxes()) {
-            ConversionNode syntaxNode = root;
-            for (int i = 0; i < syntax.getArguments().length; i++) {
-                final Argument<?> arg = syntax.getArguments()[i];
-                ConversionNode tmp = syntaxNode.next.get(arg);
-                if (tmp == null) {
-                    tmp = new ConversionNode(new HashMap<>());
-                    syntaxNode.next.put(arg, tmp);
-                }
-                syntaxNode = tmp;
-            }
-        }
-
+        final ConversionNode root = commandToNode(command);
         BuilderImpl builder = new BuilderImpl(Literal(command.getName()));
         for (var test : root.next.entrySet()) recursiveConversion(test, builder);
         return builder.build();
@@ -41,6 +28,33 @@ record GraphImpl(Node root) implements Graph {
         builder.append(entry.getKey(), b -> {
             for (var e : entry.getValue().next.entrySet()) recursiveConversion(e, b);
         });
+    }
+
+    static ConversionNode commandToNode(Command command) {
+        ConversionNode root = new ConversionNode();
+        for (var syntax : command.getSyntaxes()) {
+            ConversionNode syntaxNode = root;
+            for (Argument<?> arg : syntax.getArguments()) {
+                ConversionNode tmp = syntaxNode.next.get(arg);
+                if (tmp == null) {
+                    tmp = new ConversionNode();
+                    syntaxNode.next.put(arg, tmp);
+                }
+                syntaxNode = tmp;
+            }
+        }
+        return root;
+    }
+
+    static Graph merge(Collection<Command> commands) {
+        BuilderImpl builder = new BuilderImpl(Literal(""));
+        for (Command command : commands) {
+            final ConversionNode node = commandToNode(command);
+            builder.append(Literal(command.getName()), b -> {
+                for (var e : node.next().entrySet()) recursiveConversion(e, b);
+            });
+        }
+        return builder.build();
     }
 
     static GraphImpl merge(List<Graph> graphs) {

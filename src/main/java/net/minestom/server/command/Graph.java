@@ -4,6 +4,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -16,6 +17,10 @@ sealed interface Graph permits GraphImpl {
         final Graph graph = GraphImpl.fromCommand(command);
         GraphValidator.verifyConflict(graph);
         return graph;
+    }
+
+    static @NotNull Graph merge(@NotNull Collection<@NotNull Command> commands) {
+        return GraphImpl.merge(commands);
     }
 
     static @NotNull Graph merge(@NotNull List<@NotNull Graph> graphs) {

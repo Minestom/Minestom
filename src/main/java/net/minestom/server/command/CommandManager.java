@@ -12,8 +12,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 /**
  * Manager used to register {@link Command commands}.
  * <p>
@@ -159,8 +157,7 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
-        final List<Graph> graphs = dispatcher.getCommands().stream().map(Graph::fromCommand).toList();
-        final Graph merged = Graph.merge(graphs);
+        final Graph merged = Graph.merge(dispatcher.getCommands());
         return GraphConverter.createPacket(merged);
     }
 }
