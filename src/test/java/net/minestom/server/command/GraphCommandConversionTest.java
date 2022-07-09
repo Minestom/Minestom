@@ -9,7 +9,7 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.Integer
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GraphTest {
+public class GraphCommandConversionTest {
     @Test
     public void empty() {
         final Command foo = new Command("foo");
@@ -21,7 +21,7 @@ public class GraphTest {
     public void singleLiteral() {
         final Command foo = new Command("foo");
         var first = Literal("first");
-        foo.addSyntax(GraphTest::dummyExecutor, first);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, first);
         var graph = Graph.builder(Literal("foo"))
                 .append(first).build();
         assertEqualsGraph(graph, Graph.fromCommand(foo));
@@ -33,8 +33,8 @@ public class GraphTest {
         var first = Literal("first");
         var second = Literal("second");
 
-        foo.addSyntax(GraphTest::dummyExecutor, first);
-        foo.addSyntax(GraphTest::dummyExecutor, second);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, first);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, second);
 
         var graph = Graph.builder(Literal("foo"))
                 .append(first).append(second)
@@ -52,8 +52,8 @@ public class GraphTest {
         var baz = Literal("baz");
         var a = Enum("a", A.class);
 
-        foo.addSyntax(GraphTest::dummyExecutor, bar);
-        foo.addSyntax(GraphTest::dummyExecutor, baz, a);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, bar);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, baz, a);
 
         var graph = Graph.builder(Literal("foo"))
                 .append(bar)
@@ -70,8 +70,8 @@ public class GraphTest {
         var bar = Literal("bar");
         var number = Integer("number");
 
-        foo.addSyntax(GraphTest::dummyExecutor, bar);
-        foo.addSyntax(GraphTest::dummyExecutor, bar, number);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, bar);
+        foo.addSyntax(GraphCommandConversionTest::dummyExecutor, bar, number);
 
         // The two syntax shall start from the same node
         var graph = Graph.builder(Literal("foo"))
