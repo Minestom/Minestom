@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CommandPacketTest {
     @Test
-    public void commandToPacket() {
+    public void singleCommandWithOneSyntax() {
         final Command foo = new Command("foo");
         foo.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Integer("bar"));
 

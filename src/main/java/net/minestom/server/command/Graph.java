@@ -24,6 +24,8 @@ interface Graph {
 
     @NotNull Node root();
 
+    boolean compare(@NotNull Graph graph, @NotNull Comparator comparator);
+
     interface Node {
         @NotNull Argument<?> argument();
 
@@ -36,5 +38,9 @@ interface Graph {
         @NotNull Builder append(@NotNull Argument<?> argument);
 
         @NotNull Graph build();
+    }
+
+    enum Comparator {
+        TREE
     }
 }

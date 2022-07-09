@@ -39,6 +39,12 @@ record GraphImpl(Node root) implements Graph {
         return builder.build();
     }
 
+    @Override
+    public boolean compare(@NotNull Graph graph, @NotNull Comparator comparator) {
+        // We currently do not include execution data in the graph
+        return equals(graph);
+    }
+
     static void recursiveMerge(Node node, Builder builder) {
         final List<Node> args = node.next();
         if (args.isEmpty()) {

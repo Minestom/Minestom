@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Enum;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GraphTest {
     @Test
     public void empty() {
         final Command foo = new Command("foo");
         var graph = Graph.builder(Literal("foo")).build();
-        assertEquals(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, Graph.fromCommand(foo));
     }
 
     @Test
@@ -24,7 +24,7 @@ public class GraphTest {
         foo.addSyntax(GraphTest::dummyExecutor, first);
         var graph = Graph.builder(Literal("foo"))
                 .append(first).build();
-        assertEquals(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, Graph.fromCommand(foo));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class GraphTest {
         var graph = Graph.builder(Literal("foo"))
                 .append(first).append(second)
                 .build();
-        assertEquals(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, Graph.fromCommand(foo));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class GraphTest {
                 .append(baz, builder ->
                         builder.append(a))
                 .build();
-        assertEquals(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, Graph.fromCommand(foo));
     }
 
     @Test
@@ -77,7 +77,15 @@ public class GraphTest {
         var graph = Graph.builder(Literal("foo"))
                 .append(bar, builder -> builder.append(number))
                 .build();
-        assertEquals(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, Graph.fromCommand(foo));
+    }
+
+    private static void assertEqualsGraph(Graph expected, Graph actual) {
+        assertTrue(expected.compare(actual, Graph.Comparator.TREE), () -> {
+            System.out.println("Expected: " + expected);
+            System.out.println("Actual: " + actual);
+            return "";
+        });
     }
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {
