@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-interface Graph {
+sealed interface Graph permits GraphImpl {
     static @NotNull Builder builder(@NotNull Argument<?> argument) {
         return new GraphImpl.BuilderImpl(argument);
     }
@@ -26,13 +26,13 @@ interface Graph {
 
     boolean compare(@NotNull Graph graph, @NotNull Comparator comparator);
 
-    interface Node {
+    sealed interface Node permits GraphImpl.NodeImpl {
         @NotNull Argument<?> argument();
 
         @NotNull List<@NotNull Node> next();
     }
 
-    interface Builder {
+    sealed interface Builder permits GraphImpl.BuilderImpl {
         @NotNull Builder append(@NotNull Argument<?> argument, @NotNull Consumer<Builder> consumer);
 
         @NotNull Builder append(@NotNull Argument<?> argument);
