@@ -18,7 +18,7 @@ interface Graph {
         return graph;
     }
 
-    static @NotNull Graph merge(@NotNull List<@NotNull Graph> graphs) {
+    static @NotNull Graph merge(@NotNull Graph @NotNull ... graphs) {
         return GraphImpl.merge(graphs);
     }
 
