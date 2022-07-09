@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.Contract;
@@ -21,20 +22,25 @@ final class GraphConverter {
     }
 
     private static int append(Graph.Node of, List<DeclareCommandsPacket.Node> to, AtomicInteger id) {
+        final Argument<?> argument = of.argument();
+        final List<Graph.Node> next = of.next();
+
         final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
-        node.children = of.next().stream().mapToInt(x -> append(x, to, id)).toArray();
-        if (of.argument() instanceof ArgumentLiteral literal) {
+        int[] children = new int[next.size()];
+        for (int i = 0; i < children.length; i++) children[i] = append(next.get(i), to, id);
+        node.children = children;
+        if (argument instanceof ArgumentLiteral literal) {
             if (literal.getId().isEmpty()) {
                 node.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ROOT, false, false, false);
             } else {
                 node.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, false, false, false);
-                node.name = of.argument().getId();
+                node.name = argument.getId();
             }
         } else {
             node.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, false, false, false);
-            node.name = of.argument().getId();
-            node.parser = of.argument().parser();
-            node.properties = of.argument().nodeProperties();
+            node.name = argument.getId();
+            node.parser = argument.parser();
+            node.properties = argument.nodeProperties();
         }
         to.add(node);
         return id.getAndIncrement();
