@@ -107,6 +107,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean hasPhysics = true;
+    protected boolean hasNoGravity = false;
 
     /**
      * The amount of drag applied on the Y axle.
@@ -1265,7 +1266,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return true if the entity ignore gravity, false otherwise
      */
     public boolean hasNoGravity() {
-        return this.entityMeta.isHasNoGravity();
+        return this.hasNoGravity;
     }
 
     /**
@@ -1274,6 +1275,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param noGravity should the entity ignore gravity
      */
     public void setNoGravity(boolean noGravity) {
+        this.hasNoGravity = noGravity;
         this.entityMeta.setHasNoGravity(noGravity);
     }
 
