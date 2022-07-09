@@ -21,7 +21,7 @@ public record NodeGraph(List<Node> nodes, Node root) {
         return resolveId(node.redirectTarget().get());
     }
 
-    public String exportGarphvizDot() {
+    public String exportGarphvizDot(boolean prettyPrint) {
         final StringBuilder builder = new StringBuilder();
         final char statementSeparator = ';';
         builder.append("digraph G {");
@@ -54,7 +54,13 @@ public record NodeGraph(List<Node> nodes, Node root) {
             }
         }
         builder.append("}");
-        return builder.toString();
+        if (prettyPrint)
+            return builder.toString()
+                    .replaceFirst("\\{r", "{\n  r")
+                    .replaceAll(";", "\n  ")
+                    .replaceFirst(" {2}}$", "}\n");
+        else
+            return builder.toString();
     }
 
     private static String graphvizName(Node node) {
