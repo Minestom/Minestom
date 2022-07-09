@@ -5,30 +5,42 @@ import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
 record GraphImpl(Node root) implements Graph {
+
+    record ConversionNode(Map<Argument<?>, ConversionNode> next) {
+    }
+
     static GraphImpl fromCommand(Command command) {
-        BuilderImpl builder = new BuilderImpl(Literal(command.getName()));
+        ConversionNode root = new ConversionNode(new HashMap<>());
         for (var syntax : command.getSyntaxes()) {
-            AtomicReference<Builder> syntaxBuilder = new AtomicReference<>(builder);
+            ConversionNode syntaxNode = root;
             for (int i = 0; i < syntax.getArguments().length; i++) {
                 final Argument<?> arg = syntax.getArguments()[i];
-                final boolean isLast = i == syntax.getArguments().length - 1;
-
-                Builder tmp = syntaxBuilder.get();
-                if (isLast) {
-                    tmp.append(arg);
-                } else {
-                    tmp.append(arg, syntaxBuilder::set);
+                ConversionNode tmp = syntaxNode.next.get(arg);
+                if (tmp == null) {
+                    tmp = new ConversionNode(new HashMap<>());
+                    syntaxNode.next.put(arg, tmp);
                 }
+                syntaxNode = tmp;
             }
         }
+
+        BuilderImpl builder = new BuilderImpl(Literal(command.getName()));
+        for (var test : root.next.entrySet()) recursiveConversion(test, builder);
         return builder.build();
+    }
+
+    static void recursiveConversion(Map.Entry<Argument<?>, ConversionNode> entry, Builder builder) {
+        builder.append(entry.getKey(), b -> {
+            for (var e : entry.getValue().next.entrySet()) recursiveConversion(e, b);
+        });
     }
 
     static GraphImpl merge(Graph... graphs) {
