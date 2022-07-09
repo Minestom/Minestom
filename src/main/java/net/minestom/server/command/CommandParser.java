@@ -32,12 +32,13 @@ public final class CommandParser {
 
         while (result != null) {
             syntax.add(result);
+            final Node parent = result.getKey();
             if (result.getValue() instanceof SyntaxError e) {
                 // Syntax error stop at this arg
-                return new SyntaxErrorResult(withoutPrefix.toString(), result.getKey().executionInfo().get().condition(),
-                        result.getKey().arg().getCallback(), e, syntaxMapper(syntax));
+                return new SyntaxErrorResult(withoutPrefix.toString(), parent.executionInfo().get().condition(),
+                        parent.arg().getCallback(), e, syntaxMapper(syntax));
             }
-            result = parseChild(graph, result.getKey(), reader);
+            result = parseChild(graph, Objects.requireNonNullElse(graph.getRedirectTarget(parent), parent), reader);
         }
 
         if (syntax.size() < 1) {
@@ -57,7 +58,7 @@ public final class CommandParser {
     }
 
     private static @Nullable Map.Entry<Node, Object> parseChild(NodeGraph graph, Node parent, CommandReader reader) {
-        for (Node child : graph.getChildren(Objects.requireNonNullElse(graph.getRedirectTarget(parent), parent))) {
+        for (Node child : graph.getChildren(parent)) {
             final int start = reader.cursor();
             try {
                 final Argument.Result<?> parse = child.realArg().parse(reader);
