@@ -31,6 +31,25 @@ record GraphImpl(Node root) implements Graph {
         return builder.build();
     }
 
+    static GraphImpl merge(List<Graph> graphs) {
+        BuilderImpl builder = new BuilderImpl(Literal(""));
+        for (Graph graph : graphs) {
+            recursiveMerge(graph.root(), builder);
+        }
+        return builder.build();
+    }
+
+    static void recursiveMerge(Node node, Builder builder) {
+        final List<Node> args = node.next();
+        if (args.isEmpty()) {
+            builder.append(node.argument());
+        } else {
+            builder.append(node.argument(), b -> {
+                for (var arg : args) recursiveMerge(arg, b);
+            });
+        }
+    }
+
     static final class BuilderImpl implements Graph.Builder {
         private final Argument<?> argument;
         private final List<BuilderImpl> children;

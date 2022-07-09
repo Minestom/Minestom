@@ -13,7 +13,13 @@ interface Graph {
     }
 
     static @NotNull Graph fromCommand(@NotNull Command command) {
-        return GraphImpl.fromCommand(command);
+        final Graph graph = GraphImpl.fromCommand(command);
+        GraphValidator.verifyConflict(graph);
+        return graph;
+    }
+
+    static @NotNull Graph merge(@NotNull List<@NotNull Graph> graphs) {
+        return GraphImpl.merge(graphs);
     }
 
     @NotNull Node root();
