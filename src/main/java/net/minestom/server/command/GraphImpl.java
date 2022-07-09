@@ -10,76 +10,31 @@ import java.util.function.Consumer;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
 record GraphImpl(Node root) implements Graph {
-
-    record ConversionNode(Map<Argument<?>, ConversionNode> next) {
-        ConversionNode() {
-            this(new HashMap<>());
-        }
-    }
-
     static GraphImpl fromCommand(Command command) {
-        final ConversionNode root = commandToNode(command);
-        BuilderImpl builder = new BuilderImpl(Literal(command.getName()));
-        for (var test : root.next.entrySet()) recursiveConversion(test, builder);
-        return builder.build();
-    }
-
-    static void recursiveConversion(Map.Entry<Argument<?>, ConversionNode> entry, Builder builder) {
-        builder.append(entry.getKey(), b -> {
-            for (var e : entry.getValue().next.entrySet()) recursiveConversion(e, b);
-        });
-    }
-
-    static ConversionNode commandToNode(Command command) {
-        ConversionNode root = new ConversionNode();
-        for (var syntax : command.getSyntaxes()) {
-            ConversionNode syntaxNode = root;
-            for (Argument<?> arg : syntax.getArguments()) {
-                ConversionNode tmp = syntaxNode.next.get(arg);
-                if (tmp == null) {
-                    tmp = new ConversionNode();
-                    syntaxNode.next.put(arg, tmp);
-                }
-                syntaxNode = tmp;
-            }
-        }
-        return root;
+        final ConversionNode conv = ConversionNode.fromCommand(command);
+        final Node root = NodeImpl.fromConversionNode(Literal(command.getName()), conv);
+        return new GraphImpl(root);
     }
 
     static Graph merge(Collection<Command> commands) {
-        BuilderImpl builder = new BuilderImpl(Literal(""));
-        for (Command command : commands) {
-            final ConversionNode node = commandToNode(command);
-            builder.append(Literal(command.getName()), b -> {
-                for (var e : node.next().entrySet()) recursiveConversion(e, b);
-            });
+        final ConversionNode conv = new ConversionNode();
+        for (var command : commands) {
+            conv.next.put(Literal(command.getName()), ConversionNode.fromCommand(command));
         }
-        return builder.build();
+        final Node root = NodeImpl.fromConversionNode(Literal(""), conv);
+        return new GraphImpl(root);
     }
 
     static GraphImpl merge(List<Graph> graphs) {
-        BuilderImpl builder = new BuilderImpl(Literal(""));
-        for (Graph graph : graphs) {
-            recursiveMerge(graph.root(), builder);
-        }
-        return builder.build();
+        final List<Node> children = graphs.stream().map(Graph::root).toList();
+        final Node root = new NodeImpl(Literal(""), children);
+        return new GraphImpl(root);
     }
 
     @Override
     public boolean compare(@NotNull Graph graph, @NotNull Comparator comparator) {
         // We currently do not include execution data in the graph
         return equals(graph);
-    }
-
-    static void recursiveMerge(Node node, Builder builder) {
-        final List<Node> args = node.next();
-        if (args.isEmpty()) {
-            builder.append(node.argument());
-        } else {
-            builder.append(node.argument(), b -> {
-                for (var arg : args) recursiveMerge(arg, b);
-            });
-        }
     }
 
     static final class BuilderImpl implements Graph.Builder {
@@ -111,18 +66,47 @@ record GraphImpl(Node root) implements Graph {
 
         @Override
         public @NotNull GraphImpl build() {
-            final Node root = builderToNode(this);
+            final Node root = NodeImpl.fromBuilder(this);
             return new GraphImpl(root);
         }
     }
 
-    static Node builderToNode(BuilderImpl builder) {
-        final List<BuilderImpl> children = builder.children;
-        Node[] nodes = new NodeImpl[children.size()];
-        for (int i = 0; i < children.size(); i++) nodes[i] = builderToNode(children.get(i));
-        return new NodeImpl(builder.argument, List.of(nodes));
+    record NodeImpl(Argument<?> argument, List<Graph.Node> next) implements Graph.Node {
+        static NodeImpl fromBuilder(BuilderImpl builder) {
+            final List<BuilderImpl> children = builder.children;
+            Node[] nodes = new NodeImpl[children.size()];
+            for (int i = 0; i < children.size(); i++) nodes[i] = fromBuilder(children.get(i));
+            return new NodeImpl(builder.argument, List.of(nodes));
+        }
+
+        static Node fromConversionNode(Argument<?> argument, ConversionNode conv) {
+            final Map<Argument<?>, ConversionNode> next = conv.next;
+            Node[] nodes = new NodeImpl[next.size()];
+            int i = 0;
+            for (var entry : next.entrySet()) nodes[i++] = fromConversionNode(entry.getKey(), entry.getValue());
+            return new NodeImpl(argument, List.of(nodes));
+        }
     }
 
-    record NodeImpl(Argument<?> argument, List<Graph.Node> next) implements Graph.Node {
+    record ConversionNode(Map<Argument<?>, ConversionNode> next) {
+        ConversionNode() {
+            this(new LinkedHashMap<>());
+        }
+
+        static ConversionNode fromCommand(Command command) {
+            ConversionNode root = new ConversionNode();
+            for (var syntax : command.getSyntaxes()) {
+                ConversionNode syntaxNode = root;
+                for (Argument<?> arg : syntax.getArguments()) {
+                    ConversionNode tmp = syntaxNode.next.get(arg);
+                    if (tmp == null) {
+                        tmp = new ConversionNode();
+                        syntaxNode.next.put(arg, tmp);
+                    }
+                    syntaxNode = tmp;
+                }
+            }
+            return root;
+        }
     }
 }

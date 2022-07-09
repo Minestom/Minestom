@@ -46,7 +46,7 @@ public class GraphMergeTest {
     private static void assertEqualsGraph(Graph expected, Graph actual) {
         assertTrue(expected.compare(actual, Graph.Comparator.TREE), () -> {
             System.out.println("Expected: " + expected);
-            System.out.println("Actual: " + actual);
+            System.out.println("Actual:   " + actual);
             return "";
         });
     }
