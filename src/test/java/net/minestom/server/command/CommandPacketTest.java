@@ -40,7 +40,7 @@ public class CommandPacketTest {
 
     @Test
     public void executeLike() {
-        enum Dimension{OVERWORLD,THE_NETHER,THE_END}
+        enum Dimension {OVERWORLD, THE_NETHER, THE_END}
         final Command execute = new Command("execute");
         execute.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Loop("params",
                 ArgumentType.Group("facing", ArgumentType.Literal("facing"), ArgumentType.RelativeVec3("pos")),
@@ -49,7 +49,8 @@ public class CommandPacketTest {
                 ArgumentType.Group("in", ArgumentType.Literal("in"), ArgumentType.Enum("dimesion", Dimension.class)),
                 ArgumentType.Group("run", ArgumentType.Command("run"))
         ));
-        assertEquals("""
+        var graph = Graph.merge(Graph.fromCommand(execute));
+        assertPacketGraph("""
                 digraph G {
                   rankdir=LR
                   12 [label="root",shape=rectangle]
@@ -79,12 +80,15 @@ public class CommandPacketTest {
                   11 -> { 0 2 4 6 10 }
                   12 -> { 11 }
                 }
-                """, exportGarphvizDot(GraphConverter.createPacket(Graph.merge(Graph.fromCommand(execute))), true));
+                """, graph);
     }
 
     @Test
     public void singleCommandTwoEnum() {
-        assertEquals("""
+        var graph = Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Enum("baz", B.class)))
+                .build());
+        assertPacketGraph("""
                 digraph G {
                   rankdir=LR
                   7 [label="root",shape=rectangle]
@@ -101,14 +105,15 @@ public class CommandPacketTest {
                   6 -> { 3 4 5 }
                   7 -> { 6 }
                 }
-                """, exportGarphvizDot(GraphConverter.createPacket(Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Enum("baz", B.class)))
-                .build())), true));
+                """, graph);
     }
 
     @Test
     public void singleCommandCommandAfterEnum() {
-        assertEquals("""
+        var graph = Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))
+                .build());
+        assertPacketGraph("""
                 digraph G {
                   rankdir=LR
                   5 [label="root",shape=rectangle]
@@ -124,14 +129,20 @@ public class CommandPacketTest {
                   4 -> { 1 2 3 }
                   5 -> { 4 }
                 }
-                """, exportGarphvizDot(GraphConverter.createPacket(Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))
-                .build())), true));
+                """, graph);
     }
 
     @Test
     public void twoCommandIntEnumInt() {
-        assertEquals("""
+        var graph = Graph.merge(
+                Graph.builder(ArgumentType.Literal("foo"))
+                        .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", A.class), c -> c.append(ArgumentType.Integer("int2"))))
+                        .build(),
+                Graph.builder(ArgumentType.Literal("bar"))
+                        .append(ArgumentType.Integer("int3"), b -> b.append(ArgumentType.Enum("test", B.class), c -> c.append(ArgumentType.Integer("int4"))))
+                        .build()
+        );
+        assertPacketGraph("""
                 digraph G {
                   rankdir=LR
                   12 [label="root",shape=rectangle]
@@ -159,19 +170,17 @@ public class CommandPacketTest {
                   11 -> { 10 }
                   12 -> { 5 11 }
                 }
-                """, exportGarphvizDot(GraphConverter.createPacket(Graph.merge(
-                Graph.builder(ArgumentType.Literal("foo"))
-                        .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", A.class), c -> c.append(ArgumentType.Integer("int2"))))
-                        .build(),
-                Graph.builder(ArgumentType.Literal("bar"))
-                        .append(ArgumentType.Integer("int3"), b -> b.append(ArgumentType.Enum("test", B.class), c -> c.append(ArgumentType.Integer("int4"))))
-                        .build()
-        )), true));
+                """, graph);
     }
 
     @Test
     public void singleCommandTwoGroupOfIntInt() {
-        assertEquals("""
+        var graph = Graph.merge(
+                Graph.builder(ArgumentType.Literal("foo"))
+                        .append(ArgumentType.Group("1", ArgumentType.Integer("int1"), ArgumentType.Integer("int2")),
+                                b -> b.append(ArgumentType.Group("2", ArgumentType.Integer("int3"), ArgumentType.Integer("int4"))))
+                        .build());
+        assertPacketGraph("""
                 digraph G {
                   rankdir=LR
                   5 [label="root",shape=rectangle]
@@ -186,11 +195,12 @@ public class CommandPacketTest {
                   4 -> { 2 }
                   5 -> { 4 }
                 }
-                """, exportGarphvizDot(GraphConverter.createPacket(Graph.merge(
-                Graph.builder(ArgumentType.Literal("foo"))
-                        .append(ArgumentType.Group("1", ArgumentType.Integer("int1"), ArgumentType.Integer("int2")),
-                                b -> b.append(ArgumentType.Group("2", ArgumentType.Integer("int3"), ArgumentType.Integer("int4"))))
-                        .build())), true));
+                """, graph);
+    }
+
+    static void assertPacketGraph(String expected, Graph graph) {
+        var packet = GraphConverter.createPacket(graph);
+        assertEquals(expected, exportGarphvizDot(packet, true));
     }
 
     private static String exportGarphvizDot(DeclareCommandsPacket packet, boolean prettyPrint) {
@@ -246,9 +256,11 @@ public class CommandPacketTest {
             return builder.toString();
     }
 
-    enum A{A,B,C}
-    enum B{D,E,F}
-    enum C{G,H,I,J,K}
+    enum A {A, B, C}
+
+    enum B {D, E, F}
+
+    enum C {G, H, I, J, K}
 
     private static void assertNodeType(DeclareCommandsPacket.NodeType expected, byte flags) {
         assertEquals(expected, DeclareCommandsPacket.NodeType.values()[flags & 0x03]);
