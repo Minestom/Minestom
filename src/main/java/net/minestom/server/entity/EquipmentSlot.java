@@ -3,6 +3,8 @@ package net.minestom.server.entity;
 import net.minestom.server.item.attribute.AttributeSlot;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 public enum EquipmentSlot {
@@ -12,6 +14,8 @@ public enum EquipmentSlot {
     LEGGINGS(true, LEGGINGS_SLOT),
     CHESTPLATE(true, CHESTPLATE_SLOT),
     HELMET(true, HELMET_SLOT);
+
+    private static final List<EquipmentSlot> ARMORS = List.of(BOOTS, LEGGINGS, CHESTPLATE, HELMET);
 
     private final boolean armor;
     private final int armorSlot;
@@ -33,7 +37,11 @@ public enum EquipmentSlot {
         return armorSlot;
     }
 
-    public static EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
+    public static @NotNull List<@NotNull EquipmentSlot> armors() {
+        return ARMORS;
+    }
+
+    public static @NotNull EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
         return switch (attributeSlot) {
             case MAINHAND -> MAIN_HAND;
             case OFFHAND -> OFF_HAND;

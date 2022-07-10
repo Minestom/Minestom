@@ -45,10 +45,9 @@ public final class PlayerDiggingListener {
         } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
             swapItemHand(player);
         }
-
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
-            player.getPlayerConnection().sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, diggingResult.block,
+            player.sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, diggingResult.block,
                     status, diggingResult.success));
         }
     }

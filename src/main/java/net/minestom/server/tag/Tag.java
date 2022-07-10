@@ -2,7 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.collection.IndexMap;
+import net.minestom.server.utils.collection.AutoIncrementMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ import java.util.function.UnaryOperator;
  */
 @ApiStatus.NonExtendable
 public class Tag<T> {
-    private static final IndexMap<String> INDEX_MAP = new IndexMap<>();
+    private static final AutoIncrementMap<String> INDEX_MAP = new AutoIncrementMap<>();
 
     record PathEntry(String name, int index) {
     }
@@ -120,35 +120,18 @@ public class Tag<T> {
         var entry = this.entry;
         var readFunction = entry.reader();
         var writeFunction = entry.writer();
-        var listEntry = new Serializers.Entry<List<T>, NBTList>(
-                NBTList.class,
+        var listEntry = new Serializers.Entry<List<T>, NBTList<?>>(
+                NBTType.TAG_List,
                 read -> {
-                    var list = (NBTList<?>) read;
-                    final int size = list.getSize();
-                    if (size == 0)
-                        return List.of();
-                    T[] array = (T[]) new Object[size];
-                    for (int i = 0; i < size; i++) {
-                        array[i] = readFunction.apply(list.get(i));
-                    }
-                    return List.of(array);
+                    if (read.isEmpty()) return List.of();
+                    return read.asListView().stream().map(readFunction).toList();
                 },
                 write -> {
-                    final int size = write.size();
-                    if (size == 0)
-                        return new NBTList<>(NBTType.TAG_String); // String is the default type for lists
-                    NBTType<NBT> type = null;
-                    NBT[] array = new NBT[size];
-                    for (int i = 0; i < size; i++) {
-                        final NBT nbt = writeFunction.apply(write.get(i));
-                        if (type == null) {
-                            type = (NBTType<NBT>) nbt.getID();
-                        } else if (type != nbt.getID()) {
-                            throw new IllegalArgumentException("All elements of the list must have the same type");
-                        }
-                        array[i] = nbt;
-                    }
-                    return NBT.List(type, List.of(array));
+                    if (write.isEmpty())
+                        return NBT.List(NBTType.TAG_String); // String is the default type for lists
+                    final List<NBT> list = write.stream().map(writeFunction).toList();
+                    final NBTType<?> type = list.get(0).getID();
+                    return NBT.List(type, list);
                 });
         UnaryOperator<List<T>> co = this.copy != null ? ts -> {
             final int size = ts.size();
@@ -225,6 +208,11 @@ public class Tag<T> {
     final T createDefault() {
         final Supplier<T> supplier = defaultValue;
         return supplier != null ? supplier.get() : null;
+    }
+
+    final T copyValue(@NotNull T value) {
+        final UnaryOperator<T> copier = copy;
+        return copier != null ? copier.apply(value) : value;
     }
 
     @Override

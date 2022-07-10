@@ -2,13 +2,12 @@ package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityEquipEvent implements EntityEvent, EntityInstanceEvent, ItemEvent {
+public class EntityEquipEvent implements EntityInstanceEvent, ItemEvent {
 
     private final Entity entity;
     private ItemStack equippedItem;

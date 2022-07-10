@@ -55,6 +55,7 @@ public final class PacketListenerManager {
         setListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
         setListener(ClientSpectatePacket.class, SpectateListener::listener);
+        setListener(ClientEditBookPacket.class, BookListener::listener);
     }
 
     /**

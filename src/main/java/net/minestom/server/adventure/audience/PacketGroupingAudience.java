@@ -36,7 +36,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param players the players
      * @return the audience
      */
-    static PacketGroupingAudience of(Collection<Player> players) {
+    static @NotNull PacketGroupingAudience of(@NotNull Collection<Player> players) {
         return () -> players;
     }
 
@@ -45,15 +45,15 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      *
      * @return the connections
      */
-    @NotNull Collection<Player> getPlayers();
+    @NotNull Collection<@NotNull Player> getPlayers();
 
     /**
      * Broadcast a ServerPacket to all players of this audience
      *
      * @param packet the packet to broadcast
      */
-    default void sendGroupedPacket(ServerPacket packet) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), packet);
+    default void sendGroupedPacket(@NotNull ServerPacket packet) {
+        PacketUtils.sendGroupedPacket(getPlayers(), packet);
     }
 
     @Override

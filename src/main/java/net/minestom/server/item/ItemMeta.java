@@ -153,7 +153,7 @@ public sealed interface ItemMeta extends TagReadable, Writeable
 
         @Contract("_ -> this")
         default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_PLACE_ON, List.copyOf(blocks));
+            return set(ItemTags.CAN_PLACE_ON, blocks.stream().map(block -> Block.fromNamespaceId(block.name())).toList());
         }
 
         @Contract("_ -> this")
@@ -163,7 +163,7 @@ public sealed interface ItemMeta extends TagReadable, Writeable
 
         @Contract("_ -> this")
         default @NotNull Builder canDestroy(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_DESTROY, List.copyOf(blocks));
+            return set(ItemTags.CAN_DESTROY, blocks.stream().map(block -> Block.fromNamespaceId(block.name())).toList());
         }
 
         @Contract("_ -> this")

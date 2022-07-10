@@ -24,10 +24,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
-import net.minestom.server.snapshot.ChunkSnapshot;
-import net.minestom.server.snapshot.InstanceSnapshot;
-import net.minestom.server.snapshot.SnapshotUpdater;
-import net.minestom.server.snapshot.Snapshotable;
+import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.ThreadDispatcher;
@@ -641,7 +638,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
-        return new InstanceSnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
+        return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
                 tagHandler.readableCopy());
     }

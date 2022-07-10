@@ -26,11 +26,11 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                  @Nullable NBTCompound nbt,
                  @Nullable BlockHandler handler) implements Block {
     // Block state -> block object
-    private static final ObjectArray<Block> BLOCK_STATE_MAP = new ObjectArray<>();
+    private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
     // Block id -> valid property keys (order is important for lookup)
-    private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = new ObjectArray<>();
+    private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
     // Block id -> Map<PropertiesValues, Block>
-    private static final ObjectArray<Map<PropertiesHolder, BlockImpl>> POSSIBLE_STATES = new ObjectArray<>();
+    private static final ObjectArray<Map<PropertiesHolder, BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
     private static final Registry.Container<Block> CONTAINER = Registry.createContainer(Registry.Resource.BLOCKS,
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");

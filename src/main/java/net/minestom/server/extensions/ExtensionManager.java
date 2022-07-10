@@ -49,7 +49,7 @@ public final class ExtensionManager {
     private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
     private final Map<String, HierarchyClassLoader> externalDependencies = new HashMap<>();
 
-    private Path extensionDataRoot = Paths.get("extensions");
+    private Path extensionDataRoot = Paths.get(PropertyUtils.getString("minestom.extension.folder", "extensions"));
     private Path dependenciesFolder = extensionDataRoot.resolve(".libs");
 
     private boolean started = false;

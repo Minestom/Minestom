@@ -32,9 +32,8 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public synchronized void clear() {
+        cursorItem = ItemStack.AIR;
         super.clear();
-        // Reset cursor
-        setCursorItem(ItemStack.AIR);
         // Update equipments
         this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
     }
@@ -110,7 +109,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      */
     @Override
     public void update() {
-        this.player.getPlayerConnection().sendPacket(createWindowItemsPacket());
+        this.player.sendPacket(createWindowItemsPacket());
     }
 
     /**
@@ -128,43 +127,35 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * @param cursorItem the new cursor item
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
-        final boolean similar = this.cursorItem.isSimilar(cursorItem);
+        if (this.cursorItem.equals(cursorItem)) return;
         this.cursorItem = cursorItem;
-
-        if (!similar) {
-            final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-            player.getPlayerConnection().sendPacket(setSlotPacket);
-        }
+        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
+        this.player.sendPacket(setSlotPacket);
     }
 
     @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
-        EquipmentSlot equipmentSlot = null;
-        if (slot == player.getHeldSlot()) {
-            equipmentSlot = EquipmentSlot.MAIN_HAND;
-        } else if (slot == OFFHAND_SLOT) {
-            equipmentSlot = EquipmentSlot.OFF_HAND;
-        } else if (slot == HELMET_SLOT) {
-            equipmentSlot = EquipmentSlot.HELMET;
-        } else if (slot == CHESTPLATE_SLOT) {
-            equipmentSlot = EquipmentSlot.CHESTPLATE;
-        } else if (slot == LEGGINGS_SLOT) {
-            equipmentSlot = EquipmentSlot.LEGGINGS;
-        } else if (slot == BOOTS_SLOT) {
-            equipmentSlot = EquipmentSlot.BOOTS;
-        }
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
+        final EquipmentSlot equipmentSlot = switch (slot) {
+            case HELMET_SLOT -> EquipmentSlot.HELMET;
+            case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
+            case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
+            case BOOTS_SLOT -> EquipmentSlot.BOOTS;
+            case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
+            default -> slot == player.getHeldSlot() ? EquipmentSlot.MAIN_HAND : null;
+        };
         if (equipmentSlot != null) {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
         }
         this.itemStacks[slot] = itemStack;
-        // Sync equipment
-        if (equipmentSlot != null) {
-            this.player.syncEquipment(equipmentSlot);
+
+        if (sendPacket) {
+            // Sync equipment
+            if (equipmentSlot != null) this.player.syncEquipment(equipmentSlot);
+            // Refresh slot
+            sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
         }
-        // Refresh slot
-        sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
     }
 
     /**
@@ -175,7 +166,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * @param itemStack the item stack in the slot
      */
     protected void sendSlotRefresh(short slot, ItemStack itemStack) {
-        player.getPlayerConnection().sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
+        this.player.sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
     }
 
     /**
@@ -275,18 +266,19 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
+        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack heldItem = getItemStack(key);
+        final ItemStack heldItem = getItemStack(convertedKey);
         final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, key, clicked, heldItem);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, convertedKey, clicked, heldItem);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
         setItemStack(convertedSlot, clickResult.getClicked());
-        setItemStack(key, clickResult.getCursor());
+        setItemStack(convertedKey, clickResult.getCursor());
         callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
         return true;
     }

@@ -14,40 +14,144 @@
   "name":"jdk.internal.loader.ClassLoaders$PlatformClassLoader"
 },
 {
-  "name":"org.fusesource.jansi.internal.CLibrary",
+  "name":"org.fusesource.jansi.internal.Kernel32",
   "fields":[
-    {"name":"HAVE_ISATTY"}, 
-    {"name":"HAVE_TTYNAME"}, 
-    {"name":"TCSADRAIN"}, 
-    {"name":"TCSAFLUSH"}, 
-    {"name":"TCSANOW"}, 
-    {"name":"TIOCGETD"}, 
-    {"name":"TIOCGWINSZ"}, 
-    {"name":"TIOCSETD"}, 
-    {"name":"TIOCSWINSZ"}
+    {"name":"BACKGROUND_BLUE"}, 
+    {"name":"BACKGROUND_GREEN"}, 
+    {"name":"BACKGROUND_INTENSITY"}, 
+    {"name":"BACKGROUND_RED"}, 
+    {"name":"COMMON_LVB_GRID_HORIZONTAL"}, 
+    {"name":"COMMON_LVB_GRID_LVERTICAL"}, 
+    {"name":"COMMON_LVB_GRID_RVERTICAL"}, 
+    {"name":"COMMON_LVB_LEADING_BYTE"}, 
+    {"name":"COMMON_LVB_REVERSE_VIDEO"}, 
+    {"name":"COMMON_LVB_TRAILING_BYTE"}, 
+    {"name":"COMMON_LVB_UNDERSCORE"}, 
+    {"name":"FOREGROUND_BLUE"}, 
+    {"name":"FOREGROUND_GREEN"}, 
+    {"name":"FOREGROUND_INTENSITY"}, 
+    {"name":"FOREGROUND_RED"}, 
+    {"name":"FORMAT_MESSAGE_FROM_SYSTEM"}, 
+    {"name":"INVALID_HANDLE_VALUE"}, 
+    {"name":"STD_ERROR_HANDLE"}, 
+    {"name":"STD_INPUT_HANDLE"}, 
+    {"name":"STD_OUTPUT_HANDLE"}
   ]
 },
 {
-  "name":"org.fusesource.jansi.internal.CLibrary$Termios",
+  "name":"org.fusesource.jansi.internal.Kernel32$CONSOLE_SCREEN_BUFFER_INFO",
   "fields":[
     {"name":"SIZEOF"}, 
-    {"name":"c_cc"}, 
-    {"name":"c_cflag"}, 
-    {"name":"c_iflag"}, 
-    {"name":"c_ispeed"}, 
-    {"name":"c_lflag"}, 
-    {"name":"c_oflag"}, 
-    {"name":"c_ospeed"}
+    {"name":"attributes"}, 
+    {"name":"cursorPosition"}, 
+    {"name":"maximumWindowSize"}, 
+    {"name":"size"}, 
+    {"name":"window"}
   ]
 },
 {
-  "name":"org.fusesource.jansi.internal.CLibrary$WinSize",
+  "name":"org.fusesource.jansi.internal.Kernel32$COORD",
   "fields":[
     {"name":"SIZEOF"}, 
-    {"name":"ws_col"}, 
-    {"name":"ws_row"}, 
-    {"name":"ws_xpixel"}, 
-    {"name":"ws_ypixel"}
+    {"name":"x"}, 
+    {"name":"y"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$FOCUS_EVENT_RECORD",
+  "fields":[
+    {"name":"SIZEOF"}, 
+    {"name":"setFocus"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$INPUT_RECORD",
+  "fields":[
+    {"name":"FOCUS_EVENT"}, 
+    {"name":"KEY_EVENT"}, 
+    {"name":"MENU_EVENT"}, 
+    {"name":"MOUSE_EVENT"}, 
+    {"name":"SIZEOF"}, 
+    {"name":"WINDOW_BUFFER_SIZE_EVENT"}, 
+    {"name":"eventType"}, 
+    {"name":"focusEvent"}, 
+    {"name":"keyEvent"}, 
+    {"name":"menuEvent"}, 
+    {"name":"mouseEvent"}, 
+    {"name":"windowBufferSizeEvent"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$KEY_EVENT_RECORD",
+  "fields":[
+    {"name":"CAPSLOCK_ON"}, 
+    {"name":"ENHANCED_KEY"}, 
+    {"name":"LEFT_ALT_PRESSED"}, 
+    {"name":"LEFT_CTRL_PRESSED"}, 
+    {"name":"NUMLOCK_ON"}, 
+    {"name":"RIGHT_ALT_PRESSED"}, 
+    {"name":"RIGHT_CTRL_PRESSED"}, 
+    {"name":"SCROLLLOCK_ON"}, 
+    {"name":"SHIFT_PRESSED"}, 
+    {"name":"SIZEOF"}, 
+    {"name":"controlKeyState"}, 
+    {"name":"keyCode"}, 
+    {"name":"keyDown"}, 
+    {"name":"repeatCount"}, 
+    {"name":"scanCode"}, 
+    {"name":"uchar"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$MENU_EVENT_RECORD",
+  "fields":[
+    {"name":"SIZEOF"}, 
+    {"name":"commandId"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$MOUSE_EVENT_RECORD",
+  "fields":[
+    {"name":"CAPSLOCK_ON"}, 
+    {"name":"DOUBLE_CLICK"}, 
+    {"name":"ENHANCED_KEY"}, 
+    {"name":"FROM_LEFT_1ST_BUTTON_PRESSED"}, 
+    {"name":"FROM_LEFT_2ND_BUTTON_PRESSED"}, 
+    {"name":"FROM_LEFT_3RD_BUTTON_PRESSED"}, 
+    {"name":"FROM_LEFT_4TH_BUTTON_PRESSED"}, 
+    {"name":"LEFT_ALT_PRESSED"}, 
+    {"name":"LEFT_CTRL_PRESSED"}, 
+    {"name":"MOUSE_HWHEELED"}, 
+    {"name":"MOUSE_MOVED"}, 
+    {"name":"MOUSE_WHEELED"}, 
+    {"name":"NUMLOCK_ON"}, 
+    {"name":"RIGHTMOST_BUTTON_PRESSED"}, 
+    {"name":"RIGHT_ALT_PRESSED"}, 
+    {"name":"RIGHT_CTRL_PRESSED"}, 
+    {"name":"SCROLLLOCK_ON"}, 
+    {"name":"SHIFT_PRESSED"}, 
+    {"name":"SIZEOF"}, 
+    {"name":"buttonState"}, 
+    {"name":"controlKeyState"}, 
+    {"name":"eventFlags"}, 
+    {"name":"mousePosition"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$SMALL_RECT",
+  "fields":[
+    {"name":"SIZEOF"}, 
+    {"name":"bottom"}, 
+    {"name":"left"}, 
+    {"name":"right"}, 
+    {"name":"top"}
+  ]
+},
+{
+  "name":"org.fusesource.jansi.internal.Kernel32$WINDOW_BUFFER_SIZE_RECORD",
+  "fields":[
+    {"name":"SIZEOF"}, 
+    {"name":"size"}
   ]
 },
 {

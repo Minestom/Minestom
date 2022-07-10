@@ -66,7 +66,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param itemStack the item to insert (use air instead of null)
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      */
-    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         ItemStack previous;
         synchronized (this) {
             Check.argCondition(
@@ -75,7 +75,8 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
                     slot
             );
             previous = itemStacks[slot];
-            UNSAFE_itemInsert(slot, itemStack);
+            if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
+            UNSAFE_itemInsert(slot, itemStack, sendPacket);
         }
         if (this instanceof PlayerInventory inv) {
             EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
@@ -84,7 +85,11 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         }
     }
 
-    protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack);
+    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+        safeItemInsert(slot, itemStack, true);
+    }
+
+    protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket);
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
@@ -162,7 +167,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public synchronized void clear() {
         // Clear the item array
         for (int i = 0; i < size; i++) {
-            safeItemInsert(i, ItemStack.AIR);
+            safeItemInsert(i, ItemStack.AIR, false);
         }
         // Send the cleared inventory to viewers
         update();

@@ -78,7 +78,7 @@ public class WindowListener {
         refreshCursorItem(player, inventory);
 
         // (Why is the ping packet necessary?)
-        player.getPlayerConnection().sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
+        player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
     }
 
     public static void pong(ClientPongPacket packet, Player player) {
@@ -111,7 +111,7 @@ public class WindowListener {
             throw new RuntimeException("Invalid inventory: " + inventory.getClass());
         }
         final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-        player.getPlayerConnection().sendPacket(setSlotPacket);
+        player.sendPacket(setSlotPacket);
     }
 
     private static void setCursor(Player player, AbstractInventory inventory, ItemStack itemStack) {

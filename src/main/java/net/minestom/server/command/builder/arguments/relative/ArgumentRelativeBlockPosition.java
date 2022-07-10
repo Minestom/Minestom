@@ -1,7 +1,5 @@
 package net.minestom.server.command.builder.arguments.relative;
 
-import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -18,11 +16,8 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelativeVec {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:block_pos";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    public String parser() {
+        return "minecraft:block_pos";
     }
 
     @Override

@@ -15,12 +15,13 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.PooledBuffers;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -46,8 +47,8 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
     private long lastChange;
-    private final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    private final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
+    final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -203,10 +204,13 @@ public class DynamicChunk extends Chunk {
                     "WORLD_SURFACE", NBT.LongArray(Utils.encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
-        final BinaryWriter writer = new BinaryWriter(PooledBuffers.tempBuffer());
-        for (Section section : sections) writer.write(section);
+        final byte[] data = ObjectPool.PACKET_POOL.use(buffer -> {
+            final BinaryWriter writer = new BinaryWriter(buffer);
+            for (Section section : sections) writer.write(section);
+            return writer.toByteArray();
+        });
         return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmapsNBT, writer.toByteArray(), entries),
+                new ChunkData(heightmapsNBT, data, entries),
                 createLightData());
     }
 
@@ -253,7 +257,7 @@ public class DynamicChunk extends Chunk {
             clonedSections[i] = sections.get(i).clone();
         var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
-        return new InstanceSnapshotImpl.Chunk(minSection, chunkX, chunkZ,
+        return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
                 tagHandler().readableCopy());
     }

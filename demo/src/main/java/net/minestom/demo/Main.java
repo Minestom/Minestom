@@ -52,6 +52,8 @@ public class Main {
         commandManager.register(new AutoViewCommand());
         commandManager.register(new SaveCommand());
         commandManager.register(new GamemodeCommand());
+        commandManager.register(new ExecuteCommand());
+        commandManager.register(new RedirectTestCommand());
 
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
@@ -107,6 +109,7 @@ public class Main {
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
 
         minecraftServer.start("0.0.0.0", 25565);
+//        minecraftServer.start(java.net.UnixDomainSocketAddress.of("minestom-demo.sock"));
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 }
