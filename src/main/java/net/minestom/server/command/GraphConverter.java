@@ -18,17 +18,17 @@ final class GraphConverter {
     @Contract("_ -> new")
     public static DeclareCommandsPacket createPacket(Graph graph) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
-        List<DeclareCommandsPacket.Node> rootRedirect = new ArrayList<>();
+        List<AtomicInteger> rootRedirect = new ArrayList<>();
         final AtomicInteger idSource = new AtomicInteger(0);
         final int rootId = append(graph.root(), nodes, rootRedirect, idSource, null)[0];
-        for (DeclareCommandsPacket.Node node : rootRedirect) {
-            node.redirectedNode = rootId;
+        for (var i : rootRedirect) {
+            i.set(rootId);
         }
         return new DeclareCommandsPacket(nodes, rootId);
     }
 
     private static int[] append(Graph.Node graphNode, List<DeclareCommandsPacket.Node> to,
-                                List<DeclareCommandsPacket.Node> rootRedirect, AtomicInteger id, @Nullable Integer redirect) {
+                                List<AtomicInteger> rootRedirect, AtomicInteger id, @Nullable AtomicInteger redirect) {
         final Argument<?> argument = graphNode.argument();
         final List<Graph.Node> children = graphNode.next();
 
@@ -62,7 +62,8 @@ final class GraphConverter {
             if (argument instanceof ArgumentCommand) {
                 node.flags = literal(false, true);
                 node.name = argument.getId();
-                rootRedirect.add(node);
+                node.redirectedNode = new AtomicInteger();
+                rootRedirect.add(node.redirectedNode);
                 to.add(node);
 
                 return new int[]{id.getAndIncrement()};
@@ -113,7 +114,7 @@ final class GraphConverter {
                 }
                 throw new RuntimeException("Arg group must have child args.");
             } else if (argument instanceof ArgumentLoop special) {
-                int r = id.get();
+                AtomicInteger r = new AtomicInteger();
                 int[] res = new int[special.arguments().size()];
                 List<?> arguments = special.arguments();
                 for (int i = 0; i < arguments.size(); i++) {
@@ -127,6 +128,7 @@ final class GraphConverter {
                         i += append.length;
                     }
                 }
+                r.set(id.get());
                 return res;
             } else {
                 node.flags = arg(false, argument.hasSuggestion());
