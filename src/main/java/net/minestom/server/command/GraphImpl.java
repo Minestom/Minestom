@@ -12,16 +12,13 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.Literal
 record GraphImpl(Node root) implements Graph {
     static GraphImpl fromCommand(Command command) {
         final ConversionNode conv = ConversionNode.fromCommand(command);
-        final Node root = NodeImpl.fromConversionNode(Literal(command.getName()), conv);
+        final Node root = NodeImpl.fromConversionNode(conv);
         return new GraphImpl(root);
     }
 
     static Graph merge(Collection<Command> commands) {
-        final ConversionNode conv = new ConversionNode();
-        for (var command : commands) {
-            conv.next.put(Literal(command.getName()), ConversionNode.fromCommand(command));
-        }
-        final Node root = NodeImpl.fromConversionNode(Literal(""), conv);
+        final ConversionNode conv = ConversionNode.rootConv(commands);
+        final Node root = NodeImpl.fromConversionNode(conv);
         return new GraphImpl(root);
     }
 
@@ -79,34 +76,38 @@ record GraphImpl(Node root) implements Graph {
             return new NodeImpl(builder.argument, List.of(nodes));
         }
 
-        static Node fromConversionNode(Argument<?> argument, ConversionNode conv) {
+        static Node fromConversionNode(ConversionNode conv) {
             final Map<Argument<?>, ConversionNode> next = conv.next;
             Node[] nodes = new NodeImpl[next.size()];
             int i = 0;
-            for (var entry : next.entrySet()) nodes[i++] = fromConversionNode(entry.getKey(), entry.getValue());
-            return new NodeImpl(argument, List.of(nodes));
+            for (var entry : next.values()) nodes[i++] = fromConversionNode(entry);
+            return new NodeImpl(conv.root, List.of(nodes));
         }
     }
 
-    record ConversionNode(Map<Argument<?>, ConversionNode> next) {
-        ConversionNode() {
-            this(new LinkedHashMap<>());
+    record ConversionNode(Argument<?> root, Map<Argument<?>, ConversionNode> next) {
+        ConversionNode(Argument<?> root) {
+            this(root, new LinkedHashMap<>());
         }
 
         static ConversionNode fromCommand(Command command) {
-            ConversionNode root = new ConversionNode();
+            ConversionNode root = new ConversionNode(Literal(command.getName()));
             for (var syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
                 for (Argument<?> arg : syntax.getArguments()) {
-                    ConversionNode tmp = syntaxNode.next.get(arg);
-                    if (tmp == null) {
-                        tmp = new ConversionNode();
-                        syntaxNode.next.put(arg, tmp);
-                    }
-                    syntaxNode = tmp;
+                    syntaxNode = syntaxNode.next.computeIfAbsent(arg, ConversionNode::new);
                 }
             }
             return root;
+        }
+
+        static ConversionNode rootConv(Collection<Command> commands) {
+            Map<Argument<?>, ConversionNode> next = new LinkedHashMap<>(commands.size());
+            for (Command command : commands) {
+                final ConversionNode conv = fromCommand(command);
+                next.put(conv.root(), conv);
+            }
+            return new ConversionNode(Literal(""), next);
         }
     }
 }
