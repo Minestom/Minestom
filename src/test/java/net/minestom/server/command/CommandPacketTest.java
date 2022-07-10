@@ -109,6 +109,42 @@ public class CommandPacketTest {
     }
 
     @Test
+    public void singleCommandRestrictedWord() {
+        var graph = Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("bar").from("A", "B", "C"))
+                .build());
+        assertPacketGraph("""
+                digraph G {
+                  rankdir=LR
+                  4 [label="root",shape=rectangle]
+                  0 [label="'A'"]
+                  1 [label="'B'"]
+                  2 [label="'C'"]
+                  3 [label="'foo'"]
+                  3 -> { 0 1 2 }
+                  4 -> { 3 }
+                }
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandWord() {
+        var graph = Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("bar"))
+                .build());
+        assertPacketGraph("""
+                digraph G {
+                  rankdir=LR
+                  2 [label="root",shape=rectangle]
+                  0 [label="bar"]
+                  1 [label="'foo'"]
+                  1 -> { 0 }
+                  2 -> { 1 }
+                }
+                """, graph);
+    }
+
+    @Test
     public void singleCommandCommandAfterEnum() {
         var graph = Graph.merge(Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))

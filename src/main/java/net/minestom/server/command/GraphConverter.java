@@ -67,8 +67,8 @@ final class GraphConverter {
                 to.add(node);
 
                 return new int[]{id.getAndIncrement()};
-            } else if (argument instanceof ArgumentEnum<?> special) {
-                List<String> entries = special.entries();
+            } else if (argument instanceof ArgumentEnum<?> || (argument instanceof ArgumentWord word && word.hasRestrictions())) {
+                List<String> entries = argument instanceof ArgumentEnum<?> ? ((ArgumentEnum<?>) argument).entries() : Arrays.stream(((ArgumentWord) argument).getRestrictions()).toList();
                 final int[] res = new int[entries.size()];
                 for (int i = 0; i < res.length; i++) {
                     String entry = entries.get(i);
