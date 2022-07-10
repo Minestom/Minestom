@@ -9,22 +9,20 @@ import java.util.function.Consumer;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
-record GraphImpl(Node root) implements Graph {
+record GraphImpl(NodeImpl root) implements Graph {
     static GraphImpl fromCommand(Command command) {
         final ConversionNode conv = ConversionNode.fromCommand(command);
-        final Node root = NodeImpl.fromConversionNode(conv);
-        return new GraphImpl(root);
+        return new GraphImpl(NodeImpl.fromConversionNode(conv));
     }
 
     static Graph merge(Collection<Command> commands) {
         final ConversionNode conv = ConversionNode.rootConv(commands);
-        final Node root = NodeImpl.fromConversionNode(conv);
-        return new GraphImpl(root);
+        return new GraphImpl(NodeImpl.fromConversionNode(conv));
     }
 
     static GraphImpl merge(List<Graph> graphs) {
         final List<Node> children = graphs.stream().map(Graph::root).toList();
-        final Node root = new NodeImpl(Literal(""), children);
+        final NodeImpl root = new NodeImpl(Literal(""), children);
         return new GraphImpl(root);
     }
 
@@ -34,15 +32,7 @@ record GraphImpl(Node root) implements Graph {
         return equals(graph);
     }
 
-    static final class BuilderImpl implements Graph.Builder {
-        private final Argument<?> argument;
-        private final List<BuilderImpl> children;
-
-        public BuilderImpl(Argument<?> argument, List<BuilderImpl> children) {
-            this.argument = argument;
-            this.children = children;
-        }
-
+    record BuilderImpl(Argument<?> argument, List<BuilderImpl> children) implements Graph.Builder {
         public BuilderImpl(Argument<?> argument) {
             this(argument, new ArrayList<>());
         }
@@ -63,8 +53,7 @@ record GraphImpl(Node root) implements Graph {
 
         @Override
         public @NotNull GraphImpl build() {
-            final Node root = NodeImpl.fromBuilder(this);
-            return new GraphImpl(root);
+            return new GraphImpl(NodeImpl.fromBuilder(this));
         }
     }
 
@@ -76,7 +65,7 @@ record GraphImpl(Node root) implements Graph {
             return new NodeImpl(builder.argument, List.of(nodes));
         }
 
-        static Node fromConversionNode(ConversionNode conv) {
+        static NodeImpl fromConversionNode(ConversionNode conv) {
             final Map<Argument<?>, ConversionNode> next = conv.nextMap;
             Node[] nodes = new NodeImpl[next.size()];
             int i = 0;
