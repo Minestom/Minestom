@@ -11,13 +11,11 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.Literal
 
 record GraphImpl(NodeImpl root) implements Graph {
     static GraphImpl fromCommand(Command command) {
-        final ConversionNode conv = ConversionNode.fromCommand(command);
-        return new GraphImpl(NodeImpl.fromConversionNode(conv));
+        return new GraphImpl(NodeImpl.command(command));
     }
 
     static Graph merge(Collection<Command> commands) {
-        final ConversionNode conv = ConversionNode.rootConv(commands);
-        return new GraphImpl(NodeImpl.fromConversionNode(conv));
+        return new GraphImpl(NodeImpl.rootCommands(commands));
     }
 
     static GraphImpl merge(List<Graph> graphs) {
@@ -65,18 +63,25 @@ record GraphImpl(NodeImpl root) implements Graph {
             return new NodeImpl(builder.argument, List.of(nodes));
         }
 
-        static NodeImpl fromConversionNode(ConversionNode conv) {
-            final Map<Argument<?>, ConversionNode> next = conv.nextMap;
-            Node[] nodes = new NodeImpl[next.size()];
-            int i = 0;
-            for (var entry : next.values()) nodes[i++] = fromConversionNode(entry);
-            return new NodeImpl(conv.argument, List.of(nodes));
+        static NodeImpl command(Command command) {
+            return ConversionNode.fromCommand(command).toNode();
+        }
+
+        static NodeImpl rootCommands(Collection<Command> commands) {
+            return ConversionNode.rootConv(commands).toNode();
         }
     }
 
-    record ConversionNode(Argument<?> argument, Map<Argument<?>, ConversionNode> nextMap) {
-        ConversionNode(Argument<?> root) {
-            this(root, new LinkedHashMap<>());
+    private record ConversionNode(Argument<?> argument, Map<Argument<?>, ConversionNode> nextMap) {
+        ConversionNode(Argument<?> argument) {
+            this(argument, new LinkedHashMap<>());
+        }
+
+        private NodeImpl toNode() {
+            Node[] nodes = new NodeImpl[nextMap.size()];
+            int i = 0;
+            for (var entry : nextMap.values()) nodes[i++] = entry.toNode();
+            return new NodeImpl(argument, List.of(nodes));
         }
 
         static ConversionNode fromCommand(Command command) {
