@@ -36,9 +36,6 @@ sealed interface Graph permits GraphImpl {
     boolean compare(@NotNull Graph graph, @NotNull Comparator comparator);
 
     sealed interface Node permits GraphImpl.NodeImpl {
-        static Node fromArgument(Argument<?> argument) {
-            return new GraphImpl.NodeImpl(argument, List.of());
-        }
         @NotNull Argument<?> argument();
 
         @NotNull List<@NotNull Node> next();

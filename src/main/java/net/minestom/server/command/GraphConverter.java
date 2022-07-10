@@ -91,7 +91,7 @@ final class GraphConverter {
                     Argument<?> entry = entries.get(i);
                     if (i == entries.size()-1) {
                         // Last will be the parent of next args
-                        final int[] l = append(Graph.Node.fromArgument(entry), to, rootRedirect, id, redirect);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, List.of()), to, rootRedirect, id, redirect);
                         for (int n : l) {
                             to.get(n).children = node.children;
                         }
@@ -101,10 +101,10 @@ final class GraphConverter {
                         return res == null ? l : res;
                     } else if (i == 0) {
                         // First will be the children & parent of following
-                        res = append(Graph.Node.fromArgument(entry), to, rootRedirect, id, null);
+                        res = append(new GraphImpl.NodeImpl(entry, List.of()), to, rootRedirect, id, null);
                         last = res;
                     } else {
-                        final int[] l = append(Graph.Node.fromArgument(entry), to, rootRedirect, id, null);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, List.of()), to, rootRedirect, id, null);
                         for (int n : last) {
                             to.get(n).children = l;
                         }
@@ -118,7 +118,7 @@ final class GraphConverter {
                 List<?> arguments = special.arguments();
                 for (int i = 0; i < arguments.size(); i++) {
                     Object arg = arguments.get(i);
-                    final int[] append = append(Graph.Node.fromArgument((Argument<?>) arg), to, rootRedirect, id, r);
+                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, List.of()), to, rootRedirect, id, r);
                     if (append.length == 1) {
                         res[i] = append[0];
                     } else {
