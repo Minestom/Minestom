@@ -77,15 +77,15 @@ record GraphImpl(Node root) implements Graph {
         }
 
         static Node fromConversionNode(ConversionNode conv) {
-            final Map<Argument<?>, ConversionNode> next = conv.next;
+            final Map<Argument<?>, ConversionNode> next = conv.nextMap;
             Node[] nodes = new NodeImpl[next.size()];
             int i = 0;
             for (var entry : next.values()) nodes[i++] = fromConversionNode(entry);
-            return new NodeImpl(conv.root, List.of(nodes));
+            return new NodeImpl(conv.argument, List.of(nodes));
         }
     }
 
-    record ConversionNode(Argument<?> root, Map<Argument<?>, ConversionNode> next) {
+    record ConversionNode(Argument<?> argument, Map<Argument<?>, ConversionNode> nextMap) {
         ConversionNode(Argument<?> root) {
             this(root, new LinkedHashMap<>());
         }
@@ -95,7 +95,7 @@ record GraphImpl(Node root) implements Graph {
             for (var syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
                 for (Argument<?> arg : syntax.getArguments()) {
-                    syntaxNode = syntaxNode.next.computeIfAbsent(arg, ConversionNode::new);
+                    syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, ConversionNode::new);
                 }
             }
             return root;
@@ -105,7 +105,7 @@ record GraphImpl(Node root) implements Graph {
             Map<Argument<?>, ConversionNode> next = new LinkedHashMap<>(commands.size());
             for (Command command : commands) {
                 final ConversionNode conv = fromCommand(command);
-                next.put(conv.root(), conv);
+                next.put(conv.argument, conv);
             }
             return new ConversionNode(Literal(""), next);
         }
