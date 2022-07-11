@@ -1,11 +1,5 @@
 package net.minestom.server.coordinate;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
