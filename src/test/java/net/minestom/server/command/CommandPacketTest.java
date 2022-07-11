@@ -7,8 +7,10 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,35 +53,18 @@ public class CommandPacketTest {
         ));
         var graph = Graph.merge(Graph.fromCommand(execute));
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  12 [label="root",shape=rectangle]
-                  0 [label="'facing'"]
-                  0 -> { 1 }
-                  1 [label="pos"]
-                  1 -> { 11 } [style = dotted]
-                  2 [label="'at'"]
-                  2 -> { 3 }
-                  3 [label="targets"]
-                  3 -> { 11 } [style = dotted]
-                  4 [label="'as'"]
-                  4 -> { 5 }
-                  5 [label="targets"]
-                  5 -> { 11 } [style = dotted]
-                  6 [label="'in'"]
-                  6 -> { 7 8 9 }
-                  7 [label="'OVERWORLD'"]
-                  7 -> { 11 } [style = dotted]
-                  8 [label="'THE_NETHER'"]
-                  8 -> { 11 } [style = dotted]
-                  9 [label="'THE_END'"]
-                  9 -> { 11 } [style = dotted]
-                  10 [label="'run'"]
-                  10 -> { 12 } [style = dotted]
-                  11 [label="'execute'"]
-                  11 -> { 0 2 4 6 10 }
-                  12 -> { 11 }
-                }
+                execute facing at as in run=%
+                overworld the_nether the_end=§
+                0->execute
+                atEnt asEnt=targets minecraft:entity 0
+                execute->facing at as in run
+                at->atEnt
+                as->asEnt
+                in->overworld the_nether the_end
+                pos=! minecraft:vec3 0
+                facing->pos
+                facing at as in+>execute
+                run+>0
                 """, graph);
     }
 
@@ -89,22 +74,11 @@ public class CommandPacketTest {
                 .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Enum("baz", B.class)))
                 .build());
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  7 [label="root",shape=rectangle]
-                  0 [label="'D'"]
-                  1 [label="'E'"]
-                  2 [label="'F'"]
-                  3 [label="'A'"]
-                  3 -> { 0 1 2 }
-                  4 [label="'B'"]
-                  4 -> { 0 1 2 }
-                  5 [label="'C'"]
-                  5 -> { 0 1 2 }
-                  6 [label="'foo'"]
-                  6 -> { 3 4 5 }
-                  7 -> { 6 }
-                }
+                foo=%
+                a b c d e f=§
+                0->foo
+                foo->a b c
+                a b c->d e f
                 """, graph);
     }
 
@@ -114,16 +88,10 @@ public class CommandPacketTest {
                 .append(ArgumentType.Word("bar").from("A", "B", "C"))
                 .build());
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  4 [label="root",shape=rectangle]
-                  0 [label="'A'"]
-                  1 [label="'B'"]
-                  2 [label="'C'"]
-                  3 [label="'foo'"]
-                  3 -> { 0 1 2 }
-                  4 -> { 3 }
-                }
+                foo=%
+                a b c=§
+                0->foo
+                foo->a b c
                 """, graph);
     }
 
@@ -133,14 +101,10 @@ public class CommandPacketTest {
                 .append(ArgumentType.Word("bar"))
                 .build());
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  2 [label="root",shape=rectangle]
-                  0 [label="bar"]
-                  1 [label="'foo'"]
-                  1 -> { 0 }
-                  2 -> { 1 }
-                }
+                foo=%
+                bar=! brigadier:string 0
+                0->foo
+                foo->bar
                 """, graph);
     }
 
@@ -150,21 +114,12 @@ public class CommandPacketTest {
                 .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))
                 .build());
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  5 [label="root",shape=rectangle]
-                  0 [label="'baz'"]
-                  0 -> { 5 } [style = dotted]
-                  1 [label="'A'"]
-                  1 -> { 0 }
-                  2 [label="'B'"]
-                  2 -> { 0 }
-                  3 [label="'C'"]
-                  3 -> { 0 }
-                  4 [label="'foo'"]
-                  4 -> { 1 2 3 }
-                  5 -> { 4 }
-                }
+                foo baz=%
+                a b c=§
+                0->foo
+                foo->a b c
+                a b c->baz
+                baz+>0
                 """, graph);
     }
 
@@ -172,40 +127,25 @@ public class CommandPacketTest {
     public void twoCommandIntEnumInt() {
         var graph = Graph.merge(
                 Graph.builder(ArgumentType.Literal("foo"))
-                        .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", A.class), c -> c.append(ArgumentType.Integer("int2"))))
+                        .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", A.class),
+                                c -> c.append(ArgumentType.Integer("int2"))))
                         .build(),
                 Graph.builder(ArgumentType.Literal("bar"))
-                        .append(ArgumentType.Integer("int3"), b -> b.append(ArgumentType.Enum("test", B.class), c -> c.append(ArgumentType.Integer("int4"))))
+                        .append(ArgumentType.Integer("int3"), b -> b.append(ArgumentType.Enum("test", B.class),
+                                c -> c.append(ArgumentType.Integer("int4"))))
                         .build()
         );
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  12 [label="root",shape=rectangle]
-                  0 [label="int2"]
-                  1 [label="'A'"]
-                  1 -> { 0 }
-                  2 [label="'B'"]
-                  2 -> { 0 }
-                  3 [label="'C'"]
-                  3 -> { 0 }
-                  4 [label="int1"]
-                  4 -> { 1 2 3 }
-                  5 [label="'foo'"]
-                  5 -> { 4 }
-                  6 [label="int4"]
-                  7 [label="'D'"]
-                  7 -> { 6 }
-                  8 [label="'E'"]
-                  8 -> { 6 }
-                  9 [label="'F'"]
-                  9 -> { 6 }
-                  10 [label="int3"]
-                  10 -> { 7 8 9 }
-                  11 [label="'bar'"]
-                  11 -> { 10 }
-                  12 -> { 5 11 }
-                }
+                foo bar=%
+                0->foo bar
+                a b c d e f=§
+                int1 int2 int3 int4=! brigadier:integer 0
+                foo->int1
+                bar->int3
+                int1->a b c
+                int3->d e f
+                a b c->int2
+                d e f->int4
                 """, graph);
     }
 
@@ -217,26 +157,19 @@ public class CommandPacketTest {
                                 b -> b.append(ArgumentType.Group("2", ArgumentType.Integer("int3"), ArgumentType.Integer("int4"))))
                         .build());
         assertPacketGraph("""
-                digraph G {
-                  rankdir=LR
-                  5 [label="root",shape=rectangle]
-                  0 [label="int3"]
-                  0 -> { 1 }
-                  1 [label="int4"]
-                  2 [label="int1"]
-                  2 -> { 3 }
-                  3 [label="int2"]
-                  3 -> { 0 }
-                  4 [label="'foo'"]
-                  4 -> { 2 }
-                  5 -> { 4 }
-                }
+                foo=%
+                int1 int2 int3 int4=! brigadier:integer 0
+                0->foo
+                foo->int1
+                int1->int2
+                int2->int3
+                int3->int4
                 """, graph);
     }
 
     static void assertPacketGraph(String expected, Graph graph) {
         var packet = GraphConverter.createPacket(graph);
-        assertEquals(expected, exportGarphvizDot(packet, true));
+        assertEquals(fromString("0\n0=$root$\n"+expected), fromString(packetToString(packet)));
     }
 
     private static String exportGarphvizDot(DeclareCommandsPacket packet, boolean prettyPrint) {
@@ -290,6 +223,193 @@ public class CommandPacketTest {
                     .replaceFirst(" {2}}$", "}\n");
         else
             return builder.toString();
+    }
+
+    private record TestNode(List<TestNode> children, String meta, AtomicReference<String> redirect) {
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof TestNode that) {
+                return this.meta.equals(that.meta) && Objects.equals(this.redirect.get(), that.redirect.get()) &&
+                        this.children.containsAll(that.children) && this.children.size() == that.children.size();
+            } else {
+                return false;
+            }
+        }
+    }
+
+    private static String packetToString(DeclareCommandsPacket packet) {
+        final char lineSeparator = '\n';
+        final StringBuilder builder = new StringBuilder();
+        builder.append(packet.rootIndex());
+        builder.append(lineSeparator);
+        @NotNull List<DeclareCommandsPacket.Node> nodes = packet.nodes();
+        for (int i = 0; i < nodes.size(); i++) {
+            DeclareCommandsPacket.Node node = nodes.get(i);
+            builder.append(i);
+            builder.append('=');
+            // Meta
+            if ((node.flags & 0x3) == 0) {
+                builder.append("$root$");
+            } else {
+                if ((node.flags & 0x3) == 1) {
+                    builder.append("'");
+                    builder.append(node.name);
+                    builder.append("'");
+                } else {
+                    builder.append(node.name);
+                    builder.append(' ');
+                    builder.append(node.parser);
+
+                    if (node.properties != null) {
+                        builder.append(' ');
+                        builder.append(new BigInteger(node.properties).toString(16));
+                    }
+                }
+            }
+            if ((node.flags & 0x4) == 0x4) {
+                builder.append(" executable");
+            }
+            if ((node.flags & 0x10) == 0x10) {
+                builder.append(' ');
+                builder.append(node.suggestionsType);
+            }
+            builder.append(lineSeparator);
+            if (node.children.length > 0) {
+                builder.append(i);
+                builder.append("->");
+                builder.append(Arrays.stream(node.children).mapToObj(String::valueOf).collect(Collectors.joining(" ")));
+                builder.append(lineSeparator);
+            }
+            if ((node.flags & 0x8) == 0x8) {
+                builder.append(i);
+                builder.append("+>");
+                builder.append(node.redirectedNode);
+                builder.append(lineSeparator);
+            }
+        }
+        return builder.toString();
+    }
+
+
+    private static Map<Character, Function<String, Collection<String>>> functions = new HashMap<>();
+
+    private static final Set<Character> placeholders = functions.keySet();
+
+    static {
+        // ID as is
+        functions.put('!', s -> {
+            final String[] strings = splitDeclaration(s);
+            final ArrayList<String> result = new ArrayList<>();
+            for (String s1 : strings[0].split(" ")) {
+                result.add(s1+"="+(strings[1].replaceAll("!", s1)));
+            }
+            return result;
+        });
+        // ID as literal
+        functions.put('%', s -> {
+            final String[] strings = splitDeclaration(s);
+            final ArrayList<String> result = new ArrayList<>();
+            for (String s1 : strings[0].split(" ")) {
+                result.add(s1+"="+(strings[1].replaceAll("%", "'"+s1+"'")));
+            }
+            return result;
+        });
+        // ID as uppercase literal
+        functions.put('§', s -> {
+            final String[] strings = splitDeclaration(s);
+            final ArrayList<String> result = new ArrayList<>();
+            for (String s1 : strings[0].split(" ")) {
+                result.add(s1+"="+(strings[1].replaceAll("§", "'"+(s1.toUpperCase(Locale.ROOT))+"'")));
+            }
+            return result;
+        });
+    }
+
+    private static String[] splitDeclaration(String input) {
+        return input.split("=", 2);
+    }
+
+    private static List<String> preProcessString(String string) {
+        final List<String> strings = Arrays.stream(string.split("\n")).toList();
+        final ArrayList<String> result = new ArrayList<>();
+        for (String s : strings) {
+            if (s.indexOf('=') > -1) {
+                boolean match = false;
+                for (Character placeholder : placeholders) {
+                    if (s.indexOf(placeholder) > -1) {
+                        result.addAll(functions.get(placeholder).apply(s));
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match) {
+                    result.add(s);
+                }
+            } else {
+                final int spaceIndex = s.indexOf(" ");
+                if (spaceIndex > -1 && spaceIndex < s.indexOf('-')) {
+                    final String[] split = s.split("-", 2);
+                    for (String s1 : split[0].split(" ")) {
+                        result.add(s1+"-"+split[1]);
+                    }
+                } else if (spaceIndex > -1 && spaceIndex < s.indexOf('+')) {
+                    final String[] split = s.split("\\+", 2);
+                    for (String s1 : split[0].split(" ")) {
+                        result.add(s1+"-"+split[1]);
+                    }
+                } else {
+                    result.add(s);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static TestNode fromString(String input) {
+        Map<String, String[]> references = new HashMap<>();
+        Map<String, TestNode> nodes = new HashMap<>();
+        final List<String> strings = preProcessString(input);
+        String rootId = strings.get(0);
+
+        for (String s : strings.stream().skip(0).toList()) {
+            if (s.length() < 3) continue; //invalid line
+            final int declareSeparator = s.indexOf('=');
+            if (declareSeparator > -1) {
+                final String id = s.substring(0, declareSeparator);
+                final String meta = s.substring(declareSeparator + 1);
+                nodes.put(id, new TestNode(new ArrayList<>(), meta, new AtomicReference<>()));
+            } else {
+                final int childSeparator = s.indexOf('-');
+                if (childSeparator > -1) {
+                    references.put(s.substring(0, childSeparator), s.substring(childSeparator + 2).split(" "));
+                } else {
+                    final int redirectSeparator = s.indexOf('+');
+                    references.put(s.substring(0, redirectSeparator), new String[]{null, s.substring(redirectSeparator + 2)});
+                }
+            }
+        }
+
+        return resolveNode(rootId, rootId, references, nodes);
+    }
+
+    private static TestNode resolveNode(String rootID, String id, Map<String, String[]> references, Map<String, TestNode> nodes) {
+        final TestNode node = nodes.get(id);
+        final String[] refs = references.get(id);
+        if (refs == null) {
+            return node;
+        } else if (refs[0] == null) {
+            node.redirect.set(resolvePath(rootID, refs[1], references, nodes));
+        } else {
+            for (String ref : refs) {
+                node.children.add(resolveNode(rootID, ref, references, nodes));
+            }
+        }
+        return node;
+    }
+
+    private static String resolvePath(String rootID, String nodeID, Map<String, String[]> references, Map<String, TestNode> nodes) {
+        if (rootID.equals(nodeID)) return nodes.get(rootID).meta;
+        throw new RuntimeException("Not implemented!"); //todo implement it
     }
 
     enum A {A, B, C}
