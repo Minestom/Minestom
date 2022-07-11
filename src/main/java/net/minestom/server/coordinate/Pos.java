@@ -1,10 +1,18 @@
 package net.minestom.server.coordinate;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerMoveEvent;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -13,11 +21,12 @@ import java.util.function.DoubleUnaryOperator;
  * <p>
  * To become a value then primitive type.
  */
-public record Pos(double x, double y, double z, float yaw, float pitch) implements Point {
+public record Pos(double x, double y, double z, float yaw, @Range(from = -90, to = 90) float pitch) implements Point {
     public static final Pos ZERO = new Pos(0, 0, 0);
 
     public Pos {
         yaw = fixYaw(yaw);
+        if (pitch < -90 || pitch > 90) throw new IllegalArgumentException("Pitch must be between -90 and 90");
     }
 
     public Pos(double x, double y, double z) {
@@ -158,6 +167,20 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     /**
+     * @return The closest direction {@link #yaw() yaw} and {@link #pitch() pitch} are facing to.
+     */
+    public @NotNull Direction facing() {
+        if (pitch < -45) return Direction.UP;
+        if (pitch > 45) return Direction.DOWN;
+        final float yaw = fixYaw(this.yaw);
+        if (yaw > 135 || yaw <= -135) return Direction.NORTH;
+        if (-135 < yaw && yaw <= -45) return Direction.EAST;
+        if (-45 < yaw && yaw <= 45) return Direction.SOUTH;
+        if (45 < yaw) return Direction.WEST;
+        throw new IllegalStateException("Illegal yaw (%s) or pitch (%s) value.".formatted(this.yaw, pitch));
+    }
+
+    /**
      * Returns a new position based on this position fields.
      *
      * @param operator the operator deconstructing this object and providing a new position
@@ -286,6 +309,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @param yaw The possible "wrong" yaw
      * @return a fixed yaw
      */
+    @Range(from = -180, to = 180)
     private static float fixYaw(float yaw) {
         yaw = yaw % 360;
         if (yaw < -180.0F) {
