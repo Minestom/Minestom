@@ -286,39 +286,33 @@ public class CommandPacketTest {
     }
 
 
-    private static Map<Character, Function<String, Collection<String>>> functions = new HashMap<>();
-
+    private static final Map<Character, Function<String, Collection<String>>> functions = Map.of(
+            '!', s -> {
+                final String[] strings = splitDeclaration(s);
+                final ArrayList<String> result = new ArrayList<>();
+                for (String s1 : strings[0].split(" ")) {
+                    result.add(s1+"="+(strings[1].replaceAll("!", s1)));
+                }
+                return result;
+            },
+            '%', s -> {
+                final String[] strings = splitDeclaration(s);
+                final ArrayList<String> result = new ArrayList<>();
+                for (String s1 : strings[0].split(" ")) {
+                    result.add(s1+"="+(strings[1].replaceAll("%", "'"+s1+"'")));
+                }
+                return result;
+            },
+            '§', s -> {
+                final String[] strings = splitDeclaration(s);
+                final ArrayList<String> result = new ArrayList<>();
+                for (String s1 : strings[0].split(" ")) {
+                    result.add(s1+"="+(strings[1].replaceAll("§", "'"+(s1.toUpperCase(Locale.ROOT))+"'")));
+                }
+                return result;
+            }
+    );
     private static final Set<Character> placeholders = functions.keySet();
-
-    static {
-        // ID as is
-        functions.put('!', s -> {
-            final String[] strings = splitDeclaration(s);
-            final ArrayList<String> result = new ArrayList<>();
-            for (String s1 : strings[0].split(" ")) {
-                result.add(s1+"="+(strings[1].replaceAll("!", s1)));
-            }
-            return result;
-        });
-        // ID as literal
-        functions.put('%', s -> {
-            final String[] strings = splitDeclaration(s);
-            final ArrayList<String> result = new ArrayList<>();
-            for (String s1 : strings[0].split(" ")) {
-                result.add(s1+"="+(strings[1].replaceAll("%", "'"+s1+"'")));
-            }
-            return result;
-        });
-        // ID as uppercase literal
-        functions.put('§', s -> {
-            final String[] strings = splitDeclaration(s);
-            final ArrayList<String> result = new ArrayList<>();
-            for (String s1 : strings[0].split(" ")) {
-                result.add(s1+"="+(strings[1].replaceAll("§", "'"+(s1.toUpperCase(Locale.ROOT))+"'")));
-            }
-            return result;
-        });
-    }
 
     private static String[] splitDeclaration(String input) {
         return input.split("=", 2);
