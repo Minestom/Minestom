@@ -13,8 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandPacketTest {
     @Test
@@ -61,9 +60,9 @@ public class CommandPacketTest {
                 at->atEnt
                 as->asEnt
                 in->overworld the_nether the_end
-                pos=! minecraft:vec3 0
+                pos=! minecraft:vec3
                 facing->pos
-                facing at as in+>execute
+                pos atEnt asEnt overworld the_nether the_end+>execute
                 run+>0
                 """, graph);
     }
@@ -164,7 +163,10 @@ public class CommandPacketTest {
 
     static void assertPacketGraph(String expected, Graph... graphs) {
         var packet = GraphConverter.createPacket(Graph.merge(graphs));
-        assertEquals(fromString("0\n0=$root$\n"+expected), fromString(packetToString(packet)));
+        final List<TestNode> expectedList = fromString("0\n0=$root$\n" + expected);
+        final List<TestNode> actualList = fromString(packetToString(packet));
+        assertEquals(expectedList.size(), actualList.size(), "Different node counts");
+        assertTrue(actualList.containsAll(expectedList), "Packet doesn't contain all expected nodes.");
     }
 
     private static String exportGarphvizDot(DeclareCommandsPacket packet, boolean prettyPrint) {
@@ -220,7 +222,7 @@ public class CommandPacketTest {
             return builder.toString();
     }
 
-    private record TestNode(List<TestNode> children, String meta, AtomicReference<String> redirect) {
+    private record TestNode(List<String> children, String meta, AtomicReference<String> redirect) {
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof TestNode that) {
@@ -332,7 +334,15 @@ public class CommandPacketTest {
                     }
                 }
                 if (!match) {
-                    result.add(s);
+                    final int spaceIndex = s.indexOf(" ");
+                    if (spaceIndex > -1 && spaceIndex < s.indexOf('=')) {
+                        final String[] split = s.split("=", 2);
+                        for (String s1 : split[0].split(" ")) {
+                            result.add(s1+"="+split[1]);
+                        }
+                    } else {
+                        result.add(s);
+                    }
                 }
             } else {
                 final int spaceIndex = s.indexOf(" ");
@@ -344,7 +354,7 @@ public class CommandPacketTest {
                 } else if (spaceIndex > -1 && spaceIndex < s.indexOf('+')) {
                     final String[] split = s.split("\\+", 2);
                     for (String s1 : split[0].split(" ")) {
-                        result.add(s1+"-"+split[1]);
+                        result.add(s1+"+"+split[1]);
                     }
                 } else {
                     result.add(s);
@@ -354,7 +364,7 @@ public class CommandPacketTest {
         return result;
     }
 
-    private static TestNode fromString(String input) {
+    private static List<TestNode> fromString(String input) {
         Map<String, String[]> references = new HashMap<>();
         Map<String, TestNode> nodes = new HashMap<>();
         final List<String> strings = preProcessString(input);
@@ -377,28 +387,34 @@ public class CommandPacketTest {
                 }
             }
         }
-
-        return resolveNode(rootId, rootId, references, nodes);
+        final ArrayList<TestNode> result = new ArrayList<>();
+        List<Runnable> redirectSetters = new ArrayList<>();
+        resolveNode(rootId, references, nodes, result, new HashMap<>(), redirectSetters, "");
+        redirectSetters.forEach(Runnable::run);
+        return result;
     }
 
-    private static TestNode resolveNode(String rootID, String id, Map<String, String[]> references, Map<String, TestNode> nodes) {
+    private static String resolveNode(String id, Map<String, String[]> references,
+                                   Map<String, TestNode> nodes, ArrayList<TestNode> result,
+                                      Map<String, String> nameToMetaPath,
+                                   List<Runnable> redirectSetters, String metaPath) {
         final TestNode node = nodes.get(id);
         final String[] refs = references.get(id);
+        final String path = metaPath + "#" + node.meta;
         if (refs == null) {
-            return node;
+            result.add(node);
+            nameToMetaPath.put(id, path);
+            return path;
         } else if (refs[0] == null) {
-            node.redirect.set(resolvePath(rootID, refs[1], references, nodes));
+             redirectSetters.add(() -> node.redirect.set(nameToMetaPath.get(refs[1])));
         } else {
             for (String ref : refs) {
-                node.children.add(resolveNode(rootID, ref, references, nodes));
+                node.children.add(resolveNode(ref, references, nodes, result, nameToMetaPath, redirectSetters, path));
             }
         }
-        return node;
-    }
-
-    private static String resolvePath(String rootID, String nodeID, Map<String, String[]> references, Map<String, TestNode> nodes) {
-        if (rootID.equals(nodeID)) return nodes.get(rootID).meta;
-        throw new RuntimeException("Not implemented!"); //todo implement it
+        result.add(node);
+        nameToMetaPath.put(id, path);
+        return path;
     }
 
     enum A {A, B, C}
