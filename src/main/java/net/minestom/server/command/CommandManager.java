@@ -157,7 +157,6 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
-        final Graph merged = Graph.merge(dispatcher.getCommands());
-        return GraphConverter.createPacket(merged);
+        return GraphBuilder.forPlayer(this.dispatcher.getCommands(), player).createPacket();
     }
 }
