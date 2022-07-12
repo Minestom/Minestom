@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -165,8 +166,12 @@ public class CommandPacketTest {
         var packet = GraphConverter.createPacket(Graph.merge(graphs));
         final List<TestNode> expectedList = fromString("0\n0=$root$\n" + expected);
         final List<TestNode> actualList = fromString(packetToString(packet));
-        assertEquals(expectedList.size(), actualList.size(), "Different node counts");
-        assertTrue(actualList.containsAll(expectedList), "Packet doesn't contain all expected nodes.");
+        try {
+            assertEquals(expectedList.size(), actualList.size(), "Different node counts");
+            assertTrue(actualList.containsAll(expectedList), "Packet doesn't contain all expected nodes.");
+        } catch (AssertionFailedError error) {
+            fail("Graphs didn't match. Actual graph from packet: " + exportGarphvizDot(packet, false));
+        }
     }
 
     private static String exportGarphvizDot(DeclareCommandsPacket packet, boolean prettyPrint) {
