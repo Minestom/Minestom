@@ -9,7 +9,6 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public record DeclareCommandsPacket(@NotNull List<Node> nodes,
@@ -40,7 +39,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
     public static final class Node implements Writeable, Readable {
         public byte flags;
         public int[] children = new int[0];
-        public AtomicInteger redirectedNode; // Only if flags & 0x08
+        public int redirectedNode; // Only if flags & 0x08
         public String name = ""; // Only for literal and argument
         public String parser = ""; // Only for argument
         public byte[] properties; // Only for argument
@@ -56,7 +55,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             writer.writeVarIntArray(children);
 
             if ((flags & 0x08) != 0) {
-                writer.writeVarInt(redirectedNode.get());
+                writer.writeVarInt(redirectedNode);
             }
 
             if (isLiteral() || isArgument()) {
@@ -80,7 +79,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             flags = reader.readByte();
             children = reader.readVarIntArray();
             if ((flags & 0x08) != 0) {
-                redirectedNode = new AtomicInteger(reader.readVarInt());
+                redirectedNode = reader.readVarInt();
             }
 
             if (isLiteral() || isArgument()) {
