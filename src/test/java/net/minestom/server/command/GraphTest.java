@@ -7,9 +7,29 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphTest {
+    @Test
+    public void empty() {
+        var result = Graph.builder(Literal(""))
+                .build();
+        var node = result.root();
+        assertEquals(Literal(""), node.argument());
+        assertTrue(node.next().isEmpty());
+    }
+
+    @Test
+    public void next() {
+        var result = Graph.builder(Literal(""))
+                .append(Literal("foo"))
+                .build();
+        var node = result.root();
+        assertEquals(Literal(""), node.argument());
+        assertEquals(1, node.next().size());
+        assertEquals(Literal("foo"), node.next().get(0).argument());
+    }
+
     @Test
     public void immutableNextBuilder() {
         var result = Graph.builder(Literal(""))
