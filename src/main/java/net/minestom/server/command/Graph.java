@@ -14,9 +14,7 @@ sealed interface Graph permits GraphImpl {
     }
 
     static @NotNull Graph fromCommand(@NotNull Command command) {
-        final Graph graph = GraphImpl.fromCommand(command);
-        GraphValidator.verifyConflict(graph);
-        return graph;
+        return GraphImpl.fromCommand(command);
     }
 
     static @NotNull Graph merge(@NotNull Collection<@NotNull Command> commands) {
