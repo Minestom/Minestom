@@ -22,7 +22,7 @@ final class GraphConverter {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         List<Consumer<Integer>> rootRedirect = new ArrayList<>();
         final AtomicInteger idSource = new AtomicInteger(0);
-        final int rootId = append(graph.root(), nodes, rootRedirect, idSource, null, null)[0];
+        final int rootId = append(graph.root(), nodes, rootRedirect, idSource, null, null, player)[0];
         for (var i : rootRedirect) {
             i.accept(rootId);
         }
@@ -31,14 +31,19 @@ final class GraphConverter {
 
     private static int[] append(Graph.Node graphNode, List<DeclareCommandsPacket.Node> to,
                                 List<Consumer<Integer>> rootRedirect, AtomicInteger id, @Nullable AtomicInteger redirect,
-                                List<Runnable> redirectSetters) {
+                                List<Runnable> redirectSetters, @Nullable Player player) {
+        final Graph.Executor executor = graphNode.executor();
+        if (player != null && executor != null) {
+            if (!executor.test(player)) return new int[0];
+        }
+
         final Argument<?> argument = graphNode.argument();
         final List<Graph.Node> children = graphNode.next();
 
         final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
         int[] packetNodeChildren = new int[children.size()];
         for (int i = 0; i < packetNodeChildren.length; i++) {
-            final int[] append = append(children.get(i), to, rootRedirect, id, redirect, redirectSetters);
+            final int[] append = append(children.get(i), to, rootRedirect, id, redirect, redirectSetters, player);
             if (append.length == 1) {
                 packetNodeChildren[i] = append[0];
             } else {
@@ -94,7 +99,7 @@ final class GraphConverter {
                     Argument<?> entry = entries.get(i);
                     if (i == entries.size() - 1) {
                         // Last will be the parent of next args
-                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, redirect, redirectSetters);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, redirect, redirectSetters, player);
                         for (int n : l) {
                             to.get(n).children = node.children;
                         }
@@ -104,10 +109,10 @@ final class GraphConverter {
                         return res == null ? l : res;
                     } else if (i == 0) {
                         // First will be the children & parent of following
-                        res = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters);
+                        res = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters, player);
                         last = res;
                     } else {
-                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters, player);
                         for (int n : last) {
                             to.get(n).children = l;
                         }
@@ -122,7 +127,7 @@ final class GraphConverter {
                 List<?> arguments = special.arguments();
                 for (int i = 0; i < arguments.size(); i++) {
                     Object arg = arguments.get(i);
-                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, null, List.of()), to, rootRedirect, id, r, setters);
+                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, null, List.of()), to, rootRedirect, id, r, setters, player);
                     if (append.length == 1) {
                         res[i] = append[0];
                     } else {
