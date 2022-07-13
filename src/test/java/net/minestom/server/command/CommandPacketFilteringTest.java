@@ -98,6 +98,72 @@ public class CommandPacketFilteringTest {
                 """);
     }
 
+    @Test
+    public void singleCommandConditionalArgGroupTrue() {
+        final Command foo = new Command("foo");
+        foo.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Group("test", ArgumentType.Literal("bar")));
+        assertFiltering(foo, """
+                foo bar=%
+                0->foo
+                foo->bar
+                """);
+    }
+
+    @Test
+    public void singleCommandConditionalArgGroupFalse() {
+        final Command foo = new Command("foo");
+        foo.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Group("test", ArgumentType.Literal("foo")));
+        assertFiltering(foo, """
+                foo=%
+                0->foo
+                """);
+    }
+
+    @Test
+    public void singleCommandUnconditionalArgGroup() {
+        final Command foo = new Command("foo");
+        foo.addSyntax(null, ArgumentType.Group("test", ArgumentType.Literal("bar")));
+        assertFiltering(foo, """
+                foo bar=%
+                0->foo
+                foo->bar
+                """);
+    }
+
+    @Test
+    public void singleCommandConditionalArgGroupTrue2() {
+        final Command foo = new Command("foo");
+        foo.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Group("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
+        assertFiltering(foo, """
+                foo bar baz=%
+                0->foo
+                foo->bar
+                bar->baz
+                """);
+    }
+
+    @Test
+    public void singleCommandConditionalArgGroupFalse2() {
+        final Command foo = new Command("foo");
+        foo.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Group("test", ArgumentType.Literal("foo"), ArgumentType.Literal("baz")));
+        assertFiltering(foo, """
+                foo=%
+                0->foo
+                """);
+    }
+
+    @Test
+    public void singleCommandUnconditionalArgGroup2() {
+        final Command foo = new Command("foo");
+        foo.addSyntax(null, ArgumentType.Group("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
+        assertFiltering(foo, """
+                foo bar baz=%
+                0->foo
+                foo->bar
+                bar->baz
+                """);
+    }
+
     private void assertFiltering(Command command, String expectedStructure) {
         final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(command)), PLAYER);
         CommandTestUtils.assertPacket(packet, expectedStructure);
