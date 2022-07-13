@@ -8,7 +8,6 @@ public record CommandResult(Type type, String input, CommandData commandData) {
         SUCCESS,
         /**
          * Command found, but the syntax is invalid.
-         * Executor sets to {@link Command#getDefaultExecutor()}.
          */
         INVALID_SYNTAX,
         /**

@@ -1,15 +1,14 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.Graph.Node;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static net.minestom.server.command.builder.arguments.Argument.Result.SyntaxError;
@@ -21,51 +20,79 @@ public final class CommandParser {
         //no instance
     }
 
-    public static Result parse(NodeGraph graph, String input) {
+    public static Result parse(Graph graph, String input) {
         final CharSequence withoutPrefix = input.trim().startsWith(COMMAND_PREFIX) ?
                 input.subSequence(COMMAND_PREFIX.length(), input.length()) : input;
         // Create reader & parse
         final CommandReader reader = new CommandReader(withoutPrefix);
-        List<Map.Entry<Node, Object>> syntax = new ArrayList<>();
+        final List<NodeResult> syntax = new ArrayList<>();
+        final Node root = graph.root();
+        final Set<CommandCondition> conditions = new HashSet<>();
 
-        Map.Entry<Node, Object> result = parseChild(graph, graph.root(), reader);
+        NodeResult result;
+        Node parent = root;
 
-        while (result != null) {
+        while ((result = parseChild(parent, reader)) != null) {
             syntax.add(result);
-            final Node parent = result.getKey();
-            if (result.getValue() instanceof SyntaxError e) {
+            // Create condition chain
+            final CommandCondition condition = result.node().executor().condition();
+            if (condition != null) conditions.add(condition);
+            // Check parse result
+            if (result.value instanceof SyntaxError e) {
                 // Syntax error stop at this arg
-                return new SyntaxErrorResult(withoutPrefix.toString(), parent.executionInfo().get().condition(),
-                        parent.arg().getCallback(), e, syntaxMapper(syntax));
+                return new SyntaxErrorResult(withoutPrefix.toString(), chainConditions(conditions),
+                        parent.argument().getCallback(), e, syntaxMapper(syntax));
             }
-            result = parseChild(graph, Objects.requireNonNullElse(graph.getRedirectTarget(parent), parent), reader);
+            parent = result.node;
         }
 
         if (syntax.size() < 1) {
             return new UnknownCommandResult(withoutPrefix.toString());
         } else {
-            final Node lastNode = syntax.get(syntax.size() - 1).getKey();
-            return new ValidCommandResult(withoutPrefix.toString(), lastNode.executionInfo().get().condition(),
-                    lastNode.executionInfo().get().executor(), syntaxMapper(syntax));
+            final Node lastNode = syntax.get(syntax.size() - 1).node;
+            if (lastNode.executor().executor() == null) {
+                // Syntax error
+                return new SyntaxErrorResult(withoutPrefix.toString(), chainConditions(conditions),
+                        lastNode.executor().syntaxErrorCallback(), null, syntaxMapper(syntax));
+            }
+            return new ValidCommandResult(withoutPrefix.toString(), chainConditions(conditions),
+                    lastNode.executor().executor(), syntaxMapper(syntax));
         }
     }
 
-    private static Map<String, Object> syntaxMapper(List<Map.Entry<Node, Object>> syntax) {
-        return syntax.stream()
+    private static Map<String, Object> syntaxMapper(List<NodeResult> syntax) {
+        final Map<String, Object> providedArgs = syntax.stream()
                 .skip(1) // skip root
-                .map(x -> Map.entry(x.getKey().realArg().getId(), x.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(NodeResult::name, NodeResult::value));
+        final Map<String, Supplier<?>> defaultValueSuppliers = syntax.get(syntax.size() - 1).node.executor().defaultValueSuppliers();
+        if (defaultValueSuppliers != null) {
+            final Map<String, ?> defaults = defaultValueSuppliers.entrySet()
+                    .stream()
+                    .map(x -> Map.entry(x.getKey(), x.getValue().get()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            providedArgs.putAll(defaults);
+        }
+        return providedArgs;
     }
 
-    private static @Nullable Map.Entry<Node, Object> parseChild(NodeGraph graph, Node parent, CommandReader reader) {
-        for (Node child : graph.getChildren(parent)) {
+    private static CommandCondition chainConditions(Set<CommandCondition> conditions) {
+        return (sender, commandString) -> {
+            for (CommandCondition condition : conditions) {
+                if (!condition.canUse(sender, commandString)) return false;
+            }
+            return true;
+        };
+    }
+
+    private static NodeResult parseChild(Node parent, CommandReader reader) {
+        for (Node child : parent.next()) {
             final int start = reader.cursor();
             try {
-                final Argument.Result<?> parse = child.realArg().parse(reader);
+                final Argument.Result<?> parse = child.argument().parse(reader);
                 if (parse instanceof Argument.Result.Success<?> success) {
-                    return Map.entry(child, success.value());
+                    return new NodeResult(child, success.value());
                 } else if (parse instanceof Argument.Result.SyntaxError<?> syntaxError) {
-                    return Map.entry(child, syntaxError);
+                    return new NodeResult(child, syntaxError);
                 } else {
                     // Reset cursor & try next
                     reader.setCursor(start);
@@ -120,5 +147,11 @@ public final class CommandParser {
 
     private record ValidCommandResult(String input, CommandCondition condition, CommandExecutor executor,
                                       Map<String, Object> arguments) implements KnownCommandResult {
+    }
+
+    private record NodeResult(Node node, Object value) {
+        public String name() {
+            return node.argument().getId();
+        }
     }
 }

@@ -4,8 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.command.CommandParser;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.GraphBuilder;
-import net.minestom.server.command.NodeGraph;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,8 +17,6 @@ public class CommandDispatcher { //Todo maybe merge with manager?
 
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Set<Command> commands = new HashSet<>();
-
-    private NodeGraph graph;
     private final Cache<String, CommandParser.Result> cache = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .build();
@@ -43,7 +39,6 @@ public class CommandDispatcher { //Todo maybe merge with manager?
         }
 
         this.commands.add(command);
-        this.graph = GraphBuilder.forServer(this.commands);
     }
 
     public void unregister(@NotNull Command command) {
@@ -57,7 +52,6 @@ public class CommandDispatcher { //Todo maybe merge with manager?
         }
 
         this.commands.remove(command);
-        this.graph = GraphBuilder.forServer(this.commands);
         // Clear cache
         this.cache.invalidateAll();
     }
@@ -91,6 +85,6 @@ public class CommandDispatcher { //Todo maybe merge with manager?
     }
 
     public @NotNull CommandParser.Result parse(@NotNull String commandString) {
-        return cache.get(commandString, command -> CommandParser.parse(graph, command));
+        return null;
     }
 }
