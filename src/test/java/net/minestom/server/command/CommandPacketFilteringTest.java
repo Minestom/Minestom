@@ -17,16 +17,14 @@ public class CommandPacketFilteringTest {
     public void singleCommandFilteredFalse() {
         final Command foo = new Command("foo");
         foo.setCondition(((sender, commandString) -> false));
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, "");
+        assertFiltering(foo, "");
     }
 
     @Test
     public void singleCommandFilteredTrue() {
         final Command foo = new Command("foo");
         foo.setCondition(((sender, commandString) -> true));
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, """
+        assertFiltering(foo, """
                 foo=%
                 0->foo
                 """);
@@ -35,8 +33,7 @@ public class CommandPacketFilteringTest {
     @Test
     public void singleCommandUnfiltered() {
         final Command foo = new Command("foo");
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, """
+        assertFiltering(foo, """
                 foo=%
                 0->foo
                 """);
@@ -50,8 +47,7 @@ public class CommandPacketFilteringTest {
         bar.setCondition((sender, commandString) -> true);
         foo.addSubcommand(bar);
         bar.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Literal("baz"));
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, """
+        assertFiltering(foo, """
                 foo bar=%
                 0->foo
                 foo->bar
@@ -65,8 +61,7 @@ public class CommandPacketFilteringTest {
         final Command bar = new Command("bar");
         bar.setCondition((sender, commandString) -> false);
         foo.addSubcommand(bar);
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, """
+        assertFiltering(foo, """
                 foo=%
                 0->foo
                 """);
@@ -79,8 +74,7 @@ public class CommandPacketFilteringTest {
         final Command bar = new Command("bar");
         bar.setCondition((sender, commandString) -> true);
         foo.addSubcommand(bar);
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, """
+        assertFiltering(foo, """
                 foo bar=%
                 0->foo
                 foo->bar
@@ -96,12 +90,16 @@ public class CommandPacketFilteringTest {
         foo.addSubcommand(bar);
         bar.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Literal("true"));
         bar.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Literal("false"));
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(foo)), PLAYER);
-        CommandTestUtils.assertPacket(packet, """
+        assertFiltering(foo, """
                 foo bar true=%
                 0->foo
                 foo->bar
                 bar->true
                 """);
+    }
+
+    private void assertFiltering(Command command, String expectedStructure) {
+        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(command)), PLAYER);
+        CommandTestUtils.assertPacket(packet, expectedStructure);
     }
 }
