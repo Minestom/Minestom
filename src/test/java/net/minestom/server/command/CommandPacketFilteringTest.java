@@ -164,6 +164,40 @@ public class CommandPacketFilteringTest {
                 """);
     }
 
+    @Test
+    public void singleCommandUnconditionalArgLoop() {
+        final Command foo = new Command("foo");
+        foo.addSyntax(null, ArgumentType.Loop("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
+        assertFiltering(foo, """
+                foo bar baz=%
+                0->foo
+                foo->bar baz
+                bar baz+>foo
+                """);
+    }
+
+    @Test
+    public void singleCommandConditionalArgLoopTrue() {
+        final Command foo = new Command("foo");
+        foo.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Loop("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
+        assertFiltering(foo, """
+                foo bar baz=%
+                0->foo
+                foo->bar baz
+                bar baz+>foo
+                """);
+    }
+
+    @Test
+    public void singleCommandConditionalArgLoopFalse() {
+        final Command foo = new Command("foo");
+        foo.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Loop("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
+        assertFiltering(foo, """
+                foo=%
+                0->foo
+                """);
+    }
+
     private void assertFiltering(Command command, String expectedStructure) {
         final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(command)), PLAYER);
         CommandTestUtils.assertPacket(packet, expectedStructure);
