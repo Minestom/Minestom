@@ -80,16 +80,28 @@ record GraphImpl(NodeImpl root) implements Graph {
             return predicate.test(commandSender);
         }
 
-        static ExecutorImpl fromCommand(Command command) {
+        static ExecutorImpl fromCommand(List<Command> parents, Command command) {
+            final List<CommandCondition> parentCond = parents.stream().map(Command::getCondition).filter(Objects::nonNull).toList();
             final CommandCondition condition = command.getCondition();
-            if (condition == null) return null;
-            return new ExecutorImpl(commandSender -> condition.canUse(commandSender, null));
+            if (parentCond.isEmpty() && condition == null) return null;
+            return new ExecutorImpl(commandSender -> {
+                for (CommandCondition parent : parentCond) {
+                    if (!parent.canUse(commandSender, null)) return false;
+                }
+                return condition == null || condition.canUse(commandSender, null);
+            });
         }
 
-        static ExecutorImpl fromSyntax(CommandSyntax syntax) {
+        static ExecutorImpl fromSyntax(List<Command> parents, CommandSyntax syntax) {
+            final List<CommandCondition> parentCond = parents.stream().map(Command::getCondition).filter(Objects::nonNull).toList();
             final CommandCondition condition = syntax.getCommandCondition();
-            if (condition == null) return null;
-            return new ExecutorImpl(commandSender -> condition.canUse(commandSender, null));
+            if (parentCond.isEmpty() && condition == null) return null;
+            return new ExecutorImpl(commandSender -> {
+                for (CommandCondition parent : parentCond) {
+                    if (!parent.canUse(commandSender, null)) return false;
+                }
+                return condition == null || condition.canUse(commandSender, null);
+            });
         }
     }
 
@@ -107,21 +119,37 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
 
         static ConversionNode fromCommand(Command command) {
-            ConversionNode root = new ConversionNode(Literal(command.getName()), ExecutorImpl.fromCommand(command));
+            return fromCommand(List.of(), command);
+        }
+
+        static ConversionNode fromCommand(List<Command> parents, Command command) {
+            ConversionNode root = new ConversionNode(Literal(command.getName()), ExecutorImpl.fromCommand(parents, command));
             // Syntaxes
             for (CommandSyntax syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
-                for (Argument<?> arg : syntax.getArguments()) {
-                    boolean last = arg == syntax.getArguments()[syntax.getArguments().length - 1];
-                    syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> {
-                        var ex = last ? ExecutorImpl.fromSyntax(syntax) : null;
-                        return new ConversionNode(argument, ex);
-                    });
+                var syntaxArgs = syntax.getArguments();
+                for(int i = 0; i < syntaxArgs.length; i++) {
+                    final Argument<?> arg = syntaxArgs[i];
+                    final boolean last = i == syntaxArgs.length - 1;
+                    if(last){
+                        // Executable node
+                        syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> {
+                            var subParents = new ArrayList<>(parents);
+                            subParents.add(command);
+                            return new ConversionNode(argument, ExecutorImpl.fromSyntax(subParents, syntax));
+                        });
+                    }else{
+                        // Intermediate node
+                        syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> new ConversionNode(argument, null));
+                    }
                 }
             }
             // Subcommands
             for (Command subcommand : command.getSubcommands()) {
-                root.nextMap.put(Literal(subcommand.getName()), fromCommand(subcommand));
+                assert subcommand != command : "Command should not contain itself as subcommand";
+                var subParents = new ArrayList<>(parents);
+                subParents.add(command);
+                root.nextMap.put(Literal(subcommand.getName()), fromCommand(subParents, subcommand));
             }
             return root;
         }
