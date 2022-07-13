@@ -29,7 +29,7 @@ record GraphImpl(NodeImpl root) implements Graph {
 
     @Override
     public boolean compare(@NotNull Graph graph, @NotNull Comparator comparator) {
-        return NodeImpl.compare(root, graph.root(), comparator);
+        return compare(root, graph.root(), comparator);
     }
 
     record BuilderImpl(Argument<?> argument, List<BuilderImpl> children) implements Graph.Builder {
@@ -58,26 +58,6 @@ record GraphImpl(NodeImpl root) implements Graph {
     }
 
     record NodeImpl(Argument<?> argument, ExecutorImpl executor, List<Graph.Node> next) implements Graph.Node {
-        static boolean compare(@NotNull Node first, Node second, @NotNull Comparator comparator) {
-            if (comparator == Comparator.TREE) {
-                if (!first.argument().equals(second.argument())) {
-                    return false;
-                }
-                if (first.next().size() != second.next().size()) {
-                    return false;
-                }
-
-                for (int i = 0; i < first.next().size(); i++) {
-                    if (!compare(first.next().get(i), second.next().get(i), comparator)) {
-                        return false;
-                    }
-                }
-                return true;
-            } else {
-                throw new UnsupportedOperationException("Comparator " + comparator + " is not supported yet");
-            }
-        }
-
         static NodeImpl fromBuilder(BuilderImpl builder) {
             final List<BuilderImpl> children = builder.children;
             Node[] nodes = new NodeImpl[children.size()];
@@ -154,5 +134,20 @@ record GraphImpl(NodeImpl root) implements Graph {
             }
             return new ConversionNode(Literal(""), null, next);
         }
+    }
+
+    static boolean compare(@NotNull Node first, Node second, @NotNull Comparator comparator) {
+        return switch (comparator) {
+            case TREE -> {
+                if (!first.argument().equals(second.argument())) yield false;
+                if (first.next().size() != second.next().size()) yield false;
+                for (int i = 0; i < first.next().size(); i++) {
+                    if (!compare(first.next().get(i), second.next().get(i), comparator)) {
+                        yield false;
+                    }
+                }
+                yield true;
+            }
+        };
     }
 }
