@@ -3,6 +3,8 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.Enchantment;
 import org.junit.jupiter.api.Test;
 
 import java.lang.String;
@@ -107,6 +109,43 @@ public class CommandSyntaxSingleTest {
         assertSyntax(groupLoop, "1", ExpectedExecution.DEFAULT);
         assertSyntax(groupLoop, "1 2 3", ExpectedExecution.DEFAULT);
         assertSyntax(groupLoop, "1 2 3 4 5", ExpectedExecution.DEFAULT);
+    }
+
+    @Test
+    public void singleLoopDoubleGroup() {
+        List<Argument<?>> groupLoop = List.of(
+                Loop("loop",
+                        Group("group", BlockState("block"), Enchantment("enchant")),
+                        Group("group2", Enchantment("enchant"), BlockState("block"))
+                )
+        );
+        // block enchant
+        {
+            var input = "minecraft:stone minecraft:sharpness";
+            var context = new CommandContext(input);
+            context.setArg("block", Block.STONE, "minecraft:stone");
+            context.setArg("enchant", Enchantment.SHARPNESS, "minecraft:sharpness");
+            assertSyntax(groupLoop, input, ExpectedExecution.SYNTAX, Map.of("loop", List.of(context)));
+        }
+        // enchant block block enchant
+        {
+            var context1 = new CommandContext("minecraft:sharpness minecraft:stone");
+            var context2 = new CommandContext("minecraft:grass minecraft:efficiency");
+
+            context1.setArg("enchant", Enchantment.SHARPNESS, "minecraft:sharpness");
+            context1.setArg("block", Block.STONE, "minecraft:stone");
+
+            context2.setArg("block", Block.GRASS, "minecraft:grass");
+            context2.setArg("enchant", Enchantment.EFFICIENCY, "minecraft:efficiency");
+
+            var input = context1.getInput() + " " + context2.getInput();
+            assertSyntax(groupLoop, input, ExpectedExecution.SYNTAX, Map.of("loop", List.of(context1, context2)));
+        }
+        // Incomplete loop
+        assertSyntax(groupLoop, "minecraft:sharpness", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "minecraft:sharpness minecraft:sharpness", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "minecraft:stone", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "minecraft:stone minecraft:stone", ExpectedExecution.DEFAULT);
     }
 
     private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {

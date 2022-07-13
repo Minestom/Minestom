@@ -207,11 +207,8 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
-
         assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
         assertInvalidArg(arg, "minecraft:");
-
-        assertEquals("ResourceLocation<resource_location>", arg.toString());
     }
 
     @Test
@@ -423,11 +420,11 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentStringArray() {
         var arg = ArgumentType.StringArray("string_array");
-        assertArrayEquals(new String[]{"example", "text"}, arg.parse(new CommandReader("example text")).value());
-        assertArrayEquals(new String[]{"some", "more", "placeholder", "text"}, arg.parse(new CommandReader("some more placeholder text")).value());
-//        assertArrayEquals(new String[]{""}, arg.parse(new CommandReader("")).value()); Is it parser responsibility?
-        assertArrayEquals(new String[0], arg.parse(new CommandReader(" ")).value());
-        assertArrayEquals(new String[0], arg.parse(new CommandReader("         ")).value());
+        assertArrayArg(arg, new String[]{"example", "text"}, "example text");
+        assertArrayArg(arg, new String[]{"some", "more", "placeholder", "text"}, "some more placeholder text");
+        assertArrayArg(arg, new String[]{""}, "");
+        assertArrayArg(arg, new String[0], " ");
+        assertArrayArg(arg, new String[0], "         ");
     }
 
     @Test
@@ -444,6 +441,14 @@ public class ArgumentTypeTest {
 
     private static <T> void assertArg(Argument<T> arg, T expected, String input) {
         assertEquals(expected, arg.parse(new CommandReader(input)).value());
+    }
+
+    private static <T> void assertArrayArg(Argument<T[]> arg, T[] expected, String input) {
+        assertArrayEquals(expected, arg.parse(input));
+    }
+
+    private static <T> void assertValidArg(Argument<T> arg, String input) {
+        assertDoesNotThrow(() -> arg.parse(input));
     }
 
     private static <T> void assertInvalidArg(Argument<T> arg, String input) {

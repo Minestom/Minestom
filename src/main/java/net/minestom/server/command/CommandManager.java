@@ -157,8 +157,7 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
-        final NodeGraph nodeGraph = GraphBuilder.forPlayer(this.dispatcher.getCommands(), player);
-        System.out.println(nodeGraph.exportGarphvizDot()); //TODO remove before merging
-        return GraphConverter.createPacket(nodeGraph);
+        final Graph merged = Graph.merge(dispatcher.getCommands());
+        return GraphConverter.createPacket(merged, player);
     }
 }
