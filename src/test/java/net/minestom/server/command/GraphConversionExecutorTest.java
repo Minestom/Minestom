@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphCommandConversionExecutorTest {
+public class GraphConversionExecutorTest {
     @Test
     public void empty() {
         final Command foo = new Command("foo");
@@ -39,7 +39,7 @@ public class GraphCommandConversionExecutorTest {
     @Test
     public void emptySyntaxCondition() {
         final Command foo = new Command("foo");
-        foo.addSyntax(GraphCommandConversionExecutorTest::dummyExecutor, Literal("first"));
+        foo.addSyntax(GraphConversionExecutorTest::dummyExecutor, Literal("first"));
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
@@ -50,7 +50,7 @@ public class GraphCommandConversionExecutorTest {
     public void syntaxConditionTrue() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, context) -> true,
-                GraphCommandConversionExecutorTest::dummyExecutor, Literal("first"));
+                GraphConversionExecutorTest::dummyExecutor, Literal("first"));
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
@@ -63,7 +63,7 @@ public class GraphCommandConversionExecutorTest {
     public void syntaxConditionFalse() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, context) -> false,
-                GraphCommandConversionExecutorTest::dummyExecutor, Literal("first"));
+                GraphConversionExecutorTest::dummyExecutor, Literal("first"));
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
