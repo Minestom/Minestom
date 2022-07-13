@@ -1,6 +1,7 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
@@ -86,11 +87,16 @@ record GraphImpl(NodeImpl root) implements Graph {
 
         static ConversionNode fromCommand(Command command) {
             ConversionNode root = new ConversionNode(Literal(command.getName()));
-            for (var syntax : command.getSyntaxes()) {
+            // Syntaxes
+            for (CommandSyntax syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
                 for (Argument<?> arg : syntax.getArguments()) {
                     syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, ConversionNode::new);
                 }
+            }
+            // Subcommands
+            for (Command subcommand : command.getSubcommands()) {
+                root.nextMap.put(Literal(subcommand.getName()), fromCommand(subcommand));
             }
             return root;
         }

@@ -14,7 +14,7 @@ public class GraphCommandConversionTest {
     public void empty() {
         final Command foo = new Command("foo");
         var graph = Graph.builder(Literal("foo")).build();
-        assertEqualsGraph(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, foo);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class GraphCommandConversionTest {
         foo.addSyntax(GraphCommandConversionTest::dummyExecutor, first);
         var graph = Graph.builder(Literal("foo"))
                 .append(first).build();
-        assertEqualsGraph(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, foo);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class GraphCommandConversionTest {
         var graph = Graph.builder(Literal("foo"))
                 .append(first).append(second)
                 .build();
-        assertEqualsGraph(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, foo);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class GraphCommandConversionTest {
                 .append(baz, builder ->
                         builder.append(a))
                 .build();
-        assertEqualsGraph(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, foo);
     }
 
     @Test
@@ -77,10 +77,32 @@ public class GraphCommandConversionTest {
         var graph = Graph.builder(Literal("foo"))
                 .append(bar, builder -> builder.append(number))
                 .build();
-        assertEqualsGraph(graph, Graph.fromCommand(foo));
+        assertEqualsGraph(graph, foo);
     }
 
-    private static void assertEqualsGraph(Graph expected, Graph actual) {
+    @Test
+    public void subcommand() {
+        final Command main = new Command("main");
+        final Command sub = new Command("sub");
+
+        var bar = Literal("bar");
+        var number = Integer("number");
+
+        sub.addSyntax(GraphCommandConversionTest::dummyExecutor, bar);
+        sub.addSyntax(GraphCommandConversionTest::dummyExecutor, bar, number);
+
+        main.addSubcommand(sub);
+
+        // The two syntax shall start from the same node
+        var graph = Graph.builder(Literal("main"))
+                .append(Literal("sub"), builder ->
+                        builder.append(bar, builder1 -> builder1.append(number)))
+                .build();
+        assertEqualsGraph(graph, main);
+    }
+
+    private static void assertEqualsGraph(Graph expected, Command command) {
+        final Graph actual = Graph.fromCommand(command);
         assertTrue(expected.compare(actual, Graph.Comparator.TREE), () -> {
             System.out.println("Expected: " + expected);
             System.out.println("Actual:   " + actual);
