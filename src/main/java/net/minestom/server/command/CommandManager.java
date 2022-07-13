@@ -158,6 +158,6 @@ public final class CommandManager {
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
         final Graph merged = Graph.merge(dispatcher.getCommands());
-        return GraphConverter.createPacket(merged);
+        return GraphConverter.createPacket(merged, player);
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -16,8 +17,8 @@ final class GraphConverter {
         //no instance
     }
 
-    @Contract("_ -> new")
-    public static DeclareCommandsPacket createPacket(Graph graph) {
+    @Contract("_, _ -> new")
+    public static DeclareCommandsPacket createPacket(Graph graph, @Nullable Player player) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         List<Consumer<Integer>> rootRedirect = new ArrayList<>();
         final AtomicInteger idSource = new AtomicInteger(0);
