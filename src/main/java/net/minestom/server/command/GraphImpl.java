@@ -3,10 +3,12 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
@@ -21,14 +23,13 @@ record GraphImpl(NodeImpl root) implements Graph {
 
     static GraphImpl merge(List<Graph> graphs) {
         final List<Node> children = graphs.stream().map(Graph::root).toList();
-        final NodeImpl root = new NodeImpl(Literal(""), children);
+        final NodeImpl root = new NodeImpl(Literal(""), null, children);
         return new GraphImpl(root);
     }
 
     @Override
     public boolean compare(@NotNull Graph graph, @NotNull Comparator comparator) {
-        // We currently do not include execution data in the graph
-        return equals(graph);
+        return NodeImpl.compare(root, graph.root(), comparator);
     }
 
     record BuilderImpl(Argument<?> argument, List<BuilderImpl> children) implements Graph.Builder {
@@ -56,12 +57,32 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record NodeImpl(Argument<?> argument, List<Graph.Node> next) implements Graph.Node {
+    record NodeImpl(Argument<?> argument, ExecutorImpl executor, List<Graph.Node> next) implements Graph.Node {
+        static boolean compare(@NotNull Node first, Node second, @NotNull Comparator comparator) {
+            if (comparator == Comparator.TREE) {
+                if (!first.argument().equals(second.argument())) {
+                    return false;
+                }
+                if (first.next().size() != second.next().size()) {
+                    return false;
+                }
+
+                for (int i = 0; i < first.next().size(); i++) {
+                    if (!compare(first.next().get(i), second.next().get(i), comparator)) {
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                throw new UnsupportedOperationException("Comparator " + comparator + " is not supported yet");
+            }
+        }
+
         static NodeImpl fromBuilder(BuilderImpl builder) {
             final List<BuilderImpl> children = builder.children;
             Node[] nodes = new NodeImpl[children.size()];
             for (int i = 0; i < children.size(); i++) nodes[i] = fromBuilder(children.get(i));
-            return new NodeImpl(builder.argument, List.of(nodes));
+            return new NodeImpl(builder.argument, null, List.of(nodes));
         }
 
         static NodeImpl command(Command command) {
@@ -73,25 +94,49 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    private record ConversionNode(Argument<?> argument, Map<Argument<?>, ConversionNode> nextMap) {
-        ConversionNode(Argument<?> argument) {
-            this(argument, new LinkedHashMap<>());
+    record ExecutorImpl(Predicate<CommandSender> predicate) implements Graph.Executor {
+        @Override
+        public boolean test(CommandSender commandSender) {
+            return predicate.test(commandSender);
+        }
+
+        static ExecutorImpl fromCommand(Command command) {
+            final CommandCondition condition = command.getCondition();
+            if (condition == null) return null;
+            return new ExecutorImpl(commandSender -> condition.canUse(commandSender, null));
+        }
+
+        static ExecutorImpl fromSyntax(CommandSyntax syntax) {
+            final CommandCondition condition = syntax.getCommandCondition();
+            if (condition == null) return null;
+            return new ExecutorImpl(commandSender -> condition.canUse(commandSender, null));
+        }
+    }
+
+    private record ConversionNode(Argument<?> argument, ExecutorImpl executor,
+                                  Map<Argument<?>, ConversionNode> nextMap) {
+        ConversionNode(Argument<?> argument, ExecutorImpl executor) {
+            this(argument, executor, new LinkedHashMap<>());
         }
 
         private NodeImpl toNode() {
             Node[] nodes = new NodeImpl[nextMap.size()];
             int i = 0;
             for (var entry : nextMap.values()) nodes[i++] = entry.toNode();
-            return new NodeImpl(argument, List.of(nodes));
+            return new NodeImpl(argument, executor, List.of(nodes));
         }
 
         static ConversionNode fromCommand(Command command) {
-            ConversionNode root = new ConversionNode(Literal(command.getName()));
+            ConversionNode root = new ConversionNode(Literal(command.getName()), ExecutorImpl.fromCommand(command));
             // Syntaxes
             for (CommandSyntax syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
                 for (Argument<?> arg : syntax.getArguments()) {
-                    syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, ConversionNode::new);
+                    boolean last = arg == syntax.getArguments()[syntax.getArguments().length - 1];
+                    syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> {
+                        var ex = last ? ExecutorImpl.fromSyntax(syntax) : null;
+                        return new ConversionNode(argument, ex);
+                    });
                 }
             }
             // Subcommands
@@ -107,7 +152,7 @@ record GraphImpl(NodeImpl root) implements Graph {
                 final ConversionNode conv = fromCommand(command);
                 next.put(conv.argument, conv);
             }
-            return new ConversionNode(Literal(""), next);
+            return new ConversionNode(Literal(""), null, next);
         }
     }
 }

@@ -42,7 +42,7 @@ final class GraphConverter {
             if (append.length == 1) {
                 packetNodeChildren[i] = append[0];
             } else {
-                packetNodeChildren = Arrays.copyOf(packetNodeChildren, packetNodeChildren.length+append.length-1);
+                packetNodeChildren = Arrays.copyOf(packetNodeChildren, packetNodeChildren.length + append.length - 1);
                 System.arraycopy(append, 0, packetNodeChildren, i, append.length);
                 i += append.length;
             }
@@ -92,9 +92,9 @@ final class GraphConverter {
                 int[] last = new int[0];
                 for (int i = 0; i < entries.size(); i++) {
                     Argument<?> entry = entries.get(i);
-                    if (i == entries.size()-1) {
+                    if (i == entries.size() - 1) {
                         // Last will be the parent of next args
-                        final int[] l = append(new GraphImpl.NodeImpl(entry, List.of()), to, rootRedirect, id, redirect, redirectSetters);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, redirect, redirectSetters);
                         for (int n : l) {
                             to.get(n).children = node.children;
                         }
@@ -104,10 +104,10 @@ final class GraphConverter {
                         return res == null ? l : res;
                     } else if (i == 0) {
                         // First will be the children & parent of following
-                        res = append(new GraphImpl.NodeImpl(entry, List.of()), to, rootRedirect, id, null, redirectSetters);
+                        res = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters);
                         last = res;
                     } else {
-                        final int[] l = append(new GraphImpl.NodeImpl(entry, List.of()), to, rootRedirect, id, null, redirectSetters);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters);
                         for (int n : last) {
                             to.get(n).children = l;
                         }
@@ -122,11 +122,11 @@ final class GraphConverter {
                 List<?> arguments = special.arguments();
                 for (int i = 0; i < arguments.size(); i++) {
                     Object arg = arguments.get(i);
-                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, List.of()), to, rootRedirect, id, r, setters);
+                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, null, List.of()), to, rootRedirect, id, r, setters);
                     if (append.length == 1) {
                         res[i] = append[0];
                     } else {
-                        res = Arrays.copyOf(res, res.length+append.length-1);
+                        res = Arrays.copyOf(res, res.length + append.length - 1);
                         System.arraycopy(append, 0, res, i, append.length);
                         i += append.length;
                     }

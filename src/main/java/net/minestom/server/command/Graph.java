@@ -3,10 +3,12 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 sealed interface Graph permits GraphImpl {
     static @NotNull Builder builder(@NotNull Argument<?> argument) {
@@ -36,7 +38,13 @@ sealed interface Graph permits GraphImpl {
     sealed interface Node permits GraphImpl.NodeImpl {
         @NotNull Argument<?> argument();
 
+        @UnknownNullability Executor executor();
+
         @NotNull List<@NotNull Node> next();
+    }
+
+    sealed interface Executor extends Predicate<CommandSender> permits GraphImpl.ExecutorImpl {
+        // TODO execute the node
     }
 
     sealed interface Builder permits GraphImpl.BuilderImpl {
