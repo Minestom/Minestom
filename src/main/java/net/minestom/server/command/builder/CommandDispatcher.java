@@ -3,6 +3,7 @@ package net.minestom.server.command.builder;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -21,13 +22,19 @@ import java.util.concurrent.TimeUnit;
  * Class responsible for parsing {@link Command}.
  */
 public class CommandDispatcher {
-
-    private final Map<String, Command> commandMap = new HashMap<>();
-    private final Set<Command> commands = new HashSet<>();
+    private final CommandManager manager;
 
     private final Cache<String, CommandResult> cache = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .build();
+
+    public CommandDispatcher(CommandManager manager) {
+        this.manager = manager;
+    }
+
+    public CommandDispatcher() {
+        this(new CommandManager());
+    }
 
     /**
      * Registers a command,
@@ -36,37 +43,15 @@ public class CommandDispatcher {
      * @param command the command to register
      */
     public void register(@NotNull Command command) {
-        this.commandMap.put(command.getName().toLowerCase(), command);
-
-        // Register aliases
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                this.commandMap.put(alias.toLowerCase(), command);
-            }
-        }
-
-        this.commands.add(command);
+        manager.register(command);
     }
 
     public void unregister(@NotNull Command command) {
-        this.commandMap.remove(command.getName().toLowerCase());
-
-        final String[] aliases = command.getAliases();
-        if (aliases != null) {
-            for (String alias : aliases) {
-                this.commandMap.remove(alias.toLowerCase());
-            }
-        }
-
-        this.commands.remove(command);
-
-        // Clear cache
-        this.cache.invalidateAll();
+        manager.unregister(command);
     }
 
     public @NotNull Set<Command> getCommands() {
-        return Collections.unmodifiableSet(commands);
+        return manager.getCommands();
     }
 
     /**
@@ -76,8 +61,7 @@ public class CommandDispatcher {
      * @return the {@link Command} associated with the name, null if not any
      */
     public @Nullable Command findCommand(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
-        return commandMap.getOrDefault(commandName, null);
+        return manager.getCommand(commandName);
     }
 
     /**
@@ -88,12 +72,7 @@ public class CommandDispatcher {
      * @return the command result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
-        CommandResult commandResult = parse(commandString);
-        ParsedCommand parsedCommand = commandResult.parsedCommand;
-        if (parsedCommand != null) {
-            commandResult.commandData = parsedCommand.execute(source);
-        }
-        return commandResult;
+        return manager.execute(source, commandString);
     }
 
     /**

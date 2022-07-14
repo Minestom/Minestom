@@ -12,6 +12,8 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.*;
+
 /**
  * Manager used to register {@link Command commands}.
  * <p>
@@ -23,8 +25,9 @@ public final class CommandManager {
 
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
-
-    private final CommandDispatcher dispatcher = new CommandDispatcher();
+    private final CommandParser parser = CommandParser.parser();
+    private final Map<String, Command> commandMap = new HashMap<>();
+    private final Set<Command> commands = new HashSet<>();
 
     private CommandCallback unknownCommandCallback;
 
@@ -46,7 +49,10 @@ public final class CommandManager {
                         "A command with the name " + alias + " is already registered!");
             }
         }
-        this.dispatcher.register(command);
+        commands.add(command);
+        for (String name : command.getNames()) {
+            commandMap.put(name, command);
+        }
     }
 
     /**
@@ -56,7 +62,10 @@ public final class CommandManager {
      * @param command the command to remove
      */
     public void unregister(@NotNull Command command) {
-        this.dispatcher.unregister(command);
+        commands.remove(command);
+        for (String name : command.getNames()) {
+            commandMap.remove(name);
+        }
     }
 
     /**
@@ -66,7 +75,7 @@ public final class CommandManager {
      * @return the command associated with the name, null if not any
      */
     public @Nullable Command getCommand(@NotNull String commandName) {
-        return dispatcher.findCommand(commandName);
+        return commandMap.get(commandName.toLowerCase(Locale.ROOT));
     }
 
     /**
@@ -76,8 +85,7 @@ public final class CommandManager {
      * @return true if the command does exist
      */
     public boolean commandExists(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
-        return dispatcher.findCommand(commandName) != null;
+        return getCommand(commandName) != null;
     }
 
     /**
@@ -97,7 +105,8 @@ public final class CommandManager {
             command = playerCommandEvent.getCommand();
         }
         // Process the command
-        final CommandResult result = dispatcher.execute(sender, command);
+        final ParseResult parsedCommand = parser.parse(getGraph(), command);
+        final CommandResult result = resultConverter(parsedCommand.execute(sender), command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
@@ -117,7 +126,7 @@ public final class CommandManager {
     }
 
     public @NotNull CommandDispatcher getDispatcher() {
-        return dispatcher;
+        return new CommandDispatcher(this);
     }
 
     /**
@@ -157,7 +166,24 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
-        final Graph merged = Graph.merge(dispatcher.getCommands());
-        return GraphConverter.createPacket(merged, player);
+        return GraphConverter.createPacket(getGraph(), player);
+    }
+
+    public @NotNull Set<@NotNull Command> getCommands() {
+        return Collections.unmodifiableSet(commands);
+    }
+
+    private Graph getGraph() {
+        //todo cache
+        return Graph.merge(commands);
+    }
+
+    private static CommandResult resultConverter(ExecutionResult newResult, String input) {
+        return CommandResult.of(switch (newResult.type()) {
+            case SUCCESS -> CommandResult.Type.SUCCESS;
+            case CANCELLED, PRECONDITION_FAILED, EXECUTOR_EXCEPTION -> CommandResult.Type.CANCELLED;
+            case INVALID_SYNTAX -> CommandResult.Type.INVALID_SYNTAX;
+            case UNKNOWN -> CommandResult.Type.UNKNOWN;
+        }, input, newResult.commandData());
     }
 }

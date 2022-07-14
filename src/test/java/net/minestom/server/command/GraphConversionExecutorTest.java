@@ -43,7 +43,10 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        assertNull(graph.root().next().get(0).execution());
+        var executor = graph.root().next().get(0).execution();
+        assertNotNull(executor);
+        assertNull(executor.condition());
+        assertNotNull(executor.executor());
     }
 
     @Test
