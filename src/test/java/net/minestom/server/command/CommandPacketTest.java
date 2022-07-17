@@ -154,6 +154,20 @@ public class CommandPacketTest {
                 int3->int4
                 """, graph);
     }
+    @Test
+    public void twoEnumAndOneLiteralChild() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Enum("a", A.class))
+                .append(ArgumentType.Literal("l"))
+                .append(ArgumentType.Enum("b", B.class))
+                .build();
+        assertPacketGraph("""
+                foo l=%
+                0->foo
+                a b c d e f=§
+                foo->a b c d e f l
+                """, graph);
+    }
 
     static void assertPacketGraph(String expected, Graph... graphs) {
         var packet = GraphConverter.createPacket(Graph.merge(graphs), null);

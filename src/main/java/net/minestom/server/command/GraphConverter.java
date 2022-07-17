@@ -42,14 +42,14 @@ final class GraphConverter {
 
         final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
         int[] packetNodeChildren = new int[children.size()];
-        for (int i = 0; i < packetNodeChildren.length; i++) {
+        for (int i = 0, appendIndex = 0; i < children.size(); i++) {
             final int[] append = append(children.get(i), to, rootRedirect, id, redirect, redirectSetters, player);
             if (append.length == 1) {
-                packetNodeChildren[i] = append[0];
+                packetNodeChildren[appendIndex++] = append[0];
             } else {
                 packetNodeChildren = Arrays.copyOf(packetNodeChildren, packetNodeChildren.length + append.length - 1);
-                System.arraycopy(append, 0, packetNodeChildren, i, append.length);
-                i += append.length;
+                System.arraycopy(append, 0, packetNodeChildren, appendIndex, append.length);
+                appendIndex += append.length;
             }
         }
         node.children = packetNodeChildren;
@@ -125,15 +125,15 @@ final class GraphConverter {
                 List<Runnable> setters = new ArrayList<>();
                 int[] res = new int[special.arguments().size()];
                 List<?> arguments = special.arguments();
-                for (int i = 0; i < arguments.size(); i++) {
+                for (int i = 0, appendIndex = 0; i < arguments.size(); i++) {
                     Object arg = arguments.get(i);
                     final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, null, List.of()), to, rootRedirect, id, r, setters, player);
                     if (append.length == 1) {
-                        res[i] = append[0];
+                        res[appendIndex++] = append[0];
                     } else {
                         res = Arrays.copyOf(res, res.length + append.length - 1);
-                        System.arraycopy(append, 0, res, i, append.length);
-                        i += append.length;
+                        System.arraycopy(append, 0, res, appendIndex, append.length);
+                        appendIndex += append.length;
                     }
                 }
                 r.set(id.get());
