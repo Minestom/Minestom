@@ -27,7 +27,7 @@ final class CommandParserImpl implements CommandParser {
     @Override
     public @NotNull ParseResult parse(@NotNull Graph graph, @NotNull String input) {
         // Create reader & parse
-        final CommandStringReader reader = CommandStringReader.from(input);
+        final CommandStringReader reader = new CommandStringReader(input);
         final List<NodeResult> syntax = new ArrayList<>();
         final Node root = graph.root();
         final Set<CommandCondition> conditions = new HashSet<>();

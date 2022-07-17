@@ -1,40 +1,66 @@
 package net.minestom.server.command;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
-interface CommandStringReader {
-    @Contract(value = "_ -> new", pure = true)
-    static @NotNull CommandStringReader from(CharSequence input) {
-        return new CommandStringReaderImpl(input);
+import java.nio.BufferUnderflowException;
+import java.util.stream.IntStream;
+
+final class CommandStringReader {
+    static final char SPACE = ' ';
+    private final CharSequence input;
+    private int cursor = 0;
+
+    public CommandStringReader(CharSequence input) {
+        this.input = input;
     }
 
-    boolean hasRemaining();
+    public boolean hasRemaining() {
+        return remaining() > 0;
+    }
 
-    String readWord();
+    public String readWord() {
+        return readUntil(SPACE);
+    }
 
-    String readQuotedString();
+    public String readRemaining() {
+        return read(input.length());
+    }
 
-    String readRemaining();
+    public int cursor() {
+        return cursor;
+    }
 
-    char peekNextChar();
+    public void setCursor(int cursor) {
+        this.cursor = cursor;
+    }
 
-    char getCharAt(int position);
+    public String read(int exclusiveAbsoluteEnd) {
+        if (!hasRemaining()) throw new BufferUnderflowException();
+        final String s = input.subSequence(cursor, exclusiveAbsoluteEnd).toString();
+        cursor += s.length();
+        return s;
+    }
 
-    int cursor();
+    /**
+     * Reads until the supplied character or end of input is encountered, target char
+     * will not be included in the result, but the cursor will skip it
+     *
+     * @param c end char
+     * @return string from current position until end char
+     */
+    public String readUntil(char c) {
+        final int i = nextIndexOf(c, 0);
+        final String read = read(i == -1 ? input.length() : i);
+        cursor++; // skip target char
+        return read;
+    }
 
-    void setCursor(int cursor);
+    @VisibleForTesting
+    int nextIndexOf(char c, int offset) {
+        return IntStream.range(cursor + offset, input.length()).filter(x -> input.charAt(x) == c).findFirst().orElse(-1);
+    }
 
-    String readUntil(char c);
-
-    String readUntilAny(char... c);
-
-    default String readQuotablePhrase() {
-        final char c = peekNextChar();
-        if (c == '"' || c == '\'') {
-            return readQuotedString();
-        } else {
-            return readWord();
-        }
+    public int remaining() {
+        return input.length() - cursor;
     }
 }
