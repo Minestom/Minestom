@@ -1,66 +1,44 @@
 package net.minestom.server.command;
 
-import org.jetbrains.annotations.VisibleForTesting;
-
-import java.nio.BufferUnderflowException;
-import java.util.stream.IntStream;
-
 final class CommandStringReader {
     static final char SPACE = ' ';
-    private final CharSequence input;
+    private final String input;
     private int cursor = 0;
 
-    public CommandStringReader(CharSequence input) {
+    CommandStringReader(String input) {
         this.input = input;
     }
 
-    public boolean hasRemaining() {
-        return remaining() > 0;
+    boolean hasRemaining() {
+        return input.length() - cursor > 0;
     }
 
-    public String readWord() {
-        return readUntil(SPACE);
-    }
+    String readWord() {
+        final String input = this.input;
+        final int cursor = this.cursor;
 
-    public String readRemaining() {
-        return read(input.length());
-    }
-
-    public int cursor() {
-        return cursor;
-    }
-
-    public void setCursor(int cursor) {
-        this.cursor = cursor;
-    }
-
-    public String read(int exclusiveAbsoluteEnd) {
-        if (!hasRemaining()) throw new BufferUnderflowException();
-        final String s = input.subSequence(cursor, exclusiveAbsoluteEnd).toString();
-        cursor += s.length();
-        return s;
-    }
-
-    /**
-     * Reads until the supplied character or end of input is encountered, target char
-     * will not be included in the result, but the cursor will skip it
-     *
-     * @param c end char
-     * @return string from current position until end char
-     */
-    public String readUntil(char c) {
-        final int i = nextIndexOf(c, 0);
-        final String read = read(i == -1 ? input.length() : i);
-        cursor++; // skip target char
+        final int i = input.indexOf(SPACE, cursor);
+        if (i == -1) {
+            this.cursor = input.length() + 1;
+            return input.substring(cursor);
+        }
+        final String read = input.substring(cursor, i);
+        this.cursor += read.length() + 1;
         return read;
     }
 
-    @VisibleForTesting
-    int nextIndexOf(char c, int offset) {
-        return IntStream.range(cursor + offset, input.length()).filter(x -> input.charAt(x) == c).findFirst().orElse(-1);
+    String readRemaining() {
+        final String input = this.input;
+        final String result = input.substring(cursor);
+        this.cursor = input.length();
+        return result;
     }
 
-    public int remaining() {
-        return input.length() - cursor;
+    int cursor() {
+        return cursor;
+    }
+
+    void cursor(int cursor) {
+        this.cursor = cursor;
     }
 }

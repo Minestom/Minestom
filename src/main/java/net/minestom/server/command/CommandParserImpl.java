@@ -128,11 +128,11 @@ final class CommandParserImpl implements CommandParser {
                     return new NodeResult(child, new InputOutputPair<>(syntaxError, ""/*todo get consumed string*/));
                 } else {
                     // Reset cursor & try next
-                    reader.setCursor(start);
+                    reader.cursor(start);
                 }
             } catch (Exception e) {
                 // Reset cursor & try next
-                reader.setCursor(start);
+                reader.cursor(start);
             }
         }
         return null;
