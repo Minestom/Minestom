@@ -2,8 +2,8 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,22 +20,21 @@ public class ArgumentColor extends Argument<Style> {
         super(id);
     }
 
-    @NotNull
     @Override
-    public Style parse(@NotNull String input) throws ArgumentSyntaxException {
-
+    public @NotNull Result<Style> parse(CommandReader reader) {
+        final String input = reader.readWord();
         // check for colour
         NamedTextColor color = NamedTextColor.NAMES.value(input);
         if (color != null) {
-            return Style.style(color);
+            return Result.success(Style.style(color));
         }
 
         // check for reset
         if (input.equals("reset")) {
-            return Style.empty();
+            return Result.success(Style.empty());
         }
 
-        throw new ArgumentSyntaxException("Undefined color", input, UNDEFINED_COLOR);
+        return Result.syntaxError("Undefined color", input, UNDEFINED_COLOR);
     }
 
     @Override

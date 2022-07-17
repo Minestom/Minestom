@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -14,13 +14,13 @@ public class ArgumentUUID extends Argument<UUID> {
         super(id);
     }
 
-    @NotNull
     @Override
-    public UUID parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Result<UUID> parse(CommandReader reader) {
+        final String input = reader.readWord();
         try {
-            return UUID.fromString(input);
+            return Result.success(UUID.fromString(input));
         } catch (IllegalArgumentException exception) {
-            throw new ArgumentSyntaxException("Invalid UUID", input, INVALID_UUID);
+            return Result.syntaxError("Invalid UUID", input, INVALID_UUID);
         }
     }
 

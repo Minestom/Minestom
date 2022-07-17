@@ -8,7 +8,6 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
@@ -101,35 +100,35 @@ public class ArgumentTypeTest {
     public void testArgumentEntity() {
         var arg = ArgumentType.Entity("entity");
 
-        assertValidArg(arg, "@a");
-        assertValidArg(arg, "@p");
+        assertNotNull(arg.parse(new CommandReader("@a")).value());
+        assertNotNull(arg.parse(new CommandReader("@p")).value());
         assertInvalidArg(arg, "@x");
 
-        assertValidArg(arg, "@e[type=sheep]");
-        assertValidArg(arg, "@e[type=!cow]");
+        assertNotNull(arg.parse(new CommandReader("@e[type=sheep]")).value());
+        assertNotNull(arg.parse(new CommandReader("@e[type=!cow]")).value());
         assertInvalidArg(arg, "@e[type=invalid_entity]");
         assertInvalidArg(arg, "@e[type=!invalid_entity_two]");
 
-        assertValidArg(arg, "@e[gamemode=creative]");
-        assertValidArg(arg, "@e[gamemode=!survival]");
+        assertNotNull(arg.parse(new CommandReader("@e[gamemode=creative]")).value());
+        assertNotNull(arg.parse(new CommandReader("@e[gamemode=!survival]")).value());
         assertInvalidArg(arg, "@e[gamemode=invalid_gamemode]");
         assertInvalidArg(arg, "@e[gamemode=!invalid_gamemode_2]");
 
-        assertValidArg(arg, "@e[limit=500]");
+        assertNotNull(arg.parse(new CommandReader("@e[limit=500]")).value());
         assertInvalidArg(arg, "@e[limit=-500]");
         assertInvalidArg(arg, "@e[limit=invalid_integer]");
         assertInvalidArg(arg, "@e[limit=2147483648]");
 
-        assertValidArg(arg, "@e[sort=nearest]");
+        assertNotNull(arg.parse(new CommandReader("@e[sort=nearest]")).value());
         assertInvalidArg(arg, "@e[sort=invalid_sort]");
 
-        assertValidArg(arg, "@e[level=55]");
-        assertValidArg(arg, "@e[level=100..500]");
+        assertNotNull(arg.parse(new CommandReader("@e[level=55]")).value());
+        assertNotNull(arg.parse(new CommandReader("@e[level=100..500]")).value());
         assertInvalidArg(arg, "@e[level=20-50]");
         assertInvalidArg(arg, "@e[level=2147483648]");
 
-        assertValidArg(arg, "@e[distance=500]");
-        assertValidArg(arg, "@e[distance=50..150]");
+        assertNotNull(arg.parse(new CommandReader("@e[distance=500]")).value());
+        assertNotNull(arg.parse(new CommandReader("@e[distance=50..150]")).value());
         assertInvalidArg(arg, "@e[distance=-500-500]");
         assertInvalidArg(arg, "@e[distance=2147483648]");
     }
@@ -209,8 +208,7 @@ public class ArgumentTypeTest {
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
         assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
-        assertInvalidArg(arg, "minecraft:invalid resource location");
-        //assertInvalidArg(arg, "minecraft:");
+        assertInvalidArg(arg, "minecraft:");
     }
 
     @Test
@@ -287,7 +285,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "^-3 ~14 ^+255");
         assertInvalidArg(arg, "^-3 14 ^+255");
         assertInvalidArg(arg, "1 2");
-        assertInvalidArg(arg, "1 2 3 4");
     }
 
     @Test
@@ -308,7 +305,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "^-3 ~14");
         assertInvalidArg(arg, "^-3 14");
         assertInvalidArg(arg, "1");
-        assertInvalidArg(arg, "1 2 3");
     }
 
     @Test
@@ -329,7 +325,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "^-3 ~14 ^+255");
         assertInvalidArg(arg, "^-3 14 ^+255");
         assertInvalidArg(arg, "1 2");
-        assertInvalidArg(arg, "1 2 3 4");
     }
 
     @Test
@@ -373,13 +368,15 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.Group("group", ArgumentType.Integer("integer"), ArgumentType.String("string"), ArgumentType.Double("double"));
 
         // Test normal input
-        var context1 = arg.parse("1234 1234 1234");
+        var context1 = arg.parse(new CommandReader("1234 1234 1234")).value();
+        assertNotNull(context1);
         assertEquals(1234, context1.<Integer>get("integer"));
         assertEquals("1234", context1.<String>get("string"));
         assertEquals(1234.0, context1.<Double>get("double"));
 
         // Test different input + trailing spaces
-        var context2 = arg.parse("1234 abcd 1234.5678   ");
+        var context2 = arg.parse(new CommandReader("1234 abcd 1234.5678   ")).value();
+        assertNotNull(context2);
         assertEquals(1234, context2.<Integer>get("integer"));
         assertEquals("abcd", context2.<String>get("string"));
         assertEquals(1234.5678, context2.<Double>get("double"));
@@ -391,7 +388,6 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "1234 1234 abcd");
         assertInvalidArg(arg, "1234 1234 ");
         assertInvalidArg(arg, "1234");
-        assertInvalidArg(arg, "1234 abcd 1234.5678 extra");
     }
 
     @Test
@@ -399,7 +395,7 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.Literal("literal");
         assertArg(arg, "literal", "literal");
         assertInvalidArg(arg, "not_literal");
-        assertInvalidArg(arg, "");
+//        assertInvalidArg(arg, ""); Is it parser responsibility?
     }
 
     @Test
@@ -419,7 +415,6 @@ public class ArgumentTypeTest {
         assertArg(arg, "more text", "\"more text\"");
         assertArg(arg, "more text, but with \"escaped\" quotes", "\"more text, but with \\\"escaped\\\" quotes\"");
         assertInvalidArg(arg, "\"unclosed quotes");
-        assertInvalidArg(arg, "\"unescaped \" quotes\"");
     }
 
     @Test
@@ -445,7 +440,7 @@ public class ArgumentTypeTest {
     }
 
     private static <T> void assertArg(Argument<T> arg, T expected, String input) {
-        assertEquals(expected, arg.parse(input));
+        assertEquals(expected, arg.parse(new CommandReader(input)).value());
     }
 
     private static <T> void assertArrayArg(Argument<T[]> arg, T[] expected, String input) {
@@ -457,6 +452,6 @@ public class ArgumentTypeTest {
     }
 
     private static <T> void assertInvalidArg(Argument<T> arg, String input) {
-        assertThrows(ArgumentSyntaxException.class, () -> arg.parse(input));
+        assertNull(arg.parse(new CommandReader(input)).value());
     }
 }

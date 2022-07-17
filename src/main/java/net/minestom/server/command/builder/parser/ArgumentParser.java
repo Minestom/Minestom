@@ -2,18 +2,18 @@ package net.minestom.server.command.builder.parser;
 
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,117 +135,6 @@ public class ArgumentParser {
         }
 
         return result.toArray(Argument[]::new);
-    }
-
-    @Nullable
-    public static ArgumentResult validate(@NotNull Argument<?> argument,
-                                          @NotNull Argument<?>[] arguments, int argIndex,
-                                          @NotNull String[] inputArguments, int inputIndex) {
-        final boolean end = inputIndex == inputArguments.length;
-        if (end) // Stop if there is no input to analyze left
-            return null;
-
-        // the parsed argument value, null if incorrect
-        Object parsedValue = null;
-        // the argument exception, null if the input is correct
-        ArgumentSyntaxException argumentSyntaxException = null;
-        // true if the arg is valid, false otherwise
-        boolean correct = false;
-        // The raw string value of the argument
-        String rawArg = null;
-
-        if (argument.useRemaining()) {
-            final boolean hasArgs = inputArguments.length > inputIndex;
-            // Verify if there is any string part available
-            if (hasArgs) {
-                StringBuilder builder = new StringBuilder();
-                // Argument is supposed to take the rest of the command input
-                for (int i = inputIndex; i < inputArguments.length; i++) {
-                    final String arg = inputArguments[i];
-                    if (builder.length() > 0)
-                        builder.append(StringUtils.SPACE);
-                    builder.append(arg);
-                }
-
-                rawArg = builder.toString();
-
-                try {
-                    parsedValue = argument.parse(rawArg);
-                    correct = true;
-                } catch (ArgumentSyntaxException exception) {
-                    argumentSyntaxException = exception;
-                }
-            }
-        } else {
-            // Argument is either single-word or can accept optional delimited space(s)
-            StringBuilder builder = new StringBuilder();
-            for (int i = inputIndex; i < inputArguments.length; i++) {
-                builder.append(inputArguments[i]);
-
-                rawArg = builder.toString();
-
-                try {
-                    parsedValue = argument.parse(rawArg);
-
-                    // Prevent quitting the parsing too soon if the argument
-                    // does not allow space
-                    final boolean lastArgumentIteration = argIndex + 1 == arguments.length;
-                    if (lastArgumentIteration && i + 1 < inputArguments.length) {
-                        if (!argument.allowSpace())
-                            break;
-                        builder.append(StringUtils.SPACE);
-                        continue;
-                    }
-
-                    correct = true;
-
-                    inputIndex = i + 1;
-                    break;
-                } catch (ArgumentSyntaxException exception) {
-                    argumentSyntaxException = exception;
-
-                    if (!argument.allowSpace()) {
-                        // rawArg should be the remaining
-                        for (int j = i + 1; j < inputArguments.length; j++) {
-                            final String arg = inputArguments[j];
-                            if (builder.length() > 0)
-                                builder.append(StringUtils.SPACE);
-                            builder.append(arg);
-                        }
-                        rawArg = builder.toString();
-                        break;
-                    }
-                    builder.append(StringUtils.SPACE);
-                }
-            }
-        }
-
-        ArgumentResult argumentResult = new ArgumentResult();
-        argumentResult.argument = argument;
-        argumentResult.correct = correct;
-        argumentResult.inputIndex = inputIndex;
-        argumentResult.argumentSyntaxException = argumentSyntaxException;
-
-        argumentResult.useRemaining = argument.useRemaining();
-
-        argumentResult.rawArg = rawArg;
-
-        argumentResult.parsedValue = parsedValue;
-        return argumentResult;
-    }
-
-    public static class ArgumentResult {
-        public Argument<?> argument;
-        public boolean correct;
-        public int inputIndex;
-        public ArgumentSyntaxException argumentSyntaxException;
-
-        public boolean useRemaining;
-
-        public String rawArg;
-
-        // If correct
-        public Object parsedValue;
     }
 
 }

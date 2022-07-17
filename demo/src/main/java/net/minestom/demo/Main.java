@@ -55,6 +55,7 @@ public class Main {
         commandManager.register(new ExecuteCommand());
         commandManager.register(new RedirectTestCommand());
 
+        MinecraftServer.getCommandManager().createDeclareCommandsPacket(null);
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

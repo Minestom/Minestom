@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.StringUtils;
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -15,14 +14,31 @@ import org.jetbrains.annotations.Nullable;
  * Example: hey
  */
 public class ArgumentWord extends Argument<String> {
-
-    public static final int SPACE_ERROR = 1;
+    private static final byte[] prop = BinaryWriter.makeArray(packetWriter -> {
+        packetWriter.writeVarInt(0); // Single word
+    });
     public static final int RESTRICTION_ERROR = 2;
 
     protected String[] restrictions;
 
     public ArgumentWord(String id) {
         super(id);
+    }
+
+    @Override
+    public @NotNull Result<String> parse(CommandReader reader) {
+        final String word = reader.readWord();
+
+        // Check restrictions (acting as literal)
+        if (hasRestrictions()) {
+            for (String r : restrictions) {
+                if (word.equals(r)) {
+                    return Result.success(word);
+                }
+            }
+            return Result.incompatibleType();
+        }
+        return Result.success(word);
     }
 
     /**
@@ -49,24 +65,6 @@ public class ArgumentWord extends Argument<String> {
         return this;
     }
 
-    @NotNull
-    @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        if (input.contains(StringUtils.SPACE))
-            throw new ArgumentSyntaxException("Word cannot contain space character", input, SPACE_ERROR);
-
-        // Check restrictions (acting as literal)
-        if (hasRestrictions()) {
-            for (String r : restrictions) {
-                if (input.equals(r))
-                    return input;
-            }
-            throw new ArgumentSyntaxException("Word needs to be in the restriction list", input, RESTRICTION_ERROR);
-        }
-
-        return input;
-    }
-
     @Override
     public String parser() {
         return "brigadier:string";
@@ -74,9 +72,7 @@ public class ArgumentWord extends Argument<String> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeVarInt(0); // Single word
-        });
+        return prop;
     }
 
     /**

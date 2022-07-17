@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.StringUtils;
+import net.minestom.server.command.CommandReader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,48 +15,34 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
 
     @SafeVarargs
     public ArgumentLoop(@NotNull String id, @NotNull Argument<T>... arguments) {
-        super(id, true, true);
+        super(id);
         this.arguments.addAll(Arrays.asList(arguments));
-    }
-
-    @NotNull
-    @Override
-    public List<T> parse(@NotNull String input) throws ArgumentSyntaxException {
-        List<T> result = new ArrayList<>();
-        final String[] split = input.split(StringUtils.SPACE);
-
-        final StringBuilder builder = new StringBuilder();
-        boolean success = false;
-        for (String s : split) {
-            builder.append(s);
-
-            for (Argument<T> argument : arguments) {
-                try {
-                    final String inputString = builder.toString();
-                    final T value = argument.parse(inputString);
-                    success = true;
-                    result.add(value);
-                    break;
-                } catch (ArgumentSyntaxException ignored) {
-                    success = false;
-                }
-            }
-            if (success) {
-                builder.setLength(0); // Clear
-            } else {
-                builder.append(StringUtils.SPACE);
-            }
-        }
-
-        if (result.isEmpty() || !success) {
-            throw new ArgumentSyntaxException("Invalid loop, there is no valid argument found", input, INVALID_INPUT_ERROR);
-        }
-
-        return result;
     }
 
     public List<Argument<T>> arguments() {
         return arguments;
+    }
+
+    @Override
+    public @NotNull Result<List<T>> parse(CommandReader reader) {
+        final List<T> result = new ArrayList<>();
+
+        while (reader.hasRemaining()) {
+            for (Argument<T> argument : arguments) {
+                final T value = argument.parse(reader).value();
+                if (value != null) {
+                    result.add(value);
+                } else {
+                    if (result.isEmpty()) {
+                        return Result.incompatibleType();
+                    } else {
+                        return Result.syntaxError("Invalid loop, one of the arguments didn't return a value", "", INVALID_INPUT_ERROR);
+                    }
+                }
+            }
+        }
+
+        return Result.success(result);
     }
 
     @Override

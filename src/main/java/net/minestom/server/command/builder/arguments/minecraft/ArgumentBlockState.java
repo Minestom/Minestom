@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
@@ -14,52 +15,45 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY_VALUE = 4;
 
     public ArgumentBlockState(@NotNull String id) {
-        super(id, true, false);
+        super(id);
     }
 
     @Override
-    public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
-    }
-
-    @Override
-    public String parser() {
-        return "minecraft:block_state";
-    }
-
-    /**
-     * @deprecated use {@link Argument#parse(Argument)}
-     */
-    @Deprecated
-    public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Result<Block> parse(CommandReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readWord();
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0)
-            throw new ArgumentSyntaxException("No block type", input, NO_BLOCK);
+            return Result.syntaxError("No block type", input, NO_BLOCK);
 
         if (nbtIndex == -1) {
             // Only block name
             final Block block = Block.fromNamespaceId(input);
             if (block == null)
-                throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
-            return block;
+                return Result.syntaxError("Invalid block type", input, INVALID_BLOCK);
+            return Result.success(block);
         } else {
             if (!input.endsWith("]"))
-                throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
+                return Result.syntaxError("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
             Block block = Block.fromNamespaceId(blockName);
             if (block == null)
-                throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
+                return Result.syntaxError("Invalid block type", input, INVALID_BLOCK);
 
             // Compute properties
             final String query = input.substring(nbtIndex);
             final var propertyMap = BlockUtils.parseProperties(query);
             try {
-                return block.withProperties(propertyMap);
+                return Result.success(block.withProperties(propertyMap));
             } catch (IllegalArgumentException e) {
-                throw new ArgumentSyntaxException("Invalid property values", input, INVALID_PROPERTY_VALUE);
+                return Result.syntaxError("Invalid property values", input, INVALID_PROPERTY_VALUE);
             }
         }
+    }
+
+    @Override
+    public String parser() {
+        return "minecraft:block_state";
     }
 
     @Override

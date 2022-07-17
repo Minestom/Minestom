@@ -93,12 +93,12 @@ public final class CommandManager {
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
             EventDispatcher.call(playerCommandEvent);
             if (playerCommandEvent.isCancelled())
-                return CommandResult.of(CommandResult.Type.CANCELLED, command);
+                return new CommandResult(CommandResult.Type.CANCELLED, command, null);
             command = playerCommandEvent.getCommand();
         }
         // Process the command
         final CommandResult result = dispatcher.execute(sender, command);
-        if (result.getType() == CommandResult.Type.UNKNOWN) {
+        if (result.type() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
             }

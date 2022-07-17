@@ -13,7 +13,7 @@ public class TestCommand extends Command {
         setDefaultExecutor(this::usage);
 
         var block = ArgumentType.BlockState("block");
-        block.setCallback((sender, exception) -> exception.printStackTrace());
+        block.setCallback((sender, exception) -> System.err.println(exception.message()));
 
         addSyntax((sender, context) -> System.out.println("executed"), block);
     }

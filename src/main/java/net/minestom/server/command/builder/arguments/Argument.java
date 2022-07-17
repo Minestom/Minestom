@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -19,15 +20,13 @@ import java.util.function.Supplier;
  * <p>
  * You can create your own with your own special conditions.
  * <p>
- * Arguments are parsed using {@link #parse(String)}.
+ * Arguments are parsed using {@link #parse(CommandReader)}.
  *
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
 
     private final String id;
-    protected final boolean allowSpace;
-    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
@@ -39,33 +38,10 @@ public abstract class Argument<T> {
     /**
      * Creates a new argument.
      *
-     * @param id           the id of the argument, used to retrieve the parsed value
-     * @param allowSpace   true if the argument can/should have spaces in it
-     * @param useRemaining true if the argument will always take the rest of the command arguments
-     */
-    public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
-        this.id = id;
-        this.allowSpace = allowSpace;
-        this.useRemaining = useRemaining;
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} sets to false.
-     *
-     * @param id         the id of the argument, used to retrieve the parsed value
-     * @param allowSpace true if the argument can/should have spaces in it
-     */
-    public Argument(@NotNull String id, boolean allowSpace) {
-        this(id, allowSpace, false);
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} and {@code allowSpace} sets to false.
-     *
      * @param id the id of the argument, used to retrieve the parsed value
      */
     public Argument(@NotNull String id) {
-        this(id, false, false);
+        this.id = id;
     }
 
     /**
@@ -74,22 +50,20 @@ public abstract class Argument<T> {
      * @param argument the argument, with the input as id
      * @param <T>      the result type
      * @return the parsed result
-     * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
      */
     @ApiStatus.Experimental
-    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
-        return argument.parse(argument.getId());
+    public static <T> @NotNull Result<T> parse(@NotNull Argument<T> argument) {
+        return argument.parse(new CommandReader(argument.getId()));
     }
 
     /**
-     * Parses the given input, and throw an {@link ArgumentSyntaxException}
-     * if the input cannot be converted to {@code T}
+     * Tries to read the value from {@code reader}, if the method throws
+     * an exception its handled like it returned {@link Result.IncompatibleType}
      *
-     * @param input the argument to parse
+     * @param reader the command
      * @return the parsed argument
-     * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public abstract @NotNull Result<T> parse(CommandReader reader);
 
     public abstract String parser();
 
@@ -110,27 +84,6 @@ public abstract class Argument<T> {
     @NotNull
     public String getId() {
         return id;
-    }
-
-    /**
-     * Gets if the argument can contain space.
-     *
-     * @return true if the argument allows space, false otherwise
-     */
-    public boolean allowSpace() {
-        return allowSpace;
-    }
-
-    /**
-     * Gets if the argument always use all the remaining characters.
-     * <p>
-     * ex: /help I am a test - will always give you "I am a test"
-     * if the first and single argument does use the remaining.
-     *
-     * @return true if the argument use all the remaining characters, false otherwise
-     */
-    public boolean useRemaining() {
-        return useRemaining;
     }
 
     /**
@@ -283,7 +236,7 @@ public abstract class Argument<T> {
         final Function<I, O> mapper;
 
         private ArgumentMap(@NotNull Argument<I> argument, @NotNull Function<I, O> mapper) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -293,12 +246,16 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
-            final I value = argument.parse(input);
-            final O mappedValue = mapper.apply(value);
-            if (mappedValue == null)
-                throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
-            return mappedValue;
+        public @NotNull Result<O> parse(CommandReader reader) throws ArgumentSyntaxException {
+            final Result<I> value = argument.parse(reader);
+            if (value instanceof Result.Success<I> success) {
+                final O mappedValue = mapper.apply(success.value());
+                if (mappedValue == null)
+                    return Result.syntaxError("Couldn't be converted to map type", value.toString(), INVALID_MAP);
+                return Result.success(mappedValue);
+            } else {
+                return (Result<O>) value;
+            }
         }
 
         @Override
@@ -318,7 +275,7 @@ public abstract class Argument<T> {
         final Predicate<T> predicate;
 
         private ArgumentFilter(@NotNull Argument<T> argument, @NotNull Predicate<T> predicate) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            super(argument.getId());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
@@ -328,10 +285,12 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-            final T result = argument.parse(input);
-            if (!predicate.test(result))
-                throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
+        public @NotNull Result<T> parse(CommandReader reader) throws ArgumentSyntaxException {
+            final Result<T> result = argument.parse(reader);
+            if (result instanceof Result.Success<T> success) {
+                if (!predicate.test(success.value()))
+                    Result.syntaxError("Predicate failed", result.toString(), INVALID_FILTER);
+            }
             return result;
         }
 
@@ -345,4 +304,39 @@ public abstract class Argument<T> {
             return argument.nodeProperties();
         }
     }
+
+    public sealed interface Result<R> {
+        default @Nullable R value() {
+            return null;
+        }
+
+        static <T> Result.Success<T> success(@NotNull T result) {
+            return new SuccessResult<>(result);
+        }
+
+        static <T> Result.IncompatibleType<T> incompatibleType() {
+            return new IncompatibleTypeResult<>();
+        }
+
+        static <T> Result.SyntaxError<T> syntaxError(String message, String input, int code) {
+            return new SyntaxErrorResult<>(code, message, input);
+        }
+
+        sealed interface Success<T> extends Result<T> {
+            @NotNull T value();
+        }
+
+        sealed interface IncompatibleType<T> extends Result<T> {}
+
+        sealed interface SyntaxError<T> extends Result<T> {
+            int code();
+            String message();
+            String input();
+        }
+    }
+
+    private record SuccessResult<R>(R value) implements Result.Success<R> {}
+    private record IncompatibleTypeResult<R>() implements Result.IncompatibleType<R> {}
+    private record SyntaxErrorResult<R>(int code, String message, String input) implements Result.SyntaxError<R> {}
+
 }

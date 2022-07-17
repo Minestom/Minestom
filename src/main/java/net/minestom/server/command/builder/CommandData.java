@@ -4,11 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class CommandData {
-
-    private final Map<String, Object> dataMap = new ConcurrentHashMap<>();
+public record CommandData(Map<String, Object> dataMap) {
 
     public CommandData set(@NotNull String key, Object value) {
         this.dataMap.put(key, value);
@@ -22,10 +19,5 @@ public class CommandData {
 
     public boolean has(@NotNull String key) {
         return dataMap.containsKey(key);
-    }
-
-    @NotNull
-    public Map<String, Object> getDataMap() {
-        return dataMap;
     }
 }

@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.CommandReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -40,7 +41,10 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Result<T> parse(CommandReader reader) throws ArgumentSyntaxException {
+        final char start = reader.peekNextChar();
+        if ((start < '0' || start > '9') && start != '-') return Result.incompatibleType();
+        final String input = reader.readWord();
         try {
             final T value;
             final int radix = getRadix(input);
@@ -52,15 +56,15 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
 
             // Check range
             if (hasMin && comparator.compare(value, min) < 0) {
-                throw new ArgumentSyntaxException("Input is lower than the minimum allowed value", input, TOO_LOW_ERROR);
+                return Result.syntaxError("Input is lower than the minimum allowed value", input, TOO_LOW_ERROR);
             }
             if (hasMax && comparator.compare(value, max) > 0) {
-                throw new ArgumentSyntaxException("Input is higher than the maximum allowed value", input, TOO_HIGH_ERROR);
+                return Result.syntaxError("Input is higher than the maximum allowed value", input, TOO_HIGH_ERROR);
             }
 
-            return value;
+            return Result.success(value);
         } catch (NumberFormatException | NullPointerException e) {
-            throw new ArgumentSyntaxException("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
+            return Result.syntaxError("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
         }
     }
 

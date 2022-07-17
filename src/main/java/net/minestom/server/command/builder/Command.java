@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -50,7 +49,7 @@ public class Command {
     private final String[] aliases;
     private final String[] names;
 
-    private CommandExecutor defaultExecutor;
+    private ArgumentCallback syntaxErrorCallback;
     private CommandCondition condition;
 
     private final List<Command> subcommands;
@@ -143,64 +142,9 @@ public class Command {
     public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
                                                           @NotNull CommandExecutor executor,
                                                           @NotNull Argument<?>... args) {
-        // Check optional argument(s)
-        boolean hasOptional = false;
-        {
-            for (Argument<?> argument : args) {
-                if (argument.isOptional()) {
-                    hasOptional = true;
-                }
-                if (hasOptional && !argument.isOptional()) {
-                    LOGGER.warn("Optional arguments are followed by a non-optional one, the default values will be ignored.");
-                    hasOptional = false;
-                    break;
-                }
-            }
-        }
-
-        if (!hasOptional) {
-            final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
-            this.syntaxes.add(syntax);
-            return Collections.singleton(syntax);
-        } else {
-            List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
-
-            // the 'args' array starts by all the required arguments, followed by the optional ones
-            List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
-            boolean optionalBranch = false;
-            int i = 0;
-            for (Argument<?> argument : args) {
-                final boolean isLast = ++i == args.length;
-                if (argument.isOptional()) {
-                    // Set default value
-                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
-
-                    if (!optionalBranch && !requiredArguments.isEmpty()) {
-                        // First optional argument, create a syntax with current cached arguments
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
-                        optionalSyntaxes.add(syntax);
-                        optionalBranch = true;
-                    } else {
-                        // New optional argument, save syntax with current cached arguments and save default value
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
-                        optionalSyntaxes.add(syntax);
-                    }
-                }
-                requiredArguments.add(argument);
-                if (isLast) {
-                    // Create the last syntax
-                    final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                            requiredArguments.toArray(new Argument[0]));
-                    optionalSyntaxes.add(syntax);
-                }
-            }
-
-            this.syntaxes.addAll(optionalSyntaxes);
-            return optionalSyntaxes;
-        }
+        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
+        this.syntaxes.add(syntax);
+        return Collections.singleton(syntax);
     }
 
     /**
@@ -255,26 +199,24 @@ public class Command {
         return names;
     }
 
-    /**
-     * Gets the default {@link CommandExecutor} which is called when there is no argument
-     * or if no corresponding syntax has been found.
-     *
-     * @return the default executor, null if not any
-     * @see #setDefaultExecutor(CommandExecutor)
-     */
-    @Nullable
-    public CommandExecutor getDefaultExecutor() {
-        return defaultExecutor;
+    public ArgumentCallback syntaxErrorCallback() {
+        return syntaxErrorCallback;
+    }
+
+    public void setSyntaxErrorCallback(ArgumentCallback syntaxErrorCallback) {
+        this.syntaxErrorCallback = syntaxErrorCallback;
     }
 
     /**
-     * Sets the default {@link CommandExecutor}.
-     *
-     * @param executor the new default executor, null to remove it
-     * @see #getDefaultExecutor()
+     * This was an ambiguous method which is no longer supported by the new parser.<br>
+     * Updating: If you were using this method to set<br>
+     * - an executor for a command without arguments you should
+     * use {@link #addSyntax(CommandExecutor, Argument[])} without arguments
+     * - a syntax error handler you should use the new {@link #setSyntaxErrorCallback(ArgumentCallback)}
      */
+    @Deprecated(forRemoval = true)
     public void setDefaultExecutor(@Nullable CommandExecutor executor) {
-        this.defaultExecutor = executor;
+        throw new RuntimeException("Unsupported operation! See method javadoc.");
     }
 
     /**

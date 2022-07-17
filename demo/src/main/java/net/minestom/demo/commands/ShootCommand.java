@@ -4,13 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.arrow.ArrowMeta;
-import net.minestom.server.entity.EntityProjectile;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,8 +29,8 @@ public class ShootCommand extends Command {
         sender.sendMessage(Component.text("Correct usage: shoot [default/spectral/colored]"));
     }
 
-    private void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral' or 'colored'"));
+    private void onTypeError(CommandSender sender, Argument.Result.SyntaxError<?> exception) {
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.input() + "' should be replaced by 'default', 'spectral' or 'colored'"));
     }
 
     private void onShootCommand(CommandSender sender, CommandContext context) {

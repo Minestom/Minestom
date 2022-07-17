@@ -32,6 +32,12 @@ public class CommandContext {
         this.commandName = input.split(StringUtils.SPACE)[0];
     }
 
+    // todo make this nicer
+    public CommandContext setArgs(Map<String, Object> args) {
+        this.args = args;
+        return this;
+    }
+
     public @NotNull String getInput() {
         return input;
     }

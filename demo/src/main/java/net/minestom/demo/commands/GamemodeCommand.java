@@ -32,7 +32,7 @@ public class GamemodeCommand extends Command {
         gamemode.setCallback((sender, exception) -> {
             sender.sendMessage(
                     Component.text("Invalid gamemode ", NamedTextColor.RED)
-                            .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
+                            .append(Component.text(exception.input(), NamedTextColor.WHITE))
                             .append(Component.text("!")), MessageType.SYSTEM);
         });
 
