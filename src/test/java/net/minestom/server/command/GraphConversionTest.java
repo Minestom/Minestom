@@ -101,6 +101,20 @@ public class GraphConversionTest {
         assertEqualsGraph(graph, main);
     }
 
+    @Test
+    public void alias() {
+        final Command main = new Command("main", "alias");
+        var graph = Graph.builder(Word("main").from("main", "alias")).build();
+        assertEqualsGraph(graph, main);
+    }
+
+    @Test
+    public void aliases() {
+        final Command main = new Command("main", "first", "second");
+        var graph = Graph.builder(Word("main").from("main", "first", "second")).build();
+        assertEqualsGraph(graph, main);
+    }
+
     private static void assertEqualsGraph(Graph expected, Command command) {
         final Graph actual = Graph.fromCommand(command);
         assertTrue(expected.compare(actual, Graph.Comparator.TREE), () -> {

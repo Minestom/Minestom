@@ -169,6 +169,28 @@ public class CommandPacketTest {
                 """, graph);
     }
 
+    @Test
+    public void commandAliasWithoutArg() {
+        var graph = Graph.builder(ArgumentType.Word("foo").from("foo", "bar"))
+                .build();
+        assertPacketGraph("""
+                foo bar=%
+                0->foo bar
+                """, graph);
+    }
+
+    @Test
+    public void commandAliasWithArg() {
+        var graph = Graph.builder(ArgumentType.Word("foo").from("foo", "bar"))
+                .append(ArgumentType.Literal("l"))
+                .build();
+        assertPacketGraph("""
+                foo bar l=%
+                0->foo bar
+                foo bar->l
+                """, graph);
+    }
+
     static void assertPacketGraph(String expected, Graph... graphs) {
         var packet = GraphConverter.createPacket(Graph.merge(graphs), null);
         CommandTestUtils.assertPacket(packet, expected);

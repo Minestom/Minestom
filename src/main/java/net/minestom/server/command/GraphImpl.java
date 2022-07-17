@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 
 record GraphImpl(NodeImpl root) implements Graph {
     static GraphImpl fromCommand(Command command) {
@@ -107,7 +108,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
 
         static ConversionNode fromCommand(Command command) {
-            ConversionNode root = new ConversionNode(Literal(command.getName()), ExecutionImpl.fromCommand(command));
+            ConversionNode root = new ConversionNode(commandToArgument(command), ExecutionImpl.fromCommand(command));
             // Syntaxes
             for (CommandSyntax syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
@@ -121,7 +122,7 @@ record GraphImpl(NodeImpl root) implements Graph {
             }
             // Subcommands
             for (Command subcommand : command.getSubcommands()) {
-                root.nextMap.put(Literal(subcommand.getName()), fromCommand(subcommand));
+                root.nextMap.put(commandToArgument(subcommand), fromCommand(subcommand));
             }
             return root;
         }
@@ -134,6 +135,12 @@ record GraphImpl(NodeImpl root) implements Graph {
             }
             return new ConversionNode(Literal(""), null, next);
         }
+    }
+
+    static Argument<String> commandToArgument(Command command) {
+        final String[] aliases = command.getNames();
+        if (aliases.length == 1) return Literal(aliases[0]);
+        return Word(command.getName()).from(command.getNames());
     }
 
     static boolean compare(@NotNull Node first, Node second, @NotNull Comparator comparator) {
