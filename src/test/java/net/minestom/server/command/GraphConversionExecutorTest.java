@@ -12,7 +12,7 @@ public class GraphConversionExecutorTest {
     public void empty() {
         final Command foo = new Command("foo");
         var graph = Graph.fromCommand(foo);
-        assertNull(graph.root().executor());
+        assertNull(graph.root().execution());
     }
 
     @Test
@@ -22,17 +22,17 @@ public class GraphConversionExecutorTest {
         {
             foo.setCondition((sender, commandString) -> true);
             var graph = Graph.fromCommand(foo);
-            var executor = graph.root().executor();
-            assertNotNull(executor);
-            assertTrue(executor.test(null));
+            var execution = graph.root().execution();
+            assertNotNull(execution);
+            assertTrue(execution.test(null));
         }
         // Constant false
         {
             foo.setCondition((sender, commandString) -> false);
             var graph = Graph.fromCommand(foo);
-            var executor = graph.root().executor();
-            assertNotNull(executor);
-            assertFalse(executor.test(null));
+            var execution = graph.root().execution();
+            assertNotNull(execution);
+            assertFalse(execution.test(null));
         }
     }
 
@@ -43,7 +43,7 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        assertNull(graph.root().next().get(0).executor());
+        assertNull(graph.root().next().get(0).execution());
     }
 
     @Test
@@ -54,9 +54,9 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        var executor = graph.root().next().get(0).executor();
-        assertNotNull(executor);
-        assertTrue(executor.test(null));
+        var execution = graph.root().next().get(0).execution();
+        assertNotNull(execution);
+        assertTrue(execution.test(null));
     }
 
     @Test
@@ -67,9 +67,9 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        var executor = graph.root().next().get(0).executor();
-        assertNotNull(executor);
-        assertFalse(executor.test(null));
+        var execution = graph.root().next().get(0).execution();
+        assertNotNull(execution);
+        assertFalse(execution.test(null));
     }
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {

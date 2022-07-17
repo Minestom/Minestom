@@ -32,9 +32,9 @@ final class GraphConverter {
     private static int[] append(Graph.Node graphNode, List<DeclareCommandsPacket.Node> to,
                                 List<Consumer<Integer>> rootRedirect, AtomicInteger id, @Nullable AtomicInteger redirect,
                                 List<Runnable> redirectSetters, @Nullable Player player) {
-        final Graph.Executor executor = graphNode.executor();
-        if (player != null && executor != null) {
-            if (!executor.test(player)) return new int[0];
+        final Graph.Execution execution = graphNode.execution();
+        if (player != null && execution != null) {
+            if (!execution.test(player)) return new int[0];
         }
 
         final Argument<?> argument = graphNode.argument();
