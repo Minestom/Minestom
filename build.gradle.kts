@@ -2,6 +2,7 @@ plugins {
     `java-library`
     id("minestom.publishing-conventions")
     id("minestom.native-conventions")
+    alias(libs.plugins.blossom)
 }
 
 allprojects {
@@ -79,4 +80,18 @@ dependencies {
     // NBT parsing/manipulation/saving
     api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
     api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
+}
+
+blossom {
+    val git = "src/main/java/net/minestom/server/Git.java"
+    val gitCommit = System.getenv("GIT_COMMIT") ?: null
+    replaceToken("&COMMIT", if (gitCommit == null) "null" else "\"${gitCommit}\"", git)
+    val gitBranch = System.getenv("GIT_BRANCH") ?: null
+    replaceToken("&BRANCH", if (gitBranch == null) "null" else "\"${gitBranch}\"", git)
+    val group = System.getenv("GROUP") ?: null
+    replaceToken("&GROUP", if (group == null) "null" else "\"${group}\"", git)
+    val artifact = System.getenv("ARTIFACT") ?: null
+    replaceToken("&ARTIFACT", if (artifact == null) "null" else "\"${artifact}\"", git)
+    val version = System.getenv("VERSION") ?: null
+    replaceToken("&VERSION", if (version == null) "null" else "\"${version}\"", git)
 }
