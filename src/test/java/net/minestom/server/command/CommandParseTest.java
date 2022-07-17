@@ -98,6 +98,28 @@ public class CommandParseTest {
         assertSyntaxError(foo, "foo");
     }
 
+    @Test
+    public void aliasWithoutArgs() {
+        final AtomicBoolean b = new AtomicBoolean();
+        var foo = Graph.merge(Graph.builder(Word("").from("foo", "bar"), createExecutor(b))
+                .build());
+        assertValid(foo, "foo", b);
+        assertValid(foo, "bar", b);
+        assertUnknown(foo, "test");
+    }
+
+    @Test
+    public void aliasWithArgs() {
+        final AtomicBoolean b = new AtomicBoolean();
+        var foo = Graph.merge(Graph.builder(Word("").from("foo", "bar"))
+                        .append(ArgumentType.Integer("test"), createExecutor(b))
+                .build());
+        assertValid(foo, "foo 1", b);
+        assertValid(foo, "bar 1", b);
+        assertSyntaxError(foo, "foo");
+        assertSyntaxError(foo, "bar");
+    }
+
     private static void assertSyntaxError(Graph graph, String input) {
         assertInstanceOf(ParseResult.KnownCommand.Invalid.class, parseCommand(graph, input));
     }
