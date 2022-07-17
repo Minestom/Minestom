@@ -38,12 +38,12 @@ sealed interface Graph permits GraphImpl {
     sealed interface Node permits GraphImpl.NodeImpl {
         @NotNull Argument<?> argument();
 
-        @UnknownNullability Executor executor();
+        @UnknownNullability Execution execution();
 
         @NotNull List<@NotNull Node> next();
     }
 
-    sealed interface Executor extends Predicate<CommandSender> permits GraphImpl.ExecutorImpl {
+    sealed interface Execution extends Predicate<CommandSender> permits GraphImpl.ExecutionImpl {
         // TODO execute the node
     }
 

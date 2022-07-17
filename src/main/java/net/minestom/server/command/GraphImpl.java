@@ -57,7 +57,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record NodeImpl(Argument<?> argument, ExecutorImpl executor, List<Graph.Node> next) implements Graph.Node {
+    record NodeImpl(Argument<?> argument, ExecutionImpl execution, List<Graph.Node> next) implements Graph.Node {
         static NodeImpl fromBuilder(BuilderImpl builder) {
             final List<BuilderImpl> children = builder.children;
             Node[] nodes = new NodeImpl[children.size()];
@@ -74,47 +74,47 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record ExecutorImpl(Predicate<CommandSender> predicate) implements Graph.Executor {
+    record ExecutionImpl(Predicate<CommandSender> predicate) implements Execution {
         @Override
         public boolean test(CommandSender commandSender) {
             return predicate.test(commandSender);
         }
 
-        static ExecutorImpl fromCommand(Command command) {
+        static ExecutionImpl fromCommand(Command command) {
             final CommandCondition condition = command.getCondition();
             if (condition == null) return null;
-            return new ExecutorImpl(commandSender -> condition.canUse(commandSender, null));
+            return new ExecutionImpl(commandSender -> condition.canUse(commandSender, null));
         }
 
-        static ExecutorImpl fromSyntax(CommandSyntax syntax) {
+        static ExecutionImpl fromSyntax(CommandSyntax syntax) {
             final CommandCondition condition = syntax.getCommandCondition();
             if (condition == null) return null;
-            return new ExecutorImpl(commandSender -> condition.canUse(commandSender, null));
+            return new ExecutionImpl(commandSender -> condition.canUse(commandSender, null));
         }
     }
 
-    private record ConversionNode(Argument<?> argument, ExecutorImpl executor,
+    private record ConversionNode(Argument<?> argument, ExecutionImpl execution,
                                   Map<Argument<?>, ConversionNode> nextMap) {
-        ConversionNode(Argument<?> argument, ExecutorImpl executor) {
-            this(argument, executor, new LinkedHashMap<>());
+        ConversionNode(Argument<?> argument, ExecutionImpl execution) {
+            this(argument, execution, new LinkedHashMap<>());
         }
 
         private NodeImpl toNode() {
             Node[] nodes = new NodeImpl[nextMap.size()];
             int i = 0;
             for (var entry : nextMap.values()) nodes[i++] = entry.toNode();
-            return new NodeImpl(argument, executor, List.of(nodes));
+            return new NodeImpl(argument, execution, List.of(nodes));
         }
 
         static ConversionNode fromCommand(Command command) {
-            ConversionNode root = new ConversionNode(Literal(command.getName()), ExecutorImpl.fromCommand(command));
+            ConversionNode root = new ConversionNode(Literal(command.getName()), ExecutionImpl.fromCommand(command));
             // Syntaxes
             for (CommandSyntax syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
                 for (Argument<?> arg : syntax.getArguments()) {
                     boolean last = arg == syntax.getArguments()[syntax.getArguments().length - 1];
                     syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> {
-                        var ex = last ? ExecutorImpl.fromSyntax(syntax) : null;
+                        var ex = last ? ExecutionImpl.fromSyntax(syntax) : null;
                         return new ConversionNode(argument, ex);
                     });
                 }
