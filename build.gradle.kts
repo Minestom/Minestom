@@ -43,15 +43,17 @@ tasks {
 
     blossom {
         val git = "src/main/java/net/minestom/server/Git.java"
-        val gitCommit = System.getenv("GIT_COMMIT") ?: null
+
+        val gitCommit = System.getenv("GIT_COMMIT")
+        val gitBranch = System.getenv("GIT_BRANCH")
+        val group = System.getenv("GROUP")
+        val artifact = System.getenv("ARTIFACT")
+        val version = System.getenv("VERSION")
+
         replaceToken("\"&COMMIT\"", if (gitCommit == null) "null" else "\"${gitCommit}\"", git)
-        val gitBranch = System.getenv("GIT_BRANCH") ?: null
         replaceToken("\"&BRANCH\"", if (gitBranch == null) "null" else "\"${gitBranch}\"", git)
-        val group = System.getenv("GROUP") ?: null
         replaceToken("\"&GROUP\"", if (group == null) "null" else "\"${group}\"", git)
-        val artifact = System.getenv("ARTIFACT") ?: null
         replaceToken("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"", git)
-        val version = System.getenv("VERSION") ?: null
         replaceToken("\"&VERSION\"", if (version == null) "null" else "\"${version}\"", git)
     }
 
