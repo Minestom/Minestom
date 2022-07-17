@@ -3,7 +3,7 @@ package net.minestom.server.command;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public interface CommandStringReader {
+interface CommandStringReader {
     @Contract(value = "_ -> new", pure = true)
     static @NotNull CommandStringReader from(CharSequence input) {
         return new CommandStringReaderImpl(input);
@@ -32,9 +32,9 @@ public interface CommandStringReader {
     default String readQuotablePhrase() {
         final char c = peekNextChar();
         if (c == '"' || c == '\'') {
-            return readWord();
-        } else {
             return readQuotedString();
+        } else {
+            return readWord();
         }
     }
 }
