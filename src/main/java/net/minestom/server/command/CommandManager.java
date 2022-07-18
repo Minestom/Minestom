@@ -96,6 +96,7 @@ public final class CommandManager {
      * @return the execution result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
+        command = command.trim();
         // Command event
         if (sender instanceof Player player) {
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
