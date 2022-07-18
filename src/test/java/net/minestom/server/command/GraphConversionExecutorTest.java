@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.condition.CommandCondition;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
@@ -73,6 +74,18 @@ public class GraphConversionExecutorTest {
         var execution = graph.root().next().get(0).execution();
         assertNotNull(execution);
         assertFalse(execution.test(null));
+    }
+
+    @Test
+    public void commandConditionFalse() {
+        final Command foo = new Command("foo");
+        foo.setCondition((sender, commandString) -> false);
+        final Graph graph = Graph.fromCommand(foo);
+        final Graph.Execution execution = graph.root().execution();
+        assertNotNull(execution);
+        final CommandCondition condition = execution.condition();
+        assertNotNull(condition);
+        assertFalse(condition.canUse(null, null));
     }
 
     private static void dummyExecutor(CommandSender sender, CommandContext context) {
