@@ -137,19 +137,15 @@ final class CommandParserImpl implements CommandParser {
     }
 
     private static NodeResult parseChild(Node parent, CommandStringReader reader) {
+        if (!reader.hasRemaining()) return null;
         for (Node child : parent.next()) {
             final int start = reader.cursor();
-            try {
-                final ArgumentResult<?> parse = ArgumentParser.parse(child.argument(), reader);
-                if (parse instanceof ArgumentResult.Success<?> success) {
-                    return new NodeResult(child,  new InputOutputPair<>(success.value(), ""/*todo get consumed string*/));
-                } else if (parse instanceof ArgumentResult.SyntaxError<?> syntaxError) {
-                    return new NodeResult(child, new InputOutputPair<>(syntaxError, ""/*todo get consumed string*/));
-                } else {
-                    // Reset cursor & try next
-                    reader.cursor(start);
-                }
-            } catch (Exception e) {
+            final ArgumentResult<?> parse = ArgumentParser.parse(child.argument(), reader);
+            if (parse instanceof ArgumentResult.Success<?> success) {
+                return new NodeResult(child,  new InputOutputPair<>(success.value(), ""/*todo get consumed string*/));
+            } else if (parse instanceof ArgumentResult.SyntaxError<?> syntaxError) {
+                return new NodeResult(child, new InputOutputPair<>(syntaxError, ""/*todo get consumed string*/));
+            } else {
                 // Reset cursor & try next
                 reader.cursor(start);
             }
