@@ -78,7 +78,8 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record ExecutionImpl(Predicate<CommandSender> predicate, CommandExecutor defaultExecutor,
+    record ExecutionImpl(Predicate<CommandSender> predicate,
+                         CommandExecutor defaultExecutor, CommandExecutor globalListener,
                          CommandExecutor executor, CommandCondition condition) implements Execution {
         @Override
         public boolean test(CommandSender commandSender) {
@@ -98,17 +99,17 @@ record GraphImpl(NodeImpl root) implements Graph {
                     break;
                 }
             }
+            final CommandExecutor globalListener = (sender, context) -> command.globalListener(sender, context, context.getInput());
 
-            if (defaultExecutor == null && defaultCondition == null && executor == null) return null;
             return new ExecutionImpl(commandSender -> defaultCondition == null || defaultCondition.canUse(commandSender, null),
-                    defaultExecutor, executor, condition);
+                    defaultExecutor, globalListener, executor, condition);
         }
 
         static ExecutionImpl fromSyntax(CommandSyntax syntax) {
             final CommandExecutor executor = syntax.getExecutor();
             final CommandCondition condition = syntax.getCommandCondition();
             return new ExecutionImpl(commandSender -> condition == null || condition.canUse(commandSender, null),
-                    null, executor, condition);
+                    null, null, executor, condition);
         }
     }
 

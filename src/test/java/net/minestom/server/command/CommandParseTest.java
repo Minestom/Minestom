@@ -71,7 +71,7 @@ public class CommandParseTest {
                         x -> x.append(Word("b").setDefaultValue("B"),
                                 x1 -> x1.append(Word("c").setDefaultValue("C"),
                                         x2 -> x2.append(Word("d").setDefaultValue("D"),
-                                                new GraphImpl.ExecutionImpl(null, null,
+                                                new GraphImpl.ExecutionImpl(null, null, null,
                                                         (sender, context) -> {
                                                             b.set(true);
                                                             assertEquals(expectedFirstArg.get(), context.get("a"));
@@ -112,7 +112,7 @@ public class CommandParseTest {
     public void aliasWithArgs() {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Word("").from("foo", "bar"))
-                        .append(ArgumentType.Integer("test"), createExecutor(b))
+                .append(ArgumentType.Integer("test"), createExecutor(b))
                 .build());
         assertValid(foo, "foo 1", b);
         assertValid(foo, "bar 1", b);
@@ -142,6 +142,6 @@ public class CommandParseTest {
 
     @NotNull
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
-        return new GraphImpl.ExecutionImpl(null, null, (sender, context) -> atomicBoolean.set(true), null);
+        return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
     }
 }
