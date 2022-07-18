@@ -1,6 +1,7 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 
 class ArgumentParser {
 
@@ -17,13 +18,13 @@ class ArgumentParser {
             while (true) {
                 try {
                     return ArgumentResult.success(argument.parse(current.toString()));
-                } catch (Exception ignored) {
+                } catch (ArgumentSyntaxException ignored) {
                     if (!reader.hasRemaining()) break;
                     current.append(" ");
                     current.append(reader.readWord());
                 }
             }
-        } catch (Exception ignored) {
+        } catch (ArgumentSyntaxException ignored) {
         }
         return ArgumentResult.incompatibleType();
     }
