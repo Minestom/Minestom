@@ -30,6 +30,7 @@ final class CommandParserImpl implements CommandParser {
         final CommandStringReader reader = new CommandStringReader(input);
         final List<NodeResult> syntax = new ArrayList<>();
         final Set<CommandCondition> conditions = new HashSet<>();
+        CommandExecutor defaultExecutor = null;
 
         NodeResult result;
         Node parent = graph.root();
@@ -39,11 +40,19 @@ final class CommandParserImpl implements CommandParser {
             // Create condition chain
             final CommandCondition condition = nullSafeGetter(result.node.execution(), Graph.Execution::condition);
             if (condition != null) conditions.add(condition);
+            // Track default executor
+            final CommandExecutor defExec = nullSafeGetter(result.node.execution(), Graph.Execution::defaultExecutor);
+            if (defExec != null) defaultExecutor = defExec;
             // Check parse result
             if (result.io.output instanceof SyntaxError e) {
                 // Syntax error stop at this arg
-                return new InvalidCommand(input, chainConditions(conditions),
-                        parent.argument().getCallback(), e, syntaxMapper(syntax));
+                final ArgumentCallback argumentCallback = parent.argument().getCallback();
+                if (argumentCallback == null && defaultExecutor != null) {
+                    return new ValidCommand(input, chainConditions(conditions), defaultExecutor, syntaxMapper(syntax));
+                } else {
+                    return new InvalidCommand(input, chainConditions(conditions),
+                            argumentCallback, e, syntaxMapper(syntax));
+                }
             }
             parent = result.node;
         }
@@ -55,17 +64,25 @@ final class CommandParserImpl implements CommandParser {
             final CommandExecutor executor = locateExecutor(syntax.get(syntax.size() - 1).node, args);
             if (executor == null) {
                 // Syntax error
-                return new InvalidCommand(input, chainConditions(conditions),
-                        null/*todo command syntax callback*/,
-                        ArgumentResult.syntaxError("INTERNAL ERROR: Couldn't locate executor.", null, -1),
-                        args);
+                if (defaultExecutor != null) {
+                    return new ValidCommand(input, chainConditions(conditions), defaultExecutor, syntaxMapper(syntax));
+                } else {
+                    return new InvalidCommand(input, chainConditions(conditions),
+                            null/*todo command syntax callback*/,
+                            ArgumentResult.syntaxError("INTERNAL ERROR: Couldn't locate executor.", null, -1),
+                            args);
+                }
             }
             if (reader.hasRemaining()) {
                 // Command had trailing data
-                return new InvalidCommand(input, chainConditions(conditions),
-                        null/*todo command syntax callback*/,
-                        ArgumentResult.syntaxError("Command has trailing data.", null, -1),
-                        args);
+                if (defaultExecutor != null) {
+                    return new ValidCommand(input, chainConditions(conditions), defaultExecutor, syntaxMapper(syntax));
+                } else {
+                    return new InvalidCommand(input, chainConditions(conditions),
+                            null/*todo command syntax callback*/,
+                            ArgumentResult.syntaxError("Command has trailing data.", null, -1),
+                            args);
+                }
             }
             return new ValidCommand(input, chainConditions(conditions), executor, args);
         }
