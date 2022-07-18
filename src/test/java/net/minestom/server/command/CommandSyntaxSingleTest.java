@@ -172,7 +172,7 @@ public class CommandSyntaxSingleTest {
         }, args.toArray(Argument[]::new));
 
         final String executeString = commandName + " " + input;
-        manager.executeServerCommand(executeString);
+        manager.executeServerCommand(executeString.trim());
         assertEquals(expectedExecution, result.get());
         if (expectedValues != null) {
             assertEquals(expectedValues, values.get());
