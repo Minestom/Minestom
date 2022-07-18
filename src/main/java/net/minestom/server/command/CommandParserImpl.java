@@ -13,7 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -29,7 +32,7 @@ final class CommandParserImpl implements CommandParser {
         // Create reader & parse
         final CommandStringReader reader = new CommandStringReader(input);
         final List<NodeResult> syntax = new ArrayList<>();
-        final Set<CommandCondition> conditions = new HashSet<>();
+        final List<CommandCondition> conditions = new ArrayList<>();
         CommandExecutor defaultExecutor = null;
 
         NodeResult result;
@@ -94,7 +97,7 @@ final class CommandParserImpl implements CommandParser {
                 .collect(Collectors.toMap(NodeResult::name, NodeResult::io));
     }
 
-    private static CommandCondition chainConditions(Set<CommandCondition> conditions) {
+    private static CommandCondition chainConditions(List<CommandCondition> conditions) {
         return (sender, commandString) -> {
             for (CommandCondition condition : conditions) {
                 if (!condition.canUse(sender, commandString)) return false;
