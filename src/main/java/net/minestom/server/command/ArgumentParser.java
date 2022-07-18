@@ -14,14 +14,15 @@ class ArgumentParser {
             if (!argument.allowSpace()) return ArgumentResult.success(argument.parse(reader.readWord()));
             // Bruteforce
             StringBuilder current = new StringBuilder(reader.readWord());
-            do {
+            while (true) {
                 try {
                     return ArgumentResult.success(argument.parse(current.toString()));
                 } catch (Exception ignored) {
+                    if (!reader.hasRemaining()) break;
                     current.append(" ");
                     current.append(reader.readWord());
                 }
-            } while (reader.hasRemaining());
+            }
         } catch (Exception ignored) {
         }
         return ArgumentResult.incompatibleType();
