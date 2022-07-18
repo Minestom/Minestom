@@ -89,8 +89,8 @@ record GraphImpl(NodeImpl root) implements Graph {
             final CommandExecutor defaultExecutor = command.getDefaultExecutor();
             final CommandCondition defaultCondition = command.getCondition();
 
-            CommandExecutor executor = null;
-            CommandCondition condition = null;
+            CommandExecutor executor = defaultExecutor;
+            CommandCondition condition = defaultCondition;
             for (var syntax : command.getSyntaxes()) {
                 if (syntax.getArguments().length == 0) {
                     executor = syntax.getExecutor();
