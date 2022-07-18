@@ -29,13 +29,12 @@ final class CommandParserImpl implements CommandParser {
         // Create reader & parse
         final CommandStringReader reader = new CommandStringReader(input);
         final List<NodeResult> syntax = new ArrayList<>();
-        final Node root = graph.root();
         final Set<CommandCondition> conditions = new HashSet<>();
 
         NodeResult result;
-        Node parent = root;
+        Node parent = graph.root();
 
-        while ((result = parseChild(parent/*todo redirects*/, reader)) != null) {
+        while ((result = parseChild(parent, reader)) != null) {
             syntax.add(result);
             // Create condition chain
             final CommandCondition condition = nullSafeGetter(result.node.execution(), Graph.Execution::condition);
