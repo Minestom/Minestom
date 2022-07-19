@@ -1,10 +1,10 @@
 package net.minestom.server.terminal;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.utils.PropertyUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A string converter to convert a string to an ansi-colored one.
@@ -13,9 +13,8 @@ import net.minestom.server.utils.PropertyUtils;
  * @see <a href="https://github.com/PaperMC/Paper/blob/41647af74caed955c1fd5b38d458ee59298ae5d4/patches/server/0591-Add-support-for-hex-color-codes-in-console.patch">Paper</a>
  */
 public final class TerminalColorConverter {
-    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
-
     public static final char COLOR_CHAR = '§';
+    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
     private static final String RGB_ANSI = "\u001B[38;2;%d;%d;%dm";
     private static final String ANSI_RESET = "\u001B[m";
     private static final String LOOKUP = "0123456789abcdefklmnor";
@@ -60,18 +59,13 @@ public final class TerminalColorConverter {
     /**
      * Format the colored string to an ansi-colored one.
      *
-     * @param string      the string to format
-     * @param stripColors if true, colors will be stripped
+     * @param string the string to format
      * @return the formatted string
      */
-    public static String format(String string, boolean stripColors) {
+    public static String format(String string) {
         string = RGB_PATTERN.matcher(string).replaceAll(match -> {
-            if (stripColors) {
-                return "";
-            } else {
-                String hex = match.group(1);
-                return getAnsiColorFromHexColor(Integer.parseInt(hex, 16));
-            }
+            String hex = match.group(1);
+            return getAnsiColorFromHexColor(Integer.parseInt(hex, 16));
         });
 
         Matcher matcher = NAMED_PATTERN.matcher(string);
@@ -79,16 +73,14 @@ public final class TerminalColorConverter {
         while (matcher.find()) {
             int format = LOOKUP.indexOf(Character.toLowerCase(matcher.group().charAt(1)));
             if (format != -1) {
-                matcher.appendReplacement(builder, stripColors ? "" : ANSI_CODES[format]);
+                matcher.appendReplacement(builder, ANSI_CODES[format]);
             } else {
                 matcher.appendReplacement(builder, matcher.group());
             }
         }
         matcher.appendTail(builder);
 
-        if (!stripColors) {
-            builder.append(ANSI_RESET);
-        }
+        builder.append(ANSI_RESET);
         return builder.toString();
     }
 }

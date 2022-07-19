@@ -9,13 +9,17 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
 public class MinestomComponentLoggerProvider implements ComponentLoggerProvider {
+    private static final LegacyComponentSerializer serializer = LegacyComponentSerializer.builder()
+            .character(TerminalColorConverter.COLOR_CHAR)
+            .flattener(MinestomFlattenerProvider.INSTANCE)
+            .hexColors()
+            .build();
+
     @Override
     public @NotNull ComponentLogger logger(@NotNull LoggerHelper helper, @NotNull String name) {
-        return helper.delegating(LoggerFactory.getLogger(name),
-                LegacyComponentSerializer.builder()
-                        .character(TerminalColorConverter.COLOR_CHAR)
-                        .flattener(MinestomFlattenerProvider.INSTANCE)
-                        .hexColors()
-                        .build()::serialize);
+        return helper.delegating(LoggerFactory.getLogger(name), component -> {
+            String text = serializer.serialize(component);
+            return TerminalColorConverter.format(text);
+        });
     }
 }

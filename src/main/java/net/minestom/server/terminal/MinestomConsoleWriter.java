@@ -16,11 +16,10 @@ public final class MinestomConsoleWriter extends AbstractFormatPatternWriter {
     @Override
     public void write(LogEntry logEntry) throws Exception {
         String rendered = render(logEntry);
-        String formatted = TerminalColorConverter.format(rendered, false);
         if (reader != null) {
-            reader.printAbove(formatted);
+            reader.printAbove(rendered);
         } else {
-            AnsiConsole.out().print(formatted);
+            AnsiConsole.out().print(rendered);
         }
     }
 
