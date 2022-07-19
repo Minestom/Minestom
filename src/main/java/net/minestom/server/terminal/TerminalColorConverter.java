@@ -2,6 +2,8 @@ package net.minestom.server.terminal;
 
 /**
  * A string converter to convert a string to an ansi-colored one.
+ *
+ * Part of the code took from <a href="https://github.com/Minecrell/TerminalConsoleAppender/blob/master/src/main/java/net/minecrell/terminalconsole/MinecraftFormattingConverter.java">TerminalConsoleAppender</a>
  */
 public final class TerminalColorConverter {
     public static final String ANSI_RESET = "\u001B[m";
