@@ -15,6 +15,7 @@ public class MinestomComponentLoggerProvider implements ComponentLoggerProvider 
                 LegacyComponentSerializer.builder()
                         .character(TerminalColorConverter.COLOR_CHAR)
                         .flattener(MinestomFlattenerProvider.INSTANCE)
+                        .hexColors()
                         .build()::serialize);
     }
 }
