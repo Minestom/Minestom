@@ -4,10 +4,7 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentString;
-import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentUUID;
@@ -23,19 +20,13 @@ public class EchoCommand extends Command {
 
         ArgumentComponent json = ArgumentType.Component("json");
         ArgumentUUID uuid = ArgumentType.UUID("uuid");
-        ArgumentStringArray message = ArgumentType.StringArray("message");
-
-//        this.addSyntax((sender, context) -> {
-//            sender.sendMessage(context.get(json));
-//        }, json);
-//
-//        this.addSyntax((sender, context) -> {
-//            sender.sendMessage(Identity.identity(context.get(uuid)), context.get(json), MessageType.CHAT);
-//        }, uuid, json);
 
         this.addSyntax((sender, context) -> {
-            Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(String.join(" ", context.get(message)));
-            sender.sendMessage(component);
-        }, message);
+            sender.sendMessage(context.get(json));
+        }, json);
+
+        this.addSyntax((sender, context) -> {
+            sender.sendMessage(Identity.identity(context.get(uuid)), context.get(json), MessageType.CHAT);
+        }, uuid, json);
     }
 }
