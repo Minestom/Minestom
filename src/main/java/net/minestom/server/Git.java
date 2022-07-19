@@ -6,5 +6,4 @@ public class Git {
 
     public static final String GROUP = "&GROUP";
     public static final String ARTIFACT = "&ARTIFACT";
-    public static final String VERSION = "&VERSION";
 }
