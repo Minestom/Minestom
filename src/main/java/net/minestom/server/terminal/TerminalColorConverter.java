@@ -44,33 +44,36 @@ public final class TerminalColorConverter {
      * @return the formatted string
      */
     public static String format(String string, boolean stripColors) {
+        int currentPos = string.indexOf(COLOR_CHAR);
+        if (currentPos == -1) {
+            return string;
+        }
+
+        int lastPos = string.length() - 1;
+        if (currentPos == lastPos) {
+            return string.substring(0, currentPos);
+        }
+
         StringBuilder builder = new StringBuilder();
-        int pos = 0;
-        int size = string.length();
-        while (pos < size) {
-            char c = string.charAt(pos);
-            if (c != COLOR_CHAR) {
-                builder.append(c);
-                pos++;
-                continue;
-            }
-            if (pos + 1 >= size) {
-                builder.append(COLOR_CHAR);
-                pos++;
-                continue;
-            }
-            char next = string.charAt(pos + 1);
-            int format = LOOKUP.indexOf(Character.toLowerCase(next));
+
+        int previousPos = 0;
+        do {
+            builder.append(string, previousPos, currentPos);
+            int format = LOOKUP.indexOf(Character.toLowerCase(string.charAt(currentPos + 1)));
             if (format != -1) {
                 if (!stripColors) {
                     builder.append(ANSI_CODES[format]);
                 }
-                pos += 2;
+                previousPos = currentPos += 2;
             } else {
-                builder.append(c);
-                pos++;
+                previousPos = currentPos;
+                currentPos++;
             }
-        }
+
+            currentPos = string.indexOf(COLOR_CHAR, currentPos);
+        } while (currentPos != -1 && currentPos < lastPos);
+
+        builder.append(string, previousPos, string.length());
         if (!stripColors) {
             builder.append(ANSI_RESET);
         }
