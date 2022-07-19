@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -11,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilLoader implements IChunkLoader {
-    private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(AnvilLoader.class);
     private static final Biome BIOME = Biome.PLAINS;
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();

@@ -3,6 +3,7 @@ package net.minestom.server.extras.query;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
@@ -12,8 +13,6 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -32,7 +31,7 @@ import java.util.Random;
  */
 public class Query {
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
-    private static final Logger LOGGER = LoggerFactory.getLogger(Query.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(Query.class);
     private static final Random RANDOM = new Random();
     private static final Int2ObjectMap<SocketAddress> CHALLENGE_TOKENS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 

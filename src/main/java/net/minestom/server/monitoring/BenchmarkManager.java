@@ -5,12 +5,11 @@ import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -34,7 +33,7 @@ import static net.minestom.server.MinecraftServer.THREAD_NAME_TICK_SCHEDULER;
  * Be aware that this is not the most accurate method, you should use a proper java profiler depending on your needs.
  */
 public final class BenchmarkManager {
-    private final static Logger LOGGER = LoggerFactory.getLogger(BenchmarkManager.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(BenchmarkManager.class);
     private static final ThreadMXBean THREAD_MX_BEAN = ManagementFactory.getThreadMXBean();
     private static final List<String> THREADS = new ArrayList<>();
 

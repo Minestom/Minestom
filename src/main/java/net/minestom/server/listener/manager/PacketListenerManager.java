@@ -1,5 +1,6 @@
 package net.minestom.server.listener.manager;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.Player;
@@ -9,15 +10,13 @@ import net.minestom.server.listener.*;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.*;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PacketListenerManager {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
+    public final static ComponentLogger LOGGER = ComponentLogger.logger(PacketListenerManager.class);
     private final ServerProcess serverProcess;
 
     private final Map<Class<? extends ClientPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();

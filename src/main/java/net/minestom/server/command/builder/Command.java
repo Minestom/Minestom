@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
@@ -12,8 +13,6 @@ import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -44,7 +43,7 @@ import java.util.stream.Stream;
  */
 public class Command {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(Command.class);
+    public static final ComponentLogger LOGGER = ComponentLogger.logger(Command.class);
 
     private final String name;
     private final String[] aliases;
