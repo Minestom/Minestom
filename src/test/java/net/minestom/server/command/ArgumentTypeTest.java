@@ -101,35 +101,35 @@ public class ArgumentTypeTest {
     public void testArgumentEntity() {
         var arg = ArgumentType.Entity("entity");
 
-        assertDoesNotThrow(() -> arg.parse("@a"));
-        assertDoesNotThrow(() -> arg.parse("@p"));
+        assertValidArg(arg, "@a");
+        assertValidArg(arg, "@p");
         assertInvalidArg(arg, "@x");
 
-        assertDoesNotThrow(() -> arg.parse("@e[type=sheep]"));
-        assertDoesNotThrow(() -> arg.parse("@e[type=!cow]"));
+        assertValidArg(arg, "@e[type=sheep]");
+        assertValidArg(arg, "@e[type=!cow]");
         assertInvalidArg(arg, "@e[type=invalid_entity]");
         assertInvalidArg(arg, "@e[type=!invalid_entity_two]");
 
-        assertDoesNotThrow(() -> arg.parse("@e[gamemode=creative]"));
-        assertDoesNotThrow(() -> arg.parse("@e[gamemode=!survival]"));
+        assertValidArg(arg, "@e[gamemode=creative]");
+        assertValidArg(arg, "@e[gamemode=!survival]");
         assertInvalidArg(arg, "@e[gamemode=invalid_gamemode]");
         assertInvalidArg(arg, "@e[gamemode=!invalid_gamemode_2]");
 
-        assertDoesNotThrow(() -> arg.parse("@e[limit=500]"));
+        assertValidArg(arg, "@e[limit=500]");
         assertInvalidArg(arg, "@e[limit=-500]");
         assertInvalidArg(arg, "@e[limit=invalid_integer]");
         assertInvalidArg(arg, "@e[limit=2147483648]");
 
-        assertDoesNotThrow(() -> arg.parse("@e[sort=nearest]"));
+        assertValidArg(arg, "@e[sort=nearest]");
         assertInvalidArg(arg, "@e[sort=invalid_sort]");
 
-        assertDoesNotThrow(() -> arg.parse("@e[level=55]"));
-        assertDoesNotThrow(() -> arg.parse("@e[level=100..500]"));
+        assertValidArg(arg, "@e[level=55]");
+        assertValidArg(arg, "@e[level=100..500]");
         assertInvalidArg(arg, "@e[level=20-50]");
         assertInvalidArg(arg, "@e[level=2147483648]");
 
-        assertDoesNotThrow(() -> arg.parse("@e[distance=500]"));
-        assertDoesNotThrow(() -> arg.parse("@e[distance=50..150]"));
+        assertValidArg(arg, "@e[distance=500]");
+        assertValidArg(arg, "@e[distance=50..150]");
         assertInvalidArg(arg, "@e[distance=-500-500]");
         assertInvalidArg(arg, "@e[distance=2147483648]");
     }
@@ -208,11 +208,9 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
-
-        assertArg(arg, "minecraft:resource_location_example", arg.parse("minecraft:resource_location_example"));
+        assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
         assertInvalidArg(arg, "minecraft:invalid resource location");
-
-        assertArg(arg, "ResourceLocation<resource_location>", arg.toString());
+        //assertInvalidArg(arg, "minecraft:");
     }
 
     @Test
@@ -399,7 +397,7 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentLiteral() {
         var arg = ArgumentType.Literal("literal");
-        assertArg(arg, "literal", arg.parse("literal"));
+        assertArg(arg, "literal", "literal");
         assertInvalidArg(arg, "not_literal");
         assertInvalidArg(arg, "");
     }
@@ -427,11 +425,11 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentStringArray() {
         var arg = ArgumentType.StringArray("string_array");
-        assertArrayEquals(new String[]{"example", "text"}, arg.parse("example text"));
-        assertArrayEquals(new String[]{"some", "more", "placeholder", "text"}, arg.parse("some more placeholder text"));
-        assertArrayEquals(new String[]{""}, arg.parse(""));
-        assertArrayEquals(new String[0], arg.parse(" "));
-        assertArrayEquals(new String[0], arg.parse("         "));
+        assertArrayArg(arg, new String[]{"example", "text"}, "example text");
+        assertArrayArg(arg, new String[]{"some", "more", "placeholder", "text"}, "some more placeholder text");
+        assertArrayArg(arg, new String[]{""}, "");
+        assertArrayArg(arg, new String[0], " ");
+        assertArrayArg(arg, new String[0], "         ");
     }
 
     @Test
@@ -448,6 +446,14 @@ public class ArgumentTypeTest {
 
     private static <T> void assertArg(Argument<T> arg, T expected, String input) {
         assertEquals(expected, arg.parse(input));
+    }
+
+    private static <T> void assertArrayArg(Argument<T[]> arg, T[] expected, String input) {
+        assertArrayEquals(expected, arg.parse(input));
+    }
+
+    private static <T> void assertValidArg(Argument<T> arg, String input) {
+        assertDoesNotThrow(() -> arg.parse(input));
     }
 
     private static <T> void assertInvalidArg(Argument<T> arg, String input) {

@@ -333,7 +333,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
-            final Point loweredPosition = position.sub(0, -.5, 0);
+            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
                         if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
@@ -1446,17 +1446,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        CloseWindowPacket closeWindowPacket;
-        if (openInventory == null) {
-            closeWindowPacket = new CloseWindowPacket((byte) 0);
-        } else {
-            closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-            openInventory.removeViewer(this); // Clear cache
-            this.openInventory = null;
+        if (openInventory == getOpenInventory()) {
+            CloseWindowPacket closeWindowPacket;
+            if (openInventory == null) {
+                closeWindowPacket = new CloseWindowPacket((byte) 0);
+            } else {
+                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
+                openInventory.removeViewer(this); // Clear cache
+                this.openInventory = null;
+            }
+            sendPacket(closeWindowPacket);
+            inventory.update();
+            this.didCloseInventory = true;
         }
-        sendPacket(closeWindowPacket);
-        inventory.update();
-        this.didCloseInventory = true;
     }
 
     /**

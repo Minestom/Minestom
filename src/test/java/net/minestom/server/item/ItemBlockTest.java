@@ -13,7 +13,8 @@ public class ItemBlockTest {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canPlaceOn(Block.STONE))
                 .build();
-        assertTrue(item.meta().getCanPlaceOn().contains(Block.STONE));
+        assertTrue(item.meta().getCanPlaceOn().contains(Block.STONE.name()));
+        assertTrue(item.meta().canPlaceOn(Block.STONE));
     }
 
     @Test
@@ -31,7 +32,9 @@ public class ItemBlockTest {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canPlaceOn(Block.SANDSTONE_STAIRS.withProperty("facing", "south")))
                 .build();
-        assertTrue(item.meta().getCanPlaceOn().contains(Block.SANDSTONE_STAIRS));
+        assertTrue(item.meta().getCanPlaceOn().contains(Block.SANDSTONE_STAIRS.name()));
+        assertTrue(item.meta().getCanPlaceOn().contains(Block.SANDSTONE_STAIRS.withProperty("facing", "south").name()));
+        assertTrue(item.meta().canPlaceOn(Block.SANDSTONE_STAIRS.withProperty("facing", "south")));
     }
 
     @Test
@@ -39,7 +42,8 @@ public class ItemBlockTest {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canDestroy(Block.STONE))
                 .build();
-        assertTrue(item.meta().getCanDestroy().contains(Block.STONE));
+        assertTrue(item.meta().getCanDestroy().contains(Block.STONE.name()));
+        assertTrue(item.meta().canDestroy(Block.STONE));
     }
 
     @Test
@@ -57,6 +61,8 @@ public class ItemBlockTest {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canDestroy(Block.SANDSTONE_STAIRS.withProperty("facing", "south")))
                 .build();
-        assertTrue(item.meta().getCanDestroy().contains(Block.SANDSTONE_STAIRS));
+        assertTrue(item.meta().getCanDestroy().contains(Block.SANDSTONE_STAIRS.name()));
+        assertTrue(item.meta().getCanDestroy().contains(Block.SANDSTONE_STAIRS.withProperty("facing", "south").name()));
+        assertTrue(item.meta().canDestroy(Block.SANDSTONE_STAIRS.withProperty("facing", "south")));
     }
 }
