@@ -9,6 +9,6 @@ import org.slf4j.LoggerFactory;
 public class MinestomComponentLoggerProvider implements ComponentLoggerProvider {
     @Override
     public @NotNull ComponentLogger logger(@NotNull LoggerHelper helper, @NotNull String name) {
-        return helper.delegating(LoggerFactory.getLogger(name), TerminalColorConverter::format);
+        return helper.delegating(LoggerFactory.getLogger(name), TerminalColorConverter.SERIALIZER::serialize);
     }
 }

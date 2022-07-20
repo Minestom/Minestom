@@ -1,5 +1,6 @@
 package net.minestom.server.terminal;
 
+import net.minestom.server.adventure.provider.TerminalColorConverter;
 import org.fusesource.jansi.AnsiConsole;
 import org.tinylog.core.LogEntry;
 import org.tinylog.writers.AbstractFormatPatternWriter;
@@ -16,10 +17,11 @@ public final class MinestomConsoleWriter extends AbstractFormatPatternWriter {
     @Override
     public void write(LogEntry logEntry) throws Exception {
         String rendered = render(logEntry);
+        String formatted = TerminalColorConverter.format(rendered);
         if (reader != null) {
-            reader.printAbove(rendered);
+            reader.printAbove(formatted);
         } else {
-            AnsiConsole.out().print(rendered);
+            AnsiConsole.out().print(formatted);
         }
     }
 

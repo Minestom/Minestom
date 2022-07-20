@@ -16,14 +16,14 @@ import java.util.regex.Pattern;
  */
 public final class TerminalColorConverter {
     public static final char COLOR_CHAR = '§';
-    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
-    private static final boolean SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
-
-    private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
+    public static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
             .character(TerminalColorConverter.COLOR_CHAR)
             .flattener(MinestomFlattenerProvider.INSTANCE)
             .hexColors()
             .build();
+    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
+    private static final boolean SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
+
     private static final String RGB_ANSI = "\u001B[38;2;%d;%d;%dm";
     private static final String ANSI_RESET = "\u001B[m";
     private static final String LOOKUP = "0123456789abcdefklmnor";
@@ -105,15 +105,5 @@ public final class TerminalColorConverter {
             builder.append(ANSI_RESET);
         }
         return builder.toString();
-    }
-
-    /**
-     * Format the component to an ansi-colored string.
-     *
-     * @param component the component to format
-     * @return the formatted string
-     */
-    public static String format(Component component) {
-        return format(SERIALIZER.serialize(component));
     }
 }
