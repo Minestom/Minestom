@@ -16,12 +16,14 @@ import java.util.regex.Pattern;
  */
 public final class TerminalColorConverter {
     public static final char COLOR_CHAR = '§';
+    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
+    private static final boolean SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
+
     private static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
             .character(TerminalColorConverter.COLOR_CHAR)
             .flattener(MinestomFlattenerProvider.INSTANCE)
             .hexColors()
             .build();
-    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
     private static final String RGB_ANSI = "\u001B[38;2;%d;%d;%dm";
     private static final String ANSI_RESET = "\u001B[m";
     private static final String LOOKUP = "0123456789abcdefklmnor";
@@ -56,14 +58,15 @@ public final class TerminalColorConverter {
     }
 
     private static String getAnsiColor(NamedTextColor color, String fallback) {
-        return SUPPORT_HEX_COLOR ? getAnsiColorFromHexColor(color.value()) : fallback;
+        return getAnsiColorFromHexColor(color.value(), fallback);
+    }
+
+    private static String getAnsiColorFromHexColor(int color, String fallback) {
+        return SUPPORT_HEX_COLOR ? String.format(RGB_ANSI, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF) : fallback;
     }
 
     private static String getAnsiColorFromHexColor(int color) {
-        int r = (color >> 16) & 0xFF;
-        int g = (color >> 8) & 0xFF;
-        int b = color & 0xFF;
-        return String.format(RGB_ANSI, r, g, b);
+        return getAnsiColorFromHexColor(color, "");
     }
 
     /**
@@ -78,8 +81,12 @@ public final class TerminalColorConverter {
         }
 
         string = RGB_PATTERN.matcher(string).replaceAll(match -> {
-            String hex = match.group(1);
-            return getAnsiColorFromHexColor(Integer.parseInt(hex, 16));
+            if (SUPPORT_COLOR) {
+                String hex = match.group(1);
+                return getAnsiColorFromHexColor(Integer.parseInt(hex, 16));
+            } else {
+                return "";
+            }
         });
 
         Matcher matcher = NAMED_PATTERN.matcher(string);
@@ -87,14 +94,16 @@ public final class TerminalColorConverter {
         while (matcher.find()) {
             int format = LOOKUP.indexOf(Character.toLowerCase(matcher.group().charAt(1)));
             if (format != -1) {
-                matcher.appendReplacement(builder, ANSI_CODES[format]);
+                matcher.appendReplacement(builder, SUPPORT_COLOR ? ANSI_CODES[format] : "");
             } else {
                 matcher.appendReplacement(builder, matcher.group());
             }
         }
         matcher.appendTail(builder);
 
-        builder.append(ANSI_RESET);
+        if (SUPPORT_COLOR) {
+            builder.append(ANSI_RESET);
+        }
         return builder.toString();
     }
 
