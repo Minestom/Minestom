@@ -27,7 +27,7 @@ public class PlayerHeldListener {
             final byte resultSlot = changeHeldSlotEvent.getNewSlot();
 
             // If the held slot has been changed by the event, send the change to the player
-            if (resultSlot != slot) {
+            if (resultSlot != oldSlot) {
                 player.setHeldItemSlot(resultSlot);
             } else {
                 // Otherwise, simply refresh the player field
