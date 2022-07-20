@@ -73,6 +73,10 @@ public final class TerminalColorConverter {
      * @return the formatted string
      */
     public static String format(String string) {
+        if (string.indexOf(COLOR_CHAR) == -1) {
+            return string;
+        }
+
         string = RGB_PATTERN.matcher(string).replaceAll(match -> {
             String hex = match.group(1);
             return getAnsiColorFromHexColor(Integer.parseInt(hex, 16));
