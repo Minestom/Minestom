@@ -49,6 +49,17 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         this.options = options;
     }
 
+    /**
+     * Returns a long array, containing the chunk indexes of
+     * every affected chunk so far.
+     * @return the chunk indexes
+     * 
+     * @see ChunkUtils#getChunkIndex(int, int)
+     */
+    public long[] getAffectedChunks() {
+        return chunkBatchesMap.keySet().toLongArray();
+    }
+
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         final int chunkX = ChunkUtils.getChunkCoordinate(x);
