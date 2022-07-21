@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.Suggestion;
@@ -42,16 +43,17 @@ final class CommandParserImpl implements CommandParser {
         Node parent = graph.root();
 
         while ((result = parseChild(parent, reader)) != null) {
-            if (result.node != null) {
-                syntax.add(result);
+            syntax.add(result);
+            final Graph.Execution execution = result.node.execution();
+            if (execution != null) {
                 // Create condition chain
-                final CommandCondition condition = nullSafeGetter(result.node.execution(), Graph.Execution::condition);
+                final CommandCondition condition = execution.condition();
                 if (condition != null) conditions.add(condition);
                 // Track default executor
-                final CommandExecutor defExec = nullSafeGetter(result.node.execution(), Graph.Execution::defaultExecutor);
+                final CommandExecutor defExec = execution.defaultExecutor();
                 if (defExec != null) defaultExecutor = defExec;
                 // Merge global listeners
-                final CommandExecutor globalListener = nullSafeGetter(result.node.execution(), Graph.Execution::globalListener);
+                final CommandExecutor globalListener = execution.globalListener();
                 if (globalListener != null) globalListeners.add(globalListener);
             }
             // Check parse result
@@ -60,15 +62,12 @@ final class CommandParserImpl implements CommandParser {
                 final ArgumentCallback argumentCallback = parent.argument().getCallback();
                 if (argumentCallback == null && defaultExecutor != null) {
                     return new ValidCommand(input, chainConditions(conditions), defaultExecutor, syntaxMapper(syntax),
-                            mergeExecutors(globalListeners), null);
+                            mergeExecutors(globalListeners), extractSuggestionCallback(syntax));
                 } else {
                     return new InvalidCommand(input, chainConditions(conditions),
-                            argumentCallback, e, syntaxMapper(syntax), mergeExecutors(globalListeners), null);
+                            argumentCallback, e, syntaxMapper(syntax), mergeExecutors(globalListeners),
+                            extractSuggestionCallback(syntax));
                 }
-            } else if (result.io.output instanceof SuggestionCallbackHolder callbackHolder) {
-                return new InvalidCommand(input, chainConditions(conditions),
-                        callbackHolder.argumentCallback, null, syntaxMapper(syntax), mergeExecutors(globalListeners),
-                        callbackHolder.callback);
             }
             parent = result.node;
         }
@@ -82,28 +81,33 @@ final class CommandParserImpl implements CommandParser {
                 // Syntax error
                 if (defaultExecutor != null) {
                     return new ValidCommand(input, chainConditions(conditions), defaultExecutor, syntaxMapper(syntax),
-                            mergeExecutors(globalListeners), null);
+                            mergeExecutors(globalListeners), extractSuggestionCallback(syntax));
                 } else {
                     return new InvalidCommand(input, chainConditions(conditions),
                             null/*todo command syntax callback*/,
                             ArgumentResult.syntaxError("INTERNAL ERROR: Couldn't locate executor.", null, -1),
-                            args, mergeExecutors(globalListeners), null);
+                            args, mergeExecutors(globalListeners), extractSuggestionCallback(syntax));
                 }
             }
             if (reader.hasRemaining()) {
                 // Command had trailing data
                 if (defaultExecutor != null) {
                     return new ValidCommand(input, chainConditions(conditions), defaultExecutor,
-                            syntaxMapper(syntax), mergeExecutors(globalListeners), null);
+                            syntaxMapper(syntax), mergeExecutors(globalListeners), extractSuggestionCallback(syntax));
                 } else {
                     return new InvalidCommand(input, chainConditions(conditions),
                             null/*todo command syntax callback*/,
                             ArgumentResult.syntaxError("Command has trailing data.", null, -1),
-                            args, mergeExecutors(globalListeners), null);
+                            args, mergeExecutors(globalListeners), extractSuggestionCallback(syntax));
                 }
             }
-            return new ValidCommand(input, chainConditions(conditions), executor, args, mergeExecutors(globalListeners), null);
+            return new ValidCommand(input, chainConditions(conditions), executor, args, mergeExecutors(globalListeners),
+                    extractSuggestionCallback(syntax));
         }
+    }
+
+    private static SuggestionCallback extractSuggestionCallback(List<NodeResult> syntax) {
+        return syntax.get(syntax.size()-1).callback;
     }
 
     private static Map<String, InputOutputPair<Object>> syntaxMapper(List<NodeResult> syntax) {
@@ -156,22 +160,37 @@ final class CommandParserImpl implements CommandParser {
     }
 
     private static NodeResult parseChild(Node parent, CommandStringReader reader) {
-        if (parent == null) return null;
-        if (!reader.hasRemaining()) return new NodeResult(null, new InputOutputPair<>(
-                new SuggestionCallbackHolder(parent.argument().getSuggestionCallback(), parent.argument().getCallback()), ""));
+        if (!reader.hasRemaining()) return null;
         for (Node child : parent.next()) {
             final int start = reader.cursor();
             final ArgumentResult<?> parse = ArgumentParser.parse(child.argument(), reader);
             if (parse instanceof ArgumentResult.Success<?> success) {
-                return new NodeResult(child, new InputOutputPair<>(success.value(), ""/*todo get consumed string*/));
+                return new NodeResult(child, new InputOutputPair<>(success.value(), ""/*todo get consumed string*/),
+                        child.argument().getSuggestionCallback());
             } else if (parse instanceof ArgumentResult.SyntaxError<?> syntaxError) {
-                return new NodeResult(child, new InputOutputPair<>(syntaxError, ""/*todo get consumed string*/));
+                return new NodeResult(child, new InputOutputPair<>(syntaxError, ""/*todo get consumed string*/),
+                        child.argument().getSuggestionCallback());
             } else {
                 // Reset cursor & try next
                 reader.cursor(start);
             }
         }
-        return null;
+        final SuggestionCallback suggestionCallback = nullSafeGetter(parent.next()
+                        .stream()
+                        .map(Node::argument)
+                        .filter(argument -> argument.getSuggestionCallback() != null)
+                        .findFirst()
+                        .orElse(null),
+                Argument::getSuggestionCallback
+        );
+        if (suggestionCallback != null) {
+            return new NodeResult(parent,
+                    new InputOutputPair<>(new ArgumentParser.SyntaxErrorResult<>(-1,
+                            "None of the arguments were compatible, but a suggestion callback was found.", ""), ""),
+                    suggestionCallback);
+        } else {
+            return null;
+        }
     }
 
     record UnknownCommandResult() implements ParseResult.UnknownCommand {
@@ -204,7 +223,7 @@ final class CommandParserImpl implements CommandParser {
             final SuggestionCallback callback = suggestionCallback();
             if (callback == null) return null;
             final int lastSpace = input().lastIndexOf(" ");
-            final Suggestion suggestion = new Suggestion(input(), lastSpace+2, input().length()-lastSpace);
+            final Suggestion suggestion = new Suggestion(input(), lastSpace+2, input().length()-lastSpace-1);
             final CommandContext context = new CommandContext(input());
             for (var entry : arguments().entrySet()) {
                 final String identifier = entry.getKey();
@@ -270,15 +289,12 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutionResult INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
     }
 
-    private record NodeResult(Node node, InputOutputPair<Object> io) {
+    private record NodeResult(Node node, InputOutputPair<Object> io, SuggestionCallback callback) {
         public String name() {
             return node.argument().getId();
         }
     }
 
     private record InputOutputPair<R>(R output, String input) {
-    }
-
-    private record SuggestionCallbackHolder(SuggestionCallback callback, ArgumentCallback argumentCallback) {
     }
 }

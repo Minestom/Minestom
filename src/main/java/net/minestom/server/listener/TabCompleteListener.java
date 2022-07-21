@@ -26,12 +26,15 @@ public class TabCompleteListener {
     }
 
     public static @Nullable Suggestion getSuggestion(CommandSender commandSender, String text) {
+        if (text.startsWith("/")) {
+            text = text.substring(1);
+        }
         if (text.endsWith(" ")) {
             // Append a placeholder char if the command ends with a space allowing the parser to find suggestion
             // for the next arg without typing the first char of it, this is probably the most hacky solution, but hey
-            // it's working as intended :)
+            // it works as intended :)
             text = text + '\00';
         }
-        return MinecraftServer.getCommandManager().parseCommand(text.substring(1)).suggestion(commandSender);
+        return MinecraftServer.getCommandManager().parseCommand(text).suggestion(commandSender);
     }
 }
