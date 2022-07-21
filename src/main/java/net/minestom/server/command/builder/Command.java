@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -136,71 +135,15 @@ public class Command {
      * @param commandCondition the condition to use the syntax
      * @param executor         the executor to call when the syntax is successfully received
      * @param args             all the arguments of the syntax, the length needs to be higher than 0
-     * @return the created {@link CommandSyntax syntaxes},
-     * there can be multiple of them when optional arguments are used
+     * @return the created {@link CommandSyntax syntax}
      */
     @NotNull
-    public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
+    public CommandSyntax addConditionalSyntax(@Nullable CommandCondition commandCondition,
                                                           @NotNull CommandExecutor executor,
                                                           @NotNull Argument<?>... args) {
-        // Check optional argument(s)
-        boolean hasOptional = false;
-        {
-            for (Argument<?> argument : args) {
-                if (argument.isOptional()) {
-                    hasOptional = true;
-                }
-                if (hasOptional && !argument.isOptional()) {
-                    LOGGER.warn("Optional arguments are followed by a non-optional one, the default values will be ignored.");
-                    hasOptional = false;
-                    break;
-                }
-            }
-        }
-
-        if (!hasOptional) {
-            final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
-            this.syntaxes.add(syntax);
-            return Collections.singleton(syntax);
-        } else {
-            List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
-
-            // the 'args' array starts by all the required arguments, followed by the optional ones
-            List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
-            boolean optionalBranch = false;
-            int i = 0;
-            for (Argument<?> argument : args) {
-                final boolean isLast = ++i == args.length;
-                if (argument.isOptional()) {
-                    // Set default value
-                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
-
-                    if (!optionalBranch && !requiredArguments.isEmpty()) {
-                        // First optional argument, create a syntax with current cached arguments
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
-                        optionalSyntaxes.add(syntax);
-                        optionalBranch = true;
-                    } else {
-                        // New optional argument, save syntax with current cached arguments and save default value
-                        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
-                        optionalSyntaxes.add(syntax);
-                    }
-                }
-                requiredArguments.add(argument);
-                if (isLast) {
-                    // Create the last syntax
-                    final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                            requiredArguments.toArray(new Argument[0]));
-                    optionalSyntaxes.add(syntax);
-                }
-            }
-
-            this.syntaxes.addAll(optionalSyntaxes);
-            return optionalSyntaxes;
-        }
+        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
+        this.syntaxes.add(syntax);
+        return syntax;
     }
 
     /**
@@ -208,7 +151,7 @@ public class Command {
      *
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
-    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public @NotNull CommandSyntax addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
         return addConditionalSyntax(null, executor, args);
     }
 
@@ -222,7 +165,7 @@ public class Command {
      * @return the newly created {@link CommandSyntax syntaxes}.
      */
     @ApiStatus.Experimental
-    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
+    public @NotNull CommandSyntax addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
         return addSyntax(executor, ArgumentType.generate(format));
     }
 
