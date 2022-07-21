@@ -140,13 +140,17 @@ final class GraphConverter {
                 setters.forEach(Runnable::run);
                 return res;
             } else {
-                node.flags = arg(false, argument.hasSuggestion());
+                final boolean hasSuggestion = argument.hasSuggestion();
+                node.flags = arg(false, hasSuggestion);
                 node.name = argument.getId();
                 node.parser = argument.parser();
                 node.properties = argument.nodeProperties();
                 if (redirect != null) {
                     node.flags |= 0x8;
                     redirectSetters.add(() -> node.redirectedNode = redirect.get());
+                }
+                if (hasSuggestion) {
+                    node.suggestionsType = argument.suggestionType().getIdentifier();
                 }
                 to.add(node);
                 return new int[]{id.getAndIncrement()};
