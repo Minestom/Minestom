@@ -1,9 +1,16 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.builder.suggestion.Suggestion;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+@ApiStatus.Experimental
 sealed public interface ParseResult {
     @NotNull ExecutionResult execute(@NotNull CommandSender sender);
+
+    @ApiStatus.Internal
+    @Nullable Suggestion suggestion(CommandSender sender);
 
     sealed interface UnknownCommand extends ParseResult
             permits CommandParserImpl.UnknownCommandResult {

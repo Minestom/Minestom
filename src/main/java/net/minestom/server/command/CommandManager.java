@@ -106,7 +106,7 @@ public final class CommandManager {
             command = playerCommandEvent.getCommand();
         }
         // Process the command
-        final ParseResult parsedCommand = parser.parse(getGraph(), command);
+        final ParseResult parsedCommand = parseCommand(command);
         final CommandResult result = resultConverter(parsedCommand.execute(sender), command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
@@ -172,6 +172,16 @@ public final class CommandManager {
 
     public @NotNull Set<@NotNull Command> getCommands() {
         return Collections.unmodifiableSet(commands);
+    }
+
+    /**
+     * Parses the command based on the registered commands
+     *
+     * @param input commands string without prefix
+     * @return the parsing result
+     */
+    public ParseResult parseCommand(String input) {
+        return parser.parse(getGraph(), input);
     }
 
     private Graph getGraph() {
