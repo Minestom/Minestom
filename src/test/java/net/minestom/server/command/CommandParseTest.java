@@ -131,7 +131,7 @@ public class CommandParseTest {
     private static void assertValid(Graph graph, String input, AtomicBoolean executorTest) {
         final ParseResult result = parseCommand(graph, input);
         assertInstanceOf(ParseResult.KnownCommand.Valid.class, result);
-        result.execute(null);
+        result.toExecutable().execute(null);
         assertTrue(executorTest.get(), "Parser returned valid syntax, but with the wrong executor.");
         executorTest.set(false);
     }

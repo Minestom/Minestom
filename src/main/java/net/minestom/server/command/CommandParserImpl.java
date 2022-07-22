@@ -197,8 +197,8 @@ final class CommandParserImpl implements CommandParser {
         private static final ParseResult INSTANCE = new UnknownCommandResult();
 
         @Override
-        public @NotNull ExecutionResult execute(@NotNull CommandSender sender) {
-            return ExecutionResultImpl.UNKNOWN;
+        public ExecutableCommand toExecutable() {
+            return UnknownExecutableCmd.INSTANCE;
         }
 
         @Override
@@ -233,60 +233,92 @@ final class CommandParserImpl implements CommandParser {
             callback.apply(sender, context, suggestion);
             return suggestion;
         }
-
-        @Override
-        default @NotNull ExecutionResult execute(@NotNull CommandSender sender) {
-            final CommandCondition condition = condition();
-
-            final CommandContext context = new CommandContext(input());
-            for (var entry : arguments().entrySet()) {
-                final String identifier = entry.getKey();
-                final var value = entry.getValue();
-                context.setArg(identifier, value.output(), value.input());
-            }
-
-            globalListener().apply(sender, context);
-
-            if (condition != null && !condition.canUse(sender, input())) {
-                return ExecutionResultImpl.PRECONDITION_FAILED;
-            }
-            if (this instanceof ValidCommand valid) {
-                try {
-                    valid.executor().apply(sender, context);
-                    return new ExecutionResultImpl(ExecutionResult.Type.SUCCESS, context.getReturnData());
-                } catch (Exception e) {
-                    LOGGER.error("An exception was encountered while executing command: " + input(), e);
-                    return ExecutionResultImpl.EXECUTOR_EXCEPTION;
-                }
-            } else if (this instanceof InvalidCommand invalid) {
-                final ArgumentCallback callback = invalid.callback();
-                if (callback != null)
-                    callback.apply(sender, new ArgumentSyntaxException(invalid.error.message(),
-                            invalid.error.input(), invalid.error.code()));
-                return ExecutionResultImpl.INVALID_SYNTAX;
-            }
-            throw new IllegalStateException("How did we get here?");
-        }
     }
 
     record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback, SyntaxError<?> error,
                           @NotNull Map<String, InputOutputPair<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback)
             implements InternalKnownCommand, ParseResult.KnownCommand.Invalid {
+        @Override
+        public ExecutableCommand toExecutable() {
+            return new InvalidExecutableCmd(condition, globalListener, callback, error, input, arguments);
+        }
     }
 
     record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
                         @NotNull Map<String, InputOutputPair<Object>> arguments,
                         CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback)
             implements InternalKnownCommand, ParseResult.KnownCommand.Valid {
+        @Override
+        public ExecutableCommand toExecutable() {
+            return new ValidExecutableCmd(condition, globalListener, executor, input, arguments);
+        }
     }
 
-    record ExecutionResultImpl(Type type, CommandData commandData) implements ExecutionResult {
-        static final ExecutionResult CANCELLED = new ExecutionResultImpl(Type.CANCELLED, null);
-        static final ExecutionResult UNKNOWN = new ExecutionResultImpl(Type.UNKNOWN, null);
-        static final ExecutionResult EXECUTOR_EXCEPTION = new ExecutionResultImpl(Type.EXECUTOR_EXCEPTION, null);
-        static final ExecutionResult PRECONDITION_FAILED = new ExecutionResultImpl(Type.PRECONDITION_FAILED, null);
-        static final ExecutionResult INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
+    record UnknownExecutableCmd() implements ExecutableCommand {
+        static final ExecutableCommand INSTANCE = new UnknownExecutableCmd();
+
+        @Override
+        public @NotNull Result execute(@NotNull CommandSender sender) {
+            return ExecutionResultImpl.UNKNOWN;
+        }
+    }
+
+    record ValidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, CommandExecutor executor,
+                              String input, Map<String, InputOutputPair<Object>> arguments) implements ExecutableCommand {
+
+        @Override
+        public @NotNull Result execute(@NotNull CommandSender sender) {
+            final CommandContext context = createCommandContext(input, arguments);
+
+            globalListener().apply(sender, context);
+
+            if (condition != null && !condition.canUse(sender, input())) {
+                return ExecutionResultImpl.PRECONDITION_FAILED;
+            }
+
+            try {
+                executor().apply(sender, context);
+                return new ExecutionResultImpl(ExecutableCommand.Result.Type.SUCCESS, context.getReturnData());
+            } catch (Exception e) {
+                LOGGER.error("An exception was encountered while executing command: " + input(), e);
+                return ExecutionResultImpl.EXECUTOR_EXCEPTION;
+            }
+        }
+    }
+
+    record InvalidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, ArgumentCallback callback,
+                                SyntaxError<?> error, String input, Map<String, InputOutputPair<Object>> arguments) implements ExecutableCommand {
+
+        @Override
+        public @NotNull Result execute(@NotNull CommandSender sender) {
+            globalListener().apply(sender, createCommandContext(input, arguments));
+
+            if (condition != null && !condition.canUse(sender, input())) {
+                return ExecutionResultImpl.PRECONDITION_FAILED;
+            }
+            if (callback != null)
+                callback.apply(sender, new ArgumentSyntaxException(error.message(), error.input(), error.code()));
+            return ExecutionResultImpl.INVALID_SYNTAX;
+        }
+    }
+
+    private static CommandContext createCommandContext(String input, Map<String, InputOutputPair<Object>> arguments) {
+        final CommandContext context = new CommandContext(input);
+        for (var entry : arguments.entrySet()) {
+            final String identifier = entry.getKey();
+            final var value = entry.getValue();
+            context.setArg(identifier, value.output(), value.input());
+        }
+        return context;
+    }
+
+    record ExecutionResultImpl(Type type, CommandData commandData) implements ExecutableCommand.Result {
+        static final ExecutableCommand.Result CANCELLED = new ExecutionResultImpl(Type.CANCELLED, null);
+        static final ExecutableCommand.Result UNKNOWN = new ExecutionResultImpl(Type.UNKNOWN, null);
+        static final ExecutableCommand.Result EXECUTOR_EXCEPTION = new ExecutionResultImpl(Type.EXECUTOR_EXCEPTION, null);
+        static final ExecutableCommand.Result PRECONDITION_FAILED = new ExecutionResultImpl(Type.PRECONDITION_FAILED, null);
+        static final ExecutableCommand.Result INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
     }
 
     private record NodeResult(Node node, InputOutputPair<Object> io, SuggestionCallback callback) {

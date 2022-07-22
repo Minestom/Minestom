@@ -107,7 +107,7 @@ public final class CommandManager {
         }
         // Process the command
         final ParseResult parsedCommand = parseCommand(command);
-        final CommandResult result = resultConverter(parsedCommand.execute(sender), command);
+        final CommandResult result = resultConverter(parsedCommand.toExecutable().execute(sender), command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
@@ -189,7 +189,7 @@ public final class CommandManager {
         return Graph.merge(commands);
     }
 
-    private static CommandResult resultConverter(ExecutionResult newResult, String input) {
+    private static CommandResult resultConverter(ExecutableCommand.Result newResult, String input) {
         return CommandResult.of(switch (newResult.type()) {
             case SUCCESS -> CommandResult.Type.SUCCESS;
             case CANCELLED, PRECONDITION_FAILED, EXECUTOR_EXCEPTION -> CommandResult.Type.CANCELLED;
