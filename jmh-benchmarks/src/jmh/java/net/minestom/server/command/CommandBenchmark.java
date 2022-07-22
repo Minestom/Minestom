@@ -7,19 +7,26 @@ import org.openjdk.jmh.infra.Blackhole;
 import java.lang.String;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
+import static net.minestom.server.command.builder.arguments.ArgumentType.Double;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Long;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Fork(1)
+@Warmup(time = 2, iterations = 3)
+@Measurement(time = 6)
 public class CommandBenchmark {
-    Graph graph;
-    String[] inputs;
+    Function<String, Object> parser;
 
     @Setup
     public void setup() {
-        this.graph = Graph.merge(Set.of(
+        var graph = Graph.merge(Set.of(
                 new Command("tp", "teleport") {{
                     addSyntax((sender, context) -> {}, Potion("pos"));
                     addSyntax((sender, context) -> {}, Entity("entity"), Potion("pos"));
@@ -40,23 +47,59 @@ public class CommandBenchmark {
                     addSyntax((sender, context) -> {}, Literal("a"), Literal("b"), Literal("c"), Literal("d"),
                             Literal("e"), Literal("f"));
                     setDefaultExecutor((sender, context) -> {});
+                }},
+                new Command("parser") {{
+                    addSyntax((sender, context) -> {}, Literal("int"), Integer("val"));
+                    addSyntax((sender, context) -> {}, Literal("double"), Double("val"));
+                    addSyntax((sender, context) -> {}, Literal("float"), Float("val"));
+                    addSyntax((sender, context) -> {}, Literal("long"), Long("val"));
                 }}
         ));
-        this.inputs = new String[] {
-                "tp 0 a", "tp 0 0 0", "tp foo 0", "tp foo bar", "tp foo 0 0 0", "tp 1 2 3", "tp", "tp 1 2 3 4 5",
-                "teleport a", "teleport bar 1 2 3 4", "teleport 1 2 3", "teleport 12 2 4", "set a", "set", "set 0 0 0",
-                "set 0 0 0 air", "setblock", "setblock 0 0 0 stone", "set 0 0 0 0", "set 0 0 0 0 stone 0", "set 1 2a 3 a",
-                "foo", "foo bar", "bar", "baz", "foo bar 15", "foo bar a a a a ", "foo bar a b", "foo bar baz", "foo baz A",
-                "foo baz a", "foo baz a a", "foo baz a b", "foo baz a b c", "def a a a a", "def", "def a a a a a", "def a",
-                "def a a a a a a a a a", "def b", "def a a b", "b", "a", "def a", "def a b", "def a b c d e"
-        };
+        final CommandParser commandParser = CommandParser.parser();
+        this.parser = input -> commandParser.parse(graph, input);
     }
 
     @Benchmark
-    public void run(Blackhole bh) {
-        final CommandParser parser = CommandParser.parser();
-        for (String input : inputs) {
-            bh.consume(parser.parse(graph, input).execute(null));
-        }
+    public void unknownCommand5Char(Blackhole bh) {
+        bh.consume(parser.apply("01234"));
+    }
+
+    @Benchmark
+    public void unknownCommand50Char(Blackhole bh) {
+        bh.consume(parser.apply("01234567890123456789012345678901234567890123456789"));
+    }
+
+    @Benchmark
+    public void validCommandWithValidLiteral(Blackhole bh) {
+        bh.consume(parser.apply("foo bar"));
+    }
+
+    @Benchmark
+    public void validCommandWithInvalid50CharLiteral(Blackhole bh) {
+        bh.consume(parser.apply("foo 01234567890123456789012345678901234567890123456789"));
+    }
+
+    @Benchmark
+    public void numberParsing3Digit(Blackhole bh) {
+        bh.consume(parser.apply("parse int 123"));
+        bh.consume(parser.apply("parse float 123"));
+        bh.consume(parser.apply("parse double 123"));
+        bh.consume(parser.apply("parse long 123"));
+    }
+
+    @Benchmark
+    public void numberParsing10Digit(Blackhole bh) {
+        bh.consume(parser.apply("parse int 1234567890"));
+        bh.consume(parser.apply("parse float 1234567890"));
+        bh.consume(parser.apply("parse double 1234567890"));
+        bh.consume(parser.apply("parse long 1234567890"));
+    }
+
+    @Benchmark
+    public void numberParsing10DigitInvalid(Blackhole bh) {
+        bh.consume(parser.apply("parse int a1234567890"));
+        bh.consume(parser.apply("parse float a1234567890"));
+        bh.consume(parser.apply("parse double a1234567890"));
+        bh.consume(parser.apply("parse long a1234567890"));
     }
 }
