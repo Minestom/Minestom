@@ -101,10 +101,22 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
+        final var sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
+    }
+
+    /**
+     * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
+     * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
+     *
+     * @see CachedPacket#body()
+     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
+     */
+    private static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
+        return (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION || !(packet instanceof ComponentHoldingServerPacket)) && GROUPED_PACKET;
     }
 
     /**
