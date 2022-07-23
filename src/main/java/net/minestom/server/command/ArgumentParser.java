@@ -10,21 +10,25 @@ class ArgumentParser {
     }
 
     public static <T> ArgumentResult<T> parse(Argument<T> argument, CommandStringReader reader) {
+        // Handle specific type without loop
         try {
-            if (argument.useRemaining()) return ArgumentResult.success(argument.parse(reader.readRemaining()));
+            // Single word argument
             if (!argument.allowSpace()) return ArgumentResult.success(argument.parse(reader.readWord()));
-            // Bruteforce
-            StringBuilder current = new StringBuilder(reader.readWord());
-            while (true) {
-                try {
-                    return ArgumentResult.success(argument.parse(current.toString()));
-                } catch (ArgumentSyntaxException ignored) {
-                    if (!reader.hasRemaining()) break;
-                    current.append(" ");
-                    current.append(reader.readWord());
-                }
-            }
+            // Complete input argument
+            if (argument.useRemaining()) return ArgumentResult.success(argument.parse(reader.readRemaining()));
         } catch (ArgumentSyntaxException ignored) {
+            return ArgumentResult.incompatibleType();
+        }
+        // Bruteforce
+        StringBuilder current = new StringBuilder(reader.readWord());
+        while (true) {
+            try {
+                return ArgumentResult.success(argument.parse(current.toString()));
+            } catch (ArgumentSyntaxException ignored) {
+                if (!reader.hasRemaining()) break;
+                current.append(" ");
+                current.append(reader.readWord());
+            }
         }
         return ArgumentResult.incompatibleType();
     }
