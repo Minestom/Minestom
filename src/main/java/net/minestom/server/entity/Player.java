@@ -1513,6 +1513,26 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * @see Entity#synchronizePosition(boolean)
+     *
+     * @param includeSelf whether the packet should be sent to the player
+     * @param flags       flags telling the client which co-ordinates are relative, can be empty
+     */
+    @ApiStatus.Internal
+    @ApiStatus.Experimental
+    protected void synchronizePosition(boolean includeSelf, @NotNull RelativeTeleportFlag... flags) {
+        if (includeSelf) {
+            sendPacket(new PlayerPositionAndLookPacket(
+                    position.sub(previousPosition).withPitch(position.pitch()-previousPosition.pitch()).withYaw(position.yaw()-previousPosition.yaw()),
+                    RelativeTeleportFlag.pack(flags),
+                    getNextTeleportId(),
+                    false
+            ));
+        }
+        super.synchronizePosition(includeSelf);
+    }
+
+    /**
      * Gets the player permission level.
      *
      * @return the player permission level

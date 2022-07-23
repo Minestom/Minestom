@@ -291,12 +291,30 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+        return teleport(position, chunks, new RelativeTeleportFlag[0]);
+    }
+
+    /**
+     * Teleports the entity only if the chunk at {@code position} is loaded or if
+     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
+     *
+     * @param position the teleport position
+     * @param chunks   the chunk indexes to load before teleporting the entity,
+     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                 can be null or empty to only load the chunk at {@code position}
+     * @param flags    flags telling the client which co-ordinates are relative, can be empty
+     * @throws IllegalStateException if you try to teleport an entity before settings its instance
+     */
+    @ApiStatus.Experimental
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, @NotNull RelativeTeleportFlag... flags) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = position;
             refreshCoordinate(position);
-            synchronizePosition(true);
+
+            if (this instanceof Player player) player.synchronizePosition(true, flags); // Allow relative teleportation to occur
+            else synchronizePosition(true);
         };
 
         if (chunks != null && chunks.length > 0) {
@@ -315,7 +333,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
-        return teleport(position, null);
+        return teleport(position, (long[]) null);
+    }
+
+    /**
+     * @see #teleport(Pos, long[], RelativeTeleportFlag...)
+     */
+    @ApiStatus.Experimental
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull RelativeTeleportFlag... flags) {
+        return teleport(position, null, flags);
     }
 
     /**
