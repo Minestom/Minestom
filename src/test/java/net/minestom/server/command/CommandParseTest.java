@@ -121,22 +121,22 @@ public class CommandParseTest {
     }
 
     private static void assertSyntaxError(Graph graph, String input) {
-        assertInstanceOf(ParseResult.KnownCommand.Invalid.class, parseCommand(graph, input));
+        assertInstanceOf(CommandParser.Result.KnownCommand.Invalid.class, parseCommand(graph, input));
     }
 
     private static void assertUnknown(Graph graph, String input) {
-        assertInstanceOf(ParseResult.UnknownCommand.class, parseCommand(graph, input));
+        assertInstanceOf(CommandParser.Result.UnknownCommand.class, parseCommand(graph, input));
     }
 
     private static void assertValid(Graph graph, String input, AtomicBoolean executorTest) {
-        final ParseResult result = parseCommand(graph, input);
-        assertInstanceOf(ParseResult.KnownCommand.Valid.class, result);
-        result.toExecutable().execute(null);
+        final CommandParser.Result result = parseCommand(graph, input);
+        assertInstanceOf(CommandParser.Result.KnownCommand.Valid.class, result);
+        result.executable().execute(null);
         assertTrue(executorTest.get(), "Parser returned valid syntax, but with the wrong executor.");
         executorTest.set(false);
     }
 
-    private static ParseResult parseCommand(Graph graph, String input) {
+    private static CommandParser.Result parseCommand(Graph graph, String input) {
         return CommandParser.parser().parse(graph, input);
     }
 

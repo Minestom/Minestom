@@ -31,7 +31,7 @@ final class CommandParserImpl implements CommandParser {
     static final CommandParserImpl PARSER = new CommandParserImpl();
 
     @Override
-    public @NotNull ParseResult parse(@NotNull Graph graph, @NotNull String input) {
+    public @NotNull CommandParser.Result parse(@NotNull Graph graph, @NotNull String input) {
         // Create reader & parse
         final CommandStringReader reader = new CommandStringReader(input);
         final List<NodeResult> syntax = new ArrayList<>();
@@ -193,11 +193,11 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record UnknownCommandResult() implements ParseResult.UnknownCommand {
-        private static final ParseResult INSTANCE = new UnknownCommandResult();
+    record UnknownCommandResult() implements Result.UnknownCommand {
+        private static final Result INSTANCE = new UnknownCommandResult();
 
         @Override
-        public ExecutableCommand toExecutable() {
+        public @NotNull ExecutableCommand executable() {
             return UnknownExecutableCmd.INSTANCE;
         }
 
@@ -207,7 +207,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    sealed interface InternalKnownCommand extends ParseResult.KnownCommand {
+    sealed interface InternalKnownCommand extends Result.KnownCommand {
         String input();
 
         @Nullable CommandCondition condition();
@@ -238,9 +238,9 @@ final class CommandParserImpl implements CommandParser {
     record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback, SyntaxError<?> error,
                           @NotNull Map<String, InputOutputPair<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback)
-            implements InternalKnownCommand, ParseResult.KnownCommand.Invalid {
+            implements InternalKnownCommand, Result.KnownCommand.Invalid {
         @Override
-        public ExecutableCommand toExecutable() {
+        public @NotNull ExecutableCommand executable() {
             return new InvalidExecutableCmd(condition, globalListener, callback, error, input, arguments);
         }
     }
@@ -248,9 +248,9 @@ final class CommandParserImpl implements CommandParser {
     record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
                         @NotNull Map<String, InputOutputPair<Object>> arguments,
                         CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback)
-            implements InternalKnownCommand, ParseResult.KnownCommand.Valid {
+            implements InternalKnownCommand, Result.KnownCommand.Valid {
         @Override
-        public ExecutableCommand toExecutable() {
+        public @NotNull ExecutableCommand executable() {
             return new ValidExecutableCmd(condition, globalListener, executor, input, arguments);
         }
     }
