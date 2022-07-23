@@ -3,6 +3,7 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
+import net.minestom.server.command.builder.ParsedCommand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -26,6 +27,7 @@ public final class CommandManager {
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
     private final CommandParser parser = CommandParser.parser();
+    private final CommandDispatcher dispatcher = new CommandDispatcher(this);
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Set<Command> commands = new HashSet<>();
 
@@ -107,7 +109,9 @@ public final class CommandManager {
         }
         // Process the command
         final CommandParser.Result parsedCommand = parseCommand(command);
-        final CommandResult result = resultConverter(parsedCommand.executable().execute(sender), command);
+        final ExecutableCommand executable = parsedCommand.executable();
+        final ExecutableCommand.Result executeResult = executable.execute(sender);
+        final CommandResult result = resultConverter(executable, executeResult, command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
@@ -127,7 +131,7 @@ public final class CommandManager {
     }
 
     public @NotNull CommandDispatcher getDispatcher() {
-        return new CommandDispatcher(this);
+        return dispatcher;
     }
 
     /**
@@ -189,12 +193,14 @@ public final class CommandManager {
         return Graph.merge(commands);
     }
 
-    private static CommandResult resultConverter(ExecutableCommand.Result newResult, String input) {
+    private static CommandResult resultConverter(ExecutableCommand executable,
+                                                 ExecutableCommand.Result newResult,
+                                                 String input) {
         return CommandResult.of(switch (newResult.type()) {
             case SUCCESS -> CommandResult.Type.SUCCESS;
             case CANCELLED, PRECONDITION_FAILED, EXECUTOR_EXCEPTION -> CommandResult.Type.CANCELLED;
             case INVALID_SYNTAX -> CommandResult.Type.INVALID_SYNTAX;
             case UNKNOWN -> CommandResult.Type.UNKNOWN;
-        }, input, newResult.commandData());
+        }, input, ParsedCommand.fromExecutable(executable), newResult.commandData());
     }
 }
