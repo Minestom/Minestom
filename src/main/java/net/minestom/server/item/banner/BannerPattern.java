@@ -16,7 +16,7 @@ public record BannerPattern(@NotNull DyeColor color, @NotNull PatternType type) 
      * @return A new created banner pattern.
      */
     public static @NotNull BannerPattern fromCompound(@NotNull NBTCompound compound) {
-        DyeColor color = compound.containsKey("Color") ? DyeColor.byPatternColorId(compound.getByte("Color")) : DyeColor.WHITE;
+        DyeColor color = compound.containsKey("Color") ? DyeColor.values()[compound.getByte("Color")] : DyeColor.WHITE;
         PatternType type = compound.containsKey("Pattern") ? PatternType.getByIdentifier(compound.getString("Pattern")) : PatternType.BASE;
         return new BannerPattern(color != null ? color : DyeColor.WHITE, type != null ? type : PatternType.BASE);
     }
@@ -28,7 +28,7 @@ public record BannerPattern(@NotNull DyeColor color, @NotNull PatternType type) 
      */
     public @NotNull NBTCompound asCompound() {
         return NBT.Compound(Map.of(
-                "Color", NBT.Byte(color.patternColorId()),
+                "Color", NBT.Byte(color.ordinal()),
                 "Pattern", NBT.String(type.getIdentifier())
         ));
     }
