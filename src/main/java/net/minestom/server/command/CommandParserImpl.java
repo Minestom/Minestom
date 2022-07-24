@@ -321,6 +321,49 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
+    static final class CommandStringReader {
+        private final String input;
+        private int cursor = 0;
+
+        CommandStringReader(String input) {
+            this.input = input;
+        }
+
+        boolean hasRemaining() {
+            return cursor < input.length();
+        }
+
+        String readWord() {
+            final String input = this.input;
+            final int cursor = this.cursor;
+
+            final int i = input.indexOf(' ', cursor);
+            if (i == -1) {
+                this.cursor = input.length() + 1;
+                return input.substring(cursor);
+            }
+            final String read = input.substring(cursor, i);
+            this.cursor += read.length() + 1;
+            return read;
+        }
+
+        String readRemaining() {
+            final String input = this.input;
+            final String result = input.substring(cursor);
+            this.cursor = input.length();
+            return result;
+        }
+
+        int cursor() {
+            return cursor;
+        }
+
+        void cursor(int cursor) {
+            assert cursor >= 0 && cursor <= input.length();
+            this.cursor = cursor;
+        }
+    }
+
     // ARGUMENT
 
     private static <T> ArgumentResult<T> parse(Argument<T> argument, CommandStringReader reader) {
@@ -340,6 +383,7 @@ final class CommandParserImpl implements CommandParser {
             return new ArgumentResult.IncompatibleType<>();
         }
         // Bruteforce
+        assert argument.allowSpace() && !argument.useRemaining();
         StringBuilder current = new StringBuilder(reader.readWord());
         while (true) {
             try {
