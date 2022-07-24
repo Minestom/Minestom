@@ -106,7 +106,7 @@ final class CommandParserImpl implements CommandParser {
                 if (defaultSupplier != null) {
                     final Object value = defaultSupplier.get();
                     final ArgumentResult<Object> argumentResult = new ArgumentResult.Success<>(value, "");
-                    chain.nodeResults.add(new NodeResult(child, argumentResult, argument.getSuggestionCallback()));
+                    chain.append(new NodeResult(child, argumentResult, argument.getSuggestionCallback()));
                     parent = child;
                     break;
                 }
