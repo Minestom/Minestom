@@ -24,8 +24,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static net.minestom.server.command.ArgumentResult.SyntaxError;
-
 final class CommandParserImpl implements CommandParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandParserImpl.class);
     static final CommandParserImpl PARSER = new CommandParserImpl();
@@ -51,6 +49,12 @@ final class CommandParserImpl implements CommandParser {
                 if (globalListener != null) globalListeners.add(globalListener);
             }
         }
+
+        Map<String, ArgumentResult<Object>> collectArguments() {
+            return syntax.stream()
+                    .skip(1) // skip root
+                    .collect(Collectors.toMap(NodeResult::name, NodeResult::argumentResult));
+        }
     }
 
     @Override
@@ -64,14 +68,14 @@ final class CommandParserImpl implements CommandParser {
         while ((result = parseChild(parent, reader)) != null) {
             chain.append(result);
             // Check parse result
-            if (result.io.output instanceof SyntaxError<?> e) {
+            if (result.argumentResult instanceof ArgumentResult.SyntaxError<?> e) {
                 // Syntax error stop at this arg
                 final ArgumentCallback argumentCallback = parent.argument().getCallback();
                 if (argumentCallback == null && chain.defaultExecutor != null) {
                     return ValidCommand.defaultExecutor(input, chain);
                 } else {
                     return new InvalidCommand(input, chainConditions(chain.conditions),
-                            argumentCallback, e, syntaxMapper(chain.syntax), mergeExecutors(chain.globalListeners),
+                            argumentCallback, e, chain.collectArguments(), mergeExecutors(chain.globalListeners),
                             extractSuggestionCallback(chain.syntax));
                 }
             }
@@ -82,7 +86,7 @@ final class CommandParserImpl implements CommandParser {
             return UnknownCommandResult.INSTANCE;
         }
         // Verify syntax(s)
-        final Map<String, InputOutputPair<Object>> args = syntaxMapper(chain.syntax);
+        final Map<String, ArgumentResult<Object>> args = chain.collectArguments();
         final CommandExecutor executor = locateExecutor(chain.syntax.get(chain.syntax.size() - 1).node, args);
         if (executor == null) {
             // Syntax error
@@ -107,12 +111,6 @@ final class CommandParserImpl implements CommandParser {
         return syntax.get(syntax.size() - 1).callback;
     }
 
-    private static Map<String, InputOutputPair<Object>> syntaxMapper(List<NodeResult> syntax) {
-        return syntax.stream()
-                .skip(1) // skip root
-                .collect(Collectors.toMap(NodeResult::name, NodeResult::io));
-    }
-
     private static CommandCondition chainConditions(List<CommandCondition> conditions) {
         return (sender, commandString) -> {
             for (CommandCondition condition : conditions) {
@@ -126,7 +124,7 @@ final class CommandParserImpl implements CommandParser {
         return (sender, context) -> executors.forEach(x -> x.apply(sender, context));
     }
 
-    private static CommandExecutor locateExecutor(Node fromNode, Map<String, InputOutputPair<Object>> arguments) {
+    private static CommandExecutor locateExecutor(Node fromNode, Map<String, ArgumentResult<Object>> arguments) {
         CommandExecutor executor = nullSafeGetter(fromNode.execution(), Graph.Execution::executor);
         if (executor != null) return executor; //parsing ended with last args
         Map<String, Supplier<?>> defaultValueSupplier = new HashMap<>();
@@ -143,7 +141,7 @@ final class CommandParserImpl implements CommandParser {
         }
         if (executor == null) return null;
         arguments.putAll(defaultValueSupplier.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, x -> new InputOutputPair<>(x.getValue().get(), ""))));
+                .collect(Collectors.toMap(Map.Entry::getKey, x -> new ArgumentResult.Success<>(x.getValue().get(), ""))));
         return executor;
     }
 
@@ -160,12 +158,12 @@ final class CommandParserImpl implements CommandParser {
         if (!reader.hasRemaining()) return null;
         for (Node child : parent.next()) {
             final int start = reader.cursor();
-            final ArgumentResult<?> parse = ArgumentParser.parse(child.argument(), reader);
+            final ArgumentResult<?> parse = parse(child.argument(), reader);
             if (parse instanceof ArgumentResult.Success<?> success) {
-                return new NodeResult(child, new InputOutputPair<>(success.value(), ""/*todo get consumed string*/),
+                return new NodeResult(child, (ArgumentResult<Object>) success,
                         child.argument().getSuggestionCallback());
             } else if (parse instanceof ArgumentResult.SyntaxError<?> syntaxError) {
-                return new NodeResult(child, new InputOutputPair<>(syntaxError, ""/*todo get consumed string*/),
+                return new NodeResult(child, (ArgumentResult<Object>) syntaxError,
                         child.argument().getSuggestionCallback());
             } else {
                 // Reset cursor & try next
@@ -182,8 +180,7 @@ final class CommandParserImpl implements CommandParser {
         );
         if (suggestionCallback != null) {
             return new NodeResult(parent,
-                    new InputOutputPair<>(new ArgumentParser.SyntaxErrorResult<>(-1,
-                            "None of the arguments were compatible, but a suggestion callback was found.", ""), ""),
+                    new ArgumentResult.SyntaxError<>("None of the arguments were compatible, but a suggestion callback was found.", "", -1),
                     suggestionCallback);
         } else {
             return null;
@@ -209,7 +206,7 @@ final class CommandParserImpl implements CommandParser {
 
         @Nullable CommandCondition condition();
 
-        @NotNull Map<String, InputOutputPair<Object>> arguments();
+        @NotNull Map<String, ArgumentResult<Object>> arguments();
 
         CommandExecutor globalListener();
 
@@ -221,26 +218,22 @@ final class CommandParserImpl implements CommandParser {
             if (callback == null) return null;
             final int lastSpace = input().lastIndexOf(" ");
             final Suggestion suggestion = new Suggestion(input(), lastSpace + 2, input().length() - lastSpace - 1);
-            final CommandContext context = new CommandContext(input());
-            for (var entry : arguments().entrySet()) {
-                final String identifier = entry.getKey();
-                final var value = entry.getValue();
-                context.setArg(identifier, value.output(), value.input());
-            }
+            final CommandContext context = createCommandContext(input(), arguments());
             callback.apply(sender, context, suggestion);
             return suggestion;
         }
     }
 
-    record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback, SyntaxError<?> error,
-                          @NotNull Map<String, InputOutputPair<Object>> arguments, CommandExecutor globalListener,
+    record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback,
+                          ArgumentResult.SyntaxError<?> error,
+                          @NotNull Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback)
             implements InternalKnownCommand, Result.KnownCommand.Invalid {
 
-        static InvalidCommand invalid(String input, Chain chain, Map<String, InputOutputPair<Object>> args) {
+        static InvalidCommand invalid(String input, Chain chain, Map<String, ArgumentResult<Object>> args) {
             return new InvalidCommand(input, chainConditions(chain.conditions),
                     null/*todo command syntax callback*/,
-                    ArgumentResult.syntaxError("Command has trailing data.", null, -1),
+                    new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
                     args, mergeExecutors(chain.globalListeners), extractSuggestionCallback(chain.syntax));
         }
 
@@ -251,16 +244,16 @@ final class CommandParserImpl implements CommandParser {
     }
 
     record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
-                        @NotNull Map<String, InputOutputPair<Object>> arguments,
+                        @NotNull Map<String, ArgumentResult<Object>> arguments,
                         CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback)
             implements InternalKnownCommand, Result.KnownCommand.Valid {
 
         static ValidCommand defaultExecutor(String input, Chain chain) {
-            return new ValidCommand(input, chainConditions(chain.conditions), chain.defaultExecutor, syntaxMapper(chain.syntax),
+            return new ValidCommand(input, chainConditions(chain.conditions), chain.defaultExecutor, chain.collectArguments(),
                     mergeExecutors(chain.globalListeners), extractSuggestionCallback(chain.syntax));
         }
 
-        static ValidCommand executor(String input, Chain chain, CommandExecutor executor, Map<String, InputOutputPair<Object>> args) {
+        static ValidCommand executor(String input, Chain chain, CommandExecutor executor, Map<String, ArgumentResult<Object>> args) {
             return new ValidCommand(input, chainConditions(chain.conditions), executor, args, mergeExecutors(chain.globalListeners),
                     extractSuggestionCallback(chain.syntax));
         }
@@ -282,7 +275,7 @@ final class CommandParserImpl implements CommandParser {
 
     record ValidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, CommandExecutor executor,
                               String input,
-                              Map<String, InputOutputPair<Object>> arguments) implements ExecutableCommand {
+                              Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
 
         @Override
         public @NotNull Result execute(@NotNull CommandSender sender) {
@@ -305,8 +298,8 @@ final class CommandParserImpl implements CommandParser {
     }
 
     record InvalidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, ArgumentCallback callback,
-                                SyntaxError<?> error, String input,
-                                Map<String, InputOutputPair<Object>> arguments) implements ExecutableCommand {
+                                ArgumentResult.SyntaxError<?> error, String input,
+                                Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
 
         @Override
         public @NotNull Result execute(@NotNull CommandSender sender) {
@@ -321,12 +314,16 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    private static CommandContext createCommandContext(String input, Map<String, InputOutputPair<Object>> arguments) {
+    private static CommandContext createCommandContext(String input, Map<String, ArgumentResult<Object>> arguments) {
         final CommandContext context = new CommandContext(input);
         for (var entry : arguments.entrySet()) {
             final String identifier = entry.getKey();
-            final var value = entry.getValue();
-            context.setArg(identifier, value.output(), value.input());
+            final ArgumentResult<Object> value = entry.getValue();
+
+            final Object argOutput = value instanceof ArgumentResult.Success<Object> success ? success.value() : null;
+            final String argInput = value instanceof ArgumentResult.Success<Object> success ? success.input() : "";
+
+            context.setArg(identifier, argOutput, argInput);
         }
         return context;
     }
@@ -339,12 +336,56 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand.Result INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
     }
 
-    private record NodeResult(Node node, InputOutputPair<Object> io, SuggestionCallback callback) {
+    private record NodeResult(Node node, ArgumentResult<Object> argumentResult, SuggestionCallback callback) {
         public String name() {
             return node.argument().getId();
         }
     }
 
-    private record InputOutputPair<R>(R output, String input) {
+    // ARGUMENT
+
+    private static <T> ArgumentResult<T> parse(Argument<T> argument, CommandStringReader reader) {
+        // Handle specific type without loop
+        try {
+            // Single word argument
+            if (!argument.allowSpace()) {
+                final String word = reader.readWord();
+                return new ArgumentResult.Success<>(argument.parse(word), word);
+            }
+            // Complete input argument
+            if (argument.useRemaining()) {
+                final String remaining = reader.readRemaining();
+                return new ArgumentResult.Success<>(argument.parse(remaining), remaining);
+            }
+        } catch (ArgumentSyntaxException ignored) {
+            return new ArgumentResult.IncompatibleType<>();
+        }
+        // Bruteforce
+        StringBuilder current = new StringBuilder(reader.readWord());
+        while (true) {
+            try {
+                final String input = current.toString();
+                return new ArgumentResult.Success<>(argument.parse(input), input);
+            } catch (ArgumentSyntaxException ignored) {
+                if (!reader.hasRemaining()) break;
+                current.append(" ");
+                current.append(reader.readWord());
+            }
+        }
+        return new ArgumentResult.IncompatibleType<>();
+    }
+
+    private sealed interface ArgumentResult<R> {
+        record Success<T>(T value, String input)
+                implements ArgumentResult<T> {
+        }
+
+        record IncompatibleType<T>()
+                implements ArgumentResult<T> {
+        }
+
+        record SyntaxError<T>(String message, String input, int code)
+                implements ArgumentResult<T> {
+        }
     }
 }

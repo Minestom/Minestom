@@ -10,13 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphConversionExecutorTest {
     @Test
-    public void empty() {
-        final Command foo = new Command("foo");
-        var graph = Graph.fromCommand(foo);
-        assertNull(graph.root().execution());
-    }
-
-    @Test
     public void defaultCondition() {
         final Command foo = new Command("foo");
         // Constant true
