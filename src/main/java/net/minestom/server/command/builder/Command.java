@@ -139,8 +139,8 @@ public class Command {
      */
     @NotNull
     public CommandSyntax addConditionalSyntax(@Nullable CommandCondition commandCondition,
-                                                          @NotNull CommandExecutor executor,
-                                                          @NotNull Argument<?>... args) {
+                                              @NotNull CommandExecutor executor,
+                                              @NotNull Argument<?>... args) {
         final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
         this.syntaxes.add(syntax);
         return syntax;
