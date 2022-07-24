@@ -16,10 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -30,12 +27,12 @@ final class CommandParserImpl implements CommandParser {
 
     static final class Chain {
         CommandExecutor defaultExecutor = null;
-        final List<NodeResult> syntax = new ArrayList<>();
+        final ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
         final List<CommandCondition> conditions = new ArrayList<>();
         final List<CommandExecutor> globalListeners = new ArrayList<>();
 
         void append(NodeResult result) {
-            this.syntax.add(result);
+            this.nodeResults.add(result);
             final Graph.Execution execution = result.node.execution();
             if (execution != null) {
                 // Create condition chain
@@ -50,8 +47,25 @@ final class CommandParserImpl implements CommandParser {
             }
         }
 
+        CommandCondition mergedConditions() {
+            return (sender, commandString) -> {
+                for (CommandCondition condition : conditions) {
+                    if (!condition.canUse(sender, commandString)) return false;
+                }
+                return true;
+            };
+        }
+
+        CommandExecutor mergedGlobalExecutors() {
+            return (sender, context) -> globalListeners.forEach(x -> x.apply(sender, context));
+        }
+
+        SuggestionCallback extractSuggestionCallback() {
+            return nodeResults.peekLast().callback;
+        }
+
         Map<String, ArgumentResult<Object>> collectArguments() {
-            return syntax.stream()
+            return nodeResults.stream()
                     .skip(1) // skip root
                     .collect(Collectors.toMap(NodeResult::name, NodeResult::argumentResult));
         }
@@ -74,20 +88,19 @@ final class CommandParserImpl implements CommandParser {
                 if (argumentCallback == null && chain.defaultExecutor != null) {
                     return ValidCommand.defaultExecutor(input, chain);
                 } else {
-                    return new InvalidCommand(input, chainConditions(chain.conditions),
-                            argumentCallback, e, chain.collectArguments(), mergeExecutors(chain.globalListeners),
-                            extractSuggestionCallback(chain.syntax));
+                    return new InvalidCommand(input, chain.mergedConditions(),
+                            argumentCallback, e, chain.collectArguments(), chain.mergedGlobalExecutors(),
+                            chain.extractSuggestionCallback());
                 }
             }
             parent = result.node;
         }
         // Check if any syntax has been found
-        if (chain.syntax.size() < 1) {
-            return UnknownCommandResult.INSTANCE;
-        }
+        final NodeResult lastNode = chain.nodeResults.peekLast();
+        if (lastNode == null) return UnknownCommandResult.INSTANCE;
         // Verify syntax(s)
         final Map<String, ArgumentResult<Object>> args = chain.collectArguments();
-        final CommandExecutor executor = locateExecutor(chain.syntax.get(chain.syntax.size() - 1).node, args);
+        final CommandExecutor executor = locateExecutor(lastNode.node(), args);
         if (executor == null) {
             // Syntax error
             if (chain.defaultExecutor != null) {
@@ -107,23 +120,6 @@ final class CommandParserImpl implements CommandParser {
         return ValidCommand.executor(input, chain, executor, args);
     }
 
-    private static SuggestionCallback extractSuggestionCallback(List<NodeResult> syntax) {
-        return syntax.get(syntax.size() - 1).callback;
-    }
-
-    private static CommandCondition chainConditions(List<CommandCondition> conditions) {
-        return (sender, commandString) -> {
-            for (CommandCondition condition : conditions) {
-                if (!condition.canUse(sender, commandString)) return false;
-            }
-            return true;
-        };
-    }
-
-    private static CommandExecutor mergeExecutors(List<CommandExecutor> executors) {
-        return (sender, context) -> executors.forEach(x -> x.apply(sender, context));
-    }
-
     private static CommandExecutor locateExecutor(Node fromNode, Map<String, ArgumentResult<Object>> arguments) {
         CommandExecutor executor = nullSafeGetter(fromNode.execution(), Graph.Execution::executor);
         if (executor != null) return executor; //parsing ended with last args
@@ -132,7 +128,7 @@ final class CommandParserImpl implements CommandParser {
         while (fromNode != null) {
             final Supplier<?> supplier = fromNode.argument().getDefaultValue();
             if (supplier == null) {
-                //Required arg wasn't present
+                // Required arg wasn't present
                 return null;
             }
             executor = nullSafeGetter(fromNode.execution(), Graph.Execution::executor);
@@ -157,34 +153,29 @@ final class CommandParserImpl implements CommandParser {
     private static NodeResult parseChild(Node parent, CommandStringReader reader) {
         if (!reader.hasRemaining()) return null;
         for (Node child : parent.next()) {
+            final Argument<?> argument = child.argument();
             final int start = reader.cursor();
-            final ArgumentResult<?> parse = parse(child.argument(), reader);
+            final ArgumentResult<?> parse = parse(argument, reader);
             if (parse instanceof ArgumentResult.Success<?> success) {
                 return new NodeResult(child, (ArgumentResult<Object>) success,
-                        child.argument().getSuggestionCallback());
+                        argument.getSuggestionCallback());
             } else if (parse instanceof ArgumentResult.SyntaxError<?> syntaxError) {
                 return new NodeResult(child, (ArgumentResult<Object>) syntaxError,
-                        child.argument().getSuggestionCallback());
+                        argument.getSuggestionCallback());
             } else {
                 // Reset cursor & try next
                 reader.cursor(start);
             }
         }
-        final SuggestionCallback suggestionCallback = nullSafeGetter(parent.next()
-                        .stream()
-                        .map(Node::argument)
-                        .filter(argument -> argument.getSuggestionCallback() != null)
-                        .findFirst()
-                        .orElse(null),
-                Argument::getSuggestionCallback
-        );
-        if (suggestionCallback != null) {
-            return new NodeResult(parent,
-                    new ArgumentResult.SyntaxError<>("None of the arguments were compatible, but a suggestion callback was found.", "", -1),
-                    suggestionCallback);
-        } else {
-            return null;
+        for (Node node : parent.next()) {
+            final SuggestionCallback suggestionCallback = node.argument().getSuggestionCallback();
+            if (suggestionCallback != null) {
+                return new NodeResult(parent,
+                        new ArgumentResult.SyntaxError<>("None of the arguments were compatible, but a suggestion callback was found.", "", -1),
+                        suggestionCallback);
+            }
         }
+        return null;
     }
 
     record UnknownCommandResult() implements Result.UnknownCommand {
@@ -231,10 +222,10 @@ final class CommandParserImpl implements CommandParser {
             implements InternalKnownCommand, Result.KnownCommand.Invalid {
 
         static InvalidCommand invalid(String input, Chain chain, Map<String, ArgumentResult<Object>> args) {
-            return new InvalidCommand(input, chainConditions(chain.conditions),
+            return new InvalidCommand(input, chain.mergedConditions(),
                     null/*todo command syntax callback*/,
                     new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
-                    args, mergeExecutors(chain.globalListeners), extractSuggestionCallback(chain.syntax));
+                    args, chain.mergedGlobalExecutors(), chain.extractSuggestionCallback());
         }
 
         @Override
@@ -249,13 +240,13 @@ final class CommandParserImpl implements CommandParser {
             implements InternalKnownCommand, Result.KnownCommand.Valid {
 
         static ValidCommand defaultExecutor(String input, Chain chain) {
-            return new ValidCommand(input, chainConditions(chain.conditions), chain.defaultExecutor, chain.collectArguments(),
-                    mergeExecutors(chain.globalListeners), extractSuggestionCallback(chain.syntax));
+            return new ValidCommand(input, chain.mergedConditions(), chain.defaultExecutor, chain.collectArguments(),
+                    chain.mergedGlobalExecutors(), chain.extractSuggestionCallback());
         }
 
         static ValidCommand executor(String input, Chain chain, CommandExecutor executor, Map<String, ArgumentResult<Object>> args) {
-            return new ValidCommand(input, chainConditions(chain.conditions), executor, args, mergeExecutors(chain.globalListeners),
-                    extractSuggestionCallback(chain.syntax));
+            return new ValidCommand(input, chain.mergedConditions(), executor, args, chain.mergedGlobalExecutors(),
+                    chain.extractSuggestionCallback());
         }
 
         @Override
