@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
+@ApiStatus.Experimental
 public interface CommandParser {
     static @NotNull CommandParser parser() {
         return CommandParserImpl.PARSER;

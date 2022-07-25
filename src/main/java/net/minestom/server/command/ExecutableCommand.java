@@ -3,8 +3,11 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandSyntax;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+@ApiStatus.Internal
+@ApiStatus.Experimental
 public interface ExecutableCommand {
     @NotNull Result execute(@NotNull CommandSender sender);
 
