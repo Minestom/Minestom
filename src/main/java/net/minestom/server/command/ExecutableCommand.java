@@ -9,11 +9,7 @@ public interface ExecutableCommand {
     @NotNull Result execute(@NotNull CommandSender sender);
 
     interface Result {
-        static Result cancelled() {
-            return CommandParserImpl.ExecutionResultImpl.CANCELLED;
-        }
-
-        @NotNull ExecutableCommand.Result.Type type();
+        @NotNull Type type();
 
         @NotNull CommandData commandData();
 
