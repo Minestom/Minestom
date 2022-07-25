@@ -149,18 +149,26 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> registered by <a href="#register(net.minestom.server.command.builder.Command)"><code>register(Command)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConsoleSender()" class="member-name-link">getConsoleSender</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCommands()" class="member-name-link">getCommands</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConsoleSender()" class="member-name-link">getConsoleSender</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a> (which is used as a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="builder/CommandDispatcher.html" title="class in net.minestom.server.command.builder">CommandDispatcher</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDispatcher()" class="member-name-link">getDispatcher</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUnknownCommandCallback()" class="member-name-link">getUnknownCommandCallback</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="builder/CommandDispatcher.html" title="class in net.minestom.server.command.builder">CommandDispatcher</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDispatcher()" class="member-name-link">getDispatcher</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUnknownCommandCallback()" class="member-name-link">getUnknownCommandCallback</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the callback executed once an unknown command is run.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CommandParser.Result.html" title="interface in net.minestom.server.command">CommandParser.Result</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseCommand(java.lang.String)" class="member-name-link">parseCommand</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Parses the command based on the registered commands</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(net.minestom.server.command.builder.Command)" class="member-name-link">register</a><wbr>(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></div>
@@ -380,6 +388,26 @@ loadScripts(document, 'script');</script>
 <dd><code>player</code> - the player to get the commands packet</dd>
 <dt>Returns:</dt>
 <dd>the <a href="../network/packet/server/play/DeclareCommandsPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DeclareCommandsPacket</code></a> for <code>player</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCommands()">
+<h3>getCommands</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;</span>&nbsp;<span class="element-name">getCommands</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="parseCommand(java.lang.String)">
+<h3>parseCommand</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CommandParser.Result.html" title="interface in net.minestom.server.command">CommandParser.Result</a></span>&nbsp;<span class="element-name">parseCommand</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span></div>
+<div class="block">Parses the command based on the registered commands</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>input</code> - commands string without prefix</dd>
+<dt>Returns:</dt>
+<dd>the parsing result</dd>
 </dl>
 </section>
 </li>

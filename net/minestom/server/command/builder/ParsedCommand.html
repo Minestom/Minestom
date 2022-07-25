@@ -45,14 +45,14 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
@@ -82,55 +82,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code></div>
-<div class="col-second even-row-color"><code><a href="#argumentSyntaxException" class="member-name-link">argumentSyntaxException</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#callback" class="member-name-link">callback</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></code></div>
-<div class="col-second even-row-color"><code><a href="#command" class="member-name-link">command</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#commandString" class="member-name-link">commandString</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a></code></div>
-<div class="col-second even-row-color"><code><a href="#context" class="member-name-link">context</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#executor" class="member-name-link">executor</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#parents" class="member-name-link">parents</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#syntax" class="member-name-link">syntax</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<li>
-<section class="constructor-summary" id="constructor-summary">
-<h2>Constructor Summary</h2>
-<div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
-<div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">ParsedCommand</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
@@ -148,8 +99,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Executes the command for the given source.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#withDefaultExecutor(net.minestom.server.command.builder.Command,java.lang.String)" class="member-name-link">withDefaultExecutor</a><wbr>(@NotNull <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromExecutable(net.minestom.server.command.ExecutableCommand)" class="member-name-link">fromExecutable</a><wbr>(<a href="../ExecutableCommand.html" title="interface in net.minestom.server.command">ExecutableCommand</a>&nbsp;executableCommand)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -163,76 +113,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="parents">
-<h3>parents</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;</span>&nbsp;<span class="element-name">parents</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="command">
-<h3>command</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></span>&nbsp;<span class="element-name">command</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="commandString">
-<h3>commandString</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">commandString</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="syntax">
-<h3>syntax</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a></span>&nbsp;<span class="element-name">syntax</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="executor">
-<h3>executor</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a></span>&nbsp;<span class="element-name">executor</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="context">
-<h3>context</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a></span>&nbsp;<span class="element-name">context</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="callback">
-<h3>callback</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a></span>&nbsp;<span class="element-name">callback</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="argumentSyntaxException">
-<h3>argumentSyntaxException</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></span>&nbsp;<span class="element-name">argumentSyntaxException</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<li>
-<section class="constructor-details" id="constructor-detail">
-<h2>Constructor Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="&lt;init&gt;()">
-<h3>ParsedCommand</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ParsedCommand</span>()</div>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
@@ -257,13 +137,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="withDefaultExecutor(net.minestom.server.command.builder.Command,java.lang.String)">
-<h3>withDefaultExecutor</h3>
+<section class="detail" id="fromExecutable(net.minestom.server.command.ExecutableCommand)">
+<h3>fromExecutable</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></span>&nbsp;<span class="element-name">withDefaultExecutor</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></span>&nbsp;<span class="element-name">fromExecutable</span><wbr><span class="parameters">(<a href="../ExecutableCommand.html" title="interface in net.minestom.server.command">ExecutableCommand</a>&nbsp;executableCommand)</span></div>
 </section>
 </li>
 </ul>
