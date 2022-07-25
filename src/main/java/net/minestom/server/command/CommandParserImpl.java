@@ -72,6 +72,10 @@ final class CommandParserImpl implements CommandParser {
                     .skip(1) // skip root
                     .collect(Collectors.toUnmodifiableMap(NodeResult::name, NodeResult::argumentResult));
         }
+
+        List<Argument<?>> getArgs() {
+            return nodeResults.stream().map(x -> x.node.argument()).collect(Collectors.toList());
+        }
     }
 
     @Override
@@ -91,7 +95,7 @@ final class CommandParserImpl implements CommandParser {
                 } else {
                     return new InvalidCommand(input, chain.mergedConditions(),
                             argumentCallback, e, chain.collectArguments(), chain.mergedGlobalExecutors(),
-                            chain.extractSuggestionCallback());
+                            chain.extractSuggestionCallback(), chain.getArgs());
                 }
             }
             parent = result.node;
@@ -181,6 +185,11 @@ final class CommandParserImpl implements CommandParser {
         public @Nullable Suggestion suggestion(CommandSender sender) {
             return null;
         }
+
+        @Override
+        public List<Argument<?>> args() {
+            return null;
+        }
     }
 
     sealed interface InternalKnownCommand extends Result.KnownCommand {
@@ -209,14 +218,14 @@ final class CommandParserImpl implements CommandParser {
     record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback,
                           ArgumentResult.SyntaxError<?> error,
                           @NotNull Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
-                          @Nullable SuggestionCallback suggestionCallback)
+                          @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Invalid {
 
         static InvalidCommand invalid(String input, Chain chain) {
             return new InvalidCommand(input, chain.mergedConditions(),
                     null/*todo command syntax callback*/,
                     new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
-                    chain.collectArguments(), chain.mergedGlobalExecutors(), chain.extractSuggestionCallback());
+                    chain.collectArguments(), chain.mergedGlobalExecutors(), chain.extractSuggestionCallback(), chain.getArgs());
         }
 
         @Override
@@ -227,17 +236,17 @@ final class CommandParserImpl implements CommandParser {
 
     record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
                         @NotNull Map<String, ArgumentResult<Object>> arguments,
-                        CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback)
+                        CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Valid {
 
         static ValidCommand defaultExecutor(String input, Chain chain) {
             return new ValidCommand(input, chain.mergedConditions(), chain.defaultExecutor, chain.collectArguments(),
-                    chain.mergedGlobalExecutors(), chain.extractSuggestionCallback());
+                    chain.mergedGlobalExecutors(), chain.extractSuggestionCallback(), chain.getArgs());
         }
 
         static ValidCommand executor(String input, Chain chain, CommandExecutor executor) {
             return new ValidCommand(input, chain.mergedConditions(), executor, chain.collectArguments(), chain.mergedGlobalExecutors(),
-                    chain.extractSuggestionCallback());
+                    chain.extractSuggestionCallback(), chain.getArgs());
         }
 
         @Override

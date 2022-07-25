@@ -221,7 +221,7 @@ public class CommandPacketTest {
                 foo bar cmd=%
                 0->foo bar
                 bar->cmd
-                cmd+>msg
+                cmd+>foo
                 foo->msg
                 msg=! brigadier:string 1
                 """, foo, bar);

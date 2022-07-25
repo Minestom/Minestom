@@ -1,10 +1,13 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.suggestion.Suggestion;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @ApiStatus.Internal
 @ApiStatus.Experimental
@@ -28,6 +31,9 @@ public interface CommandParser {
 
         @ApiStatus.Internal
         @Nullable Suggestion suggestion(CommandSender sender);
+
+        @ApiStatus.Internal
+        List<Argument<?>> args();
 
         sealed interface UnknownCommand extends Result
                 permits CommandParserImpl.UnknownCommandResult {

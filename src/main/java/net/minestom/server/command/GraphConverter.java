@@ -6,9 +6,7 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -21,17 +19,24 @@ final class GraphConverter {
     public static DeclareCommandsPacket createPacket(Graph graph, @Nullable Player player) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         List<Consumer<Integer>> rootRedirect = new ArrayList<>();
+        List<Consumer<Graph>> graphRedirect = new ArrayList<>();
+        Map<Argument<?>, Integer> argToPacketId = new HashMap<>();
         final AtomicInteger idSource = new AtomicInteger(0);
-        final int rootId = append(graph.root(), nodes, rootRedirect, idSource, null, null, player)[0];
+        final int rootId = append(graph.root(), nodes, rootRedirect, idSource, null, null, player,
+                argToPacketId, graphRedirect)[0];
         for (var i : rootRedirect) {
             i.accept(rootId);
+        }
+        for (Consumer<Graph> consumer : graphRedirect) {
+            consumer.accept(graph);
         }
         return new DeclareCommandsPacket(nodes, rootId);
     }
 
     private static int[] append(Graph.Node graphNode, List<DeclareCommandsPacket.Node> to,
                                 List<Consumer<Integer>> rootRedirect, AtomicInteger id, @Nullable AtomicInteger redirect,
-                                List<Runnable> redirectSetters, @Nullable Player player) {
+                                List<Runnable> redirectSetters, @Nullable Player player, Map<Argument<?>, Integer> argToPacketId,
+                                List<Consumer<Graph>> graphRedirect) {
         final Graph.Execution execution = graphNode.execution();
         if (player != null && execution != null) {
             if (!execution.test(player)) return new int[0];
@@ -43,7 +48,11 @@ final class GraphConverter {
         final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
         int[] packetNodeChildren = new int[children.size()];
         for (int i = 0, appendIndex = 0; i < children.size(); i++) {
-            final int[] append = append(children.get(i), to, rootRedirect, id, redirect, redirectSetters, player);
+            final int[] append = append(children.get(i), to, rootRedirect, id, redirect, redirectSetters, player,
+                    argToPacketId, graphRedirect);
+            if (append.length > 0) {
+                argToPacketId.put(children.get(i).argument(), append[0]);
+            }
             if (append.length == 1) {
                 packetNodeChildren[appendIndex++] = append[0];
             } else {
@@ -67,15 +76,30 @@ final class GraphConverter {
             to.add(node);
             return new int[]{id.getAndIncrement()};
         } else {
-            if (argument instanceof ArgumentCommand) {
+            if (argument instanceof ArgumentCommand argCmd) {
                 node.flags = literal(false, true);
                 node.name = argument.getId();
-                rootRedirect.add(i -> node.redirectedNode = i);
+                final String shortcut = argCmd.getShortcut();
+                if (shortcut.isEmpty()) {
+                    rootRedirect.add(i -> node.redirectedNode = i);
+                } else {
+                    graphRedirect.add(g -> {
+                        final List<Argument<?>> args = CommandParser.parser().parse(g, shortcut).args();
+                        final Argument<?> last = args.get(args.size() - 1);
+                        if (last.allowSpace()) {
+                            node.redirectedNode = argToPacketId.get(args.get(args.size()-2));
+                        } else {
+                            node.redirectedNode = argToPacketId.get(last);
+                        }
+                    });
+                }
                 to.add(node);
 
                 return new int[]{id.getAndIncrement()};
             } else if (argument instanceof ArgumentEnum<?> || (argument instanceof ArgumentWord word && word.hasRestrictions())) {
-                List<String> entries = argument instanceof ArgumentEnum<?> ? ((ArgumentEnum<?>) argument).entries() : Arrays.stream(((ArgumentWord) argument).getRestrictions()).toList();
+                List<String> entries = argument instanceof ArgumentEnum<?> ?
+                        ((ArgumentEnum<?>) argument).entries() :
+                        Arrays.stream(((ArgumentWord) argument).getRestrictions()).toList();
                 final int[] res = new int[entries.size()];
                 for (int i = 0; i < res.length; i++) {
                     String entry = entries.get(i);
@@ -99,7 +123,8 @@ final class GraphConverter {
                     Argument<?> entry = entries.get(i);
                     if (i == entries.size() - 1) {
                         // Last will be the parent of next args
-                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, redirect, redirectSetters, player);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect,
+                                id, redirect, redirectSetters, player, argToPacketId, graphRedirect);
                         for (int n : l) {
                             to.get(n).children = node.children;
                         }
@@ -109,10 +134,12 @@ final class GraphConverter {
                         return res == null ? l : res;
                     } else if (i == 0) {
                         // First will be the children & parent of following
-                        res = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters, player);
+                        res = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id,
+                                null, redirectSetters, player, argToPacketId, graphRedirect);
                         last = res;
                     } else {
-                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect, id, null, redirectSetters, player);
+                        final int[] l = append(new GraphImpl.NodeImpl(entry, null, List.of()), to, rootRedirect,
+                                id, null, redirectSetters, player, argToPacketId, graphRedirect);
                         for (int n : last) {
                             to.get(n).children = l;
                         }
@@ -127,7 +154,8 @@ final class GraphConverter {
                 List<?> arguments = special.arguments();
                 for (int i = 0, appendIndex = 0; i < arguments.size(); i++) {
                     Object arg = arguments.get(i);
-                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, null, List.of()), to, rootRedirect, id, r, setters, player);
+                    final int[] append = append(new GraphImpl.NodeImpl((Argument<?>) arg, null, List.of()), to,
+                            rootRedirect, id, r, setters, player,argToPacketId, graphRedirect);
                     if (append.length == 1) {
                         res[appendIndex++] = append[0];
                     } else {
