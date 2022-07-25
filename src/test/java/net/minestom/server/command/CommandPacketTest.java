@@ -191,6 +191,42 @@ public class CommandPacketTest {
                 """, graph);
     }
 
+    @Test
+    public void cmdArgShortcut() {
+        var foo = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.String("msg"))
+                .build();
+        var bar = Graph.builder(ArgumentType.Literal("bar"))
+                .append(ArgumentType.Command("cmd").setShortcut("foo"))
+                .build();
+        assertPacketGraph("""
+                foo bar cmd=%
+                0->foo bar
+                bar->cmd
+                cmd+>foo
+                foo->msg
+                msg=! brigadier:string 1
+                """, foo, bar);
+    }
+
+    @Test
+    public void cmdArgShortcutWithPartialArg() {
+        var foo = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.String("msg"))
+                .build();
+        var bar = Graph.builder(ArgumentType.Literal("bar"))
+                .append(ArgumentType.Command("cmd").setShortcut("foo \"prefix "))
+                .build();
+        assertPacketGraph("""
+                foo bar cmd=%
+                0->foo bar
+                bar->cmd
+                cmd+>foo
+                foo->msg
+                msg=! brigadier:string 1
+                """, foo, bar);
+    }
+
     static void assertPacketGraph(String expected, Graph... graphs) {
         var packet = GraphConverter.createPacket(Graph.merge(graphs), null);
         CommandTestUtils.assertPacket(packet, expected);
