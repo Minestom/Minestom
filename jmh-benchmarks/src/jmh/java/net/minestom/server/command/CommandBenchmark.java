@@ -48,7 +48,7 @@ public class CommandBenchmark {
                             Literal("e"), Literal("f"));
                     setDefaultExecutor((sender, context) -> {});
                 }},
-                new Command("parser") {{
+                new Command("parse") {{
                     addSyntax((sender, context) -> {}, Literal("int"), Integer("val"));
                     addSyntax((sender, context) -> {}, Literal("double"), Double("val"));
                     addSyntax((sender, context) -> {}, Literal("float"), Float("val"));
