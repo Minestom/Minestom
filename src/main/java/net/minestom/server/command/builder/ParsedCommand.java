@@ -2,34 +2,18 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ExecutableCommand;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Represents a {@link Command} ready to be executed (already parsed).
  */
 public class ParsedCommand {
+    private final ExecutableCommand executableCommand;
 
-    protected ExecutableCommand executableCommand;
-
-    // TODO remove all these fields
-    // Command
-    protected List<Command> parents;
-    protected Command command;
-    protected String commandString;
-
-    // Command Executor
-    protected CommandSyntax syntax;
-
-    protected CommandExecutor executor;
-    protected CommandContext context;
-
-    // Argument Callback
-    protected ArgumentCallback callback;
-    protected ArgumentSyntaxException argumentSyntaxException;
+    private ParsedCommand(ExecutableCommand executableCommand) {
+        this.executableCommand = executableCommand;
+    }
 
     /**
      * Executes the command for the given source.
@@ -46,8 +30,6 @@ public class ParsedCommand {
     }
 
     public static @NotNull ParsedCommand fromExecutable(ExecutableCommand executableCommand) {
-        ParsedCommand parsedCommand = new ParsedCommand();
-        parsedCommand.executableCommand = executableCommand;
-        return parsedCommand;
+        return new ParsedCommand(executableCommand);
     }
 }
