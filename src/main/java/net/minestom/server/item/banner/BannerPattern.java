@@ -1,36 +1,39 @@
 package net.minestom.server.item.banner;
 
-import net.minestom.server.color.DyeColor;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.Collection;
 
-public record BannerPattern(@NotNull DyeColor color, @NotNull PatternType type) {
+public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
 
-    /**
-     * Retrieves a banner pattern from the given {@code compound}.
-     *
-     * @param compound The NBT connection, which should be a banner pattern.
-     * @return A new created banner pattern.
-     */
-    public static @NotNull BannerPattern fromCompound(@NotNull NBTCompound compound) {
-        DyeColor color = compound.containsKey("Color") ? DyeColor.values()[compound.getByte("Color")] : DyeColor.WHITE;
-        PatternType type = compound.containsKey("Pattern") ? PatternType.getByIdentifier(compound.getString("Pattern")) : PatternType.BASE;
-        return new BannerPattern(color != null ? color : DyeColor.WHITE, type != null ? type : PatternType.BASE);
+    static @NotNull Collection<@NotNull BannerPattern> values() {
+        return BannerPatternImpl.values();
     }
 
-    /**
-     * Retrieves the {@link BannerPattern} as an {@link NBTCompound}.
-     *
-     * @return The banner pattern as a nbt compound.
-     */
-    public @NotNull NBTCompound asCompound() {
-        return NBT.Compound(Map.of(
-                "Color", NBT.Byte(color.ordinal()),
-                "Pattern", NBT.String(type.getIdentifier())
-        ));
+    static @Nullable BannerPattern fromNamespaceId(@NotNull String namespaceID) {
+        return BannerPatternImpl.getSafe(namespaceID);
     }
 
+    static @Nullable BannerPattern fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromNamespaceId(namespaceID.asString());
+    }
+
+    static @Nullable BannerPattern fromId(int id) {
+        return BannerPatternImpl.getId(id);
+    }
+
+    static @Nullable BannerPattern fromIdentifier(String identifier) {
+        return BannerPatternImpl.getIdentifier(identifier);
+    }
+
+    @Override
+    default @NotNull Key key() {
+        return ProtocolObject.super.key();
+    }
+
+    @NotNull String identifier();
 }

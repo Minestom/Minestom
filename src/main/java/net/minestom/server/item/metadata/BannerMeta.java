@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.item.banner.BannerPattern;
 import net.minestom.server.tag.Tag;
@@ -11,9 +12,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Meta for all {@link net.minestom.server.item.Material#WHITE_BANNER} and {@link net.minestom.server.item.Material#SHIELD} items
@@ -25,8 +29,8 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
 
     private static final Tag<Component> CUSTOM_NAME = Tag.Component("CustomName")
             .path("BlockEntityTag");
-    private static final Tag<List<BannerPattern>> PATTERNS = Tag.Structure("Patterns",
-            TagSerializer.fromCompound(BannerPattern::fromCompound, BannerPattern::asCompound))
+    private static final Tag<List<Pattern>> PATTERNS = Tag.Structure("Patterns",
+            TagSerializer.fromCompound(Pattern::fromCompound, Pattern::asCompound))
             .path("BlockEntityTag").list().defaultValue(List.of());
 
     /**
@@ -43,7 +47,7 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
      *
      * @return patterns of the banner
      */
-    public @NotNull List<BannerPattern> getPatterns() {
+    public @NotNull List<Pattern> getPatterns() {
         return getTag(PATTERNS);
     }
 
@@ -74,7 +78,7 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
          * @param patterns patterns of the banner
          * @return this
          */
-        public Builder patterns(List<BannerPattern> patterns) {
+        public Builder patterns(List<Pattern> patterns) {
             setTag(PATTERNS, patterns);
             return this;
         }
@@ -85,7 +89,7 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
          * @param pattern pattern to add
          * @return this
          */
-        public Builder addPattern(BannerPattern pattern) {
+        public Builder addPattern(Pattern pattern) {
             var newList = new ArrayList<>(getTag(PATTERNS));
             newList.add(pattern);
             return patterns(newList);
@@ -97,11 +101,43 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
          * @param pattern pattern to remove
          * @return this
          */
-        public Builder removePattern(BannerPattern pattern) {
+        public Builder removePattern(Pattern pattern) {
             var newList = new ArrayList<>(getTag(PATTERNS));
             newList.remove(pattern);
             return patterns(newList);
         }
+    }
+
+    public record Pattern(@NotNull DyeColor color, @NotNull BannerPattern type) {
+
+        /**
+         * Retrieves a banner pattern from the given {@code compound}.
+         *
+         * @param compound The NBT connection, which should be a banner pattern.
+         * @return A new created banner pattern.
+         */
+        public static @NotNull Pattern fromCompound(@NotNull NBTCompound compound) {
+            DyeColor color = compound.containsKey("Color") ? DyeColor.values()[compound.getByte("Color")] : DyeColor.WHITE;
+            BannerPattern type;
+            if (compound.containsKey("Pattern")) {
+                BannerPattern pattern = BannerPattern.fromIdentifier(compound.getString("Pattern"));
+                type = pattern != null ? pattern : BannerPattern.BASE;
+            } else type = BannerPattern.BASE;
+            return new Pattern(color, type);
+        }
+
+        /**
+         * Retrieves the {@link Pattern} as an {@link NBTCompound}.
+         *
+         * @return The banner pattern as a nbt compound.
+         */
+        public @NotNull NBTCompound asCompound() {
+            return NBT.Compound(Map.of(
+                    "Color", NBT.Byte(color.ordinal()),
+                    "Pattern", NBT.String(type.identifier())
+            ));
+        }
+
     }
 
 }
