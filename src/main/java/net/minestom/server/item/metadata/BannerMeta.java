@@ -108,7 +108,7 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
         }
     }
 
-    public record Pattern(@NotNull DyeColor color, @NotNull BannerPattern type) {
+    public record Pattern(@NotNull DyeColor color, @NotNull BannerPattern pattern) {
 
         /**
          * Retrieves a banner pattern from the given {@code compound}.
@@ -134,7 +134,7 @@ public record BannerMeta(TagReadable readable) implements ItemMetaView<BannerMet
         public @NotNull NBTCompound asCompound() {
             return NBT.Compound(Map.of(
                     "Color", NBT.Byte(color.ordinal()),
-                    "Pattern", NBT.String(type.identifier())
+                    "Pattern", NBT.String(pattern.identifier())
             ));
         }
 
