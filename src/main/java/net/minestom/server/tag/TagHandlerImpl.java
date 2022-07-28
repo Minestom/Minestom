@@ -65,7 +65,7 @@ final class TagHandlerImpl implements TagHandler {
         StaticIntMap<Entry<?>> entries = node.entries;
         if (value != null) {
             Entry previous = entries.get(tagIndex);
-            if (previous != null && previous.tag().shareValue(tag)) {
+            if (previous != null && previous.tag.shareValue(tag)) {
                 previous.updateValue(tag.copyValue(value));
             } else {
                 synchronized (this) {
@@ -104,7 +104,7 @@ final class TagHandlerImpl implements TagHandler {
         StaticIntMap<Entry<?>> entries = node.entries;
 
         final Entry previousEntry = entries.get(tagIndex);
-        final T previousValue = previousEntry != null ? (T) previousEntry.value() : tag.createDefault();
+        final T previousValue = previousEntry != null ? (T) previousEntry.value : tag.createDefault();
         final T newValue = value.apply(previousValue);
         if (newValue != null) entries.put(tagIndex, valueToEntry(node, tag, newValue));
         else entries.remove(tagIndex);
@@ -181,7 +181,7 @@ final class TagHandlerImpl implements TagHandler {
                     // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
                     Node tmp = local;
                     local = new Node(tmp);
-                    if (synEntry != null && synEntry.nbt() instanceof NBTCompound compound) {
+                    if (synEntry != null && synEntry.updatedNbt() instanceof NBTCompound compound) {
                         local.updateContent(compound);
                     }
                     tmp.entries.put(pathIndex, Entry.makePathEntry(path.name(), local));
@@ -234,14 +234,14 @@ final class TagHandlerImpl implements TagHandler {
             final Entry<?> entry = entries.get(tag.index);
             if (entry == null)
                 return tag.createDefault(); // Not present
-            if (entry.tag().shareValue(tag)) {
+            if (entry.tag.shareValue(tag)) {
                 // The tag used to write the entry is compatible with the one used to get
                 // return the value directly
                 //noinspection unchecked
-                return (T) entry.value();
+                return (T) entry.value;
             }
             // Value must be parsed from nbt if the tag is different
-            final NBT nbt = entry.nbt();
+            final NBT nbt = entry.updatedNbt();
             final Serializers.Entry<T, NBT> serializerEntry = tag.entry;
             final NBTType<NBT> type = serializerEntry.nbtType();
             return type == null || type == nbt.getID() ? serializerEntry.read(nbt) : tag.createDefault();
@@ -259,8 +259,8 @@ final class TagHandlerImpl implements TagHandler {
             if (!CACHE_ENABLE || (compound = this.compound) == null) {
                 MutableNBTCompound tmp = new MutableNBTCompound();
                 this.entries.forValues(entry -> {
-                    final Tag tag = entry.tag();
-                    final NBT nbt = entry.nbt();
+                    final Tag tag = entry.tag;
+                    final NBT nbt = entry.updatedNbt();
                     if (!tag.entry.isPath() || !((NBTCompound) nbt).isEmpty()) {
                         tmp.put(tag.getKey(), nbt);
                     }
@@ -287,7 +287,7 @@ final class TagHandlerImpl implements TagHandler {
                     nbt = copy.compound;
                     assert nbt != null : "Node copy should also compute the compound";
                 } else {
-                    nbt = entry.nbt();
+                    nbt = entry.updatedNbt();
                 }
 
                 tmp.put(tag.getKey(), nbt);
@@ -325,22 +325,14 @@ final class TagHandlerImpl implements TagHandler {
             return makePathEntry(tag.getKey(), node);
         }
 
-        public Tag<T> tag() {
-            return tag;
-        }
-
-        public T value() {
-            return value;
-        }
-
-        public NBT nbt() {
+        NBT updatedNbt() {
             if (tag.entry.isPath()) return ((Node) value).compound();
             NBT nbt = this.nbt;
             if (nbt == null) this.nbt = nbt = tag.entry.write(value);
             return nbt;
         }
 
-        public void updateValue(T value) {
+        void updateValue(T value) {
             assert !tag.entry.isPath();
             this.value = value;
             this.nbt = null;
@@ -348,7 +340,7 @@ final class TagHandlerImpl implements TagHandler {
 
         Node toNode() {
             if (tag.entry.isPath()) return (Node) value;
-            if (nbt() instanceof NBTCompound compound) {
+            if (updatedNbt() instanceof NBTCompound compound) {
                 // Slow path forcing a conversion of the structure to NBTCompound
                 // TODO should the handler be cached inside the entry?
                 return fromCompound(compound).root;
