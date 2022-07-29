@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
@@ -96,5 +97,19 @@ public class TagUpdateTest {
             return 10;
         });
         assertEquals(5, result);
+    }
+
+    @Test
+    public void updateInner() {
+        var tag = Tag.Structure("vec", Vec.class);
+        var tagX = Tag.Double("x").path("vec");
+        var handler = TagHandler.newHandler();
+        handler.setTag(tag, new Vec(5, 10, 15));
+        handler.updateTag(tagX, x -> {
+            assertEquals(5, x);
+            return 7d;
+        });
+        assertEquals(7d, handler.getTag(tagX));
+        assertEquals(new Vec(7, 10, 15), handler.getTag(tag));
     }
 }
