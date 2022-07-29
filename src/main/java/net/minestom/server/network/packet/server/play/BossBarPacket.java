@@ -13,7 +13,6 @@ import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
@@ -86,7 +85,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
 
         @Override
         public @NotNull Collection<Component> components() {
-            return Collections.singleton(this.title);
+            return List.of(this.title);
         }
 
         @Override
@@ -147,7 +146,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
 
         @Override
         public @NotNull Collection<Component> components() {
-            return Collections.singleton(this.title);
+            return List.of(this.title);
         }
 
         @Override

@@ -10,7 +10,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record ResourcePackSendPacket(String url, String hash, boolean forced,
@@ -45,7 +45,7 @@ public record ResourcePackSendPacket(String url, String hash, boolean forced,
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(this.prompt);
+        return List.of(this.prompt);
     }
 
     @Override

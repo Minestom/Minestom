@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record SetSlotPacket(byte windowId, int stateId, short slot,
@@ -37,7 +38,7 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
     public @NotNull Collection<Component> components() {
         final var displayname = this.itemStack.getDisplayName();
 
-        return displayname == null ? Collections.emptyList() : Collections.singleton(displayname);
+        return displayname == null ? List.of() : List.of(displayname);
     }
 
     @Override

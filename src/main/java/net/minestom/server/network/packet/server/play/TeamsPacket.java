@@ -42,7 +42,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
 
     @Override
     public @NotNull Collection<Component> components() {
-        return this.action instanceof ComponentHolder<?> holder ? holder.components() : Collections.emptyList();
+        return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record DisconnectPacket(@NotNull Component message) implements ComponentHoldingServerPacket {
@@ -29,7 +29,7 @@ public record DisconnectPacket(@NotNull Component message) implements ComponentH
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(message);
+        return List.of(message);
     }
 
     @Override

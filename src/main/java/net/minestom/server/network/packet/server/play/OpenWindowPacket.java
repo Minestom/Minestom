@@ -9,7 +9,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record OpenWindowPacket(int windowId, int windowType,
@@ -32,7 +32,7 @@ public record OpenWindowPacket(int windowId, int windowType,
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(this.title);
+        return List.of(this.title);
     }
 
     @Override
