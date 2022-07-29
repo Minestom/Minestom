@@ -100,8 +100,8 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
+        final Node node = traversePathWrite(root, tag, true);
         if (tag.isView()) {
-            Node node = traversePathWrite(root, tag, true);
             final T previousValue = tag.read(node.compound());
             final T newValue = value.apply(previousValue);
             node.updateContent((NBTCompoundLike) tag.entry.write(newValue));
@@ -110,7 +110,6 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         final int tagIndex = tag.index;
-        final Node node = traversePathWrite(root, tag, true);
         StaticIntMap<Entry<?>> entries = node.entries;
 
         final Entry previousEntry = entries.get(tagIndex);
