@@ -1,10 +1,12 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -33,22 +35,23 @@ record GraphImpl(NodeImpl root) implements Graph {
         return compare(root, graph.root(), comparator);
     }
 
-    record BuilderImpl(Argument<?> argument, List<BuilderImpl> children) implements Graph.Builder {
-        public BuilderImpl(Argument<?> argument) {
-            this(argument, new ArrayList<>());
+    record BuilderImpl(Argument<?> argument, List<BuilderImpl> children, Execution execution) implements Graph.Builder {
+        public BuilderImpl(Argument<?> argument, Execution execution) {
+            this(argument, new ArrayList<>(), execution);
         }
 
         @Override
-        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @NotNull Consumer<Graph.Builder> consumer) {
-            BuilderImpl builder = new BuilderImpl(argument);
+        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @Nullable Execution execution,
+                                             @NotNull Consumer<Graph.Builder> consumer) {
+            BuilderImpl builder = new BuilderImpl(argument, execution);
             consumer.accept(builder);
             this.children.add(builder);
             return this;
         }
 
         @Override
-        public Graph.@NotNull Builder append(@NotNull Argument<?> argument) {
-            this.children.add(new BuilderImpl(argument, List.of()));
+        public Graph.@NotNull Builder append(@NotNull Argument<?> argument, @Nullable Execution execution) {
+            this.children.add(new BuilderImpl(argument, List.of(), execution));
             return this;
         }
 
@@ -63,7 +66,7 @@ record GraphImpl(NodeImpl root) implements Graph {
             final List<BuilderImpl> children = builder.children;
             Node[] nodes = new NodeImpl[children.size()];
             for (int i = 0; i < children.size(); i++) nodes[i] = fromBuilder(children.get(i));
-            return new NodeImpl(builder.argument, null, List.of(nodes));
+            return new NodeImpl(builder.argument, (ExecutionImpl) builder.execution, List.of(nodes));
         }
 
         static NodeImpl command(Command command) {
@@ -75,22 +78,38 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record ExecutionImpl(Predicate<CommandSender> predicate) implements Execution {
+    record ExecutionImpl(Predicate<CommandSender> predicate,
+                         CommandExecutor defaultExecutor, CommandExecutor globalListener,
+                         CommandExecutor executor, CommandCondition condition) implements Execution {
         @Override
         public boolean test(CommandSender commandSender) {
             return predicate.test(commandSender);
         }
 
         static ExecutionImpl fromCommand(Command command) {
-            final CommandCondition condition = command.getCondition();
-            if (condition == null) return null;
-            return new ExecutionImpl(commandSender -> condition.canUse(commandSender, null));
+            final CommandExecutor defaultExecutor = command.getDefaultExecutor();
+            final CommandCondition defaultCondition = command.getCondition();
+
+            CommandExecutor executor = defaultExecutor;
+            CommandCondition condition = defaultCondition;
+            for (var syntax : command.getSyntaxes()) {
+                if (syntax.getArguments().length == 0) {
+                    executor = syntax.getExecutor();
+                    condition = syntax.getCommandCondition();
+                    break;
+                }
+            }
+            final CommandExecutor globalListener = (sender, context) -> command.globalListener(sender, context, context.getInput());
+
+            return new ExecutionImpl(commandSender -> defaultCondition == null || defaultCondition.canUse(commandSender, null),
+                    defaultExecutor, globalListener, executor, condition);
         }
 
         static ExecutionImpl fromSyntax(CommandSyntax syntax) {
+            final CommandExecutor executor = syntax.getExecutor();
             final CommandCondition condition = syntax.getCommandCondition();
-            if (condition == null) return null;
-            return new ExecutionImpl(commandSender -> condition.canUse(commandSender, null));
+            return new ExecutionImpl(commandSender -> condition == null || condition.canUse(commandSender, null),
+                    null, null, executor, condition);
         }
     }
 

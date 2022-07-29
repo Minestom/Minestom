@@ -14,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -155,7 +155,8 @@ public final class Metadata {
     }
 
     private final Entity entity;
-    private final Int2ObjectSyncMap<Entry<?>> metadataMap = Int2ObjectSyncMap.hashmap();
+    private volatile Entry<?>[] entries = new Entry<?>[0];
+    private volatile Map<Integer, Entry<?>> entryMap = null;
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
@@ -167,12 +168,21 @@ public final class Metadata {
 
     @SuppressWarnings("unchecked")
     public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final Entry<?> entry = this.metadataMap.get(index);
+        final Entry<?>[] entries = this.entries;
+        if (index < 0 || index >= entries.length) return defaultValue;
+        final Entry<?> entry = entries[index];
         return entry != null ? (T) entry.value() : defaultValue;
     }
 
     public void setIndex(int index, @NotNull Entry<?> entry) {
-        this.metadataMap.put(index, entry);
+        Entry<?>[] entries = this.entries;
+        // Resize array if necessary
+        if (index >= entries.length) {
+            final int newLength = Math.max(entries.length * 2, index + 1);
+            this.entries = entries = Arrays.copyOf(entries, newLength);
+            this.entryMap = null;
+        }
+        entries[index] = entry;
         // Send metadata packet to update viewers and self
         final Entity entity = this.entity;
         if (entity != null && entity.isActive()) {
@@ -206,7 +216,17 @@ public final class Metadata {
     }
 
     public @NotNull Map<Integer, Entry<?>> getEntries() {
-        return metadataMap;
+        Map<Integer, Entry<?>> map = entryMap;
+        if (map == null) {
+            map = new HashMap<>();
+            final Entry<?>[] entries = this.entries;
+            for (int i = 0; i < entries.length; i++) {
+                final Entry<?> entry = entries[i];
+                if (entry != null) map.put(i, entry);
+            }
+            this.entryMap = Map.copyOf(map);
+        }
+        return map;
     }
 
     public sealed interface Entry<T> extends Writeable

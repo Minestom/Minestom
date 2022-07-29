@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +51,16 @@ public class CommandResult {
         CommandResult result = new CommandResult();
         result.type = type;
         result.input = input;
+        return result;
+    }
+
+    @ApiStatus.Internal
+    public static @NotNull CommandResult of(Type type, String input, ParsedCommand parsedCommand, CommandData data) {
+        CommandResult result = new CommandResult();
+        result.type = type;
+        result.input = input;
+        result.parsedCommand = parsedCommand;
+        result.commandData = data;
         return result;
     }
 }
