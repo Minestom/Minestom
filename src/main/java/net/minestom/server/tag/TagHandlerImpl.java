@@ -12,6 +12,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.lang.invoke.VarHandle;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
@@ -99,12 +100,32 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
+        if (tag.isView()) {
+            Node node = traversePathWrite(root, tag, true);
+            final T previousValue = tag.read(node.compound());
+            final T newValue = value.apply(previousValue);
+            node.updateContent((NBTCompoundLike) tag.entry.write(newValue));
+            node.invalidate();
+            return returnPrevious ? previousValue : newValue;
+        }
+
         final int tagIndex = tag.index;
         final Node node = traversePathWrite(root, tag, true);
         StaticIntMap<Entry<?>> entries = node.entries;
 
         final Entry previousEntry = entries.get(tagIndex);
-        final T previousValue = previousEntry != null ? (T) previousEntry.value : tag.createDefault();
+        final T previousValue;
+        if (previousEntry != null) {
+            final Object previousTmp = previousEntry.value;
+            if (previousTmp instanceof Node n) {
+                final NBTCompound compound = NBT.Compound(Map.of(tag.getKey(), n.compound()));
+                previousValue = tag.read(compound);
+            } else {
+                previousValue = (T) previousTmp;
+            }
+        } else {
+            previousValue = tag.createDefault();
+        }
         final T newValue = value.apply(previousValue);
         if (newValue != null) entries.put(tagIndex, valueToEntry(node, tag, newValue));
         else entries.remove(tagIndex);

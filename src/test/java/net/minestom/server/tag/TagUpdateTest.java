@@ -110,6 +110,45 @@ public class TagUpdateTest {
     }
 
     @Test
+    public void updateStructureConversion() {
+        record Test(int coin) {
+        }
+
+        var tag1 = Tag.Integer("coin").path("path");
+        var tag2 = Tag.Structure("path", Test.class);
+        var handler = TagHandler.newHandler();
+        handler.setTag(tag1, 5);
+        assertEquals(5, handler.getTag(tag1));
+        assertEquals(new Test(5), handler.getTag(tag2));
+
+        assertDoesNotThrow(() -> handler.updateTag(tag2, value -> new Test(value.coin + 1)));
+        assertEquals(6, handler.getTag(tag1));
+        assertEquals(new Test(6), handler.getTag(tag2));
+
+        handler.updateTag(tag2, value -> null);
+        assertNull(handler.getTag(tag1));
+        assertNull(handler.getTag(tag2));
+    }
+
+    @Test
+    public void updateViewConversion() {
+        record Test(int coin) {
+        }
+
+        var tag1 = Tag.Integer("coin");
+        var tag2 = Tag.View(Test.class);
+        var handler = TagHandler.newHandler();
+        handler.setTag(tag1, 5);
+        assertDoesNotThrow(() -> handler.updateTag(tag2, value -> new Test(value.coin + 1)));
+        assertEquals(6, handler.getTag(tag1));
+        assertEquals(new Test(6), handler.getTag(tag2));
+
+        handler.updateTag(tag2, value -> null);
+        assertNull(handler.getTag(tag1));
+        assertNull(handler.getTag(tag2));
+    }
+
+    @Test
     public void updateIncompatible() {
         var tagI = Tag.Integer("coin");
         var tagD = Tag.Double("coin");
