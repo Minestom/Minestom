@@ -53,7 +53,7 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         return new WindowItemsPacket(
                 this.windowId,
                 this.stateId,
-                this.items.stream().map(stack -> stack.withDisplayName(operator)).collect(Collectors.toList()),
+                this.items.stream().map(stack -> stack.withDisplayName(operator)).toList(),
                 this.carriedItem.withDisplayName(operator)
         );
     }
