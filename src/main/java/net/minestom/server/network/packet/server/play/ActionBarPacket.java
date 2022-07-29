@@ -9,7 +9,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record ActionBarPacket(@NotNull Component text) implements ComponentHoldingServerPacket {
@@ -29,7 +29,7 @@ public record ActionBarPacket(@NotNull Component text) implements ComponentHoldi
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(this.text);
+        return List.of(this.text);
     }
 
     @Override

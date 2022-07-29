@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
@@ -41,7 +42,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
     public @NotNull Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder
                 ? holder.components()
-                : Collections.emptyList();
+                : List.of();
     }
 
     @Override

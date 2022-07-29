@@ -57,7 +57,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         list.addAll(titles);
         list.addAll(descriptions);
 
-        return list;
+        return List.copyOf(list);
     }
 
     @Override
@@ -122,7 +122,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
         @Override
         public @NotNull Collection<Component> components() {
-            return this.displayData != null ? this.displayData.components() : Collections.emptyList();
+            return this.displayData != null ? this.displayData.components() : List.of();
         }
 
         @Override

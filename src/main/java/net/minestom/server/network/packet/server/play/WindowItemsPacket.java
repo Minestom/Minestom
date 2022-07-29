@@ -45,7 +45,7 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         final var list = new ArrayList<>(this.items);
         list.add(this.carriedItem);
 
-        return list.stream().map(ItemStack::getDisplayName).filter(Objects::nonNull).collect(Collectors.toList());
+        return list.stream().map(ItemStack::getDisplayName).filter(Objects::nonNull).toList();
     }
 
     @Override
