@@ -42,15 +42,4 @@ public interface ComponentHolder<T> {
         }
     }
 
-    default boolean hasTranslatableComponents() {
-        return this.components().stream().anyMatch(ComponentHolder::isTranslatable);
-    }
-
-    private static boolean isTranslatable(final @NotNull Component component) {
-        if (component instanceof TranslatableComponent) return true;
-
-        final var children = component.children();
-        return children.isEmpty() || children.stream().anyMatch(ComponentHolder::isTranslatable);
-    }
-
 }
