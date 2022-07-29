@@ -114,7 +114,9 @@ public final class PacketUtils {
      * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
      */
     private static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
-        return (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION || !(packet instanceof ComponentHoldingServerPacket)) && GROUPED_PACKET;
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return GROUPED_PACKET;
+        if (!(packet instanceof ComponentHoldingServerPacket holder)) return GROUPED_PACKET;
+        return !holder.hasTranslatableComponents();
     }
 
     /**

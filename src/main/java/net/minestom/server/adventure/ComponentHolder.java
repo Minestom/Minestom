@@ -1,6 +1,7 @@
 package net.minestom.server.adventure;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -40,4 +41,16 @@ public interface ComponentHolder<T> {
             visitor.accept(component);
         }
     }
+
+    default boolean hasTranslatableComponents() {
+        return this.components().stream().anyMatch(ComponentHolder::isTranslatable);
+    }
+
+    private static boolean isTranslatable(final @NotNull Component component) {
+        if (component instanceof TranslatableComponent) return true;
+
+        final var children = component.children();
+        return children.isEmpty() || children.stream().anyMatch(ComponentHolder::isTranslatable);
+    }
+
 }
