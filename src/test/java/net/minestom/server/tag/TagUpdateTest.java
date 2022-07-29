@@ -6,7 +6,7 @@ import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagAtomicTest {
+public class TagUpdateTest {
 
     @Test
     public void update() {
