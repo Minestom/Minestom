@@ -1,7 +1,6 @@
 package net.minestom.server.adventure;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -41,5 +40,4 @@ public interface ComponentHolder<T> {
             visitor.accept(component);
         }
     }
-
 }
