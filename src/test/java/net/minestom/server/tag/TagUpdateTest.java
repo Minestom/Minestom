@@ -4,8 +4,7 @@ import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TagUpdateTest {
 
@@ -97,6 +96,26 @@ public class TagUpdateTest {
             return 10;
         });
         assertEquals(5, result);
+    }
+
+    @Test
+    public void updateHiddenSimilarity() {
+        var tag1 = Tag.Integer("coin");
+        var tag2 = Tag.Integer("coin").map(i -> i + 1, i -> i - 1);
+        var handler = TagHandler.newHandler();
+        handler.setTag(tag1, 5);
+        assertDoesNotThrow(() -> handler.updateTag(tag2, value -> 5));
+        assertEquals(4, handler.getTag(tag1));
+        assertEquals(5, handler.getTag(tag2));
+    }
+
+    @Test
+    public void updateIncompatible() {
+        var tagI = Tag.Integer("coin");
+        var tagD = Tag.Double("coin");
+        var handler = TagHandler.newHandler();
+        handler.setTag(tagI, 5);
+        assertThrows(ClassCastException.class, () -> handler.updateTag(tagD, value -> 5d));
     }
 
     @Test
