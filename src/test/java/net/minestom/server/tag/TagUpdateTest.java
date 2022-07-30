@@ -152,6 +152,30 @@ public class TagUpdateTest {
     }
 
     @Test
+    public void updateStructureConversionPathDouble() {
+        record Test(int coin) {
+        }
+        record Structure(Test test) {
+        }
+
+        var tag1 = Tag.Integer("coin").path("path", "test");
+        var tag2 = Tag.Structure("path", Structure.class);
+
+        var handler = TagHandler.newHandler();
+        handler.setTag(tag1, 5);
+        assertEquals(5, handler.getTag(tag1));
+        assertEquals(new Structure(new Test(5)), handler.getTag(tag2));
+
+        assertDoesNotThrow(() -> handler.updateTag(tag2, value -> new Structure(new Test(value.test.coin + 1))));
+        assertEquals(6, handler.getTag(tag1));
+        assertEquals(new Structure(new Test(6)), handler.getTag(tag2));
+
+        handler.updateTag(tag2, value -> null);
+        assertNull(handler.getTag(tag1));
+        assertNull(handler.getTag(tag2));
+    }
+
+    @Test
     public void updateViewConversion() {
         record Test(int coin) {
         }
