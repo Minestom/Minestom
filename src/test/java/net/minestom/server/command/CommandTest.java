@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +51,29 @@ public class CommandTest {
         assertTrue(hasRun.get());
         assertTrue(checkSet.get());
 
+    }
+
+    @Test
+    public void testConflictingSyntaxAndSubcommand() {
+        final CommandManager manager = new CommandManager();
+
+        final AtomicBoolean subcommandRun = new AtomicBoolean();
+        final AtomicBoolean syntaxRun = new AtomicBoolean();
+
+        final Command command = new Command("command");
+        command.addSubcommand(new Command("subcommand") {
+            {
+                addSyntax((sender, ctx) -> subcommandRun.set(true));
+            }
+        });
+        var argument = ArgumentType.String("id");
+        command.addSyntax((sender, ctx) -> syntaxRun.set(true), argument);
+
+        manager.register(command);
+
+        manager.executeServerCommand("command subcommand");
+
+        assertTrue(subcommandRun.get());
+        assertFalse(syntaxRun.get());
     }
 }
