@@ -22,7 +22,7 @@ final class TestConnectionImpl implements TestConnection {
     private final ServerProcess process;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
 
-    private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
+    private final List<IncomingCollector<SendablePacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
     TestConnectionImpl(Env env) {
         this.env = env;
@@ -45,17 +45,22 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public @NotNull <T extends ServerPacket> Collector<T> trackIncoming(@NotNull Class<T> type) {
-        var tracker = new IncomingCollector<>(type);
+    public @NotNull <T extends SendablePacket> Collector<T> trackIncoming(@NotNull Class<T> type, boolean extractPackets) {
+        var tracker = new IncomingCollector<>(type, extractPackets);
         this.incomingTrackers.add(IncomingCollector.class.cast(tracker));
         return tracker;
+    }
+
+    @Override
+    public @NotNull <T extends SendablePacket> Collector<T> trackIncoming(@NotNull Class<T> type) {
+        return this.trackIncoming(type, true);
     }
 
     final class PlayerConnectionImpl extends PlayerConnection {
         @Override
         public void sendPacket(@NotNull SendablePacket packet) {
             for (var tracker : incomingTrackers) {
-                final var serverPacket = SendablePacket.extractServerPacket(packet);
+                final var serverPacket = tracker.extractPacket ? SendablePacket.extractServerPacket(packet) : packet;
                 if (tracker.type.isAssignableFrom(serverPacket.getClass())) tracker.packets.add(serverPacket);
             }
         }
@@ -71,12 +76,14 @@ final class TestConnectionImpl implements TestConnection {
         }
     }
 
-    final class IncomingCollector<T extends ServerPacket> implements Collector<T> {
+    final class IncomingCollector<T extends SendablePacket> implements Collector<T> {
         private final Class<T> type;
+        private final boolean extractPacket;
         private final List<T> packets = new CopyOnWriteArrayList<>();
 
-        public IncomingCollector(Class<T> type) {
+        public IncomingCollector(Class<T> type, boolean extractPackets) {
             this.type = type;
+            this.extractPacket = extractPackets;
         }
 
         @Override
