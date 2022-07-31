@@ -1,70 +1,37 @@
 package net.minestom.server.utils;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.message.ChatPosition;
-import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.text.MessageFormat;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
 public class PacketUtilsTest {
 
-    @BeforeAll
-    static void translator() {
-        final var translator = TranslationRegistry.create(Key.key("test.reg"));
-        translator.register("test.key", MinestomAdventure.getDefaultLocale(), new MessageFormat("test", MinestomAdventure.getDefaultLocale()));
-
-        GlobalTranslator.translator().addSource(translator);
-    }
-
     @Test
-    public void testTranslationEnabled(final Env env) {
-        final var instance = env.createFlatInstance();
-        final var connection = env.createConnection();
-        final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        final var collector = connection.trackIncoming(ChatMessagePacket.class, false);
-
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
-        final var message = Component.translatable("test.key");
-        final var packet = new ChatMessagePacket(message, ChatPosition.CHAT, UUID.randomUUID());
-        PacketUtils.sendGroupedPacket(List.of(player), packet);
-
-        // the message should not be changed if translations are enabled.
-        // the translation of the message itself will be proceeded in PlayerConnectionImpl class
-        collector.assertSingle(paket -> {
-            assertEquals(message, packet.message());
-        });
-    }
-
-    @Test
-    public void testTranslationDisabled(final Env env) {
-        final var instance = env.createFlatInstance();
-        final var connection = env.createConnection();
-        final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        final var collector = connection.trackIncoming(CachedPacket.class, false);
+    public void testShouldUseCachePacketWithTranslatableComponent() {
+        final var packet = new ChatMessagePacket(Component.translatable("test.key"), ChatPosition.CHAT, UUID.randomUUID());
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = false;
-        final var packet = new ChatMessagePacket(Component.translatable("test.key"), ChatPosition.CHAT, UUID.randomUUID());
-        PacketUtils.sendGroupedPacket(List.of(player), packet);
+        assertTrue(PacketUtils.shouldUseCachePacket(packet));
 
-        collector.assertSingle(received -> {
-            assertInstanceOf(CachedPacket.class, received);
-        });
+        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        assertFalse(PacketUtils.shouldUseCachePacket(packet));
+    }
+
+    @Test
+    public void testShouldUseCachePacketWithTextComponent() {
+        final var packet = new ChatMessagePacket(Component.text("This is a test"), ChatPosition.CHAT, UUID.randomUUID());
+
+        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        assertTrue(PacketUtils.shouldUseCachePacket(packet));
+
+        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = false;
+        assertTrue(PacketUtils.shouldUseCachePacket(packet));
     }
 
 }
