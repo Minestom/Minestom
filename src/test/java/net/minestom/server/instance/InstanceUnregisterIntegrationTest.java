@@ -3,6 +3,8 @@ package net.minestom.server.instance;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.instance.InstanceRegisteredEvent;
+import net.minestom.server.event.instance.InstanceUnregisteredEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
 import org.junit.jupiter.api.Test;
 
@@ -59,5 +61,16 @@ public class InstanceUnregisterIntegrationTest {
         //noinspection UnusedAssignment
         chunk = null;
         waitUntilCleared(ref);
+    }
+
+    @Test
+    public void registrationEvents(Env env) {
+        var registrationListener = env.listen(InstanceRegisteredEvent.class);
+        registrationListener.followup();
+        var instance = env.process().instance().createInstanceContainer();
+
+        var unregistrationListener = env.listen(InstanceUnregisteredEvent.class);
+        unregistrationListener.followup();
+        env.process().instance().unregisterInstance(instance);
     }
 }
