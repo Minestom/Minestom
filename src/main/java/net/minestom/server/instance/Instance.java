@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
-import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
@@ -692,15 +691,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public void setExplosionSupplier(@Nullable ExplosionSupplier supplier) {
         this.explosionSupplier = supplier;
-    }
-
-    /**
-     * Plays a {@link Sound} at a given point
-     * @param sound The sound to play
-     * @param point The point in this instance at which to play the sound
-     */
-    public void playSound(@NotNull Sound sound, @NotNull Point point) {
-        playSound(sound, point.x(), point.y(), point.z());
     }
 
     /**
