@@ -1,12 +1,16 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.item.banner.BannerPattern;
+import net.minestom.server.item.metadata.BannerMeta;
 import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.item.metadata.PlayerHeadMeta;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,4 +58,34 @@ public class ItemMetaTest {
         assertEquals(uuid, view.getSkullOwner());
         assertEquals(skin, view.getPlayerSkin());
     }
+
+    @Test
+    public void banner() {
+        var item = ItemStack.builder(Material.WHITE_BANNER)
+                .meta(BannerMeta.class, bannerMetaBuilder -> {
+                    bannerMetaBuilder.customName(Component.text("Test Banner"));
+                    bannerMetaBuilder.addPattern(new BannerMeta.Pattern(DyeColor.BLUE, BannerPattern.BORDER));
+                    bannerMetaBuilder.addPattern(new BannerMeta.Pattern(DyeColor.LIGHT_BLUE, BannerPattern.STRIPE_MIDDLE));
+                })
+                .build();
+        assertEquals(Component.text("Test Banner"), item.meta(BannerMeta.class).getCustomName());
+        assertEquals(2, item.meta(BannerMeta.class).getPatterns().size());
+        assertEquals(DyeColor.BLUE, item.meta(BannerMeta.class).getPatterns().get(0).color());
+        assertEquals(BannerPattern.STRIPE_MIDDLE, item.meta(BannerMeta.class).getPatterns().get(1).pattern());
+    }
+
+    @Test
+    public void shield() {
+        var item = ItemStack.builder(Material.SHIELD)
+                .meta(BannerMeta.class, bannerMetaBuilder -> {
+                    bannerMetaBuilder.customName(Component.text("Test Shield"));
+                    bannerMetaBuilder.patterns(List.of(new BannerMeta.Pattern(DyeColor.BLACK, BannerPattern.PIGLIN)));
+                })
+                .build();
+        assertEquals(Component.text("Test Shield"), item.meta(BannerMeta.class).getCustomName());
+        assertEquals(1, item.meta(BannerMeta.class).getPatterns().size());
+        assertEquals(DyeColor.BLACK, item.meta(BannerMeta.class).getPatterns().get(0).color());
+        assertEquals(BannerPattern.PIGLIN, item.meta(BannerMeta.class).getPatterns().get(0).pattern());
+    }
+
 }

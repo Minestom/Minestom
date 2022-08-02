@@ -137,6 +137,7 @@ public final class Registry {
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
+        BANNER_PATTERNS("banner_patterns.json"),
 
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
