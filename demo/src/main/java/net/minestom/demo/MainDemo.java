@@ -1,6 +1,7 @@
 package net.minestom.demo;
 
 import net.minestom.demo.commands.GamemodeCommand;
+import net.minestom.demo.commands.SaveCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -21,6 +22,7 @@ public class MainDemo {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         MinecraftServer.getCommandManager().register(new GamemodeCommand());
+        MinecraftServer.getCommandManager().register(new SaveCommand());
 
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         // Create the instance

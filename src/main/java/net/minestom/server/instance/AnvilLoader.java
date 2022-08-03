@@ -1,10 +1,11 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -14,6 +15,8 @@ import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.mca.readers.ChunkReader;
 import org.jglrxavpok.hephaistos.mca.readers.ChunkSectionReader;
 import org.jglrxavpok.hephaistos.mca.readers.SectionBiomeInformation;
+import org.jglrxavpok.hephaistos.mca.writer.ChunkSectionWriter;
+import org.jglrxavpok.hephaistos.mca.writer.ChunkWriter;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
@@ -43,7 +46,15 @@ public class AnvilLoader implements IChunkLoader {
     /**
      * Represents the chunks currently loaded per region. Used to determine when a region file can be unloaded.
      */
-    private final Acquirable<RegionCache> perRegionLoadedChunks = Acquirable.of(new RegionCache());
+    private final RegionCache perRegionLoadedChunks = new RegionCache();
+
+    // thread local to avoid contention issues with locks
+    private final ThreadLocal<Int2ObjectMap<BlockState>> blockStateId2ObjectCacheTLS = new ThreadLocal<>() {
+        @Override
+        protected Int2ObjectMap<BlockState> initialValue() {
+            return new Int2ObjectArrayMap<>();
+        }
+    };
 
     public AnvilLoader(@NotNull Path path) {
         this.path = path;
@@ -119,14 +130,14 @@ public class AnvilLoader implements IChunkLoader {
             loadSections(chunk, chunkReader);
 
             // Block entities
-            loadTileEntities(chunk, chunkReader);
+            loadBlockEntities(chunk, chunkReader);
         }
-        perRegionLoadedChunks.sync(cache -> {
+        synchronized (perRegionLoadedChunks) {
             int regionX = CoordinatesKt.chunkToRegion(chunkX);
             int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
-            var chunks = cache.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), r -> new HashSet<>()); // region cache may have been removed on another thread due to unloadChunk
+            var chunks = perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), r -> new HashSet<>()); // region cache may have been removed on another thread due to unloadChunk
             chunks.add(new IntIntImmutablePair(chunkX, chunkZ));
-        });
+        };
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -139,10 +150,10 @@ public class AnvilLoader implements IChunkLoader {
                 if (!Files.exists(regionPath)) {
                     return null;
                 }
-                perRegionLoadedChunks.sync(cache -> {
-                    Set<IntIntImmutablePair> previousVersion = cache.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
+                synchronized (perRegionLoadedChunks) {
+                    Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
                     assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
-                });
+                };
                 return new RegionFile(new RandomAccessFile(regionPath.toFile(), "rw"), regionX, regionZ, instance.getDimensionType().getMinY(), instance.getDimensionType().getMaxY()-1);
             } catch (IOException | AnvilException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
@@ -263,8 +274,8 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void loadTileEntities(Chunk loadedChunk, ChunkReader chunkReader) {
-        for (NBTCompound te : chunkReader.getTileEntities()) {
+    private void loadBlockEntities(Chunk loadedChunk, ChunkReader chunkReader) {
+        for (NBTCompound te : chunkReader.getBlockEntities()) {
             final var x = te.getInt("x");
             final var y = te.getInt("y");
             final var z = te.getInt("z");
@@ -336,19 +347,11 @@ public class AnvilLoader implements IChunkLoader {
                 }
             }
         }
-        ChunkColumn column;
-        try {
-            column = mcaFile.getOrCreateChunk(chunkX, chunkZ);
-        } catch (AnvilException | IOException e) {
-            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
-            MinecraftServer.getExceptionManager().handleException(e);
-            return AsyncUtils.VOID_FUTURE;
-        }
-        save(chunk, column);
+        ChunkWriter writer = new ChunkWriter(SupportedVersion.Companion.getLatest());
+        save(chunk, writer);
         try {
             LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
-            mcaFile.writeColumn(column);
-            mcaFile.forget(column);
+            mcaFile.writeColumnData(writer.toNBT(), chunk.getChunkX(), chunk.getChunkZ());
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             MinecraftServer.getExceptionManager().handleException(e);
@@ -357,39 +360,81 @@ public class AnvilLoader implements IChunkLoader {
         return AsyncUtils.VOID_FUTURE;
     }
 
-    private void save(Chunk chunk, ChunkColumn chunkColumn) {
-        chunkColumn.changeVersion(SupportedVersion.Companion.getLatest());
-        chunkColumn.setYRange(chunk.getMinSection()*16, chunk.getMaxSection()*16-1);
-        List<NBTCompound> tileEntities = new ArrayList<>();
-        chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
-        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                for (int y = chunkColumn.getMinY(); y < chunkColumn.getMaxY(); y++) {
-                    final Block block = chunk.getBlock(x, y, z);
-                    // Block
-                    chunkColumn.setBlockState(x, y, z, new BlockState(block.name(), block.properties()));
-                    chunkColumn.setBiome(x, y, z, chunk.getBiome(x, y, z).name().asString());
+    private BlockState getBlockState(final Block block) {
+        return blockStateId2ObjectCacheTLS.get().computeIfAbsent(block.stateId(), _unused -> new BlockState(block.name(), block.properties()));
+    }
 
-                    // Tile entity
-                    final BlockHandler handler = block.handler();
-                    var originalNBT = block.nbt();
-                    if (originalNBT != null || handler != null) {
-                        MutableNBTCompound nbt = originalNBT != null ?
-                                originalNBT.toMutableCompound() : new MutableNBTCompound();
+    private void save(Chunk chunk, ChunkWriter chunkWriter) {
+        final int minY = chunk.getMinSection()*Chunk.CHUNK_SECTION_SIZE;
+        final int maxY = chunk.getMaxSection()*Chunk.CHUNK_SECTION_SIZE -1;
+        chunkWriter.setYPos(minY);
+        List<NBTCompound> blockEntities = new ArrayList<>();
+        chunkWriter.setStatus(ChunkColumn.GenerationStatus.Full);
 
-                        if (handler != null) {
-                            nbt.setString("id", handler.getNamespaceId().asString());
+        List<NBTCompound> sectionData = new ArrayList<>((maxY - minY + 1) / Chunk.CHUNK_SECTION_SIZE);
+        int[] palettedBiomes = new int[ChunkSection.Companion.getBiomeArraySize()];
+        int[] palettedBlockStates = new int[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
+        for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
+            ChunkSectionWriter sectionWriter = new ChunkSectionWriter(SupportedVersion.Companion.getLatest(), (byte)sectionY);
+
+            Section section = chunk.getSection(sectionY);
+            sectionWriter.setSkyLights(section.getSkyLight());
+            sectionWriter.setBlockLights(section.getBlockLight());
+
+            BiomePalette biomePalette = new BiomePalette();
+            BlockPalette blockPalette = new BlockPalette();
+            for (int sectionLocalY = 0; sectionLocalY < Chunk.CHUNK_SECTION_SIZE; sectionLocalY++) {
+                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                    for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                        final int y = sectionLocalY + sectionY * Chunk.CHUNK_SECTION_SIZE;
+
+                        int blockIndex = x + sectionLocalY * 16 * 16 + z * 16;
+
+                        final Block block = chunk.getBlock(x, y, z);
+
+                        final BlockState hephaistosBlockState = getBlockState(block);
+                        blockPalette.increaseReference(hephaistosBlockState);
+
+                        palettedBlockStates[blockIndex] = blockPalette.getPaletteIndex(hephaistosBlockState);
+
+                        // biome are stored for 4x4x4 volumes, avoid unnecessary work
+                        if(x % 4 == 0 && sectionLocalY % 4 == 0 && z % 4 == 0) {
+                            int biomeIndex = (x/4) + (sectionLocalY/4) * 4 * 4 + (z/4) * 4;
+                            final Biome biome = chunk.getBiome(x, y, z);
+                            final String biomeName = biome.name().asString();
+
+                            biomePalette.increaseReference(biomeName);
+                            palettedBiomes[biomeIndex] = biomePalette.getPaletteIndex(biomeName);
                         }
-                        nbt.setInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
-                        nbt.setInt("y", y);
-                        nbt.setInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
-                        nbt.setByte("keepPacked", (byte) 0);
-                        tileEntities.add(nbt.toCompound());
+
+                        // Block entities
+                        final BlockHandler handler = block.handler();
+                        var originalNBT = block.nbt();
+                        if (originalNBT != null || handler != null) {
+                            MutableNBTCompound nbt = originalNBT != null ?
+                                    originalNBT.toMutableCompound() : new MutableNBTCompound();
+
+                            if (handler != null) {
+                                nbt.setString("id", handler.getNamespaceId().asString());
+                            }
+                            nbt.setInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
+                            nbt.setInt("y", y);
+                            nbt.setInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
+                            nbt.setByte("keepPacked", (byte) 0);
+                            blockEntities.add(nbt.toCompound());
+                        }
                     }
                 }
             }
+
+            sectionWriter.setPalettedBiomes(biomePalette, palettedBiomes);
+            sectionWriter.setPalettedBlockStates(blockPalette, palettedBlockStates);
+
+            sectionData.add(sectionWriter.toNBT());
         }
-        chunkColumn.setTileEntities(NBT.List(NBTType.TAG_Compound, tileEntities));
+
+        chunkWriter.setSectionsData(NBT.List(NBTType.TAG_Compound, sectionData));
+        chunkWriter.setBlockEntityData(NBT.List(NBTType.TAG_Compound, blockEntities));
     }
 
     /**
@@ -402,14 +447,14 @@ public class AnvilLoader implements IChunkLoader {
         final int regionZ = CoordinatesKt.chunkToRegion(chunk.chunkZ);
 
         final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
-        perRegionLoadedChunks.sync(cache -> {
-            Set<IntIntImmutablePair> chunks = cache.get(regionKey);
+        synchronized (perRegionLoadedChunks) {
+            Set<IntIntImmutablePair> chunks = perRegionLoadedChunks.get(regionKey);
             if(chunks != null) { // if null, trying to unload a chunk from a region that was not created by the AnvilLoader
                 // don't check return value, trying to unload a chunk not created by the AnvilLoader is valid
                 chunks.remove(new IntIntImmutablePair(chunk.chunkX, chunk.chunkZ));
 
                 if(chunks.isEmpty()) {
-                    cache.remove(regionKey);
+                    perRegionLoadedChunks.remove(regionKey);
                     RegionFile regionFile = alreadyLoaded.remove(RegionFile.Companion.createFileName(regionX, regionZ));
                     if(regionFile != null) {
                         try {
@@ -420,7 +465,7 @@ public class AnvilLoader implements IChunkLoader {
                     }
                 }
             }
-        });
+        };
     }
 
     @Override
