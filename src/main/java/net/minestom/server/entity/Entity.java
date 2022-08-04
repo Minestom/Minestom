@@ -310,7 +310,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
-            this.position = position;
+            this.position = position
+                    .withYaw(Arrays.stream(flags).anyMatch(flag -> flag == RelativeTeleportFlag.YAW) ? this.position.yaw() : position.yaw())
+                    .withPitch(Arrays.stream(flags).anyMatch(flag -> flag == RelativeTeleportFlag.PITCH) ? this.position.pitch() : position.pitch());
             refreshCoordinate(position);
 
             if (this instanceof Player player) player.synchronizePosition(true, flags); // Allow relative teleportation to occur
