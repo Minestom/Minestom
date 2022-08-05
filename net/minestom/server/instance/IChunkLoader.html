@@ -130,6 +130,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Does this <a href="IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded saving of <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#unloadChunk(net.minestom.server.instance.Chunk)" class="member-name-link">unloadChunk</a><wbr>(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Called when a chunk is unloaded, so that this chunk loader can unload any resource it is holding.</div>
+</div>
 </div>
 </div>
 </div>
@@ -236,6 +241,19 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>true if the chunk loader supports parallel loading</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="unloadChunk(net.minestom.server.instance.Chunk)">
+<h3>unloadChunk</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unloadChunk</span><wbr><span class="parameters">(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</span></div>
+<div class="block">Called when a chunk is unloaded, so that this chunk loader can unload any resource it is holding.
+ Note: Minestom currently has no way to determine whether the chunk comes from this loader, so you may get
+ unload requests for chunks not created by the loader.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>chunk</code> - the chunk to unload</dd>
 </dl>
 </section>
 </li>

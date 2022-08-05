@@ -142,6 +142,11 @@ implements <a href="IChunkLoader.html" title="interface in net.minestom.server.i
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Does this <a href="IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded saving of <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unloadChunk(net.minestom.server.instance.Chunk)" class="member-name-link">unloadChunk</a><wbr>(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Unload a given chunk.</div>
+</div>
 </div>
 </div>
 </div>
@@ -249,6 +254,19 @@ implements <a href="IChunkLoader.html" title="interface in net.minestom.server.i
 <dt>Returns:</dt>
 <dd>a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> executed when the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done saving,
  should be called even if the saving failed (you can throw an exception).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="unloadChunk(net.minestom.server.instance.Chunk)">
+<h3>unloadChunk</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unloadChunk</span><wbr><span class="parameters">(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</span></div>
+<div class="block">Unload a given chunk. Also unloads a region when no chunk from that region is loaded.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="IChunkLoader.html#unloadChunk(net.minestom.server.instance.Chunk)">unloadChunk</a></code>&nbsp;in interface&nbsp;<code><a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>chunk</code> - the chunk to unload</dd>
 </dl>
 </section>
 </li>
