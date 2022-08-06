@@ -6,7 +6,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -301,7 +300,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @param yaw The possible "wrong" yaw
      * @return a fixed yaw
      */
-    private static @Range(from = -180, to = 180) float fixYaw(float yaw) {
+    private static float fixYaw(float yaw) {
         yaw = yaw % 360;
         if (yaw < -180.0F) {
             yaw += 360.0F;
