@@ -15,12 +15,11 @@ import java.util.function.DoubleUnaryOperator;
  * <p>
  * To become a value then primitive type.
  */
-public record Pos(double x, double y, double z, float yaw, @Range(from = -90, to = 90) float pitch) implements Point {
+public record Pos(double x, double y, double z, float yaw, float pitch) implements Point {
     public static final Pos ZERO = new Pos(0, 0, 0);
 
     public Pos {
         yaw = fixYaw(yaw);
-        if (pitch < -90 || pitch > 90) throw new IllegalArgumentException("Pitch must be between -90 and 90");
     }
 
     public Pos(double x, double y, double z) {
