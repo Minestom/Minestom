@@ -165,7 +165,6 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     public @NotNull Direction facing() {
         if (pitch < -45) return Direction.UP;
         if (pitch > 45) return Direction.DOWN;
-        final float yaw = fixYaw(this.yaw);
         if (yaw > 135 || yaw <= -135) return Direction.NORTH;
         if (-135 < yaw && yaw <= -45) return Direction.EAST;
         if (-45 < yaw && yaw <= 45) return Direction.SOUTH;
@@ -302,8 +301,7 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * @param yaw The possible "wrong" yaw
      * @return a fixed yaw
      */
-    @Range(from = -180, to = 180)
-    private static float fixYaw(float yaw) {
+    private static @Range(from = -180, to = 180) float fixYaw(float yaw) {
         yaw = yaw % 360;
         if (yaw < -180.0F) {
             yaw += 360.0F;
