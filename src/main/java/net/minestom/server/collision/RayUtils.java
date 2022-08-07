@@ -3,8 +3,6 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.block.BlockIterator;
 
 final class RayUtils {
     /**
@@ -54,8 +52,7 @@ final class RayUtils {
                 double yix = rayDirection.y() * xFac + rayCentre.y();
                 double zix = rayDirection.z() * xFac + rayCentre.z();
 
-                if (rayDirection.x() < 0
-                        && ((yix - rayCentre.y()) * signumRayY) >= 0
+                if (((yix - rayCentre.y()) * signumRayY) >= 0
                         && ((zix - rayCentre.z()) * signumRayZ) >= 0
                         && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
                         && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
