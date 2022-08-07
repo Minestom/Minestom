@@ -240,6 +240,38 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsRepeatedCollision(Env env) {
+        var instance = env.createFlatInstance();
+        PhysicsResult previousResult = null;
+
+        instance.setBlock(0, 41, 0, Block.STONE);
+        instance.setBlock(1, 42, 0, Block.STONE);
+        instance.setBlock(0, 42, 1, Block.STONE);
+        instance.setBlock(0, 42, -1, Block.STONE);
+        instance.setBlock(-1, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 43.0, 0.5)).join();
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 0));
+        entity.teleport(res.newPosition()).join();
+
+        while ((previousResult == null || !previousResult.newPosition().samePoint(res.newPosition())) && entity.getPosition().y() >= 42) {
+            previousResult = res;
+
+            res = CollisionUtils.handlePhysics(entity, new Vec(0.01, -2, 0));
+            entity.teleport(res.newPosition()).join();
+
+            res = CollisionUtils.handlePhysics(entity, new Vec(0.01, 0.000001, 0));
+            entity.teleport(res.newPosition()).join();
+
+            System.out.println(res.newPosition());
+        }
+
+        assertEqualsPoint(new Pos(0.7, 42, 0.5), res.newPosition());
+    }
+
+    @Test
     public void entityPhysicsCheckDiagonal(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
