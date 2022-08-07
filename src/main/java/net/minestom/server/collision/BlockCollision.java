@@ -267,7 +267,7 @@ final class BlockCollision {
                     if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
                         break;
 
-                    if (BlockCollision.checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult))
+                    if (checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult))
                         break;
                 }
             }
