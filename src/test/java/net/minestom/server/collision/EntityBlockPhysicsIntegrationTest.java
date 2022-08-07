@@ -717,7 +717,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(BoundingBox.ZERO);
 
-        entity.setInstance(instance, new Pos(0.52, 42.51, 0.5)).join();
+        entity.setInstance(instance, new Pos(0.51, 42.51, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
