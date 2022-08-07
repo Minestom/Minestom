@@ -100,6 +100,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     private BoundingBox boundingBox;
+    private BoundingBox reducedBoundingBox;
+
     private PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
@@ -804,6 +806,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setBoundingBox(BoundingBox boundingBox) {
         this.boundingBox = boundingBox;
+        this.reducedBoundingBox = boundingBox.contract(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
     }
 
     /**
@@ -1704,6 +1707,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 
         return nearby.orElse(null);
+    }
+
+    public BoundingBox getReducedBoundingBox() {
+        return reducedBoundingBox;
     }
 
     public enum Pose {

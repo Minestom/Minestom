@@ -317,7 +317,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         instance.setBlock(5, 43, -5, Block.STONE);
 
-        entity.setInstance(instance, new Pos(-0.3, 42, -0.3)).join();
+        entity.setInstance(instance, new Pos(-0.3 + Vec.EPSILON, 42, -0.3 + Vec.EPSILON)).join();
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, -10));
@@ -410,7 +410,7 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(1, 43, 1, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
+        entity.setInstance(instance, new Pos(0, 42, 0.7 + Vec.EPSILON)).join();
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 0));
@@ -624,12 +624,12 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
 
-        entity.setInstance(instance, new Pos(0.7, 42, 0.5)).join();
+        entity.setInstance(instance, new Pos(0.700000, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, 0.6));
@@ -641,7 +641,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -658,7 +658,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -675,7 +675,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -692,7 +692,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -709,7 +709,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -726,7 +726,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -743,7 +743,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -761,7 +761,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -778,7 +778,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -795,7 +795,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
+        BoundingBox bb = new BoundingBox(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
@@ -847,6 +847,8 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(0, 44, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
+        entity.setBoundingBox(new BoundingBox(0.6, 1.95, 0.6));
+
         entity.setInstance(instance, new Pos(0.5, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 
@@ -859,7 +861,7 @@ public class EntityBlockPhysicsIntegrationTest {
         PhysicsResult nz = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -10));
 
         assertEqualsPoint(new Pos(0.7, 42, 0.5), px.newPosition());
-        assertEqualsPoint(new Pos(0.5, 42.04, 0.5), py.newPosition());
+        assertEqualsPoint(new Pos(0.5, 42.05, 0.5), py.newPosition());
         assertEqualsPoint(new Pos(0.5, 42, 0.7), pz.newPosition());
 
         assertEqualsPoint(new Pos(0.3, 42, 0.5), nx.newPosition());

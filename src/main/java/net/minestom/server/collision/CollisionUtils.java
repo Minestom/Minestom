@@ -32,7 +32,7 @@ public final class CollisionUtils {
         final Instance instance = entity.getInstance();
         assert instance != null;
         return handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
+                entity.getReducedBoundingBox(),
                 entity.getPosition(), entityVelocity,
                 lastPhysicsResult);
     }
