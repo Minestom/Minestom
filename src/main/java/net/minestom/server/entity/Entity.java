@@ -1717,6 +1717,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return reducedBoundingBox;
     }
 
+    @ApiStatus.Internal
+    void setBoundingBoxDirect(BoundingBox bb) {
+        this.boundingBox = bb;
+        this.reducedBoundingBox = bb;
+    }
+
     public enum Pose {
         STANDING,
         FALL_FLYING,
