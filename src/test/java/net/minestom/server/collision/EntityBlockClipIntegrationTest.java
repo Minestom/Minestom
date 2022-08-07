@@ -22,7 +22,6 @@ public class EntityBlockClipIntegrationTest {
                 instance.loadChunk(i, j).join();
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(new BoundingBox(0.6, 1.95, 0.6));
 
         instance.setBlock(5, 43, -5, Block.STONE);
 
@@ -40,7 +39,6 @@ public class EntityBlockClipIntegrationTest {
         instance.setBlock(1, 43, 1, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(new BoundingBox(0.6, 1.95, 0.6));
 
         entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
@@ -55,10 +53,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.7, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
@@ -72,10 +68,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.5, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
@@ -89,10 +83,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.8, 42, 1.3)).join();
         assertEquals(instance, entity.getInstance());
@@ -106,10 +98,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.7, 42, 1.1)).join();
         assertEquals(instance, entity.getInstance());
@@ -123,10 +113,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(1.1, 42, 1.3)).join();
         assertEquals(instance, entity.getInstance());
@@ -140,10 +128,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(1.3, 42, 1.1)).join();
         assertEquals(instance, entity.getInstance());
@@ -157,10 +143,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(1.1, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
@@ -174,10 +158,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(1.3, 42, 0.8)).join();
         assertEquals(instance, entity.getInstance());
@@ -192,10 +174,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 0, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.52, 42.51, 0.5)).join();
         assertEquals(instance, entity.getInstance());
@@ -209,10 +189,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.50, 42.51, 0.52)).join();
         assertEquals(instance, entity.getInstance());
@@ -226,10 +204,8 @@ public class EntityBlockClipIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
 
-        BoundingBox bb = new BoundingBox(0, 0, 0);
-
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(bb);
+        entity.setBoundingBox(BoundingBox.ZERO);
 
         entity.setInstance(instance, new Pos(0.51, 42.50, 0.51)).join();
         assertEquals(instance, entity.getInstance());
