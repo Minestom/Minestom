@@ -69,8 +69,6 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.273, -0.0784, 0.0));
 
-        System.out.println(res);
-
         assertTrue(res.isOnGround());
         assertTrue(res.collisionY());
         assertEqualsPoint(new Vec(13.09, 100, 16.5), res.newPosition());
@@ -271,8 +269,6 @@ public class EntityBlockPhysicsIntegrationTest {
 
             res = CollisionUtils.handlePhysics(entity, new Vec(0.1, -0.01, 0));
             entity.teleport(res.newPosition()).join();
-
-            System.out.println(res.newPosition());
         }
 
         assertEqualsPoint(new Pos(0.7, 42, 0.5), res.newPosition());
