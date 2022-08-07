@@ -65,7 +65,7 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(13, 99, 16, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(12.812, 100.0, 16.498)).join();
+        entity.setInstance(instance, new Pos(12.812, 100.001, 16.498)).join();
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.273, -0.0784, 0.0));
         assertTrue(res.isOnGround());

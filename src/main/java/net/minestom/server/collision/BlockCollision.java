@@ -10,6 +10,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.block.BlockIterator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -148,7 +149,6 @@ final class BlockCollision {
                     && velocity.x() == 0 && velocity.z() == 0
                     && entityPosition.samePoint(lastPhysicsResult.newPosition())
                     && lastPhysicsResult.blockTypeY() != Block.AIR) {
-                velocity = velocity.withY(0);
                 foundCollisionY = true;
                 collisionYBlock = lastPhysicsResult.collidedBlockY();
                 blockYType = lastPhysicsResult.blockTypeY();
@@ -261,16 +261,29 @@ final class BlockCollision {
         } else {
             // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
             for (Vec point : allFaces) {
-                RayUtils.RaycastCollision(velocity, point.add(entityPosition), getter, boundingBox, entityPosition, finalResult);
+                BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, (int) Math.ceil(velocity.length()));
+                while (iterator.hasNext()) {
+                    Point p = iterator.next();
+                    if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
+                        break;
+
+                    if (BlockCollision.checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult))
+                        break;
+                }
             }
         }
+
         final boolean collisionX = finalResult.normalX != 0;
         final boolean collisionY = finalResult.normalY != 0;
         final boolean collisionZ = finalResult.normalZ != 0;
 
-        final double deltaX = finalResult.res * velocity.x();
-        final double deltaY = finalResult.res * velocity.y();
-        final double deltaZ = finalResult.res * velocity.z();
+        double deltaX = finalResult.res * velocity.x();
+        double deltaY = finalResult.res * velocity.y();
+        double deltaZ = finalResult.res * velocity.z();
+
+        if (Math.abs(deltaX) < Vec.EPSILON) deltaX = 0;
+        if (Math.abs(deltaY) < Vec.EPSILON) deltaY = 0;
+        if (Math.abs(deltaZ) < Vec.EPSILON) deltaZ = 0;
 
         final Pos finalPos = entityPosition.add(deltaX, deltaY, deltaZ);
 
