@@ -133,7 +133,7 @@ final class BlockCollision {
                                        @NotNull Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult) {
         // Allocate once and update values
-        SweepResult finalResult = new SweepResult(1, 0, 0, 0, null);
+        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
         Point collisionYBlock = null;
@@ -171,7 +171,7 @@ final class BlockCollision {
         // Looping until there are no collisions will allow the entity to move in axis other than the collision axis after a collision.
         while (res.collisionX() || res.collisionY() || res.collisionZ()) {
             // Reset final result
-            finalResult.res = 1;
+            finalResult.res = 1 - Vec.EPSILON;
             finalResult.normalX = 0;
             finalResult.normalY = 0;
             finalResult.normalZ = 0;
@@ -264,6 +264,8 @@ final class BlockCollision {
                 BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, (int) Math.ceil(velocity.length()));
                 while (iterator.hasNext()) {
                     Point p = iterator.next();
+
+                    // sqrt 3 (1.733) is the maximum error
                     if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
                         break;
 

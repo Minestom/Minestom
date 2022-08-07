@@ -14,7 +14,7 @@ final class RayUtils {
      * @return true if an intersection between the ray and the bounding box was found
      */
     public static boolean BoundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset) {
-        Point bbCentre = new Vec(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2, moving.minZ() + moving.depth() / 2);
+        Point bbCentre = new Vec(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2 + Vec.EPSILON, moving.minZ() + moving.depth() / 2);
         Point rayCentre = rayStart.add(bbCentre);
 
         // Translate bounding box
@@ -47,7 +47,7 @@ final class RayUtils {
                 }
             }
             // Right side of bounding box
-            if (rayDirection.x() < 0){
+            if (rayDirection.x() < 0) {
                 double xFac = bbOffMax.x() / rayDirection.x();
                 double yix = rayDirection.y() * xFac + rayCentre.y();
                 double zix = rayDirection.z() * xFac + rayCentre.z();

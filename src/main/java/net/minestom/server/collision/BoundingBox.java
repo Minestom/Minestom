@@ -30,7 +30,7 @@ public final class BoundingBox implements Shape {
     }
 
     public BoundingBox(double width, double height, double depth) {
-        this(width, height, depth, new Vec(-width / 2, Vec.EPSILON / 2, -depth / 2));
+        this(width, height, depth, new Vec(-width / 2, 0, -depth / 2));
     }
 
     @Override
