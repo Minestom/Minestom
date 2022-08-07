@@ -22,7 +22,7 @@ public final class BoundingBox implements Shape {
     private final Point offset;
     private Point relativeEnd;
 
-    BoundingBox(double width, double height, double depth, Point offset) {
+    public BoundingBox(double width, double height, double depth, Point offset) {
         this.width = width;
         this.height = height;
         this.depth = depth;

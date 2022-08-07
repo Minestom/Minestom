@@ -65,9 +65,12 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(13, 99, 16, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(12.812, 100.001, 16.498)).join();
+        entity.setInstance(instance, new Pos(12.812, 100, 16.498)).join();
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.273, -0.0784, 0.0));
+
+        System.out.println(res);
+
         assertTrue(res.isOnGround());
         assertTrue(res.collisionY());
         assertEqualsPoint(new Vec(13.09, 100, 16.5), res.newPosition());
@@ -245,24 +248,28 @@ public class EntityBlockPhysicsIntegrationTest {
         PhysicsResult previousResult = null;
 
         instance.setBlock(0, 41, 0, Block.STONE);
+
         instance.setBlock(1, 42, 0, Block.STONE);
         instance.setBlock(0, 42, 1, Block.STONE);
         instance.setBlock(0, 42, -1, Block.STONE);
         instance.setBlock(-1, 42, 0, Block.STONE);
 
-        var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0.5, 43.0, 0.5)).join();
+        instance.setBlock(1, 43, 0, Block.STONE);
+        instance.setBlock(0, 43, 1, Block.STONE);
+        instance.setBlock(0, 43, -1, Block.STONE);
+        instance.setBlock(-1, 43, 0, Block.STONE);
 
-        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, -2, 0));
+        var entity = new Entity(EntityType.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(0.5, 43.1, 0.5)).join();
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 0));
         entity.teleport(res.newPosition()).join();
 
         while ((previousResult == null || !previousResult.newPosition().samePoint(res.newPosition())) && entity.getPosition().y() >= 42) {
             previousResult = res;
 
-            res = CollisionUtils.handlePhysics(entity, new Vec(0.01, -2, 0));
-            entity.teleport(res.newPosition()).join();
-
-            res = CollisionUtils.handlePhysics(entity, new Vec(0.01, 0.000001, 0));
+            res = CollisionUtils.handlePhysics(entity, new Vec(0.1, -0.01, 0));
             entity.teleport(res.newPosition()).join();
 
             System.out.println(res.newPosition());
@@ -770,7 +777,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-        assertEqualsPoint(new Pos(1.08, 43, 1.07), res.newPosition());
+        assertEqualsPoint(new Pos(1.0, 43.08, 1.07), res.newPosition());
     }
 
     @Test
@@ -787,7 +794,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-        assertEqualsPoint(new Pos(1.07, 43, 1.08), res.newPosition());
+        assertEqualsPoint(new Pos(1.07, 43.08, 1.0), res.newPosition());
     }
 
     @Test

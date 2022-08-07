@@ -283,15 +283,12 @@ final class BlockCollision {
 
         if (Math.abs(deltaX) < Vec.EPSILON) {
             deltaX = 0;
-            collisionX = false;
         }
         if (Math.abs(deltaY) < Vec.EPSILON) {
             deltaY = 0;
-            collisionY = false;
         }
         if (Math.abs(deltaZ) < Vec.EPSILON) {
             deltaZ = 0;
-            collisionZ = false;
         }
 
         final Pos finalPos = entityPosition.add(deltaX, deltaY, deltaZ);

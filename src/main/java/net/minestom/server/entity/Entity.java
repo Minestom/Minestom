@@ -806,7 +806,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setBoundingBox(BoundingBox boundingBox) {
         this.boundingBox = boundingBox;
-        this.reducedBoundingBox = boundingBox.contract(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
+        this.reducedBoundingBox = new BoundingBox(
+                boundingBox.width() - Vec.EPSILON,
+                boundingBox.height() - Vec.EPSILON,
+                boundingBox.depth() - Vec.EPSILON,
+                new Vec(-(boundingBox.width() - Vec.EPSILON) / 2, Vec.EPSILON / 2, -(boundingBox.depth() - Vec.EPSILON) / 2));
     }
 
     /**
