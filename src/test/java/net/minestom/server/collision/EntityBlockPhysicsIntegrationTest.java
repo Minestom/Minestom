@@ -65,10 +65,9 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(13, 99, 16, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(12.812, 100, 16.498)).join();
+        entity.setInstance(instance, new Pos(12.812, 100.0, 16.498)).join();
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.273, -0.0784, 0.0));
-
         assertTrue(res.isOnGround());
         assertTrue(res.collisionY());
         assertEqualsPoint(new Vec(13.09, 100, 16.5), res.newPosition());
@@ -632,7 +631,7 @@ public class EntityBlockPhysicsIntegrationTest {
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(bb);
 
-        entity.setInstance(instance, new Pos(0.700000, 42, 0.5)).join();
+        entity.setInstance(instance, new Pos(0.7, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.6, 0, 0.6));
@@ -850,8 +849,6 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(0, 44, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBox(new BoundingBox(0.6, 1.95, 0.6));
-
         entity.setInstance(instance, new Pos(0.5, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
 

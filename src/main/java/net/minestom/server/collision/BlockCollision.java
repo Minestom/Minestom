@@ -281,15 +281,9 @@ final class BlockCollision {
         double deltaY = finalResult.res * velocity.y();
         double deltaZ = finalResult.res * velocity.z();
 
-        if (Math.abs(deltaX) < Vec.EPSILON) {
-            deltaX = 0;
-        }
-        if (Math.abs(deltaY) < Vec.EPSILON) {
-            deltaY = 0;
-        }
-        if (Math.abs(deltaZ) < Vec.EPSILON) {
-            deltaZ = 0;
-        }
+        if (Math.abs(deltaX) < Vec.EPSILON) deltaX = 0;
+        if (Math.abs(deltaY) < Vec.EPSILON) deltaY = 0;
+        if (Math.abs(deltaZ) < Vec.EPSILON) deltaZ = 0;
 
         final Pos finalPos = entityPosition.add(deltaX, deltaY, deltaZ);
 
