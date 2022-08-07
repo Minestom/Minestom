@@ -100,7 +100,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     private BoundingBox boundingBox;
-    private BoundingBox reducedBoundingBox;
 
     private PhysicsResult lastPhysicsResult = null;
 
@@ -806,11 +805,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setBoundingBox(BoundingBox boundingBox) {
         this.boundingBox = boundingBox;
-        this.reducedBoundingBox = new BoundingBox(
-                boundingBox.width() - Vec.EPSILON,
-                boundingBox.height() - Vec.EPSILON,
-                boundingBox.depth() - Vec.EPSILON,
-                new Vec(-(boundingBox.width() - Vec.EPSILON) / 2, Vec.EPSILON / 2, -(boundingBox.depth() - Vec.EPSILON) / 2));
     }
 
     /**
@@ -1711,16 +1705,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 
         return nearby.orElse(null);
-    }
-
-    public BoundingBox getReducedBoundingBox() {
-        return reducedBoundingBox;
-    }
-
-    @ApiStatus.Internal
-    void setBoundingBoxDirect(BoundingBox bb) {
-        this.boundingBox = bb;
-        this.reducedBoundingBox = bb;
     }
 
     public enum Pose {

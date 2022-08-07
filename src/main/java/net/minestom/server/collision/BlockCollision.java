@@ -314,9 +314,9 @@ final class BlockCollision {
                 // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
                 // For this reason we subtract a small amount from the player position
                 Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.0000001));
-                intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getReducedBoundingBox());
+                intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
             } else {
-                intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getReducedBoundingBox());
+                intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
             }
             if (intersects) return entity;
         }

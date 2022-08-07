@@ -1,20 +1,18 @@
-package net.minestom.server.entity;
+package net.minestom.server.collision;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
-import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.EntityBlockPhysicsIntegrationTest;
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class EntityPhysicsIntegrationTest {
+public class EntityBlockClipIntegrationTest {
 
     @Test
     public void entityPhysicsCheckCorner(Env env) {
@@ -24,7 +22,7 @@ public class EntityPhysicsIntegrationTest {
                 instance.loadChunk(i, j).join();
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(new BoundingBox(0.6, 1.95, 0.6));
+        entity.setBoundingBox(new BoundingBox(0.6, 1.95, 0.6));
 
         instance.setBlock(5, 43, -5, Block.STONE);
 
@@ -42,7 +40,7 @@ public class EntityPhysicsIntegrationTest {
         instance.setBlock(1, 43, 1, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(new BoundingBox(0.6, 1.95, 0.6));
+        entity.setBoundingBox(new BoundingBox(0.6, 1.95, 0.6));
 
         entity.setInstance(instance, new Pos(0, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
@@ -60,7 +58,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.7, 42, 0.5)).join();
         assertEquals(instance, entity.getInstance());
@@ -77,7 +75,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.5, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
@@ -94,7 +92,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.8, 42, 1.3)).join();
         assertEquals(instance, entity.getInstance());
@@ -111,7 +109,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.7, 42, 1.1)).join();
         assertEquals(instance, entity.getInstance());
@@ -128,7 +126,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(1.1, 42, 1.3)).join();
         assertEquals(instance, entity.getInstance());
@@ -145,7 +143,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(1.3, 42, 1.1)).join();
         assertEquals(instance, entity.getInstance());
@@ -162,7 +160,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(1.1, 42, 0.7)).join();
         assertEquals(instance, entity.getInstance());
@@ -179,7 +177,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(1.3, 42, 0.8)).join();
         assertEquals(instance, entity.getInstance());
@@ -197,7 +195,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.52, 42.51, 0.5)).join();
         assertEquals(instance, entity.getInstance());
@@ -214,7 +212,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.50, 42.51, 0.52)).join();
         assertEquals(instance, entity.getInstance());
@@ -231,7 +229,7 @@ public class EntityPhysicsIntegrationTest {
         BoundingBox bb = new BoundingBox(0, 0, 0);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setBoundingBoxDirect(bb);
+        entity.setBoundingBox(bb);
 
         entity.setInstance(instance, new Pos(0.51, 42.50, 0.51)).join();
         assertEquals(instance, entity.getInstance());

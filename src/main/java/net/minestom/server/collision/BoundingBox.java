@@ -30,15 +30,15 @@ public final class BoundingBox implements Shape {
     }
 
     public BoundingBox(double width, double height, double depth) {
-        this(width, height, depth, new Vec(-width / 2, 0, -depth / 2));
+        this(width, height, depth, new Vec(-width / 2, Vec.EPSILON / 2, -depth / 2));
     }
 
     @Override
     @ApiStatus.Experimental
     public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
-        return (minX() + positionRelative.x() <= boundingBox.maxX() && maxX() + positionRelative.x() >= boundingBox.minX()) &&
-                (minY() + positionRelative.y() <= boundingBox.maxY() && maxY() + positionRelative.y() >= boundingBox.minY()) &&
-                (minZ() + positionRelative.z() <= boundingBox.maxZ() && maxZ() + positionRelative.z() >= boundingBox.minZ());
+        return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
+                (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
+                (minZ() + positionRelative.z() <= boundingBox.maxZ() - Vec.EPSILON / 2 && maxZ() + positionRelative.z() >= boundingBox.minZ() + Vec.EPSILON / 2);
     }
 
     @Override
