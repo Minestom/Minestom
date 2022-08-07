@@ -720,7 +720,10 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-        assertEqualsPoint(new Pos(1.09, 43, 1.07), res.newPosition());
+
+        boolean isFirst = checkPoints(new Pos(1.08, 43, 1.07), res.newPosition());
+        boolean isSecond = checkPoints(new Pos(1.0, 43.08, 1.07), res.newPosition());
+        assertTrue(isFirst || isSecond);
     }
 
     @Test
@@ -731,11 +734,14 @@ public class EntityBlockPhysicsIntegrationTest {
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setBoundingBox(BoundingBox.ZERO);
 
-        entity.setInstance(instance, new Pos(0.50, 42.51, 0.52)).join();
+        entity.setInstance(instance, new Pos(0.50, 42.51, 0.51)).join();
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-        assertEqualsPoint(new Pos(1.07, 43, 1.09), res.newPosition());
+
+        boolean isFirst = checkPoints(new Pos(1.07, 43, 1.08), res.newPosition());
+        boolean isSecond = checkPoints(new Pos(0.7, 43.08, 1.0), res.newPosition());
+        assertTrue(isFirst || isSecond);
     }
 
     @Test
@@ -750,7 +756,11 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-        assertEqualsPoint(new Pos(1.08, 43, 1.08), res.newPosition());
+
+        boolean isFirst = checkPoints(new Pos(1.0, 43.08, 1.08), res.newPosition());
+        boolean isSecond = checkPoints(new Pos(1.08, 43.0, 1.08), res.newPosition());
+        boolean isThird = checkPoints(new Pos(1.08, 43.08, 1.0), res.newPosition());
+        assertTrue(isFirst || isSecond || isThird);
     }
 
     @Test
