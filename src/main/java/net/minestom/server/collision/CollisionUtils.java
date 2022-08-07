@@ -74,7 +74,7 @@ public final class CollisionUtils {
                 BoundingBox.ZERO,
                 Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
                 null);
-        return shape.intersectBox(end.sub(result.newPosition()), BoundingBox.ZERO);
+        return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
     }
 
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
