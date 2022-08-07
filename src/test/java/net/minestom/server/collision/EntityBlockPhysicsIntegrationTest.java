@@ -11,6 +11,7 @@ import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +32,16 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(expected.x(), actual.x(), PRECISION.x());
         assertEquals(expected.y(), actual.y(), PRECISION.y());
         assertEquals(expected.z(), actual.z(), PRECISION.z());
+    }
+
+    private static void assertPossiblePoints(List<Point> expected, Point actual) {
+        for (Point point : expected) {
+            if (checkPoints(point, actual)) {
+                return;
+            }
+        }
+
+        fail("Expected one of the following points: " + expected);
     }
 
     @Test
@@ -251,13 +262,8 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 10));
 
-        boolean isFirst = checkPoints(new Pos(10, 42, 0.7), res.newPosition());
-        boolean isSecond = checkPoints(new Pos(0.7, 42, 10), res.newPosition());
-
         // First and second are both valid, it depends on the implementation
-        // If x collision is checked first then isFirst will be true
-        // If z collision is checked first then isSecond will be true
-        assertTrue(isFirst || isSecond);
+        assertPossiblePoints(List.of(new Pos(10, 42, 0.7), new Pos(0.7, 42, 10)), res.newPosition());
     }
 
     @Test
@@ -395,13 +401,8 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.702, 0, 0.702));
 
-        boolean isFirst = checkPoints(new Pos(1.402, 42, 0.7), res.newPosition());
-        boolean isSecond = checkPoints(new Pos(0.7, 42, 1.402), res.newPosition());
-
         // First and second are both valid, it depends on the implementation
-        // If x collision is checked first then isFirst will be true
-        // If z collision is checked first then isSecond will be true
-        assertTrue(isFirst || isSecond);
+        assertPossiblePoints(List.of(new Pos(1.402, 42, 0.7), new Pos(0.7, 42, 1.402)), res.newPosition());
     }
 
     @Test
@@ -720,10 +721,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-
-        boolean isFirst = checkPoints(new Pos(1.08, 43, 1.07), res.newPosition());
-        boolean isSecond = checkPoints(new Pos(1.0, 43.08, 1.07), res.newPosition());
-        assertTrue(isFirst || isSecond);
+        assertPossiblePoints(List.of(new Pos(1.08, 43, 1.07), new Pos(1.0, 43.08, 1.07)), res.newPosition());
     }
 
     @Test
@@ -738,10 +736,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
-
-        boolean isFirst = checkPoints(new Pos(1.07, 43, 1.08), res.newPosition());
-        boolean isSecond = checkPoints(new Pos(0.7, 43.08, 1.0), res.newPosition());
-        assertTrue(isFirst || isSecond);
+        assertPossiblePoints(List.of(new Pos(1.07, 43, 1.08), new Pos(1.07, 43.08, 1.0)), res.newPosition());
     }
 
     @Test
@@ -757,10 +752,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0.57, 0.57, 0.57));
 
-        boolean isFirst = checkPoints(new Pos(1.0, 43.08, 1.08), res.newPosition());
-        boolean isSecond = checkPoints(new Pos(1.08, 43.0, 1.08), res.newPosition());
-        boolean isThird = checkPoints(new Pos(1.08, 43.08, 1.0), res.newPosition());
-        assertTrue(isFirst || isSecond || isThird);
+        assertPossiblePoints(List.of(new Pos(1.0, 43.08, 1.08), new Pos(1.08, 43.0, 1.08), new Pos(1.08, 43.08, 1.0)), res.newPosition());
     }
 
     @Test
