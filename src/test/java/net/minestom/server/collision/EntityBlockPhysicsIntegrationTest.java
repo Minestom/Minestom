@@ -307,6 +307,21 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void entityPhysicsCheckDirectSlide(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(1, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 2, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.69, 42, 0.69)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 11));
+        assertEqualsPoint(new Pos(0.7, 42, 11.69), res.newPosition());
+    }
+
+
+    @Test
     public void entityPhysicsCheckCorner(Env env) {
         var instance = env.createFlatInstance();
         for (int i = -2; i <= 2; ++i)
@@ -323,20 +338,6 @@ public class EntityBlockPhysicsIntegrationTest {
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, -10));
 
         EntityBlockPhysicsIntegrationTest.assertEqualsPoint(new Pos(4.7, 42, -10.3), res.newPosition());
-    }
-
-    @Test
-    public void entityPhysicsCheckDirectSlide(Env env) {
-        var instance = env.createFlatInstance();
-        instance.setBlock(1, 43, 1, Block.STONE);
-        instance.setBlock(1, 43, 2, Block.STONE);
-
-        var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0.69, 42, 0.69)).join();
-        assertEquals(instance, entity.getInstance());
-
-        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(10, 0, 11));
-        assertEqualsPoint(new Pos(0.7, 42, 11.69), res.newPosition());
     }
 
     @Test
