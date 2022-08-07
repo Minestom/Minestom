@@ -257,7 +257,6 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(-1, 43, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-
         entity.setInstance(instance, new Pos(0.5, 43.1, 0.5)).join();
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 0));
@@ -265,10 +264,8 @@ public class EntityBlockPhysicsIntegrationTest {
 
         while ((previousResult == null || !previousResult.newPosition().samePoint(res.newPosition())) && entity.getPosition().y() >= 42) {
             previousResult = res;
-
             res = CollisionUtils.handlePhysics(entity, new Vec(0.1, -0.01, 0));
             entity.teleport(res.newPosition()).join();
-            System.out.println(res);
         }
 
         assertEqualsPoint(new Pos(0.7, 42, 0.5), res.newPosition());
