@@ -22,6 +22,11 @@ public class PufferfishMeta extends AbstractFishMeta {
         updateBoundingBox(state);
     }
 
+    public void setSize(int size) {
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(size));
+        updateBoundingBox(State.UNPUFFED);
+    }
+
     private void updateBoundingBox(State state) {
         this.consumeEntity((entity) -> {
             switch (state) {
