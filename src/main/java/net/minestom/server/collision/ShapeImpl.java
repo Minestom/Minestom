@@ -92,8 +92,6 @@ final class ShapeImpl implements Shape {
                                      @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         boolean hitBlock = false;
         for (BoundingBox blockSection : blockSections) {
-            // Fast check to see if a collision happens
-            // Uses minkowski sum
             // Update final result if the temp result collision is sooner than the current final result
             if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
                 finalResult.collidedShapePosition = shapePos;

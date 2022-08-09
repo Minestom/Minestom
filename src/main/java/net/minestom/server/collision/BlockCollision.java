@@ -132,6 +132,24 @@ final class BlockCollision {
                                        @NotNull Vec velocity, @NotNull Pos entityPosition,
                                        @NotNull Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult) {
+        // Check cache to see if the entity is standing on a block without moving.
+        // If the entity isn't moving and the block below hasn't changed, return
+        // if (lastPhysicsResult != null) {
+        //     if (lastPhysicsResult.collisionY()
+        //             && velocity.y() == lastPhysicsResult.originalDelta().y()
+        //             && lastPhysicsResult.collidedBlockY() != null
+        //             && getter.getBlock(lastPhysicsResult.collidedBlockY(), Block.Getter.Condition.TYPE) == lastPhysicsResult.blockTypeY()
+        //             && velocity.x() == 0 && velocity.z() == 0
+        //             && entityPosition.samePoint(lastPhysicsResult.newPosition())
+        //             && lastPhysicsResult.blockTypeY() != Block.AIR) {
+        //         return lastPhysicsResult;
+        //     }
+        // }
+
+        if (velocity.isZero()) {
+            return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, velocity, null, Block.AIR);
+        }
+
         // Allocate once and update values
         SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null);
 
@@ -139,30 +157,6 @@ final class BlockCollision {
         Point collisionYBlock = null;
         Block blockYType = Block.AIR;
 
-        // Check cache to see if the entity is standing on a block without moving.
-        // If the entity isn't moving and the block below hasn't changed, return
-        if (lastPhysicsResult != null) {
-            if (lastPhysicsResult.collisionY()
-                    && Math.signum(velocity.y()) == Math.signum(lastPhysicsResult.originalDelta().y())
-                    && lastPhysicsResult.collidedBlockY() != null
-                    && getter.getBlock(lastPhysicsResult.collidedBlockY(), Block.Getter.Condition.TYPE) == lastPhysicsResult.blockTypeY()
-                    && velocity.x() == 0 && velocity.z() == 0
-                    && entityPosition.samePoint(lastPhysicsResult.newPosition())
-                    && lastPhysicsResult.blockTypeY() != Block.AIR) {
-                foundCollisionY = true;
-                collisionYBlock = lastPhysicsResult.collidedBlockY();
-                blockYType = lastPhysicsResult.blockTypeY();
-            }
-        }
-        if (velocity.isZero()) {
-            if (lastPhysicsResult != null) {
-                return new PhysicsResult(entityPosition, Vec.ZERO, lastPhysicsResult.isOnGround(),
-                        lastPhysicsResult.collisionX(), lastPhysicsResult.collisionY(), lastPhysicsResult.collisionZ(),
-                        velocity, lastPhysicsResult.collidedBlockY(), lastPhysicsResult.blockTypeY());
-            } else {
-                return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, velocity, null, Block.AIR);
-            }
-        }
         // Query faces to get the points needed for collision
         final Vec[] allFaces = calculateFaces(velocity, boundingBox);
         PhysicsResult res = handlePhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);

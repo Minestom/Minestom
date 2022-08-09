@@ -31,26 +31,24 @@ final class RayUtils {
 
         boolean isHit = false;
         double percentage = 1;
-
         int collisionFace = -1;
 
         // Intersect X
         // Left side of bounding box
         if (rayDirection.x() > 0) {
             double xFac = bbOffMin.x() / rayDirection.x();
-            double yix = rayDirection.y() * xFac + rayCentre.y();
-            double zix = rayDirection.z() * xFac + rayCentre.z();
+            if (xFac < percentage) {
+                double yix = rayDirection.y() * xFac + rayCentre.y();
+                double zix = rayDirection.z() * xFac + rayCentre.z();
 
-            // Check if ray passes through y/z plane
-            if (((yix - rayCentre.y()) * signumRayY) >= 0
-                    && ((zix - rayCentre.z()) * signumRayZ) >= 0
-                    && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                    && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
-                    && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                    && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-
-                isHit = true;
-                if (xFac < percentage) {
+                // Check if ray passes through y/z plane
+                if (((yix - rayCentre.y()) * signumRayY) >= 0
+                        && ((zix - rayCentre.z()) * signumRayZ) >= 0
+                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
+                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = xFac;
                     collisionFace = 0;
                 }
@@ -59,17 +57,17 @@ final class RayUtils {
         // Right side of bounding box
         if (rayDirection.x() < 0) {
             double xFac = bbOffMax.x() / rayDirection.x();
-            double yix = rayDirection.y() * xFac + rayCentre.y();
-            double zix = rayDirection.z() * xFac + rayCentre.z();
+            if (xFac < percentage) {
+                double yix = rayDirection.y() * xFac + rayCentre.y();
+                double zix = rayDirection.z() * xFac + rayCentre.z();
 
-            if (((yix - rayCentre.y()) * signumRayY) >= 0
-                    && ((zix - rayCentre.z()) * signumRayZ) >= 0
-                    && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                    && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
-                    && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                    && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                isHit = true;
-                if (xFac < percentage) {
+                if (((yix - rayCentre.y()) * signumRayY) >= 0
+                        && ((zix - rayCentre.z()) * signumRayZ) >= 0
+                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
+                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = xFac;
                     collisionFace = 0;
                 }
@@ -79,17 +77,17 @@ final class RayUtils {
         // Intersect Z
         if (rayDirection.z() > 0) {
             double zFac = bbOffMin.z() / rayDirection.z();
-            double xiz = rayDirection.x() * zFac + rayCentre.x();
-            double yiz = rayDirection.y() * zFac + rayCentre.y();
+            if (zFac < percentage) {
+                double xiz = rayDirection.x() * zFac + rayCentre.x();
+                double yiz = rayDirection.y() * zFac + rayCentre.y();
 
-            if (((yiz - rayCentre.y()) * signumRayY) >= 0
-                    && ((xiz - rayCentre.x()) * signumRayX) >= 0
-                    && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                    && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                    && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                    && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
-                isHit = true;
-                if (zFac < percentage) {
+                if (((yiz - rayCentre.y()) * signumRayY) >= 0
+                        && ((xiz - rayCentre.x()) * signumRayX) >= 0
+                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
+                    isHit = true;
                     percentage = zFac;
                     collisionFace = 1;
                 }
@@ -97,17 +95,17 @@ final class RayUtils {
         }
         if (rayDirection.z() < 0) {
             double zFac = bbOffMax.z() / rayDirection.z();
-            double xiz = rayDirection.x() * zFac + rayCentre.x();
-            double yiz = rayDirection.y() * zFac + rayCentre.y();
+            if (zFac < percentage) {
+                double xiz = rayDirection.x() * zFac + rayCentre.x();
+                double yiz = rayDirection.y() * zFac + rayCentre.y();
 
-            if (((yiz - rayCentre.y()) * signumRayY) >= 0
-                    && ((xiz - rayCentre.x()) * signumRayX) >= 0
-                    && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                    && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                    && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                    && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
-                isHit = true;
-                if (zFac < percentage) {
+                if (((yiz - rayCentre.y()) * signumRayY) >= 0
+                        && ((xiz - rayCentre.x()) * signumRayX) >= 0
+                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
+                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
+                    isHit = true;
                     percentage = zFac;
                     collisionFace = 1;
                 }
@@ -117,17 +115,17 @@ final class RayUtils {
         // Intersect Y
         if (rayDirection.y() > 0) {
             double yFac = bbOffMin.y() / rayDirection.y();
-            double xiy = rayDirection.x() * yFac + rayCentre.x();
-            double ziy = rayDirection.z() * yFac + rayCentre.z();
+            if (yFac < percentage) {
+                double xiy = rayDirection.x() * yFac + rayCentre.x();
+                double ziy = rayDirection.z() * yFac + rayCentre.z();
 
-            if (((ziy - rayCentre.z()) * signumRayZ) >= 0
-                    && ((xiy - rayCentre.x()) * signumRayX) >= 0
-                    && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                    && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                    && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                    && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                isHit = true;
-                if (yFac < percentage) {
+                if (((ziy - rayCentre.z()) * signumRayZ) >= 0
+                        && ((xiy - rayCentre.x()) * signumRayX) >= 0
+                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = yFac;
                     collisionFace = 2;
                 }
@@ -136,17 +134,17 @@ final class RayUtils {
 
         if (rayDirection.y() < 0) {
             double yFac = bbOffMax.y() / rayDirection.y();
-            double xiy = rayDirection.x() * yFac + rayCentre.x();
-            double ziy = rayDirection.z() * yFac + rayCentre.z();
+            if (yFac < percentage) {
+                double xiy = rayDirection.x() * yFac + rayCentre.x();
+                double ziy = rayDirection.z() * yFac + rayCentre.z();
 
-            if (((ziy - rayCentre.z()) * signumRayZ) >= 0
-                    && ((xiy - rayCentre.x()) * signumRayX) >= 0
-                    && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                    && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                    && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                    && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                isHit = true;
-                if (yFac < percentage) {
+                if (((ziy - rayCentre.z()) * signumRayZ) >= 0
+                        && ((xiy - rayCentre.x()) * signumRayX) >= 0
+                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
+                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
+                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
+                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = yFac;
                     collisionFace = 2;
                 }
