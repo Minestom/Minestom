@@ -890,4 +890,117 @@ public class EntityBlockPhysicsIntegrationTest {
 
         assertEqualsPoint(new Pos(0.7, 42, 0.5), res.newPosition());
     }
+
+    @Test
+    public void entityPhysicsCheckNoMoveCache(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityType.ZOMBIE);
+
+        entity.setInstance(instance, new Pos(5, 42, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
+        entity.teleport(res.newPosition());
+        res = CollisionUtils.handlePhysics(entity, Vec.ZERO, res);
+        assertEqualsPoint(new Pos(5, 42, 5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckNoMoveLargeVelocityHit(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityType.ZOMBIE);
+
+        final int distance = 20;
+        for (int x = 0; x < distance; ++x) instance.loadChunk(x, 0).join();
+
+        instance.setBlock(distance * 8, 43, 5, Block.STONE);
+
+        entity.setInstance(instance, new Pos(5, 42, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
+        entity.teleport(res.newPosition());
+        res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0), res);
+        assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckLargeVelocityHitNoMove(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityType.ZOMBIE);
+
+        final int distance = 20;
+        for (int x = 0; x < distance; ++x) instance.loadChunk(x, 0).join();
+
+        instance.setBlock(distance * 8, 43, 5, Block.STONE);
+
+        entity.setInstance(instance, new Pos(5, 42, 5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
+        entity.teleport(res.newPosition());
+        res = CollisionUtils.handlePhysics(entity, Vec.ZERO, res);
+        assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckDoorSubBlockSouthRepeat(Env env) {
+        var instance = env.createFlatInstance();
+        Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "south", "open", "true"));
+
+        instance.setBlock(0, 42, 0, b);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.5, 42.5, 0.5)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4));
+        entity.teleport(res.newPosition());
+        res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4), res);
+
+        assertEqualsPoint(new Pos(0.5, 42.5, 0.487), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckCollisionDownCache(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 43, 1, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
+        entity.teleport(res.newPosition());
+        res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), res);
+
+        assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckGravityCached(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 43, 1, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
+        entity.teleport(res.newPosition());
+        res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), res);
+        entity.teleport(res.newPosition());
+
+        PhysicsResult lastPhysicsResult;
+
+        for (int x = 0; x < 50; ++x) {
+            lastPhysicsResult = res;
+            res = CollisionUtils.handlePhysics(entity, new Vec(0, -1.7, 0), res);
+            entity.teleport(res.newPosition());
+
+            if (x > 10) assertSame(lastPhysicsResult, res, "Physics result not cached");
+        }
+
+        assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
+    }
 }
