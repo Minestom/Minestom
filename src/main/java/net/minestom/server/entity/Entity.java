@@ -848,7 +848,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
         EventDispatcher.call(event);
-        if (event.isCancelled()) return null; // TODO what to return?
+        if (event.isCancelled())
+            return CompletableFuture.failedFuture(new Exception("AddEntityToInstanceEvent was cancelled"));
 
         if (previousInstance != null) removeFromInstance(previousInstance);
 

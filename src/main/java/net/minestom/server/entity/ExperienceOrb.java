@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.coordinate.Vec;
 
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 public class ExperienceOrb extends Entity {
 
@@ -20,19 +21,16 @@ public class ExperienceOrb extends Entity {
     @Override
     public void update(long time) {
 
-        // TODO slide toward nearest player
-
         //todo water movement
-        if (hasNoGravity()) {
-            setVelocity(getVelocity().add(0, -0.3f, 0));
-        }
+//        if (hasNoGravity()) {
+//            setVelocity(getVelocity().add(0, -0.3f, 0));
+//        }
 
         //todo lava
 
-        double d = 8.0;
         if (lastTargetUpdateTick < time - 20 + getEntityId() % 100) {
-            if (target == null || target.getPosition().distanceSquared(getPosition()) > 64) {
-                this.target = getClosestPlayer(this, 8);
+            if (target == null || target.getPosition().distanceSquared(getPosition()) > 8 * 8) {
+                this.target = getClosestPlayer(this, player -> player.getGameMode() != GameMode.SPECTATOR, 8);
             }
 
             lastTargetUpdateTick = time;
@@ -42,28 +40,22 @@ public class ExperienceOrb extends Entity {
             target = null;
         }
 
-        if (target != null) {
-            final var pos = getPosition();
-            final var targetPos = target.getPosition();
-            final Vec toTarget = new Vec(targetPos.x() - pos.x(), targetPos.y() + (target.getEyeHeight() / 2) - pos.y(), targetPos.z() - pos.z());
-            double e = toTarget.length(); //could really be lengthSquared
-            if (e < 8) {
-                double f = 1 - (e / 8);
-                setVelocity(getVelocity().add(toTarget.normalize().mul(f * f * 0.1)));
-            }
-        }
-
-        // Move should be called here
-        float g = 0.98f;
-        if (this.onGround) {
-//            g = 2f;
-            g = 0.6f * 0.98f;
-        }
-        // apply slipperiness
-
-        setVelocity(getVelocity().mul(new Vec(g, 0.98f, g)));
+        // This is needed due to glitchy clientside predictions
         if (isOnGround()) {
-            setVelocity(getVelocity().mul(new Vec(1, -0.9f, 1)));
+            this.velocity = velocity.withY(-0.5);
+        }
+
+        // Slide toward target (Should be after gravity)
+        if (this.target != null) {
+            Vec targetPos = Vec.fromPoint(this.target.getPosition());
+            this.position = this.position.withLookAt(targetPos);
+
+            double distanceToTarget = targetPos.distance(this.position);
+            // https://gaming.stackexchange.com/questions/386506/how-quickly-do-experience-orbs-travel
+            // License: (CC BY-SA 4.0)
+            double velocity = -5.91561 * Math.sin(0.19495 * distanceToTarget) + 5.89166;
+            // TODO: Smoothen the clientside prediction
+            this.velocity = targetPos.sub(this.position).normalize().mul(velocity);
         }
     }
 
@@ -96,9 +88,14 @@ public class ExperienceOrb extends Entity {
     }
 
     private Player getClosestPlayer(Entity entity, float maxDistance) {
+        return getClosestPlayer(entity, player -> true, maxDistance);
+    }
+
+    private Player getClosestPlayer(Entity entity, Predicate<Player> predicate, float maxDistance) {
         Player closest = entity.getInstance()
                 .getPlayers()
                 .stream()
+                .filter(predicate)
                 .min(Comparator.comparingDouble(a -> a.getDistance(entity)))
                 .orElse(null);
         if (closest == null) return null;

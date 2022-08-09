@@ -54,9 +54,9 @@ public class FakePlayer extends Player implements NavigableEntity {
         this.fakePlayerController = new FakePlayerController(this);
 
         if (spawnCallback != null) {
-            // FIXME
             MinecraftServer.getGlobalEventHandler().addListener(
                     EventListener.builder(PlayerSpawnEvent.class)
+                            .filter(event -> event.getPlayer() == this)
                             .expireCount(1)
                             .handler(event -> {
                                 if (event.isFirstSpawn()) {

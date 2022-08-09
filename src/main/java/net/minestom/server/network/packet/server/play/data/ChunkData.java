@@ -61,7 +61,17 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
             final short y = reader.readShort();
             final int blockEntityId = reader.readVarInt();
             final NBTCompound nbt = (NBTCompound) reader.readTag();
-            // TODO create block object
+
+            int x = xz >> 4;
+            int z = xz & 15;
+            int index = ChunkUtils.getBlockIndex(x, y, z);
+
+            Block block = Block.fromStateId((short) blockEntityId);
+            if (block == null) {
+                continue;
+            }
+
+            blockEntities.put(index, block.withNbt(nbt));
         }
         return blockEntities;
     }

@@ -16,7 +16,12 @@ public class SpectateListener {
         if (target == null || target == player)
             return;
 
-        // TODO check if 'target' is in a different instance
+        // Check if the target is in a different instance
+        if (target.getInstance() != player.getInstance()) {
+            //noinspection ConstantConditions
+            player.setInstance(target.getInstance()).thenRun(() -> player.spectate(target));
+            return;
+        }
         player.spectate(target);
     }
 
