@@ -82,6 +82,7 @@ public class TestPermissions {
 
     @Test
     public void hasPermissionWildcard() {
+        assertFalse(player.hasPermission(permission3));
         assertFalse(player.hasPermission(permission2));
 
         player.addPermission(permission4);
