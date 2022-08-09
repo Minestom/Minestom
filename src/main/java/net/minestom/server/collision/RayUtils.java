@@ -30,7 +30,7 @@ final class RayUtils {
         double signumRayZ = Math.signum(rayDirection.z());
 
         boolean isHit = false;
-        double percentage = 1;
+        double percentage = Double.MAX_VALUE;
         int collisionFace = -1;
 
         // Intersect X
@@ -168,6 +168,6 @@ final class RayUtils {
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position, new SweepResult(0, 0, 0, 0, null));
+        return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position, new SweepResult(Double.MAX_VALUE, 0, 0, 0, null));
     }
 }
