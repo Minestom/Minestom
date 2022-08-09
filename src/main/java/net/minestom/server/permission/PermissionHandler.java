@@ -71,7 +71,7 @@ public interface PermissionHandler {
             }
             if (permissionLoop.getPermissionName().endsWith("*")) {
                 // Remove (*) from the end of the string
-                String permissionPrefix = permissionLoop.getPermissionName().substring(0, permission.getPermissionName().length() - 1);
+                String permissionPrefix = permissionLoop.getPermissionName().substring(0, permissionLoop.getPermissionName().length() - 1);
                 // If permission is "*", startsWith() will return true, as we pass an empty string
                 if (permission.getPermissionName().startsWith(permissionPrefix)) {
                     return true;
