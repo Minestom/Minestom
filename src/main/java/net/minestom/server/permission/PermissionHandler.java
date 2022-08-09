@@ -56,6 +56,8 @@ public interface PermissionHandler {
 
     /**
      * Gets if this handler has the permission {@code permission}.
+     * This method will also check for wildcards. For example, if this handler has the permission {@code "*"}, this method will always return true.
+     * However, if this handler has the permission {@code "foo.*"}, this method will return true if {@code permission} is {@code "foo.bar"} or {@code "foo.bar.baz}, but not simply {@code "foo"}.
      * <p>
      * Uses {@link Permission#equals(Object)} internally.
      *
@@ -66,6 +68,14 @@ public interface PermissionHandler {
         for (Permission permissionLoop : getAllPermissions()) {
             if (permissionLoop.equals(permission)) {
                 return true;
+            }
+            if (permissionLoop.getPermissionName().endsWith("*")) {
+                // Remove (*) from the end of the string
+                String permissionPrefix = permissionLoop.getPermissionName().substring(0, permission.getPermissionName().length() - 1);
+                // If permission is "*", startsWith() will return true, as we pass an empty string
+                if (permission.getPermissionName().startsWith(permissionPrefix)) {
+                    return true;
+                }
             }
         }
         return false;
