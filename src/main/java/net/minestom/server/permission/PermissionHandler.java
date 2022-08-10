@@ -6,6 +6,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Represents an object which can have permissions.
@@ -56,8 +57,8 @@ public interface PermissionHandler {
 
     /**
      * Gets if this handler has the permission {@code permission}.
-     * This method will also check for wildcards. For example, if this handler has the permission {@code "*"}, this method will always return true.
-     * However, if this handler has the permission {@code "foo.*"}, this method will return true if {@code permission} is {@code "foo.bar"} or {@code "foo.bar.baz}, but not simply {@code "foo"}.
+     * This method will also pattern match for wildcards. For example, if this handler has the permission {@code "*"}, this method will always return true.
+     * However, if this handler has the permission {@code "foo.b*r.baz"}, this method will return true if {@code permission} is {@code "foo.baaar.baz"} or {@code "foo.br.baz}, but not {@code "foo.bar.bz"}.
      * <p>
      * Uses {@link Permission#equals(Object)} internally.
      *
@@ -69,11 +70,13 @@ public interface PermissionHandler {
             if (permissionLoop.equals(permission)) {
                 return true;
             }
-            if (permissionLoop.getPermissionName().endsWith("*")) {
-                // Remove (*) from the end of the string
-                String permissionPrefix = permissionLoop.getPermissionName().substring(0, permissionLoop.getPermissionName().length() - 1);
-                // If permission is "*", startsWith() will return true, as we pass an empty string
-                if (permission.getPermissionName().startsWith(permissionPrefix)) {
+            // pattern matching for wildcards, where foo.b*r.baz matches foo.baaaar.baz or foo.bar.baz
+            // permission "*" matches everything
+            if (permissionLoop.getPermissionName().contains("*")) {
+                Pattern pattern = Pattern.compile(permissionLoop.getPermissionName()
+                        .replace(".", "\\.")
+                        .replace("*", ".*"));
+                if (pattern.matcher(permission.getPermissionName()).matches()) {
                     return true;
                 }
             }
