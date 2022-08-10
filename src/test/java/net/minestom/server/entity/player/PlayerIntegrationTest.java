@@ -129,7 +129,7 @@ public class PlayerIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         var expOrb = new ExperienceOrb((short) 1);
-        expOrb.setInstance(instance, new Pos(0, 42, 0));
+        expOrb.setInstance(instance, new Pos(0, 42, 0)).join();
 
         AtomicBoolean pickedUp = new AtomicBoolean(false);
         player.eventNode().addListener(PickupExperienceEvent.class, event -> pickedUp.set(true));
