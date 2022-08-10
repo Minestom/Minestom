@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,9 +52,12 @@ public class EntityInstanceIntegrationTest {
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
         env.process().eventHandler().addListener(AddEntityToInstanceEvent.class, event -> event.setCancelled(true));
+        AtomicBoolean failed = new AtomicBoolean(false);
         var future = entity.setInstance(instance2).whenComplete((result, error) -> {
             assertTrue(error instanceof Exception, "error is not an exception");
+            failed.set(true);
         });
         env.tickWhile(() -> !future.isDone(), Duration.ofSeconds(2));
+        assertTrue(failed.get(), "future is not failed");
     }
 }
