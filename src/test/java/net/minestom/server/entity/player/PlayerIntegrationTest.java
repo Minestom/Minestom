@@ -4,8 +4,10 @@ import net.minestom.server.api.Collector;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.NamespaceID;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -118,6 +121,21 @@ public class PlayerIntegrationTest {
             assertEquals(player.getEntityId(), statusPacket.entityId());
             assertEquals(24 + TEST_PERMISSION_LEVEL, statusPacket.status()); // TODO: Remove magic value of 24
         }
+    }
+
+    @Test
+    public void playerPickupExp(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var expOrb = new ExperienceOrb((short) 1);
+        expOrb.setInstance(instance, new Pos(0, 42, 0));
+
+        AtomicBoolean pickedUp = new AtomicBoolean(false);
+        player.eventNode().addListener(PickupExperienceEvent.class, event -> pickedUp.set(true));
+
+        env.tickWhile(() -> !pickedUp.get(), Duration.ofSeconds(2));
+        assertTrue(pickedUp.get(), "Player did not pick up the experience orb");
     }
 
 }
