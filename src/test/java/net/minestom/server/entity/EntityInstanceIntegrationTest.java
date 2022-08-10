@@ -3,12 +3,13 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityInstanceIntegrationTest {
@@ -38,7 +39,21 @@ public class EntityInstanceIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
         // #join may cause the thread to hang as scheduled for the next tick when initially in a pool
-        Assertions.assertTimeout(Duration.ofSeconds(2), () -> player.setInstance(instance2).join());
+        assertTimeout(Duration.ofSeconds(2), () -> player.setInstance(instance2).join());
         assertEquals(instance2, player.getInstance());
+    }
+
+    @Test
+    public void entitySwitchCancel(Env env) {
+        var instance = env.createFlatInstance();
+        var instance2 = env.createFlatInstance();
+        var entity = new Entity(EntityType.BAT);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+        env.process().eventHandler().addListener(AddEntityToInstanceEvent.class, event -> event.setCancelled(true));
+        var future = entity.setInstance(instance2).whenComplete((result, error) -> {
+            assertTrue(error instanceof Exception, "error is not an exception");
+        });
+        env.tickWhile(() -> !future.isDone(), Duration.ofSeconds(2));
     }
 }

@@ -836,7 +836,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
      * @return a {@link CompletableFuture} called once the entity's instance has been set,
-     * this is due to chunks needing to load
+     * this is due to chunks needing to load. This future may be failed with a {@link Exception}
+     * if the {@link AddEntityToInstanceEvent} was cancelled.
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
