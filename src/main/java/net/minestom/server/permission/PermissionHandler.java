@@ -70,12 +70,12 @@ public interface PermissionHandler {
             if (permissionLoop.equals(permission)) {
                 return true;
             }
-            // pattern matching for wildcards, where foo.b*r.baz matches foo.baaaar.baz or foo.bar.baz
-            // permission "*" matches everything
-            if (permissionLoop.getPermissionName().contains("*")) {
-                Pattern pattern = Pattern.compile(permissionLoop.getPermissionName()
-                        .replace(".", "\\.")
-                        .replace("*", ".*"));
+            String permissionLoopName = permissionLoop.getPermissionName();
+            if (permissionLoopName.contains("*")) {
+                // Sanitize permissionLoopName
+                String regexSanitized = Pattern.quote(permissionLoopName).replace("*", "\\E(.*)\\Q"); // Replace * with regex
+                // pattern matching for wildcards, where foo.b*r.baz matches foo.baaaar.baz or foo.bar.baz
+                Pattern pattern = Pattern.compile(regexSanitized);
                 if (pattern.matcher(permission.getPermissionName()).matches()) {
                     return true;
                 }
