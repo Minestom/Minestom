@@ -75,8 +75,7 @@ public interface PermissionHandler {
                 // Sanitize permissionLoopName
                 String regexSanitized = Pattern.quote(permissionLoopName).replace("*", "\\E(.*)\\Q"); // Replace * with regex
                 // pattern matching for wildcards, where foo.b*r.baz matches foo.baaaar.baz or foo.bar.baz
-                Pattern pattern = Pattern.compile(regexSanitized);
-                if (pattern.matcher(permission.getPermissionName()).matches()) {
+                if (permission.getPermissionName().matches(regexSanitized)) {
                     return true;
                 }
             }
