@@ -36,21 +36,15 @@ public final class BoundingBox implements Shape {
     @Override
     @ApiStatus.Experimental
     public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
-        return (minX() + positionRelative.x() <= boundingBox.maxX() && maxX() + positionRelative.x() >= boundingBox.minX()) &&
-                (minY() + positionRelative.y() <= boundingBox.maxY() && maxY() + positionRelative.y() >= boundingBox.minY()) &&
-                (minZ() + positionRelative.z() <= boundingBox.maxZ() && maxZ() + positionRelative.z() >= boundingBox.minZ());
+        return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
+                (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
+                (minZ() + positionRelative.z() <= boundingBox.maxZ() - Vec.EPSILON / 2 && maxZ() + positionRelative.z() >= boundingBox.minZ() + Vec.EPSILON / 2);
     }
 
     @Override
     @ApiStatus.Experimental
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
-        final boolean isHit = RayUtils.BoundingBoxIntersectionCheck(
-                moving, rayStart, rayDirection,
-                this,
-                shapePos
-        );
-        if (!isHit) return false;
-        if (RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
+        if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
             finalResult.collidedShapePosition = shapePos;
             finalResult.collidedShape = this;
             finalResult.blockType = null;

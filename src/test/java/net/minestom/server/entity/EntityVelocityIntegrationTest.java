@@ -106,7 +106,7 @@ public class EntityVelocityIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         env.tick();
 
-        final double epsilon = 0.0000001;
+        final double epsilon = 0.00001;
 
         assertEquals(player.getVelocity().y(), -1.568, epsilon);
         double previousVelocity = player.getVelocity().y();

@@ -10,7 +10,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class CommandTestUtils {
 
@@ -19,9 +20,20 @@ public class CommandTestUtils {
         final List<NodeStructure.TestNode> actualList = NodeStructure.fromString(NodeStructure.packetToString(packet));
         try {
             assertEquals(expectedList.size(), actualList.size(), "Different node counts");
-            assertTrue(actualList.containsAll(expectedList), "Packet doesn't contain all expected nodes.");
+            for (NodeStructure.TestNode expected : expectedList) {
+                boolean found = false;
+                for (NodeStructure.TestNode actual : actualList) {
+                    if (expected.equals(actual)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    fail("Packet doesn't contain " + expected.toString());
+                }
+            }
         } catch (AssertionFailedError error) {
-            fail("Graphs didn't match. Actual graph from packet: " + CommandTestUtils.exportGarphvizDot(packet, false));
+            fail("Graphs didn't match. Actual graph from packet: " + CommandTestUtils.exportGarphvizDot(packet, false), error);
         }
     }
 

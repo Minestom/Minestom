@@ -1,34 +1,19 @@
 package net.minestom.server.command.builder;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.ExecutableCommand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a {@link Command} ready to be executed (already parsed).
  */
 public class ParsedCommand {
+    private final ExecutableCommand executableCommand;
 
-    // Command
-    protected List<Command> parents;
-    protected Command command;
-    protected String commandString;
-
-    // Command Executor
-    protected CommandSyntax syntax;
-
-    protected CommandExecutor executor;
-    protected CommandContext context;
-
-    // Argument Callback
-    protected ArgumentCallback callback;
-    protected ArgumentSyntaxException argumentSyntaxException;
+    private ParsedCommand(ExecutableCommand executableCommand) {
+        this.executableCommand = executableCommand;
+    }
 
     /**
      * Executes the command for the given source.
@@ -40,70 +25,11 @@ public class ParsedCommand {
      * @return the command data, null if none
      */
     public @Nullable CommandData execute(@NotNull CommandSender source) {
-        // Global listener
-        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString)), commandString);
-        // Command condition check
-        {
-            // Parents
-            if (parents != null) {
-                for (Command parent : parents) {
-                    final CommandCondition condition = parent.getCondition();
-                    if (condition != null) {
-                        final boolean result = condition.canUse(source, commandString);
-                        if (!result) return null;
-                    }
-                }
-            }
-            // Self
-            final CommandCondition condition = command.getCondition();
-            if (condition != null) {
-                final boolean result = condition.canUse(source, commandString);
-                if (!result) return null;
-            }
-        }
-        // Condition is respected
-        if (executor != null) {
-            // An executor has been found
-
-            if (syntax != null) {
-                // The executor is from a syntax
-                final CommandCondition commandCondition = syntax.getCommandCondition();
-                if (commandCondition == null || commandCondition.canUse(source, commandString)) {
-                    context.retrieveDefaultValues(syntax.getDefaultValuesMap());
-                    try {
-                        executor.apply(source, context);
-                    } catch (Throwable throwable) {
-                        MinecraftServer.getExceptionManager().handleException(throwable);
-                    }
-                }
-            } else {
-                // The executor is probably the default one
-                try {
-                    executor.apply(source, context);
-                } catch (Throwable throwable) {
-                    MinecraftServer.getExceptionManager().handleException(throwable);
-                }
-            }
-        } else if (callback != null && argumentSyntaxException != null) {
-            // No syntax has been validated but the faulty argument with a callback has been found
-            // Execute the faulty argument callback
-            callback.apply(source, argumentSyntaxException);
-        }
-
-        if (context == null) {
-            // Argument callbacks cannot return data
-            return null;
-        }
-
-        return context.getReturnData();
+        final ExecutableCommand.Result result = executableCommand.execute(source);
+        return result.commandData();
     }
 
-    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
-        ParsedCommand parsedCommand = new ParsedCommand();
-        parsedCommand.command = command;
-        parsedCommand.commandString = input;
-        parsedCommand.executor = command.getDefaultExecutor();
-        parsedCommand.context = new CommandContext(input);
-        return parsedCommand;
+    public static @NotNull ParsedCommand fromExecutable(ExecutableCommand executableCommand) {
+        return new ParsedCommand(executableCommand);
     }
 }
