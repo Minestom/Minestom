@@ -34,13 +34,7 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(8, 100 + y, 8), Math.max(0, 14 - Math.abs(y)));
         }
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 6, 0);
         assertLightInstance(instance, expectedLights);
     }
 
@@ -64,13 +58,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(2, 40, 2), 12)
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -119,13 +107,7 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(-2, 60 + y, 8), Math.max(0, 8 - Math.abs(y)));
         }
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -141,13 +123,7 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(4, 100,8 , Block.TORCH);
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         instance.setBlock(4, 100,8 , Block.AIR);
 
@@ -159,13 +135,7 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(-2, 100 + y, 8), 0);
         }
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -197,13 +167,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(0, 40, 4), 2)
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -235,14 +199,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
-
+        LightUtils.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
@@ -272,14 +229,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
-
+        LightUtils.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
@@ -330,14 +280,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
-
+        LightUtils.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
@@ -363,13 +306,7 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(-2, 40, 4, Block.TORCH);
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         instance.setBlock(-2, 40, 4, Block.STONE);
 
@@ -380,13 +317,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -409,13 +340,7 @@ public class BlockLightMergeIntegrationTest {
 
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
 
         instance.setBlock(-2, 40, 14, Block.AIR);
@@ -426,13 +351,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(2, 40, 18), 0)
 
         );
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
         assertLightInstance(instance, expectedLights);
     }
 
@@ -448,13 +367,7 @@ public class BlockLightMergeIntegrationTest {
         instance.setBlock(1, 40, 1, Block.TORCH);
         instance.setBlock(1, 40, 17, Block.TORCH);
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         instance.setBlock(1, 40, 17, Block.AIR);
 
@@ -462,13 +375,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-3, 40, 2), 9)
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -507,13 +414,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-4, 40, 18), 0)
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
@@ -538,13 +439,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-2, 40, -1), 0)
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
 
@@ -554,13 +449,7 @@ public class BlockLightMergeIntegrationTest {
                 entry(new Vec(-2, 40, -1), 13)
         );
 
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                for (int y = -3; y <= 3; y++) {
-                    LightUtils.relightSection(instance, x, y + 6, z);
-                }
-            }
-        }
+        LightUtils.relightSection(instance, 0, 2, 0);
 
         assertLightInstance(instance, expectedLights);
     }
