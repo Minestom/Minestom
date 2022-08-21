@@ -31,7 +31,6 @@ final class BlockLight implements Light {
     private byte[][] bordersPropagationSwap;
     private boolean isValidBorders = true;
     private Set<Point> toUpdateSet = new HashSet<>();
-    private boolean isValidCore = true;
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -150,12 +149,7 @@ final class BlockLight implements Light {
             return this;
         }
 
-        if (this.isValidCore) {
-            this.toUpdateSet = Set.of();
-            return this;
-        }
         this.isValidBorders = true;
-        this.isValidCore = true;
 
         Set<Point> toUpdate = new HashSet<>();
 
@@ -195,7 +189,6 @@ final class BlockLight implements Light {
     @Override
     public void invalidate() {
         this.isValidBorders = false;
-        this.isValidCore = false;
         invalidatePropagation();
     }
 
@@ -205,8 +198,8 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public boolean requiresCoreUpdate() {
-        return !isValidCore;
+    public void set(byte[] copyArray) {
+        this.content = copyArray.clone();
     }
 
     private void clearCache() {
@@ -346,12 +339,8 @@ final class BlockLight implements Light {
         if (Arrays.equals(this.baked, new byte[LIGHT_LENGTH])) baked = null;
 
         {
-            this.content = null;
-            // this.borders = null
             this.bordersPropagation = null;
             this.contentPropagation = null;
-            this.isValidCore = false;
-            // this.isValidBorders = false;
         }
     }
 

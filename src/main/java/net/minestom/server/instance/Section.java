@@ -36,4 +36,12 @@ public record Section(Palette blockPalette, Palette biomePalette,
         writer.write(blockPalette);
         writer.write(biomePalette);
     }
+
+    public void setSkyLight(byte[] copyArray) {
+        this.skyLight.set(copyArray);
+    }
+
+    public void setBlockLight(byte[] copyArray) {
+        this.blockLight().set(copyArray);
+    }
 }

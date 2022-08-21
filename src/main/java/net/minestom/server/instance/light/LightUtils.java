@@ -98,7 +98,7 @@ public class LightUtils {
         toCheck.add(point);
         found.add(point);
 
-        while (toCheck.size() > 0 && found.size() < 1000) {
+        while (toCheck.size() > 0) {
             final Point current = toCheck.poll();
             final Set<Point> nearby = getNearbyRequired(instance, current);
             nearby.forEach(p -> {
@@ -116,13 +116,9 @@ public class LightUtils {
         Chunk c = instance.getChunk(chunkX, chunkZ);
         if (c == null) return;
 
-        Section s = c.getSection(sectionY);
-
-        if (!s.blockLight().requiresCoreUpdate()) return;
-
         Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
-        // System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size());
-        // System.out.println("Collected " + collected);
+        System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size());
+        System.out.println("Collected " + collected);
 
         synchronized (lock) {
             relight(instance, collected);
