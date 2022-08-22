@@ -80,7 +80,24 @@ public class ItemMetaWrittenBookTest {
 
     @Test
     public void buildFromVanillSNBT() {
-        String vanillaSNBT = "{pages:['[\"\",{\"text\":\"\\\\n\\\\ntest\\\\n\\\\n\"},{\"text\":\"TESTSETSET\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"hi\"}},{\"text\":\"\\\\n\\\\n\"},{\"text\":\"COLORS\",\"color\":\"dark_red\"},{\"text\":\"\\\\n\\\\n\",\"color\":\"reset\"},{\"text\":\"EVERYTHING\",\"bold\":true,\"italic\":true,\"strikethrough\":true,\"underlined\":true,\"obfuscated\":true,\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"EVERYTHING\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"Test\"}}]'],title:\"Minestom Book\",author:\"https://minestom.net/\",display:{Lore:[\"Minestom.\"]}}";
+        String vanillaSNBT = """
+{
+    pages:['[
+        "",
+        {"text":"\\\\n\\\\ntest\\\\n\\\\n"},
+        {"text":"TESTSETSET","clickEvent":{"action":"run_command","value":"hi"}},
+        {"text":"\\\\n\\\\n"},
+        {"text":"COLORS","color":"dark_red"},
+        {"text":"\\\\n\\\\n","color":"reset"},
+        {"text":"EVERYTHING","bold":true,"italic":true,"strikethrough":true,"underlined":true,"obfuscated":true,
+            "color":"green","clickEvent":{"action":"run_command","value":"EVERYTHING"},
+            "hoverEvent":{"action":"show_text","contents":"Test"}}
+    ]'],
+    title:"Minestom Book",
+    author:"https://minestom.net/",
+    display:{Lore:["Minestom."]}
+}
+                """;
         SNBTParser parser = new SNBTParser(new StringReader(vanillaSNBT));
 
         ItemStack book = ItemStack.of(Material.WRITTEN_BOOK).withMeta(WrittenBookMeta.class, meta -> {
@@ -136,7 +153,24 @@ public class ItemMetaWrittenBookTest {
     // TODO: Compare to vanilla snbt. This depends on a modern serializer that defaults to legacy in some cases.
 //    @Test
 //    public void compareToVanilla() {
-//        String vanillaSNBT = "{pages:['[\"\",{\"text\":\"\\\\n\\\\ntest\\\\n\\\\n\"},{\"text\":\"TESTSETSET\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"hi\"}},{\"text\":\"\\\\n\\\\n\"},{\"text\":\"COLORS\",\"color\":\"dark_red\"},{\"text\":\"\\\\n\\\\n\",\"color\":\"reset\"},{\"text\":\"EVERYTHING\",\"bold\":true,\"italic\":true,\"strikethrough\":true,\"underlined\":true,\"obfuscated\":true,\"color\":\"green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"EVERYTHING\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"Test\"}}]'],title:\"Minestom Book\",author:\"https://minestom.net/\",display:{Lore:[\"Minestom.\"]}}";
+//    String vanillaSNBT = """
+//{
+//    pages:['[
+//        "",
+//        {"text":"\\\\n\\\\ntest\\\\n\\\\n"},
+//        {"text":"TESTSETSET","clickEvent":{"action":"run_command","value":"hi"}},
+//        {"text":"\\\\n\\\\n"},
+//        {"text":"COLORS","color":"dark_red"},
+//        {"text":"\\\\n\\\\n","color":"reset"},
+//        {"text":"EVERYTHING","bold":true,"italic":true,"strikethrough":true,"underlined":true,"obfuscated":true,
+//            "color":"green","clickEvent":{"action":"run_command","value":"EVERYTHING"},
+//            "hoverEvent":{"action":"show_text","contents":"Test"}}
+//    ]'],
+//    title:"Minestom Book",
+//    author:"https://minestom.net/",
+//    display:{Lore:["Minestom."]}
+//}
+//                """;
 //
 //        ItemStack book = ItemStack.of(Material.WRITTEN_BOOK).withMeta(WrittenBookMeta.class, meta -> {
 //            List<Component> pageA = new ArrayList<>();
