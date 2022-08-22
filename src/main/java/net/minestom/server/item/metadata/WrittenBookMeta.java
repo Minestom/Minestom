@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.tag.Tag;
