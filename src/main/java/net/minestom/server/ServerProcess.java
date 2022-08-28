@@ -5,7 +5,6 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
@@ -95,11 +94,6 @@ public interface ServerProcess extends Snapshotable {
      * Handles registered boss bars.
      */
     @NotNull BossBarManager bossBar();
-
-    /**
-     * Loads and handle extensions.
-     */
-    @NotNull ExtensionManager extension();
 
     /**
      * Handles registry tags.

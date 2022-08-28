@@ -6,7 +6,6 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -296,10 +295,6 @@ public final class MinecraftServer {
 
     public static AdvancementManager getAdvancementManager() {
         return serverProcess.advancement();
-    }
-
-    public static ExtensionManager getExtensionManager() {
-        return serverProcess.extension();
     }
 
     public static TagManager getTagManager() {
