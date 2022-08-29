@@ -402,7 +402,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Changes the entity health, kill it if {@code health} is &gt;= 0 and is not dead yet.
+     * Changes the entity health, kill it if {@code health} is &lt;= 0 and is not dead yet.
      *
      * @param health the new entity health
      */
