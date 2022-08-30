@@ -45,7 +45,18 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         final var list = new ArrayList<>(this.items);
         list.add(this.carriedItem);
 
-        return list.stream().map(ItemStack::getDisplayName).filter(Objects::nonNull).toList();
+        final var components = new ArrayList<Component>();
+
+        list.forEach(itemStack -> {
+            components.addAll(itemStack.getLore());
+
+            final var displayName = itemStack.getDisplayName();
+            if (displayName == null) return;
+
+            components.add(displayName);
+        });
+
+        return components;
     }
 
     @Override
@@ -53,8 +64,16 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         return new WindowItemsPacket(
                 this.windowId,
                 this.stateId,
-                this.items.stream().map(stack -> stack.withDisplayName(operator)).toList(),
-                this.carriedItem.withDisplayName(operator)
+                this.items.stream().map(stack -> stack.withDisplayName(operator).withLore(lines -> {
+                    final var translatedComponents = new ArrayList<Component>();
+                    lines.forEach(component -> translatedComponents.add(operator.apply(component)));
+                    return translatedComponents;
+                })).toList(),
+                this.carriedItem.withDisplayName(operator).withLore(lines -> {
+                    final var translatedComponents = new ArrayList<Component>();
+                    lines.forEach(component -> translatedComponents.add(operator.apply(component)));
+                    return translatedComponents;
+                })
         );
     }
 }

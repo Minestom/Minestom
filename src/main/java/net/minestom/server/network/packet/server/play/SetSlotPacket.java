@@ -9,8 +9,10 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public record SetSlotPacket(byte windowId, int stateId, short slot,
@@ -35,14 +37,20 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
 
     @Override
     public @NotNull Collection<Component> components() {
+        final var components = new ArrayList<>(this.itemStack.getLore());
         final var displayname = this.itemStack.getDisplayName();
+        if (displayname != null) components.add(displayname);
 
-        return displayname == null ? List.of() : List.of(displayname);
+        return List.copyOf(components);
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new SetSlotPacket(this.windowId, this.stateId, this.slot, this.itemStack.withDisplayName(operator));
+        return new SetSlotPacket(this.windowId, this.stateId, this.slot, this.itemStack.withDisplayName(operator).withLore(lines -> {
+            final var translatedComponents = new ArrayList<Component>();
+            lines.forEach(component -> translatedComponents.add(operator.apply(component)));
+            return translatedComponents;
+        }));
     }
 
     /**
