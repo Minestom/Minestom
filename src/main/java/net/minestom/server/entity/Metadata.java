@@ -180,9 +180,9 @@ public final class Metadata {
         if (index >= entries.length) {
             final int newLength = Math.max(entries.length * 2, index + 1);
             this.entries = entries = Arrays.copyOf(entries, newLength);
-            this.entryMap = null;
         }
         entries[index] = entry;
+        this.entryMap = null;
         // Send metadata packet to update viewers and self
         final Entity entity = this.entity;
         if (entity != null && entity.isActive()) {
