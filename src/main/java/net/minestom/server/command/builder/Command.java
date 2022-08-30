@@ -151,7 +151,7 @@ public class Command {
                     hasOptional = true;
                 }
                 if (hasOptional && !argument.isOptional()) {
-                    LOGGER.warn("Optional arguments are followed by a non-optional one, the default values will be ignored.");
+                    LOGGER.warn("Optional arguments in command " + name + " are followed by a non-optional one, the default values will be ignored.");
                     hasOptional = false;
                     break;
                 }
