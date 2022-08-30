@@ -183,6 +183,7 @@ public final class Metadata {
             this.entryMap = null;
         }
         entries[index] = entry;
+        if (this.entryMap != null) this.entryMap.put(index, entry);
         // Send metadata packet to update viewers and self
         final Entity entity = this.entity;
         if (entity != null && entity.isActive()) {
@@ -224,7 +225,7 @@ public final class Metadata {
                 final Entry<?> entry = entries[i];
                 if (entry != null) map.put(i, entry);
             }
-            this.entryMap = Map.copyOf(map);
+            this.entryMap = new HashMap<>(map);
         }
         return map;
     }
