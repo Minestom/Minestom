@@ -224,7 +224,7 @@ public final class Metadata {
                 final Entry<?> entry = entries[i];
                 if (entry != null) map.put(i, entry);
             }
-            this.entryMap = new HashMap<>(map);
+            this.entryMap = Map.copyOf(map);
         }
         return map;
     }
