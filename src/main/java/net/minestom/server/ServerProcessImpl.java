@@ -211,7 +211,7 @@ final class ServerProcessImpl implements ServerProcess {
         extension.start();
         extension.gotoPreInit();
 
-        LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Starting Minestom server.");
 
         extension.gotoInit();
 
@@ -228,7 +228,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         extension.gotoPostInit();
 
-        LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
+        LOGGER.info("Minestom server started successfully.");
 
         if (MinecraftServer.isTerminalEnabled()) {
             MinestomTerminal.start();
@@ -241,7 +241,7 @@ final class ServerProcessImpl implements ServerProcess {
     public void stop() {
         if (!stopped.compareAndSet(false, true))
             return;
-        LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Stopping Minestom server.");
         LOGGER.info("Unloading all extensions.");
         extension.shutdown();
         scheduler.shutdown();
@@ -251,7 +251,7 @@ final class ServerProcessImpl implements ServerProcess {
         benchmark.disable();
         MinestomTerminal.stop();
         dispatcher.shutdown();
-        LOGGER.info(MinecraftServer.getBrandName() " server stopped successfully.");
+        LOGGER.info("Minestom server stopped successfully.");
     }
 
     @Override
