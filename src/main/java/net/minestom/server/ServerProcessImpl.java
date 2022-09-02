@@ -251,7 +251,7 @@ final class ServerProcessImpl implements ServerProcess {
         benchmark.disable();
         MinestomTerminal.stop();
         dispatcher.shutdown();
-        LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
+        LOGGER.info(MinecraftServer.getBrandName() " server stopped successfully.");
     }
 
     @Override
