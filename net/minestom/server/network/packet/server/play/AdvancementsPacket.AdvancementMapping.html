@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a>&gt;</code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Enclosing class:</dt>
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">AdvancementsPacket.AdvancementMapping</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key, @NotNull <a href="AdvancementsPacket.Advancement.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.Advancement</a>&nbsp;value)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
-implements <a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></span></div>
+implements <a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>, <a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a>&gt;</span></div>
 <div class="block">AdvancementMapping maps the namespaced ID to the Advancement.</div>
 </section>
 <section class="summary">
@@ -122,6 +122,16 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#components()" class="member-name-link">components</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the components held by this object.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copyWithOperator(java.util.function.UnaryOperator)" class="member-name-link">copyWithOperator</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;operator)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a copy of this object.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -158,6 +168,9 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-net.minestom.server.adventure.ComponentHolder">Methods inherited from interface&nbsp;net.minestom.server.adventure.<a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a></h3>
+<code><a href="../../../../adventure/ComponentHolder.html#visitComponents(java.util.function.Consumer)">visitComponents</a></code></div>
 </section>
 </li>
 </ul>
@@ -210,6 +223,40 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <dd><code><a href="../../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>writer</code> - the writer to write to</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="components()">
+<h3>components</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">components</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#components()">ComponentHolder</a></code></span></div>
+<div class="block">Gets the components held by this object.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html#components()">components</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>the components</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="copyWithOperator(java.util.function.UnaryOperator)">
+<h3>copyWithOperator</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a></span>&nbsp;<span class="element-name">copyWithOperator</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.10.1/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;operator)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">ComponentHolder</a></code></span></div>
+<div class="block">Returns a copy of this object. For each component this object holds, the operator
+ is applied to the copy before returning.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>operator</code> - the operator</dd>
+<dt>Returns:</dt>
+<dd>the copy</dd>
 </dl>
 </section>
 </li>
