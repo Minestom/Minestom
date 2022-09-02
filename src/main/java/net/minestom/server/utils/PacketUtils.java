@@ -8,15 +8,16 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.FramedPacket;
-import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
@@ -101,10 +102,45 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
+        final var sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
+    }
+
+    /**
+     * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
+     * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
+     *
+     * @see CachedPacket#body()
+     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
+     */
+    static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return GROUPED_PACKET;
+        if (!(packet instanceof ComponentHoldingServerPacket holder)) return GROUPED_PACKET;
+        return !containsTranslatableComponents(holder);
+    }
+
+    private static boolean containsTranslatableComponents(final @NotNull ComponentHolder<?> holder) {
+        for (final Component component : holder.components()) {
+            if (isTranslatable(component)) return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isTranslatable(final @NotNull Component component) {
+        if (component instanceof TranslatableComponent) return true;
+
+        final var children = component.children();
+        if (children.isEmpty()) return false;
+
+        for (final Component child : children) {
+            if (isTranslatable(child)) return true;
+        }
+
+        return false;
     }
 
     /**

@@ -3,6 +3,8 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -13,11 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * The packet creates or updates teams
  */
-public record TeamsPacket(String teamName, Action action) implements ServerPacket {
+public record TeamsPacket(String teamName, Action action) implements ComponentHoldingServerPacket {
     public TeamsPacket(BinaryReader reader) {
         this(reader.readSizedString(), switch (reader.readByte()) {
             case 0 -> new CreateTeamAction(reader);
@@ -36,6 +39,21 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         writer.write(action);
     }
 
+    @Override
+    public @NotNull Collection<Component> components() {
+        return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        return new TeamsPacket(
+                this.teamName,
+                this.action instanceof ComponentHolder<?> holder
+                        ? (Action) holder.copyWithOperator(operator)
+                        : this.action
+        );
+    }
+
     public sealed interface Action extends Writeable
             permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
         int id();
@@ -44,7 +62,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record CreateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   Collection<String> entities) implements Action {
+                                   Collection<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
         public CreateTeamAction {
             entities = List.copyOf(entities);
         }
@@ -72,6 +90,25 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         public int id() {
             return 0;
         }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+        }
+
+        @Override
+        public @NotNull CreateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new CreateTeamAction(
+                    operator.apply(this.displayName),
+                    this.friendlyFlags,
+                    this.nameTagVisibility,
+                    this.collisionRule,
+                    this.teamColor,
+                    operator.apply(this.teamPrefix),
+                    operator.apply(this.teamSuffix),
+                    entities
+            );
+        }
     }
 
     public record RemoveTeamAction() implements Action {
@@ -88,7 +125,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record UpdateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor,
-                                   Component teamPrefix, Component teamSuffix) implements Action {
+                                   Component teamPrefix, Component teamSuffix) implements Action, ComponentHolder<UpdateTeamAction> {
 
         public UpdateTeamAction(BinaryReader reader) {
             this(reader.readComponent(), reader.readByte(),
@@ -111,6 +148,24 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         @Override
         public int id() {
             return 2;
+        }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+        }
+
+        @Override
+        public @NotNull UpdateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new UpdateTeamAction(
+                    operator.apply(this.displayName),
+                    this.friendlyFlags,
+                    this.nameTagVisibility,
+                    this.collisionRule,
+                    this.teamColor,
+                    operator.apply(this.teamPrefix),
+                    operator.apply(this.teamSuffix)
+            );
         }
     }
 

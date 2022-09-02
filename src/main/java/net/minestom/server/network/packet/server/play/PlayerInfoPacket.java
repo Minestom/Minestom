@@ -81,7 +81,7 @@ public record PlayerInfoPacket(@NotNull Action action,
                 }
                 return components;
             default:
-                return Collections.emptyList();
+                return List.of();
         }
     }
 
@@ -152,7 +152,7 @@ public record PlayerInfoPacket(@NotNull Action action,
 
         @Override
         public @NotNull Collection<Component> components() {
-            return displayName != null ? Collections.singleton(displayName) : Collections.emptyList();
+            return displayName != null ? List.of(displayName) : List.of();
         }
 
         @Override
@@ -218,7 +218,7 @@ public record PlayerInfoPacket(@NotNull Action action,
 
         @Override
         public @NotNull Collection<Component> components() {
-            return displayName != null ? Collections.singleton(displayName) : Collections.emptyList();
+            return displayName != null ? List.of(displayName) : List.of();
         }
 
         @Override
