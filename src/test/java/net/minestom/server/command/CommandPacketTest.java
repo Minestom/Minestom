@@ -154,6 +154,78 @@ public class CommandPacketTest {
                 int3->int4
                 """, graph);
     }
+    @Test
+    public void twoEnumAndOneLiteralChild() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Enum("a", A.class))
+                .append(ArgumentType.Literal("l"))
+                .append(ArgumentType.Enum("b", B.class))
+                .build();
+        assertPacketGraph("""
+                foo l=%
+                0->foo
+                a b c d e f=§
+                foo->a b c d e f l
+                """, graph);
+    }
+
+    @Test
+    public void commandAliasWithoutArg() {
+        var graph = Graph.builder(ArgumentType.Word("foo").from("foo", "bar"))
+                .build();
+        assertPacketGraph("""
+                foo bar=%
+                0->foo bar
+                """, graph);
+    }
+
+    @Test
+    public void commandAliasWithArg() {
+        var graph = Graph.builder(ArgumentType.Word("foo").from("foo", "bar"))
+                .append(ArgumentType.Literal("l"))
+                .build();
+        assertPacketGraph("""
+                foo bar l=%
+                0->foo bar
+                foo bar->l
+                """, graph);
+    }
+
+    @Test
+    public void cmdArgShortcut() {
+        var foo = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.String("msg"))
+                .build();
+        var bar = Graph.builder(ArgumentType.Literal("bar"))
+                .append(ArgumentType.Command("cmd").setShortcut("foo"))
+                .build();
+        assertPacketGraph("""
+                foo bar cmd=%
+                0->foo bar
+                bar->cmd
+                cmd+>foo
+                foo->msg
+                msg=! brigadier:string 1
+                """, foo, bar);
+    }
+
+    @Test
+    public void cmdArgShortcutWithPartialArg() {
+        var foo = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.String("msg"))
+                .build();
+        var bar = Graph.builder(ArgumentType.Literal("bar"))
+                .append(ArgumentType.Command("cmd").setShortcut("foo \"prefix "))
+                .build();
+        assertPacketGraph("""
+                foo bar cmd=%
+                0->foo bar
+                bar->cmd
+                cmd+>foo
+                foo->msg
+                msg=! brigadier:string 1
+                """, foo, bar);
+    }
 
     static void assertPacketGraph(String expected, Graph... graphs) {
         var packet = GraphConverter.createPacket(Graph.merge(graphs), null);

@@ -30,6 +30,6 @@ final class ItemTags {
         return List.copyOf(entries);
     }).defaultValue(Map.of());
     static final Tag<List<ItemAttribute>> ATTRIBUTES = Tag.Structure("AttributeModifiers", ATTRIBUTE_SERIALIZER).list().defaultValue(List.of());
-    static final Tag<List<Block>> CAN_PLACE_ON = Tag.String("CanPlaceOn").map(Block::fromNamespaceId, ProtocolObject::name).list().defaultValue(List.of());
-    static final Tag<List<Block>> CAN_DESTROY = Tag.String("CanDestroy").map(Block::fromNamespaceId, ProtocolObject::name).list().defaultValue(List.of());
+    static final Tag<List<String>> CAN_PLACE_ON = Tag.String("CanPlaceOn").list().defaultValue(List.of());
+    static final Tag<List<String>> CAN_DESTROY = Tag.String("CanDestroy").list().defaultValue(List.of());
 }

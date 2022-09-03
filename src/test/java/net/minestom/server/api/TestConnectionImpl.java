@@ -1,10 +1,13 @@
 package net.minestom.server.api;
 
+import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.ServerProcess;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -13,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -54,10 +58,24 @@ final class TestConnectionImpl implements TestConnection {
     final class PlayerConnectionImpl extends PlayerConnection {
         @Override
         public void sendPacket(@NotNull SendablePacket packet) {
+            final var serverPacket = this.extractPacket(packet);
             for (var tracker : incomingTrackers) {
-                final var serverPacket = SendablePacket.extractServerPacket(packet);
                 if (tracker.type.isAssignableFrom(serverPacket.getClass())) tracker.packets.add(serverPacket);
             }
+        }
+
+        private ServerPacket extractPacket(final SendablePacket packet) {
+            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(packet);
+
+            final Player player = getPlayer();
+            if (player == null) return serverPacket;
+
+            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ComponentHoldingServerPacket) {
+                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
+                        GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
+            }
+
+            return serverPacket;
         }
 
         @Override

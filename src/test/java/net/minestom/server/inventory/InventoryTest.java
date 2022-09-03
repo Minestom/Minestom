@@ -75,4 +75,12 @@ public class InventoryTest {
         assertTrue(inventory.addItemStack(ItemStack.of(Material.ANDESITE, 32), TransactionOption.ALL_OR_NOTHING));
         assertFalse(inventory.addItemStack(ItemStack.of(Material.BLUE_CONCRETE, 32), TransactionOption.ALL_OR_NOTHING));
     }
+
+    @Test
+    public void testIds() {
+        for (int i = 0; i <= 256; ++i) {
+            final Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+            assertTrue(inventory.getWindowId() != 0);
+        }
+    }
 }

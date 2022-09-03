@@ -2,7 +2,10 @@ package net.minestom.server.command.builder.parser;
 
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
