@@ -36,7 +36,7 @@ public class PlayerBlockPlacementIntegrationTest {
         var packet = new ClientPlayerBlockPlacementPacket(
                 Player.Hand.MAIN, new Pos(2, 41, 0), BlockFace.WEST,
                 1f, 1f, 1f,
-                false
+                false, 0
         );
         player.addPacketToQueue(packet);
         player.interpretPacketQueue();

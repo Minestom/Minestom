@@ -51,7 +51,6 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
@@ -247,10 +246,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionType = spawnInstance.getDimensionType();
 
         NBTCompound nbt = NBT.Compound(Map.of(
+                "minecraft:chat_type", Messenger.chatRegistry(),
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of("minestom:world"), nbt, dimensionType.toNBT(), dimensionType.getName().asString(),
+                List.of("minestom:world"), nbt, dimensionType.toString(), "minestom:world",
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, levelFlat);
         sendPacket(joinGamePacket);
@@ -430,7 +430,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setFireForDuration(0);
         setOnFire(false);
         refreshHealth();
-        sendPacket(new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
+        sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -662,15 +662,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
-    }
-
-    /**
-     * Makes the player send a message (can be used for commands).
-     *
-     * @param message the message that the player will send
-     */
-    public void chat(@NotNull String message) {
-        addPacketToQueue(new ClientChatMessagePacket(message));
     }
 
     @Override
@@ -937,7 +928,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), "minestom:world",
                 0, gameMode, gameMode, false, levelFlat, true);
 
         sendPacket(removePlayerPacket);
@@ -1310,7 +1301,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType, dimensionType.getName().asString(),
+        sendPacket(new RespawnPacket(dimensionType.toString(), "minestom:world",
                 0, gameMode, gameMode, false, levelFlat, true));
         refreshClientStateAfterRespawn();
     }
@@ -1889,7 +1880,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 Collections.emptyList();
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName));
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName, null));
     }
 
     /**

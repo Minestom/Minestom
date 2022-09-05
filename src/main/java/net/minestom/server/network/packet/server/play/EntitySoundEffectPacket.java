@@ -9,9 +9,10 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public record EntitySoundEffectPacket(int soundId, Sound.Source source, int entityId,
-                                      float volume, float pitch) implements ServerPacket {
+                                      float volume, float pitch, long seed) implements ServerPacket {
     public EntitySoundEffectPacket(BinaryReader reader) {
-        this(reader.readVarInt(), Sound.Source.values()[reader.readVarInt()], reader.readVarInt(), reader.readFloat(), reader.readFloat());
+        this(reader.readVarInt(), Sound.Source.values()[reader.readVarInt()], reader.readVarInt(),
+                reader.readFloat(), reader.readFloat(), reader.readLong());
     }
 
     @Override
@@ -21,6 +22,7 @@ public record EntitySoundEffectPacket(int soundId, Sound.Source source, int enti
         writer.writeVarInt(entityId);
         writer.writeFloat(volume);
         writer.writeFloat(pitch);
+        writer.writeLong(seed);
     }
 
     @Override

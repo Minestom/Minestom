@@ -39,7 +39,7 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
         };
     }
 
-    public void process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
+    public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
         final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
         if (packet instanceof ClientPreplayPacket prePlayPacket) {
             prePlayPacket.process(connection);
@@ -48,5 +48,6 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
             assert player != null;
             player.addPacketToQueue(packet);
         }
+        return packet;
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;

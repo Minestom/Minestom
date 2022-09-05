@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 public record ClientPlayerBlockPlacementPacket(@NotNull Player.Hand hand, @NotNull Point blockPosition,
                                                @NotNull BlockFace blockFace,
                                                float cursorPositionX, float cursorPositionY, float cursorPositionZ,
-                                               boolean insideBlock) implements ClientPacket {
+                                               boolean insideBlock, int sequence) implements ClientPacket {
     public ClientPlayerBlockPlacementPacket(BinaryReader reader) {
         this(Player.Hand.values()[reader.readVarInt()], reader.readBlockPosition(),
                 BlockFace.values()[reader.readVarInt()],
                 reader.readFloat(), reader.readFloat(), reader.readFloat(),
-                reader.readBoolean());
+                reader.readBoolean(), reader.readVarInt());
     }
 
     @Override
@@ -28,5 +28,6 @@ public record ClientPlayerBlockPlacementPacket(@NotNull Player.Hand hand, @NotNu
         writer.writeFloat(cursorPositionY);
         writer.writeFloat(cursorPositionZ);
         writer.writeBoolean(insideBlock);
+        writer.writeVarInt(sequence);
     }
 }

@@ -15,7 +15,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
-import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
+import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlayerDiggingListener {
@@ -47,8 +47,7 @@ public final class PlayerDiggingListener {
         }
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
-            player.sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, diggingResult.block,
-                    status, diggingResult.success));
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         }
     }
 

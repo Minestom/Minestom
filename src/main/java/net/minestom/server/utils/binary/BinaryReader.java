@@ -5,6 +5,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
@@ -244,6 +245,14 @@ public class BinaryReader extends InputStream {
 
     public <T> List<T> readByteList(@NotNull Function<BinaryReader, T> supplier) {
         return readList(readByte(), supplier);
+    }
+
+    public <L, R> Either<L, R> readEither(Function<BinaryReader, L> leftReader, Function<BinaryReader, R> rightReader) {
+        if (readBoolean()) {
+            return Either.left(leftReader.apply(this));
+        } else {
+            return Either.right(rightReader.apply(this));
+        }
     }
 
     private <T> List<T> readList(int length, @NotNull Function<BinaryReader, T> supplier) {

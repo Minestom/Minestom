@@ -11,7 +11,7 @@ public record ParticlePacket(int particleId, boolean longDistance,
                              float offsetX, float offsetY, float offsetZ,
                              float particleData, int particleCount, byte[] data) implements ServerPacket {
     public ParticlePacket(BinaryReader reader) {
-        this(reader.readInt(), reader.readBoolean(),
+        this(reader.readVarInt(), reader.readBoolean(),
                 reader.readDouble(), reader.readDouble(), reader.readDouble(),
                 reader.readFloat(), reader.readFloat(), reader.readFloat(),
                 reader.readFloat(), reader.readInt(), reader.readRemainingBytes());
@@ -19,7 +19,7 @@ public record ParticlePacket(int particleId, boolean longDistance,
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeInt(particleId);
+        writer.writeVarInt(particleId);
         writer.writeBoolean(longDistance);
         writer.writeDouble(x);
         writer.writeDouble(y);

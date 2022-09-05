@@ -5,22 +5,20 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public record RespawnPacket(DimensionType dimensionType, String worldName,
+public record RespawnPacket(String dimensionType, String worldName,
                             long hashedSeed, GameMode gameMode, GameMode previousGameMode,
                             boolean isDebug, boolean isFlat, boolean copyMeta) implements ServerPacket {
     public RespawnPacket(BinaryReader reader) {
-        this(DimensionType.fromNBT((NBTCompound) reader.readTag()), reader.readSizedString(),
+        this(reader.readSizedString(), reader.readSizedString(),
                 reader.readLong(), GameMode.values()[reader.readByte()], GameMode.values()[reader.readByte()],
                 reader.readBoolean(), reader.readBoolean(), reader.readBoolean());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeNBT("", dimensionType.toNBT());
+        writer.writeSizedString(dimensionType);
         writer.writeSizedString(worldName);
         writer.writeLong(hashedSeed);
         writer.writeByte(gameMode.id());
@@ -28,6 +26,8 @@ public record RespawnPacket(DimensionType dimensionType, String worldName,
         writer.writeBoolean(isDebug);
         writer.writeBoolean(isFlat);
         writer.writeBoolean(copyMeta);
+
+        writer.writeBoolean(false);
     }
 
     @Override
