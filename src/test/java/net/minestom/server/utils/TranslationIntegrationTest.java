@@ -8,16 +8,15 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.message.ChatPosition;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
+import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @EnvTest
 public class TranslationIntegrationTest {
@@ -35,11 +34,11 @@ public class TranslationIntegrationTest {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        final var collector = connection.trackIncoming(ChatMessagePacket.class);
+        final var collector = connection.trackIncoming(SystemChatPacket.class);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
         final var message = Component.translatable("test.key");
-        final var packet = new ChatMessagePacket(message, ChatPosition.CHAT, UUID.randomUUID());
+        final var packet = new SystemChatPacket(message, false);
         PacketUtils.sendGroupedPacket(List.of(player), packet);
 
         // the message should not be changed if translations are enabled.
@@ -54,16 +53,15 @@ public class TranslationIntegrationTest {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        final var collector = connection.trackIncoming(ChatMessagePacket.class);
+        final var collector = connection.trackIncoming(SystemChatPacket.class);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = false;
         final var message = Component.translatable("test.key");
-        final var packet = new ChatMessagePacket(message, ChatPosition.CHAT, UUID.randomUUID());
+        final var packet = new SystemChatPacket(message, false);
         PacketUtils.sendGroupedPacket(List.of(player), packet);
 
         collector.assertSingle(received -> {
             assertEquals(message, received.message());
         });
     }
-
 }
