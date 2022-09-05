@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code>, <code><a href="../ClientPreplayPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPreplayPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EncryptionResponsePacket</span>(byte[]&nbsp;sharedSecret, byte[]&nbsp;verifyToken)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EncryptionResponsePacket</span>(byte[]&nbsp;sharedSecret, <a href="../../../../utils/Either.html" title="class in net.minestom.server.utils">Either</a>&lt;byte[],<wbr><a href="../../../../crypto/SaltSignaturePair.html" title="class in net.minestom.server.crypto">SaltSignaturePair</a>&gt;&nbsp;nonceOrSignature)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPreplayPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPreplayPacket</a></span></div>
 </section>
@@ -105,8 +105,8 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(byte%5B%5D,byte%5B%5D)" class="member-name-link">EncryptionResponsePacket</a><wbr>(byte[]&nbsp;sharedSecret,
- byte[]&nbsp;verifyToken)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(byte%5B%5D,net.minestom.server.utils.Either)" class="member-name-link">EncryptionResponsePacket</a><wbr>(byte[]&nbsp;sharedSecret,
+ <a href="../../../../utils/Either.html" title="class in net.minestom.server.utils">Either</a>&lt;byte[],<wbr><a href="../../../../crypto/SaltSignaturePair.html" title="class in net.minestom.server.crypto">SaltSignaturePair</a>&gt;&nbsp;nonceOrSignature)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>EncryptionResponsePacket</code> record class.</div>
 </div>
@@ -136,25 +136,25 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#process(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">process</a><wbr>(@NotNull <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../utils/Either.html" title="class in net.minestom.server.utils">Either</a>&lt;byte[],<wbr><a href="../../../../crypto/SaltSignaturePair.html" title="class in net.minestom.server.crypto">SaltSignaturePair</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nonceOrSignature()" class="member-name-link">nonceOrSignature</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>nonceOrSignature</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#process(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">process</a><wbr>(@NotNull <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when the packet is received.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sharedSecret()" class="member-name-link">sharedSecret</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sharedSecret()" class="member-name-link">sharedSecret</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>sharedSecret</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a string representation of this record class.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyToken()" class="member-name-link">verifyToken</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>verifyToken</code> record component.</div>
+<div class="block">Returns a string representation of this record class.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
@@ -185,15 +185,15 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(byte[],byte[])">
+<section class="detail" id="&lt;init&gt;(byte[],net.minestom.server.utils.Either)">
 <h3>EncryptionResponsePacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EncryptionResponsePacket</span><wbr><span class="parameters">(byte[]&nbsp;sharedSecret,
- byte[]&nbsp;verifyToken)</span></div>
+ <a href="../../../../utils/Either.html" title="class in net.minestom.server.utils">Either</a>&lt;byte[],<wbr><a href="../../../../crypto/SaltSignaturePair.html" title="class in net.minestom.server.crypto">SaltSignaturePair</a>&gt;&nbsp;nonceOrSignature)</span></div>
 <div class="block">Creates an instance of a <code>EncryptionResponsePacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>sharedSecret</code> - the value for the <code>sharedSecret</code> record component</dd>
-<dd><code>verifyToken</code> - the value for the <code>verifyToken</code> record component</dd>
+<dd><code>nonceOrSignature</code> - the value for the <code>nonceOrSignature</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -288,13 +288,13 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 </section>
 </li>
 <li>
-<section class="detail" id="verifyToken()">
-<h3>verifyToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">verifyToken</span>()</div>
-<div class="block">Returns the value of the <code>verifyToken</code> record component.</div>
+<section class="detail" id="nonceOrSignature()">
+<h3>nonceOrSignature</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../utils/Either.html" title="class in net.minestom.server.utils">Either</a>&lt;byte[],<wbr><a href="../../../../crypto/SaltSignaturePair.html" title="class in net.minestom.server.crypto">SaltSignaturePair</a>&gt;</span>&nbsp;<span class="element-name">nonceOrSignature</span>()</div>
+<div class="block">Returns the value of the <code>nonceOrSignature</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>verifyToken</code> record component</dd>
+<dd>the value of the <code>nonceOrSignature</code> record component</dd>
 </dl>
 </section>
 </li>

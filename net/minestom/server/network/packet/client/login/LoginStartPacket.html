@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code>, <code><a href="../ClientPreplayPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPreplayPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LoginStartPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LoginStartPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username, @Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a>&nbsp;publicKey, @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;profileId)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPreplayPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPreplayPacket</a></span></div>
 </section>
@@ -105,7 +105,9 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">LoginStartPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.crypto.PlayerPublicKey,java.util.UUID)" class="member-name-link">LoginStartPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ @Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a>&nbsp;publicKey,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;profileId)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>LoginStartPacket</code> record class.</div>
 </div>
@@ -139,6 +141,16 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#process(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">process</a><wbr>(@NotNull <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when the packet is received.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#profileId()" class="member-name-link">profileId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>profileId</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#publicKey()" class="member-name-link">publicKey</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>publicKey</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -179,14 +191,20 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,net.minestom.server.crypto.PlayerPublicKey,java.util.UUID)">
 <h3>LoginStartPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LoginStartPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ @Nullable
+ @Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a>&nbsp;publicKey,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;profileId)</span></div>
 <div class="block">Creates an instance of a <code>LoginStartPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>username</code> - the value for the <code>username</code> record component</dd>
+<dd><code>publicKey</code> - the value for the <code>publicKey</code> record component</dd>
+<dd><code>profileId</code> - the value for the <code>profileId</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -278,6 +296,30 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>username</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="publicKey()">
+<h3>publicKey</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a></span>&nbsp;<span class="element-name">publicKey</span>()</div>
+<div class="block">Returns the value of the <code>publicKey</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>publicKey</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="profileId()">
+<h3>profileId</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></span>&nbsp;<span class="element-name">profileId</span>()</div>
+<div class="block">Returns the value of the <code>profileId</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>profileId</code> record component</dd>
 </dl>
 </section>
 </li>

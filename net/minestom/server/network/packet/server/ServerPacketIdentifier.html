@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ServerPacketIdentifier</span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ServerPacketIdentifier</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 </section>
 <section class="summary">
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#ACKNOWLEDGE_PLAYER_DIGGING" class="member-name-link">ACKNOWLEDGE_PLAYER_DIGGING</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ACKNOWLEDGE_BLOCK_CHANGE" class="member-name-link">ACKNOWLEDGE_BLOCK_CHANGE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
 <div class="col-second odd-row-color"><code><a href="#ACTION_BAR" class="member-name-link">ACTION_BAR</a></code></div>
@@ -120,7 +120,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#CHANGE_GAME_STATE" class="member-name-link">CHANGE_GAME_STATE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#CHAT_MESSAGE" class="member-name-link">CHAT_MESSAGE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#CHAT_PREVIEW" class="member-name-link">CHAT_PREVIEW</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
 <div class="col-second even-row-color"><code><a href="#CHUNK_DATA" class="member-name-link">CHUNK_DATA</a></code></div>
@@ -138,13 +138,19 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#CRAFT_RECIPE_RESPONSE" class="member-name-link">CRAFT_RECIPE_RESPONSE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#DEATH_COMBAT_EVENT" class="member-name-link">DEATH_COMBAT_EVENT</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#CUSTOM_CHAT_COMPLETIONS" class="member-name-link">CUSTOM_CHAT_COMPLETIONS</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#DECLARE_COMMANDS" class="member-name-link">DECLARE_COMMANDS</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEATH_COMBAT_EVENT" class="member-name-link">DEATH_COMBAT_EVENT</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#DECLARE_RECIPES" class="member-name-link">DECLARE_RECIPES</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#DECLARE_COMMANDS" class="member-name-link">DECLARE_COMMANDS</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#DECLARE_RECIPES" class="member-name-link">DECLARE_RECIPES</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#DELETE_CHAT_MESSAGE" class="member-name-link">DELETE_CHAT_MESSAGE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
 <div class="col-second even-row-color"><code><a href="#DESTROY_ENTITIES" class="member-name-link">DESTROY_ENTITIES</a></code></div>
@@ -270,6 +276,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#PLAYER_ABILITIES" class="member-name-link">PLAYER_ABILITIES</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#PLAYER_CHAT" class="member-name-link">PLAYER_CHAT</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#PLAYER_CHAT_HEADER" class="member-name-link">PLAYER_CHAT_HEADER</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
 <div class="col-second odd-row-color"><code><a href="#PLAYER_INFO" class="member-name-link">PLAYER_INFO</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
@@ -294,10 +306,10 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#SCOREBOARD_OBJECTIVE" class="member-name-link">SCOREBOARD_OBJECTIVE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SCULK_VIBRATION_SIGNAL" class="member-name-link">SCULK_VIBRATION_SIGNAL</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SELECT_ADVANCEMENT_TAB" class="member-name-link">SELECT_ADVANCEMENT_TAB</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SELECT_ADVANCEMENT_TAB" class="member-name-link">SELECT_ADVANCEMENT_TAB</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SERVER_DATA" class="member-name-link">SERVER_DATA</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
 <div class="col-second odd-row-color"><code><a href="#SERVER_DIFFICULTY" class="member-name-link">SERVER_DIFFICULTY</a></code></div>
@@ -306,52 +318,52 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#SET_COOLDOWN" class="member-name-link">SET_COOLDOWN</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SET_EXPERIENCE" class="member-name-link">SET_EXPERIENCE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SET_DISPLAY_CHAT_PREVIEW" class="member-name-link">SET_DISPLAY_CHAT_PREVIEW</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SET_PASSENGERS" class="member-name-link">SET_PASSENGERS</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SET_EXPERIENCE" class="member-name-link">SET_EXPERIENCE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SET_SIMULATION_DISTANCE" class="member-name-link">SET_SIMULATION_DISTANCE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SET_PASSENGERS" class="member-name-link">SET_PASSENGERS</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SET_SLOT" class="member-name-link">SET_SLOT</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SET_SIMULATION_DISTANCE" class="member-name-link">SET_SIMULATION_DISTANCE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SET_TITLE_SUBTITLE" class="member-name-link">SET_TITLE_SUBTITLE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SET_SLOT" class="member-name-link">SET_SLOT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SET_TITLE_TEXT" class="member-name-link">SET_TITLE_TEXT</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SET_TITLE_SUBTITLE" class="member-name-link">SET_TITLE_SUBTITLE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SET_TITLE_TIME" class="member-name-link">SET_TITLE_TIME</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SET_TITLE_TEXT" class="member-name-link">SET_TITLE_TEXT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SOUND_EFFECT" class="member-name-link">SOUND_EFFECT</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SET_TITLE_TIME" class="member-name-link">SET_TITLE_TIME</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SPAWN_ENTITY" class="member-name-link">SPAWN_ENTITY</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SOUND_EFFECT" class="member-name-link">SOUND_EFFECT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SPAWN_EXPERIENCE_ORB" class="member-name-link">SPAWN_EXPERIENCE_ORB</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SPAWN_ENTITY" class="member-name-link">SPAWN_ENTITY</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SPAWN_LIVING_ENTITY" class="member-name-link">SPAWN_LIVING_ENTITY</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SPAWN_EXPERIENCE_ORB" class="member-name-link">SPAWN_EXPERIENCE_ORB</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SPAWN_PAINTING" class="member-name-link">SPAWN_PAINTING</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SPAWN_PLAYER" class="member-name-link">SPAWN_PLAYER</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#SPAWN_PLAYER" class="member-name-link">SPAWN_PLAYER</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SPAWN_POSITION" class="member-name-link">SPAWN_POSITION</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#SPAWN_POSITION" class="member-name-link">SPAWN_POSITION</a></code></div>
+<div class="col-second even-row-color"><code><a href="#STATISTICS" class="member-name-link">STATISTICS</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#STATISTICS" class="member-name-link">STATISTICS</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#STOP_SOUND" class="member-name-link">STOP_SOUND</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#STOP_SOUND" class="member-name-link">STOP_SOUND</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SYSTEM_CHAT" class="member-name-link">SYSTEM_CHAT</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final int</code></div>
 <div class="col-second odd-row-color"><code><a href="#TAB_COMPLETE" class="member-name-link">TAB_COMPLETE</a></code></div>
@@ -521,1456 +533,648 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="SPAWN_ENTITY">
 <h3>SPAWN_ENTITY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SPAWN_ENTITY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SPAWN_ENTITY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SPAWN_EXPERIENCE_ORB">
 <h3>SPAWN_EXPERIENCE_ORB</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SPAWN_EXPERIENCE_ORB</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SPAWN_EXPERIENCE_ORB">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="SPAWN_LIVING_ENTITY">
-<h3>SPAWN_LIVING_ENTITY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SPAWN_LIVING_ENTITY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SPAWN_LIVING_ENTITY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="SPAWN_PAINTING">
-<h3>SPAWN_PAINTING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SPAWN_PAINTING</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SPAWN_PAINTING">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SPAWN_PLAYER">
 <h3>SPAWN_PLAYER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SPAWN_PLAYER</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SPAWN_PLAYER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="SCULK_VIBRATION_SIGNAL">
-<h3>SCULK_VIBRATION_SIGNAL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SCULK_VIBRATION_SIGNAL</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SCULK_VIBRATION_SIGNAL">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_ANIMATION">
 <h3>ENTITY_ANIMATION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_ANIMATION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_ANIMATION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="STATISTICS">
 <h3>STATISTICS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">STATISTICS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.STATISTICS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="ACKNOWLEDGE_PLAYER_DIGGING">
-<h3>ACKNOWLEDGE_PLAYER_DIGGING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ACKNOWLEDGE_PLAYER_DIGGING</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ACKNOWLEDGE_PLAYER_DIGGING">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+<section class="detail" id="ACKNOWLEDGE_BLOCK_CHANGE">
+<h3>ACKNOWLEDGE_BLOCK_CHANGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ACKNOWLEDGE_BLOCK_CHANGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="BLOCK_BREAK_ANIMATION">
 <h3>BLOCK_BREAK_ANIMATION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_BREAK_ANIMATION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.BLOCK_BREAK_ANIMATION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="BLOCK_ENTITY_DATA">
 <h3>BLOCK_ENTITY_DATA</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_ENTITY_DATA</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.BLOCK_ENTITY_DATA">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="BLOCK_ACTION">
 <h3>BLOCK_ACTION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_ACTION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.BLOCK_ACTION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="BLOCK_CHANGE">
 <h3>BLOCK_CHANGE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_CHANGE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.BLOCK_CHANGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="BOSS_BAR">
 <h3>BOSS_BAR</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BOSS_BAR</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.BOSS_BAR">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SERVER_DIFFICULTY">
 <h3>SERVER_DIFFICULTY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SERVER_DIFFICULTY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SERVER_DIFFICULTY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="CHAT_MESSAGE">
-<h3>CHAT_MESSAGE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CHAT_MESSAGE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CHAT_MESSAGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+<section class="detail" id="CHAT_PREVIEW">
+<h3>CHAT_PREVIEW</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CHAT_PREVIEW</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="CLEAR_TITLES">
 <h3>CLEAR_TITLES</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CLEAR_TITLES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CLEAR_TITLES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="TAB_COMPLETE">
 <h3>TAB_COMPLETE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">TAB_COMPLETE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.TAB_COMPLETE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="DECLARE_COMMANDS">
 <h3>DECLARE_COMMANDS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DECLARE_COMMANDS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.DECLARE_COMMANDS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="CLOSE_WINDOW">
 <h3>CLOSE_WINDOW</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CLOSE_WINDOW</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CLOSE_WINDOW">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WINDOW_ITEMS">
 <h3>WINDOW_ITEMS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WINDOW_ITEMS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WINDOW_ITEMS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WINDOW_PROPERTY">
 <h3>WINDOW_PROPERTY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WINDOW_PROPERTY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WINDOW_PROPERTY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_SLOT">
 <h3>SET_SLOT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_SLOT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_SLOT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_COOLDOWN">
 <h3>SET_COOLDOWN</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_COOLDOWN</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_COOLDOWN">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="CUSTOM_CHAT_COMPLETIONS">
+<h3>CUSTOM_CHAT_COMPLETIONS</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CUSTOM_CHAT_COMPLETIONS</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="PLUGIN_MESSAGE">
 <h3>PLUGIN_MESSAGE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLUGIN_MESSAGE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PLUGIN_MESSAGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="NAMED_SOUND_EFFECT">
 <h3>NAMED_SOUND_EFFECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">NAMED_SOUND_EFFECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.NAMED_SOUND_EFFECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="DELETE_CHAT_MESSAGE">
+<h3>DELETE_CHAT_MESSAGE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DELETE_CHAT_MESSAGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DISCONNECT">
 <h3>DISCONNECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DISCONNECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.DISCONNECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_STATUS">
 <h3>ENTITY_STATUS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_STATUS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_STATUS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="EXPLOSION">
 <h3>EXPLOSION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">EXPLOSION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.EXPLOSION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UNLOAD_CHUNK">
 <h3>UNLOAD_CHUNK</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UNLOAD_CHUNK</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UNLOAD_CHUNK">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="CHANGE_GAME_STATE">
 <h3>CHANGE_GAME_STATE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CHANGE_GAME_STATE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CHANGE_GAME_STATE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="OPEN_HORSE_WINDOW">
 <h3>OPEN_HORSE_WINDOW</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">OPEN_HORSE_WINDOW</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.OPEN_HORSE_WINDOW">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="INITIALIZE_WORLD_BORDER">
 <h3>INITIALIZE_WORLD_BORDER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">INITIALIZE_WORLD_BORDER</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.INITIALIZE_WORLD_BORDER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="KEEP_ALIVE">
 <h3>KEEP_ALIVE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">KEEP_ALIVE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.KEEP_ALIVE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="CHUNK_DATA">
 <h3>CHUNK_DATA</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CHUNK_DATA</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CHUNK_DATA">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="EFFECT">
 <h3>EFFECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">EFFECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.EFFECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="PARTICLE">
 <h3>PARTICLE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PARTICLE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PARTICLE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UPDATE_LIGHT">
 <h3>UPDATE_LIGHT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UPDATE_LIGHT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UPDATE_LIGHT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="JOIN_GAME">
 <h3>JOIN_GAME</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">JOIN_GAME</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.JOIN_GAME">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="MAP_DATA">
 <h3>MAP_DATA</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">MAP_DATA</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.MAP_DATA">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="TRADE_LIST">
 <h3>TRADE_LIST</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">TRADE_LIST</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.TRADE_LIST">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_POSITION">
 <h3>ENTITY_POSITION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_POSITION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_POSITION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_POSITION_AND_ROTATION">
 <h3>ENTITY_POSITION_AND_ROTATION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_POSITION_AND_ROTATION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_POSITION_AND_ROTATION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_ROTATION">
 <h3>ENTITY_ROTATION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_ROTATION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_ROTATION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="VEHICLE_MOVE">
 <h3>VEHICLE_MOVE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">VEHICLE_MOVE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.VEHICLE_MOVE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="OPEN_BOOK">
 <h3>OPEN_BOOK</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">OPEN_BOOK</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.OPEN_BOOK">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="OPEN_WINDOW">
 <h3>OPEN_WINDOW</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">OPEN_WINDOW</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.OPEN_WINDOW">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="OPEN_SIGN_EDITOR">
 <h3>OPEN_SIGN_EDITOR</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">OPEN_SIGN_EDITOR</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.OPEN_SIGN_EDITOR">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="PING">
 <h3>PING</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PING</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PING">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="CRAFT_RECIPE_RESPONSE">
 <h3>CRAFT_RECIPE_RESPONSE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CRAFT_RECIPE_RESPONSE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CRAFT_RECIPE_RESPONSE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="PLAYER_ABILITIES">
 <h3>PLAYER_ABILITIES</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLAYER_ABILITIES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PLAYER_ABILITIES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PLAYER_CHAT_HEADER">
+<h3>PLAYER_CHAT_HEADER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLAYER_CHAT_HEADER</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="PLAYER_CHAT">
+<h3>PLAYER_CHAT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLAYER_CHAT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="END_COMBAT_EVENT">
 <h3>END_COMBAT_EVENT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">END_COMBAT_EVENT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.END_COMBAT_EVENT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTER_COMBAT_EVENT">
 <h3>ENTER_COMBAT_EVENT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTER_COMBAT_EVENT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTER_COMBAT_EVENT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="DEATH_COMBAT_EVENT">
 <h3>DEATH_COMBAT_EVENT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DEATH_COMBAT_EVENT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.DEATH_COMBAT_EVENT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="PLAYER_INFO">
 <h3>PLAYER_INFO</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLAYER_INFO</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PLAYER_INFO">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="FACE_PLAYER">
 <h3>FACE_PLAYER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">FACE_PLAYER</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.FACE_PLAYER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="PLAYER_POSITION_AND_LOOK">
 <h3>PLAYER_POSITION_AND_LOOK</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLAYER_POSITION_AND_LOOK</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UNLOCK_RECIPES">
 <h3>UNLOCK_RECIPES</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UNLOCK_RECIPES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UNLOCK_RECIPES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="DESTROY_ENTITIES">
 <h3>DESTROY_ENTITIES</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DESTROY_ENTITIES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.DESTROY_ENTITIES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="REMOVE_ENTITY_EFFECT">
 <h3>REMOVE_ENTITY_EFFECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">REMOVE_ENTITY_EFFECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.REMOVE_ENTITY_EFFECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="RESOURCE_PACK_SEND">
 <h3>RESOURCE_PACK_SEND</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">RESOURCE_PACK_SEND</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.RESOURCE_PACK_SEND">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="RESPAWN">
 <h3>RESPAWN</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">RESPAWN</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.RESPAWN">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_HEAD_LOOK">
 <h3>ENTITY_HEAD_LOOK</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_HEAD_LOOK</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_HEAD_LOOK">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="MULTI_BLOCK_CHANGE">
 <h3>MULTI_BLOCK_CHANGE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">MULTI_BLOCK_CHANGE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.MULTI_BLOCK_CHANGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SELECT_ADVANCEMENT_TAB">
 <h3>SELECT_ADVANCEMENT_TAB</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SELECT_ADVANCEMENT_TAB</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="SERVER_DATA">
+<h3>SERVER_DATA</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SERVER_DATA</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="ACTION_BAR">
 <h3>ACTION_BAR</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ACTION_BAR</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ACTION_BAR">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WORLD_BORDER_CENTER">
 <h3>WORLD_BORDER_CENTER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WORLD_BORDER_CENTER</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WORLD_BORDER_CENTER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WORLD_BORDER_LERP_SIZE">
 <h3>WORLD_BORDER_LERP_SIZE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WORLD_BORDER_LERP_SIZE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WORLD_BORDER_LERP_SIZE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WORLD_BORDER_SIZE">
 <h3>WORLD_BORDER_SIZE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WORLD_BORDER_SIZE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WORLD_BORDER_SIZE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WORLD_BORDER_WARNING_DELAY">
 <h3>WORLD_BORDER_WARNING_DELAY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WORLD_BORDER_WARNING_DELAY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WORLD_BORDER_WARNING_DELAY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="WORLD_BORDER_WARNING_REACH">
 <h3>WORLD_BORDER_WARNING_REACH</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WORLD_BORDER_WARNING_REACH</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.WORLD_BORDER_WARNING_REACH">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="CAMERA">
 <h3>CAMERA</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">CAMERA</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.CAMERA">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="HELD_ITEM_CHANGE">
 <h3>HELD_ITEM_CHANGE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">HELD_ITEM_CHANGE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.HELD_ITEM_CHANGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UPDATE_VIEW_POSITION">
 <h3>UPDATE_VIEW_POSITION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UPDATE_VIEW_POSITION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UPDATE_VIEW_POSITION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UPDATE_VIEW_DISTANCE">
 <h3>UPDATE_VIEW_DISTANCE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UPDATE_VIEW_DISTANCE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UPDATE_VIEW_DISTANCE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SPAWN_POSITION">
 <h3>SPAWN_POSITION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SPAWN_POSITION</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SPAWN_POSITION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="SET_DISPLAY_CHAT_PREVIEW">
+<h3>SET_DISPLAY_CHAT_PREVIEW</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_DISPLAY_CHAT_PREVIEW</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DISPLAY_SCOREBOARD">
 <h3>DISPLAY_SCOREBOARD</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DISPLAY_SCOREBOARD</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.DISPLAY_SCOREBOARD">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_METADATA">
 <h3>ENTITY_METADATA</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_METADATA</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_METADATA">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ATTACH_ENTITY">
 <h3>ATTACH_ENTITY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ATTACH_ENTITY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ATTACH_ENTITY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_VELOCITY">
 <h3>ENTITY_VELOCITY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_VELOCITY</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_VELOCITY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_EQUIPMENT">
 <h3>ENTITY_EQUIPMENT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_EQUIPMENT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_EQUIPMENT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_EXPERIENCE">
 <h3>SET_EXPERIENCE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_EXPERIENCE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_EXPERIENCE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UPDATE_HEALTH">
 <h3>UPDATE_HEALTH</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UPDATE_HEALTH</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UPDATE_HEALTH">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SCOREBOARD_OBJECTIVE">
 <h3>SCOREBOARD_OBJECTIVE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SCOREBOARD_OBJECTIVE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SCOREBOARD_OBJECTIVE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_PASSENGERS">
 <h3>SET_PASSENGERS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_PASSENGERS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_PASSENGERS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="TEAMS">
 <h3>TEAMS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">TEAMS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.TEAMS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="UPDATE_SCORE">
 <h3>UPDATE_SCORE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">UPDATE_SCORE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.UPDATE_SCORE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_SIMULATION_DISTANCE">
 <h3>SET_SIMULATION_DISTANCE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_SIMULATION_DISTANCE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_SIMULATION_DISTANCE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_TITLE_SUBTITLE">
 <h3>SET_TITLE_SUBTITLE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_TITLE_SUBTITLE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_TITLE_SUBTITLE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="TIME_UPDATE">
 <h3>TIME_UPDATE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">TIME_UPDATE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.TIME_UPDATE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_TITLE_TEXT">
 <h3>SET_TITLE_TEXT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_TITLE_TEXT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_TITLE_TEXT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SET_TITLE_TIME">
 <h3>SET_TITLE_TIME</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SET_TITLE_TIME</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SET_TITLE_TIME">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_SOUND_EFFECT">
 <h3>ENTITY_SOUND_EFFECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_SOUND_EFFECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_SOUND_EFFECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="SOUND_EFFECT">
 <h3>SOUND_EFFECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SOUND_EFFECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.SOUND_EFFECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="STOP_SOUND">
 <h3>STOP_SOUND</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">STOP_SOUND</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.STOP_SOUND">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="SYSTEM_CHAT">
+<h3>SYSTEM_CHAT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SYSTEM_CHAT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="PLAYER_LIST_HEADER_AND_FOOTER">
 <h3>PLAYER_LIST_HEADER_AND_FOOTER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">PLAYER_LIST_HEADER_AND_FOOTER</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.PLAYER_LIST_HEADER_AND_FOOTER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="NBT_QUERY_RESPONSE">
 <h3>NBT_QUERY_RESPONSE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">NBT_QUERY_RESPONSE</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.NBT_QUERY_RESPONSE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="COLLECT_ITEM">
 <h3>COLLECT_ITEM</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">COLLECT_ITEM</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.COLLECT_ITEM">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_TELEPORT">
 <h3>ENTITY_TELEPORT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_TELEPORT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_TELEPORT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ADVANCEMENTS">
 <h3>ADVANCEMENTS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ADVANCEMENTS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ADVANCEMENTS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_PROPERTIES">
 <h3>ENTITY_PROPERTIES</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_PROPERTIES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_PROPERTIES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ENTITY_EFFECT">
 <h3>ENTITY_EFFECT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">ENTITY_EFFECT</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.ENTITY_EFFECT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="DECLARE_RECIPES">
 <h3>DECLARE_RECIPES</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DECLARE_RECIPES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.DECLARE_RECIPES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="TAGS">
 <h3>TAGS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">TAGS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../../constant-values.html#net.minestom.server.network.packet.server.ServerPacketIdentifier.TAGS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 </ul>

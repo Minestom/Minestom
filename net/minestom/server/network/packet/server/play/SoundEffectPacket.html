@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">SoundEffectPacket</span>(int&nbsp;soundId, @NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source, int&nbsp;x, int&nbsp;y, int&nbsp;z, float&nbsp;volume, float&nbsp;pitch)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">SoundEffectPacket</span>(int&nbsp;soundId, @NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source, int&nbsp;x, int&nbsp;y, int&nbsp;z, float&nbsp;volume, float&nbsp;pitch, long&nbsp;seed)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -96,13 +96,14 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,net.kyori.adventure.sound.Sound.Source,int,int,int,float,float)" class="member-name-link">SoundEffectPacket</a><wbr>(int&nbsp;soundId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,net.kyori.adventure.sound.Sound.Source,int,int,int,float,float,long)" class="member-name-link">SoundEffectPacket</a><wbr>(int&nbsp;soundId,
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
  int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  float&nbsp;volume,
- float&nbsp;pitch)</code></div>
+ float&nbsp;pitch,
+ long&nbsp;seed)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>SoundEffectPacket</code> record class.</div>
 </div>
@@ -148,44 +149,49 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>pitch</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundId()" class="member-name-link">soundId</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seed()" class="member-name-link">seed</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>seed</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundId()" class="member-name-link">soundId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>soundId</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#source()" class="member-name-link">source</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#source()" class="member-name-link">source</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>source</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#volume()" class="member-name-link">volume</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#volume()" class="member-name-link">volume</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>volume</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#x()" class="member-name-link">x</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#x()" class="member-name-link">x</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>x</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#y()" class="member-name-link">y</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#y()" class="member-name-link">y</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>y</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#z()" class="member-name-link">z</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#z()" class="member-name-link">z</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>z</code> record component.</div>
 </div>
 </div>
@@ -225,7 +231,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(int,net.kyori.adventure.sound.Sound.Source,int,int,int,float,float)">
+<section class="detail" id="&lt;init&gt;(int,net.kyori.adventure.sound.Sound.Source,int,int,int,float,float,long)">
 <h3>SoundEffectPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SoundEffectPacket</span><wbr><span class="parameters">(int&nbsp;soundId,
  @NotNull
@@ -234,7 +240,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
  int&nbsp;y,
  int&nbsp;z,
  float&nbsp;volume,
- float&nbsp;pitch)</span></div>
+ float&nbsp;pitch,
+ long&nbsp;seed)</span></div>
 <div class="block">Creates an instance of a <code>SoundEffectPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -245,6 +252,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dd><code>z</code> - the value for the <code>z</code> record component</dd>
 <dd><code>volume</code> - the value for the <code>volume</code> record component</dd>
 <dd><code>pitch</code> - the value for the <code>pitch</code> record component</dd>
+<dd><code>seed</code> - the value for the <code>seed</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -403,6 +411,17 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>pitch</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="seed()">
+<h3>seed</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">seed</span>()</div>
+<div class="block">Returns the value of the <code>seed</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>seed</code> record component</dd>
 </dl>
 </section>
 </li>

@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">PlayerInfoPacket.AddPlayer</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a>&gt;&nbsp;properties, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, int&nbsp;ping, <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">PlayerInfoPacket.AddPlayer</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a>&gt;&nbsp;properties, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, int&nbsp;ping, @Nullable <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName, @Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a>&nbsp;playerPublicKey)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minestom.server.network.packet.server.play">PlayerInfoPacket.Entry</a>, <a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="PlayerInfoPacket.AddPlayer.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer</a>&gt;</span></div>
 </section>
@@ -115,12 +115,13 @@ implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minesto
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,java.util.List,net.minestom.server.entity.GameMode,int,net.kyori.adventure.text.Component)" class="member-name-link">AddPlayer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,java.util.List,net.minestom.server.entity.GameMode,int,net.kyori.adventure.text.Component,net.minestom.server.crypto.PlayerPublicKey)" class="member-name-link">AddPlayer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a>&gt;&nbsp;properties,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
  int&nbsp;ping,
- <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName)</code></div>
+ @Nullable <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName,
+ @Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a>&nbsp;playerPublicKey)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>AddPlayer</code> record class.</div>
 </div>
@@ -151,7 +152,7 @@ implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minesto
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a copy of this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayName()" class="member-name-link">displayName</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>displayName</code> record component.</div>
@@ -181,24 +182,29 @@ implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minesto
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>ping</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerPublicKey()" class="member-name-link">playerPublicKey</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>playerPublicKey</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>properties</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#uuid()" class="member-name-link">uuid</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#uuid()" class="member-name-link">uuid</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>uuid</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </div>
 </div>
@@ -222,14 +228,17 @@ implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minesto
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,java.util.List,net.minestom.server.entity.GameMode,int,net.kyori.adventure.text.Component)">
+<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,java.util.List,net.minestom.server.entity.GameMode,int,net.kyori.adventure.text.Component,net.minestom.server.crypto.PlayerPublicKey)">
 <h3>AddPlayer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AddPlayer</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoPacket.AddPlayer.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket.AddPlayer.Property</a>&gt;&nbsp;properties,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
  int&nbsp;ping,
- <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName)</span></div>
+ @Nullable
+ @Nullable <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName,
+ @Nullable
+ @Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a>&nbsp;playerPublicKey)</span></div>
 <div class="block">Creates an instance of a <code>AddPlayer</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,6 +248,7 @@ implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minesto
 <dd><code>gameMode</code> - the value for the <code>gameMode</code> record component</dd>
 <dd><code>ping</code> - the value for the <code>ping</code> record component</dd>
 <dd><code>displayName</code> - the value for the <code>displayName</code> record component</dd>
+<dd><code>playerPublicKey</code> - the value for the <code>playerPublicKey</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -406,11 +416,24 @@ implements <a href="PlayerInfoPacket.Entry.html" title="interface in net.minesto
 <li>
 <section class="detail" id="displayName()">
 <h3>displayName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">displayName</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">displayName</span>()</div>
 <div class="block">Returns the value of the <code>displayName</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>displayName</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="playerPublicKey()">
+<h3>playerPublicKey</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../../crypto/PlayerPublicKey.html" title="class in net.minestom.server.crypto">PlayerPublicKey</a></span>&nbsp;<span class="element-name">playerPublicKey</span>()</div>
+<div class="block">Returns the value of the <code>playerPublicKey</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>playerPublicKey</code> record component</dd>
 </dl>
 </section>
 </li>

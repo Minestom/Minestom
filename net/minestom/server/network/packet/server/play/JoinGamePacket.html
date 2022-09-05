@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">JoinGamePacket</span>(int&nbsp;entityId, boolean&nbsp;isHardcore, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds, org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimensionCodec, org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimension, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world, long&nbsp;hashedSeed, int&nbsp;maxPlayers, int&nbsp;viewDistance, int&nbsp;simulationDistance, boolean&nbsp;reducedDebugInfo, boolean&nbsp;enableRespawnScreen, boolean&nbsp;isDebug, boolean&nbsp;isFlat)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">JoinGamePacket</span>(int&nbsp;entityId, boolean&nbsp;isHardcore, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds, org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimensionCodec, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world, long&nbsp;hashedSeed, int&nbsp;maxPlayers, int&nbsp;viewDistance, int&nbsp;simulationDistance, boolean&nbsp;reducedDebugInfo, boolean&nbsp;enableRespawnScreen, boolean&nbsp;isDebug, boolean&nbsp;isFlat)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -96,13 +96,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,boolean,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,java.util.List,org.jglrxavpok.hephaistos.nbt.NBTCompound,org.jglrxavpok.hephaistos.nbt.NBTCompound,java.lang.String,long,int,int,int,boolean,boolean,boolean,boolean)" class="member-name-link">JoinGamePacket</a><wbr>(int&nbsp;entityId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,boolean,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,java.util.List,org.jglrxavpok.hephaistos.nbt.NBTCompound,java.lang.String,java.lang.String,long,int,int,int,boolean,boolean,boolean,boolean)" class="member-name-link">JoinGamePacket</a><wbr>(int&nbsp;entityId,
  boolean&nbsp;isHardcore,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds,
  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimensionCodec,
- org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimension,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world,
  long&nbsp;hashedSeed,
  int&nbsp;maxPlayers,
@@ -132,14 +132,14 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimension()" class="member-name-link">dimension</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimensionCodec()" class="member-name-link">dimensionCodec</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>dimension</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimensionCodec()" class="member-name-link">dimensionCodec</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>dimensionCodec</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimensionType()" class="member-name-link">dimensionType</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>dimensionType</code> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enableRespawnScreen()" class="member-name-link">enableRespawnScreen</a>()</code></div>
@@ -254,13 +254,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.binary.BinaryReader)">
-<h3>JoinGamePacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JoinGamePacket</span><wbr><span class="parameters">(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(int,boolean,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,java.util.List,org.jglrxavpok.hephaistos.nbt.NBTCompound,org.jglrxavpok.hephaistos.nbt.NBTCompound,java.lang.String,long,int,int,int,boolean,boolean,boolean,boolean)">
+<section class="detail" id="&lt;init&gt;(int,boolean,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,java.util.List,org.jglrxavpok.hephaistos.nbt.NBTCompound,java.lang.String,java.lang.String,long,int,int,int,boolean,boolean,boolean,boolean)">
 <h3>JoinGamePacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JoinGamePacket</span><wbr><span class="parameters">(int&nbsp;entityId,
  boolean&nbsp;isHardcore,
@@ -268,7 +262,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds,
  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimensionCodec,
- org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;dimension,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world,
  long&nbsp;hashedSeed,
  int&nbsp;maxPlayers,
@@ -287,7 +281,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dd><code>previousGameMode</code> - the value for the <code>previousGameMode</code> record component</dd>
 <dd><code>worlds</code> - the value for the <code>worlds</code> record component</dd>
 <dd><code>dimensionCodec</code> - the value for the <code>dimensionCodec</code> record component</dd>
-<dd><code>dimension</code> - the value for the <code>dimension</code> record component</dd>
+<dd><code>dimensionType</code> - the value for the <code>dimensionType</code> record component</dd>
 <dd><code>world</code> - the value for the <code>world</code> record component</dd>
 <dd><code>hashedSeed</code> - the value for the <code>hashedSeed</code> record component</dd>
 <dd><code>maxPlayers</code> - the value for the <code>maxPlayers</code> record component</dd>
@@ -298,6 +292,12 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dd><code>isDebug</code> - the value for the <code>isDebug</code> record component</dd>
 <dd><code>isFlat</code> - the value for the <code>isFlat</code> record component</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.binary.BinaryReader)">
+<h3>JoinGamePacket</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JoinGamePacket</span><wbr><span class="parameters">(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</span></div>
 </section>
 </li>
 </ul>
@@ -447,13 +447,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="dimension()">
-<h3>dimension</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">dimension</span>()</div>
-<div class="block">Returns the value of the <code>dimension</code> record component.</div>
+<section class="detail" id="dimensionType()">
+<h3>dimensionType</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">dimensionType</span>()</div>
+<div class="block">Returns the value of the <code>dimensionType</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>dimension</code> record component</dd>
+<dd>the value of the <code>dimensionType</code> record component</dd>
 </dl>
 </section>
 </li>

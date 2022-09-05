@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntityEffectPacket</span>(int&nbsp;entityId, @NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a>&nbsp;potion)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntityEffectPacket</span>(int&nbsp;entityId, @NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a>&nbsp;potion, @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;factorCodec)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></span></div>
 </section>
@@ -96,8 +96,9 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,net.minestom.server.potion.Potion)" class="member-name-link">EntityEffectPacket</a><wbr>(int&nbsp;entityId,
- @NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a>&nbsp;potion)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,net.minestom.server.potion.Potion,org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">EntityEffectPacket</a><wbr>(int&nbsp;entityId,
+ @NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a>&nbsp;potion,
+ @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;factorCodec)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>EntityEffectPacket</code> record class.</div>
 </div>
@@ -127,29 +128,34 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getId()" class="member-name-link">getId</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#factorCodec()" class="member-name-link">factorCodec</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>factorCodec</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getId()" class="member-name-link">getId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the id of this packet.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#potion()" class="member-name-link">potion</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#potion()" class="member-name-link">potion</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>potion</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </div>
 </div>
@@ -176,16 +182,19 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(int,net.minestom.server.potion.Potion)">
+<section class="detail" id="&lt;init&gt;(int,net.minestom.server.potion.Potion,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
 <h3>EntityEffectPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntityEffectPacket</span><wbr><span class="parameters">(int&nbsp;entityId,
  @NotNull
- @NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a>&nbsp;potion)</span></div>
+ @NotNull <a href="../../../../potion/Potion.html" title="class in net.minestom.server.potion">Potion</a>&nbsp;potion,
+ @Nullable
+ @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;factorCodec)</span></div>
 <div class="block">Creates an instance of a <code>EntityEffectPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>entityId</code> - the value for the <code>entityId</code> record component</dd>
 <dd><code>potion</code> - the value for the <code>potion</code> record component</dd>
+<dd><code>factorCodec</code> - the value for the <code>factorCodec</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -289,6 +298,18 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>potion</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="factorCodec()">
+<h3>factorCodec</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">factorCodec</span>()</div>
+<div class="block">Returns the value of the <code>factorCodec</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>factorCodec</code> record component</dd>
 </dl>
 </section>
 </li>

@@ -20,6 +20,7 @@ net.minestom.server.command.builder.exception
 net.minestom.server.command.builder.parser
 net.minestom.server.command.builder.suggestion
 net.minestom.server.coordinate
+net.minestom.server.crypto
 net.minestom.server.effects
 net.minestom.server.entity
 net.minestom.server.entity.ai
@@ -128,6 +129,7 @@ net.minestom.server.utils.block
 net.minestom.server.utils.callback
 net.minestom.server.utils.chunk
 net.minestom.server.utils.collection
+net.minestom.server.utils.crypto
 net.minestom.server.utils.debug
 net.minestom.server.utils.entity
 net.minestom.server.utils.function

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientSetBeaconEffectPacket</span>(int&nbsp;primaryEffect, int&nbsp;secondaryEffect)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientSetBeaconEffectPacket</span>(@Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a>&nbsp;primaryEffect, @Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a>&nbsp;secondaryEffect)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span></div>
 </section>
@@ -96,8 +96,8 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,int)" class="member-name-link">ClientSetBeaconEffectPacket</a><wbr>(int&nbsp;primaryEffect,
- int&nbsp;secondaryEffect)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.potion.PotionType,net.minestom.server.potion.PotionType)" class="member-name-link">ClientSetBeaconEffectPacket</a><wbr>(@Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a>&nbsp;primaryEffect,
+ @Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a>&nbsp;secondaryEffect)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientSetBeaconEffectPacket</code> record class.</div>
 </div>
@@ -127,12 +127,12 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#primaryEffect()" class="member-name-link">primaryEffect</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>primaryEffect</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#secondaryEffect()" class="member-name-link">secondaryEffect</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>secondaryEffect</code> record component.</div>
@@ -171,10 +171,12 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(int,int)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.potion.PotionType,net.minestom.server.potion.PotionType)">
 <h3>ClientSetBeaconEffectPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientSetBeaconEffectPacket</span><wbr><span class="parameters">(int&nbsp;primaryEffect,
- int&nbsp;secondaryEffect)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientSetBeaconEffectPacket</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a>&nbsp;primaryEffect,
+ @Nullable
+ @Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a>&nbsp;secondaryEffect)</span></div>
 <div class="block">Creates an instance of a <code>ClientSetBeaconEffectPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -236,7 +238,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -250,7 +252,8 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <li>
 <section class="detail" id="primaryEffect()">
 <h3>primaryEffect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">primaryEffect</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a></span>&nbsp;<span class="element-name">primaryEffect</span>()</div>
 <div class="block">Returns the value of the <code>primaryEffect</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -261,7 +264,8 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <li>
 <section class="detail" id="secondaryEffect()">
 <h3>secondaryEffect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">secondaryEffect</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a></span>&nbsp;<span class="element-name">secondaryEffect</span>()</div>
 <div class="block">Returns the value of the <code>secondaryEffect</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
