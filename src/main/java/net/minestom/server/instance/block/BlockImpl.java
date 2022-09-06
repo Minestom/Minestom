@@ -165,6 +165,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
         final int length = propertyTypes.length;
+        if (length == 0) return Map.of();
         String[] keys = new String[length];
         String[] values = new String[length];
         for (int i = 0; i < length; i++) {
@@ -172,7 +173,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
             keys[i] = property.key();
             values[i] = property.values().get(propertiesArray[i]);
         }
-        return Map.class.cast(Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length)));
+        return Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length));
     }
 
     @Override
