@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record ChatPreviewPacket(int queryId, @Nullable Component preview) implements ComponentHoldingServerPacket {
@@ -32,7 +32,7 @@ public record ChatPreviewPacket(int queryId, @Nullable Component preview) implem
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(preview);
+        return List.of(preview);
     }
 
     @Override

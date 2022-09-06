@@ -1637,7 +1637,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public List<Point> getLineOfSight(int maxDistance) {
         Instance instance = getInstance();
         if (instance == null) {
-            return Collections.emptyList();
+            return List.of();
         }
 
         List<Point> blocks = new ArrayList<>();

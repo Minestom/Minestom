@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
@@ -49,7 +49,7 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
 
     @Override
     public @NotNull Collection<Component> components() {
-        return Collections.singleton(signedContent);
+        return List.of(signedContent);
     }
 
     @Override

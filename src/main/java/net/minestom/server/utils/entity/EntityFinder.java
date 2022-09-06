@@ -129,11 +129,11 @@ public class EntityFinder {
         if (targetSelector == TargetSelector.MINESTOM_USERNAME) {
             Check.notNull(constantName, "The player name should not be null when searching for it");
             final Player player = MinecraftServer.getConnectionManager().getPlayer(constantName);
-            return player != null ? Collections.singletonList(player) : Collections.emptyList();
+            return player != null ? List.of(player) : List.of();
         } else if (targetSelector == TargetSelector.MINESTOM_UUID) {
             Check.notNull(constantUuid, "The UUID should not be null when searching for it");
             final Entity entity = Entity.getEntity(constantUuid);
-            return entity != null ? Collections.singletonList(entity) : Collections.emptyList();
+            return entity != null ? List.of(entity) : List.of();
         }
 
         final Point pos = startPosition != null ? startPosition : (self != null ? self.getPosition() : Vec.ZERO);
@@ -221,7 +221,7 @@ public class EntityFinder {
             result = result.stream()
                     .sorted((ent1, ent2) -> switch (entitySort) {
                         case ARBITRARY, RANDOM ->
-                                // RANDOM is handled below
+                            // RANDOM is handled below
                                 1;
                         case FURTHEST -> pos.distance(ent1.getPosition()) >
                                 pos.distance(ent2.getPosition()) ?
@@ -312,11 +312,11 @@ public class EntityFinder {
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             return players.stream()
                     .min(Comparator.comparingDouble(p -> p.getPosition().distance(startPosition)))
-                    .<List<Entity>>map(Collections::singletonList).orElse(Collections.emptyList());
+                    .<List<Entity>>map(Collections::singletonList).orElse(List.of());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
             final int index = ThreadLocalRandom.current().nextInt(players.size());
             final Player player = players.stream().skip(index).findFirst().orElseThrow();
-            return Collections.singletonList(player);
+            return List.of(player);
         } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
             return List.copyOf(players);
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
@@ -331,7 +331,7 @@ public class EntityFinder {
             }
             return entities;
         } else if (targetSelector == TargetSelector.SELF) {
-            return self != null ? Collections.singletonList(self) : Collections.emptyList();
+            return self != null ? List.of(self) : List.of();
         }
         throw new IllegalStateException("Weird thing happened: " + targetSelector);
     }
