@@ -164,8 +164,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     public @Unmodifiable @NotNull Map<String, String> properties() {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
-        if (propertyTypes.length == 0) return Collections.emptyMap();
         final int length = propertyTypes.length;
+        if (length == 0) return Map.of();
         String[] keys = new String[length];
         String[] values = new String[length];
         for (int i = 0; i < length; i++) {
