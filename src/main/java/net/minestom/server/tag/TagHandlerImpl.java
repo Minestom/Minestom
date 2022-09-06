@@ -1,312 +1,372 @@
 package net.minestom.server.tag;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.utils.PropertyUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
+import java.lang.invoke.VarHandle;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
-    private volatile SPMCMap entries;
-    private Cache cache;
+    private static final boolean CACHE_ENABLE = PropertyUtils.getBoolean("minestom.tag-handler-cache", true);
+    static final Serializers.Entry<Node, NBTCompound> NODE_SERIALIZER = new Serializers.Entry<>(NBTType.TAG_Compound, entries -> fromCompound(entries).root, Node::compound, true);
 
-    TagHandlerImpl(SPMCMap entries, Cache cache) {
-        this.entries = entries;
-        this.cache = cache;
+    private final Node root;
+    private volatile Node copy;
+
+    TagHandlerImpl(Node root) {
+        this.root = root;
     }
 
     TagHandlerImpl() {
-        this.entries = new SPMCMap();
-        this.cache = null;
+        this.root = new Node();
     }
 
-    static TagHandlerImpl fromCompound(NBTCompoundLike compound) {
+    static TagHandlerImpl fromCompound(NBTCompoundLike compoundLike) {
+        final NBTCompound compound = compoundLike.toCompound();
         TagHandlerImpl handler = new TagHandlerImpl();
-        for (var entry : compound) {
-            final Tag<NBT> tag = Tag.NBT(entry.getKey());
-            final NBT nbt = entry.getValue();
-            handler.setTag(tag, nbt);
-        }
+        TagNbtSeparator.separate(compound, entry -> handler.setTag(entry.tag(), entry.value()));
+        handler.root.compound = compound;
         return handler;
     }
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        if (tag.isView()) return tag.read(asCompound());
-        return read(entries, tag);
+        VarHandle.fullFence();
+        return root.getTag(tag);
     }
 
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        // Handle view tags
         if (tag.isView()) {
-            MutableNBTCompound viewCompound = new MutableNBTCompound();
-            tag.writeUnsafe(viewCompound, value);
-            updateContent(viewCompound);
-        } else {
-            final Entry<?> entry = valueToEntry(tag, value);
-            updateEntry(tag, entry);
+            synchronized (this) {
+                Node syncNode = traversePathWrite(root, tag, value != null);
+                if (syncNode != null) {
+                    syncNode.updateContent(value != null ? (NBTCompound) tag.entry.write(value) : NBTCompound.EMPTY);
+                    syncNode.invalidate();
+                }
+            }
+            return;
         }
-    }
-
-    private <T> Entry<?> valueToEntry(Tag<T> tag, @Nullable T value) {
-        if (value == null) return null;
-        if (value instanceof NBT nbt) {
-            if (nbt instanceof NBTCompound compound) {
-                final TagHandlerImpl handler = fromCompound(compound);
-                return new PathEntry(tag.getKey(), handler);
+        // Normal tag
+        final int tagIndex = tag.index;
+        VarHandle.fullFence();
+        Node node = traversePathWrite(root, tag, value != null);
+        if (node == null)
+            return; // Tried to remove an absent tag. Do nothing
+        StaticIntMap<Entry<?>> entries = node.entries;
+        if (value != null) {
+            Entry previous = entries.get(tagIndex);
+            if (previous != null && previous.tag.shareValue(tag)) {
+                previous.updateValue(tag.copyValue(value));
             } else {
-                final var nbtEntry = TagNbtSeparator.separateSingle(tag.getKey(), nbt);
-                return new TagEntry<>(nbtEntry.tag(), nbtEntry.value());
+                synchronized (this) {
+                    node = traversePathWrite(root, tag, true);
+                    node.entries.put(tagIndex, valueToEntry(node, tag, value));
+                }
             }
         } else {
-            final UnaryOperator<T> copy = tag.copy;
-            if (copy != null) value = copy.apply(value);
-            return new TagEntry<>(tag, value);
+            synchronized (this) {
+                node = traversePathWrite(root, tag, false);
+                if (node == null) return;
+                node.entries.remove(tagIndex);
+            }
         }
+        node.invalidate();
+    }
+
+    @Override
+    public <T> void updateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+        updateTag0(tag, value, false);
+    }
+
+    @Override
+    public <T> @UnknownNullability T updateAndGetTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+        return updateTag0(tag, value, false);
+    }
+
+    @Override
+    public <T> @UnknownNullability T getAndUpdateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
+        return updateTag0(tag, value, true);
+    }
+
+    private synchronized <T> T updateTag0(@NotNull Tag<T> tag, @NotNull UnaryOperator<T> value, boolean returnPrevious) {
+        final Node node = traversePathWrite(root, tag, true);
+        if (tag.isView()) {
+            final T previousValue = tag.read(node.compound());
+            final T newValue = value.apply(previousValue);
+            node.updateContent((NBTCompoundLike) tag.entry.write(newValue));
+            node.invalidate();
+            return returnPrevious ? previousValue : newValue;
+        }
+
+        final int tagIndex = tag.index;
+        StaticIntMap<Entry<?>> entries = node.entries;
+
+        final Entry previousEntry = entries.get(tagIndex);
+        final T previousValue;
+        if (previousEntry != null) {
+            final Object previousTmp = previousEntry.value;
+            if (previousTmp instanceof Node n) {
+                final NBTCompound compound = NBT.Compound(Map.of(tag.getKey(), n.compound()));
+                previousValue = tag.read(compound);
+            } else {
+                previousValue = (T) previousTmp;
+            }
+        } else {
+            previousValue = tag.createDefault();
+        }
+        final T newValue = value.apply(previousValue);
+        if (newValue != null) entries.put(tagIndex, valueToEntry(node, tag, newValue));
+        else entries.remove(tagIndex);
+
+        node.invalidate();
+        return returnPrevious ? previousValue : newValue;
     }
 
     @Override
     public @NotNull TagReadable readableCopy() {
-        return updatedCache();
+        Node copy = this.copy;
+        if (copy == null) {
+            synchronized (this) {
+                this.copy = copy = root.copy(null);
+            }
+        }
+        return copy;
     }
 
     @Override
     public synchronized @NotNull TagHandler copy() {
-        return new TagHandlerImpl(entries.clone(), cache);
+        return new TagHandlerImpl(root.copy(null));
     }
 
     @Override
-    public void updateContent(@NotNull NBTCompoundLike compound) {
-        final TagHandlerImpl converted = fromCompound(compound);
-        synchronized (this) {
-            this.cache = converted.cache;
-            this.entries = converted.entries;
-        }
+    public synchronized void updateContent(@NotNull NBTCompoundLike compound) {
+        this.root.updateContent(compound);
     }
 
     @Override
     public @NotNull NBTCompound asCompound() {
-        return updatedCache().compound;
+        VarHandle.fullFence();
+        return root.compound();
     }
 
-    private synchronized <T> void updateEntry(@NotNull Tag<T> tag, @Nullable Entry<?> value) {
-        int tagIndex = tag.index;
-        TagHandlerImpl local = this;
-
+    private static Node traversePathRead(Node node, Tag<?> tag) {
         final Tag.PathEntry[] paths = tag.path;
-        TagHandlerImpl[] pathHandlers = null;
-        if (paths != null) {
-            final int length = paths.length;
-            pathHandlers = new TagHandlerImpl[length];
-            for (int i = 0; i < length; i++) {
-                final Tag.PathEntry path = paths[i];
-                final int pathIndex = path.index();
-                final Entry<?> entry = local.entries.get(pathIndex);
-                if (entry instanceof PathEntry pathEntry) {
-                    // Existing path, continue navigating
-                    local = pathEntry.value;
-                } else {
-                    if (value == null) return;
+        if (paths == null) return node;
+        for (var path : paths) {
+            final Entry<?> entry = node.entries.get(path.index());
+            if (entry == null || (node = entry.toNode()) == null)
+                return null;
+        }
+        return node;
+    }
+
+    @Contract("_, _, true -> !null")
+    private Node traversePathWrite(Node root, Tag<?> tag,
+                                   boolean present) {
+        final Tag.PathEntry[] paths = tag.path;
+        if (paths == null) return root;
+        Node local = root;
+        for (Tag.PathEntry path : paths) {
+            final int pathIndex = path.index();
+            final Entry<?> entry = local.entries.get(pathIndex);
+            if (entry != null && entry.tag.entry.isPath()) {
+                // Existing path, continue navigating
+                final Node tmp = (Node) entry.value;
+                assert tmp.parent == local : "Path parent is invalid: " + tmp.parent + " != " + local;
+                local = tmp;
+            } else {
+                if (!present) return null;
+                synchronized (this) {
+                    var synEntry = local.entries.get(pathIndex);
+                    if (synEntry != null && synEntry.tag.entry.isPath()) {
+                        // Existing path, continue navigating
+                        final Node tmp = (Node) synEntry.value;
+                        assert tmp.parent == local : "Path parent is invalid: " + tmp.parent + " != " + local;
+                        local = tmp;
+                        continue;
+                    }
+
                     // Empty path, create a new handler.
                     // Slow path is taken if the entry comes from a Structure tag, requiring conversion from NBT
-                    TagHandlerImpl tmp = local;
-                    local = entry != null && entry.updatedNbt() instanceof NBTCompound compound ?
-                            fromCompound(compound) : new TagHandlerImpl();
-                    tmp.entries.put(pathIndex, new PathEntry(path.name(), local));
-                }
-                pathHandlers[i] = local;
-            }
-            // Handle removal if the tag was present (recursively)
-            if (value == null) {
-                // Remove entry
-                if (pathHandlers[length - 1].entries.remove(tagIndex) == null) return;
-                // Clear empty parents
-                for (int i = length - 1; i >= 0; i--) {
-                    final TagHandlerImpl handler = pathHandlers[i];
-                    if (!handler.entries.isEmpty()) break;
-                    final int pathIndex = paths[i].index();
-                    if (i == 0) {
-                        // Remove the root handler
-                        local = this;
-                        tagIndex = pathIndex;
-                    } else {
-                        TagHandlerImpl parent = pathHandlers[i - 1];
-                        parent.entries.remove(pathIndex);
+                    Node tmp = local;
+                    local = new Node(tmp);
+                    if (synEntry != null && synEntry.updatedNbt() instanceof NBTCompound compound) {
+                        local.updateContent(compound);
                     }
+                    tmp.entries.put(pathIndex, Entry.makePathEntry(path.name(), local));
                 }
             }
         }
-        // Normal tag
-        if (value != null) local.entries.put(tagIndex, value);
-        else local.entries.remove(tagIndex);
-        this.cache = null;
-        if (pathHandlers != null) {
-            for (var handler : pathHandlers) handler.cache = null;
-        }
+        return local;
     }
 
-    private synchronized Cache updatedCache() {
-        Cache cache = this.cache;
-        if (cache == null) {
-            final var entries = this.entries;
-            if (!entries.isEmpty()) {
-                MutableNBTCompound tmp = new MutableNBTCompound();
-                for (Entry<?> entry : entries.values()) {
-                    if (entry != null) tmp.put(entry.tag().getKey(), entry.updatedNbt());
-                }
-                cache = new Cache(entries.clone(), tmp.toCompound());
-            } else cache = Cache.EMPTY;
-            this.cache = cache;
-        }
-        return cache;
-    }
-
-    private static <T> T read(Int2ObjectOpenHashMap<Entry<?>> entries, Tag<T> tag) {
-        final Tag.PathEntry[] paths = tag.path;
-        if (paths != null) {
-            // Must be a path-able entry
-            if ((entries = traversePath(paths, entries)) == null)
-                return tag.createDefault();
-        }
-        final Entry<?> entry;
-        if ((entry = entries.get(tag.index)) == null) {
-            return tag.createDefault();
-        }
-        if (entry.tag().shareValue(tag)) {
-            // The tag used to write the entry is compatible with the one used to get
-            // return the value directly
-            //noinspection unchecked
-            return (T) entry.value();
-        }
-        // Value must be parsed from nbt if the tag is different
-        final NBT nbt = entry.updatedNbt();
-        final Serializers.Entry<T, NBT> serializerEntry = tag.entry;
-        return serializerEntry.nbtType().isAssignableFrom(nbt.getClass()) ?
-                serializerEntry.read(nbt) : tag.createDefault();
-    }
-
-    private static Int2ObjectOpenHashMap<Entry<?>> traversePath(Tag.PathEntry[] paths,
-                                                                Int2ObjectOpenHashMap<Entry<?>> entries) {
-        for (var path : paths) {
-            final Entry<?> entry;
-            if ((entry = entries.get(path.index())) == null)
-                return null;
-            if (entry instanceof PathEntry pathEntry) {
-                entries = pathEntry.value.entries;
-            } else if (entry.updatedNbt() instanceof NBTCompound compound) {
-                // Slow path forcing a conversion of the structure to NBTCompound
-                // TODO should the handler be cached inside the entry?
-                TagHandlerImpl tmp = fromCompound(compound);
-                entries = tmp.entries;
+    private <T> Entry<?> valueToEntry(Node parent, Tag<T> tag, @NotNull T value) {
+        if (value instanceof NBT nbt) {
+            if (nbt instanceof NBTCompound compound) {
+                final TagHandlerImpl handler = fromCompound(compound);
+                return Entry.makePathEntry(tag, new Node(parent, handler.root.entries));
             } else {
-                // Entry is not path-able
-                return null;
+                final var nbtEntry = TagNbtSeparator.separateSingle(tag.getKey(), nbt);
+                return new Entry<>(nbtEntry.tag(), nbtEntry.value());
             }
+        } else {
+            return new Entry<>(tag, tag.copyValue(value));
         }
-        return entries;
     }
 
-    private record Cache(Int2ObjectOpenHashMap<Entry<?>> entries, NBTCompound compound) implements TagReadable {
-        static final Cache EMPTY = new Cache(new Int2ObjectOpenHashMap<>(), NBTCompound.EMPTY);
+    final class Node implements TagReadable {
+        final Node parent;
+        final StaticIntMap<Entry<?>> entries;
+        NBTCompound compound;
+
+        public Node(Node parent, StaticIntMap<Entry<?>> entries) {
+            this.parent = parent;
+            this.entries = entries;
+        }
+
+        Node(Node parent) {
+            this(parent, new StaticIntMap.Array<>());
+        }
+
+        Node() {
+            this(null);
+        }
 
         @Override
         public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-            if (tag.isView()) return tag.read(compound);
-            return read(entries, tag);
+            final Node node = traversePathRead(this, tag);
+            if (node == null)
+                return tag.createDefault(); // Must be a path-able entry, but not present
+            if (tag.isView()) return tag.read(node.compound());
+
+            final StaticIntMap<Entry<?>> entries = node.entries;
+            final Entry<?> entry = entries.get(tag.index);
+            if (entry == null)
+                return tag.createDefault(); // Not present
+            if (entry.tag.shareValue(tag)) {
+                // The tag used to write the entry is compatible with the one used to get
+                // return the value directly
+                //noinspection unchecked
+                return (T) entry.value;
+            }
+            // Value must be parsed from nbt if the tag is different
+            final NBT nbt = entry.updatedNbt();
+            final Serializers.Entry<T, NBT> serializerEntry = tag.entry;
+            final NBTType<NBT> type = serializerEntry.nbtType();
+            return type == null || type == nbt.getID() ? serializerEntry.read(nbt) : tag.createDefault();
+        }
+
+        void updateContent(@NotNull NBTCompoundLike compoundLike) {
+            final NBTCompound compound = compoundLike.toCompound();
+            final TagHandlerImpl converted = fromCompound(compound);
+            this.entries.updateContent(converted.root.entries);
+            this.compound = compound;
+        }
+
+        NBTCompound compound() {
+            NBTCompound compound;
+            if (!CACHE_ENABLE || (compound = this.compound) == null) {
+                MutableNBTCompound tmp = new MutableNBTCompound();
+                this.entries.forValues(entry -> {
+                    final Tag tag = entry.tag;
+                    final NBT nbt = entry.updatedNbt();
+                    if (!tag.entry.isPath() || !((NBTCompound) nbt).isEmpty()) {
+                        tmp.put(tag.getKey(), nbt);
+                    }
+                });
+                this.compound = compound = tmp.toCompound();
+            }
+            return compound;
+        }
+
+        @Contract("null -> !null")
+        Node copy(Node parent) {
+            MutableNBTCompound tmp = new MutableNBTCompound();
+            Node result = new Node(parent, new StaticIntMap.Array<>());
+            StaticIntMap<Entry<?>> entries = result.entries;
+            this.entries.forValues(entry -> {
+                Tag tag = entry.tag;
+                Object value = entry.value;
+                NBT nbt;
+                if (value instanceof Node node) {
+                    Node copy = node.copy(result);
+                    if (copy == null)
+                        return; // Empty node
+                    value = copy;
+                    nbt = copy.compound;
+                    assert nbt != null : "Node copy should also compute the compound";
+                } else {
+                    nbt = entry.updatedNbt();
+                }
+
+                tmp.put(tag.getKey(), nbt);
+                entries.put(tag.index, valueToEntry(result, tag, value));
+            });
+            if (tmp.isEmpty() && parent != null)
+                return null; // Empty child node
+            result.compound = tmp.toCompound();
+            return result;
+        }
+
+        void invalidate() {
+            Node tmp = this;
+            do tmp.compound = null;
+            while ((tmp = tmp.parent) != null);
+            TagHandlerImpl.this.copy = null;
         }
     }
 
-    private sealed interface Entry<T>
-            permits TagEntry, PathEntry {
-        Tag<T> tag();
-
-        T value();
-
-        NBT updatedNbt();
-    }
-
-    private static final class TagEntry<T> implements Entry<T> {
+    private static final class Entry<T> {
         private final Tag<T> tag;
-        private final T value;
-        volatile NBT nbt;
+        T value;
+        NBT nbt;
 
-        TagEntry(Tag<T> tag, T value) {
+        Entry(Tag<T> tag, T value) {
             this.tag = tag;
             this.value = value;
         }
 
-        @Override
-        public Tag<T> tag() {
-            return tag;
+        static Entry<?> makePathEntry(String path, Node node) {
+            return new Entry<>(Tag.tag(path, NODE_SERIALIZER), node);
         }
 
-        @Override
-        public T value() {
-            return value;
+        static Entry<?> makePathEntry(Tag<?> tag, Node node) {
+            return makePathEntry(tag.getKey(), node);
         }
 
-        @Override
-        public NBT updatedNbt() {
+        NBT updatedNbt() {
+            if (tag.entry.isPath()) return ((Node) value).compound();
             NBT nbt = this.nbt;
             if (nbt == null) this.nbt = nbt = tag.entry.write(value);
             return nbt;
         }
-    }
 
-    private record PathEntry(Tag<TagHandlerImpl> tag,
-                             TagHandlerImpl value) implements Entry<TagHandlerImpl> {
-        PathEntry(String key, TagHandlerImpl value) {
-            this(Tag.tag(key, Serializers.PATH), value);
+        void updateValue(T value) {
+            assert !tag.entry.isPath();
+            this.value = value;
+            this.nbt = null;
         }
 
-        @Override
-        public NBTCompound updatedNbt() {
-            return value.asCompound();
-        }
-    }
-
-    final class SPMCMap extends Int2ObjectOpenHashMap<Entry<?>> {
-        boolean rehashed;
-
-        SPMCMap() {
-        }
-
-        SPMCMap(Int2ObjectMap<TagHandlerImpl.Entry<?>> m) {
-            super(m);
-        }
-
-        @Override
-        public TagHandlerImpl.Entry<?> put(int k, TagHandlerImpl.Entry<?> entry) {
-            assertState();
-            return super.put(k, entry);
-        }
-
-        @Override
-        public boolean remove(int k, Object v) {
-            assertState();
-            return super.remove(k, v);
-        }
-
-        @Override
-        protected void rehash(int newSize) {
-            assertState();
-            TagHandlerImpl.this.entries = new SPMCMap(this);
-            this.rehashed = true;
-        }
-
-        @Override
-        public SPMCMap clone() {
-            return (SPMCMap) super.clone();
-        }
-
-        private void assertState() {
-            assert !rehashed;
+        Node toNode() {
+            if (tag.entry.isPath()) return (Node) value;
+            if (updatedNbt() instanceof NBTCompound compound) {
+                // Slow path forcing a conversion of the structure to NBTCompound
+                // TODO should the handler be cached inside the entry?
+                return fromCompound(compound).root;
+            }
+            // Entry is not path-able
+            return null;
         }
     }
 }

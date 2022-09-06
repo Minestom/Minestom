@@ -2,7 +2,9 @@ package net.minestom.server.instance;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,5 +48,29 @@ public class InstanceBlockIntegrationTest {
 
         instance.loadChunk(0, 0).join();
         assertEquals(Block.AIR, instance.getBlock(0, 50, 0));
+    }
+
+    @Test
+    public void blockNbt(Env env) {
+        var instance = env.createFlatInstance();
+        assertThrows(NullPointerException.class, () -> instance.getBlock(0, 0, 0),
+                "No exception throw when getting a block in an unloaded chunk");
+
+        instance.loadChunk(0, 0).join();
+
+        var tag = Tag.Integer("key");
+        var block = Block.STONE.withTag(tag, 5);
+        var point = new Vec(0, 50, 0);
+        // Initial placement
+        instance.setBlock(point, block);
+        assertEquals(5, instance.getBlock(point).getTag(tag));
+
+        // Override
+        instance.setBlock(point, block.withTag(tag, 7));
+        assertEquals(7, instance.getBlock(point).getTag(tag));
+
+        // Different block type
+        instance.setBlock(point, Block.GRASS.withTag(tag, 8));
+        assertEquals(8, instance.getBlock(point).getTag(tag));
     }
 }

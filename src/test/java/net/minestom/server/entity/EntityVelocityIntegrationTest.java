@@ -5,11 +5,11 @@ import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class EntityVelocityIntegrationTest {
@@ -22,16 +22,14 @@ public class EntityVelocityIntegrationTest {
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         env.tick(); // Ensure velocity downwards is present
 
-        testMovement(env, entity, new Vec[] {
-                new Vec(0.0, 42.0, 0.0),
+        testMovement(env, entity, new Vec(0.0, 42.0, 0.0),
                 new Vec(0.0, 41.92159999847412, 0.0),
                 new Vec(0.0, 41.76636799395752, 0.0),
                 new Vec(0.0, 41.53584062504456, 0.0),
                 new Vec(0.0, 41.231523797587016, 0.0),
                 new Vec(0.0, 40.85489329934836, 0.0),
                 new Vec(0.0, 40.40739540236494, 0.0),
-                new Vec(0.0, 40.0, 0.0)
-        });
+                new Vec(0.0, 40.0, 0.0));
     }
 
     @Test
@@ -45,8 +43,7 @@ public class EntityVelocityIntegrationTest {
         env.tick(); // Ensures the entity is onGround
         entity.takeKnockback(0.4f, 0, -1);
 
-        testMovement(env, entity, new Vec[] {
-                new Vec(0.0, 40.0, 0.0),
+        testMovement(env, entity, new Vec(0.0, 40.0, 0.0),
                 new Vec(0.0, 40.360800005197525, 0.4000000059604645),
                 new Vec(0.0, 40.63598401564693, 0.6184000345826153),
                 new Vec(0.0, 40.827264349610196, 0.8171440663565412),
@@ -63,8 +60,7 @@ public class EntityVelocityIntegrationTest {
                 new Vec(0.0, 40.0, 1.9757875252341128),
                 new Vec(0.0, 40.0, 1.9840936051840241),
                 new Vec(0.0, 40.0, 1.9886287253634418),
-                new Vec(0.0, 40.0, 1.9886287253634418),
-        });
+                new Vec(0.0, 40.0, 1.9886287253634418));
     }
 
     @Test
@@ -79,8 +75,9 @@ public class EntityVelocityIntegrationTest {
         entity.takeKnockback(0.4f, 0, -1);
         entity.takeKnockback(0.5f, 0, -1);
 
-        testMovement(env, entity, new Vec[] {
-                new Vec(0.0, 40.0, 0.0),
+        assertTrue(entity.hasVelocity());
+
+        testMovement(env, entity, new Vec(0.0, 40.0, 0.0),
                 new Vec(0.0, 40.4, 0.7000000029802322),
                 new Vec(0.0, 40.71360000610351, 1.0822000490009787),
                 new Vec(0.0, 40.94252801654052, 1.4300021009034531),
@@ -98,11 +95,72 @@ public class EntityVelocityIntegrationTest {
                 new Vec(0.0, 40.0, 3.5916417190562298),
                 new Vec(0.0, 40.0, 3.6048691516168874),
                 new Vec(0.0, 40.0, 3.6120913306338815),
-                new Vec(0.0, 40.0, 3.616034640835186)
-        });
+                new Vec(0.0, 40.0, 3.616034640835186));
     }
 
-    private void testMovement(Env env, Entity entity, Vec[] sample) {
+    @Test
+    public void flyingVelocity(Env env) {
+        var instance = env.createFlatInstance();
+        loadChunks(instance);
+
+        var player = env.createPlayer(instance, new Pos(0, 42, 0));
+        env.tick();
+
+        final double epsilon = 0.00001;
+
+        assertEquals(player.getVelocity().y(), -1.568, epsilon);
+        double previousVelocity = player.getVelocity().y();
+
+        player.setFlying(true);
+        env.tick();
+
+        // Every tick, the y velocity is multiplied by 0.6, and after 27 ticks it should be 0
+        for (int i = 0; i < 27; i++) {
+            assertEquals(player.getVelocity().y(), previousVelocity * 0.6, epsilon);
+            previousVelocity = player.getVelocity().y();
+            env.tick();
+        }
+        assertEquals(player.getVelocity().y(), 0);
+    }
+
+    @Test
+    public void flyingPlayerMovement(Env env) {
+        // Player movement should not send velocity packets as already client predicted
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 42, 0));
+        player.setFlying(true);
+        var witness = env.createConnection();
+        witness.connect(instance, new Pos(0, 42, 0)).join();
+
+        var tracker = witness.trackIncoming(EntityVelocityPacket.class);
+        env.tick(); // Process gravity velocity
+        tracker.assertEmpty();
+    }
+
+    @Test
+    public void testHasVelocity(Env env) {
+        var instance = env.createFlatInstance();
+        loadChunks(instance);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        // Should  be false because the new entity should have no velocity
+        assertFalse(entity.hasVelocity());
+
+        entity.setInstance(instance, new Pos(0, 41, 0)).join();
+
+        env.tick();
+
+        // Should be true: The entity is currently falling (in the air), so it does have a velocity.
+        // Only entities on the ground should ignore the default velocity.
+        assertTrue(entity.hasVelocity());
+
+        env.tick();
+
+        // Now that the entity is on the ground, it should no longer have a velocity.
+        assertFalse(entity.hasVelocity());
+    }
+
+    private void testMovement(Env env, Entity entity, Vec... sample) {
         final double epsilon = 0.003;
         for (Vec vec : sample) {
             assertEquals(vec.x(), entity.getPosition().x(), epsilon);
@@ -113,7 +171,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     private void loadChunks(Instance instance) {
-        ChunkUtils.optionalLoadAll(instance, new long[] {
+        ChunkUtils.optionalLoadAll(instance, new long[]{
                 ChunkUtils.getChunkIndex(-1, -1),
                 ChunkUtils.getChunkIndex(-1, 0),
                 ChunkUtils.getChunkIndex(-1, 1),

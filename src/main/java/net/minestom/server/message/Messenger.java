@@ -3,11 +3,15 @@ package net.minestom.server.message;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
+import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,43 +19,82 @@ import java.util.UUID;
 /**
  * Utility class to handle client chat settings.
  */
-public class Messenger {
+public final class Messenger {
     /**
      * The message sent to the client if they send a chat message but it is rejected by the server.
      */
     public static final Component CANNOT_SEND_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
+    private static final UUID NO_SENDER = new UUID(0, 0);
+    private static final SystemChatPacket CANNOT_SEND_PACKET = new SystemChatPacket(CANNOT_SEND_MESSAGE, false);
 
-    private static final ChatMessagePacket CANNOT_SEND_PACKET = new ChatMessagePacket(CANNOT_SEND_MESSAGE, ChatPosition.SYSTEM_MESSAGE, null);
+    private static final NBTCompound CHAT_REGISTRY;
+
+    static {
+        try {
+            CHAT_REGISTRY = (NBTCompound) new SNBTParser(new StringReader(
+                    "{\n" +
+                            "    \"type\": \"minecraft:chat_type\",\n" +
+                            "    \"value\": [\n" +
+                            "         {\n" +
+                            "            \"name\":\"minecraft:chat\",\n" +
+                            "            \"id\":1,\n" +
+                            "            \"element\":{\n" +
+                            "               \"chat\":{\n" +
+                            "                  \"translation_key\":\"chat.type.text\",\n" +
+                            "                  \"parameters\":[\n" +
+                            "                     \"sender\",\n" +
+                            "                     \"content\"\n" +
+                            "                  ]\n" +
+                            "               },\n" +
+                            "               \"narration\":{\n" +
+                            "                  \"translation_key\":\"chat.type.text.narrate\",\n" +
+                            "                  \"parameters\":[\n" +
+                            "                     \"sender\",\n" +
+                            "                     \"content\"\n" +
+                            "                  ]\n" +
+                            "               }\n" +
+                            "            }\n" +
+                            "         }" +
+                            "    ]\n" +
+                            "}"
+            )).parse();
+        } catch (NBTException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static @NotNull NBTCompound chatRegistry() {
+        return CHAT_REGISTRY;
+    }
 
     /**
      * Sends a message to a player, respecting their chat settings.
      *
-     * @param player the player
-     * @param message the message
+     * @param player   the player
+     * @param message  the message
      * @param position the position
-     * @param uuid the UUID of the sender, if any
+     * @param uuid     the UUID of the sender, if any
      * @return if the message was sent
      */
     public static boolean sendMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
         if (getChatMessageType(player).accepts(position)) {
-            player.getPlayerConnection().sendPacket(new ChatMessagePacket(message, position, uuid));
+            player.sendPacket(new SystemChatPacket(message, false));
             return true;
         }
-
         return false;
     }
 
     /**
      * Sends a message to some players, respecting their chat settings.
      *
-     * @param players the players
-     * @param message the message
+     * @param players  the players
+     * @param message  the message
      * @param position the position
-     * @param uuid the UUID of the sender, if any
+     * @param uuid     the UUID of the sender, if any
      */
     public static void sendMessage(@NotNull Collection<Player> players, @NotNull Component message,
-                                                   @NotNull ChatPosition position, @Nullable UUID uuid) {
-        PacketUtils.sendGroupedPacket(players, new ChatMessagePacket(message, position, uuid),
+                                   @NotNull ChatPosition position, @Nullable UUID uuid) {
+        PacketUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
                 player -> getChatMessageType(player).accepts(position));
     }
 
@@ -81,7 +124,7 @@ public class Messenger {
      * @param player the player
      */
     public static void sendRejectionMessage(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(CANNOT_SEND_PACKET);
+        player.sendPacket(CANNOT_SEND_PACKET);
     }
 
     /**

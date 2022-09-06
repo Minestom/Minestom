@@ -203,11 +203,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
+            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        if (expandedBoundingBox.intersectEntity(position, itemEntity)) {
+                        if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                             EventDispatcher.callCancellable(pickupItemEvent, () -> {
                                 final ItemStack item = itemEntity.getItemStack();
@@ -265,6 +266,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
+        setPose(Pose.DYING);
         setHealth(0);
 
         // Reset velocity
@@ -400,7 +402,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Changes the entity health, kill it if {@code health} is &gt;= 0 and is not dead yet.
+     * Changes the entity health, kill it if {@code health} is &lt;= 0 and is not dead yet.
      *
      * @param health the new entity health
      */
@@ -521,9 +523,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public void setBoundingBox(double x, double y, double z) {
-        super.setBoundingBox(x, y, z);
-        this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
+    public void setBoundingBox(BoundingBox boundingBox) {
+        super.setBoundingBox(boundingBox);
+        this.expandedBoundingBox = boundingBox.expand(1, .5, 1);
     }
 
     /**
@@ -550,6 +552,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
             meta.setNotifyAboutChanges(true);
+
+            updatePose(); // Riptide spin attack has a pose
         }
     }
 
@@ -559,6 +563,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     public void setFlyingWithElytra(boolean isFlying) {
         this.entityMeta.setFlyingWithElytra(isFlying);
+        updatePose();
     }
 
     /**

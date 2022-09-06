@@ -76,11 +76,41 @@ public class LivingEntityMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
     }
 
+    /**
+     * @deprecated
+     * This returns the bee stinger count, not the absorption heart count
+     * Use {@link #getBeeStingerCount()} instead
+     * @return The number of bee stingers in this entity
+     */
+    @Deprecated
     public int getHealthAddedByAbsorption() {
         return super.metadata.getIndex(OFFSET + 5, 0);
     }
 
+    /**
+     * @deprecated
+     * This sets the bee stinger count, not the absorption heart count
+     * Use {@link #setBeeStingerCount(int)} instead
+     * @param value The number of bee stingers for this entity to have
+     */
+    @Deprecated
     public void setHealthAddedByAbsorption(int value) {
+        super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
+    }
+
+    /**
+     * Gets the amount of bee stingers in this entity
+     * @return The amount of bee stingers
+     */
+    public int getBeeStingerCount() {
+        return super.metadata.getIndex(OFFSET + 5, 0);
+    }
+
+    /**
+     * Sets the amount of bee stingers in this entity
+     * @param value The amount of bee stingers to set, use 0 to clear all stingers
+     */
+    public void setBeeStingerCount(int value) {
         super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
     }
 

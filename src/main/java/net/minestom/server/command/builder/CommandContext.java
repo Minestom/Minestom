@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -86,10 +87,7 @@ public class CommandContext {
     }
 
     public String getRaw(@NotNull String identifier) {
-        return rawArgs.computeIfAbsent(identifier, s -> {
-            throw new NullPointerException(
-                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
-        });
+        return rawArgs.get(identifier);
     }
 
     public void setArg(@NotNull String id, Object value, String rawInput) {
@@ -110,5 +108,21 @@ public class CommandContext {
                 this.args.put(key, supplier.get());
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommandContext that)) return false;
+        return Objects.equals(input, that.input) &&
+                Objects.equals(commandName, that.commandName) &&
+                Objects.equals(args, that.args) &&
+                Objects.equals(rawArgs, that.rawArgs) &&
+                Objects.equals(returnData, that.returnData);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(input, commandName, args, rawArgs, returnData);
     }
 }

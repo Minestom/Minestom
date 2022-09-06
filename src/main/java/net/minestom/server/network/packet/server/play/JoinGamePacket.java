@@ -11,13 +11,17 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.List;
 
 public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode, GameMode previousGameMode,
-                             List<String> worlds, NBTCompound dimensionCodec, NBTCompound dimension, String world,
+                             List<String> worlds, NBTCompound dimensionCodec, String dimensionType, String world,
                              long hashedSeed, int maxPlayers, int viewDistance, int simulationDistance,
                              boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug,
                              boolean isFlat) implements ServerPacket {
+    public JoinGamePacket {
+        worlds = List.copyOf(worlds);
+    }
+
     public JoinGamePacket(BinaryReader reader) {
         this(reader.readVarInt(), reader.readBoolean(), GameMode.fromId(reader.readByte()), GameMode.fromId(reader.readByte()),
-                List.of(reader.readSizedStringArray()), (NBTCompound) reader.readTag(), (NBTCompound) reader.readTag(), reader.readSizedString(),
+                List.of(reader.readSizedStringArray()), (NBTCompound) reader.readTag(), reader.readSizedString(), reader.readSizedString(),
                 reader.readLong(), reader.readVarInt(), reader.readVarInt(), reader.readVarInt(),
                 reader.readBoolean(), reader.readBoolean(), reader.readBoolean(), reader.readBoolean());
     }
@@ -34,10 +38,9 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         }
 
         writer.writeVarIntList(worlds, BinaryWriter::writeSizedString);
-
         writer.writeNBT("", dimensionCodec);
-        writer.writeNBT("", dimension);
 
+        writer.writeSizedString(dimensionType);
         writer.writeSizedString(world);
         writer.writeLong(hashedSeed);
         writer.writeVarInt(maxPlayers);
@@ -49,6 +52,8 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         writer.writeBoolean(isDebug);
         //is flat
         writer.writeBoolean(isFlat);
+
+        writer.writeBoolean(false);
     }
 
     @Override

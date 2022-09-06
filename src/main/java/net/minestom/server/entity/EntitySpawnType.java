@@ -1,40 +1,24 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
+import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
+import net.minestom.server.network.packet.server.play.SpawnPlayerPacket;
 
 public enum EntitySpawnType {
     BASE {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            int data = 0;
-            short velocityX = 0, velocityZ = 0, velocityY = 0;
-            if (entity.getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
-                data = objectDataProvider.getObjectData();
-                if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
-                    final var velocity = entity.getVelocityForPacket();
-                    velocityX = (short) velocity.x();
-                    velocityY = (short) velocity.y();
-                    velocityZ = (short) velocity.z();
-                }
-            }
-            return new SpawnEntityPacket(entity.getEntityId(), entity.getUuid(), entity.getEntityType().id(),
-                    entity.getPosition(), data, velocityX, velocityY, velocityZ);
+            return EntitySpawnType.basicEntity(entity);
         }
     },
     LIVING {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            final Pos position = entity.getPosition();
-            final Vec velocity = entity.getVelocityForPacket();
-            return new SpawnLivingEntityPacket(entity.getEntityId(), entity.getUuid(), entity.getEntityType().id(),
-                    position, position.yaw(), (short) velocity.x(), (short) velocity.y(), (short) velocity.z());
+            return EntitySpawnType.basicEntity(entity);
         }
     },
     PLAYER {
@@ -54,7 +38,8 @@ public enum EntitySpawnType {
     PAINTING {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            int motive = 0;
+            return EntitySpawnType.basicEntity(entity);
+           /* int motive = 0;
             Point position = Vec.ZERO;
             byte direction = 0;
             if (entity.getEntityMeta() instanceof PaintingMeta paintingMeta) {
@@ -72,9 +57,26 @@ public enum EntitySpawnType {
                     default -> 0;
                 };
             }
-            return new SpawnPaintingPacket(entity.getEntityId(), entity.getUuid(), motive, position, direction);
+            return new SpawnPaintingPacket(entity.getEntityId(), entity.getUuid(), motive, position, direction);*/
         }
     };
 
     public abstract ServerPacket getSpawnPacket(Entity entity);
+
+    private static SpawnEntityPacket basicEntity(Entity entity) {
+        int data = 0;
+        short velocityX = 0, velocityZ = 0, velocityY = 0;
+        if (entity.getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
+            data = objectDataProvider.getObjectData();
+            if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
+                final var velocity = entity.getVelocityForPacket();
+                velocityX = (short) velocity.x();
+                velocityY = (short) velocity.y();
+                velocityZ = (short) velocity.z();
+            }
+        }
+        final Pos position = entity.getPosition();
+        return new SpawnEntityPacket(entity.getEntityId(), entity.getUuid(), entity.getEntityType().id(),
+                position, position.yaw(), data, velocityX, velocityY, velocityZ);
+    }
 }

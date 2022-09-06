@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -42,7 +41,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
 
     @Override
     public @NotNull Collection<Component> components() {
-        if (matches.isEmpty()) return Collections.emptyList();
+        if (matches.isEmpty()) return List.of();
         List<Component> components = new ArrayList<>(matches.size());
         for (Match match : matches) {
             if (match.tooltip != null) {
@@ -75,7 +74,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
 
         @Override
         public @NotNull Collection<Component> components() {
-            return tooltip != null ? Collections.singletonList(tooltip) : Collections.emptyList();
+            return tooltip != null ? List.of(tooltip) : List.of();
         }
 
         @Override

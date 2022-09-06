@@ -73,7 +73,7 @@ public final class Registry {
     public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
-        ObjectArray<T> ids = new ObjectArray<>(entries.size());
+        ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
         for (var entry : entries.entrySet()) {
             final String namespace = entry.getKey();
             final Properties properties = Properties.fromMap(entry.getValue());
@@ -105,6 +105,10 @@ public final class Registry {
             return ids.get(id);
         }
 
+        public int toId(@NotNull String namespace) {
+            return get(namespace).id();
+        }
+
         public Collection<T> values() {
             return namespaces.values();
         }
@@ -133,6 +137,7 @@ public final class Registry {
         ENTITIES("entities.json"),
         ENCHANTMENTS("enchantments.json"),
         SOUNDS("sounds.json"),
+        COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),

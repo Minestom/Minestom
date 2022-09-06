@@ -46,8 +46,8 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.18.2";
-    public static final int PROTOCOL_VERSION = 758;
+    public static final String VERSION_NAME = "1.19.2";
+    public static final int PROTOCOL_VERSION = 760;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -137,31 +137,31 @@ public final class MinecraftServer {
         return serverProcess.eventHandler();
     }
 
-    public static PacketListenerManager getPacketListenerManager() {
+    public static @NotNull PacketListenerManager getPacketListenerManager() {
         return serverProcess.packetListener();
     }
 
-    public static InstanceManager getInstanceManager() {
+    public static @NotNull InstanceManager getInstanceManager() {
         return serverProcess.instance();
     }
 
-    public static BlockManager getBlockManager() {
+    public static @NotNull BlockManager getBlockManager() {
         return serverProcess.block();
     }
 
-    public static CommandManager getCommandManager() {
+    public static @NotNull CommandManager getCommandManager() {
         return serverProcess.command();
     }
 
-    public static RecipeManager getRecipeManager() {
+    public static @NotNull RecipeManager getRecipeManager() {
         return serverProcess.recipe();
     }
 
-    public static TeamManager getTeamManager() {
+    public static @NotNull TeamManager getTeamManager() {
         return serverProcess.team();
     }
 
-    public static SchedulerManager getSchedulerManager() {
+    public static @NotNull SchedulerManager getSchedulerManager() {
         return serverProcess.scheduler();
     }
 
@@ -170,23 +170,23 @@ public final class MinecraftServer {
      *
      * @return the benchmark manager
      */
-    public static BenchmarkManager getBenchmarkManager() {
+    public static @NotNull BenchmarkManager getBenchmarkManager() {
         return serverProcess.benchmark();
     }
 
-    public static ExceptionManager getExceptionManager() {
+    public static @NotNull ExceptionManager getExceptionManager() {
         return serverProcess.exception();
     }
 
-    public static ConnectionManager getConnectionManager() {
+    public static @NotNull ConnectionManager getConnectionManager() {
         return serverProcess.connection();
     }
 
-    public static BossBarManager getBossBarManager() {
+    public static @NotNull BossBarManager getBossBarManager() {
         return serverProcess.bossBar();
     }
 
-    public static PacketProcessor getPacketProcessor() {
+    public static @NotNull PacketProcessor getPacketProcessor() {
         return serverProcess.packetProcessor();
     }
 

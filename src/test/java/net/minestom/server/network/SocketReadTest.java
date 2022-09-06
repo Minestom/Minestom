@@ -2,11 +2,11 @@ package net.minestom.server.network;
 
 import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.network.packet.client.play.ClientPluginMessagePacket;
+import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.PooledBuffers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -24,7 +24,7 @@ public class SocketReadTest {
     public void complete(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PooledBuffers.packetBuffer();
+        var buffer = ObjectPool.PACKET_POOL.get();
         PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
 
         var wrapper = BinaryBuffer.wrap(buffer);
@@ -48,7 +48,7 @@ public class SocketReadTest {
     public void completeTwo(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PooledBuffers.packetBuffer();
+        var buffer = ObjectPool.PACKET_POOL.get();
         PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
         PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
 
@@ -76,7 +76,7 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PooledBuffers.packetBuffer();
+        var buffer = ObjectPool.PACKET_POOL.get();
         PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
         Utils.writeVarInt(buffer, 200); // incomplete 200 bytes packet
 
@@ -104,7 +104,7 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PooledBuffers.packetBuffer();
+        var buffer = ObjectPool.PACKET_POOL.get();
         PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
         buffer.put((byte) -85); // incomplete var-int length
 

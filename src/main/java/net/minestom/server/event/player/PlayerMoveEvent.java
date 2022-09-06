@@ -3,14 +3,13 @@ package net.minestom.server.event.player;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player is modifying his position.
  */
-public class PlayerMoveEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerMoveEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private Pos newPosition;

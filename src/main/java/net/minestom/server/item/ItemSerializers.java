@@ -12,6 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.UUID;
 
 @ApiStatus.Internal
@@ -42,7 +43,7 @@ public final class ItemSerializers {
     static final TagSerializer<ItemAttribute> ATTRIBUTE_SERIALIZER = new TagSerializer<>() {
         static final Tag<UUID> ID = Tag.UUID("UUID");
         static final Tag<Double> AMOUNT = Tag.Double("Amount");
-        static final Tag<String> SLOT = Tag.String("Slot").defaultValue("MAINHAND");
+        static final Tag<String> SLOT = Tag.String("Slot").defaultValue("mainhand");
         static final Tag<String> ATTRIBUTE_NAME = Tag.String("AttributeName");
         static final Tag<Integer> OPERATION = Tag.Integer("Operation");
         static final Tag<String> NAME = Tag.String("Name");
@@ -56,7 +57,7 @@ public final class ItemSerializers {
             final int operation = reader.getTag(OPERATION);
             final String name = reader.getTag(NAME);
 
-            final Attribute attribute = Attribute.fromKey(attributeName);
+            final Attribute attribute = Attribute.fromKey(attributeName.toUpperCase(Locale.ROOT));
             // Wrong attribute name, stop here
             if (attribute == null) return null;
             final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);
@@ -77,7 +78,7 @@ public final class ItemSerializers {
         public void write(@NotNull TagWritable writer, @NotNull ItemAttribute value) {
             writer.setTag(ID, value.uuid());
             writer.setTag(AMOUNT, value.amount());
-            writer.setTag(SLOT, value.slot().name());
+            writer.setTag(SLOT, value.slot().name().toLowerCase(Locale.ROOT));
             writer.setTag(ATTRIBUTE_NAME, value.attribute().key());
             writer.setTag(OPERATION, value.operation().getId());
             writer.setTag(NAME, value.name());

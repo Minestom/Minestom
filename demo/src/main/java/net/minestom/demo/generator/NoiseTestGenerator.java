@@ -1,43 +1,30 @@
 package net.minestom.demo.generator;
 
-import de.articdive.jnoise.JNoise;
-import de.articdive.jnoise.interpolation.InterpolationType;
+import de.articdive.jnoise.generators.noise_parameters.interpolation.Interpolation;
+import de.articdive.jnoise.generators.noisegen.opensimplex.FastSimplexNoiseGenerator;
+import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator;
+import de.articdive.jnoise.pipeline.JNoise;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.ChunkGenerator;
-import net.minestom.server.instance.ChunkPopulator;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class NoiseTestGenerator implements Generator {
 
-    public NoiseTestGenerator() {
-        treeNoise.getNoise(0, 0);
-        jNoise.getNoise(0, 0);
-    }
-
     private final JNoise treeNoise = JNoise.newBuilder()
-            .fastSimplex()
-            .setFrequency(999)
-            .setSeed(123)
+            .fastSimplex(FastSimplexNoiseGenerator.newBuilder().setSeed(123).build())
+            .scale(999)
             .build();
 
     private final JNoise jNoise = JNoise.newBuilder()
-            .perlin()
-            .setInterpolation(InterpolationType.LINEAR)
-            .setSeed(123)
-            .setFrequency(0.4).build();
+            .perlin(PerlinNoiseGenerator.newBuilder().setSeed(123).setInterpolation(Interpolation.LINEAR).build())
+            .scale(0.4).build();
 
     public int getHeight(int x, int z) {
-        double preHeight = jNoise.getNoise(x / 16.0, z / 16.0);
+        double preHeight = jNoise.evaluateNoise(x / 16.0, z / 16.0);
         return (int) ((preHeight > 0 ? preHeight * 6 : preHeight * 4) + 64);
     }
 
@@ -68,7 +55,7 @@ public class NoiseTestGenerator implements Generator {
                 unit.modifier().fill(pos.withY(pos.y() - 1), posp1, Block.GRASS_BLOCK);
                 unit.modifier().fill(pos.withY(0), posp1.withY(1), Block.BEDROCK);
 
-                if (treeNoise.getNoise(pos.x(), pos.z()) > 0.8) {
+                if (treeNoise.evaluateNoise(pos.x(), pos.z()) > 0.8) {
                     TreePopulator.populate(pos, unit);
                 }
             }
@@ -148,5 +135,8 @@ public class NoiseTestGenerator implements Generator {
                 setter.setBlock(origin.add(-1, 4, -1), Block.OAK_LEAVES);
             });
         }
+
+
     }
+
 }

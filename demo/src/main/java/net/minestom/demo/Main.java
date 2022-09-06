@@ -54,7 +54,6 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new RelightCommand());
 
-
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
         MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
@@ -108,6 +107,7 @@ public class Main {
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
 
         minecraftServer.start("0.0.0.0", 25565);
+//        minecraftServer.start(java.net.UnixDomainSocketAddress.of("minestom-demo.sock"));
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 }

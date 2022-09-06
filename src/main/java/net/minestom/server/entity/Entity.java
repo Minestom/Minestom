@@ -16,6 +16,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -40,6 +41,7 @@ import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.snapshot.EntitySnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
@@ -182,9 +184,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        setBoundingBox(entityType.registry().boundingBox());
-
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+
+        setBoundingBox(entityType.registry().boundingBox());
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
@@ -334,10 +336,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the view of the entity so that it looks in a direction to the given position if
      * it is different from the entity's current position.
      *
-     * @param position the position to look at.
+     * @param point the point to look at.
      */
-    public void lookAt(@NotNull Pos position) {
-        final Pos newPosition = this.position.withLookAt(position);
+    public void lookAt(@NotNull Point point) {
+        final Pos newPosition = this.position.add(0, getEyeHeight(), 0).withLookAt(point);
         setView(newPosition.yaw(), newPosition.pitch());
     }
 
@@ -348,8 +350,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void lookAt(@NotNull Entity entity) {
         Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
-        double eyeHeightDifference = entity.getEyeHeight() - getEyeHeight();
-        lookAt(entity.position.withY(entity.position.y() + eyeHeightDifference));
+        lookAt(entity.position.withY(entity.position.y() + entity.getEyeHeight()));
     }
 
     /**
@@ -580,14 +581,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // World border collision
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
+        final boolean isPlayer = this instanceof Player;
+        final boolean flying = isPlayer && ((Player) this).isFlying();
         if (!positionChanged) {
-            if (hasVelocity || newVelocity.isZero()) {
+            if (flying) {
+                this.velocity = Vec.ZERO;
+                return;
+            } else if (hasVelocity || newVelocity.isZero()) {
                 this.velocity = noGravity ? Vec.ZERO : new Vec(
                         0,
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                sendPacketToViewers(getVelocityPacket());
+                if (!isPlayer) sendPacketToViewers(getVelocityPacket());
                 return;
             }
         }
@@ -611,15 +617,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            updateVelocity(wasOnGround, positionBeforeMove, newVelocity);
+            updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
+        if (!isPlayer && (hasVelocity || gravityTickCount > 0)) {
             sendPacketToViewers(getVelocityPacket());
         }
     }
 
-    protected void updateVelocity(boolean wasOnGround, Pos positionBeforeMove, Vec newVelocity) {
+    protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
         EntitySpawnType type = entityType.registry().spawnType();
         final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
         final double drag;
@@ -630,11 +636,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
         } else drag = airDrag;
 
+        double gravity = flying ? 0 : gravityAcceleration;
+        double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
+
         this.velocity = newVelocity
-                // Apply drag
+                // Apply gravity and drag
                 .apply((x, y, z) -> new Vec(
                         x * drag,
-                        !hasNoGravity() ? (y - gravityAcceleration) * (1 - gravityDragPerTick) : y,
+                        !hasNoGravity() ? (y - gravity) * gravityDrag : y,
                         z * drag
                 ))
                 // Convert from block/tick to block/sec
@@ -760,16 +769,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Returns the current bounding box (based on pose).
      * Is used to check collision with coordinates or other blocks/entities.
      *
      * @return the entity bounding box
      */
     public @NotNull BoundingBox getBoundingBox() {
-        return boundingBox;
+        // Check if there is a specific bounding box for this pose
+        BoundingBox poseBoundingBox = BoundingBox.fromPose(getPose());
+        return poseBoundingBox == null ? boundingBox : poseBoundingBox;
     }
 
     /**
-     * Changes the internal entity bounding box.
+     * Changes the internal entity standing bounding box.
+     * When the pose is not standing, a different bounding box may be used for collision.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
@@ -778,11 +791,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param depth  the bounding box Z size
      */
     public void setBoundingBox(double width, double height, double depth) {
-        this.boundingBox = new BoundingBox(width, height, depth);
+        setBoundingBox(new BoundingBox(width, height, depth));
     }
 
     /**
-     * Changes the internal entity bounding box.
+     * Changes the internal entity standing bounding box.
+     * When the pose is not standing, a different bounding box may be used for collision.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
@@ -909,10 +923,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Gets if the entity currently has a velocity applied.
      *
-     * @return true if velocity is not set to 0
+     * @return true if the entity is moving
      */
     public boolean hasVelocity() {
-        return !velocity.isZero();
+        if (isOnGround()) {
+            // if the entity is on the ground and only "moves" downwards, it does not have a velocity.
+            return Double.compare(velocity.x(), 0) != 0 || Double.compare(velocity.z(), 0) != 0 || velocity.y() > 0;
+        } else {
+            // The entity does not have velocity if the velocity is zero
+            return !velocity.isZero();
+        }
     }
 
     /**
@@ -1096,8 +1116,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param sneaking true to make the entity sneak
      */
     public void setSneaking(boolean sneaking) {
-        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
         this.entityMeta.setSneaking(sneaking);
+        updatePose();
     }
 
     /**
@@ -1178,6 +1198,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
+    }
+
+    protected void updatePose() {
+        if (entityMeta.isFlyingWithElytra()) {
+            setPose(Pose.FALL_FLYING);
+        } else if (entityMeta.isSwimming()) {
+            setPose(Pose.SWIMMING);
+        } else if (this instanceof LivingEntity && ((LivingEntityMeta) entityMeta).isInRiptideSpinAttack()) {
+            setPose(Pose.SPIN_ATTACK);
+        } else if (entityMeta.isSneaking()) {
+            setPose(Pose.SNEAKING);
+        } else {
+            setPose(Pose.STANDING);
+        }
     }
 
     /**
@@ -1273,7 +1307,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Fix head rotation
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), this);
+            // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
+            // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                    lastSyncedPosition, onGround), this);
         } else if (viewChange) {
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
             PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
@@ -1347,11 +1384,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) { // Update visible chunks
-                player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
-                ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
-                        MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
-            }
+            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
             refreshCurrentChunk(newChunk);
         }
     }
@@ -1373,7 +1406,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return boundingBox.height() * 0.85;
+        return getPose() == Pose.SLEEPING ? 0.2 : (boundingBox.height() * 0.85);
     }
 
     /**
@@ -1562,7 +1595,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
         final int[] passengersId = ArrayUtils.mapToIntArray(passengers, Entity::getEntityId);
         final Entity vehicle = this.vehicle;
-        return new EntitySnapshotImpl.Entity(entityType, uuid, id, position, velocity,
+        return new SnapshotImpl.Entity(entityType, uuid, id, position, velocity,
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 tagHandler.readableCopy());
@@ -1604,7 +1637,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public List<Point> getLineOfSight(int maxDistance) {
         Instance instance = getInstance();
         if (instance == null) {
-            return Collections.emptyList();
+            return List.of();
         }
 
         List<Point> blocks = new ArrayList<>();

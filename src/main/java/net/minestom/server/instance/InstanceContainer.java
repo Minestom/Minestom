@@ -199,7 +199,7 @@ public class InstanceContainer extends Instance {
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player));
             // Send the block break effect packet
             PacketUtils.sendGroupedPacket(chunk.getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, resultBlock.stateId(), false),
+                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
@@ -228,6 +228,9 @@ public class InstanceContainer extends Instance {
         // Clear cache
         this.chunks.remove(getChunkIndex(chunkX, chunkZ));
         chunk.unload();
+        if(chunkLoader != null) {
+            chunkLoader.unloadChunk(chunk);
+        }
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.deletePartition(chunk);
     }
@@ -322,6 +325,12 @@ public class InstanceContainer extends Instance {
                                 final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
                                 if (forkChunk != null) {
                                     applyFork(forkChunk, sectionModifier);
+                                    // Update players
+                                    if (forkChunk instanceof DynamicChunk dynamicChunk) {
+                                        dynamicChunk.chunkCache.invalidate();
+                                        dynamicChunk.lightCache.invalidate();
+                                    }
+                                    forkChunk.sendChunk();
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);
                                     this.generationForks.compute(index, (i, sectionModifiers) -> {
@@ -339,7 +348,6 @@ public class InstanceContainer extends Instance {
                     MinecraftServer.getExceptionManager().handleException(e);
                 } finally {
                     // End generation
-                    chunk.sendChunk();
                     refreshLastBlockChangeTime();
                     resultFuture.complete(chunk);
                 }
@@ -572,7 +580,7 @@ public class InstanceContainer extends Instance {
      */
     private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
-        return changedBlock != null && changedBlock.id() == block.id();
+        return Objects.equals(changedBlock, block);
     }
 
     /**

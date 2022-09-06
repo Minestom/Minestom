@@ -29,8 +29,9 @@ public final class CollisionUtils {
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
                                               @Nullable PhysicsResult lastPhysicsResult) {
-        assert entity.getInstance() != null;
-        return handlePhysics(entity.getInstance(), entity.getChunk(),
+        final Instance instance = entity.getInstance();
+        assert instance != null;
+        return handlePhysics(instance, entity.getChunk(),
                 entity.getBoundingBox(),
                 entity.getPosition(), entityVelocity,
                 lastPhysicsResult);
@@ -73,7 +74,7 @@ public final class CollisionUtils {
                 BoundingBox.ZERO,
                 Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
                 null);
-        return shape.intersectBox(end.sub(result.newPosition()), BoundingBox.ZERO);
+        return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
     }
 
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {

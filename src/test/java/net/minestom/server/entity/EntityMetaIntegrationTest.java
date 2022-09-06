@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -75,5 +76,59 @@ public class EntityMetaIntegrationTest {
                 contentChecker.accept(entry);
             }
         }
+    }
+
+    @Test
+    public void customName(Env env) {
+        //Base things.
+        var connection = env.createConnection();
+        var instance = env.createFlatInstance();
+        Pos startPos = new Pos(0, 42, 1);
+
+        //Viewer.
+        var player = connection.connect(instance, startPos).join();
+
+        //Tracks incoming packets.
+        var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);
+
+        //Creates entity and name.
+        Entity entity = new Entity(EntityType.BEE);
+        entity.setAutoViewable(false);
+        entity.getEntityMeta().setNotifyAboutChanges(false);
+        entity.setCustomName(Component.text("Custom Name"));
+        entity.setCustomNameVisible(true);
+        entity.setInstance(instance, startPos);
+        entity.getEntityMeta().setNotifyAboutChanges(true);
+        entity.addViewer(player);
+
+        //Listen packets to check if entity name is "Custom Name".
+        //This is first test, and it is not related to "custom name" bug. Therefore, it should work.
+        var packets = incomingPackets.collect();
+        validMetaDataPackets(packets, entity.getEntityId(), entry -> {
+            if (entry.type() != Metadata.TYPE_OPTCHAT) return;
+            assertEquals(Component.text("Custom Name"), entry.value());
+        });
+
+        //Removes viewer.
+        entity.removeViewer(player);
+
+        //Tracks incoming packets again. (resets previous)
+        incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);
+
+        //Sets entity name again.
+        entity.setCustomName(Component.text("Custom Name 2"));
+
+        //After setting entity's name, we add viewer again to see if the entity name is "Custom Name 2"
+        entity.addViewer(player);
+
+        //Checks if entity name is "Custom Name 2" in the metadata entry.
+        assertEquals(Component.text("Custom Name 2"), entity.getCustomName());
+
+        //Listen packets to check if entity name is "Custom Name 2".
+        packets = incomingPackets.collect();
+        validMetaDataPackets(packets, entity.getEntityId(), entry -> {
+            if (entry.type() != Metadata.TYPE_OPTCHAT) return;
+            assertEquals(Component.text("Custom Name 2"), entry.value());
+        });
     }
 }

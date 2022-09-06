@@ -6,16 +6,22 @@ import net.minestom.server.potion.Potion;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public record EntityEffectPacket(int entityId, @NotNull Potion potion) implements ServerPacket {
+public record EntityEffectPacket(int entityId, @NotNull Potion potion,
+                                 @Nullable NBTCompound factorCodec) implements ServerPacket {
     public EntityEffectPacket(BinaryReader reader) {
-        this(reader.readVarInt(), new Potion(reader));
+        this(reader.readVarInt(), new Potion(reader),
+                reader.readBoolean() ? (NBTCompound) reader.readTag() : null);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.write(potion);
+        writer.writeBoolean(factorCodec != null);
+        if (factorCodec != null) writer.writeNBT("", factorCodec);
     }
 
     @Override

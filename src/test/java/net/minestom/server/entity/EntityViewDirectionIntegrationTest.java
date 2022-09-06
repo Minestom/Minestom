@@ -51,31 +51,31 @@ public class EntityViewDirectionIntegrationTest {
     public void lookAtPos(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
+        double eyeHeight = entity.getEyeHeight(); // adding this to some position Y coordinates, to look horizontally
+        
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
 
-        // look at itself, direction should not change
-        float prevYaw = entity.getPosition().yaw();
-        float prevPitch = entity.getPosition().pitch();
+        // make it look at its feet's position, it should look down
         entity.lookAt(entity.getPosition());
-        assertEquals(prevYaw, entity.getPosition().yaw());
-        assertEquals(prevPitch, entity.getPosition().pitch());
+        // looking vertically, not checking yaw
+        assertEquals(90f, entity.getPosition().pitch());
 
-        entity.lookAt(new Pos(16, 40, 16));
+        entity.lookAt(new Pos(16, 40 + eyeHeight, 16));
         assertEquals(-45f, entity.getPosition().yaw());
         assertEquals(0f, entity.getPosition().pitch(), EPSILON);
 
-        entity.lookAt(new Pos(-16, 40, 56));
+        entity.lookAt(new Pos(-16, 40 + eyeHeight, 56));
         assertEquals(15.94f, entity.getPosition().yaw(), EPSILON);
         assertEquals(0f, entity.getPosition().pitch(), EPSILON);
 
         entity.lookAt(new Pos(48, 36, 48));
         assertEquals(-45f, entity.getPosition().yaw(), EPSILON);
-        assertEquals(4.76f, entity.getPosition().pitch(), EPSILON);
+        assertEquals(6.72f, entity.getPosition().pitch(), EPSILON);
 
         entity.lookAt(new Pos(48, 36, -17));
         assertEquals(-109.50f, entity.getPosition().yaw(), EPSILON);
         // should have the same pitch as the previous position
-        assertEquals(4.76f, entity.getPosition().pitch(), EPSILON);
+        assertEquals(6.72f, entity.getPosition().pitch(), EPSILON);
 
         entity.lookAt(new Pos(0, 87, 0));
         // looking from below, not checking the yaw
@@ -83,7 +83,7 @@ public class EntityViewDirectionIntegrationTest {
 
         entity.lookAt(new Pos(-25, 42, 4));
         assertEquals(80.90f, entity.getPosition().yaw(), EPSILON);
-        assertEquals(-4.57f, entity.getPosition().pitch(), EPSILON);
+        assertEquals(-0.78f, entity.getPosition().pitch(), EPSILON);
     }
 
     @Test

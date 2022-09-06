@@ -16,8 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class HeldClickIntegrationTest {
@@ -30,12 +29,13 @@ public class HeldClickIntegrationTest {
         var listener = env.listen(InventoryPreClickEvent.class);
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
         inventory.setItemStack(2, ItemStack.of(Material.GOLD_INGOT));
-        inventory.setItemStack(5, ItemStack.of(Material.DIAMOND));
+        inventory.setItemStack(3, ItemStack.of(Material.EGG));
+        inventory.setItemStack(6, ItemStack.of(Material.DIAMOND));
         // Empty
         {
             listener.followup(event -> {
                 assertNull(event.getInventory()); // Player inventory
-                assertEquals(3, event.getSlot());
+                assertTrue(event.getSlot() == 4 || event.getSlot() == 5);
                 assertEquals(ClickType.CHANGE_HELD, event.getClickType());
 
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
@@ -43,13 +43,13 @@ public class HeldClickIntegrationTest {
 
                 assertEquals(ItemStack.AIR, event.getClickedItem());
             });
-            heldClick(player, 3, 4);
+            heldClick(player, 4, 5);
         }
         // Swap air
         {
             listener.followup(event -> {
                 assertNull(event.getInventory()); // Player inventory
-                assertEquals(1, event.getSlot());
+                assertTrue(event.getSlot() == 1 || event.getSlot() == 0);
                 assertEquals(ClickType.CHANGE_HELD, event.getClickType());
 
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
@@ -65,7 +65,7 @@ public class HeldClickIntegrationTest {
         // Swap items
         {
             listener.followup(event -> {
-                assertEquals(0, event.getSlot());
+                assertTrue(event.getSlot() == 0 || event.getSlot() == 2);
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
                 assertEquals(ItemStack.AIR, inventory.getItemStack(1));
             });
@@ -74,6 +74,15 @@ public class HeldClickIntegrationTest {
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(2));
             assertEquals(ItemStack.of(Material.GOLD_INGOT), inventory.getItemStack(0));
+        }
+        // Swap offhand
+        {
+            listener.followup(event -> {
+                assertTrue(event.getSlot() == 3 || event.getSlot() == 45 /* Vanilla offhand slot is 40, Minestom is 45 */);
+            });
+            heldClick(player, 3, 40);
+            assertEquals(ItemStack.AIR, inventory.getItemStack(3));
+            assertEquals(ItemStack.of(Material.EGG), inventory.getItemInOffHand());
         }
         // Cancel event
         {
@@ -96,11 +105,12 @@ public class HeldClickIntegrationTest {
         var listener = env.listen(InventoryPreClickEvent.class);
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
         inventory.setItemStack(2, ItemStack.of(Material.GOLD_INGOT));
+        inventory.setItemStack(3, ItemStack.of(Material.EGG));
         inventory.setItemStack(4, ItemStack.of(Material.DIAMOND));
         // Empty
         {
             listener.followup(event -> {
-                assertEquals(inventory, event.getInventory());
+                if (event.getInventory() != null) assertEquals(inventory, event.getInventory());
                 assertEquals(0, event.getSlot());
                 assertEquals(ClickType.CHANGE_HELD, event.getClickType());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
@@ -112,8 +122,8 @@ public class HeldClickIntegrationTest {
         // Swap empty
         {
             listener.followup(event -> {
-                assertEquals(inventory, event.getInventory());
-                assertEquals(1, event.getSlot());
+                if (event.getInventory() != null) assertEquals(inventory, event.getInventory());
+                assertTrue(event.getSlot() == 1 || event.getSlot() == 0);
                 assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             });
             heldClickOpenInventory(player, 1, 0);
@@ -124,14 +134,24 @@ public class HeldClickIntegrationTest {
         // Swap items
         {
             listener.followup(event -> {
-                assertEquals(inventory, event.getInventory());
-                assertEquals(2, event.getSlot());
+                if (event.getInventory() != null) assertEquals(inventory, event.getInventory());
+                assertTrue(event.getSlot() == 2 || event.getSlot() == 0);
                 assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             });
             heldClickOpenInventory(player, 2, 0);
             assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(2));
             assertEquals(ItemStack.of(Material.GOLD_INGOT), playerInv.getItemStack(0));
+        }
+        // Swap offhand
+        {
+            listener.followup(event -> {
+                if (event.getInventory() != null) assertEquals(inventory, event.getInventory());
+                assertTrue(event.getSlot() == 3 || event.getSlot() == 45);
+            });
+            heldClickOpenInventory(player, 3, 40);
+            assertEquals(ItemStack.AIR, inventory.getItemStack(3));
+            assertEquals(ItemStack.of(Material.EGG), playerInv.getItemInOffHand());
         }
         // Cancel event
         {

@@ -56,6 +56,15 @@ public class PaletteTest {
     }
 
     @Test
+    public void placementHighValue() {
+        final int value = 250_000;
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 1, value);
+            assertEquals(value, palette.get(0, 0, 1));
+        }
+    }
+
+    @Test
     public void negPlacement() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {

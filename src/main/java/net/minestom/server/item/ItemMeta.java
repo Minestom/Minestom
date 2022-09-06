@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.Taggable;
@@ -18,6 +19,7 @@ import java.util.function.Consumer;
 
 public sealed interface ItemMeta extends TagReadable, Writeable
         permits ItemMetaImpl {
+
     @Override
     <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
@@ -69,13 +71,23 @@ public sealed interface ItemMeta extends TagReadable, Writeable
     }
 
     @Contract(pure = true)
-    default @NotNull Set<@NotNull Block> getCanDestroy() {
+    default @NotNull Set<@NotNull String> getCanDestroy() {
         return Set.copyOf(getTag(ItemTags.CAN_DESTROY));
     }
 
     @Contract(pure = true)
-    default @NotNull Set<@NotNull Block> getCanPlaceOn() {
+    default boolean canDestroy(@NotNull Block block) {
+        return getCanDestroy().contains(block.name());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Set<@NotNull String> getCanPlaceOn() {
         return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
+    }
+
+    @Contract(pure = true)
+    default boolean canPlaceOn(@NotNull Block block) {
+        return getCanPlaceOn().contains(block.name());
     }
 
     sealed interface Builder extends Taggable
@@ -153,7 +165,7 @@ public sealed interface ItemMeta extends TagReadable, Writeable
 
         @Contract("_ -> this")
         default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_PLACE_ON, List.copyOf(blocks));
+            return set(ItemTags.CAN_PLACE_ON, blocks.stream().map(ProtocolObject::name).toList());
         }
 
         @Contract("_ -> this")
@@ -163,7 +175,7 @@ public sealed interface ItemMeta extends TagReadable, Writeable
 
         @Contract("_ -> this")
         default @NotNull Builder canDestroy(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_DESTROY, List.copyOf(blocks));
+            return set(ItemTags.CAN_DESTROY, blocks.stream().map(ProtocolObject::name).toList());
         }
 
         @Contract("_ -> this")

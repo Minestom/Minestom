@@ -43,6 +43,8 @@ interface Blocks {
 
     Block DARK_OAK_PLANKS = BlockImpl.get("minecraft:dark_oak_planks");
 
+    Block MANGROVE_PLANKS = BlockImpl.get("minecraft:mangrove_planks");
+
     Block OAK_SAPLING = BlockImpl.get("minecraft:oak_sapling");
 
     Block SPRUCE_SAPLING = BlockImpl.get("minecraft:spruce_sapling");
@@ -54,6 +56,8 @@ interface Blocks {
     Block ACACIA_SAPLING = BlockImpl.get("minecraft:acacia_sapling");
 
     Block DARK_OAK_SAPLING = BlockImpl.get("minecraft:dark_oak_sapling");
+
+    Block MANGROVE_PROPAGULE = BlockImpl.get("minecraft:mangrove_propagule");
 
     Block BEDROCK = BlockImpl.get("minecraft:bedrock");
 
@@ -93,6 +97,12 @@ interface Blocks {
 
     Block DARK_OAK_LOG = BlockImpl.get("minecraft:dark_oak_log");
 
+    Block MANGROVE_LOG = BlockImpl.get("minecraft:mangrove_log");
+
+    Block MANGROVE_ROOTS = BlockImpl.get("minecraft:mangrove_roots");
+
+    Block MUDDY_MANGROVE_ROOTS = BlockImpl.get("minecraft:muddy_mangrove_roots");
+
     Block STRIPPED_SPRUCE_LOG = BlockImpl.get("minecraft:stripped_spruce_log");
 
     Block STRIPPED_BIRCH_LOG = BlockImpl.get("minecraft:stripped_birch_log");
@@ -104,6 +114,8 @@ interface Blocks {
     Block STRIPPED_DARK_OAK_LOG = BlockImpl.get("minecraft:stripped_dark_oak_log");
 
     Block STRIPPED_OAK_LOG = BlockImpl.get("minecraft:stripped_oak_log");
+
+    Block STRIPPED_MANGROVE_LOG = BlockImpl.get("minecraft:stripped_mangrove_log");
 
     Block OAK_WOOD = BlockImpl.get("minecraft:oak_wood");
 
@@ -117,6 +129,8 @@ interface Blocks {
 
     Block DARK_OAK_WOOD = BlockImpl.get("minecraft:dark_oak_wood");
 
+    Block MANGROVE_WOOD = BlockImpl.get("minecraft:mangrove_wood");
+
     Block STRIPPED_OAK_WOOD = BlockImpl.get("minecraft:stripped_oak_wood");
 
     Block STRIPPED_SPRUCE_WOOD = BlockImpl.get("minecraft:stripped_spruce_wood");
@@ -129,6 +143,8 @@ interface Blocks {
 
     Block STRIPPED_DARK_OAK_WOOD = BlockImpl.get("minecraft:stripped_dark_oak_wood");
 
+    Block STRIPPED_MANGROVE_WOOD = BlockImpl.get("minecraft:stripped_mangrove_wood");
+
     Block OAK_LEAVES = BlockImpl.get("minecraft:oak_leaves");
 
     Block SPRUCE_LEAVES = BlockImpl.get("minecraft:spruce_leaves");
@@ -140,6 +156,8 @@ interface Blocks {
     Block ACACIA_LEAVES = BlockImpl.get("minecraft:acacia_leaves");
 
     Block DARK_OAK_LEAVES = BlockImpl.get("minecraft:dark_oak_leaves");
+
+    Block MANGROVE_LEAVES = BlockImpl.get("minecraft:mangrove_leaves");
 
     Block AZALEA_LEAVES = BlockImpl.get("minecraft:azalea_leaves");
 
@@ -341,6 +359,8 @@ interface Blocks {
 
     Block DARK_OAK_SIGN = BlockImpl.get("minecraft:dark_oak_sign");
 
+    Block MANGROVE_SIGN = BlockImpl.get("minecraft:mangrove_sign");
+
     Block OAK_DOOR = BlockImpl.get("minecraft:oak_door");
 
     Block LADDER = BlockImpl.get("minecraft:ladder");
@@ -361,6 +381,8 @@ interface Blocks {
 
     Block DARK_OAK_WALL_SIGN = BlockImpl.get("minecraft:dark_oak_wall_sign");
 
+    Block MANGROVE_WALL_SIGN = BlockImpl.get("minecraft:mangrove_wall_sign");
+
     Block LEVER = BlockImpl.get("minecraft:lever");
 
     Block STONE_PRESSURE_PLATE = BlockImpl.get("minecraft:stone_pressure_plate");
@@ -378,6 +400,8 @@ interface Blocks {
     Block ACACIA_PRESSURE_PLATE = BlockImpl.get("minecraft:acacia_pressure_plate");
 
     Block DARK_OAK_PRESSURE_PLATE = BlockImpl.get("minecraft:dark_oak_pressure_plate");
+
+    Block MANGROVE_PRESSURE_PLATE = BlockImpl.get("minecraft:mangrove_pressure_plate");
 
     Block REDSTONE_ORE = BlockImpl.get("minecraft:redstone_ore");
 
@@ -477,6 +501,8 @@ interface Blocks {
 
     Block DARK_OAK_TRAPDOOR = BlockImpl.get("minecraft:dark_oak_trapdoor");
 
+    Block MANGROVE_TRAPDOOR = BlockImpl.get("minecraft:mangrove_trapdoor");
+
     Block STONE_BRICKS = BlockImpl.get("minecraft:stone_bricks");
 
     Block MOSSY_STONE_BRICKS = BlockImpl.get("minecraft:mossy_stone_bricks");
@@ -484,6 +510,10 @@ interface Blocks {
     Block CRACKED_STONE_BRICKS = BlockImpl.get("minecraft:cracked_stone_bricks");
 
     Block CHISELED_STONE_BRICKS = BlockImpl.get("minecraft:chiseled_stone_bricks");
+
+    Block PACKED_MUD = BlockImpl.get("minecraft:packed_mud");
+
+    Block MUD_BRICKS = BlockImpl.get("minecraft:mud_bricks");
 
     Block INFESTED_STONE = BlockImpl.get("minecraft:infested_stone");
 
@@ -528,6 +558,8 @@ interface Blocks {
     Block BRICK_STAIRS = BlockImpl.get("minecraft:brick_stairs");
 
     Block STONE_BRICK_STAIRS = BlockImpl.get("minecraft:stone_brick_stairs");
+
+    Block MUD_BRICK_STAIRS = BlockImpl.get("minecraft:mud_brick_stairs");
 
     Block MYCELIUM = BlockImpl.get("minecraft:mycelium");
 
@@ -607,6 +639,8 @@ interface Blocks {
 
     Block POTTED_DARK_OAK_SAPLING = BlockImpl.get("minecraft:potted_dark_oak_sapling");
 
+    Block POTTED_MANGROVE_PROPAGULE = BlockImpl.get("minecraft:potted_mangrove_propagule");
+
     Block POTTED_FERN = BlockImpl.get("minecraft:potted_fern");
 
     Block POTTED_DANDELION = BlockImpl.get("minecraft:potted_dandelion");
@@ -658,6 +692,8 @@ interface Blocks {
     Block ACACIA_BUTTON = BlockImpl.get("minecraft:acacia_button");
 
     Block DARK_OAK_BUTTON = BlockImpl.get("minecraft:dark_oak_button");
+
+    Block MANGROVE_BUTTON = BlockImpl.get("minecraft:mangrove_button");
 
     Block SKELETON_SKULL = BlockImpl.get("minecraft:skeleton_skull");
 
@@ -784,6 +820,8 @@ interface Blocks {
     Block ACACIA_STAIRS = BlockImpl.get("minecraft:acacia_stairs");
 
     Block DARK_OAK_STAIRS = BlockImpl.get("minecraft:dark_oak_stairs");
+
+    Block MANGROVE_STAIRS = BlockImpl.get("minecraft:mangrove_stairs");
 
     Block SLIME_BLOCK = BlockImpl.get("minecraft:slime_block");
 
@@ -949,6 +987,8 @@ interface Blocks {
 
     Block DARK_OAK_SLAB = BlockImpl.get("minecraft:dark_oak_slab");
 
+    Block MANGROVE_SLAB = BlockImpl.get("minecraft:mangrove_slab");
+
     Block STONE_SLAB = BlockImpl.get("minecraft:stone_slab");
 
     Block SMOOTH_STONE_SLAB = BlockImpl.get("minecraft:smooth_stone_slab");
@@ -964,6 +1004,8 @@ interface Blocks {
     Block BRICK_SLAB = BlockImpl.get("minecraft:brick_slab");
 
     Block STONE_BRICK_SLAB = BlockImpl.get("minecraft:stone_brick_slab");
+
+    Block MUD_BRICK_SLAB = BlockImpl.get("minecraft:mud_brick_slab");
 
     Block NETHER_BRICK_SLAB = BlockImpl.get("minecraft:nether_brick_slab");
 
@@ -993,6 +1035,8 @@ interface Blocks {
 
     Block DARK_OAK_FENCE_GATE = BlockImpl.get("minecraft:dark_oak_fence_gate");
 
+    Block MANGROVE_FENCE_GATE = BlockImpl.get("minecraft:mangrove_fence_gate");
+
     Block SPRUCE_FENCE = BlockImpl.get("minecraft:spruce_fence");
 
     Block BIRCH_FENCE = BlockImpl.get("minecraft:birch_fence");
@@ -1003,6 +1047,8 @@ interface Blocks {
 
     Block DARK_OAK_FENCE = BlockImpl.get("minecraft:dark_oak_fence");
 
+    Block MANGROVE_FENCE = BlockImpl.get("minecraft:mangrove_fence");
+
     Block SPRUCE_DOOR = BlockImpl.get("minecraft:spruce_door");
 
     Block BIRCH_DOOR = BlockImpl.get("minecraft:birch_door");
@@ -1012,6 +1058,8 @@ interface Blocks {
     Block ACACIA_DOOR = BlockImpl.get("minecraft:acacia_door");
 
     Block DARK_OAK_DOOR = BlockImpl.get("minecraft:dark_oak_door");
+
+    Block MANGROVE_DOOR = BlockImpl.get("minecraft:mangrove_door");
 
     Block END_ROD = BlockImpl.get("minecraft:end_rod");
 
@@ -1353,6 +1401,8 @@ interface Blocks {
 
     Block STONE_BRICK_WALL = BlockImpl.get("minecraft:stone_brick_wall");
 
+    Block MUD_BRICK_WALL = BlockImpl.get("minecraft:mud_brick_wall");
+
     Block NETHER_BRICK_WALL = BlockImpl.get("minecraft:nether_brick_wall");
 
     Block ANDESITE_WALL = BlockImpl.get("minecraft:andesite_wall");
@@ -1649,6 +1699,14 @@ interface Blocks {
 
     Block SCULK_SENSOR = BlockImpl.get("minecraft:sculk_sensor");
 
+    Block SCULK = BlockImpl.get("minecraft:sculk");
+
+    Block SCULK_VEIN = BlockImpl.get("minecraft:sculk_vein");
+
+    Block SCULK_CATALYST = BlockImpl.get("minecraft:sculk_catalyst");
+
+    Block SCULK_SHRIEKER = BlockImpl.get("minecraft:sculk_shrieker");
+
     Block OXIDIZED_COPPER = BlockImpl.get("minecraft:oxidized_copper");
 
     Block WEATHERED_COPPER = BlockImpl.get("minecraft:weathered_copper");
@@ -1747,6 +1805,8 @@ interface Blocks {
 
     Block ROOTED_DIRT = BlockImpl.get("minecraft:rooted_dirt");
 
+    Block MUD = BlockImpl.get("minecraft:mud");
+
     Block DEEPSLATE = BlockImpl.get("minecraft:deepslate");
 
     Block COBBLED_DEEPSLATE = BlockImpl.get("minecraft:cobbled_deepslate");
@@ -1800,4 +1860,14 @@ interface Blocks {
     Block POTTED_AZALEA_BUSH = BlockImpl.get("minecraft:potted_azalea_bush");
 
     Block POTTED_FLOWERING_AZALEA_BUSH = BlockImpl.get("minecraft:potted_flowering_azalea_bush");
+
+    Block OCHRE_FROGLIGHT = BlockImpl.get("minecraft:ochre_froglight");
+
+    Block VERDANT_FROGLIGHT = BlockImpl.get("minecraft:verdant_froglight");
+
+    Block PEARLESCENT_FROGLIGHT = BlockImpl.get("minecraft:pearlescent_froglight");
+
+    Block FROGSPAWN = BlockImpl.get("minecraft:frogspawn");
+
+    Block REINFORCED_DEEPSLATE = BlockImpl.get("minecraft:reinforced_deepslate");
 }
