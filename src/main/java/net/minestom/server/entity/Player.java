@@ -339,7 +339,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
                             PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                             EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                                short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                                short experienceCount = pickupExperienceEvent.getExperienceCount();
+                                setExp(getExp() + experienceCount);
                                 experienceOrb.remove();
                             });
                         }

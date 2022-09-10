@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
@@ -69,11 +70,18 @@ public abstract class Explosion {
             records[i * 3 + 2] = z;
         }
 
-        // TODO send only to close players
         ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
                 records, 0, 0, 0);
         postExplosion(instance, blocks, packet);
-        PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
+        PacketUtils.sendGroupedPacket(instance.getPlayers(), packet, player -> {
+            int chunkViewDistance = MinecraftServer.getChunkViewDistance();
+            int blockViewDistance = chunkViewDistance * Chunk.CHUNK_SIZE_X;
+            // Get the manhattan distance between the player and the center of the explosion
+            int distance = (int) (Math.abs(player.getPosition().x() - centerX) +
+                    Math.abs(player.getPosition().y() - centerY) +
+                    Math.abs(player.getPosition().z() - centerZ));
+            return distance <= blockViewDistance;
+        });
 
         postSend(instance, blocks);
     }

@@ -1,5 +1,7 @@
 package net.minestom.server.utils.collection;
 
+import java.lang.reflect.Array;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,14 +53,14 @@ public record MappedCollection<O, R>(@NotNull Collection<O> original,
 
     @Override
     public @NotNull Object @NotNull [] toArray() {
-        // TODO
-        throw new UnsupportedOperationException("Unsupported array object");
+        return original.stream().map(mapper).toArray();
     }
 
     @Override
     public <T> @NotNull T @NotNull [] toArray(@NotNull T @NotNull [] a) {
-        // TODO
-        throw new UnsupportedOperationException("Unsupported array generic");
+        return original.stream()
+                .map(mapper)
+                .toArray(length -> (T[]) Array.newInstance(a.getClass().getComponentType(), length));
     }
 
     @Override

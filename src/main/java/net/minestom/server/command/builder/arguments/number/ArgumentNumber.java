@@ -165,7 +165,6 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
         } else if (value.toLowerCase().contains("e")) {
             value = removeScientificNotation(value);
         }
-        // TODO number suffix support (k,m,b,t)
         return value;
     }
 

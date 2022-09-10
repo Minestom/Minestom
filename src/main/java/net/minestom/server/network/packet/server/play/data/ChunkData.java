@@ -1,7 +1,10 @@
 package net.minestom.server.network.packet.server.play.data;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
@@ -55,13 +58,35 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
 
     private static Map<Integer, Block> readBlockEntities(BinaryReader reader) {
         final Map<Integer, Block> blockEntities = new HashMap<>();
+        final Int2ObjectMap<Block> blockEntityId2Block = new Int2ObjectOpenHashMap<>();
         final int size = reader.readVarInt();
         for (int i = 0; i < size; i++) {
             final byte xz = reader.readByte();
             final short y = reader.readShort();
             final int blockEntityId = reader.readVarInt();
             final NBTCompound nbt = (NBTCompound) reader.readTag();
-            // TODO create block object
+
+            int x = xz >> 4;
+            int z = xz & 15;
+            int index = ChunkUtils.getBlockIndex(x, y, z);
+
+            // TODO: Expose a better way to go from block entity id -> Block
+            Block block = blockEntityId2Block.computeIfAbsent(blockEntityId, ignored -> {
+                for (Block value : Block.values()) {
+                    if (!value.registry().isBlockEntity()) {
+                        continue;
+                    }
+                    if (value.registry().blockEntityId() == blockEntityId) {
+                        return value;
+                    }
+                }
+                return null;
+            });
+            if (block == null) {
+                continue;
+            }
+
+            blockEntities.put(index, block.withNbt(nbt));
         }
         return blockEntities;
     }
