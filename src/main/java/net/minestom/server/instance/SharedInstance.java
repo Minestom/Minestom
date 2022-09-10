@@ -115,8 +115,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveBlocksToStorage() {
-        return instanceContainer.saveBlocksToStorage();
+    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
+        return instanceContainer.saveChunksToStorage();
     }
 
     @Override

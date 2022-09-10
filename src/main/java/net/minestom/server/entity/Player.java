@@ -129,10 +129,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Vec chunksLoadedByClient = Vec.ZERO;
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        this.instance.loadChunk(chunkX, chunkZ).thenAccept(chunk -> {
+        this.instance.loadOptionalChunk(chunkX, chunkZ).thenRun(() -> {
             try {
-                instance.sendChunk(this, chunkX, chunkZ);
-                EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+                if (instance.isChunkLoaded(chunkX, chunkZ)) {
+                    instance.sendChunk(this, chunkX, chunkZ);
+                    EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+                }
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -539,7 +541,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) -> {
-            final CompletableFuture<Void> future = instance.loadChunk(chunkX, chunkZ);
+            final CompletableFuture<Void> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
         if (futures.isEmpty()) {

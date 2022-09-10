@@ -370,7 +370,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveBlocksToStorage() {
+    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
         return chunkLoader.saveChunks(getChunks());
     }
 

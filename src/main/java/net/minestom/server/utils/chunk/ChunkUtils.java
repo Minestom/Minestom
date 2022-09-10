@@ -20,11 +20,11 @@ public final class ChunkUtils {
     }
 
     /**
-     * Executes {@link Instance#loadChunk(int, int)} for the array of chunks {@code chunks}
+     * Executes {@link Instance#loadOptionalChunk(int, int)} for the array of chunks {@code chunks}
      * with multiple callbacks, {@code eachCallback} which is executed each time a new chunk is loaded and
      * {@code endCallback} when all the chunks in the array have been loaded.
      * <p>
-     * Be aware that {@link Instance#loadChunk(int, int)} can give a null chunk in the callback
+     * Be aware that {@link Instance#loadOptionalChunk(int, int)} can give a null chunk in the callback
      * if {@link Instance#hasEnabledAutoChunkLoad()} returns false and the chunk is not already loaded.
      *
      * @param instance     the instance to load the chunks from
@@ -36,8 +36,8 @@ public final class ChunkUtils {
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
             // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
-                    .thenAccept((chunk) -> {
+            instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
+                    .thenAccept((ignored) -> {
                         if (counter.incrementAndGet() == chunks.length) {
                             // This is the last chunk to be loaded , spawn player
                             completableFuture.complete(null);

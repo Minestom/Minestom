@@ -307,7 +307,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(position)) {
             // Ensure that the chunk is loaded
-            return instance.loadChunk(position).thenRun(endCallback);
+            return instance.loadOptionalChunk(position).thenRun(endCallback);
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
@@ -517,7 +517,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @Override
     public void tick(long time) {
-        if (instance == null || isRemoved() || instance.isChunkLoaded(currentChunk))
+        if (instance == null || isRemoved() || !instance.isChunkLoaded(currentChunk))
             return;
 
         // scheduled tasks
@@ -847,7 +847,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.position = spawnPosition;
         this.previousPosition = spawnPosition;
         this.instance = instance;
-        return instance.loadChunk(spawnPosition).thenRun(() -> {
+        return instance.loadOptionalChunk(spawnPosition).thenRun(() -> {
             try {
                 if (this instanceof Player player) {
                     instance.getWorldBorder().init(player);

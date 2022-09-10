@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.IColumnarSpace;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -33,9 +32,7 @@ import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -50,7 +47,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -158,7 +154,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Saves the current instance tags.
      * <p>
      * Warning: only the global instance data will be saved, not blocks.
-     * You would need to call {@link #saveBlocksToStorage()} too.
+     * You would need to call {@link #saveChunksToStorage()} too.
      *
      * @return the future called once the instance data has been saved
      */
@@ -170,7 +166,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return future called when the chunks are done saving
      */
-    public abstract @NotNull CompletableFuture<Void> saveBlocksToStorage();
+    public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
      * Changes the instance {@link ChunkGenerator}.
@@ -605,6 +601,19 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Deprecated
     public @NotNull CompletableFuture<Void> loadChunk(Point blockPosition) {
         return loadChunk(blockPosition.chunkX(), blockPosition.chunkZ());
+    }
+
+    @Deprecated
+    public @NotNull CompletableFuture<Void> loadOptionalChunk(int chunkX, int chunkZ) {
+        if (hasEnabledAutoChunkLoad()) {
+            return loadChunk(chunkX, chunkZ);
+        }
+        return CompletableFuture.completedFuture(null);
+    }
+
+    @Deprecated
+    public @NotNull CompletableFuture<Void> loadOptionalChunk(Point blockPosition) {
+        return loadOptionalChunk(blockPosition.chunkX(), blockPosition.chunkZ());
     }
 
     public abstract boolean isChunkLoaded(long currentChunk);
