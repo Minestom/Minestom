@@ -14,7 +14,7 @@ public final class PFColumnarSpace implements IColumnarSpace {
     private final PFInstanceSpace instanceSpace;
     private final Chunk chunk;
 
-    PFColumnarSpace(PFInstanceSpace instanceSpace, Chunk chunk) {
+    public PFColumnarSpace(PFInstanceSpace instanceSpace, Chunk chunk) {
         this.instanceSpace = instanceSpace;
         this.chunk = chunk;
     }

@@ -6,13 +6,14 @@ import com.extollit.gaming.ai.path.model.IInstanceSpace;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PFInstanceSpace implements IInstanceSpace {
     private final Instance instance;
-    private final Map<Chunk, PFColumnarSpace> chunkSpaceMap = new ConcurrentHashMap<>();
+    private final Map<Long, IColumnarSpace> chunkSpaceMap = new ConcurrentHashMap<>();
 
     public PFInstanceSpace(Instance instance) {
         this.instance = instance;
@@ -26,13 +27,9 @@ public final class PFInstanceSpace implements IInstanceSpace {
 
     @Override
     public IColumnarSpace columnarSpaceAt(int cx, int cz) {
-        final Chunk chunk = instance.getChunk(cx, cz);
-        if (chunk == null) return null;
-        return chunkSpaceMap.computeIfAbsent(chunk, c -> {
-            final PFColumnarSpace cs = new PFColumnarSpace(this, c);
-            c.setColumnarSpace(cs);
-            return cs;
-        });
+        long chunkIndex = ChunkUtils.getChunkIndex(cx, cz);
+        PFInstanceSpace space = this;
+        return chunkSpaceMap.computeIfAbsent(chunkIndex, c -> instance.createColumnarSpace(space, cx, cz));
     }
 
     public Instance getInstance() {

@@ -64,7 +64,7 @@ public class AnvilLoaderIntegrationTest {
                 return false;
             }
         };
-        Instance instance = env.createFlatInstance(chunkLoader);
+        InstanceContainer instance = env.createFlatInstance(chunkLoader);
 
         Consumer<Chunk> checkChunk = chunk -> {
             synchronized (chunk) {
@@ -86,7 +86,7 @@ public class AnvilLoaderIntegrationTest {
 
         for (int x = -2; x < 2; x++) {
             for (int z = -2; z < 2; z++) {
-                checkChunk.accept(instance.loadChunk(x, z).join()); // this is a test so we don't care too much about waiting for each chunk
+                checkChunk.accept(instance.loadChunkOrRetrieve(x, z).join()); // this is a test so we don't care too much about waiting for each chunk
             }
         }
 
@@ -148,7 +148,7 @@ public class AnvilLoaderIntegrationTest {
 
     @Test
     public void loadAndSaveChunk(Env env) throws InterruptedException {
-        Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
+        InstanceContainer instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
             public boolean supportsParallelLoading() {
@@ -160,7 +160,7 @@ public class AnvilLoaderIntegrationTest {
                 return false;
             }
         });
-        Chunk originalChunk = instance.loadChunk(0,0).join();
+        Chunk originalChunk = instance.loadChunkOrRetrieve(0,0).join();
 
         synchronized (originalChunk) {
             instance.saveChunkToStorage(originalChunk);
@@ -170,7 +170,7 @@ public class AnvilLoaderIntegrationTest {
             }
         }
 
-        Chunk reloadedChunk = instance.loadChunk(0,0).join();
+        Chunk reloadedChunk = instance.loadChunkOrRetrieve(0,0).join();
         for(int section = reloadedChunk.getMinSection(); section < reloadedChunk.getMaxSection(); section++) {
             Section originalSection = originalChunk.getSection(section);
             Section reloadedSection = reloadedChunk.getSection(section);

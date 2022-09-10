@@ -181,6 +181,6 @@ public class EntityVelocityIntegrationTest {
                 ChunkUtils.getChunkIndex(1, -1),
                 ChunkUtils.getChunkIndex(1, 0),
                 ChunkUtils.getChunkIndex(1, 1),
-        }, null).join();
+        }).join();
     }
 }

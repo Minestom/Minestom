@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Viewable;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -26,12 +27,13 @@ public class ChunkViewerIntegrationTest {
             instance = manager.createSharedInstance((InstanceContainer) instance);
         }
 
-        var chunk = instance.loadChunk(0, 0).join();
-        assertEquals(0, chunk.getViewers().size());
+        instance.loadChunk(0, 0).join();
+        Viewable viewable = instance.getViewersAt(0, 0, 0);
+        assertEquals(0, viewable.getViewers().size());
 
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
-        assertEquals(1, chunk.getViewers().size());
-        assertEquals(player, chunk.getViewers().iterator().next());
+        assertEquals(1, viewable.getViewers().size());
+        assertEquals(player, viewable.getViewers().iterator().next());
     }
 
     @Test
@@ -53,7 +55,8 @@ public class ChunkViewerIntegrationTest {
             var tracker = connection.trackIncoming(ChunkDataPacket.class);
             for (int x = -viewRadius; x <= viewRadius; x++) {
                 for (int z = -viewRadius; z <= viewRadius; z++) {
-                    instance.getChunk(x, z).sendChunk();
+                    Chunk chunk = (Chunk) instance.loadOptionalChunk(x, z).join();
+                    chunk.sendChunk();
                 }
             }
             assertEquals(count, tracker.collect().size());

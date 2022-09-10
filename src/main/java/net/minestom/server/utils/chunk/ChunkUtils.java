@@ -20,27 +20,24 @@ public final class ChunkUtils {
     }
 
     /**
-     * Executes {@link Instance#loadOptionalChunk(int, int)} for the array of chunks {@code chunks}
+     * Executes {@link Instance#loadChunk(int, int)} for the array of chunks {@code chunks}
      * with multiple callbacks, {@code eachCallback} which is executed each time a new chunk is loaded and
      * {@code endCallback} when all the chunks in the array have been loaded.
      * <p>
-     * Be aware that {@link Instance#loadOptionalChunk(int, int)} can give a null chunk in the callback
+     * Be aware that {@link Instance#loadChunk(int, int)} can give a null chunk in the callback
      * if {@link Instance#hasEnabledAutoChunkLoad()} returns false and the chunk is not already loaded.
      *
      * @param instance     the instance to load the chunks from
      * @param chunks       the chunks to loaded, long value from {@link #getChunkIndex(int, int)}
-     * @param eachCallback the optional callback when a chunk get loaded
      * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
-    public static @NotNull CompletableFuture<Void> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
-                                                                   @Nullable Consumer<Chunk> eachCallback) {
+    public static @NotNull CompletableFuture<Void> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
             // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
+            instance.loadChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
                     .thenAccept((chunk) -> {
-                        if (eachCallback != null) eachCallback.accept(chunk);
                         if (counter.incrementAndGet() == chunks.length) {
                             // This is the last chunk to be loaded , spawn player
                             completableFuture.complete(null);
@@ -63,25 +60,12 @@ public final class ChunkUtils {
      * @return true if the chunk is loaded, false otherwise
      */
     public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
-        final Chunk chunk = instance.getChunk(getChunkCoordinate(x), getChunkCoordinate(z));
-        return isLoaded(chunk);
+        long chunkIndex = getChunkIndex(getChunkCoordinate(x), getChunkCoordinate(z));
+        return instance.isChunkLoaded(chunkIndex);
     }
 
     public static boolean isLoaded(@NotNull Instance instance, @NotNull Point point) {
-        final Chunk chunk = instance.getChunk(point.chunkX(), point.chunkZ());
-        return isLoaded(chunk);
-    }
-
-    public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
-        final int chunkX = getChunkCoordinate(x);
-        final int chunkZ = getChunkCoordinate(z);
-        final boolean sameChunk = originChunk != null &&
-                originChunk.getChunkX() == chunkX && originChunk.getChunkZ() == chunkZ;
-        return sameChunk ? originChunk : instance.getChunk(chunkX, chunkZ);
-    }
-
-    public static Chunk retrieve(Instance instance, Chunk originChunk, Point position) {
-        return retrieve(instance, originChunk, position.x(), position.z());
+        return isLoaded(instance, point.x(), point.z());
     }
 
     /**

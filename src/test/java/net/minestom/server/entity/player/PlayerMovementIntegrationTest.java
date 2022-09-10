@@ -10,6 +10,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -65,11 +66,12 @@ public class PlayerMovementIntegrationTest {
 
     @Test
     public void chunkUpdateDebounceTest(Env env) {
-        final Instance flatInstance = env.createFlatInstance();
+        final InstanceContainer flatInstance = env.createFlatInstance();
         final int viewDiameter = MinecraftServer.getChunkViewDistance() * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(0, 0, viewDiameter+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkUtils.forChunksInRange(0, 0, viewDiameter+2, (x, z) ->
+                chunks.add(flatInstance.loadChunkOrRetrieve(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         final TestConnection connection = env.createConnection();
         final CompletableFuture<@NotNull Player> future = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));

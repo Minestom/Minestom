@@ -66,6 +66,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
+import javax.swing.text.View;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
@@ -93,7 +94,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
     protected Instance instance;
-    protected Chunk currentChunk;
+    protected long currentChunk;
     protected Pos position;
     protected Pos previousPosition;
     protected Pos lastSyncedPosition;
@@ -301,12 +302,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         if (chunks != null && chunks.length > 0) {
             // Chunks need to be loaded before the teleportation can happen
-            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
+            return ChunkUtils.optionalLoadAll(instance, chunks).thenRun(endCallback);
         }
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(position)) {
             // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(position).thenRun(endCallback);
+            return instance.loadChunk(position).thenRun(endCallback);
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
@@ -516,7 +517,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @Override
     public void tick(long time) {
-        if (instance == null || isRemoved() || !ChunkUtils.isLoaded(currentChunk))
+        if (instance == null || isRemoved() || instance.isChunkLoaded(currentChunk))
             return;
 
         // scheduled tasks
@@ -597,8 +598,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 return;
             }
         }
-        final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
-        if (!ChunkUtils.isLoaded(finalChunk)) {
+
+        if (!instance.isChunkLoaded(finalVelocityPosition)) {
             // Entity shouldn't be updated when moving in an unloaded chunk
             return;
         }
@@ -630,11 +631,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
         final double drag;
         if (wasOnGround) {
-            final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
-            synchronized (chunk) {
-                drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
-            }
-        } else drag = airDrag;
+            drag = instance.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
+        } else {
+            drag = airDrag;
+        }
 
         double gravity = flying ? 0 : gravityAcceleration;
         double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
@@ -656,7 +656,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
         final BoundingBox boundingBox = this.boundingBox;
-        ChunkCache cache = new ChunkCache(instance, currentChunk);
+        Block.Getter blockGetter = instance;
 
         final int minX = (int) Math.floor(boundingBox.minX() + position.x());
         final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
@@ -668,7 +668,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
+                    final Block block = blockGetter.getBlock(x, y, z, Block.Getter.Condition.CACHED);
                     if (block == null) continue;
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
@@ -806,19 +806,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.boundingBox = boundingBox;
     }
 
-    /**
-     * Convenient method to get the entity current chunk.
-     *
-     * @return the entity chunk, can be null even if unlikely
-     */
-    public @Nullable Chunk getChunk() {
-        return currentChunk;
-    }
-
     @ApiStatus.Internal
-    protected void refreshCurrentChunk(Chunk currentChunk) {
+    protected void refreshCurrentChunk(long currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
+
     }
 
     /**
@@ -856,10 +847,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.position = spawnPosition;
         this.previousPosition = spawnPosition;
         this.instance = instance;
-        return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
+        return instance.loadChunk(spawnPosition).thenRun(() -> {
             try {
-                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
-                refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
                     instance.getWorldBorder().init(player);
                     player.sendPacket(instance.createTimePacket());
@@ -1297,23 +1286,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
-        final Chunk chunk = getChunk();
+        final Viewable viewers = instance.getViewersAt(position);
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
+            PacketUtils.prepareViewablePacket(viewers, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
             this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         } else if (positionChange && viewChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+            PacketUtils.prepareViewablePacket(viewers, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, isOnGround()), this);
             // Fix head rotation
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketUtils.prepareViewablePacket(viewers, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
             // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
             // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+            PacketUtils.prepareViewablePacket(viewers, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, onGround), this);
         } else if (viewChange) {
-            PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
-            PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
+            PacketUtils.prepareViewablePacket(viewers, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+            PacketUtils.prepareViewablePacket(viewers, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
         }
         this.lastSyncedPosition = position;
     }
@@ -1376,16 +1365,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Instance instance = getInstance();
         assert instance != null;
         instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
-        final int lastChunkX = currentChunk.getChunkX();
-        final int lastChunkZ = currentChunk.getChunkZ();
+        final int lastChunkX = ChunkUtils.getChunkCoordX(currentChunk);
+        final int lastChunkZ = ChunkUtils.getChunkCoordZ(currentChunk);
         final int newChunkX = newPosition.chunkX();
         final int newChunkZ = newPosition.chunkZ();
         if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
             // Entity moved in a new chunk
-            final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
-            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
-            refreshCurrentChunk(newChunk);
+            if (this instanceof Player player) player.sendChunkUpdates(newChunkX, newChunkZ);
+            instance.refreshCurrentChunk(this, newChunkX, newChunkZ);
         }
     }
 
@@ -1544,7 +1531,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected void synchronizePosition(boolean includeSelf) {
         final Pos posCache = this.position;
         final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
-        PacketUtils.prepareViewablePacket(currentChunk, packet, this);
+        PacketUtils.prepareViewablePacket(instance.getViewersAt(posCache), packet, this);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = posCache;
     }
@@ -1591,12 +1578,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     @Override
     public @NotNull EntitySnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final Chunk chunk = currentChunk;
+        final int chunkX = ChunkUtils.getChunkCoordX(currentChunk);
+        final int chunkZ = ChunkUtils.getChunkCoordZ(currentChunk);
         final int[] viewersId = this.viewEngine.viewableOption.bitSet.toIntArray();
         final int[] passengersId = ArrayUtils.mapToIntArray(passengers, Entity::getEntityId);
         final Entity vehicle = this.vehicle;
         return new SnapshotImpl.Entity(entityType, uuid, id, position, velocity,
-                updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
+                updater.reference(instance), chunkX, chunkZ,
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 tagHandler.readableCopy());
     }
@@ -1669,7 +1657,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
             return false;
         }
-        return CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start, end, entity.boundingBox);
+        return CollisionUtils.isLineOfSightReachingShape(instance, start, end, entity.boundingBox);
     }
 
     /**
@@ -1699,7 +1687,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Predicate<Entity> finalPredicate = e -> e != this
                 && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
                 && predicate.test(e)
-                && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
+                && CollisionUtils.isLineOfSightReachingShape(instance, start,
                 e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()

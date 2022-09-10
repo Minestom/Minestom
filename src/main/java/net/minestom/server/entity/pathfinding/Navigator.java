@@ -105,9 +105,9 @@ public final class Navigator {
         if (!worldBorder.isInside(point)) {
             return false;
         }
+
         // Can't path in an unloaded chunk
-        final Chunk chunk = instance.getChunkAt(point);
-        if (!ChunkUtils.isLoaded(chunk)) {
+        if (!instance.isChunkLoaded(point)) {
             return false;
         }
 

@@ -2,6 +2,7 @@ package net.minestom.server.utils.chunk;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -11,19 +12,19 @@ import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
 
 @ApiStatus.Internal
 public final class ChunkCache implements Block.Getter {
-    private final Instance instance;
+    private final InstanceContainer instance;
     private Chunk chunk;
 
     private final Block defaultBlock;
 
-    public ChunkCache(Instance instance, Chunk chunk,
+    public ChunkCache(InstanceContainer instance, Chunk chunk,
                       Block defaultBlock) {
         this.instance = instance;
         this.chunk = chunk;
         this.defaultBlock = defaultBlock;
     }
 
-    public ChunkCache(Instance instance, Chunk chunk) {
+    public ChunkCache(InstanceContainer instance, Chunk chunk) {
         this(instance, chunk, Block.AIR);
     }
 

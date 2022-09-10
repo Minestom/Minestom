@@ -31,7 +31,7 @@ public final class CollisionUtils {
                                               @Nullable PhysicsResult lastPhysicsResult) {
         final Instance instance = entity.getInstance();
         assert instance != null;
-        return handlePhysics(instance, entity.getChunk(),
+        return handlePhysics(instance,
                 entity.getBoundingBox(),
                 entity.getPosition(), entityVelocity,
                 lastPhysicsResult);
@@ -46,14 +46,13 @@ public final class CollisionUtils {
      * @param boundingBox the bounding box to move
      * @return the result of physics simulation
      */
-    public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
+    public static PhysicsResult handlePhysics(@NotNull Instance instance,
                                               @NotNull BoundingBox boundingBox,
                                               @NotNull Pos position, @NotNull Vec velocity,
                                               @Nullable PhysicsResult lastPhysicsResult) {
-        final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
         return BlockCollision.handlePhysics(boundingBox,
                 velocity, position,
-                getter, lastPhysicsResult);
+                instance, lastPhysicsResult);
     }
 
     /**
@@ -61,16 +60,15 @@ public final class CollisionUtils {
      * (ie there are no blocks colliding with it).
      *
      * @param instance the instance.
-     * @param chunk    optional chunk reference for speedup purposes.
      * @param start    start of the line of sight.
      * @param end      end of the line of sight.
      * @param shape    shape to check.
      * @return true is shape is reachable by the given line of sight; false otherwise.
      */
-    public static boolean isLineOfSightReachingShape(@NotNull Instance instance, @Nullable Chunk chunk,
+    public static boolean isLineOfSightReachingShape(@NotNull Instance instance,
                                                      @NotNull Point start, @NotNull Point end,
                                                      @NotNull Shape shape) {
-        final PhysicsResult result = handlePhysics(instance, chunk,
+        final PhysicsResult result = handlePhysics(instance,
                 BoundingBox.ZERO,
                 Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
                 null);

@@ -123,7 +123,6 @@ public class EntityProjectile extends Entity {
             return instance.getBlock(pos).isSolid();
         }
 
-        Chunk chunk = null;
         Collection<LivingEntity> entities = null;
         final BoundingBox bb = getBoundingBox();
 
@@ -153,14 +152,11 @@ public class EntityProjectile extends Entity {
                     return true;
                 }
             }
-            if (currentChunk != chunk) {
-                chunk = currentChunk;
-                entities = instance.getChunkEntities(chunk)
-                        .stream()
-                        .filter(entity -> entity instanceof LivingEntity)
-                        .map(entity -> (LivingEntity) entity)
-                        .collect(Collectors.toSet());
-            }
+            entities = instance.getChunkEntities(currentChunk)
+                    .stream()
+                    .filter(entity -> entity instanceof LivingEntity)
+                    .map(entity -> (LivingEntity) entity)
+                    .collect(Collectors.toSet());
             final Point currentPos = pos;
             Stream<LivingEntity> victimsStream = entities.stream()
                     .filter(entity -> bb.intersectEntity(currentPos, entity));

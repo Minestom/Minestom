@@ -16,20 +16,18 @@ public final class ChunkUpdateLimitChecker {
     /**
      * Adds the chunk to the history
      *
-     * @param chunk chunk to add
      * @return {@code true} if it's a new chunk in the history
      */
-    public boolean addToHistory(Chunk chunk) {
-        final long index = ChunkUtils.getChunkIndex(chunk);
+    public boolean addToHistory(long chunkIndex) {
         boolean result = true;
         final int lastIndex = historySize - 1;
         for (int i = 0; i < lastIndex; i++) {
-            if (chunkHistory[i] == index) {
+            if (chunkHistory[i] == chunkIndex) {
                 result = false;
             }
             chunkHistory[i] = chunkHistory[i + 1];
         }
-        chunkHistory[lastIndex] = index;
+        chunkHistory[lastIndex] = chunkIndex;
         return result;
     }
 }

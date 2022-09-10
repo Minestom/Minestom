@@ -100,7 +100,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * Those are the major actors of the server,
- * they are not necessary backed by a {@link PlayerSocketConnection} as shown by {@link FakePlayer}.
+ * they are not necessarily backed by a {@link PlayerSocketConnection} as shown by {@link FakePlayer}.
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
@@ -129,12 +129,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Vec chunksLoadedByClient = Vec.ZERO;
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
+        this.instance.loadChunk(chunkX, chunkZ).thenAccept(chunk -> {
             try {
-                if (chunk != null) {
-                    chunk.sendChunk(this);
-                    EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
-                }
+                instance.sendChunk(this, chunkX, chunkZ);
+                EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -539,9 +537,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 currentInstance == null, dimensionChange, true);
 
         // Ensure that surrounding chunks are loaded
-        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
         ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) -> {
-            final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
+            final CompletableFuture<Void> future = instance.loadChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
         if (futures.isEmpty()) {
@@ -2026,10 +2024,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return this;
     }
 
-    protected void sendChunkUpdates(Chunk newChunk) {
-        if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
-            final int newX = newChunk.getChunkX();
-            final int newZ = newChunk.getChunkZ();
+    protected void sendChunkUpdates(int newX, int newZ) {
+        if (chunkUpdateLimitChecker.addToHistory(ChunkUtils.getChunkIndex(newX, newZ))) {
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
             ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),

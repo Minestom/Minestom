@@ -1,15 +1,22 @@
 package net.minestom.server.instance;
 
+import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
+import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.pathfinding.PFColumnarSpace;
+import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -19,10 +26,17 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
+import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.thread.ThreadDispatcher;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -38,6 +52,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -54,6 +69,10 @@ public class InstanceContainer extends Instance {
 
     // the chunk generator used, can be null
     private volatile Generator generator;
+
+    // the block retriever used to get block from a position
+    private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
+
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
@@ -87,13 +106,118 @@ public class InstanceContainer extends Instance {
         this(uniqueId, dimensionType, null);
     }
 
+    /**
+     * Loads the chunk at the given {@link Point} with a callback.
+     *
+     * @param point the chunk position
+     */
+    public @NotNull CompletableFuture<Void> loadChunk(@NotNull Point point) {
+        return loadChunk(point.chunkX(), point.chunkZ()).thenRun(() -> {});
+    }
+
+    /**
+     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
+     * at the given {@link Point} with a callback.
+     *
+     * @param point the chunk position
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
+     */
+    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
+        return loadOptionalChunk(point.chunkX(), point.chunkZ());
+    }
+
+    @Override
+    public void sendChunk(Player player, int chunkX, int chunkZ) {
+        Chunk chunk = getChunk(chunkX, chunkZ);
+        Check.notNull(chunk, "Cannot send a chunk which is not loaded");
+        chunk.sendChunk(player);
+    }
+
+    @Override
+    public void refreshCurrentChunk(Tickable tickable, int newChunkX, int newChunkZ) {
+        MinecraftServer.process().dispatcher().updateElement(tickable, getChunkAt(newChunkX, newChunkZ));
+    }
+
+    @Override
+    public boolean isChunkLoaded(long currentChunk) {
+        int chunkX = ChunkUtils.getChunkCoordX(currentChunk);
+        int chunkZ = ChunkUtils.getChunkCoordZ(currentChunk);
+        return getChunk(chunkX, chunkZ) != null;
+    }
+
+    /**
+     * Unloads the chunk at the given position.
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     */
+    public void unloadChunk(int chunkX, int chunkZ) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        Check.notNull(chunk, "The chunk at {0}:{1} is already unloaded", chunkX, chunkZ);
+        unloadChunk(chunk);
+    }
+
+    /**
+     * @param chunkX the chunk X
+     * @param chunkZ this chunk Z
+     * @return true if the chunk is loaded
+     */
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return getChunk(chunkX, chunkZ) != null;
+    }
+
+    /**
+     * @param point coordinate of a block or other
+     * @return true if the chunk is loaded
+     */
+    public boolean isChunkLoaded(Point point) {
+        return isChunkLoaded(point.chunkX(), point.chunkZ());
+    }
+
+    @Override
+    public void registerDispatcher(ThreadDispatcher<Chunk> dispatcher) {
+        getChunks().forEach(dispatcher::createPartition);
+    }
+
+    @Override
+    public IColumnarSpace createColumnarSpace(PFInstanceSpace instanceSpace, int cx, int cz) {
+        loadChunk(cx, cz).join();
+        return new PFColumnarSpace(instanceSpace, getChunkAt(cx, cz));
+    }
+
+    @Override
+    public ChunkBatch applyBatch(ChunkBatch chunkBatch, int chunkX, int chunkZ, ChunkCallback callback) {
+        return chunkBatch.apply(this, getChunk(chunkX, chunkZ), callback);
+    }
+
+    /**
+     * Gets the {@link Chunk} at the given block position, null if not loaded.
+     *
+     * @param x the X position
+     * @param z the Z position
+     * @return the chunk at the given position, null if not loaded
+     */
+    public @Nullable Chunk getChunkAt(double x, double z) {
+        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
+    }
+
+    /**
+     * Gets the {@link Chunk} at the given {@link Point}, null if not loaded.
+     *
+     * @param point the position
+     * @return the chunk at the given position, null if not loaded
+     */
+    public @Nullable Chunk getChunkAt(@NotNull Point point) {
+        return getChunk(point.chunkX(), point.chunkZ());
+    }
+
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         Chunk chunk = getChunkAt(x, z);
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
-            chunk = loadChunk(getChunkCoordinate(x), getChunkCoordinate(z)).join();
+            chunk = loadChunkOrRetrieve(getChunkCoordinate(x), getChunkCoordinate(z)).join();
         }
         if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null);
     }
@@ -206,17 +330,14 @@ public class InstanceContainer extends Instance {
         return allowed;
     }
 
-    @Override
-    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public @NotNull CompletableFuture<Chunk> loadChunkOrRetrieve(int chunkX, int chunkZ) {
         return loadOrRetrieve(chunkX, chunkZ, () -> retrieveChunk(chunkX, chunkZ));
     }
 
-    @Override
     public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return loadOrRetrieve(chunkX, chunkZ, () -> hasEnabledAutoChunkLoad() ? retrieveChunk(chunkX, chunkZ) : AsyncUtils.empty());
     }
 
-    @Override
     public synchronized void unloadChunk(@NotNull Chunk chunk) {
         if (!isLoaded(chunk)) return;
         final int chunkX = chunk.getChunkX();
@@ -235,7 +356,6 @@ public class InstanceContainer extends Instance {
         dispatcher.deletePartition(chunk);
     }
 
-    @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         return chunks.get(getChunkIndex(chunkX, chunkZ));
     }
@@ -245,13 +365,12 @@ public class InstanceContainer extends Instance {
         return chunkLoader.saveInstance(this);
     }
 
-    @Override
     public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
         return chunkLoader.saveChunk(chunk);
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
+    public @NotNull CompletableFuture<Void> saveBlocksToStorage() {
         return chunkLoader.saveChunks(getChunks());
     }
 
@@ -413,6 +532,26 @@ public class InstanceContainer extends Instance {
         return point.y() < getDimensionType().getMinY() - 64;
     }
 
+    @Override
+    public @NotNull Set<@NotNull Entity> getChunkEntities(long chunk) {
+        int chunkX = ChunkUtils.getChunkCoordX(chunk);
+        int chunkZ = ChunkUtils.getChunkCoordZ(chunk);
+        var chunkEntities = getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
+        return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
+    }
+
+    @Override
+    protected @Nullable Block retrieveBlock(int x, int y, int z, @NotNull Condition condition) {
+        return this.blockRetriever.getBlock(x, y, z, condition);
+    }
+
+    @Override
+    public @NotNull Viewable getViewersAt(int x, int y, int z) {
+        Chunk chunk = getChunkAt(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
+        Check.notNull(chunk, "Chunk at " + x + ", " + z + " is not loaded.");
+        return chunk;
+    }
+
     /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
@@ -536,7 +675,6 @@ public class InstanceContainer extends Instance {
      *
      * @return the chunks of this instance
      */
-    @Override
     public @NotNull Collection<@NotNull Chunk> getChunks() {
         return chunks.values();
     }
@@ -632,5 +770,24 @@ public class InstanceContainer extends Instance {
         this.chunks.put(getChunkIndex(chunk), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
+    }
+
+    @Override
+    public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
+        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
+        final int[] entities = ArrayUtils.mapToIntArray(getEntityTracker().entities(), Entity::getEntityId);
+        return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
+                getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
+                tagHandler().readableCopy());
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return false;
+    }
+
+    @Override
+    public @NotNull CompletableFuture<Void> loadChunk(int chunkX, int chunkZ) {
+        return loadChunkOrRetrieve(chunkX, chunkZ).thenRun(() -> {});
     }
 }

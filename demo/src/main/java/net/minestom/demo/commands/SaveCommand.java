@@ -21,7 +21,7 @@ public class SaveCommand extends Command {
 
     private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
         for(var instance : MinecraftServer.getInstanceManager().getInstances()) {
-            CompletableFuture<Void> instanceSave = instance.saveInstance().thenCompose(v -> instance.saveChunksToStorage());
+            CompletableFuture<Void> instanceSave = instance.saveInstance().thenCompose(v -> instance.saveBlocksToStorage());
             try {
                 instanceSave.get();
             } catch (InterruptedException | ExecutionException e) {

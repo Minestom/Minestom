@@ -1,11 +1,13 @@
 package net.minestom.server.instance;
 
+import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
+import net.minestom.server.Viewable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -19,6 +21,7 @@ import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
+import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
@@ -32,7 +35,8 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.chunk.ChunkCache;
+import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -81,9 +85,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final EntityTracker entityTracker = new EntityTrackerImpl();
-
-    private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
+    protected final EntityTracker entityTracker = new EntityTrackerImpl();
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -153,98 +155,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
 
     /**
-     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return a {@link CompletableFuture} completed once the chunk has been loaded
-     */
-    public abstract @NotNull CompletableFuture<@NotNull Chunk> loadChunk(int chunkX, int chunkZ);
-
-    /**
-     * Loads the chunk at the given {@link Point} with a callback.
-     *
-     * @param point the chunk position
-     */
-    public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
-        return loadChunk(point.chunkX(), point.chunkZ());
-    }
-
-    /**
-     * Loads the chunk if the chunk is already loaded or if
-     * {@link #hasEnabledAutoChunkLoad()} returns true.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return a {@link CompletableFuture} completed once the chunk has been processed, can be null if not loaded
-     */
-    public abstract @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ);
-
-    /**
-     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
-     * at the given {@link Point} with a callback.
-     *
-     * @param point the chunk position
-     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
-     */
-    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
-        return loadOptionalChunk(point.chunkX(), point.chunkZ());
-    }
-
-    /**
-     * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
-     * <p>
-     * WARNING: during unloading, all entities other than {@link Player} will be removed.
-     *
-     * @param chunk the chunk to unload
-     */
-    public abstract void unloadChunk(@NotNull Chunk chunk);
-
-    /**
-     * Unloads the chunk at the given position.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     */
-    public void unloadChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        Check.notNull(chunk, "The chunk at {0}:{1} is already unloaded", chunkX, chunkZ);
-        unloadChunk(chunk);
-    }
-
-    /**
-     * Gets the loaded {@link Chunk} at a position.
-     * <p>
-     * WARNING: this should only return already-loaded chunk, use {@link #loadChunk(int, int)} or similar to load one instead.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return the chunk at the specified position, null if not loaded
-     */
-    public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
-
-    /**
-     * @param chunkX the chunk X
-     * @param chunkZ this chunk Z
-     * @return true if the chunk is loaded
-     */
-    public boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return getChunk(chunkX, chunkZ) != null;
-    }
-
-    /**
-     * @param point coordinate of a block or other
-     * @return true if the chunk is loaded
-     */
-    public boolean isChunkLoaded(Point point) {
-        return isChunkLoaded(point.chunkX(), point.chunkZ());
-    }
-
-    /**
      * Saves the current instance tags.
      * <p>
-     * Warning: only the global instance data will be saved, not chunks.
-     * You would need to call {@link #saveChunksToStorage()} too.
+     * Warning: only the global instance data will be saved, not blocks.
+     * You would need to call {@link #saveBlocksToStorage()} too.
      *
      * @return the future called once the instance data has been saved
      */
@@ -252,19 +166,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract @NotNull CompletableFuture<Void> saveInstance();
 
     /**
-     * Saves a {@link Chunk} to permanent storage.
-     *
-     * @param chunk the {@link Chunk} to save
-     * @return future called when the chunk is done saving
-     */
-    public abstract @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk);
-
-    /**
      * Saves multiple chunks to permanent storage.
      *
      * @return future called when the chunks are done saving
      */
-    public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
+    public abstract @NotNull CompletableFuture<Void> saveBlocksToStorage();
 
     /**
      * Changes the instance {@link ChunkGenerator}.
@@ -292,15 +198,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract void setGenerator(@Nullable Generator generator);
 
     /**
-     * Gets all the instance's loaded chunks.
-     *
-     * @return an unmodifiable containing all the instance chunks
-     */
-    public abstract @NotNull Collection<@NotNull Chunk> getChunks();
-
-    /**
      * When set to true, chunks will load automatically when requested.
-     * Otherwise using {@link #loadChunk(int, int)} will be required to even spawn a player
+     * Otherwise, you will need to manually load the chunks before players may even join.
      *
      * @param enable enable the auto chunk load
      */
@@ -509,12 +408,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param chunk the chunk to get the entities from
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
-     * if {@code chunk} is unloaded, return an empty {@link HashSet}
+     * if {@code chunk} is unloaded, return an empty {@link Set}
      */
-    public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        var chunkEntities = entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES);
-        return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
-    }
+    public abstract @NotNull Set<@NotNull Entity> getChunkEntities(long chunk);
 
     /**
      * Gets nearby entities to the given position.
@@ -531,9 +427,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-        final Block block = blockRetriever.getBlock(x, y, z, condition);
+        final Block block = retrieveBlock(x, y, z, condition);
         if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
         return block;
+    }
+
+    /**
+     * Retrieves a {@link Block} from this {@link Instance}'s internal storage.
+     * @param x the x coordinate of the block
+     * @param y the y coordinate of the block
+     * @param z the z coordinate of the block
+     * @param condition the block condition
+     * @return the block if it exists and matches the condition, otherwise null
+     */
+    protected abstract @Nullable Block retrieveBlock(int x, int y, int z, @NotNull Condition condition);
+
+    public abstract @NotNull Viewable getViewersAt(int x, int y, int z);
+    public @NotNull Viewable getViewersAt(Point blockPosition) {
+        return getViewersAt(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
     }
 
     /**
@@ -546,30 +457,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
         final Block block = getBlock(blockPosition);
-        final Chunk chunk = getChunkAt(blockPosition);
-        Check.notNull(chunk, "The chunk at {0} is not loaded!", blockPosition);
-        chunk.sendPacketToViewers(new BlockActionPacket(blockPosition, actionId, actionParam, block));
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given block position, null if not loaded.
-     *
-     * @param x the X position
-     * @param z the Z position
-     * @return the chunk at the given position, null if not loaded
-     */
-    public @Nullable Chunk getChunkAt(double x, double z) {
-        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given {@link Point}, null if not loaded.
-     *
-     * @param point the position
-     * @return the chunk at the given position, null if not loaded
-     */
-    public @Nullable Chunk getChunkAt(@NotNull Point point) {
-        return getChunk(point.chunkX(), point.chunkZ());
+        final Viewable viewers = getViewersAt(blockPosition);
+        PacketUtils.prepareViewablePacket(viewers, new BlockActionPacket(blockPosition, actionId, actionParam, block));
     }
 
     @ApiStatus.Experimental
@@ -635,13 +524,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     @Override
-    public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
-        final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
-        return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
-                getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
-                tagHandler.readableCopy());
-    }
+    public abstract @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater);
 
     /**
      * Creates an explosion at the given position with the given strength.
@@ -709,4 +592,37 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public @NotNull Pointers pointers() {
         return this.pointers;
     }
+
+    /**
+     * This method is used to indicate whether the instance is read only or not.
+     * @return true if the instance is read only, false otherwise
+     */
+    public abstract boolean isReadOnly();
+
+    @Deprecated
+    public abstract @NotNull CompletableFuture<Void> loadChunk(int chunkX, int chunkZ);
+
+    @Deprecated
+    public @NotNull CompletableFuture<Void> loadChunk(Point blockPosition) {
+        return loadChunk(blockPosition.chunkX(), blockPosition.chunkZ());
+    }
+
+    public abstract boolean isChunkLoaded(long currentChunk);
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return isChunkLoaded(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+    }
+    public boolean isChunkLoaded(Point blockPosition) {
+        return isChunkLoaded(ChunkUtils.getChunkIndex(blockPosition));
+    }
+
+    public abstract void sendChunk(Player player, int chunkX, int chunkZ);
+
+    public abstract void refreshCurrentChunk(Tickable tickable, int newChunkX, int newChunkZ);
+
+    @ApiStatus.Internal
+    public abstract void registerDispatcher(ThreadDispatcher<Chunk> dispatcher);
+
+    public abstract IColumnarSpace createColumnarSpace(PFInstanceSpace instanceSpace, int cx, int cz);
+
+    public abstract ChunkBatch applyBatch(ChunkBatch chunkBatch, int chunkX, int chunkZ, ChunkCallback callback);
 }

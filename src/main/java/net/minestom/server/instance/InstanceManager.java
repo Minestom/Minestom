@@ -110,10 +110,10 @@ public final class InstanceManager {
         Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
         synchronized (instance) {
             // Unload all chunks
-            if (instance instanceof InstanceContainer) {
-                instance.getChunks().forEach(instance::unloadChunk);
+            if (instance instanceof InstanceContainer container) {
+                container.getChunks().forEach(container::unloadChunk);
                 var dispatcher = MinecraftServer.process().dispatcher();
-                instance.getChunks().forEach(dispatcher::deletePartition);
+                container.getChunks().forEach(dispatcher::deletePartition);
             }
             // Unregister
             instance.setRegistered(false);
@@ -155,6 +155,6 @@ public final class InstanceManager {
         instance.setRegistered(true);
         this.instances.add(instance);
         var dispatcher = MinecraftServer.process().dispatcher();
-        instance.getChunks().forEach(dispatcher::createPartition);
+        instance.registerDispatcher(dispatcher);
     }
 }

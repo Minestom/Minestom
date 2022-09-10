@@ -50,7 +50,7 @@ public class InstanceUnregisterIntegrationTest {
     public void chunkGC(Env env) {
         // Ensure that unregistering an instance does release its chunks
         var instance = env.createFlatInstance();
-        var chunk = instance.loadChunk(0, 0).join();
+        var chunk = instance.loadChunkOrRetrieve(0, 0).join();
         var ref = new WeakReference<>(chunk);
         instance.unloadChunk(chunk);
         env.process().instance().unregisterInstance(instance);

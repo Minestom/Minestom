@@ -40,8 +40,7 @@ public class BlockPlacementListener {
             return;
 
         // Prevent outdated/modified client data
-        final Chunk interactedChunk = instance.getChunkAt(blockPosition);
-        if (!ChunkUtils.isLoaded(interactedChunk)) {
+        if (!instance.isChunkLoaded(blockPosition)) {
             // Client tried to place a block in an unloaded chunk, ignore the request
             return;
         }
@@ -61,7 +60,7 @@ public class BlockPlacementListener {
             }
         }
         if (blockUse) {
-            refresh(player, interactedChunk);
+            refresh(player, blockPosition);
             return;
         }
 
@@ -98,11 +97,10 @@ public class BlockPlacementListener {
             return;
         }
 
-        final Chunk chunk = instance.getChunkAt(placementPosition);
-        Check.stateCondition(!ChunkUtils.isLoaded(chunk),
+        Check.stateCondition(!instance.isChunkLoaded(placementPosition),
                 "A player tried to place a block in the border of a loaded chunk {0}", placementPosition);
-        if (chunk.isReadOnly()) {
-            refresh(player, chunk);
+        if (instance.isReadOnly()) {
+            refresh(player, placementPosition);
             return;
         }
 
@@ -114,7 +112,7 @@ public class BlockPlacementListener {
 
             // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
             if (collisionEntity != player)
-                refresh(player, chunk);
+                refresh(player, placementPosition);
             
             return;
         }
@@ -124,7 +122,7 @@ public class BlockPlacementListener {
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
-            refresh(player, chunk);
+            refresh(player, placementPosition);
             return;
         }
 
@@ -136,7 +134,7 @@ public class BlockPlacementListener {
             resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
         }
         if (resultBlock == null) {
-            refresh(player, chunk);
+            refresh(player, placementPosition);
             return;
         }
         // Place the block
@@ -154,8 +152,8 @@ public class BlockPlacementListener {
         }
     }
 
-    private static void refresh(Player player, Chunk chunk) {
+    private static void refresh(Player player, Point position) {
         player.getInventory().update();
-        chunk.sendChunk(player);
+        player.getInstance().sendChunk(player, position.chunkX(), position.chunkZ());
     }
 }
