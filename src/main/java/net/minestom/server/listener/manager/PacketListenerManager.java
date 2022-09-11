@@ -7,7 +7,16 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.client.ClientPreplayPacket;
+import net.minestom.server.network.packet.client.handshake.HandshakePacket;
+import net.minestom.server.network.packet.client.login.EncryptionResponsePacket;
+import net.minestom.server.network.packet.client.login.LoginPluginResponsePacket;
+import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.client.status.LegacyServerListPingPacket;
+import net.minestom.server.network.packet.client.status.PingPacket;
+import net.minestom.server.network.packet.client.status.StatusRequestPacket;
+import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +30,7 @@ public final class PacketListenerManager {
     private final ServerProcess serverProcess;
 
     private final Map<Class<? extends ClientPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
+    private final Map<Class<? extends ClientPreplayPacket>, PreplayPacketListenerConsumer> preplayListeners = new ConcurrentHashMap<>();
 
     public PacketListenerManager(ServerProcess serverProcess) {
         this.serverProcess = serverProcess;
@@ -57,6 +67,14 @@ public final class PacketListenerManager {
         setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
         setListener(ClientSpectatePacket.class, SpectateListener::listener);
         setListener(ClientEditBookPacket.class, BookListener::listener);
+
+        setListener(EncryptionResponsePacket.class, EncryptionResponsePacket::process);
+        setListener(HandshakePacket.class, HandshakePacket::process);
+        setListener(LegacyServerListPingPacket.class, LegacyServerListPingPacket::process);
+        setListener(LoginPluginResponsePacket.class, LoginPluginResponsePacket::process);
+        setListener(LoginStartPacket.class, LoginStartPacket::process);
+        setListener(PingPacket.class, PingPacket::process);
+        setListener(StatusRequestPacket.class, StatusRequestPacket::process);
     }
 
     /**
@@ -96,6 +114,29 @@ public final class PacketListenerManager {
     }
 
     /**
+     * Processes a {@link ClientPreplayPacket} by getting its {@link PreplayPacketListenerConsumer} and calling all the packet listeners.
+     *
+     * @param packet     the received packet
+     * @param connection the connection which sent the packet
+     * @param <T>        the packet type
+     */
+    public <T extends ClientPreplayPacket> void processClientPrePlayPacket(@NotNull T packet, @NotNull PlayerConnection connection) {
+
+        final Class clazz = packet.getClass();
+
+        PreplayPacketListenerConsumer<T> packetListenerConsumer = preplayListeners.get(clazz);
+
+        // Execute the listener
+        if (packetListenerConsumer != null) {
+            try {
+                packetListenerConsumer.accept(packet, connection);
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        }
+    }
+
+    /**
      * Sets the listener of a packet.
      * <p>
      * WARNING: this will overwrite the default minestom listener, this is not reversible.
@@ -106,6 +147,17 @@ public final class PacketListenerManager {
      */
     public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketListenerConsumer<T> consumer) {
         this.listeners.put(packetClass, consumer);
+    }
+
+    /**
+     * Sets the listener of a {@link ClientPreplayPacket}.
+     *
+     * @param packetClass the class of the packet
+     * @param consumer    the new packet's listener
+     * @param <T>         the type of the packet
+     */
+    public <T extends ClientPreplayPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PreplayPacketListenerConsumer<T> consumer) {
+        this.preplayListeners.put(packetClass, consumer);
     }
 
 }
