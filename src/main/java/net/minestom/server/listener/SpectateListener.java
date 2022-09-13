@@ -13,11 +13,22 @@ public class SpectateListener {
         final Entity target = Entity.getEntity(targetUuid);
 
         // Check if the target is valid
-        if (target == null || target == player)
+        if (target == null || target == player) {
             return;
+        }
 
-        // TODO check if 'target' is in a different instance
-        player.spectate(target);
+        if (target.getInstance() == null || player.getInstance() == null) {
+            return;
+        }
+
+        if (target.getInstance().getUniqueId() != player.getInstance().getUniqueId()) {
+            return;
+        }
+
+        // Despite the name of this packet being spectate, it is sent when the player
+        // uses their hotbar to switch between entities, which actually performs a teleport
+        // instead of a spectate.
+        player.teleport(target.getPosition());
     }
 
 }
