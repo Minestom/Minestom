@@ -5,10 +5,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -94,7 +91,7 @@ public class AudienceRegistry {
      */
     public @NotNull Iterable<? extends Audience> all() {
         if (this.isEmpty()) {
-            return Collections.emptyList();
+            return List.of();
         } else {
             return this.registry.values().stream().flatMap(Collection::stream).toList();
         }

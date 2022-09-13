@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -107,5 +108,21 @@ public class CommandContext {
                 this.args.put(key, supplier.get());
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommandContext that)) return false;
+        return Objects.equals(input, that.input) &&
+                Objects.equals(commandName, that.commandName) &&
+                Objects.equals(args, that.args) &&
+                Objects.equals(rawArgs, that.rawArgs) &&
+                Objects.equals(returnData, that.returnData);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(input, commandName, args, rawArgs, returnData);
     }
 }

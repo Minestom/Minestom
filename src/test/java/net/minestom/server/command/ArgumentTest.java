@@ -24,7 +24,8 @@ public class ArgumentTest {
         var arg = ArgumentType.String("id");
 
         assertFalse(arg.hasErrorCallback());
-        arg.setCallback((sender, exception) -> {});
+        arg.setCallback((sender, exception) -> {
+        });
         assertTrue(arg.hasErrorCallback());
     }
 
@@ -52,5 +53,4 @@ public class ArgumentTest {
 
         assertEquals(suggestion.getEntries(), List.of(new SuggestionEntry("entry")));
     }
-
 }

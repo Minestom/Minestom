@@ -11,6 +11,7 @@ import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Worker;
@@ -107,14 +108,15 @@ public class PlayerSocketConnection extends PlayerConnection {
                     (id, payload) -> {
                         if (!isOnline())
                             return; // Prevent packet corruption
+                        ClientPacket packet = null;
                         try {
-                            packetProcessor.process(this, id, payload);
+                            packet = packetProcessor.process(this, id, payload);
                         } catch (Exception e) {
                             // Error while reading the packet
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
                             if (payload.position() != payload.limit()) {
-                                LOGGER.warn("WARNING: Packet 0x{} not fully read ({})", Integer.toHexString(id), payload);
+                                LOGGER.warn("WARNING: Packet 0x{} not fully read ({}) {}", Integer.toHexString(id), payload, packet);
                             }
                         }
                     });
@@ -349,7 +351,9 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
             final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
-            outgoing.call(new PlayerPacketOutEvent(player, serverPacket));
+            PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+            outgoing.call(event);
+            if (event.isCancelled()) return;
         }
         // Write packet
         if (packet instanceof ServerPacket serverPacket) {

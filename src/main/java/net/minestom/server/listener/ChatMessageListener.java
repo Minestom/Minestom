@@ -11,6 +11,7 @@ import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -21,26 +22,17 @@ public class ChatMessageListener {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
-    public static void listener(ClientChatMessagePacket packet, Player player) {
-        String message = packet.message();
-
-        final String cmdPrefix = CommandManager.COMMAND_PREFIX;
-        if (message.startsWith(cmdPrefix)) {
-            // The message is a command
-            final String command = message.replaceFirst(cmdPrefix, "");
-
-            // check if we can receive commands
-            if (Messenger.canReceiveCommand(player)) {
-                COMMAND_MANAGER.execute(player, command);
-            } else {
-                Messenger.sendRejectionMessage(player);
-            }
-
-            // Do not call chat event
-            return;
+    public static void commandChatListener(ClientCommandChatPacket packet, Player player) {
+        final String command = packet.message();
+        if (Messenger.canReceiveCommand(player)) {
+            COMMAND_MANAGER.execute(player, command);
+        } else {
+            Messenger.sendRejectionMessage(player);
         }
+    }
 
-        // check if we can receive messages
+    public static void chatMessageListener(ClientChatMessagePacket packet, Player player) {
+        final String message = packet.message();
         if (!Messenger.canReceiveMessage(player)) {
             Messenger.sendRejectionMessage(player);
             return;

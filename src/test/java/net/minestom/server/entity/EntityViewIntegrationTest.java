@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
+import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -131,7 +131,7 @@ public class EntityViewIntegrationTest {
         var vehicle = new Entity(EntityType.ZOMBIE);
         var passenger = new Entity(EntityType.ZOMBIE);
 
-        var tracker = connection.trackIncoming(SpawnLivingEntityPacket.class);
+        var tracker = connection.trackIncoming(SpawnEntityPacket.class);
 
         vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
         vehicle.addPassenger(passenger);

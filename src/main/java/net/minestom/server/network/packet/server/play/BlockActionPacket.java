@@ -15,7 +15,8 @@ public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
     }
 
     public BlockActionPacket(BinaryReader reader) {
-        this(reader.readBlockPosition(), reader.readByte(), reader.readByte(), reader.readVarInt());
+        this(reader.readBlockPosition(), reader.readByte(),
+                reader.readByte(), reader.readVarInt());
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode,
@@ -55,8 +56,8 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
 
     @Override
     public @NotNull Collection<Component> components() {
-        return mode == 0 || mode == 2 ? Collections.singleton(objectiveValue) :
-                Collections.emptyList();
+        return mode == 0 || mode == 2 ? List.of(objectiveValue) :
+                List.of();
     }
 
     @Override

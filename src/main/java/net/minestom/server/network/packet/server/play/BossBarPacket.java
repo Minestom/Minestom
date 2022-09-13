@@ -3,6 +3,8 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -10,9 +12,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.UnaryOperator;
 
-public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ServerPacket {
+public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ComponentHoldingServerPacket {
     public BossBarPacket(BinaryReader reader) {
         this(reader.readUuid(), switch (reader.readVarInt()) {
             case 0 -> new AddAction(reader);
@@ -32,13 +37,27 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
         writer.write(action);
     }
 
+    @Override
+    public @NotNull Collection<Component> components() {
+        return this.action instanceof ComponentHolder<?> holder
+                ? holder.components()
+                : List.of();
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        return this.action instanceof ComponentHolder<?> holder
+                ? new BossBarPacket(this.uuid, (Action) holder.copyWithOperator(operator))
+                : this;
+    }
+
     public sealed interface Action extends Writeable
             permits AddAction, RemoveAction, UpdateHealthAction, UpdateTitleAction, UpdateStyleAction, UpdateFlagsAction {
         int id();
     }
 
     public record AddAction(@NotNull Component title, float health, @NotNull BossBar.Color color,
-                            @NotNull BossBar.Overlay overlay, byte flags) implements Action {
+                            @NotNull BossBar.Overlay overlay, byte flags) implements Action, ComponentHolder<AddAction> {
         public AddAction(@NotNull BossBar bar) {
             this(bar.name(), bar.progress(), bar.color(), bar.overlay(),
                     AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
@@ -62,6 +81,16 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
         @Override
         public int id() {
             return 0;
+        }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            return List.of(this.title);
+        }
+
+        @Override
+        public @NotNull AddAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new AddAction(operator.apply(this.title), this.health, this.color, this.overlay, this.flags);
         }
     }
 
@@ -96,7 +125,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
         }
     }
 
-    public record UpdateTitleAction(@NotNull Component title) implements Action {
+    public record UpdateTitleAction(@NotNull Component title) implements Action, ComponentHolder<UpdateTitleAction> {
         public UpdateTitleAction(@NotNull BossBar bar) {
             this(bar.name());
         }
@@ -113,6 +142,16 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
         @Override
         public int id() {
             return 3;
+        }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            return List.of(this.title);
+        }
+
+        @Override
+        public @NotNull UpdateTitleAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new UpdateTitleAction(operator.apply(this.title));
         }
     }
 

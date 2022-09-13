@@ -3,9 +3,7 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
-import net.minestom.server.command.builder.CommandSyntax;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.ParsedCommand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -15,7 +13,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Manager used to register {@link Command commands}.
@@ -28,8 +26,10 @@ public final class CommandManager {
 
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
-
-    private final CommandDispatcher dispatcher = new CommandDispatcher();
+    private final CommandParser parser = CommandParser.parser();
+    private final CommandDispatcher dispatcher = new CommandDispatcher(this);
+    private final Map<String, Command> commandMap = new HashMap<>();
+    private final Set<Command> commands = new HashSet<>();
 
     private CommandCallback unknownCommandCallback;
 
@@ -51,7 +51,10 @@ public final class CommandManager {
                         "A command with the name " + alias + " is already registered!");
             }
         }
-        this.dispatcher.register(command);
+        commands.add(command);
+        for (String name : command.getNames()) {
+            commandMap.put(name, command);
+        }
     }
 
     /**
@@ -61,7 +64,10 @@ public final class CommandManager {
      * @param command the command to remove
      */
     public void unregister(@NotNull Command command) {
-        this.dispatcher.unregister(command);
+        commands.remove(command);
+        for (String name : command.getNames()) {
+            commandMap.remove(name);
+        }
     }
 
     /**
@@ -71,7 +77,7 @@ public final class CommandManager {
      * @return the command associated with the name, null if not any
      */
     public @Nullable Command getCommand(@NotNull String commandName) {
-        return dispatcher.findCommand(commandName);
+        return commandMap.get(commandName.toLowerCase(Locale.ROOT));
     }
 
     /**
@@ -81,8 +87,7 @@ public final class CommandManager {
      * @return true if the command does exist
      */
     public boolean commandExists(@NotNull String commandName) {
-        commandName = commandName.toLowerCase(Locale.ROOT);
-        return dispatcher.findCommand(commandName) != null;
+        return getCommand(commandName) != null;
     }
 
     /**
@@ -93,6 +98,7 @@ public final class CommandManager {
      * @return the execution result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
+        command = command.trim();
         // Command event
         if (sender instanceof Player player) {
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
@@ -102,7 +108,10 @@ public final class CommandManager {
             command = playerCommandEvent.getCommand();
         }
         // Process the command
-        final CommandResult result = dispatcher.execute(sender, command);
+        final CommandParser.Result parsedCommand = parseCommand(command);
+        final ExecutableCommand executable = parsedCommand.executable();
+        final ExecutableCommand.Result executeResult = executable.execute(sender);
+        final CommandResult result = resultConverter(executable, executeResult, command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
@@ -162,43 +171,36 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
-        final GraphBuilder factory = new GraphBuilder();
+        return GraphConverter.createPacket(getGraph(), player);
+    }
 
-        for (Command command : this.dispatcher.getCommands()) {
-            // Check if user can use the command
-            final CommandCondition condition = command.getCondition();
-            if (condition != null && !condition.canUse(player, null)) continue;
+    public @NotNull Set<@NotNull Command> getCommands() {
+        return Collections.unmodifiableSet(commands);
+    }
 
-            // Add command to the graph
-            // Create the command's root node
-            final Node cmdNode = factory.createLiteralNode(command.getName(), true,
-                    command.getDefaultExecutor() != null, command.getAliases(), null);
+    /**
+     * Parses the command based on the registered commands
+     *
+     * @param input commands string without prefix
+     * @return the parsing result
+     */
+    public CommandParser.Result parseCommand(String input) {
+        return parser.parse(getGraph(), input);
+    }
 
-            // Add syntax to the command
-            for (CommandSyntax syntax : command.getSyntaxes()) {
-                boolean executable = false;
-                Node[] lastArgNodes = new Node[] {cmdNode}; // First arg links to cmd root
-                @NotNull Argument<?>[] arguments = syntax.getArguments();
-                for (int i = 0; i < arguments.length; i++) {
-                    Argument<?> argument = arguments[i];
-                    // Determine if command is executable here
-                    if (executable && argument.getDefaultValue() == null) {
-                        // Optional arg was followed by a non-optional
-                        throw new RuntimeException("");//todo exception
-                    }
-                    if (!executable && i < arguments.length-1 && arguments[i+1].getDefaultValue() != null || i+1 == arguments.length) {
-                        executable = true;
-                    }
-                    // Append current node to previous
-                    final Node[] argNodes = factory.createArgumentNode(argument, executable);
-                    for (Node lastArgNode : lastArgNodes) {
-                        lastArgNode.addChild(argNodes);
-                    }
-                    lastArgNodes = argNodes;
-                }
-            }
-        }
+    private Graph getGraph() {
+        //todo cache
+        return Graph.merge(commands);
+    }
 
-        return factory.createCommandPacket();
+    private static CommandResult resultConverter(ExecutableCommand executable,
+                                                 ExecutableCommand.Result newResult,
+                                                 String input) {
+        return CommandResult.of(switch (newResult.type()) {
+            case SUCCESS -> CommandResult.Type.SUCCESS;
+            case CANCELLED, PRECONDITION_FAILED, EXECUTOR_EXCEPTION -> CommandResult.Type.CANCELLED;
+            case INVALID_SYNTAX -> CommandResult.Type.INVALID_SYNTAX;
+            case UNKNOWN -> CommandResult.Type.UNKNOWN;
+        }, input, ParsedCommand.fromExecutable(executable), newResult.commandData());
     }
 }

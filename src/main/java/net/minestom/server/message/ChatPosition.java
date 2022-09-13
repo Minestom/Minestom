@@ -67,7 +67,7 @@ public enum ChatPosition {
      * @param id the id
      * @return the chat position
      */
-    public static @NotNull ChatPosition fromPacketID(byte id) {
+    public static @NotNull ChatPosition fromPacketID(int id) {
         return switch (id) {
             case 0 -> CHAT;
             case 1 -> SYSTEM_MESSAGE;

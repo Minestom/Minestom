@@ -65,5 +65,4 @@ public class SubcommandTest {
         assertFalse(parentExecuted.get());
         assertFalse(childExecuted.get());
     }
-
 }

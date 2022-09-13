@@ -97,7 +97,10 @@ public final class Server {
     public void stop() {
         this.stop = true;
         try {
-            this.serverSocket.close();
+            if(serverSocket != null) {
+                this.serverSocket.close();
+            }
+
             if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
                 Files.deleteIfExists(unixDomainSocketAddress.getPath());
             }

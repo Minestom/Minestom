@@ -68,4 +68,6 @@ interface PotionEffects {
     PotionEffect BAD_OMEN = PotionEffectImpl.get("minecraft:bad_omen");
 
     PotionEffect HERO_OF_THE_VILLAGE = PotionEffectImpl.get("minecraft:hero_of_the_village");
+
+    PotionEffect DARKNESS = PotionEffectImpl.get("minecraft:darkness");
 }

@@ -6,6 +6,9 @@ import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +27,16 @@ import java.util.function.Supplier;
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
+    @ApiStatus.Internal
+    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createContainer(Registry.Resource.COMMAND_ARGUMENTS,
+            (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id")));
+
+    record ArgumentImpl(NamespaceID namespace, int id) implements ProtocolObject {
+        @Override
+        public String toString() {
+            return name();
+        }
+    }
 
     private final String id;
     protected final boolean allowSpace;
@@ -305,6 +318,11 @@ public abstract class Argument<T> {
         public String parser() {
             return argument.parser();
         }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return argument.nodeProperties();
+        }
     }
 
     private static final class ArgumentFilter<T> extends Argument<T> {
@@ -333,6 +351,11 @@ public abstract class Argument<T> {
         @Override
         public String parser() {
             return argument.parser();
+        }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return argument.nodeProperties();
         }
     }
 }

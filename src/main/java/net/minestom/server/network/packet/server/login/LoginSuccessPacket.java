@@ -8,15 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username) implements ServerPacket {
+public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, int properties) implements ServerPacket {
     public LoginSuccessPacket(BinaryReader reader) {
-        this(reader.readUuid(), reader.readSizedString());
+        this(reader.readUuid(), reader.readSizedString(), reader.readVarInt());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeUuid(uuid);
         writer.writeSizedString(username);
+        writer.writeVarInt(properties);
     }
 
     @Override

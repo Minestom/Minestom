@@ -75,6 +75,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
 
     private static Map<String, BiFunction<Entity, Metadata, EntityMeta>> createMetaMap() {
         return Map.<String, BiFunction<Entity, Metadata, EntityMeta>>ofEntries(
+                entry("minecraft:allay", EntityMeta::new), // TODO dedicated metadata
                 entry("minecraft:area_effect_cloud", AreaEffectCloudMeta::new),
                 entry("minecraft:armor_stand", ArmorStandMeta::new),
                 entry("minecraft:arrow", ArrowMeta::new),
@@ -83,6 +84,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:bee", BeeMeta::new),
                 entry("minecraft:blaze", BlazeMeta::new),
                 entry("minecraft:boat", BoatMeta::new),
+                entry("minecraft:chest_boat", EntityMeta::new), // TODO dedicated metadata
                 entry("minecraft:cat", CatMeta::new),
                 entry("minecraft:cave_spider", CaveSpiderMeta::new),
                 entry("minecraft:chicken", ChickenMeta::new),
@@ -105,6 +107,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:falling_block", FallingBlockMeta::new),
                 entry("minecraft:firework_rocket", FireworkRocketMeta::new),
                 entry("minecraft:fox", FoxMeta::new),
+                entry("minecraft:frog", EntityMeta::new), // TODO dedicated metadata
                 entry("minecraft:ghast", GhastMeta::new),
                 entry("minecraft:giant", GiantMeta::new),
                 entry("minecraft:glow_item_frame", GlowItemFrameMeta::new),
@@ -164,6 +167,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:squid", SquidMeta::new),
                 entry("minecraft:stray", StrayMeta::new),
                 entry("minecraft:strider", StriderMeta::new),
+                entry("minecraft:tadpole", EntityMeta::new), // TODO dedicated metadata
                 entry("minecraft:egg", ThrownEggMeta::new),
                 entry("minecraft:ender_pearl", ThrownEnderPearlMeta::new),
                 entry("minecraft:experience_bottle", ThrownExperienceBottleMeta::new),
@@ -176,6 +180,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:villager", VillagerMeta::new),
                 entry("minecraft:vindicator", VindicatorMeta::new),
                 entry("minecraft:wandering_trader", WanderingTraderMeta::new),
+                entry("minecraft:warden", EntityMeta::new), // TODO dedicated metadata
                 entry("minecraft:witch", WitchMeta::new),
                 entry("minecraft:wither", WitherMeta::new),
                 entry("minecraft:wither_skeleton", WitherSkeletonMeta::new),

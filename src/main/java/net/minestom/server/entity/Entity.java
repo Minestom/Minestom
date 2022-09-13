@@ -1307,7 +1307,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Fix head rotation
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), this);
+            // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
+            // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                    lastSyncedPosition, onGround), this);
         } else if (viewChange) {
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
             PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
@@ -1634,7 +1637,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public List<Point> getLineOfSight(int maxDistance) {
         Instance instance = getInstance();
         if (instance == null) {
-            return Collections.emptyList();
+            return List.of();
         }
 
         List<Point> blocks = new ArrayList<>();
