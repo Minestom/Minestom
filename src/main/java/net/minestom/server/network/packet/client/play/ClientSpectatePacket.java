@@ -11,10 +11,6 @@ import java.util.UUID;
  * The ClientSpectatePacket is sent when the client interacts with their hotbar to switch between entities.
  * Contrary to its name, it is actually used to teleport the player to the entity they are switching to,
  * rather than spectating them.
- * <p>
- * Minestom will, by default, handle this behavior for you.
- *
- * @param target The UUID of the entity the player is switching to.
  */
 public record ClientSpectatePacket(@NotNull UUID target) implements ClientPacket {
     public ClientSpectatePacket(BinaryReader reader) {

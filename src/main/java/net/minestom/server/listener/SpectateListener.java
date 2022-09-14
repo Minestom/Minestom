@@ -5,6 +5,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerSpectateEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.ClientSpectatePacket;
 
 import java.util.UUID;
@@ -26,13 +27,15 @@ public class SpectateListener {
         }
 
         // Ignore if they're not attached to any instances
-        if (target.getInstance() == null || player.getInstance() == null) {
+        Instance targetInstance = target.getInstance();
+        Instance playerInstance = player.getInstance();
+        if (targetInstance == null || playerInstance == null) {
             return;
         }
 
         // Ignore if they're not in the same instance. Vanilla actually allows for
         // cross-instance spectating, but it's not really a good idea for Minestom.
-        if (target.getInstance().getUniqueId() != player.getInstance().getUniqueId()) {
+        if (targetInstance.getUniqueId() != playerInstance.getUniqueId()) {
             return;
         }
 
