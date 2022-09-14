@@ -3,6 +3,8 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerSpectateEvent;
 import net.minestom.server.network.packet.client.play.ClientSpectatePacket;
 
 import java.util.UUID;
@@ -37,7 +39,7 @@ public class SpectateListener {
         // Despite the name of this packet being spectate, it is sent when the player
         // uses their hotbar to switch between entities, which actually performs a teleport
         // instead of a spectate.
-        player.teleport(target.getPosition());
+        EventDispatcher.call(new PlayerSpectateEvent(player, target));
     }
 
 }
