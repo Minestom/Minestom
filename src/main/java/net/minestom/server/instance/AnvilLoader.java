@@ -166,7 +166,12 @@ public class AnvilLoader implements IChunkLoader {
         final HashMap<String, Biome> biomeCache = new HashMap<>();
         for (var sectionNBT : chunkReader.getSections()) {
             ChunkSectionReader sectionReader = new ChunkSectionReader(chunkReader.getMinecraftVersion(), sectionNBT);
-            Section section = chunk.getSection(sectionReader.getY());
+
+            if (sectionReader.isSectionEmpty()) continue;
+            final int sectionY = sectionReader.getY();
+            final int yOffset = Chunk.CHUNK_SECTION_SIZE * sectionY;
+
+            Section section = chunk.getSection(sectionY);
 
             if(sectionReader.getSkyLight() != null) {
                 section.setSkyLight(sectionReader.getSkyLight().copyArray());
@@ -174,10 +179,6 @@ public class AnvilLoader implements IChunkLoader {
             if(sectionReader.getBlockLight() != null) {
                 section.setBlockLight(sectionReader.getBlockLight().copyArray());
             }
-
-            if (sectionReader.isSectionEmpty()) continue;
-            final int sectionY = sectionReader.getY();
-            final int yOffset = Chunk.CHUNK_SECTION_SIZE * sectionY;
 
             // Biomes
             if(chunkReader.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
