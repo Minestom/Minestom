@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,10 +27,17 @@ public final class TickThread extends MinestomThread {
 
     private CountDownLatch latch;
     private long tickTime;
+    private long tickNum = 0;
     private final List<ThreadDispatcher.Partition> entries = new ArrayList<>();
 
     public TickThread(int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
+    }
+
+    public static @Nullable TickThread current() {
+        if (Thread.currentThread() instanceof TickThread current)
+            return current;
+        return null;
     }
 
     @Override
@@ -79,6 +87,7 @@ public final class TickThread extends MinestomThread {
         }
         this.latch = latch;
         this.tickTime = tickTime;
+        this.tickNum += 1;
         this.stop = false;
         LockSupport.unpark(this);
     }
@@ -94,6 +103,10 @@ public final class TickThread extends MinestomThread {
      */
     public @NotNull ReentrantLock lock() {
         return lock;
+    }
+
+    public long getTick() {
+        return tickNum;
     }
 
     void shutdown() {
