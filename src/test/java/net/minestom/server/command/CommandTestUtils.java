@@ -55,7 +55,7 @@ public class CommandTestUtils {
                     }
                     return result;
                 },
-                'ง', s -> {
+                'ยง', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ")) {
