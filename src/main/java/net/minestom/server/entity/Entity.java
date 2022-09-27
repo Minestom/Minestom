@@ -294,7 +294,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         
-        EntityTeleportEvent teleportEvent = this instanceof Player ? new PlayerTeleportEvent(this, position) : new EntityTeleportEvent(this, position);
+        EntityTeleportEvent teleportEvent = this instanceof Player p ? new PlayerTeleportEvent(p, position) : new EntityTeleportEvent(this, position);
         EventDispatcher.call(teleportEvent);
         if(teleportEvent.isCancelled()) // event cancelled
             return AsyncUtils.empty();
