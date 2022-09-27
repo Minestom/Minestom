@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
                                  @NotNull List<String> identifiersToRemove,

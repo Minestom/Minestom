@@ -12,9 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
                                 @NotNull ItemStack carriedItem) implements ComponentHoldingServerPacket {
