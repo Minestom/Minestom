@@ -19,6 +19,7 @@ public final class VanillaStackingRule implements StackingRule {
 
     @Override
     public @NotNull ItemStack apply(@NotNull ItemStack item, int amount) {
+        if (item.isAir()) return ItemStack.AIR;
         return amount > 0 ? item.withAmount(amount) : ItemStack.AIR;
     }
 
