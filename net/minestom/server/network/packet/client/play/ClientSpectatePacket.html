@@ -85,6 +85,9 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientSpectatePacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;target)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span></div>
+<div class="block">The ClientSpectatePacket is sent when the client interacts with their hotbar to switch between entities.
+ Contrary to its name, it is actually used to teleport the player to the entity they are switching to,
+ rather than spectating them.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
