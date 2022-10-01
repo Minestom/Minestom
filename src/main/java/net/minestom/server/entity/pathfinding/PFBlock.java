@@ -7,7 +7,6 @@ import net.minestom.server.collision.Shape;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import space.vectrix.flare.fastutil.Short2ObjectSyncMap;
 
 @ApiStatus.Internal
