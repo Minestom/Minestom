@@ -192,14 +192,13 @@ public final class PFPathingEntity implements IPathingEntity {
     @Override
     public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
         final Point targetPosition = new Vec(position.x, position.y, position.z);
-        PhysicsResult physicsResult = this.navigator.moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
-        final double entityY = entity.getPosition().y()/* + 0.00001D*/; // After any negative y movement, entities will always be extremely slightly below
-                                                                        // floor level. This +0.00001D was here to offset this error and stop the entity from
-                                                                        // permanently jumping, but simply checking X/Z collision ended up being enough.
-        if (physicsResult.collisionX() || physicsResult.collisionZ()) {
-            if (entityY < targetPosition.y()) {
-                this.entity.jump(1);
-            }
+        this.navigator.moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
+        final double entityY = entity.getPosition().y() + 0.00001D; // After any negative y movement, entities will always be extremely
+                                                                    // slightly below floor level. This +0.00001D is here to offset this
+                                                                    // error and stop the entity from permanently jumping.
+
+        if (entityY < targetPosition.y()) {
+            this.navigator.jump(1);
         }
     }
 

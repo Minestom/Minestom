@@ -66,10 +66,6 @@ public final class Navigator {
         return physicsResult;
     }
 
-    /**
-     * @deprecated Use entity#jump instead. This method is more akin to an upward climbing movement than a jump.
-     */
-    @Deprecated
     public void jump(float height) {
         // FIXME magic value
         this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
