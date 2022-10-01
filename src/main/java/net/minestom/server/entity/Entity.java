@@ -98,6 +98,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos previousPosition;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
+    protected int noJumpTicks;
 
     private BoundingBox boundingBox;
     private PhysicsResult lastPhysicsResult = null;
@@ -536,6 +537,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Call the abstract update method
             update(time);
 
+            if (noJumpTicks > 0) noJumpTicks--;
             ticks++;
             EventDispatcher.call(new EntityTickEvent(this));
 
@@ -1627,6 +1629,24 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             ));
         }
     }
+
+    public void jump(float jumpFactor) {
+        if (this.getNoJumpTicks() <= 0) {
+            Vec vec = this.getVelocity();
+            this.setVelocity(new Vec(vec.x(), jumpFactor * 6.0f, vec.z())); // FIXME magic value - 6.0 does not exactly fit 1 block, and the higher the jump factor, the bigger the error
+            this.setNoJumpTicks(10);
+        }
+    }
+
+    public int getNoJumpTicks() {
+        return this.noJumpTicks;
+    }
+
+    public void setNoJumpTicks(int noJumpTicks) {
+        this.noJumpTicks = noJumpTicks;
+    }
+
+
 
     /**
      * Gets the line of sight of the entity.
