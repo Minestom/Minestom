@@ -106,6 +106,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
+    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
 
     /**
@@ -593,7 +594,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                if (!isPlayer) sendPacketToViewers(getVelocityPacket());
+                if (!isPlayer && !this.lastVelocityWasZero) {
+                    sendPacketToViewers(getVelocityPacket());
+                    this.lastVelocityWasZero = !hasVelocity;
+                }
                 return;
             }
         }
@@ -620,8 +624,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (!isPlayer && (hasVelocity || gravityTickCount > 0)) {
+        if (!isPlayer && (hasVelocity || !lastVelocityWasZero)) {
             sendPacketToViewers(getVelocityPacket());
+            this.lastVelocityWasZero = !hasVelocity;
         }
     }
 
