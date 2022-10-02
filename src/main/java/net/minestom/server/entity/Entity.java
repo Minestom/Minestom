@@ -926,7 +926,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         EventDispatcher.callCancellable(entityVelocityEvent, () -> {
             this.velocity = entityVelocityEvent.getVelocity();
-            sendPacketToViewersAndSelf(getVelocityPacket());
+            if (this.getVelocityUpdateInterval() > 0)
+                sendPacketToViewersAndSelf(getVelocityPacket());
         });
     }
 
