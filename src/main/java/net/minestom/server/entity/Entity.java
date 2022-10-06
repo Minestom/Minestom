@@ -596,8 +596,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                if (VELOCITY_UPDATE_INTERVAL > 0) {
-                    if (!isPlayer && !this.lastVelocityWasZero && this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
+                if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
+                    if (!isPlayer && !this.lastVelocityWasZero) {
                         sendPacketToViewers(getVelocityPacket());
                         this.lastVelocityWasZero = !hasVelocity;
                     }
@@ -628,8 +628,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (VELOCITY_UPDATE_INTERVAL > 0) {
-            if (!isPlayer && (hasVelocity || !lastVelocityWasZero) && this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
+        if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
+            if (!isPlayer && (hasVelocity || !lastVelocityWasZero)) {
                 sendPacketToViewers(getVelocityPacket());
                 this.lastVelocityWasZero = !hasVelocity;
             }
@@ -927,8 +927,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         EventDispatcher.callCancellable(entityVelocityEvent, () -> {
             this.velocity = entityVelocityEvent.getVelocity();
-            if (VELOCITY_UPDATE_INTERVAL > 0)
-                sendPacketToViewersAndSelf(getVelocityPacket());
+            sendPacketToViewersAndSelf(getVelocityPacket());
         });
     }
 
