@@ -86,6 +86,8 @@ import java.util.function.UnaryOperator;
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
         PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
+    private static final int VELOCITY_UPDATE_INTERVAL = 1;
+
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
@@ -108,7 +110,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
-    protected int velocityUpdateInterval = 1;
 
     /**
      * The amount of drag applied on the Y axle.
@@ -595,8 +596,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                if (this.getVelocityUpdateInterval() > 0) {
-                    if (!isPlayer && !this.lastVelocityWasZero && this.ticks % this.getVelocityUpdateInterval() == 0) {
+                if (VELOCITY_UPDATE_INTERVAL > 0) {
+                    if (!isPlayer && !this.lastVelocityWasZero && this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
                         sendPacketToViewers(getVelocityPacket());
                         this.lastVelocityWasZero = !hasVelocity;
                     }
@@ -627,8 +628,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (this.getVelocityUpdateInterval() > 0) {
-            if (!isPlayer && (hasVelocity || !lastVelocityWasZero) && this.ticks % this.getVelocityUpdateInterval() == 0) {
+        if (VELOCITY_UPDATE_INTERVAL > 0) {
+            if (!isPlayer && (hasVelocity || !lastVelocityWasZero) && this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
                 sendPacketToViewers(getVelocityPacket());
                 this.lastVelocityWasZero = !hasVelocity;
             }
@@ -926,7 +927,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         EventDispatcher.callCancellable(entityVelocityEvent, () -> {
             this.velocity = entityVelocityEvent.getVelocity();
-            if (this.getVelocityUpdateInterval() > 0)
+            if (VELOCITY_UPDATE_INTERVAL > 0)
                 sendPacketToViewersAndSelf(getVelocityPacket());
         });
     }
@@ -944,22 +945,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // The entity does not have velocity if the velocity is zero
             return !velocity.isZero();
         }
-    }
-
-    /**
-     * Changes the interval between each {@link EntityVelocityPacket} sent to the entity's viewers.
-     * @param updateInterval The interval between each update, in ticks. <p>
-     *                       Set to 0 for no update at all.
-     */
-    public void setVelocityUpdateInterval(int updateInterval) {
-        this.velocityUpdateInterval = updateInterval;
-    }
-
-    /**
-     * @return The interval between each {@link EntityVelocityPacket} sent to the entity's viewers, in ticks.
-     */
-    public int getVelocityUpdateInterval() {
-        return this.velocityUpdateInterval;
     }
 
     /**
