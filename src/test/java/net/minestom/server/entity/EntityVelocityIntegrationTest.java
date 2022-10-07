@@ -169,12 +169,12 @@ public class EntityVelocityIntegrationTest {
 
         var instance = env.createFlatInstance();
         var viewerConnection = env.createConnection();
+        viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0,40,0));
+        entity.setInstance(instance, new Pos(0,40,0)).join();
 
         AtomicInteger i = new AtomicInteger();
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(VELOCITY_UPDATE_INTERVAL, 1);
-        viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
 
         var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
         env.tickWhile(tickLoopCondition, null);
