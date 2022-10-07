@@ -9,6 +9,9 @@ import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -158,6 +161,30 @@ public class EntityVelocityIntegrationTest {
 
         // Now that the entity is on the ground, it should no longer have a velocity.
         assertFalse(entity.hasVelocity());
+    }
+
+    @Test
+    public void countVelocityPackets(Env env) {
+        final int VELOCITY_UPDATE_INTERVAL = 1;
+
+        var instance = env.createFlatInstance();
+        var viewerConnection = env.createConnection();
+        viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0,40,0)).join();
+
+        AtomicInteger i = new AtomicInteger();
+        BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(VELOCITY_UPDATE_INTERVAL, 1);
+
+        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        env.tickWhile(tickLoopCondition, null);
+        tracker.assertEmpty(); // Verify no updates are sent while the entity is not moving
+
+        entity.setVelocity(new Vec(0, 5, 0));
+        tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        i.set(0);
+        env.tickWhile(tickLoopCondition, null);
+        tracker.assertCount(1); // Verify the update is only sent once
     }
 
     private void testMovement(Env env, Entity entity, Vec... sample) {
