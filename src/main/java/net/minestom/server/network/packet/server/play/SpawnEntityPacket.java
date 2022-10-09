@@ -29,8 +29,8 @@ public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
         writer.writeDouble(position.y());
         writer.writeDouble(position.z());
 
-        writer.writeByte((byte) (position.yaw() * 256 / 360));
         writer.writeByte((byte) (position.pitch() * 256 / 360));
+        writer.writeByte((byte) (position.yaw() * 256 / 360));
         writer.writeByte((byte) (headRot * 256 / 360));
 
         writer.writeVarInt(data);
