@@ -1727,6 +1727,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         SWIMMING,
         SPIN_ATTACK,
         SNEAKING,
-        DYING
+        LONG_JUMPING,
+        DYING,
+        CROAKING,
+        USING_TONGUE,
+        ROARING,
+        SNIFFING,
+        EMERGING,
+        DIGGING
     }
 }
