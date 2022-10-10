@@ -1,7 +1,7 @@
 package net.minestom.server.snapshot;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import org.junit.jupiter.api.Test;

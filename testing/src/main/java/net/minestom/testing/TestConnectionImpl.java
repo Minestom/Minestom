@@ -1,4 +1,4 @@
-package net.minestom.server.api;
+package net.minestom.testing;
 
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.ServerProcess;

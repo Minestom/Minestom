@@ -1,4 +1,4 @@
-package net.minestom.server.api;
+package net.minestom.testing;
 
 import net.minestom.server.event.Event;
 import org.jetbrains.annotations.NotNull;
