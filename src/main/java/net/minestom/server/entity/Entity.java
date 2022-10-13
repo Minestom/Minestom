@@ -35,8 +35,9 @@ import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.ForwardingPermissionHandler;
 import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.PermissionHandlerImpl;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
@@ -84,7 +85,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+        ForwardingPermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final int VELOCITY_UPDATE_INTERVAL = 1;
 
@@ -155,7 +156,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
-    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
+    private PermissionHandler permissionHandler;
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -204,6 +205,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Local nodes require a server process
             this.eventNode = null;
         }
+        this.permissionHandler = new PermissionHandlerImpl();
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -504,10 +506,18 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         viewers.forEach(this::updateNewViewer);
     }
 
-    @NotNull
     @Override
-    public Set<Permission> getAllPermissions() {
-        return permissions;
+    public @NotNull PermissionHandler getPermissionHandler() {
+        return this.permissionHandler;
+    }
+
+    /**
+     * Set the permission handler of the entity
+     *
+     * @param permissionHandler the permission handler
+     */
+    public void setPermissionHandler(@NotNull PermissionHandler permissionHandler) {
+        this.permissionHandler = permissionHandler;
     }
 
     /**

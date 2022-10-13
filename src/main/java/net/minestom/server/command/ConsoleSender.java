@@ -4,23 +4,22 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.ForwardingPermissionHandler;
+import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.PermissionHandlerImpl;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 /**
  * Represents the console when sending a command to the server.
  */
-public class ConsoleSender implements CommandSender {
+public class ConsoleSender implements CommandSender, ForwardingPermissionHandler {
     private static final PlainTextComponentSerializer PLAIN_SERIALIZER = PlainTextComponentSerializer.plainText();
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleSender.class);
 
-    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
+    private PermissionHandler permissionHandler = new PermissionHandlerImpl();
     private final TagHandler tagHandler = TagHandler.newHandler();
 
     @Override
@@ -34,10 +33,13 @@ public class ConsoleSender implements CommandSender {
         this.sendMessage(PLAIN_SERIALIZER.serialize(message));
     }
 
-    @NotNull
     @Override
-    public Set<Permission> getAllPermissions() {
-        return permissions;
+    public @NotNull PermissionHandler getPermissionHandler() {
+        return this.permissionHandler;
+    }
+
+    public void setPermissionHandler(@NotNull PermissionHandler permissionHandler) {
+        this.permissionHandler = permissionHandler;
     }
 
     @Override
