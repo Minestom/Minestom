@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public record EntityEquipmentPacket(int entityId,
                                     @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ComponentHoldingServerPacket {
@@ -51,15 +51,18 @@ public record EntityEquipmentPacket(int entityId,
     public @NotNull Collection<Component> components() {
         return this.equipments.values()
                 .stream()
-                .map(ItemStack::getDisplayName)
-                .filter(Objects::nonNull)
+                .flatMap(item -> Stream.concat(item.getLore().stream(), Stream.ofNullable(item.getDisplayName())))
                 .collect(Collectors.toList());
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         final var map = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
-        this.equipments.forEach((key, value) -> map.put(key, value.withDisplayName(operator)));
+        this.equipments.forEach((key, value) -> map.put(key, value.withDisplayName(operator).withLore(lines -> {
+            lines.replaceAll(operator);
+
+            return lines;
+        })));
 
         return new EntityEquipmentPacket(this.entityId, map);
     }

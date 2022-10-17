@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 public record EntityMetaDataPacket(int entityId,
                                    @NotNull Map<Integer, Metadata.Entry<?>> entries) implements ComponentHoldingServerPacket {
@@ -53,18 +54,15 @@ public record EntityMetaDataPacket(int entityId,
 
     @Override
     public @NotNull Collection<Component> components() {
-        List<Component> components = new ArrayList<>();
-
-        for (Metadata.Entry<?> entry : this.entries.values()) {
-            if(entry.value() instanceof Component component) {
-                components.add(component);
-            } else if(entry.value() instanceof ItemStack item) {
-                components.add(item.getDisplayName());
-                components.addAll(item.getLore());
-            }
-        }
-
-        return components;
+        return this.entries.values()
+                .stream()
+                .map(Metadata.Entry::value)
+                .filter(entry -> entry instanceof Component || entry instanceof ItemStack)
+                .flatMap(entry -> entry instanceof Component component
+                        ? Stream.ofNullable(component)
+                        : Stream.concat(((ItemStack) entry).getLore().stream(),
+                        Stream.ofNullable(((ItemStack) entry).getDisplayName())))
+                .toList();
     }
 
     @Override
