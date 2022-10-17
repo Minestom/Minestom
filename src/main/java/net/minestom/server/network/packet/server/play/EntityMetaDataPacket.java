@@ -71,10 +71,9 @@ public record EntityMetaDataPacket(int entityId,
 
         this.entries.forEach((key, value) -> {
             final var v = value.value();
-            Metadata.Entry newVal = null;
 
             if(v instanceof ItemStack item) {
-                newVal = Metadata.Slot(item.withDisplayName(operator).withLore(lines -> {
+                value = Metadata.Slot(item.withDisplayName(operator).withLore(lines -> {
                     lines.replaceAll(operator);
 
                     return lines;
@@ -82,10 +81,10 @@ public record EntityMetaDataPacket(int entityId,
             } else if(v instanceof Component component) {
                 component = operator.apply(component);
 
-                newVal = value.type() == Metadata.TYPE_OPTCHAT ? Metadata.OptChat(component) : Metadata.Chat(component);
+                value = value.type() == Metadata.TYPE_OPTCHAT ? Metadata.OptChat(component) : Metadata.Chat(component);
             }
 
-            entries.put(key, newVal);
+            entries.put(key, value);
         });
 
         return new EntityMetaDataPacket(this.entityId, entries);
