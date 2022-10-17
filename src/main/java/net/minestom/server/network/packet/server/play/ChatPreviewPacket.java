@@ -32,11 +32,11 @@ public record ChatPreviewPacket(int queryId, @Nullable Component preview) implem
 
     @Override
     public @NotNull Collection<Component> components() {
-        return List.of(preview);
+        return preview == null ? List.of() : List.of(preview);
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new ChatPreviewPacket(queryId, operator.apply(preview));
+        return preview != null ? new ChatPreviewPacket(queryId, operator.apply(preview)) : this;
     }
 }

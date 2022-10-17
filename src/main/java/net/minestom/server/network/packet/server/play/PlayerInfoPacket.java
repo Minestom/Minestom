@@ -77,7 +77,7 @@ public record PlayerInfoPacket(@NotNull Action action,
                 List<Component> components = new ArrayList<>();
                 for (Entry entry : entries) {
                     if (entry instanceof ComponentHolder) {
-                        components.addAll(((ComponentHolder<? extends Entry>) entry).components());
+                        components.addAll(((ComponentHolder<?>) entry).components());
                     }
                 }
                 return components;
