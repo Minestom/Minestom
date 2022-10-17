@@ -37,6 +37,6 @@ public record ChatPreviewPacket(int queryId, @Nullable Component preview) implem
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return preview != null ? new ChatPreviewPacket(queryId, operator.apply(preview)) : this;
+        return new ChatPreviewPacket(queryId, operator.apply(preview));
     }
 }
