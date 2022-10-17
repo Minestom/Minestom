@@ -79,7 +79,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
 
         @Override
         public @NotNull Match copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            return tooltip != null ? new Match(match, operator.apply(tooltip)) : this;
+            return new Match(match, operator.apply(tooltip));
         }
     }
 }
