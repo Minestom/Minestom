@@ -1,6 +1,10 @@
 package net.minestom.server.recipe;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
+import net.minestom.server.network.packet.server.play.UnlockRecipesPacket;
+import net.minestom.server.recipe.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -43,7 +47,7 @@ public class RecipeManager {
     private void refreshRecipesPacket() {
         List<DeclareRecipesPacket.DeclaredRecipe> recipesCache = new ArrayList<>();
         for (Recipe recipe : recipes) {
-            switch (recipe.recipeType) {
+            switch (recipe.getRecipeType()) {
                 case SHAPELESS -> {
                     ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
                     recipesCache.add(
@@ -130,7 +134,25 @@ public class RecipeManager {
         }
 
         declareRecipesPacket = new DeclareRecipesPacket(recipesCache);
-        // TODO; refresh and update players recipes
+        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(this::refreshPlayerRecipes);
+    }
+
+    public void refreshPlayerRecipes(Player player) {
+        List<String> recipesIdentifier = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            if (!recipe.shouldShow(player))
+                continue;
+            recipesIdentifier.add(recipe.getRecipeId());
+        }
+        if (!recipesIdentifier.isEmpty()) {
+            UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
+                    false, false,
+                    false, false,
+                    false, false,
+                    false, false,
+                    recipesIdentifier, recipesIdentifier);
+            player.sendPacket(unlockRecipesPacket);
+        }
     }
 
 }
