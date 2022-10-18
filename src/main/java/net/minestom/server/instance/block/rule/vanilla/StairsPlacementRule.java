@@ -31,14 +31,13 @@ public class StairsPlacementRule extends BlockPlacementRule {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
-        String waterlogged = "false"; // waiting for water to be implemented
+        Boolean waterlogged = instance.getBlock(blockPosition.relative(blockFace)).equals(Block.WATER);
 
         return block.withProperties(Map.of(
-                "facing", facing.toString(),
-                "half", half.toString(),
-                "shape", shape.toString(),
-                "waterlogged", waterlogged));
-
+                "facing", facing.name().toLowerCase(),
+                "half", half.name().toLowerCase(),
+                "shape", shape.name().toLowerCase(),
+                "waterlogged", String.valueOf(waterlogged)));
     }
 
     private enum Shape {
@@ -77,9 +76,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
         @NotNull
         public Pair<@Nullable Shape, @Nullable Facing> getFront(@NotNull Instance instance, @NotNull Point blockPosition) {
-            // TODO FIX
-            return null;
-            //return this.getProperties(instance, blockPosition.clone().add(this.front));
+            return this.getProperties(instance, blockPosition.add(this.front)); // @wb do we have to clone the blockPosition before modify?
         }
 
         @NotNull
@@ -108,15 +105,13 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @NotNull
     private Shape getShape(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Facing facing) {
-        // TODO FIX
-        return null;
-        /*Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
+        Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
         Pair<Shape, Facing> back = facing.getBack(instance, blockPosition);
         Shape shape = this.getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
         if (shape == null) {
             shape = this.getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
         }
-        return shape == null ? Shape.STRAIGHT : shape;*/
+        return shape == null ? Shape.STRAIGHT : shape;
     }
 
     @Nullable
@@ -171,4 +166,5 @@ public class StairsPlacementRule extends BlockPlacementRule {
             return Facing.WEST;
         }
     }
+
 }
