@@ -131,7 +131,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
             try {
-                System.out.println("Sending chunk " + chunkX + ", " + chunkZ);
                 if (chunk != null) {
                     chunk.sendChunk(this);
                     EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
