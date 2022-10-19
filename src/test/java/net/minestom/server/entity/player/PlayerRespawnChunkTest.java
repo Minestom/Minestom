@@ -19,7 +19,6 @@ public class PlayerRespawnChunkTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        player.setInstance(instance).join();
         player.teleport(new Pos(32, 40, 32)).join();
 
         var unloadChunkTracker = connection.trackIncoming(UnloadChunkPacket.class);
@@ -34,7 +33,6 @@ public class PlayerRespawnChunkTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        player.setInstance(instance).join();
 
         var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);
