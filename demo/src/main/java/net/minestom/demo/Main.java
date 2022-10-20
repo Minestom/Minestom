@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -8,6 +9,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
@@ -15,6 +17,7 @@ import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -94,6 +97,27 @@ public class Main {
             // on legacy versions, colors will be converted to the section format so it'll work there too
             responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
             //responseData.setPlayersHidden(true);
+        });
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerChatEvent.class, e -> {
+            var playPos = e.getPlayer().getPosition().add(5.0, 0.0, 0.0);
+
+            switch (e.getMessage()) {
+                case "a" -> {
+                    System.out.println("with position");
+                    e.getPlayer().playSound(Sound.sound(SoundEvent.AMBIENT_CRIMSON_FOREST_MOOD, Sound.Source.MASTER, 1f, 1f), playPos.x(), playPos.y(), playPos.z());
+                }
+                case "b" -> {
+                    System.out.println("without anything");
+                    e.getPlayer().playSound(Sound.sound(SoundEvent.AMBIENT_CRIMSON_FOREST_MOOD, Sound.Source.MASTER, 1f, 1f));
+                }
+                case "c" -> {
+                    System.out.println("with self emitter");
+                    e.getPlayer().playSound(Sound.sound(SoundEvent.AMBIENT_CRIMSON_FOREST_MOOD, Sound.Source.MASTER, 1f, 1f), Sound.Emitter.self());
+                }
+            }
+
+
         });
 
         PlayerInit.init();

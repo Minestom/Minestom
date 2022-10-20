@@ -14,7 +14,8 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
 
     @Override
     public String parser() {
-        return "minecraft:mob_effect";
+        // TODO: what replace `minecraft:mob_effect`?
+        return "minecraft:uuid";
     }
 
     @Override
