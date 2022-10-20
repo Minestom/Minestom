@@ -31,6 +31,6 @@ public record NamedSoundEffectPacket(String soundName, Source source, int x, int
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.NAMED_SOUND_EFFECT;
+        return 0;
     }
 }

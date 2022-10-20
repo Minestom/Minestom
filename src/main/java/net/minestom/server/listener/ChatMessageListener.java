@@ -32,7 +32,8 @@ public class ChatMessageListener {
     }
 
     public static void chatMessageListener(ClientChatMessagePacket packet, Player player) {
-        final String message = packet.message();
+        System.out.println("packet "+packet);
+        final String message = "test";
         if (!Messenger.canReceiveMessage(player)) {
             Messenger.sendRejectionMessage(player);
             return;

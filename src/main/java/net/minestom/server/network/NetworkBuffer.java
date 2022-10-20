@@ -15,9 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -200,6 +198,25 @@ public final class NetworkBuffer {
 
     public <E extends Enum<?>> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
         return enumClass.getEnumConstants()[read(VAR_INT)];
+    }
+
+    public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> enumType) {
+        final E[] values = enumType.getEnumConstants();
+        BitSet bitSet = new BitSet(values.length);
+        for (int i = 0; i < values.length; ++i) {
+            bitSet.set(i, enumSet.contains(values[i]));
+        }
+        writeFixedBitSet(bitSet, values.length);
+    }
+
+    private void writeFixedBitSet(BitSet set, int length) {
+        final int setLength = set.length();
+        if (setLength > length) {
+            throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
+        } else {
+            final byte[] array = set.toByteArray();
+            write(RAW_BYTES, array);
+        }
     }
 
     public byte[] readBytes(int length) {
