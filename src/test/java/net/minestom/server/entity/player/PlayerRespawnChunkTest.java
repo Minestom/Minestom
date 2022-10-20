@@ -71,8 +71,6 @@ public class PlayerRespawnChunkTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
-        player.setInstance(instance).join(); // TODO: REMOVE
-
 
         // Get a list from -8 to 8, since we will be unloading
         ArrayList<Integer> chunkZList = new ArrayList<>();
