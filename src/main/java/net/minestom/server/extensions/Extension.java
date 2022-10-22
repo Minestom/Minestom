@@ -1,5 +1,6 @@
 package net.minestom.server.extensions;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public abstract class Extension {
     private DiscoveredExtension origin;
     // Set by reflection
     @SuppressWarnings("unused")
-    private Logger logger;
+    private ComponentLogger logger;
     // Set by reflection
     @SuppressWarnings("unused")
     private EventNode<Event> eventNode;
@@ -67,7 +68,7 @@ public abstract class Extension {
      * @return The logger for the extension
      */
     @NotNull
-    public Logger getLogger() {
+    public ComponentLogger getLogger() {
         return logger;
     }
 

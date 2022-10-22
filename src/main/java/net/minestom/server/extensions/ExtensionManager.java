@@ -1,6 +1,7 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.Gson;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
@@ -338,7 +339,7 @@ public class ExtensionManager {
         try {
             Field loggerField = Extension.class.getDeclaredField("logger");
             loggerField.setAccessible(true);
-            loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
+            loggerField.set(extension, ComponentLogger.logger(extensionClass));
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur
             serverProcess.exception().handleException(e);
