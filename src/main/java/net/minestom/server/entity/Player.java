@@ -440,11 +440,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         updatePose();
 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
-        // Client unloads chunks upon respawn, call unload event, but don't send unnecessary unload packets or create unload events for chunks the player will be loading
-        ChunkUtils.forDifferingChunksInRange(respawnPosition.chunkX(), respawnPosition.chunkZ(),
-                this.position.chunkX(), this.position.chunkZ(), MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) -> {}, (chunkX, chunkZ) -> EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ)));
 
-        ChunkUtils.forChunksInRange(respawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
+        // The client unloads chunks when respawning, so resend all chunks next to spawn
+        ChunkUtils.forChunksInRange(respawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) ->
+                this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
+                    try {
+                        if (chunk != null) {
+                            chunk.sendChunk(this);
+                        }
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }));
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
     }
