@@ -3,9 +3,6 @@ package net.minestom.server.entity.player;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.player.PlayerChunkLoadEvent;
-import net.minestom.server.event.player.PlayerChunkUnloadEvent;
-import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -14,10 +11,11 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @EnvTest
@@ -58,14 +56,18 @@ public class PlayerRespawnChunkTest {
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
 
-        player.eventNode().addListener(PlayerPacketOutEvent.class, playerPacketOutEvent -> {
-            if(playerPacketOutEvent.getPacket() instanceof ChunkDataPacket chunkDataPacket) {
-                // We should only load chunks around the spawnpoint
-                assertTrue(Math.abs(chunkDataPacket.chunkX()) <= MinecraftServer.getChunkViewDistance() && Math.abs(chunkDataPacket.chunkZ()) <= MinecraftServer.getChunkViewDistance());
-            }
-        });
+        var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);
         player.addPacketToQueue(new ClientStatusPacket(ClientStatusPacket.Action.PERFORM_RESPAWN));
         player.interpretPacketQueue();
+        List<ChunkDataPacket> dataPacketList = loadChunkTracker.collect();
+        Set<ChunkDataPacket> duplicateCheck = new HashSet<>();
+        int chunkLoads = ChunkUtils.getChunkCount(MinecraftServer.getChunkViewDistance());
+        loadChunkTracker.assertCount(chunkLoads);
+        for(ChunkDataPacket packet : dataPacketList) {
+            assertFalse(duplicateCheck.contains(packet));
+            duplicateCheck.add(packet);
+            assertTrue(Math.abs(packet.chunkX()) <= MinecraftServer.getChunkViewDistance() && Math.abs(packet.chunkZ()) <= MinecraftServer.getChunkViewDistance());
+        }
     }
 }
