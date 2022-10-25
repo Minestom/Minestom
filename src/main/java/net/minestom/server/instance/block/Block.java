@@ -26,7 +26,7 @@ import java.util.function.BiPredicate;
 public sealed interface Block extends ProtocolObject, TagReadable, Blocks permits BlockImpl {
 
     /**
-     * Creates a new block with the the property {@code property} sets to {@code value}.
+     * Creates a new block with the property {@code property} sets to {@code value}.
      *
      * @param property the property name
      * @param value    the property value

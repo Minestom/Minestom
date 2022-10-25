@@ -23,7 +23,9 @@ public interface Viewable {
      * @param player the viewer to add
      * @return true if the player has been added, false otherwise (could be because he is already a viewer)
      */
-    boolean addViewer(@NotNull Player player);
+    default boolean addViewer(@NotNull Player player) {
+        return getViewers().add(player);
+    }
 
     /**
      * Removes a viewer.
@@ -31,7 +33,9 @@ public interface Viewable {
      * @param player the viewer to remove
      * @return true if the player has been removed, false otherwise (could be because he was not a viewer)
      */
-    boolean removeViewer(@NotNull Player player);
+    default boolean removeViewer(@NotNull Player player) {
+        return getViewers().remove(player);
+    }
 
     /**
      * Gets all the viewers of this viewable element.

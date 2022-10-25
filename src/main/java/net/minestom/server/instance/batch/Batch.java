@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
@@ -21,31 +22,13 @@ import java.util.concurrent.ForkJoinPool;
  * operation will return a new batch with the blocks set to whatever they were before the batch was
  * applied.
  *
- * @param <C> The callback function type.
  * @see ChunkBatch
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
-public interface Batch<C> extends Block.Setter {
+public interface Batch extends Block.Setter {
 
     ExecutorService BLOCK_BATCH_POOL = ForkJoinPool.commonPool();
-
-    /**
-     * Gets if the batch is ready to be applied to an instance.
-     *
-     * @return true if the batch is ready to apply
-     */
-    default boolean isReady() {
-        return true;
-    }
-
-    /**
-     * Blocks the current thread until the batch is ready to be applied.
-     *
-     * @see #isReady() for a non-blocking way to determine if the batch is ready
-     */
-    default void awaitReady() {
-    }
 
     /**
      * Removes all block data from this batch.
@@ -55,18 +38,13 @@ public interface Batch<C> extends Block.Setter {
     /**
      * Called to apply the batch to the given instance.
      * <p>
-     * The implementation for all current batches executes the block updates in a dedicated pool,
-     * and runs the callback on the next instance update after block placement is complete. This
-     * means that the callback can be called up to 50ms after the blocks have been placed, however,
-     * it will be called in a determinable thread. If immediate execution of the callback is needed,
-     * see the unsafeApply method in each implementation.
+     * The implementation for all current batches executes the block updates in a dedicated pool.
+     * If immediate execution of the callback is needed, see the unsafeApply method in each implementation.
      * <p>
      * See the specific batch classes for alternative application methods.
      *
      * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     * @return The completable future of this batch application.
      */
-    @Nullable
-    Batch<C> apply(@NotNull Instance instance, @Nullable C callback);
+    CompletableFuture<Void> apply(@NotNull Instance instance);
 }

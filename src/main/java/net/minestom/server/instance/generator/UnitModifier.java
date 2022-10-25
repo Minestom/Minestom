@@ -35,7 +35,9 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      *
      * @param block the block to fill
      */
-    void fill(@NotNull Block block);
+   default void fill(@NotNull Block block) {
+       setAll((x, y, z) -> block);
+   }
 
     /**
      * Fills the 3d rectangular area with the given block.
@@ -56,7 +58,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
     void fillHeight(int minHeight, int maxHeight, @NotNull Block block);
 
     /**
-     * Fills the 3d rectangular area with the given biome.
+     * Fills with the given biome.
      *
      * @param biome the biome to fill
      */

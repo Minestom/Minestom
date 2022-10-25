@@ -14,9 +14,7 @@ import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -25,20 +23,47 @@ import java.util.UUID;
 // TODO light data & API
 
 /**
- * A chunk is a view into an {@link Instance}, limited by a size of 16xNx16 blocks and subdivided in N sections of 16 blocks height.
- * Should contain all the blocks located at those positions and manage their tick updates.
+ * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
+ * Should contains all the blocks located at those positions and manage their tick updates.
  * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  * <p>
- * You can create your own implementation of this class by implementing it
+ * You can create your own implementation of this class by extending it
  * and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
  * <p>
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, Taggable, Snapshotable {
-    int CHUNK_SIZE_X = 16;
-    int CHUNK_SIZE_Z = 16;
-    int CHUNK_SECTION_SIZE = 16;
+public abstract class ChunkBase implements Chunk, Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, Taggable, Snapshotable {
+
+    private final UUID identifier;
+
+    protected Instance instance;
+    protected final int chunkX, chunkZ;
+    protected final int minSection, maxSection;
+
+    // Options
+    private final boolean shouldGenerate;
+    private boolean readOnly;
+
+    protected volatile boolean loaded = true;
+    private final ChunkView viewers;
+
+    // Path finding
+    protected PFColumnarSpace columnarSpace;
+
+    // Data
+    private final TagHandler tagHandler = TagHandler.newHandler();
+
+    public ChunkBase(@NotNull Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
+        this.identifier = UUID.randomUUID();
+        this.instance = instance;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        this.shouldGenerate = shouldGenerate;
+        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
+        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
+        this.viewers = new ChunkView(instance, toPosition());
+    }
 
     /**
      * Sets a block at a position.
@@ -55,20 +80,13 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      * @param block the block to place
      */
     @Override
-    void setBlock(int x, int y, int z, @NotNull Block block);
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
-    /**
-     * Gets a list of sections that represent this chunk. This list MUST contain all the sections needed to fill the
-     * distance between min and max section height.
-     * @return the list of sections
-     */
-    @NotNull List<Section> getSections();
+    public abstract @NotNull List<Section> getSections();
 
-    default @Nullable Section getSection(int section) {
-        return getSections().get(section);
-    }
+    public abstract @NotNull Section getSection(int section);
 
-    default @NotNull Section getSectionAt(int blockY) {
+    public @NotNull Section getSectionAt(int blockY) {
         return getSection(ChunkUtils.getChunkCoordinate(blockY));
     }
 
@@ -82,27 +100,27 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      * @param time the time of the update in milliseconds
      */
     @Override
-    void tick(long time);
+    public abstract void tick(long time);
 
     /**
      * Gets the last time that this chunk changed.
      * <p>
      * "Change" means here data used in {@link ChunkDataPacket}.
      * It is necessary to see if the cached version of this chunk can be used
-     * instead of re-writing and compressing everything.
+     * instead of re writing and compressing everything.
      *
      * @return the last change time in milliseconds
      */
-    long getLastChangeTime();
+    public abstract long getLastChangeTime();
 
     /**
      * Sends the chunk data to {@code player}.
      *
      * @param player the player
      */
-    void sendChunk(@NotNull Player player);
+    public abstract void sendChunk(@NotNull Player player);
 
-    void sendChunk();
+    public abstract void sendChunk();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -114,12 +132,12 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      * @param chunkZ   the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
-    @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
      */
-    void reset();
+    public abstract void reset();
 
     /**
      * Gets the unique identifier of this chunk.
@@ -128,49 +146,61 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      *
      * @return the chunk identifier
      */
-    @NotNull UUID getIdentifier();
+    public @NotNull UUID getIdentifier() {
+        return identifier;
+    }
 
     /**
      * Gets the instance where this chunk is stored
      *
      * @return the linked instance
      */
-    @NotNull Instance getInstance();
+    public @NotNull Instance getInstance() {
+        return instance;
+    }
 
     /**
      * Gets the chunk X.
      *
      * @return the chunk X
      */
-    int getChunkX();
+    public int getChunkX() {
+        return chunkX;
+    }
 
     /**
      * Gets the chunk Z.
      *
      * @return the chunk Z
      */
-    int getChunkZ();
+    public int getChunkZ() {
+        return chunkZ;
+    }
 
     /**
      * Gets the lowest (inclusive) section Y available in this chunk
      *
      * @return the lowest (inclusive) section Y available in this chunk
      */
-    int getMinSection();
+    public int getMinSection() {
+        return minSection;
+    }
 
     /**
      * Gets the highest (exclusive) section Y available in this chunk
      *
      * @return the highest (exclusive) section Y available in this chunk
      */
-    int getMaxSection();
+    public int getMaxSection() {
+        return maxSection;
+    }
 
     /**
      * Gets the world position of this chunk.
      *
      * @return the position of this chunk
      */
-    default @NotNull Point toPosition() {
+    public @NotNull Point toPosition() {
         return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
@@ -181,7 +211,9 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      *
      * @return true if this chunk is affected by a {@link ChunkGenerator}
      */
-    boolean shouldGenerate();
+    public boolean shouldGenerate() {
+        return shouldGenerate;
+    }
 
     /**
      * Gets if this chunk is read-only.
@@ -191,7 +223,9 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      *
      * @return true if the chunk is read-only
      */
-    boolean isReadOnly();
+    public boolean isReadOnly() {
+        return readOnly;
+    }
 
     /**
      * Changes the read state of the chunk.
@@ -201,43 +235,59 @@ public interface Chunk extends Block.Getter, Block.Setter, Biome.Getter, Biome.S
      *
      * @param readOnly true to make the chunk read-only, false otherwise
      */
-    void setReadOnly(boolean readOnly);
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
     /**
      * Changes this chunk columnar space.
      *
      * @param columnarSpace the new columnar space
      */
-    void setColumnarSpace(PFColumnarSpace columnarSpace);
+    public void setColumnarSpace(PFColumnarSpace columnarSpace) {
+        this.columnarSpace = columnarSpace;
+    }
 
     /**
      * Used to verify if the chunk should still be kept in memory.
      *
      * @return true if the chunk is loaded
      */
-    boolean isLoaded();
+    public boolean isLoaded() {
+        return loaded;
+    }
 
     @Override
-    default boolean addViewer(@NotNull Player player) {
+    public String toString() {
+        return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
+    }
+
+    @Override
+    public boolean addViewer(@NotNull Player player) {
         throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
     @Override
-    default boolean removeViewer(@NotNull Player player) {
+    public boolean removeViewer(@NotNull Player player) {
         throw new UnsupportedOperationException("Chunk does not support manual viewers");
     }
 
     @Override
-    @NotNull Set<Player> getViewers();
+    public @NotNull Set<Player> getViewers() {
+        return viewers.set;
+    }
 
     @Override
-    @NotNull TagHandler tagHandler();
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
+    }
 
     /**
      * Sets the chunk as "unloaded".
      */
-    @ApiStatus.Internal
-    void unload();
+    public void unload() {
+        this.loaded = false;
+    }
 
-    ChunkDataPacket chunkPacket();
+    public abstract ChunkDataPacket chunkPacket();
 }

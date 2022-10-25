@@ -189,6 +189,53 @@ public final class ChunkUtils {
     }
 
     /**
+     * Gets the section block index of a position.
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return an index which can be used to store and retrieve later data linked to a block position
+     */
+    public static short getSectionBlockIndex(int x, int y, int z) {
+        x = x % Chunk.CHUNK_SIZE_X;
+        y = y % Chunk.CHUNK_SECTION_SIZE;
+        z = z % Chunk.CHUNK_SIZE_Z;
+
+        short index = 0;
+        index |= (x << 0) & 0xF; // 4 bits
+        index |= (y << 4) & 0xF0; // 4 bits
+        index |= (z << 8) & 0xF00; // 4 bits
+        return index;
+    }
+
+    /**
+     * Gets the block X from a block index.
+     * @param index the block index
+     * @return the block X
+     */
+    public static int getSectionBlockIndexX(short index) {
+        return (index >> 0) & 0xF;
+    }
+
+    /**
+     * Gets the block Y from a block index.
+     * @param index the block index
+     * @return the block Y
+     */
+    public static int getSectionBlockIndexY(short index) {
+        return (index >> 4) & 0xF;
+    }
+
+    /**
+     * Gets the block Z from a block index.
+     * @param index the block index
+     * @return the block Z
+     */
+    public static int getSectionBlockIndexZ(short index) {
+        return (index >> 8) & 0xF;
+    }
+
+    /**
      * @param index  an index computed from {@link #getBlockIndex(int, int, int)}
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -249,5 +296,50 @@ public final class ChunkUtils {
 
     public static int ceilSection(int coordinate) {
         return ((coordinate - 1) | 15) + 1;
+    }
+
+    public static short getSectionBiomeIndex(int x, int y, int z) {
+        x = toSectionRelativeCoordinate(x) / 4;
+        y = toSectionRelativeCoordinate(y) / 4;
+        z = toSectionRelativeCoordinate(z) / 4;
+
+        short index = 0;
+        index |= (x << 0) & 0x3; // 2 bits
+        index |= (y << 2) & 0xC; // 2 bits
+        index |= (z << 4) & 0x30; // 2 bits
+        return index;
+    }
+
+    public static int getSectionBiomeIndexX(short index) {
+        return (index >> 0) & 0x3;
+    }
+
+    public static int getSectionBiomeIndexY(short index) {
+        return (index >> 2) & 0x3;
+    }
+
+    public static int getSectionBiomeIndexZ(short index) {
+        return (index >> 4) & 0x3;
+    }
+
+    public static long getSectionIndex(int x, int y, int z) {
+        // 28 bits for x and z, 8 bits for y
+        long index = 0;
+        index |= (x << 0) & 0xFFFFFFF; // 28 bits
+        index |= (y << 28) & 0xFF0000000L; // 8 bits
+        index |= (z << 36) & 0xFFFFFFF00000000L; // 28 bits
+        return index;
+    }
+
+    public static int getSectionIndexX(long index) {
+        return (int) (index & 0xFFFFFFF); // 28 bits
+    }
+
+    public static int getSectionIndexY(long index) {
+        return (int) ((index >> 28) & 0xFF); // 8 bits
+    }
+
+    public static int getSectionIndexZ(long index) {
+        return (int) ((index >> 36) & 0xFFFFFFF); // 28 bits
     }
 }

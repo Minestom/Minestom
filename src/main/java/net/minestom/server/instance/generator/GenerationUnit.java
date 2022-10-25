@@ -27,7 +27,9 @@ public interface GenerationUnit {
      *
      * @return the size of this unit
      */
-    @NotNull Point size();
+    default @NotNull Point size() {
+        return absoluteEnd().sub(absoluteStart());
+    }
 
     /**
      * The absolute start (min x, y, z) of this unit.

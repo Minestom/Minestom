@@ -982,6 +982,11 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
+        instance.loadChunk(0, 0).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(-1, -1).join();
+
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());

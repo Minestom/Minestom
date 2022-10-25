@@ -93,17 +93,13 @@ public final class SnapshotImpl {
             }
             // Retrieve the block from state id
             final Section section = sections[getChunkCoordinate(y) - minSection];
-            final int blockStateId = section.blockPalette()
-                    .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
-            return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
+            return section.getBlock(x, y, z);
         }
 
         @Override
         public @NotNull Biome getBiome(int x, int y, int z) {
             final Section section = sections[getChunkCoordinate(y) - minSection];
-            final int id = section.biomePalette()
-                    .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
-            return MinecraftServer.getBiomeManager().getById(id);
+            return section.getBiome(x, y, z);
         }
 
         @Override

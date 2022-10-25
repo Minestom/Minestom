@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.IColumnarSpace;
+import it.unimi.dsi.fastutil.bytes.ByteList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
@@ -20,6 +21,7 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
  * The {@link SharedInstance} is an instance that shares the same chunks as its linked {@link InstanceContainer},
  * entities are separated.
  */
-public class SharedInstance extends Instance {
+public class SharedInstance extends InstanceBase {
     private final InstanceContainer instanceContainer;
 
     public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
@@ -62,9 +64,8 @@ public class SharedInstance extends Instance {
         return instanceContainer.loadChunk(chunkX, chunkZ);
     }
 
-    @Override
     public void sendChunk(Player player, int chunkX, int chunkZ) {
-        instanceContainer.sendChunk(player, chunkX, chunkZ);
+        player.sendPacket(instanceContainer.chunkPacket(chunkX, chunkZ));
     }
 
     @Override
@@ -93,8 +94,33 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public ChunkBatch applyBatch(ChunkBatch chunkBatch, int chunkX, int chunkZ, ChunkCallback callback) {
-        throw new UnsupportedOperationException("Cannot apply batch on a shared instance");
+    public ByteList getSkyLight(int chunkX, int sectionY, int chunkZ) {
+        return instanceContainer.getSkyLight(chunkX, sectionY, chunkZ);
+    }
+
+    @Override
+    public ByteList getBlockLight(int chunkX, int sectionY, int chunkZ) {
+        return instanceContainer.getBlockLight(chunkX, sectionY, chunkZ);
+    }
+
+    @Override
+    public void setSkyLight(int chunkX, int sectionY, int chunkZ, ByteList light) {
+        instanceContainer.setSkyLight(chunkX, sectionY, chunkZ, light);
+    }
+
+    @Override
+    public void setBlockLight(int chunkX, int sectionY, int chunkZ, ByteList light) {
+        instanceContainer.setBlockLight(chunkX, sectionY, chunkZ, light);
+    }
+
+    @Override
+    public void clearSection(int chunkX, int sectionY, int chunkZ) {
+        instanceContainer.clearSection(chunkX, sectionY, chunkZ);
+    }
+
+    @Override
+    public boolean isSectionLoaded(int chunkX, int sectionY, int chunkZ) {
+        return instanceContainer.isSectionLoaded(chunkX, sectionY, chunkZ);
     }
 
     public void unloadChunk(@NotNull Chunk chunk) {
@@ -157,7 +183,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    protected @Nullable Block retrieveBlock(int x, int y, int z, @NotNull Condition condition) {
+    public @Nullable Block retrieveBlock(int x, int y, int z, @NotNull Condition condition) {
         return instanceContainer.retrieveBlock(x, y, z, condition);
     }
 
@@ -209,5 +235,15 @@ public class SharedInstance extends Instance {
      */
     public @NotNull InstanceContainer getInstanceContainer() {
         return instanceContainer;
+    }
+
+    @Override
+    public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+        instanceContainer.setBiome(x, y, z, biome);
+    }
+
+    @Override
+    public @NotNull Biome getBiome(int x, int y, int z) {
+        return instanceContainer.getBiome(x, y, z);
     }
 }

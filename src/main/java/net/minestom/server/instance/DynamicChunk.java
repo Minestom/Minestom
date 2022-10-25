@@ -38,9 +38,10 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
  * <p>
  * WARNING: not thread-safe.
  */
-public class DynamicChunk extends Chunk {
+public class DynamicChunk extends ChunkBase {
 
-    private List<Section> sections;
+    private List<PaletteSectionData> sections;
+    private List<Section> sectionViews;
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -52,9 +53,16 @@ public class DynamicChunk extends Chunk {
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
-        var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+
+        // Palette data
+        var sectionsTemp = new PaletteSectionData[maxSection - minSection];
+        Arrays.setAll(sectionsTemp, value -> new PaletteSectionData());
         this.sections = List.of(sectionsTemp);
+
+        // Section views
+        var sectionViewsTemp = new Section[maxSection - minSection];
+        Arrays.setAll(sectionViewsTemp, i -> Section.viewInto(instance, chunkX, minSection + i, chunkZ));
+        this.sectionViews = List.of(sectionViewsTemp);
     }
 
     @Override
@@ -69,9 +77,8 @@ public class DynamicChunk extends Chunk {
             final var blockDescription = PFBlock.get(block);
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
-        Section section = getSectionAt(y);
-        section.blockPalette()
-                .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
+        @NotNull Section section = getSectionAt(y);
+        section.setBlock(x, y, z, block);
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
@@ -94,20 +101,20 @@ public class DynamicChunk extends Chunk {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
-        section.biomePalette().set(
+        section.setBiome(
                 toSectionRelativeCoordinate(x) / 4,
                 toSectionRelativeCoordinate(y) / 4,
-                toSectionRelativeCoordinate(z) / 4, biome.id());
+                toSectionRelativeCoordinate(z) / 4, biome);
     }
 
     @Override
     public @NotNull List<Section> getSections() {
-        return sections;
+        return sectionViews;
     }
 
     @Override
     public @NotNull Section getSection(int section) {
-        return sections.get(section - minSection);
+        return sectionViews.get(section);
     }
 
     @Override
@@ -139,18 +146,15 @@ public class DynamicChunk extends Chunk {
         }
         // Retrieve the block from state id
         final Section section = getSectionAt(y);
-        final int blockStateId = section.blockPalette()
-                .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
-        return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
+        Block block = section.getBlock(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), condition);
+        return block == null ? Block.AIR : block;
     }
 
     @Override
     public @NotNull Biome getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
-        final int id = section.biomePalette()
-                .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
-        return MinecraftServer.getBiomeManager().getById(id);
+        return section.getBiome(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
     }
 
     @Override
@@ -173,15 +177,20 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
-        dynamicChunk.sections = sections.stream().map(Section::clone).toList();
+        dynamicChunk.sections = sections.stream().map(PaletteSectionData::clone).toList();
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
 
     @Override
     public void reset() {
-        for (Section section : sections) section.clear();
+        for (PaletteSectionData section : sections) section.clear();
         this.entries.clear();
+    }
+
+    @Override
+    public ChunkDataPacket chunkPacket() {
+        return (ChunkDataPacket) chunkCache.packet();
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {
@@ -206,7 +215,7 @@ public class DynamicChunk extends Chunk {
         // Data
         final byte[] data = ObjectPool.PACKET_POOL.use(buffer -> {
             final BinaryWriter writer = new BinaryWriter(buffer);
-            for (Section section : sections) writer.write(section);
+            for (PaletteSectionData section : sections) writer.write(section);
             return writer.toByteArray();
         });
         return new ChunkDataPacket(chunkX, chunkZ,
@@ -227,10 +236,10 @@ public class DynamicChunk extends Chunk {
         List<byte[]> blockLights = new ArrayList<>();
 
         int index = 0;
-        for (Section section : sections) {
+        for (PaletteSectionData section : sections) {
             index++;
-            final byte[] skyLight = section.getSkyLight();
-            final byte[] blockLight = section.getBlockLight();
+            final byte[] skyLight = section.getSkyLight().toByteArray();
+            final byte[] blockLight = section.getBlockLight().toByteArray();
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);
@@ -254,7 +263,7 @@ public class DynamicChunk extends Chunk {
     public @NotNull ChunkSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
-            clonedSections[i] = sections.get(i).clone();
+            clonedSections[i] = sections.get(i).clone().sectionView();
         var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,

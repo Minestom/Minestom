@@ -10,7 +10,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -23,7 +22,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
 public class BlockPlacementListener {
@@ -154,6 +152,6 @@ public class BlockPlacementListener {
 
     private static void refresh(Player player, Point position) {
         player.getInventory().update();
-        player.getInstance().sendChunk(player, position.chunkX(), position.chunkZ());
+        player.sendPacket(player.getInstance().chunkPacket(position.chunkX(), position.chunkZ()));
     }
 }

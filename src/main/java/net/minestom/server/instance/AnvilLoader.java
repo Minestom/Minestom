@@ -188,8 +188,8 @@ public class AnvilLoader implements IChunkLoader {
                         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                                 for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                                    int finalX = chunk.chunkX * Chunk.CHUNK_SIZE_X + x;
-                                    int finalZ = chunk.chunkZ * Chunk.CHUNK_SIZE_Z + z;
+                                    int finalX = chunk.getChunkX() * Chunk.CHUNK_SIZE_X + x;
+                                    int finalZ = chunk.getChunkZ() * Chunk.CHUNK_SIZE_Z + z;
                                     int finalY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
                                     String biomeName = sectionBiomeInformation.getBaseBiome();
                                     Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
@@ -202,8 +202,8 @@ public class AnvilLoader implements IChunkLoader {
                         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                                 for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                                    int finalX = chunk.chunkX * Chunk.CHUNK_SIZE_X + x;
-                                    int finalZ = chunk.chunkZ * Chunk.CHUNK_SIZE_Z + z;
+                                    int finalX = chunk.getChunkX() * Chunk.CHUNK_SIZE_X + x;
+                                    int finalZ = chunk.getChunkZ() * Chunk.CHUNK_SIZE_Z + z;
                                     int finalY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
 
                                     int index = x/4 + (z/4) * 4 + (y/4) * 16;
@@ -325,7 +325,7 @@ public class AnvilLoader implements IChunkLoader {
         final int chunkZ = chunk.getChunkZ();
         RegionFile mcaFile;
         synchronized (alreadyLoaded) {
-            mcaFile = getMCAFile(chunk.instance, chunkX, chunkZ);
+            mcaFile = getMCAFile(chunk.getInstance(), chunkX, chunkZ);
             if (mcaFile == null) {
                 final int regionX = CoordinatesKt.chunkToRegion(chunkX);
                 final int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
@@ -378,8 +378,8 @@ public class AnvilLoader implements IChunkLoader {
             ChunkSectionWriter sectionWriter = new ChunkSectionWriter(SupportedVersion.Companion.getLatest(), (byte)sectionY);
 
             Section section = chunk.getSection(sectionY);
-            sectionWriter.setSkyLights(section.getSkyLight());
-            sectionWriter.setBlockLights(section.getBlockLight());
+            sectionWriter.setSkyLights(section.getSkyLight().toByteArray());
+            sectionWriter.setBlockLights(section.getBlockLight().toByteArray());
 
             BiomePalette biomePalette = new BiomePalette();
             BlockPalette blockPalette = new BlockPalette();
@@ -443,15 +443,15 @@ public class AnvilLoader implements IChunkLoader {
      */
     @Override
     public void unloadChunk(Chunk chunk) {
-        final int regionX = CoordinatesKt.chunkToRegion(chunk.chunkX);
-        final int regionZ = CoordinatesKt.chunkToRegion(chunk.chunkZ);
+        final int regionX = CoordinatesKt.chunkToRegion(chunk.getChunkX());
+        final int regionZ = CoordinatesKt.chunkToRegion(chunk.getChunkZ());
 
         final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
         synchronized (perRegionLoadedChunks) {
             Set<IntIntImmutablePair> chunks = perRegionLoadedChunks.get(regionKey);
             if(chunks != null) { // if null, trying to unload a chunk from a region that was not created by the AnvilLoader
                 // don't check return value, trying to unload a chunk not created by the AnvilLoader is valid
-                chunks.remove(new IntIntImmutablePair(chunk.chunkX, chunk.chunkZ));
+                chunks.remove(new IntIntImmutablePair(chunk.getChunkX(), chunk.getChunkZ()));
 
                 if(chunks.isEmpty()) {
                     perRegionLoadedChunks.remove(regionKey);
@@ -465,7 +465,7 @@ public class AnvilLoader implements IChunkLoader {
                     }
                 }
             }
-        };
+        }
     }
 
     @Override

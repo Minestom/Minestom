@@ -35,7 +35,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
@@ -132,7 +131,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenRun(() -> {
             try {
                 if (instance.isChunkLoaded(chunkX, chunkZ)) {
-                    instance.sendChunk(this, chunkX, chunkZ);
+                    sendPacket(instance.chunkPacket(chunkX, chunkZ));
                     EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
                 }
             } catch (Exception e) {

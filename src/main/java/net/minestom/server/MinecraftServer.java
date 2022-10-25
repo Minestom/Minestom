@@ -223,7 +223,7 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the entity view distance of the server.
+     * Gets the entity view distance of the server. (in chunks)
      *
      * @return the entity view distance
      */

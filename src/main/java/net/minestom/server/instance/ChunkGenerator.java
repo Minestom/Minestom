@@ -29,10 +29,8 @@ public interface ChunkGenerator {
     void generateChunkData(@NotNull ChunkBatch batch, int chunkX, int chunkZ);
 
     /**
-     * Gets all the {@link ChunkPopulator} of this generator.
-     *
-     * @return a {@link List} of {@link ChunkPopulator}, can be null or empty
+     * This method is unused and is only retained for compatibility.
      */
-    @Nullable
-    List<ChunkPopulator> getPopulators();
+    @Deprecated(forRemoval = true)
+    @Nullable List<ChunkPopulator> getPopulators();
 }
