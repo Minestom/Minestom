@@ -17,16 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Extension {
-    // Set by reflection
-    @SuppressWarnings("unused")
-    private DiscoveredExtension origin;
-    // Set by reflection
-    @SuppressWarnings("unused")
-    private Logger logger;
-    // Set by reflection
-    @SuppressWarnings("unused")
-    private EventNode<Event> eventNode;
-
     /**
      * List of extensions that depend on this extension.
      */
@@ -56,9 +46,16 @@ public abstract class Extension {
 
     }
 
+    ExtensionClassLoader getExtensionClassLoader() {
+        if (getClass().getClassLoader() instanceof ExtensionClassLoader extensionClassLoader) {
+            return extensionClassLoader;
+        }
+        throw new IllegalStateException("Extension class loader is not an ExtensionClassLoader");
+    }
+
     @NotNull
     public DiscoveredExtension getOrigin() {
-        return origin;
+        return getExtensionClassLoader().getDiscoveredExtension();
     }
 
     /**
@@ -68,11 +65,11 @@ public abstract class Extension {
      */
     @NotNull
     public Logger getLogger() {
-        return logger;
+        return getExtensionClassLoader().getLogger();
     }
 
     public @NotNull EventNode<Event> getEventNode() {
-        return eventNode;
+        return getExtensionClassLoader().getEventNode();
     }
 
     public @NotNull Path getDataDirectory() {
