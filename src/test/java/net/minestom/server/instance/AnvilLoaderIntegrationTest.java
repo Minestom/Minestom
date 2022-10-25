@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -160,7 +161,7 @@ public class AnvilLoaderIntegrationTest {
                 return false;
             }
         });
-        Chunk originalChunk = instance.loadChunkOrRetrieve(0,0).join();
+        DynamicChunk originalChunk = (DynamicChunk) instance.loadChunkOrRetrieve(0,0).join();
 
         synchronized (originalChunk) {
             instance.saveChunkToStorage(originalChunk);
@@ -170,19 +171,19 @@ public class AnvilLoaderIntegrationTest {
             }
         }
 
-        Chunk reloadedChunk = instance.loadChunkOrRetrieve(0,0).join();
-        for(int section = reloadedChunk.getMinSection(); section < reloadedChunk.getMaxSection(); section++) {
-            Section originalSection = originalChunk.getSection(section);
-            Section reloadedSection = reloadedChunk.getSection(section);
-
-            // easiest equality check to write is a memory compare on written output
-            BinaryWriter originalWriter = new BinaryWriter();
-            BinaryWriter reloadedWriter = new BinaryWriter();
-            originalSection.write(originalWriter);
-            reloadedSection.write(reloadedWriter);
-
-            Assertions.assertArrayEquals(originalWriter.toByteArray(), reloadedWriter.toByteArray());
+        DynamicChunk reloadedChunk = (DynamicChunk) instance.loadChunkOrRetrieve(0,0).join();
+        int hash = 0;
+        for (PaletteSectionData section : reloadedChunk.sections()) {
+            BinaryWriter writer = new BinaryWriter();
+            section.write(writer);
+            hash += Arrays.hashCode(writer.toByteArray());
         }
+        for (PaletteSectionData section : originalChunk.sections()) {
+            BinaryWriter writer = new BinaryWriter();
+            section.write(writer);
+            hash -= Arrays.hashCode(writer.toByteArray());
+        }
+        Assertions.assertEquals(0, hash, "Chunk data should be the same after saving and reloading");
 
         env.destroyInstance(instance);
     }

@@ -55,7 +55,7 @@ public class ChunkViewerIntegrationTest {
             var tracker = connection.trackIncoming(ChunkDataPacket.class);
             for (int x = -viewRadius; x <= viewRadius; x++) {
                 for (int z = -viewRadius; z <= viewRadius; z++) {
-                    Chunk chunk = (Chunk) instance.loadOptionalChunk(x, z).join();
+                    Chunk chunk = instance.loadChunkOrRetrieve(x, z).join();
                     chunk.sendChunk();
                 }
             }

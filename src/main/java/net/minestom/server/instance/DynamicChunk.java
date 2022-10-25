@@ -162,6 +162,10 @@ public class DynamicChunk extends ChunkBase {
         return lastChange;
     }
 
+    public List<PaletteSectionData> sections() {
+        return sections;
+    }
+
     @Override
     public void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
