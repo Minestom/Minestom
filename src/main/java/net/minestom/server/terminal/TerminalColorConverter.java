@@ -1,4 +1,4 @@
-package net.minestom.server.adventure.provider;
+package net.minestom.server.terminal;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -14,12 +14,6 @@ import java.util.regex.Pattern;
  * @see <a href="https://github.com/PaperMC/Paper/blob/41647af74caed955c1fd5b38d458ee59298ae5d4/patches/server/0591-Add-support-for-hex-color-codes-in-console.patch">Paper</a>
  */
 public final class TerminalColorConverter {
-    public static final char COLOR_CHAR = '§';
-    public static final LegacyComponentSerializer SERIALIZER = LegacyComponentSerializer.builder()
-            .character(TerminalColorConverter.COLOR_CHAR)
-            .flattener(MinestomFlattenerProvider.INSTANCE)
-            .hexColors()
-            .build();
     private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
     private static final boolean SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
 
@@ -50,8 +44,8 @@ public final class TerminalColorConverter {
             "\u001B[3m", // Italic §o
             ANSI_RESET, // Reset §r
     };
-    private static final Pattern RGB_PATTERN = Pattern.compile(COLOR_CHAR + "#([\\da-fA-F]{6})");
-    private static final Pattern NAMED_PATTERN = Pattern.compile(COLOR_CHAR + "([\\da-fk-orA-FK-OR])");
+    private static final Pattern RGB_PATTERN = Pattern.compile(LegacyComponentSerializer.SECTION_CHAR + "#([\\da-fA-F]{6})");
+    private static final Pattern NAMED_PATTERN = Pattern.compile(LegacyComponentSerializer.SECTION_CHAR + "([\\da-fk-orA-FK-OR])");
 
     private TerminalColorConverter() {
     }
@@ -75,7 +69,7 @@ public final class TerminalColorConverter {
      * @return the formatted string
      */
     public static String format(String string) {
-        if (string.indexOf(COLOR_CHAR) == -1) {
+        if (string.indexOf(LegacyComponentSerializer.SECTION_CHAR) == -1) {
             return string;
         }
 

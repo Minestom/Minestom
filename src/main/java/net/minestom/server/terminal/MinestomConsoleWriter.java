@@ -1,6 +1,5 @@
 package net.minestom.server.terminal;
 
-import net.minestom.server.adventure.provider.TerminalColorConverter;
 import org.fusesource.jansi.AnsiConsole;
 import org.tinylog.core.LogEntry;
 import org.tinylog.writers.AbstractFormatPatternWriter;

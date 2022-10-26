@@ -1,8 +1,9 @@
-package net.minestom.server.adventure.provider;
+package net.minestom.server.terminal;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,7 @@ class TerminalColorConverterTest {
     void testComponentFormat() {
         Component input = Component.text("Hello World").color(NamedTextColor.RED).decorate(TextDecoration.BOLD);
         String expected = "\u001B[38;2;255;85;85m\u001B[1mHello World\u001B[m";
-        String actual = TerminalColorConverter.format(TerminalColorConverter.SERIALIZER.serialize(input));
+        String actual = TerminalColorConverter.format(LegacyComponentSerializer.legacySection().serialize(input));
         assertEquals(expected, actual);
     }
 }
