@@ -1,11 +1,10 @@
 package net.minestom.server.extensions;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -17,7 +16,7 @@ public final class ExtensionClassLoader extends URLClassLoader {
     private final List<ExtensionClassLoader> children = new ArrayList<>();
     private final DiscoveredExtension discoveredExtension;
     private EventNode<Event> eventNode;
-    private Logger logger;
+    private ComponentLogger logger;
 
     public ExtensionClassLoader(String name, URL[] urls, DiscoveredExtension discoveredExtension) {
         super("Ext_" + name, urls, MinecraftServer.class.getClassLoader());
@@ -77,9 +76,9 @@ public final class ExtensionClassLoader extends URLClassLoader {
         return eventNode;
     }
 
-    public Logger getLogger() {
+    public ComponentLogger getLogger() {
         if (logger == null) {
-            logger = LoggerFactory.getLogger(discoveredExtension.getName());
+            logger = ComponentLogger.logger(discoveredExtension.getName());
         }
         return logger;
     }
