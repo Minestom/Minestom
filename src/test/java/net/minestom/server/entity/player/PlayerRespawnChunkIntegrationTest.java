@@ -19,8 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @EnvTest
-public class PlayerRespawnChunkTest {
-
+public class PlayerRespawnChunkIntegrationTest {
 
     @Test
     public void testChunkUnloadsOnRespawn(Env env) {
@@ -64,7 +63,7 @@ public class PlayerRespawnChunkTest {
         Set<ChunkDataPacket> duplicateCheck = new HashSet<>();
         int chunkLoads = ChunkUtils.getChunkCount(MinecraftServer.getChunkViewDistance());
         loadChunkTracker.assertCount(chunkLoads);
-        for(ChunkDataPacket packet : dataPacketList) {
+        for (ChunkDataPacket packet : dataPacketList) {
             assertFalse(duplicateCheck.contains(packet));
             duplicateCheck.add(packet);
             assertTrue(Math.abs(packet.chunkX()) <= MinecraftServer.getChunkViewDistance() && Math.abs(packet.chunkZ()) <= MinecraftServer.getChunkViewDistance());
