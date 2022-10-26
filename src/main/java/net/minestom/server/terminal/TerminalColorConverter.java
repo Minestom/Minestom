@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @see <a href="https://github.com/Minecrell/TerminalConsoleAppender/blob/master/src/main/java/net/minecrell/terminalconsole/MinecraftFormattingConverter.java">TerminalConsoleAppender</a>
  * @see <a href="https://github.com/PaperMC/Paper/blob/41647af74caed955c1fd5b38d458ee59298ae5d4/patches/server/0591-Add-support-for-hex-color-codes-in-console.patch">Paper</a>
  */
-public final class TerminalColorConverter {
+final class TerminalColorConverter {
     private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
     private static final boolean SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
 
