@@ -1,5 +1,6 @@
 package net.minestom.server.extensions;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +65,7 @@ public abstract class Extension {
      * @return The logger for the extension
      */
     @NotNull
-    public Logger getLogger() {
+    public ComponentLogger getLogger() {
         return getExtensionClassLoader().getLogger();
     }
 
