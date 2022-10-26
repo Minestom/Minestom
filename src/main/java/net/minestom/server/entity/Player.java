@@ -431,7 +431,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+               0, gameMode, gameMode, false, levelFlat, true));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -439,8 +439,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshIsDead(false);
         updatePose();
 
-        // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
+        Pos respawnPosition = respawnEvent.getRespawnPosition();
+
+        // The client unloads chunks when respawning, so resend all chunks next to spawn
+        ChunkUtils.forChunksInRange(respawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) ->
+                this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
+                    try {
+                        if (chunk != null) {
+                            chunk.sendChunk(this);
+                        }
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }));
+        chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
+        teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
     }
 
     /**
