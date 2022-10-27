@@ -1,7 +1,6 @@
 package net.minestom.server.extras.velocity;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,28 +72,6 @@ public final class VelocityProxy {
             return InetAddress.getByName(reader.readSizedString());
         } catch (UnknownHostException e) {
             MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
-    }
-
-    public static PlayerSkin readSkin(@NotNull BinaryReader reader) {
-        String skinTexture = null;
-        String skinSignature = null;
-        final int properties = reader.readVarInt();
-        for (int i = 0; i < properties; i++) {
-            final String name = reader.readSizedString(Short.MAX_VALUE);
-            final String value = reader.readSizedString(Short.MAX_VALUE);
-            final String signature = reader.readBoolean() ? reader.readSizedString(Short.MAX_VALUE) : null;
-
-            if (name.equals("textures")) {
-                skinTexture = value;
-                skinSignature = signature;
-            }
-        }
-
-        if (skinTexture != null && skinSignature != null) {
-            return new PlayerSkin(skinTexture, skinSignature);
-        } else {
             return null;
         }
     }

@@ -5,7 +5,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.crypto.SignatureValidator;
-import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
@@ -95,13 +94,9 @@ public record LoginStartPacket(@NotNull String username,
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
             final UUID playerUuid = bungee && isSocketConnection ?
-                    ((PlayerSocketConnection) connection).getBungeeUuid() :
+                    ((PlayerSocketConnection) connection).gameProfile().uuid() :
                     CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
-
-            Player player = CONNECTION_MANAGER.startPlayState(connection, playerUuid, username, true);
-            if (bungee && isSocketConnection) {
-                player.setSkin(((PlayerSocketConnection) connection).getBungeeSkin());
-            }
+            CONNECTION_MANAGER.startPlayState(connection, playerUuid, username, true);
         }
     }
 
