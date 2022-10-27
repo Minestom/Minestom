@@ -4,7 +4,6 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
@@ -62,6 +61,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     // Data from client packets
     private String loginUsername;
+    private GameProfile gameProfile;
     private String serverAddress;
     private int serverPort;
     private int protocolVersion;
@@ -69,10 +69,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
     private final Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
-
-    // Bungee
-    private UUID bungeeUuid;
-    private PlayerSkin bungeeSkin;
 
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(POOL.get());
@@ -216,6 +212,14 @@ public class PlayerSocketConnection extends PlayerConnection {
         return channel;
     }
 
+    public @Nullable GameProfile gameProfile() {
+        return gameProfile;
+    }
+
+    public void UNSAFE_setProfile(@NotNull GameProfile gameProfile) {
+        this.gameProfile = gameProfile;
+    }
+
     /**
      * Retrieves the username received from the client during connection.
      * <p>
@@ -281,22 +285,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.protocolVersion = protocolVersion;
-    }
-
-    public @Nullable UUID getBungeeUuid() {
-        return bungeeUuid;
-    }
-
-    public void UNSAFE_setBungeeUuid(UUID bungeeUuid) {
-        this.bungeeUuid = bungeeUuid;
-    }
-
-    public @Nullable PlayerSkin getBungeeSkin() {
-        return bungeeSkin;
-    }
-
-    public void UNSAFE_setBungeeSkin(PlayerSkin bungeeSkin) {
-        this.bungeeSkin = bungeeSkin;
     }
 
     /**

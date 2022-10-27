@@ -55,6 +55,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
@@ -263,7 +264,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacket(new SpawnPositionPacket(respawnPoint, 0));
 
         // Add player to list with spawning skin
-        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
+        PlayerSkin profileSkin = null;
+        if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+            final GameProfile gameProfile = socketConnection.gameProfile();
+            if (gameProfile != null) {
+                for (GameProfile.Property property : gameProfile.properties()) {
+                    if (property.name().equals("textures")) {
+                        profileSkin = new PlayerSkin(property.value(), property.signature());
+                        break;
+                    }
+                }
+            }
+        }
+        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
