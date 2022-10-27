@@ -18,13 +18,7 @@ import java.util.function.Consumer;
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final ClassValue<Handle<T>> handleMap = new ClassValue<>() {
-        @Override
-        protected Handle<T> computeValue(Class<?> type) {
-            //noinspection unchecked
-            return new Handle<>((Class<T>) type);
-        }
-    };
+    private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
     final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
@@ -49,7 +43,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
-        return (ListenerHandle<E>) handleMap.get(handleType);
+        return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
+                aClass -> new Handle<>((Class<T>) aClass));
     }
 
     @Override
@@ -272,7 +267,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
-            Handle<T> handle = handleMap.get(type);
+            Handle<T> handle = handleMap.computeIfAbsent(type,
+                    aClass -> new Handle<>((Class<T>) aClass));
             handle.invalidate();
         });
         final EventNodeImpl<? super T> parent = this.parent;
