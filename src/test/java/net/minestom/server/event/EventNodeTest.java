@@ -227,6 +227,8 @@ public class EventNodeTest {
     public void nodeEmptyGC() {
         var node = EventNode.all("main");
         var ref = new WeakReference<>(node);
+
+        //noinspection UnusedAssignment
         node = null;
         waitUntilCleared(ref);
     }
@@ -237,7 +239,39 @@ public class EventNodeTest {
         var ref = new WeakReference<>(node);
         node.addListener(EventTest.class, event -> {
         });
+
+        //noinspection UnusedAssignment
         node = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void nodeChildGC() {
+        var node = EventNode.all("main");
+
+        var child = EventNode.all("child");
+        var ref = new WeakReference<>(child);
+        child.addListener(EventTest.class, event -> {
+        });
+        node.addChild(child);
+
+        //noinspection UnusedAssignment
+        child = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void nodeMapGC() {
+        var node = EventNode.all("main");
+
+        var handler = ItemStack.AIR;
+        var mapped = node.map(handler, EventFilter.ITEM);
+        var ref = new WeakReference<>(mapped);
+        mapped.addListener(ItemTestEvent.class, event -> {
+        });
+
+        //noinspection UnusedAssignment
+        mapped = null;
         waitUntilCleared(ref);
     }
 }

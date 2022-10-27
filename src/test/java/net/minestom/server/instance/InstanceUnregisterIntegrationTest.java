@@ -1,9 +1,10 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.player.PlayerMoveEvent;
+import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.event.player.PlayerTickEvent;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -43,6 +44,25 @@ public class InstanceUnregisterIntegrationTest {
 
         //noinspection UnusedAssignment
         instance = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void instanceNodeGC(Env env) {
+        final class Game {
+            final Instance instance;
+
+            Game(Env env) {
+                instance = env.process().instance().createInstanceContainer();
+                instance.eventNode().addListener(PlayerMoveEvent.class, e -> System.out.println(instance));
+            }
+        }
+        var game = new Game(env);
+        var ref = new WeakReference<>(game);
+        env.process().instance().unregisterInstance(game.instance);
+
+        //noinspection UnusedAssignment
+        game = null;
         waitUntilCleared(ref);
     }
 

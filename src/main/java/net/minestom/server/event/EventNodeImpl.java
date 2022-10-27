@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
@@ -20,9 +21,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
-    final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
-    final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
-    final Map<Object, EventNodeImpl<T>> registeredMappedNode = new WeakHashMap<>();
+    final Set<EventNodeImpl<T>> children = Collections.newSetFromMap(Caffeine.newBuilder()
+            .weakKeys().<EventNodeImpl<T>, Boolean>build().asMap());
+    final Map<Object, EventNodeImpl<T>> mappedNodeCache = Caffeine.newBuilder()
+            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
+    final Map<Object, EventNodeImpl<T>> registeredMappedNode = Caffeine.newBuilder()
+            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
 
     final String name;
     final EventFilter<T, ?> filter;
@@ -50,6 +54,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return List.of();
             List<EventNode<E>> result = new ArrayList<>();
             for (EventNode<T> child : children) {
@@ -70,6 +75,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
@@ -85,6 +91,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
