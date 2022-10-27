@@ -30,7 +30,7 @@ public final class MinestomConsoleWriter extends AbstractFormatPatternWriter {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         // EMPTY
     }
 }

@@ -3,7 +3,6 @@ package net.minestom.server.instance.generator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.List;
 
 @FunctionalInterface
 public interface Generator {
