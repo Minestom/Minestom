@@ -50,7 +50,7 @@ public class AnvilLoader implements IChunkLoader {
     private final RegionCache perRegionLoadedChunks = new RegionCache();
 
     // thread local to avoid contention issues with locks
-    private final ThreadLocal<Int2ObjectMap<BlockState>> blockStateId2ObjectCacheTLS = ThreadLocal.withInitial(() -> new Int2ObjectArrayMap<>());
+    private final ThreadLocal<Int2ObjectMap<BlockState>> blockStateId2ObjectCacheTLS = ThreadLocal.withInitial(Int2ObjectArrayMap::new);
 
     public AnvilLoader(@NotNull Path path) {
         this.path = path;
@@ -160,7 +160,7 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadSections(Chunk chunk, ChunkReader chunkReader) {
         final HashMap<String, Biome> biomeCache = new HashMap<>();
-        for (var sectionNBT : chunkReader.getSections()) {
+        for (NBTCompound sectionNBT : chunkReader.getSections()) {
             ChunkSectionReader sectionReader = new ChunkSectionReader(chunkReader.getMinecraftVersion(), sectionNBT);
 
             if (sectionReader.isSectionEmpty()) continue;
@@ -218,11 +218,11 @@ public class AnvilLoader implements IChunkLoader {
             // Blocks
             final NBTList<NBTCompound> blockPalette = sectionReader.getBlockPalette();
             if (blockPalette != null) {
-                int[] blockStateIndices = sectionReader.getUncompressedBlockStateIDs();
+                final int[] blockStateIndices = sectionReader.getUncompressedBlockStateIDs();
                 Block[] convertedPalette = new Block[blockPalette.getSize()];
                 for (int i = 0; i < convertedPalette.length; i++) {
                     final NBTCompound paletteEntry = blockPalette.get(i);
-                    String blockName = Objects.requireNonNull(paletteEntry.getString("Name"));
+                    final String blockName = Objects.requireNonNull(paletteEntry.getString("Name"));
                     if (blockName.equals("minecraft:air")) {
                         convertedPalette[i] = Block.AIR;
                     } else {
@@ -256,9 +256,9 @@ public class AnvilLoader implements IChunkLoader {
                     for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
                         for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
                             try {
-                                int blockIndex = y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE + z * Chunk.CHUNK_SECTION_SIZE + x;
-                                int paletteIndex = blockStateIndices[blockIndex];
-                                Block block = convertedPalette[paletteIndex];
+                                final int blockIndex = y * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE + z * Chunk.CHUNK_SECTION_SIZE + x;
+                                final int paletteIndex = blockStateIndices[blockIndex];
+                                final Block block = convertedPalette[paletteIndex];
 
                                 chunk.setBlock(x, y + yOffset, z, block);
                             } catch (Exception e) {
@@ -303,7 +303,7 @@ public class AnvilLoader implements IChunkLoader {
 
     @Override
     public @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
-        final var nbt = instance.tagHandler().asCompound();
+        final NBTCompound nbt = instance.tagHandler().asCompound();
         if (nbt.isEmpty()) {
             // Instance has no data
             return AsyncUtils.VOID_FUTURE;
@@ -385,7 +385,7 @@ public class AnvilLoader implements IChunkLoader {
                     for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
                         final int y = sectionLocalY + sectionY * Chunk.CHUNK_SECTION_SIZE;
 
-                        int blockIndex = x + sectionLocalY * 16 * 16 + z * 16;
+                        final int blockIndex = x + sectionLocalY * 16 * 16 + z * 16;
 
                         final Block block = chunk.getBlock(x, y, z);
 
@@ -406,7 +406,7 @@ public class AnvilLoader implements IChunkLoader {
 
                         // Block entities
                         final BlockHandler handler = block.handler();
-                        var originalNBT = block.nbt();
+                        final NBTCompound originalNBT = block.nbt();
                         if (originalNBT != null || handler != null) {
                             MutableNBTCompound nbt = originalNBT != null ?
                                     originalNBT.toMutableCompound() : new MutableNBTCompound();
