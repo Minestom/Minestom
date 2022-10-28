@@ -103,6 +103,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.nio.ByteBuffer)" class="member-name-link">BinaryWriter</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">BinaryWriter</a><wbr>(<a href="../../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -117,26 +119,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concat(java.nio.ByteBuffer...)" class="member-name-link">concat</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>...&nbsp;buffers)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ensureSize(int)" class="member-name-link">ensureSize</a><wbr>(int&nbsp;length)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBuffer()" class="member-name-link">getBuffer</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the raw buffer used by this binary writer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static byte[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#makeArray(java.util.function.Consumer)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;writing)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static byte[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#makeArray(java.util.function.Consumer)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;writing)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns a byte[] with the contents written via BinaryWriter</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBuffer(java.nio.ByteBuffer)" class="member-name-link">setBuffer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the buffer used by this binary writer.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toByteArray()" class="member-name-link">toByteArray</a>()</code></div>
@@ -166,16 +152,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Writes an array of writeable objects to this writer.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeAtEnd(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">writeAtEnd</a><wbr>(@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link"><code>ByteBuffer</code></a> at the end of this writer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeAtStart(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">writeAtStart</a><wbr>(@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link"><code>ByteBuffer</code></a> at the beginning of this writer.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeBlockPosition(int,int,int)" class="member-name-link">writeBlockPosition</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z)</code></div>
@@ -185,14 +161,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeBoolean(boolean)" class="member-name-link">writeBoolean</a><wbr>(boolean&nbsp;b)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single boolean to the buffer.</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeByte(byte)" class="member-name-link">writeByte</a><wbr>(byte&nbsp;b)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single byte to the buffer.</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeByteArray(byte%5B%5D)" class="member-name-link">writeByteArray</a><wbr>(byte[]&nbsp;array)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -202,106 +174,73 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeBytes(byte%5B%5D)" class="member-name-link">writeBytes</a><wbr>(byte @NotNull []&nbsp;bytes)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a byte array.</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeChar(char)" class="member-name-link">writeChar</a><wbr>(char&nbsp;c)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single char to the buffer.</div>
-</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeComponent(net.kyori.adventure.text.Component)" class="member-name-link">writeComponent</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;component)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeComponent(net.kyori.adventure.text.Component)" class="member-name-link">writeComponent</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;component)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a component to the buffer as a sized string.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeDouble(double)" class="member-name-link">writeDouble</a><wbr>(double&nbsp;d)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single double to the buffer.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;L,<wbr>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeDouble(double)" class="member-name-link">writeDouble</a><wbr>(double&nbsp;d)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;L,<wbr>
 R&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeEither(net.minestom.server.utils.Either,java.util.function.BiConsumer,java.util.function.BiConsumer)" class="member-name-link">writeEither</a><wbr>(<a href="../Either.html" title="class in net.minestom.server.utils">Either</a>&lt;L,<wbr>R&gt;&nbsp;either,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeEither(net.minestom.server.utils.Either,java.util.function.BiConsumer,java.util.function.BiConsumer)" class="member-name-link">writeEither</a><wbr>(<a href="../Either.html" title="class in net.minestom.server.utils">Either</a>&lt;L,<wbr>R&gt;&nbsp;either,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>,<wbr>L&gt;&nbsp;leftWriter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>,<wbr>R&gt;&nbsp;rightWriter)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeFloat(float)" class="member-name-link">writeFloat</a><wbr>(float&nbsp;f)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeFloat(float)" class="member-name-link">writeFloat</a><wbr>(float&nbsp;f)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single float to the buffer.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeInt(int)" class="member-name-link">writeInt</a><wbr>(int&nbsp;i)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single int to the buffer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeItemStack(net.minestom.server.item.ItemStack)" class="member-name-link">writeItemStack</a><wbr>(@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeInt(int)" class="member-name-link">writeInt</a><wbr>(int&nbsp;i)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeLong(long)" class="member-name-link">writeLong</a><wbr>(long&nbsp;l)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single long to the buffer.</div>
-</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeItemStack(net.minestom.server.item.ItemStack)" class="member-name-link">writeItemStack</a><wbr>(@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeLongArray(long%5B%5D)" class="member-name-link">writeLongArray</a><wbr>(long[]&nbsp;array)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeLong(long)" class="member-name-link">writeLong</a><wbr>(long&nbsp;l)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeNBT(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBT)" class="member-name-link">writeNBT</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeLongArray(long%5B%5D)" class="member-name-link">writeLongArray</a><wbr>(long[]&nbsp;array)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeNBT(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBT)" class="member-name-link">writeNBT</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull org.jglrxavpok.hephaistos.nbt.NBT&nbsp;tag)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeNullTerminatedString(java.lang.String,java.nio.charset.Charset)" class="member-name-link">writeNullTerminatedString</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;string,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeNullTerminatedString(java.lang.String,java.nio.charset.Charset)" class="member-name-link">writeNullTerminatedString</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;string,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a null terminated string to the buffer.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeShort(short)" class="member-name-link">writeShort</a><wbr>(short&nbsp;s)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single short to the buffer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeSizedString(java.lang.String)" class="member-name-link">writeSizedString</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;string)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a string to the buffer.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeStringArray(java.lang.String%5B%5D)" class="member-name-link">writeStringArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;array)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a string to the buffer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeUnsignedShort(int)" class="member-name-link">writeUnsignedShort</a><wbr>(int&nbsp;yourShort)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeShort(short)" class="member-name-link">writeShort</a><wbr>(short&nbsp;s)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeUuid(java.util.UUID)" class="member-name-link">writeUuid</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a>.</div>
-</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeSizedString(java.lang.String)" class="member-name-link">writeSizedString</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;string)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarInt(int)" class="member-name-link">writeVarInt</a><wbr>(int&nbsp;i)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single var-int to the buffer.</div>
-</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeStringArray(java.lang.String%5B%5D)" class="member-name-link">writeStringArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;array)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarIntArray(int%5B%5D)" class="member-name-link">writeVarIntArray</a><wbr>(int[]&nbsp;array)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a var-int array to the buffer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarIntList(java.util.Collection,java.util.function.BiConsumer)" class="member-name-link">writeVarIntList</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;T&gt;&nbsp;list,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeUnsignedShort(int)" class="member-name-link">writeUnsignedShort</a><wbr>(int&nbsp;yourShort)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeUuid(java.util.UUID)" class="member-name-link">writeUuid</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarInt(int)" class="member-name-link">writeVarInt</a><wbr>(int&nbsp;i)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarIntArray(int%5B%5D)" class="member-name-link">writeVarIntArray</a><wbr>(int[]&nbsp;array)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarIntList(java.util.Collection,java.util.function.BiConsumer)" class="member-name-link">writeVarIntList</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;T&gt;&nbsp;list,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>,<wbr>T&gt;&nbsp;consumer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarLong(long)" class="member-name-link">writeVarLong</a><wbr>(long&nbsp;l)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarLong(long)" class="member-name-link">writeVarLong</a><wbr>(long&nbsp;l)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes a single var-long to the buffer.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarLongArray(long%5B%5D)" class="member-name-link">writeVarLongArray</a><wbr>(long[]&nbsp;array)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeVarLongArray(long%5B%5D)" class="member-name-link">writeVarLongArray</a><wbr>(long[]&nbsp;array)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -322,6 +261,12 @@ R&gt;&nbsp;void</code></div>
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
+<h3>BinaryWriter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BinaryWriter</span><wbr><span class="parameters">(<a href="../../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer)</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.nio.ByteBuffer)">
 <h3>BinaryWriter</h3>
@@ -357,131 +302,64 @@ R&gt;&nbsp;void</code></div>
 </section>
 </li>
 <li>
-<section class="detail" id="ensureSize(int)">
-<h3>ensureSize</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">ensureSize</span><wbr><span class="parameters">(int&nbsp;length)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="writeComponent(net.kyori.adventure.text.Component)">
 <h3>writeComponent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeComponent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;component)</span></div>
-<div class="block">Writes a component to the buffer as a sized string.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>component</code> - the component</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeByte(byte)">
 <h3>writeByte</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeByte</span><wbr><span class="parameters">(byte&nbsp;b)</span></div>
-<div class="block">Writes a single byte to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>b</code> - the byte to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeBoolean(boolean)">
 <h3>writeBoolean</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeBoolean</span><wbr><span class="parameters">(boolean&nbsp;b)</span></div>
-<div class="block">Writes a single boolean to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>b</code> - the boolean to write</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="writeChar(char)">
-<h3>writeChar</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeChar</span><wbr><span class="parameters">(char&nbsp;c)</span></div>
-<div class="block">Writes a single char to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>c</code> - the char to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeShort(short)">
 <h3>writeShort</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeShort</span><wbr><span class="parameters">(short&nbsp;s)</span></div>
-<div class="block">Writes a single short to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>s</code> - the short to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeInt(int)">
 <h3>writeInt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeInt</span><wbr><span class="parameters">(int&nbsp;i)</span></div>
-<div class="block">Writes a single int to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>i</code> - the int to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeLong(long)">
 <h3>writeLong</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeLong</span><wbr><span class="parameters">(long&nbsp;l)</span></div>
-<div class="block">Writes a single long to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>l</code> - the long to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeFloat(float)">
 <h3>writeFloat</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeFloat</span><wbr><span class="parameters">(float&nbsp;f)</span></div>
-<div class="block">Writes a single float to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>f</code> - the float to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeDouble(double)">
 <h3>writeDouble</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeDouble</span><wbr><span class="parameters">(double&nbsp;d)</span></div>
-<div class="block">Writes a single double to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>d</code> - the double to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeVarInt(int)">
 <h3>writeVarInt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeVarInt</span><wbr><span class="parameters">(int&nbsp;i)</span></div>
-<div class="block">Writes a single var-int to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>i</code> - the int to write</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeVarLong(long)">
 <h3>writeVarLong</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeVarLong</span><wbr><span class="parameters">(long&nbsp;l)</span></div>
-<div class="block">Writes a single var-long to the buffer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>l</code> - the long to write</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -489,13 +367,6 @@ R&gt;&nbsp;void</code></div>
 <h3>writeSizedString</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeSizedString</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;string)</span></div>
-<div class="block">Writes a string to the buffer.
- <p>
- The size is a var-int type.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>string</code> - the string to write</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -505,26 +376,12 @@ R&gt;&nbsp;void</code></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;string,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;charset)</span></div>
-<div class="block">Writes a null terminated string to the buffer. This method adds the null character
- to the end of the string before writing.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>string</code> - the string to write</dd>
-<dd><code>charset</code> - the charset to encode in</dd>
-</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="writeVarIntArray(int[])">
 <h3>writeVarIntArray</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeVarIntArray</span><wbr><span class="parameters">(int[]&nbsp;array)</span></div>
-<div class="block">Writes a var-int array to the buffer.
- <p>
- It is sized by another var-int at the beginning.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - the integers to write</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -549,13 +406,6 @@ R&gt;&nbsp;void</code></div>
 <section class="detail" id="writeBytes(byte[])">
 <h3>writeBytes</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeBytes</span><wbr><span class="parameters">(byte @NotNull []&nbsp;bytes)</span></div>
-<div class="block">Writes a byte array.
- <p>
- WARNING: it doesn't write the length of <code>bytes</code>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>bytes</code> - the byte array to write</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -563,13 +413,6 @@ R&gt;&nbsp;void</code></div>
 <h3>writeStringArray</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeStringArray</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;array)</span></div>
-<div class="block">Writes a string to the buffer.
- <p>
- The array is sized by a var-int and all strings are wrote using <a href="#writeSizedString(java.lang.String)"><code>writeSizedString(String)</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>array</code> - the string array to write</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -577,12 +420,6 @@ R&gt;&nbsp;void</code></div>
 <h3>writeUuid</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeUuid</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</span></div>
-<div class="block">Writes an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a>.
- It is done by writing both long, the most and least significant bits.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>uuid</code> - the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> to write</dd>
-</dl>
 </section>
 </li>
 <li>
@@ -688,59 +525,6 @@ R&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="elemen
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the byte array containing all the <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> data</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="writeAtStart(net.minestom.server.utils.binary.BinaryWriter)">
-<h3>writeAtStart</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeAtStart</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</span></div>
-<div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link"><code>ByteBuffer</code></a> at the beginning of this writer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>headerWriter</code> - the <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> to add at the beginning</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="writeAtEnd(net.minestom.server.utils.binary.BinaryWriter)">
-<h3>writeAtEnd</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeAtEnd</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</span></div>
-<div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link"><code>ByteBuffer</code></a> at the end of this writer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>footerWriter</code> - the <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> to add at the end</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="concat(java.nio.ByteBuffer...)">
-<h3>concat</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></span>&nbsp;<span class="element-name">concat</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>...&nbsp;buffers)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="getBuffer()">
-<h3>getBuffer</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></span>&nbsp;<span class="element-name">getBuffer</span>()</div>
-<div class="block">Gets the raw buffer used by this binary writer.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the raw buffer</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setBuffer(java.nio.ByteBuffer)">
-<h3>setBuffer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBuffer</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</span></div>
-<div class="block">Changes the buffer used by this binary writer.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>buffer</code> - the new buffer used by this binary writer</dd>
 </dl>
 </section>
 </li>
