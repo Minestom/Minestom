@@ -29,7 +29,6 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
     public @NotNull ClientPacket create(@NotNull ConnectionState connectionState, int packetId, ByteBuffer body) {
         NetworkBuffer networkBuffer = new NetworkBuffer(body);
         BinaryReader reader = new BinaryReader(networkBuffer);
-        networkBuffer.writeIndex(body.limit());
         final ClientPacket clientPacket = switch (connectionState) {
             case PLAY -> playHandler.create(packetId, reader);
             case LOGIN -> loginHandler.create(packetId, reader);

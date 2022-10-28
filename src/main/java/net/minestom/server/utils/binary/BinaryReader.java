@@ -36,7 +36,6 @@ public class BinaryReader extends InputStream {
 
     public BinaryReader(@NotNull ByteBuffer buffer) {
         this.buffer = new NetworkBuffer(buffer);
-        this.buffer.writeIndex(buffer.limit());
     }
 
     public BinaryReader(byte[] bytes) {
