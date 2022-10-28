@@ -97,37 +97,49 @@ final class NetworkBufferTypes {
                 return value;
             });
     static final TypeImpl<Integer> VAR_INT = new TypeImpl<>(Integer.class,
-            (buffer, value) -> {
-                buffer.ensureSize(5);
-                int size = 0;
-                while (true) {
-                    if ((value & ~SEGMENT_BITS) == 0) {
-                        buffer.nioBuffer.put(buffer.writeIndex() + size, (byte) value.intValue());
-                        return size + 1;
-                    }
-                    buffer.nioBuffer.put(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
-                    size++;
-                    // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
-                    value >>>= 7;
+            (buffer, boxed) -> {
+                final int value = boxed;
+                final int index = buffer.writeIndex();
+                var nio = buffer.nioBuffer;
+                if ((value & (0xFFFFFFFF << 7)) == 0) {
+                    buffer.ensureSize(1);
+                    nio.put(index, (byte) value);
+                    return 1;
+                } else if ((value & (0xFFFFFFFF << 14)) == 0) {
+                    buffer.ensureSize(2);
+                    nio.putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
+                    return 2;
+                } else if ((value & (0xFFFFFFFF << 21)) == 0) {
+                    buffer.ensureSize(3);
+                    nio.put(index, (byte) (value & 0x7F | 0x80));
+                    nio.put(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+                    nio.put(index + 2, (byte) (value >>> 14));
+                    return 3;
+                } else if ((value & (0xFFFFFFFF << 28)) == 0) {
+                    buffer.ensureSize(4);
+                    nio.putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
+                            | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
+                    return 4;
+                } else {
+                    buffer.ensureSize(5);
+                    nio.putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
+                            | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
+                    nio.put(index + 4, (byte) (value >>> 28));
+                    return 5;
                 }
             },
             buffer -> {
-                int length = 0;
-
-                int value = 0;
-                int position = 0;
-                byte currentByte;
-
-                while (true) {
-                    currentByte = buffer.nioBuffer.get(buffer.readIndex() + length);
-                    length++;
-                    value |= (currentByte & SEGMENT_BITS) << position;
-                    if ((currentByte & CONTINUE_BIT) == 0) break;
-                    position += 7;
-                    if (position >= 32) throw new RuntimeException("VarInt is too big");
+                int index = buffer.readIndex();
+                // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
+                int result = 0;
+                for (int shift = 0; ; shift += 7) {
+                    byte b = buffer.nioBuffer.get(index++);
+                    result |= (b & 0x7f) << shift;
+                    if (b >= 0) {
+                        buffer.readIndex += index - buffer.readIndex();
+                        return result;
+                    }
                 }
-                buffer.readIndex += length;
-                return value;
             });
     static final TypeImpl<Long> VAR_LONG = new TypeImpl<>(Long.class,
             (buffer, value) -> {

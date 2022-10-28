@@ -211,7 +211,7 @@ public class NetworkBufferTest {
         var actual = action.read(buffer, type);
 
         assertEquals(value, actual);
-        if (expected != null) assertEquals(expected.length, buffer.readIndex());
+        if (expected != null) assertEquals(expected.length, buffer.readIndex(), "Invalid read index");
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
 
         if (expected != null) {
