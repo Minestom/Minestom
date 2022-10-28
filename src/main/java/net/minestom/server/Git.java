@@ -8,9 +8,9 @@ public final class Git {
     private static final String ARTIFACT = "&ARTIFACT";
 
 
-    public String commit() { return COMMIT; }
-    public String branch() { return BRANCH; }
+    public static String commit() { return COMMIT; }
+    public static String branch() { return BRANCH; }
 
-    public String group() { return GROUP; }
-    public String artifact() { return ARTIFACT; }
+    public static String group() { return GROUP; }
+    public static String artifact() { return ARTIFACT; }
 }
