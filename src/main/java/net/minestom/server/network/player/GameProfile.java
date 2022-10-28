@@ -1,8 +1,6 @@
 package net.minestom.server.network.player;
 
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,9 +8,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import static net.minestom.server.network.NetworkBuffer.STRING;
+
 @ApiStatus.Experimental
 public record GameProfile(@NotNull UUID uuid, @NotNull String name,
-                          @NotNull List<@NotNull Property> properties) implements Writeable {
+                          @NotNull List<@NotNull Property> properties) implements NetworkBuffer.Writer {
     public GameProfile {
         if (name.isBlank())
             throw new IllegalArgumentException("Name cannot be blank");
@@ -21,34 +21,33 @@ public record GameProfile(@NotNull UUID uuid, @NotNull String name,
         properties = List.copyOf(properties);
     }
 
-    public GameProfile(@NotNull BinaryReader reader) {
-        this(reader.readUuid(), reader.readSizedString(16), reader.readVarIntList(Property::new));
+    public GameProfile(@NotNull NetworkBuffer reader) {
+        this(reader.read(NetworkBuffer.UUID), reader.read(STRING), reader.readCollection(Property::new));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeUuid(uuid);
-        writer.writeSizedString(name);
-        writer.writeVarIntList(properties, BinaryWriter::write);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(NetworkBuffer.UUID, uuid);
+        writer.write(STRING, name);
+        writer.writeCollection(properties);
     }
 
     public record Property(@NotNull String name, @NotNull String value,
-                           @Nullable String signature) implements Writeable {
+                           @Nullable String signature) implements NetworkBuffer.Writer {
         public Property(@NotNull String name, @NotNull String value) {
             this(name, value, null);
         }
 
-        public Property(@NotNull BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    reader.readBoolean() ? reader.readSizedString() : null);
+        public Property(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    reader.readOptional(STRING));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(name);
-            writer.writeSizedString(value);
-            writer.writeBoolean(signature != null);
-            if (signature != null) writer.writeSizedString(signature);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, name);
+            writer.write(STRING, value);
+            writer.writeOptional(STRING, signature);
         }
     }
 }

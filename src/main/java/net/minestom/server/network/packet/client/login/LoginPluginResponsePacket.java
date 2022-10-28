@@ -11,7 +11,6 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +57,7 @@ public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) i
                             }
                             final int port = ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort();
                             socketAddress = new InetSocketAddress(address, port);
-                            gameProfile = new GameProfile(new BinaryReader(buffer));
+                            gameProfile = new GameProfile(buffer);
                         }
                     }
                 }
