@@ -7,6 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTReader;
+import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -37,6 +39,9 @@ public final class NetworkBuffer {
     final boolean resizable;
     int writeIndex;
     int readIndex;
+
+    NBTWriter nbtWriter;
+    NBTReader nbtReader;
 
     public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);

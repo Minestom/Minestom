@@ -204,12 +204,16 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<NBT> NBT = new TypeImpl<>(NBT.class,
             (buffer, value) -> {
-                NBTWriter nbtWriter = new NBTWriter(new OutputStream() {
-                    @Override
-                    public void write(int b) {
-                        buffer.write(BYTE, (byte) b);
-                    }
-                }, CompressedProcesser.NONE);
+                NBTWriter nbtWriter = buffer.nbtWriter;
+                if (nbtWriter == null) {
+                    nbtWriter = new NBTWriter(new OutputStream() {
+                        @Override
+                        public void write(int b) {
+                            buffer.write(BYTE, (byte) b);
+                        }
+                    }, CompressedProcesser.NONE);
+                    buffer.nbtWriter = nbtWriter;
+                }
                 try {
                     nbtWriter.writeNamed("", value);
                 } catch (IOException e) {
@@ -218,12 +222,16 @@ final class NetworkBufferTypes {
                 return -1;
             },
             buffer -> {
-                NBTReader nbtReader = new NBTReader(new InputStream() {
-                    @Override
-                    public int read() {
-                        return buffer.read(BYTE);
-                    }
-                }, CompressedProcesser.NONE);
+                NBTReader nbtReader = buffer.nbtReader;
+                if (nbtReader == null) {
+                    nbtReader = new NBTReader(new InputStream() {
+                        @Override
+                        public int read() {
+                            return buffer.read(BYTE);
+                        }
+                    }, CompressedProcesser.NONE);
+                    buffer.nbtReader = nbtReader;
+                }
                 try {
                     return nbtReader.read();
                 } catch (IOException | NBTException e) {
