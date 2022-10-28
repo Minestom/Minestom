@@ -1,6 +1,6 @@
 package net.minestom.server;
 
-public class Git {
+public final class Git {
     private static final String COMMIT = "&COMMIT";
     private static final String BRANCH = "&BRANCH";
 
