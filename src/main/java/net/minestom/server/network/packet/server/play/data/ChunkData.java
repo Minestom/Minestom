@@ -2,9 +2,7 @@ package net.minestom.server.network.packet.server.play.data;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
-                        @NotNull Map<Integer, Block> blockEntities) implements Writeable {
+                        @NotNull Map<Integer, Block> blockEntities) implements NetworkBuffer.Writer {
     public ChunkData {
         blockEntities = blockEntities.entrySet()
                 .stream()
@@ -23,44 +23,43 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public ChunkData(BinaryReader reader) {
-        this((NBTCompound) reader.readTag(), reader.readByteArray(),
+    public ChunkData(@NotNull NetworkBuffer reader) {
+        this((NBTCompound) reader.read(NBT), reader.read(BYTE_ARRAY),
                 readBlockEntities(reader));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
+    public void write(@NotNull NetworkBuffer writer) {
         // Heightmaps
-        writer.writeNBT("", this.heightmaps);
+        writer.write(NBT, this.heightmaps);
         // Data
-        writer.writeVarInt(data.length);
-        writer.writeBytes(data);
+        writer.write(BYTE_ARRAY, data);
         // Block entities
-        writer.writeVarInt(blockEntities.size());
+        writer.write(VAR_INT, blockEntities.size());
         for (var entry : blockEntities.entrySet()) {
             final int index = entry.getKey();
             final Block block = entry.getValue();
             final var registry = block.registry();
 
             final Point point = ChunkUtils.getBlockPosition(index, 0, 0);
-            writer.writeByte((byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
-            writer.writeShort((short) point.blockY()); // y
+            writer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
+            writer.write(SHORT, (short) point.blockY()); // y
 
-            writer.writeVarInt(registry.blockEntityId());
+            writer.write(VAR_INT, registry.blockEntityId());
             final NBTCompound nbt = BlockUtils.extractClientNbt(block);
             assert nbt != null;
-            writer.writeNBT("", nbt); // block nbt
+            writer.write(NBT, nbt); // block nbt
         }
     }
 
-    private static Map<Integer, Block> readBlockEntities(BinaryReader reader) {
+    private static Map<Integer, Block> readBlockEntities(@NotNull NetworkBuffer reader) {
         final Map<Integer, Block> blockEntities = new HashMap<>();
-        final int size = reader.readVarInt();
+        final int size = reader.read(VAR_INT);
         for (int i = 0; i < size; i++) {
-            final byte xz = reader.readByte();
-            final short y = reader.readShort();
-            final int blockEntityId = reader.readVarInt();
-            final NBTCompound nbt = (NBTCompound) reader.readTag();
+            final byte xz = reader.read(BYTE);
+            final short y = reader.read(SHORT);
+            final int blockEntityId = reader.read(VAR_INT);
+            final NBTCompound nbt = (NBTCompound) reader.read(NBT);
             // TODO create block object
         }
         return blockEntities;

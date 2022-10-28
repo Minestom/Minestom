@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -26,14 +25,14 @@ public record ClientSettingsPacket(@NotNull String locale, byte viewDistance,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(locale);
-        writer.writeByte(viewDistance);
-        writer.writeVarInt(chatMessageType.getPacketID());
-        writer.writeBoolean(chatColors);
-        writer.writeByte(displayedSkinParts);
-        writer.writeVarInt(mainHand.ordinal());
-        writer.writeBoolean(enableTextFiltering);
-        writer.writeBoolean(allowsListing);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, locale);
+        writer.write(BYTE, viewDistance);
+        writer.write(VAR_INT, chatMessageType.getPacketID());
+        writer.write(BOOLEAN, chatColors);
+        writer.write(BYTE, displayedSkinParts);
+        writer.write(VAR_INT, mainHand.ordinal());
+        writer.write(BOOLEAN, enableTextFiltering);
+        writer.write(BOOLEAN, allowsListing);
     }
 }

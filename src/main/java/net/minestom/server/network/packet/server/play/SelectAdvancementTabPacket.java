@@ -1,21 +1,21 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static net.minestom.server.network.NetworkBuffer.STRING;
+
 public record SelectAdvancementTabPacket(@Nullable String identifier) implements ServerPacket {
-    public SelectAdvancementTabPacket(BinaryReader reader) {
-        this(reader.readBoolean() ? reader.readSizedString() : null);
+    public SelectAdvancementTabPacket(@NotNull NetworkBuffer reader) {
+        this(reader.readOptional(STRING));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBoolean(identifier != null);
-        if (identifier != null) writer.writeSizedString(identifier);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.writeOptional(STRING, identifier);
     }
 
     @Override

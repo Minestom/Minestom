@@ -1,21 +1,22 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record OpenHorseWindowPacket(byte windowId, int slotCount, int entityId) implements ServerPacket {
-    public OpenHorseWindowPacket(BinaryReader reader) {
-        this(reader.readByte(), reader.readVarInt(), reader.readInt());
+    public OpenHorseWindowPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BYTE), reader.read(VAR_INT), reader.read(INT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(windowId);
-        writer.writeVarInt(slotCount);
-        writer.writeInt(entityId);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, windowId);
+        writer.write(VAR_INT, slotCount);
+        writer.write(INT, entityId);
     }
 
     @Override

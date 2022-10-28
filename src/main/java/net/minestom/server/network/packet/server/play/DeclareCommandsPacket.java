@@ -1,17 +1,17 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Readable;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                                     int rootIndex) implements ServerPacket {
@@ -19,18 +19,18 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         nodes = List.copyOf(nodes);
     }
 
-    public DeclareCommandsPacket(@NotNull BinaryReader reader) {
-        this(reader.readVarIntList(r -> {
+    public DeclareCommandsPacket(@NotNull NetworkBuffer reader) {
+        this(reader.readCollection(r -> {
             Node node = new Node();
             node.read(r);
             return node;
-        }), reader.readVarInt());
+        }), reader.read(VAR_INT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarIntList(nodes, BinaryWriter::write);
-        writer.writeVarInt(rootIndex);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.writeCollection(nodes);
+        writer.write(VAR_INT, rootIndex);
     }
 
     @Override
@@ -38,7 +38,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
-    public static final class Node implements Writeable, Readable {
+    public static final class Node implements NetworkBuffer.Writer {
         public byte flags;
         public int[] children = new int[0];
         public int redirectedNode; // Only if flags & 0x08
@@ -48,80 +48,80 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         public String suggestionsType = ""; // Only if flags 0x10
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeByte(flags);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(BYTE, flags);
 
             if (children != null && children.length > 262114) {
                 throw new RuntimeException("Children length " + children.length + " is bigger than the maximum allowed " + 262114);
             }
-            writer.writeVarIntArray(children);
+            writer.write(VAR_INT_ARRAY, children);
 
             if ((flags & 0x08) != 0) {
-                writer.writeVarInt(redirectedNode);
+                writer.write(VAR_INT, redirectedNode);
             }
 
             if (isLiteral() || isArgument()) {
-                writer.writeSizedString(name);
+                writer.write(STRING, name);
             }
 
             if (isArgument()) {
                 final int parserId = Argument.CONTAINER.toId(parser);
-                writer.writeVarInt(parserId);
+                writer.write(VAR_INT, parserId);
                 if (properties != null) {
-                    writer.writeBytes(properties);
+                    writer.write(RAW_BYTES, properties);
                 }
             }
 
             if ((flags & 0x10) != 0) {
-                writer.writeSizedString(suggestionsType);
+                writer.write(STRING, suggestionsType);
             }
         }
 
-        @Override
-        public void read(@NotNull BinaryReader reader) {
-            flags = reader.readByte();
-            children = reader.readVarIntArray();
+        public void read(@NotNull NetworkBuffer reader) {
+            flags = reader.read(BYTE);
+            children = reader.read(VAR_INT_ARRAY);
             if ((flags & 0x08) != 0) {
-                redirectedNode = reader.readVarInt();
+                redirectedNode = reader.read(VAR_INT);
             }
 
             if (isLiteral() || isArgument()) {
-                name = reader.readSizedString();
+                name = reader.read(STRING);
             }
 
             if (isArgument()) {
-                final ProtocolObject object = Argument.CONTAINER.getId(reader.readVarInt());
+                final ProtocolObject object = Argument.CONTAINER.getId(reader.read(VAR_INT));
                 parser = object.name();
-                properties = getProperties(reader, parser);
+                properties = new byte[0];//getProperties(reader, parser);
             }
 
             if ((flags & 0x10) != 0) {
-                suggestionsType = reader.readSizedString();
+                suggestionsType = reader.read(STRING);
             }
         }
 
-        private byte[] getProperties(BinaryReader reader, String parser) {
-            final Function<Function<BinaryReader, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes(() -> {
-                byte flags = reader.readByte();
-                if ((flags & 0x01) == 0x01) {
-                    via.apply(reader); // min
-                }
-                if ((flags & 0x02) == 0x02) {
-                    via.apply(reader); // max
-                }
-            });
-            return switch (parser) {
-                case "brigadier:double" -> minMaxExtractor.apply(BinaryReader::readDouble);
-                case "brigadier:integer" -> minMaxExtractor.apply(BinaryReader::readInt);
-                case "brigadier:float" -> minMaxExtractor.apply(BinaryReader::readFloat);
-                case "brigadier:long" -> minMaxExtractor.apply(BinaryReader::readLong);
-                case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
-                case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(reader::readByte);
-                case "minecraft:range" -> reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
-                case "minecraft:resource_or_tag", "minecraft:registry" -> reader.extractBytes(reader::readSizedString);
-                default -> new byte[0]; // unknown
-            };
-        }
+        //private byte[] getProperties(NetworkBuffer reader, String parser) {
+        //    final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes(() -> {
+        //        byte flags = reader.read(BYTE);
+        //        if ((flags & 0x01) == 0x01) {
+        //            via.apply(reader); // min
+        //        }
+        //        if ((flags & 0x02) == 0x02) {
+        //            via.apply(reader); // max
+        //        }
+        //    });
+        //    return switch (parser) {
+        //        case "brigadier:double" -> minMaxExtractor.apply(BinaryReader::readDouble);
+        //        case "brigadier:integer" -> minMaxExtractor.apply(BinaryReader::readInt);
+        //        case "brigadier:float" -> minMaxExtractor.apply(BinaryReader::readFloat);
+        //        case "brigadier:long" -> minMaxExtractor.apply(BinaryReader::readLong);
+        //        case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
+        //        case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(reader::readByte);
+        //        case "minecraft:range" ->
+        //                reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+        //        case "minecraft:resource_or_tag", "minecraft:registry" -> reader.extractBytes(reader::readSizedString);
+        //        default -> new byte[0]; // unknown
+        //    };
+        //}
 
         private boolean isLiteral() {
             return (flags & 0b1) != 0;

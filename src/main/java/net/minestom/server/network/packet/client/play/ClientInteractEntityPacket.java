@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,14 +19,14 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(targetId);
-        writer.writeVarInt(type.id());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, targetId);
+        writer.write(VAR_INT, type.id());
         writer.write(type);
-        writer.writeBoolean(sneaking);
+        writer.write(BOOLEAN, sneaking);
     }
 
-    public sealed interface Type extends Writeable
+    public sealed interface Type extends Writer
             permits Interact, Attack, InteractAt {
         int id();
     }
@@ -38,8 +37,8 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarInt(hand.ordinal());
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeEnum(Player.Hand.class, hand);
         }
 
         @Override
@@ -50,7 +49,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
 
     public record Attack() implements Type {
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull NetworkBuffer writer) {
             // Empty
         }
 
@@ -68,11 +67,11 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeFloat(targetX);
-            writer.writeFloat(targetY);
-            writer.writeFloat(targetZ);
-            writer.writeVarInt(hand.ordinal());
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(FLOAT, targetX);
+            writer.write(FLOAT, targetY);
+            writer.write(FLOAT, targetZ);
+            writer.writeEnum(Player.Hand.class, hand);
         }
 
         @Override

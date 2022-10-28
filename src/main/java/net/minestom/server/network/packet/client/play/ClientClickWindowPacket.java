@@ -3,8 +3,6 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,25 +24,25 @@ public record ClientClickWindowPacket(byte windowId, int stateId,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(windowId);
-        writer.writeVarInt(stateId);
-        writer.writeShort(slot);
-        writer.writeByte(button);
-        writer.writeVarInt(clickType.ordinal());
-        writer.writeVarIntList(changedSlots, BinaryWriter::write);
-        writer.writeItemStack(clickedItem);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, windowId);
+        writer.write(VAR_INT, stateId);
+        writer.write(SHORT, slot);
+        writer.write(BYTE, button);
+        writer.write(VAR_INT, clickType.ordinal());
+        writer.writeCollection(changedSlots);
+        writer.write(ITEM, clickedItem);
     }
 
-    public record ChangedSlot(short slot, @NotNull ItemStack item) implements Writeable {
+    public record ChangedSlot(short slot, @NotNull ItemStack item) implements NetworkBuffer.Writer {
         public ChangedSlot(@NotNull NetworkBuffer reader) {
             this(reader.read(SHORT), reader.read(ITEM));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeShort(slot);
-            writer.writeItemStack(item);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(SHORT, slot);
+            writer.write(ITEM, item);
         }
     }
 

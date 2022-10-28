@@ -15,7 +15,6 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
@@ -40,15 +39,15 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(protocolVersion);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, protocolVersion);
         int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
         if (serverAddress.length() > maxLength) {
             throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
-        writer.writeSizedString(serverAddress);
-        writer.writeUnsignedShort(serverPort);
-        writer.writeVarInt(nextState);
+        writer.write(STRING, serverAddress);
+        writer.write(SHORT, (short) serverPort);
+        writer.write(VAR_INT, nextState);
     }
 
     @Override

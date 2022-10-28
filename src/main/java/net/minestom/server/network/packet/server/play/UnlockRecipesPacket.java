@@ -1,13 +1,14 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record UnlockRecipesPacket(int mode,
                                   boolean craftingRecipeBookOpen, boolean craftingRecipeBookFilterActive,
@@ -23,7 +24,7 @@ public record UnlockRecipesPacket(int mode,
         }
     }
 
-    public UnlockRecipesPacket(BinaryReader reader) {
+    public UnlockRecipesPacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
 
@@ -36,18 +37,18 @@ public record UnlockRecipesPacket(int mode,
                 packet.recipeIds, packet.initRecipeIds);
     }
 
-    private static UnlockRecipesPacket read(BinaryReader reader) {
-        var mode = reader.readVarInt();
-        var craftingRecipeBookOpen = reader.readBoolean();
-        var craftingRecipeBookFilterActive = reader.readBoolean();
-        var smeltingRecipeBookOpen = reader.readBoolean();
-        var smeltingRecipeBookFilterActive = reader.readBoolean();
-        var blastFurnaceRecipeBookOpen = reader.readBoolean();
-        var blastFurnaceRecipeBookFilterActive = reader.readBoolean();
-        var smokerRecipeBookOpen = reader.readBoolean();
-        var smokerRecipeBookFilterActive = reader.readBoolean();
-        var recipeIds = reader.readVarIntList(BinaryReader::readSizedString);
-        var initRecipeIds = mode == 0 ? reader.readVarIntList(BinaryReader::readSizedString) : null;
+    private static UnlockRecipesPacket read(@NotNull NetworkBuffer reader) {
+        var mode = reader.read(VAR_INT);
+        var craftingRecipeBookOpen = reader.read(BOOLEAN);
+        var craftingRecipeBookFilterActive = reader.read(BOOLEAN);
+        var smeltingRecipeBookOpen = reader.read(BOOLEAN);
+        var smeltingRecipeBookFilterActive = reader.read(BOOLEAN);
+        var blastFurnaceRecipeBookOpen = reader.read(BOOLEAN);
+        var blastFurnaceRecipeBookFilterActive = reader.read(BOOLEAN);
+        var smokerRecipeBookOpen = reader.read(BOOLEAN);
+        var smokerRecipeBookFilterActive = reader.read(BOOLEAN);
+        var recipeIds = reader.readCollection(STRING);
+        var initRecipeIds = mode == 0 ? reader.readCollection(STRING) : null;
         return new UnlockRecipesPacket(mode,
                 craftingRecipeBookOpen, craftingRecipeBookFilterActive,
                 smeltingRecipeBookOpen, smeltingRecipeBookFilterActive,
@@ -57,20 +58,20 @@ public record UnlockRecipesPacket(int mode,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(mode);
-        writer.writeBoolean(craftingRecipeBookOpen);
-        writer.writeBoolean(craftingRecipeBookFilterActive);
-        writer.writeBoolean(smeltingRecipeBookOpen);
-        writer.writeBoolean(smeltingRecipeBookFilterActive);
-        writer.writeBoolean(blastFurnaceRecipeBookOpen);
-        writer.writeBoolean(blastFurnaceRecipeBookFilterActive);
-        writer.writeBoolean(smokerRecipeBookOpen);
-        writer.writeBoolean(smokerRecipeBookFilterActive);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, mode);
+        writer.write(BOOLEAN, craftingRecipeBookOpen);
+        writer.write(BOOLEAN, craftingRecipeBookFilterActive);
+        writer.write(BOOLEAN, smeltingRecipeBookOpen);
+        writer.write(BOOLEAN, smeltingRecipeBookFilterActive);
+        writer.write(BOOLEAN, blastFurnaceRecipeBookOpen);
+        writer.write(BOOLEAN, blastFurnaceRecipeBookFilterActive);
+        writer.write(BOOLEAN, smokerRecipeBookOpen);
+        writer.write(BOOLEAN, smokerRecipeBookFilterActive);
 
-        writer.writeVarIntList(recipeIds, BinaryWriter::writeSizedString);
+        writer.writeCollection(STRING, recipeIds);
         if (mode == 0) {
-            writer.writeVarIntList(initRecipeIds, BinaryWriter::writeSizedString);
+            writer.writeCollection(STRING, initRecipeIds);
         }
     }
 

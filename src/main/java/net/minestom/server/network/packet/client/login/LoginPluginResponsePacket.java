@@ -12,7 +12,6 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,9 +76,8 @@ public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) i
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(messageId);
-        writer.writeBoolean(data != null);
-        if (data != null) writer.writeBytes(data);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, messageId);
+        writer.writeOptional(RAW_BYTES, data);
     }
 }

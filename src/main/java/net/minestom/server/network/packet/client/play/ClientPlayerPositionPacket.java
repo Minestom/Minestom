@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
@@ -18,10 +17,10 @@ public record ClientPlayerPositionPacket(@NotNull Point position,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(position.x());
-        writer.writeDouble(position.y());
-        writer.writeDouble(position.z());
-        writer.writeBoolean(onGround);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(DOUBLE, position.x());
+        writer.write(DOUBLE, position.y());
+        writer.write(DOUBLE, position.z());
+        writer.write(BOOLEAN, onGround);
     }
 }

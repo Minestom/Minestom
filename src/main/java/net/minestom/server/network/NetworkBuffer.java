@@ -2,7 +2,9 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +18,8 @@ import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @ApiStatus.Experimental
@@ -38,7 +42,20 @@ public final class NetworkBuffer {
     public static final Type<ItemStack> ITEM = NetworkBufferTypes.ITEM;
 
     public static final Type<byte[]> BYTE_ARRAY = NetworkBufferTypes.BYTE_ARRAY;
+    public static final Type<long[]> LONG_ARRAY = NetworkBufferTypes.LONG_ARRAY;
     public static final Type<int[]> VAR_INT_ARRAY = NetworkBufferTypes.VAR_INT_ARRAY;
+    public static final Type<long[]> VAR_LONG_ARRAY = NetworkBufferTypes.VAR_LONG_ARRAY;
+
+    // METADATA
+    public static final Type<Component> OPT_CHAT = NetworkBufferTypes.OPT_CHAT;
+    public static final Type<Point> ROTATION = NetworkBufferTypes.ROTATION;
+    public static final Type<Point> OPT_BLOCK_POSITION = NetworkBufferTypes.OPT_BLOCK_POSITION;
+    public static final Type<Direction> DIRECTION = NetworkBufferTypes.DIRECTION;
+    public static final Type<UUID> OPT_UUID = NetworkBufferTypes.OPT_UUID;
+    public static final Type<Integer> OPT_BLOCK_ID = NetworkBufferTypes.OPT_BLOCK_ID;
+    public static final Type<int[]> VILLAGER_DATA = NetworkBufferTypes.VILLAGER_DATA;
+    public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypes.OPT_VAR_INT;
+    public static final Type<Entity.Pose> POSE = NetworkBufferTypes.POSE;
 
     ByteBuffer nioBuffer;
     final boolean resizable;
@@ -74,6 +91,10 @@ public final class NetworkBuffer {
         if (length != -1) this.writeIndex += length;
     }
 
+    public <T> void write(@NotNull Writer writer) {
+        writer.write(this);
+    }
+
     public <T> @NotNull T read(@NotNull Type<T> type) {
         var impl = (NetworkBufferTypes.TypeImpl<T>) type;
         return impl.reader().read(this);
@@ -82,6 +103,11 @@ public final class NetworkBuffer {
     public <T> void writeOptional(@NotNull Type<T> type, @Nullable T value) {
         write(BOOLEAN, value != null);
         if (value != null) write(type, value);
+    }
+
+    public void writeOptional(@Nullable Writer writer) {
+        write(BOOLEAN, writer != null);
+        if (writer != null) write(writer);
     }
 
     public <T> @Nullable T readOptional(@NotNull Type<T> type) {
@@ -108,6 +134,29 @@ public final class NetworkBuffer {
         writeCollection(type, values == null ? null : List.of(values));
     }
 
+    public <T extends Writer> void writeCollection(@Nullable Collection<@NotNull T> values) {
+        if (values == null) {
+            write(BYTE, (byte) 0);
+            return;
+        }
+        write(VAR_INT, values.size());
+        for (T value : values) {
+            write(value);
+        }
+    }
+
+    public <T> void writeCollection(@Nullable Collection<@NotNull T> values,
+                                    @NotNull BiConsumer<@NotNull NetworkBuffer, @NotNull T> consumer) {
+        if (values == null) {
+            write(BYTE, (byte) 0);
+            return;
+        }
+        write(VAR_INT, values.size());
+        for (T value : values) {
+            consumer.accept(this, value);
+        }
+    }
+
     public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type) {
         final int size = read(VAR_INT);
         final List<T> values = new java.util.ArrayList<>(size);
@@ -126,6 +175,16 @@ public final class NetworkBuffer {
         return values;
     }
 
+    public <L, R> void writeEither(Either<L, R> either, BiConsumer<NetworkBuffer, L> leftWriter, BiConsumer<NetworkBuffer, R> rightWriter) {
+        if (either.isLeft()) {
+            write(BOOLEAN, true);
+            leftWriter.accept(this, either.left());
+        } else {
+            write(BOOLEAN, false);
+            rightWriter.accept(this, either.right());
+        }
+    }
+
     public <L, R> @NotNull Either<L, R> readEither(@NotNull Function<NetworkBuffer, L> leftReader, Function<NetworkBuffer, R> rightReader) {
         if (read(BOOLEAN)) {
             return Either.left(leftReader.apply(this));
@@ -134,12 +193,29 @@ public final class NetworkBuffer {
         }
     }
 
-    public <E> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
+    public <E extends Enum<?>> void writeEnum(@NotNull Class<E> enumClass, @NotNull E value) {
+        write(VAR_INT, value.ordinal());
+    }
+
+    public <E extends Enum<?>> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
         return enumClass.getEnumConstants()[read(VAR_INT)];
+    }
+
+    public byte[] readBytes(int length) {
+        byte[] bytes = new byte[length];
+        nioBuffer.get(readIndex, bytes, 0, length);
+        readIndex += length;
+        return bytes;
     }
 
     public void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length) {
         this.nioBuffer.get(srcOffset, dest, destOffset, length);
+    }
+
+    public byte[] toByteArray() {
+        byte[] bytes = new byte[this.nioBuffer.remaining()];
+        this.nioBuffer.get(bytes);
+        return bytes;
     }
 
     public void clear() {
@@ -183,6 +259,18 @@ public final class NetworkBuffer {
         }
     }
 
+
     public sealed interface Type<T> permits NetworkBufferTypes.TypeImpl {
+    }
+
+    @FunctionalInterface
+    public interface Writer {
+        void write(@NotNull NetworkBuffer writer);
+    }
+
+    public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
+        NetworkBuffer writer = new NetworkBuffer();
+        writing.accept(writer);
+        return writer.toByteArray();
     }
 }

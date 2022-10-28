@@ -2,11 +2,12 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
                                 byte actionParam, int blockId) implements ServerPacket {
@@ -14,17 +15,17 @@ public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
         this(blockPosition, actionId, actionParam, block.id());
     }
 
-    public BlockActionPacket(BinaryReader reader) {
-        this(reader.readBlockPosition(), reader.readByte(),
-                reader.readByte(), reader.readVarInt());
+    public BlockActionPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BLOCK_POSITION), reader.read(BYTE),
+                reader.read(BYTE), reader.read(VAR_INT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBlockPosition(blockPosition);
-        writer.writeByte(actionId);
-        writer.writeByte(actionParam);
-        writer.writeVarInt(blockId);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BLOCK_POSITION, blockPosition);
+        writer.write(BYTE, actionId);
+        writer.write(BYTE, actionParam);
+        writer.write(VAR_INT, blockId);
     }
 
     @Override
