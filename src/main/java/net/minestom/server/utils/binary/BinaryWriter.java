@@ -2,10 +2,10 @@ package net.minestom.server.utils.binary;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Either;
-import net.minestom.server.utils.SerializerUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -160,7 +160,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeBlockPosition(int x, int y, int z) {
-        writeLong(SerializerUtils.positionToLong(x, y, z));
+        this.buffer.write(BLOCK_POSITION, new Vec(x, y, z));
     }
 
     public void writeItemStack(@NotNull ItemStack itemStack) {

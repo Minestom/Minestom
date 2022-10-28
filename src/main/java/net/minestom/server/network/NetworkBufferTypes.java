@@ -2,6 +2,8 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -168,6 +170,7 @@ final class NetworkBufferTypes {
             },
             buffer -> {
                 final int length = buffer.readableBytes();
+                assert length > 0 : "Invalid remaining: " + length;
                 final byte[] bytes = new byte[length];
                 buffer.nioBuffer.get(buffer.readIndex(), bytes);
                 buffer.readIndex += length;
@@ -214,6 +217,24 @@ final class NetworkBufferTypes {
                 } catch (IOException | NBTException e) {
                     throw new RuntimeException(e);
                 }
+            });
+    static final TypeImpl<Point> BLOCK_POSITION = new TypeImpl<>(Point.class,
+            (buffer, value) -> {
+                final int blockX = value.blockX();
+                final int blockY = value.blockY();
+                final int blockZ = value.blockZ();
+                final long longPos = (((long) blockX & 0x3FFFFFF) << 38) |
+                        (((long) blockZ & 0x3FFFFFF) << 12) |
+                        ((long) blockY & 0xFFF);
+                buffer.write(LONG, longPos);
+                return -1;
+            },
+            buffer -> {
+                final long value = buffer.read(LONG);
+                final int x = (int) (value >> 38);
+                final int y = (int) (value << 52 >> 52);
+                final int z = (int) (value << 26 >> 38);
+                return new Vec(x, y, z);
             });
     static final TypeImpl<Component> COMPONENT = new TypeImpl<>(Component.class,
             (buffer, value) -> {

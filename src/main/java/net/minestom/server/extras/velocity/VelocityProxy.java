@@ -49,7 +49,8 @@ public final class VelocityProxy {
 
     public static boolean checkIntegrity(@NotNull BinaryReader reader) {
         final byte[] signature = reader.readBytes(32);
-        ByteBuffer buf = reader.getBuffer();
+        // TODO
+        ByteBuffer buf = null;//reader.getBuffer();
         buf.mark();
         final byte[] data = reader.readRemainingBytes();
         buf.reset();

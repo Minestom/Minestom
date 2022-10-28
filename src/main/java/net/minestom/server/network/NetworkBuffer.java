@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,6 @@ import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
@@ -28,6 +28,7 @@ public final class NetworkBuffer {
     public static final Type<byte[]> RAW_BYTES = NetworkBufferTypes.RAW_BYTES;
     public static final Type<String> STRING = NetworkBufferTypes.STRING;
     public static final Type<NBT> NBT = NetworkBufferTypes.NBT;
+    public static final Type<Point> BLOCK_POSITION = NetworkBufferTypes.BLOCK_POSITION;
     public static final Type<Component> COMPONENT = NetworkBufferTypes.COMPONENT;
     public static final Type<UUID> UUID = NetworkBufferTypes.UUID;
     public static final Type<ItemStack> ITEM = NetworkBufferTypes.ITEM;
@@ -119,13 +120,21 @@ public final class NetworkBuffer {
         return readIndex;
     }
 
+    public void writeIndex(int writeIndex) {
+        this.writeIndex = writeIndex;
+    }
+
+    public void readIndex(int readIndex) {
+        this.readIndex = readIndex;
+    }
+
     public int skipWrite(int length) {
         final int oldWriteIndex = writeIndex;
         writeIndex += length;
         return oldWriteIndex;
     }
 
-    int readableBytes() {
+    public int readableBytes() {
         return writeIndex - readIndex;
     }
 

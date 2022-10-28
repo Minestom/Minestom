@@ -18,6 +18,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class NetworkBufferTest {
 
     @Test
+    public void readableBytes() {
+        var buffer = new NetworkBuffer();
+        assertEquals(0, buffer.readableBytes());
+
+        buffer.write(NetworkBuffer.BYTE, (byte) 0);
+        assertEquals(1, buffer.readableBytes());
+
+        buffer.write(NetworkBuffer.LONG, 50L);
+        assertEquals(9, buffer.readableBytes());
+
+        assertEquals((byte) 0, buffer.read(NetworkBuffer.BYTE));
+        assertEquals(8, buffer.readableBytes());
+
+        assertEquals(50L, buffer.read(NetworkBuffer.LONG));
+        assertEquals(0, buffer.readableBytes());
+    }
+
+    @Test
     public void numbers() {
         assertBufferType(NetworkBuffer.BOOLEAN, false, new byte[]{0x00});
         assertBufferType(NetworkBuffer.BOOLEAN, true, new byte[]{0x01});
@@ -133,6 +151,12 @@ public class NetworkBufferTest {
         assertBufferType(NetworkBuffer.VAR_LONG, -1L, new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x01});
         assertBufferType(NetworkBuffer.VAR_LONG, -2147483648L, new byte[]{(byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0xf8, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, 0x01});
         assertBufferType(NetworkBuffer.VAR_LONG, -9223372036854775808L, new byte[]{(byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, (byte) 0x80, 0x01});
+    }
+
+    @Test
+    public void rawBytes() {
+        assertBufferType(NetworkBuffer.RAW_BYTES, new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64},
+                new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
     }
 
     @Test
