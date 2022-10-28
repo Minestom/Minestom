@@ -35,6 +35,19 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void makeArray() {
+        assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
+        }));
+
+        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(buffer -> buffer.write(NetworkBuffer.BYTE, (byte) 1)));
+
+        assertArrayEquals(new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50}, NetworkBuffer.makeArray(buffer -> {
+            buffer.write(NetworkBuffer.BYTE, (byte) 1);
+            buffer.write(NetworkBuffer.LONG, 50L);
+        }));
+    }
+
+    @Test
     public void numbers() {
         assertBufferType(NetworkBuffer.BOOLEAN, false, new byte[]{0x00});
         assertBufferType(NetworkBuffer.BOOLEAN, true, new byte[]{0x01});

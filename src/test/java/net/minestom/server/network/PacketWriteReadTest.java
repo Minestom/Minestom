@@ -19,9 +19,6 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.PongPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -144,13 +141,13 @@ public class PacketWriteReadTest {
         CLIENT_PACKETS.forEach(PacketWriteReadTest::testPacket);
     }
 
-    private static void testPacket(Writeable writeable) {
+    private static void testPacket(NetworkBuffer.Writer writeable) {
         try {
-            BinaryWriter writer = new BinaryWriter();
-            writeable.write(writer);
-            var readerConstructor = writeable.getClass().getConstructor(BinaryReader.class);
+            byte[] bytes = NetworkBuffer.makeArray(buffer -> buffer.write(writeable));
+            var readerConstructor = writeable.getClass().getConstructor(NetworkBuffer.class);
 
-            BinaryReader reader = new BinaryReader(writer.toByteArray());
+            NetworkBuffer reader = new NetworkBuffer();
+            reader.write(NetworkBuffer.RAW_BYTES, bytes);
             var createdPacket = readerConstructor.newInstance(reader);
             assertEquals(writeable, createdPacket);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException

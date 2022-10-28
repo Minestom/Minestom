@@ -212,12 +212,6 @@ public final class NetworkBuffer {
         this.nioBuffer.get(srcOffset, dest, destOffset, length);
     }
 
-    public byte[] toByteArray() {
-        byte[] bytes = new byte[this.nioBuffer.remaining()];
-        this.nioBuffer.get(bytes);
-        return bytes;
-    }
-
     public void clear() {
         this.writeIndex = 0;
         this.readIndex = 0;
@@ -271,6 +265,8 @@ public final class NetworkBuffer {
     public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
         NetworkBuffer writer = new NetworkBuffer();
         writing.accept(writer);
-        return writer.toByteArray();
+        byte[] bytes = new byte[writer.writeIndex];
+        writer.copyTo(0, bytes, 0, bytes.length);
+        return bytes;
     }
 }

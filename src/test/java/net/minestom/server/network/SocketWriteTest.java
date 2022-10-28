@@ -4,12 +4,13 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
+import static net.minestom.server.network.NetworkBuffer.INT;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -17,8 +18,8 @@ public class SocketWriteTest {
 
     record IntPacket(int value) implements ServerPacket {
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeInt(value);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(INT, value);
         }
 
         @Override
@@ -29,8 +30,8 @@ public class SocketWriteTest {
 
     record CompressiblePacket(String value) implements ServerPacket {
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(value);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, value);
         }
 
         @Override

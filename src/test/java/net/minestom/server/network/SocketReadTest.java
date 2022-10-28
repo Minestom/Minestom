@@ -6,7 +6,6 @@ import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.BinaryReader;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -38,7 +37,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
+        var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -63,7 +62,7 @@ public class SocketReadTest {
         assertEquals(2, packets.size());
         for (var rawPacket : packets) {
             assertEquals(0x0A, rawPacket.left());
-            var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
+            var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
             assertEquals("channel", readPacket.channel());
             assertEquals(2000, readPacket.data().length);
         }
@@ -92,7 +91,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
+        var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -120,7 +119,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = new ClientPluginMessagePacket(new BinaryReader(rawPacket.right()));
+        var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }

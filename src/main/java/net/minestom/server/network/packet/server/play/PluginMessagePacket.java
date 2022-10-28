@@ -34,8 +34,7 @@ public record PluginMessagePacket(String channel, byte[] data) implements Server
      */
     public static @NotNull PluginMessagePacket getBrandPacket() {
         final String brandName = MinecraftServer.getBrandName();
-        NetworkBuffer writer = new NetworkBuffer(4 + brandName.length());
-        writer.write(STRING, brandName);
-        return new PluginMessagePacket("minecraft:brand", writer.toByteArray());
+        final byte[] data = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(STRING, brandName));
+        return new PluginMessagePacket("minecraft:brand", data);
     }
 }
