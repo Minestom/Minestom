@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -9,8 +10,11 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
+@ApiStatus.Experimental
 public final class NetworkBuffer {
     public static final Type<Boolean> BOOLEAN = NetworkBufferTypes.BOOLEAN;
     public static final Type<Byte> BYTE = NetworkBufferTypes.BYTE;
@@ -28,12 +32,25 @@ public final class NetworkBuffer {
     public static final Type<UUID> UUID = NetworkBufferTypes.UUID;
     public static final Type<ItemStack> ITEM = NetworkBufferTypes.ITEM;
 
-    final ByteBuffer nioBuffer;
+    ByteBuffer nioBuffer;
+    final boolean resizable;
     int writeIndex;
     int readIndex;
 
+    public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
+        this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
+        this.resizable = resizable;
+
+        this.writeIndex = buffer.position();
+        this.readIndex = buffer.position();
+    }
+
+    public NetworkBuffer(@NotNull ByteBuffer buffer) {
+        this(buffer, true);
+    }
+
     public NetworkBuffer(int initialCapacity) {
-        this.nioBuffer = ByteBuffer.allocateDirect(initialCapacity).order(ByteOrder.BIG_ENDIAN);
+        this(ByteBuffer.allocateDirect(initialCapacity), true);
     }
 
     public NetworkBuffer() {
@@ -44,7 +61,6 @@ public final class NetworkBuffer {
         var impl = (NetworkBufferTypes.TypeImpl<T>) type;
         final long length = impl.writer().write(this, value);
         if (length != -1) this.writeIndex += length;
-        assert nioBuffer.position() == 0 : "NIO buffer position is not 0: " + nioBuffer.position();
     }
 
     public <T> @NotNull T read(@NotNull Type<T> type) {
@@ -61,11 +77,20 @@ public final class NetworkBuffer {
         return read(BOOLEAN) ? read(type) : null;
     }
 
-    public <T> void writeCollection(@NotNull Type<T> type, @NotNull Collection<@NotNull T> values) {
+    public <T> void writeCollection(@NotNull Type<T> type, @Nullable Collection<@NotNull T> values) {
+        if (values == null) {
+            write(BYTE, (byte) 0);
+            return;
+        }
         write(VAR_INT, values.size());
         for (T value : values) {
             write(type, value);
         }
+    }
+
+    @SafeVarargs
+    public final <T> void writeCollection(@NotNull Type<T> type, @NotNull T @Nullable ... values) {
+        writeCollection(type, values == null ? null : List.of(values));
     }
 
     public <T> @NotNull Collection<@NotNull T> readCollection(@NotNull Type<T> type) {
@@ -94,8 +119,24 @@ public final class NetworkBuffer {
         return readIndex;
     }
 
+    public int skipWrite(int length) {
+        final int oldWriteIndex = writeIndex;
+        writeIndex += length;
+        return oldWriteIndex;
+    }
+
     int readableBytes() {
         return writeIndex - readIndex;
+    }
+
+    void ensureSize(int length) {
+        if (!resizable) return;
+        if (nioBuffer.capacity() < writeIndex + length) {
+            ByteBuffer newBuffer = ByteBuffer.allocateDirect(nioBuffer.capacity() * 2);
+            nioBuffer.position(0);
+            newBuffer.put(nioBuffer);
+            nioBuffer = newBuffer.clear();
+        }
     }
 
     public sealed interface Type<T> permits NetworkBufferTypes.TypeImpl {

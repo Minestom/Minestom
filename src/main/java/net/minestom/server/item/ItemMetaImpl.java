@@ -42,10 +42,7 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
             writer.writeByte((byte) 0);
             return;
         }
-        BinaryWriter w = new BinaryWriter();
-        w.writeNBT("", nbt);
-        var cachedBuffer = w.getBuffer();
-        writer.write(cachedBuffer.flip());
+        writer.writeNBT("", nbt);
     }
 
     @Override

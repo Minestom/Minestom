@@ -19,6 +19,7 @@ final class NetworkBufferTypes {
 
     static final TypeImpl<Boolean> BOOLEAN = new TypeImpl<>(Boolean.class,
             (buffer, value) -> {
+                buffer.ensureSize(1);
                 buffer.nioBuffer.put(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
                 return 1;
             },
@@ -29,6 +30,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Byte> BYTE = new TypeImpl<>(Byte.class,
             (buffer, value) -> {
+                buffer.ensureSize(1);
                 buffer.nioBuffer.put(buffer.writeIndex(), value);
                 return 1;
             },
@@ -39,6 +41,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Short> SHORT = new TypeImpl<>(Short.class,
             (buffer, value) -> {
+                buffer.ensureSize(2);
                 buffer.nioBuffer.putShort(buffer.writeIndex(), value);
                 return 2;
             },
@@ -49,6 +52,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Integer> INT = new TypeImpl<>(Integer.class,
             (buffer, value) -> {
+                buffer.ensureSize(4);
                 buffer.nioBuffer.putInt(buffer.writeIndex(), value);
                 return 4;
             },
@@ -59,6 +63,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Long> LONG = new TypeImpl<>(Long.class,
             (buffer, value) -> {
+                buffer.ensureSize(8);
                 buffer.nioBuffer.putLong(buffer.writeIndex(), value);
                 return 8;
             },
@@ -69,6 +74,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Float> FLOAT = new TypeImpl<>(Float.class,
             (buffer, value) -> {
+                buffer.ensureSize(4);
                 buffer.nioBuffer.putFloat(buffer.writeIndex(), value);
                 return 4;
             },
@@ -79,6 +85,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Double> DOUBLE = new TypeImpl<>(Double.class,
             (buffer, value) -> {
+                buffer.ensureSize(8);
                 buffer.nioBuffer.putDouble(buffer.writeIndex(), value);
                 return 8;
             },
@@ -89,6 +96,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Integer> VAR_INT = new TypeImpl<>(Integer.class,
             (buffer, value) -> {
+                buffer.ensureSize(5);
                 int size = 0;
                 while (true) {
                     if ((value & ~SEGMENT_BITS) == 0) {
@@ -121,6 +129,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Long> VAR_LONG = new TypeImpl<>(Long.class,
             (buffer, value) -> {
+                buffer.ensureSize(10);
                 int size = 0;
                 while (true) {
                     if ((value & ~((long) SEGMENT_BITS)) == 0) {
@@ -153,6 +162,7 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<byte[]> RAW_BYTES = new TypeImpl<>(byte[].class,
             (buffer, value) -> {
+                buffer.ensureSize(value.length);
                 buffer.nioBuffer.put(buffer.writeIndex(), value);
                 return value.length;
             },
