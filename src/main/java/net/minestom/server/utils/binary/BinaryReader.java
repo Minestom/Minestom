@@ -30,7 +30,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public class BinaryReader extends InputStream {
     private final NetworkBuffer buffer;
 
-    public BinaryReader(NetworkBuffer buffer) {
+    public BinaryReader(@NotNull NetworkBuffer buffer) {
         this.buffer = buffer;
     }
 

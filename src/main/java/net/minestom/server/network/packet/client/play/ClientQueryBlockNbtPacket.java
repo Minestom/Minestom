@@ -9,7 +9,7 @@ import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientQueryBlockNbtPacket(int transactionId, @NotNull Point blockPosition) implements ClientPacket {
-    public ClientQueryBlockNbtPacket(NetworkBuffer reader) {
+    public ClientQueryBlockNbtPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(BLOCK_POSITION));
     }
 

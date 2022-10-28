@@ -12,7 +12,7 @@ public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements
         entries = List.copyOf(entries);
     }
 
-    public LastSeenMessages(NetworkBuffer reader) {
+    public LastSeenMessages(@NotNull NetworkBuffer reader) {
         this(reader.readCollection(Entry::new));
     }
 
@@ -21,7 +21,7 @@ public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements
     }
 
     public record Entry(UUID from, MessageSignature lastSignature) implements NetworkBuffer.Writer {
-        public Entry(NetworkBuffer reader) {
+        public Entry(@NotNull NetworkBuffer reader) {
             this(reader.read(NetworkBuffer.UUID), new MessageSignature(reader));
         }
 
@@ -33,7 +33,7 @@ public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements
     }
 
     public record Update(LastSeenMessages lastSeen, @Nullable Entry lastReceived) implements NetworkBuffer.Writer {
-        public Update(NetworkBuffer reader) {
+        public Update(@NotNull NetworkBuffer reader) {
             this(new LastSeenMessages(reader), reader.readOptional(Entry::new));
         }
 

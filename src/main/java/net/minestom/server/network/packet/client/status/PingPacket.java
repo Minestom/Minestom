@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.LONG;
 
 public record PingPacket(long number) implements ClientPreplayPacket {
-    public PingPacket(NetworkBuffer reader) {
+    public PingPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(LONG));
     }
 

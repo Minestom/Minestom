@@ -33,7 +33,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
-    public HandshakePacket(NetworkBuffer reader) {
+    public HandshakePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(STRING),
                 reader.read(SHORT), reader.read(VAR_INT));
     }

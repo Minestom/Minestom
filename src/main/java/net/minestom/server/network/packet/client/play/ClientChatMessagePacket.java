@@ -18,7 +18,7 @@ public record ClientChatMessagePacket(@NotNull String message,
         }
     }
 
-    public ClientChatMessagePacket(NetworkBuffer reader) {
+    public ClientChatMessagePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING),
                 reader.read(LONG), reader.read(LONG), new MessageSignature(reader),
                 reader.read(BOOLEAN),

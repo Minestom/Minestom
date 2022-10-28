@@ -246,13 +246,12 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record CriterionProgress(@Nullable Long dateOfAchieving) implements NetworkBuffer.Writer {
         public CriterionProgress(@NotNull NetworkBuffer reader) {
-            this(reader.read(BOOLEAN) ? reader.read(LONG) : null);
+            this(reader.readOptional(LONG));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
-            writer.write(BOOLEAN, dateOfAchieving != null);
-            if (dateOfAchieving != null) writer.write(LONG, dateOfAchieving);
+            writer.writeOptional(LONG, dateOfAchieving);
         }
     }
 }

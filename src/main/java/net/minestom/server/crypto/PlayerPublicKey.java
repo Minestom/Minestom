@@ -16,7 +16,7 @@ import static net.minestom.server.network.NetworkBuffer.LONG;
  */
 public record PlayerPublicKey(Instant expiresAt, PublicKey publicKey,
                               byte[] signature) implements NetworkBuffer.Writer {
-    public PlayerPublicKey(NetworkBuffer reader) {
+    public PlayerPublicKey(@NotNull NetworkBuffer reader) {
         this(Instant.ofEpochMilli(reader.read(LONG)),
                 KeyUtils.publicRSAKeyFrom(reader.read(BYTE_ARRAY)), reader.read(BYTE_ARRAY));
     }

@@ -99,7 +99,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             }
         }
 
-        //private byte[] getProperties(NetworkBuffer reader, String parser) {
+        //private byte[] getProperties(@NotNull NetworkBuffer reader, String parser) {
         //    final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes(() -> {
         //        byte flags = reader.read(BYTE);
         //        if ((flags & 0x01) == 0x01) {

@@ -24,22 +24,20 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
                                       @NotNull Component displayName, @Nullable Component teamDisplayName,
                                       @NotNull MessageSignature signature) implements ComponentHoldingServerPacket {
     public PlayerChatMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(COMPONENT), reader.read(BOOLEAN) ? reader.read(COMPONENT) : null,
+        this(reader.read(COMPONENT), reader.readOptional(COMPONENT),
                 reader.read(VAR_INT), reader.read(NetworkBuffer.UUID),
-                reader.read(COMPONENT), reader.read(BOOLEAN) ? reader.read(COMPONENT) : null,
+                reader.read(COMPONENT), reader.readOptional(COMPONENT),
                 new MessageSignature(reader));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(COMPONENT, signedContent);
-        writer.write(BOOLEAN, unsignedContent != null);
-        if (unsignedContent != null) writer.write(COMPONENT, unsignedContent);
+        writer.writeOptional(COMPONENT, unsignedContent);
         writer.write(VAR_INT, type);
         writer.write(UUID, uuid);
         writer.write(COMPONENT, displayName);
-        writer.write(BOOLEAN, teamDisplayName != null);
-        if (teamDisplayName != null) writer.write(COMPONENT, teamDisplayName);
+        writer.writeOptional(COMPONENT, teamDisplayName);
         writer.write(signature);
     }
 

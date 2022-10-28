@@ -26,7 +26,7 @@ public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) i
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
-    public LoginPluginResponsePacket(NetworkBuffer reader) {
+    public LoginPluginResponsePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.readOptional(RAW_BYTES));
     }
 

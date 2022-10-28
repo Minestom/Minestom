@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record SignedMessageHeader(@Nullable MessageSignature previousSignature,
                                   @NotNull UUID sender) implements NetworkBuffer.Writer {
-    public SignedMessageHeader(NetworkBuffer reader) {
+    public SignedMessageHeader(@NotNull NetworkBuffer reader) {
         this(reader.readOptional(MessageSignature::new), reader.read(NetworkBuffer.UUID));
     }
 

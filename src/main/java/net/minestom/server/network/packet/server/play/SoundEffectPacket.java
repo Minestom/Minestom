@@ -15,7 +15,7 @@ public record SoundEffectPacket(int soundId, @NotNull Source source,
                                 int x, int y, int z,
                                 float volume, float pitch, long seed) implements ServerPacket {
     public SoundEffectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), Source.values()[reader.read(VAR_INT)],
+        this(reader.read(VAR_INT), reader.readEnum(Source.class),
                 reader.read(INT) * 8, reader.read(INT) * 8, reader.read(INT) * 8,
                 reader.read(FLOAT), reader.read(FLOAT), reader.read(LONG));
     }

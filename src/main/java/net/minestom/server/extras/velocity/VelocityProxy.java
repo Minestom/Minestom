@@ -45,7 +45,7 @@ public final class VelocityProxy {
         return enabled;
     }
 
-    public static boolean checkIntegrity(NetworkBuffer buffer) {
+    public static boolean checkIntegrity(@NotNull NetworkBuffer buffer) {
         final byte[] signature = new byte[32];
         for (int i = 0; i < signature.length; i++) {
             signature[i] = buffer.read(BYTE);

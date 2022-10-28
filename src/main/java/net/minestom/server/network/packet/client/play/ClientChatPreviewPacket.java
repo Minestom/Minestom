@@ -8,7 +8,7 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientChatPreviewPacket(int queryId, @NotNull String query) implements ClientPacket {
-    public ClientChatPreviewPacket(NetworkBuffer reader) {
+    public ClientChatPreviewPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(STRING));
     }
 

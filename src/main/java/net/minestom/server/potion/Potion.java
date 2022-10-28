@@ -44,7 +44,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         this(effect, amplifier, duration, (byte) 0);
     }
 
-    public Potion(NetworkBuffer reader) {
+    public Potion(@NotNull NetworkBuffer reader) {
         this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
                 reader.read(VAR_INT), reader.read(BYTE));
     }

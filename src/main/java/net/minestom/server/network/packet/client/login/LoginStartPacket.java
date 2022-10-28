@@ -30,7 +30,7 @@ public record LoginStartPacket(@NotNull String username,
                                @Nullable UUID profileId) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
-    public LoginStartPacket(NetworkBuffer reader) {
+    public LoginStartPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.readOptional(PlayerPublicKey::new), reader.readOptional(UUID));
     }
 

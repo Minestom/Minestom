@@ -26,7 +26,7 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
             int modifierCount = reader.read(VAR_INT);
             AttributeInstance instance = new AttributeInstance(attribute, null);
             for (int i = 0; i < modifierCount; i++) {
-                AttributeModifier modifier = new AttributeModifier(reader.read(UUID), "", reader.read(DOUBLE).floatValue(), AttributeOperation.fromId(reader.read(BYTE)));
+                AttributeModifier modifier = new AttributeModifier(reader.read(UUID), "", reader.read(DOUBLE), AttributeOperation.fromId(reader.read(BYTE)));
                 instance.addModifier(modifier);
             }
             return instance;
@@ -49,7 +49,7 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
 
                 for (var modifier : modifiers) {
                     writer.write(UUID, modifier.getId());
-                    writer.write(DOUBLE, (double) modifier.getAmount());
+                    writer.write(DOUBLE, modifier.getAmount());
                     writer.write(BYTE, (byte) modifier.getOperation().getId());
                 }
             }

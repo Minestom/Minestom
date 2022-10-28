@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -19,27 +18,15 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
     }
 
     public TradeListPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), read(reader),
+        this(reader.read(VAR_INT), reader.readCollection(Trade::new),
                 reader.read(VAR_INT), reader.read(VAR_INT),
                 reader.read(BOOLEAN), reader.read(BOOLEAN));
-    }
-
-    private static List<Trade> read(NetworkBuffer reader) {
-        int size = reader.read(BYTE);
-        List<Trade> trades = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            trades.add(new Trade(reader));
-        }
-        return trades;
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, windowId);
-        writer.write(BYTE, (byte) trades.size());
-        for (Trade trade : trades) {
-            trade.write(writer);
-        }
+        writer.writeCollection(trades);
         writer.write(VAR_INT, villagerLevel);
         writer.write(VAR_INT, experience);
         writer.write(BOOLEAN, regularVillager);
@@ -64,7 +51,6 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
-
             writer.write(ITEM, inputItem1);
             writer.write(ITEM, result);
             writer.writeOptional(ITEM, inputItem2);

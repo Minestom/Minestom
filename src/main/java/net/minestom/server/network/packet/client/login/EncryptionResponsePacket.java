@@ -34,7 +34,7 @@ public record EncryptionResponsePacket(byte[] sharedSecret,
                                        Either<byte[], SaltSignaturePair> nonceOrSignature) implements ClientPreplayPacket {
     private static final Gson GSON = new Gson();
 
-    public EncryptionResponsePacket(NetworkBuffer reader) {
+    public EncryptionResponsePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE_ARRAY), reader.readEither(networkBuffer -> networkBuffer.read(BYTE_ARRAY), SaltSignaturePair::new));
     }
 

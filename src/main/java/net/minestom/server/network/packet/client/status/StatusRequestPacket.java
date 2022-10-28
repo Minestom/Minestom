@@ -10,7 +10,7 @@ import net.minestom.server.ping.ServerListPingType;
 import org.jetbrains.annotations.NotNull;
 
 public record StatusRequestPacket() implements ClientPreplayPacket {
-    public StatusRequestPacket(NetworkBuffer reader) {
+    public StatusRequestPacket(@NotNull NetworkBuffer reader) {
         this();
     }
 
