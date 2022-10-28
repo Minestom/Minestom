@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -157,7 +156,7 @@ public class NetworkBufferTest {
     public void rawBytes() {
         // FIXME: currently break because the array is identity compared
         //assertBufferType(NetworkBuffer.RAW_BYTES, new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64},
-          //      new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        //      new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
     }
 
     @Test
@@ -168,7 +167,6 @@ public class NetworkBufferTest {
     @Test
     public void nbt() {
         assertBufferType(NetworkBuffer.NBT, NBT.Int(5));
-        assertBufferType(NetworkBuffer.NBT, NBTCompound.EMPTY);
         assertBufferType(NetworkBuffer.NBT, NBT.Compound(Map.of("key", NBT.Int(5))));
     }
 
