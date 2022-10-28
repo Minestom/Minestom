@@ -22,14 +22,14 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) implements ClientPreplayPacket {
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
-    public LoginPluginResponsePacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readBoolean() ? reader.readRemainingBytes() : null);
+    public LoginPluginResponsePacket(NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.readOptional(RAW_BYTES));
     }
 
     @Override

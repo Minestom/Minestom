@@ -9,13 +9,13 @@ import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,15 +24,16 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.UUID;
+
 public record LoginStartPacket(@NotNull String username,
                                @Nullable PlayerPublicKey publicKey,
                                @Nullable UUID profileId) implements ClientPreplayPacket {
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
-    public LoginStartPacket(BinaryReader reader) {
-        this(reader.readSizedString(16),
-                reader.readBoolean() ? new PlayerPublicKey(reader) : null,
-                reader.readBoolean() ? reader.readUuid() : null);
+    public LoginStartPacket(NetworkBuffer reader) {
+        this(reader.read(STRING), reader.readOptional(PlayerPublicKey::new), reader.readOptional(UUID));
     }
 
     @Override

@@ -1,12 +1,15 @@
 package net.minestom.server.network.packet.client.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
                                    @Nullable String title) implements ClientPacket {
@@ -14,9 +17,9 @@ public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
         pages = List.copyOf(pages);
     }
 
-    public ClientEditBookPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readVarIntList(BinaryReader::readSizedString),
-                reader.readBoolean() ? reader.readSizedString(128) : null);
+    public ClientEditBookPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.readCollection(STRING),
+                reader.readOptional(STRING));
     }
 
     @Override

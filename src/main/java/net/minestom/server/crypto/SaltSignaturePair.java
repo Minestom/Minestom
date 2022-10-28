@@ -1,13 +1,16 @@
 package net.minestom.server.crypto;
 
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+
 public record SaltSignaturePair(long salt, byte[] signature) implements Writeable {
-    public SaltSignaturePair(BinaryReader reader) {
-        this(reader.readLong(), reader.readByteArray());
+    public SaltSignaturePair(NetworkBuffer reader) {
+        this(reader.read(LONG), reader.read(BYTE_ARRAY));
     }
 
     @Override

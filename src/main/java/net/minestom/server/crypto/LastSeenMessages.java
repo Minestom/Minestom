@@ -1,5 +1,6 @@
 package net.minestom.server.crypto;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
@@ -14,8 +15,8 @@ public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements
         entries = List.copyOf(entries);
     }
 
-    public LastSeenMessages(BinaryReader reader) {
-        this(reader.readVarIntList(Entry::new));
+    public LastSeenMessages(NetworkBuffer reader) {
+        this(reader.readCollection(Entry::new));
     }
 
     @Override
@@ -24,8 +25,8 @@ public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements
     }
 
     public record Entry(UUID from, MessageSignature lastSignature) implements Writeable {
-        public Entry(BinaryReader reader) {
-            this(reader.readUuid(), new MessageSignature(reader));
+        public Entry(NetworkBuffer reader) {
+            this(reader.read(NetworkBuffer.UUID), new MessageSignature(reader));
         }
 
         @Override
@@ -36,8 +37,8 @@ public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements
     }
 
     public record Update(LastSeenMessages lastSeen, @Nullable Entry lastReceived) implements Writeable {
-        public Update(BinaryReader reader) {
-            this(new LastSeenMessages(reader), reader.readBoolean() ? new Entry(reader) : null);
+        public Update(NetworkBuffer reader) {
+            this(new LastSeenMessages(reader), reader.readOptional(Entry::new));
         }
 
         @Override

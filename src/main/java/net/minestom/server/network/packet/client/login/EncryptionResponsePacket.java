@@ -7,6 +7,7 @@ import net.minestom.server.crypto.SaltSignaturePair;
 import net.minestom.server.crypto.SignatureValidator;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -29,11 +30,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+
 public record EncryptionResponsePacket(byte[] sharedSecret, Either<byte[], SaltSignaturePair> nonceOrSignature) implements ClientPreplayPacket {
     private static final Gson GSON = new Gson();
 
-    public EncryptionResponsePacket(BinaryReader reader) {
-        this(reader.readByteArray(), reader.readEither(BinaryReader::readByteArray, SaltSignaturePair::new));
+    public EncryptionResponsePacket(NetworkBuffer reader) {
+        this(reader.read(BYTE_ARRAY), reader.readEither(networkBuffer -> networkBuffer.read(BYTE_ARRAY), SaltSignaturePair::new));
     }
 
     @Override

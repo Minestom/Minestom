@@ -3,6 +3,7 @@ package net.minestom.server.network;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,7 @@ import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
@@ -34,6 +36,9 @@ public final class NetworkBuffer {
     public static final Type<Component> COMPONENT = NetworkBufferTypes.COMPONENT;
     public static final Type<UUID> UUID = NetworkBufferTypes.UUID;
     public static final Type<ItemStack> ITEM = NetworkBufferTypes.ITEM;
+
+    public static final Type<byte[]> BYTE_ARRAY = NetworkBufferTypes.BYTE_ARRAY;
+    public static final Type<int[]> VAR_INT_ARRAY = NetworkBufferTypes.VAR_INT_ARRAY;
 
     ByteBuffer nioBuffer;
     final boolean resizable;
@@ -83,6 +88,10 @@ public final class NetworkBuffer {
         return read(BOOLEAN) ? read(type) : null;
     }
 
+    public <T> @Nullable T readOptional(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
+        return read(BOOLEAN) ? function.apply(this) : null;
+    }
+
     public <T> void writeCollection(@NotNull Type<T> type, @Nullable Collection<@NotNull T> values) {
         if (values == null) {
             write(BYTE, (byte) 0);
@@ -99,13 +108,34 @@ public final class NetworkBuffer {
         writeCollection(type, values == null ? null : List.of(values));
     }
 
-    public <T> @NotNull Collection<@NotNull T> readCollection(@NotNull Type<T> type) {
+    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type) {
         final int size = read(VAR_INT);
-        final Collection<T> values = new java.util.ArrayList<>(size);
+        final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             values.add(read(type));
         }
         return values;
+    }
+
+    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
+        final int size = read(VAR_INT);
+        final List<T> values = new java.util.ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            values.add(function.apply(this));
+        }
+        return values;
+    }
+
+    public <L, R> @NotNull Either<L, R> readEither(@NotNull Function<NetworkBuffer, L> leftReader, Function<NetworkBuffer, R> rightReader) {
+        if (read(BOOLEAN)) {
+            return Either.left(leftReader.apply(this));
+        } else {
+            return Either.right(rightReader.apply(this));
+        }
+    }
+
+    public <E> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
+        return enumClass.getEnumConstants()[read(VAR_INT)];
     }
 
     public void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length) {
