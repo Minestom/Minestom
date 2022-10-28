@@ -1,22 +1,16 @@
 package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A {@link Batch} which can be used when changes are required across chunk borders,
@@ -51,8 +45,8 @@ public class AbsoluteBlockBatch implements Batch {
             chunkBatch = get(chunkIndex);
         }
 
-        final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
-        final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
+        final int relativeX = x - (chunkX * Chunk.SIZE_X);
+        final int relativeZ = z - (chunkZ * Chunk.SIZE_Z);
         chunkBatch.setBlock(relativeX, y, relativeZ, block);
     }
 

@@ -56,9 +56,9 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
-        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
-
-        return super.setInstance(instance, spawnPosition);
+        return super.setInstance(instance, spawnPosition).thenRun(() -> {
+            this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
+        });
     }
 
     @Override

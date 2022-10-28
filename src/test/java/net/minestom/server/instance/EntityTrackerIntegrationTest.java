@@ -77,7 +77,7 @@ public class EntityTrackerIntegrationTest {
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
         assertEquals(1, viewersCount.get());
-        viewer.setInstance(anotherInstance, spawnPos).join(); // viewer swapped instance
+        viewer.setInstance(anotherInstance, spawnPos).join(); // viewer swapped chunk
         assertEquals(0, viewersCount.get());
         viewer.setInstance(instance, spawnPos).join(); // viewer back to spawn
         assertEquals(1, viewersCount.get());

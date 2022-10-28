@@ -40,7 +40,6 @@ final class TestConnectionImpl implements TestConnection {
             event.setSpawningInstance(instance);
             event.getPlayer().setRespawnPoint(pos);
         });
-
         return process.connection().startPlayState(player, true)
                 .thenApply(unused -> {
                     process.connection().updateWaitingPlayers();

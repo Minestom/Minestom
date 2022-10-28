@@ -854,6 +854,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     player.sendPacket(instance.createTimePacket());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                instance.refreshCurrentChunk(this, spawnPosition.chunkX(), spawnPosition.chunkZ());
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {

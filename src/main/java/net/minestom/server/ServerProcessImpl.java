@@ -11,9 +11,7 @@ import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -66,7 +64,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final TagManager tag;
     private final Server server;
 
-    private final ThreadDispatcher<Chunk> dispatcher;
+    private final ThreadDispatcher<SectionCache> dispatcher;
     private final Ticker ticker;
 
     private final AtomicBoolean started = new AtomicBoolean();
@@ -193,7 +191,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ThreadDispatcher<Chunk> dispatcher() {
+    public @NotNull ThreadDispatcher<SectionCache> dispatcher() {
         return dispatcher;
     }
 
@@ -309,6 +307,7 @@ final class ServerProcessImpl implements ServerProcess {
                     exception().handleException(e);
                 }
             }
+
             // Tick all chunks (and entities inside)
             dispatcher().updateAndAwait(tickStart);
 

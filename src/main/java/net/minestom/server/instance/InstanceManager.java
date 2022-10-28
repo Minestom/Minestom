@@ -23,27 +23,28 @@ public final class InstanceManager {
     /**
      * Registers an {@link Instance} internally.
      * <p>
-     * Note: not necessary if you created your instance using {@link #createInstanceContainer()} or {@link #createSharedInstance(InstanceContainer)}
-     * but only if you instantiated your instance object manually
+     * Note: not necessary if you created your chunk using {@link #createInstanceContainer()} or {@link #createSharedInstance(InstanceContainer)}
+     * but only if you instantiated your chunk object manually
      *
      * @param instance the {@link Instance} to register
      */
     public void registerInstance(@NotNull Instance instance) {
         Check.stateCondition(instance instanceof SharedInstance,
-                "Please use InstanceManager#registerSharedInstance to register a shared instance");
+                "Please use InstanceManager#registerSharedInstance to register a shared chunk");
         UNSAFE_registerInstance(instance);
     }
 
     /**
      * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
      *
-     * @param dimensionType the {@link DimensionType} of the instance
+     * @param dimensionType the {@link DimensionType} of the chunk
      * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
     @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
-        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
+        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType);
+        instanceContainer.setChunkLoader(loader);
         registerInstance(instanceContainer);
         return instanceContainer;
     }
@@ -87,7 +88,7 @@ public final class InstanceManager {
     /**
      * Creates and register a {@link SharedInstance}.
      *
-     * @param instanceContainer the container assigned to the shared instance
+     * @param instanceContainer the container assigned to the shared chunk
      * @return the created {@link SharedInstance}
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
@@ -102,19 +103,24 @@ public final class InstanceManager {
     /**
      * Unregisters the {@link Instance} internally.
      * <p>
-     * If {@code instance} is an {@link InstanceContainer} all chunks are unloaded.
+     * If {@code chunk} is an {@link InstanceContainer} all chunks are unloaded.
      *
      * @param instance the {@link Instance} to unregister
      */
     public void unregisterInstance(@NotNull Instance instance) {
-        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
+        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an chunk with players inside.");
         synchronized (instance) {
-            // Unload all chunks
+
+            // Unload all sections
             if (instance instanceof InstanceContainer container) {
-                container.getChunks().forEach(container::unloadChunk);
+                container.getLoadedSections().keySet().forEach(container::unloadSection);
                 var dispatcher = MinecraftServer.process().dispatcher();
-                container.getChunks().forEach(dispatcher::deletePartition);
+                container.getLoadedSections().keySet()
+                        .longStream()
+                        .mapToObj(container::getSectionCache)
+                        .forEach(dispatcher::deletePartition);
             }
+
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
@@ -131,10 +137,10 @@ public final class InstanceManager {
     }
 
     /**
-     * Gets an instance by the given UUID.
+     * Gets an chunk by the given UUID.
      *
-     * @param uuid UUID of the instance
-     * @return the instance with the given UUID, null if not found
+     * @param uuid UUID of the chunk
+     * @return the chunk with the given UUID, null if not found
      */
     public @Nullable Instance getInstance(@NotNull UUID uuid) {
         Optional<Instance> instance = getInstances()
@@ -147,7 +153,7 @@ public final class InstanceManager {
     /**
      * Registers an {@link Instance} internally.
      * <p>
-     * Unsafe because it does not check if {@code instance} is a {@link SharedInstance} to verify its container.
+     * Unsafe because it does not check if {@code chunk} is a {@link SharedInstance} to verify its container.
      *
      * @param instance the {@link Instance} to register
      */

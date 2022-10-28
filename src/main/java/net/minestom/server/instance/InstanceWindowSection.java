@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
- * A view into an instance.
+ * A view into an chunk.
  */
-record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) implements Section {
+record InstanceWindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) implements Section {
     @Override
     public ByteList getSkyLight() {
         return instance().getSkyLight(chunkX, sectionY, chunkZ);
@@ -33,7 +33,7 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
 
     @Override
     public void clear() {
-        instance().clearSection(chunkX, sectionY, chunkZ);
+        instance().unloadSection(chunkX, sectionY, chunkZ);
     }
 
     @Override
@@ -51,9 +51,9 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
         for (int x = 0; x < Section.SIZE_X; x++) {
             for (int y = 0; y < Section.SIZE_Y; y++) {
                 for (int z = 0; z < Section.SIZE_Z; z++) {
-                    final int absX = chunkX * Chunk.CHUNK_SIZE_X + x;
+                    final int absX = chunkX * Chunk.SIZE_X + x;
                     final int absY = sectionY * Section.SIZE_Y + y;
-                    final int absZ = chunkZ * Chunk.CHUNK_SIZE_Z + z;
+                    final int absZ = chunkZ * Chunk.SIZE_Z + z;
                     final Block block = instance.getBlock(absX, absY, absZ);
                     consumer.accept(x, y, z, block);
                 }
@@ -66,9 +66,9 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
         for (int x = 0; x < Section.SIZE_X; x++) {
             for (int y = 0; y < Section.SIZE_Y; y++) {
                 for (int z = 0; z < Section.SIZE_Z; z++) {
-                    final int absX = chunkX * Chunk.CHUNK_SIZE_X + x;
+                    final int absX = chunkX * Chunk.SIZE_X + x;
                     final int absY = sectionY * Section.SIZE_Y + y;
-                    final int absZ = chunkZ * Chunk.CHUNK_SIZE_Z + z;
+                    final int absZ = chunkZ * Chunk.SIZE_Z + z;
                     final Biome biome = instance.getBiome(absX, absY, absZ);
                     consumer.accept(x, y, z, biome);
                 }
@@ -81,9 +81,9 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
         x = ChunkUtils.toSectionRelativeCoordinate(x);
         y = ChunkUtils.toSectionRelativeCoordinate(y);
         z = ChunkUtils.toSectionRelativeCoordinate(z);
-        int absX = chunkX * Chunk.CHUNK_SIZE_X + x;
+        int absX = chunkX * Chunk.SIZE_X + x;
         int absY = sectionY * Section.SIZE_Y + y;
-        int absZ = chunkZ * Chunk.CHUNK_SIZE_Z + z;
+        int absZ = chunkZ * Chunk.SIZE_Z + z;
         instance().setBiome(absX, absY, absZ, biome);
     }
 
@@ -92,9 +92,9 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
         x = ChunkUtils.toSectionRelativeCoordinate(x);
         y = ChunkUtils.toSectionRelativeCoordinate(y);
         z = ChunkUtils.toSectionRelativeCoordinate(z);
-        int absX = chunkX * Chunk.CHUNK_SIZE_X + x;
-        int absY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
-        int absZ = chunkZ * Chunk.CHUNK_SIZE_Z + z;
+        int absX = chunkX * Chunk.SIZE_X + x;
+        int absY = sectionY * SIZE_Y + y;
+        int absZ = chunkZ * Chunk.SIZE_Z + z;
         instance().setBlock(absX, absY, absZ, block);
     }
 
@@ -103,9 +103,9 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
         x = ChunkUtils.toSectionRelativeCoordinate(x);
         y = ChunkUtils.toSectionRelativeCoordinate(y);
         z = ChunkUtils.toSectionRelativeCoordinate(z);
-        int absX = chunkX * Chunk.CHUNK_SIZE_X + x;
-        int absY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
-        int absZ = chunkZ * Chunk.CHUNK_SIZE_Z + z;
+        int absX = chunkX * Chunk.SIZE_X + x;
+        int absY = sectionY * SIZE_Y + y;
+        int absZ = chunkZ * Chunk.SIZE_Z + z;
         return instance().getBlock(absX, absY, absZ, condition);
     }
 
@@ -114,9 +114,9 @@ record WindowSection(Instance instance, int chunkX, int sectionY, int chunkZ) im
         x = ChunkUtils.toSectionRelativeCoordinate(x);
         y = ChunkUtils.toSectionRelativeCoordinate(y);
         z = ChunkUtils.toSectionRelativeCoordinate(z);
-        int absX = chunkX * Chunk.CHUNK_SIZE_X + x;
-        int absY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
-        int absZ = chunkZ * Chunk.CHUNK_SIZE_Z + z;
+        int absX = chunkX * Chunk.SIZE_X + x;
+        int absY = sectionY * SIZE_Y + y;
+        int absZ = chunkZ * Chunk.SIZE_Z + z;
         return instance().getBiome(absX, absY, absZ);
     }
 }

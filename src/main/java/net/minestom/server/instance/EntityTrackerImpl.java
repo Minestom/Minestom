@@ -148,7 +148,7 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         } else {
             // Multiple chunks
-            final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
+            final int chunkRange = (int) (range / Section.SIZE_Y) + 1;
             forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
                 final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;

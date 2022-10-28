@@ -17,9 +17,12 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.timer.Scheduler;
@@ -37,59 +40,61 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A base instance with some default behaviour used to help with custom instance implementations.
+ * A base chunk with some default behaviour used to help with custom chunk implementations.
  */
 public abstract class InstanceBase implements Instance {
 
-    private boolean registered;
+    protected boolean registered;
 
-    private final DimensionType dimensionType;
+    protected final DimensionType dimensionType;
 
-    private final WorldBorder worldBorder;
+    protected final WorldBorder worldBorder;
 
-    // Tick since the creation of the instance
-    private long worldAge;
+    // Tick since the creation of the chunk
+    protected long worldAge;
 
-    // The time of the instance
-    private long time;
-    private int timeRate = 1;
-    private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
-    private long lastTimeUpdate;
+    // The time of the chunk
+    protected long time;
+    protected int timeRate = 1;
+    protected Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
+    protected long lastTimeUpdate;
 
     // Field for tick events
-    private long lastTickAge = System.currentTimeMillis();
+    protected long lastTickAge = System.currentTimeMillis();
     protected final EntityTracker entityTracker = new EntityTrackerImpl();
 
-    // the uuid of this instance
+    // the uuid of this chunk
     protected UUID uniqueId;
 
     // world loading
     protected Generator generator = null;
+    protected IChunkLoader chunkLoader = null;
 
     protected boolean autoLoadChunks = true;
 
-    // instance custom data
-    private final TagHandler tagHandler = TagHandler.newHandler();
-    private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<InstanceEvent> eventNode;
+    // chunk custom data
+    protected final TagHandler tagHandler = TagHandler.newHandler();
+    protected final Scheduler scheduler = Scheduler.newScheduler();
+    protected final EventNode<InstanceEvent> eventNode;
 
     // the explosion supplier
-    private ExplosionSupplier explosionSupplier;
+    protected ExplosionSupplier explosionSupplier;
 
 
     // Pathfinder
-    private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
+    protected final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     // Adventure
-    private final Pointers pointers;
+    protected final Pointers pointers;
 
     protected long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
+    protected boolean isReadOnly = true; // Whether the instance is read-only (no block changes allowed)
 
     /**
-     * Creates a new instance.
+     * Creates a new chunk.
      *
-     * @param uniqueId      the {@link UUID} of the instance
-     * @param dimensionType the {@link DimensionType} of the instance
+     * @param uniqueId      the {@link UUID} of the chunk
+     * @param dimensionType the {@link DimensionType} of the chunk
      */
     public InstanceBase(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
         Check.argCondition(!dimensionType.isRegistered(),
@@ -118,6 +123,41 @@ public abstract class InstanceBase implements Instance {
     }
 
     @Override
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+        final Point blockPosition = placement.getBlockPosition();
+        final Block block = placement.getBlock();
+        setBlock(blockPosition, block);
+        return true;
+    }
+
+    @Override
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
+        if (isReadOnly()) return false;
+
+        final Block block = getBlock(blockPosition);
+        if (block.isAir()) {
+            // TODO: The player probably has a wrong version of this chunk section, send it
+            return false;
+        }
+
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition);
+        EventDispatcher.call(blockBreakEvent);
+        final boolean allowed = !blockBreakEvent.isCancelled();
+        if (allowed) {
+            // Break or change the broken block based on event result
+            final Block resultBlock = blockBreakEvent.getResultBlock();
+            setBlock(blockPosition, resultBlock);
+
+            // Send the block break effect packet
+            PacketUtils.sendGroupedPacket(getViewersAt(blockPosition).getViewers(),
+                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
+                    // Prevent the block breaker to play the particles and sound two times
+                    (viewer) -> !viewer.equals(player));
+        }
+        return allowed;
+    }
+
+    @Override
     public @Nullable Generator generator() {
         return generator;
     }
@@ -125,6 +165,11 @@ public abstract class InstanceBase implements Instance {
     @Override
     public void setGenerator(@Nullable Generator generator) {
         this.generator = generator;
+    }
+
+    @Override
+    public void setChunkLoader(IChunkLoader chunkLoader) {
+        this.chunkLoader = chunkLoader;
     }
 
     @Override
@@ -242,14 +287,17 @@ public abstract class InstanceBase implements Instance {
 
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         final Block block = retrieveBlock(x, y, z, condition);
-        if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
-        return block;
+        return switch (condition) {
+            case TYPE -> block == null ? Block.AIR : block;
+            case NONE -> block;
+            case CACHED -> block == null ? Block.AIR : block.hasNbt() || block.handler() != null ? block : null;
+        };
     }
 
     @Override
     public @NotNull Viewable getViewersAt(int x, int y, int z) {
-        assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        int viewDistance = MinecraftServer.getEntityViewDistance() * Chunk.CHUNK_SIZE_X;
+        assert Chunk.SIZE_X == Chunk.SIZE_Z;
+        int viewDistance = MinecraftServer.getEntityViewDistance() * Chunk.SIZE_X;
         Set<Player> players = getPlayers().stream()
                 .filter(player -> player.getPosition().distanceSquared(x, y, z) <= viewDistance * viewDistance)
                 .collect(Collectors.toUnmodifiableSet());
@@ -277,7 +325,6 @@ public abstract class InstanceBase implements Instance {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
                 this.lastTimeUpdate = time;
             }
-
         }
         // Tick event
         {
@@ -323,15 +370,15 @@ public abstract class InstanceBase implements Instance {
     }
 
     static @NotNull Chunk createChunk(Instance instance, int chunkX, int chunkZ) {
-        Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
+        Chunk chunk = Chunk.inMemory();
 
-        int xMin = chunkX / Chunk.CHUNK_SIZE_X;
+        int xMin = chunkX / Chunk.SIZE_X;
         int yMin = instance.getDimensionType().getMinY();
-        int zMin = chunkZ / Chunk.CHUNK_SIZE_Z;
+        int zMin = chunkZ / Chunk.SIZE_Z;
 
-        int xMax = xMin + Chunk.CHUNK_SIZE_X;
+        int xMax = xMin + Chunk.SIZE_X;
         int yMax = instance.getDimensionType().getMaxY();
-        int zMax = zMin + Chunk.CHUNK_SIZE_Z;
+        int zMax = zMin + Chunk.SIZE_Z;
 
         for (int x = xMin; x < xMax; x++) {
             for (int y = yMin; y < yMax; y++) {
@@ -343,5 +390,10 @@ public abstract class InstanceBase implements Instance {
         }
 
         return chunk;
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return isReadOnly;
     }
 }

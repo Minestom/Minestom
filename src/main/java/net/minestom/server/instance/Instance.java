@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import it.unimi.dsi.fastutil.bytes.ByteList;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
@@ -12,10 +13,8 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
-import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.instance.batch.SectionBatch;
@@ -24,7 +23,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
@@ -48,13 +46,14 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity to one using {@link Entity#setInstance(Instance)}.
  * <p>
- * WARNING: when making your own implementation registering the instance manually is required
+ * WARNING: when making your own implementation registering the chunk manually is required
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
@@ -67,19 +66,14 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     }
 
     /**
-     * Schedules a task to be run during the next instance tick.
+     * Schedules a task to be run during the next chunk tick.
      *
-     * @param runnable the task to execute during the next instance tick
+     * @param runnable the task to execute during the next chunk tick
      */
     void scheduleNextTick(@NotNull Runnable runnable);
 
     @ApiStatus.Internal
-    default boolean placeBlock(@NotNull BlockHandler.Placement placement) {
-        final Point blockPosition = placement.getBlockPosition();
-        final Block block = placement.getBlock();
-        setBlock(blockPosition, block);
-        return true;
-    }
+    boolean placeBlock(@NotNull BlockHandler.Placement placement);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -90,70 +84,50 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    default boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
-        if (isReadOnly()) return false;
-
-        final Block block = getBlock(blockPosition);
-        if (block.isAir()) {
-            // TODO: The player probably has a wrong version of this chunk section, send it
-            return false;
-        }
-
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition);
-        EventDispatcher.call(blockBreakEvent);
-        final boolean allowed = !blockBreakEvent.isCancelled();
-        if (allowed) {
-            // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
-            setBlock(blockPosition, resultBlock);
-
-            // Send the block break effect packet
-            PacketUtils.sendGroupedPacket(getViewersAt(blockPosition).getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
-                    // Prevent the block breaker to play the particles and sound two times
-                    (viewer) -> !viewer.equals(player));
-        }
-        return allowed;
-    }
+    boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
 
     /**
-     * Saves the current instance tags.
+     * Saves the current chunk tags.
      * <p>
-     * Warning: only the global instance data will be saved, not blocks.
+     * Warning: only the global chunk data will be saved, not blocks.
      * You would need to call {@link #saveChunksToStorage()} too.
      *
-     * @return the future called once the instance data has been saved
+     * @return the future called once the chunk data has been saved
      */
     @ApiStatus.Experimental
     @NotNull CompletableFuture<Void> saveInstance();
 
     /**
      * Saves multiple chunks to permanent storage.
-     *
      * @return future called when the chunks are done saving
      */
     @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
-     * Changes the instance {@link ChunkGenerator}.
-     *
-     * @param chunkGenerator the new {@link ChunkGenerator} of the instance
+     * Changes the chunk {@link ChunkGenerator}.
+     * @param chunkGenerator the new {@link ChunkGenerator} of the chunk
      * @deprecated Use {@link #setGenerator(Generator)}
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     default void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
         setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator, getDimensionType()) : null);
     }
 
     /**
-     * Gets the generator associated with the instance
-     *
+     * Sets the chunk loader for this instance.
+     * Note that this method is not a guarantee that this instance will use this chunk loader.
+     * @param chunkLoader the chunk loader to use
+     */
+    void setChunkLoader(@Nullable IChunkLoader chunkLoader);
+
+    /**
+     * Gets the generator associated with the chunk.
      * @return the generator if any
      */
     @Nullable Generator generator();
 
     /**
-     * Changes the generator of the instance
+     * Changes the generator of the chunk
      *
      * @param generator the new generator, or null to disable generation
      */
@@ -168,7 +142,7 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     void enableAutoChunkLoad(boolean enable);
 
     /**
-     * Gets if the instance should autoload chunks.
+     * Gets if the chunk should autoload chunks.
      *
      * @return true if auto chunk load is enabled, false otherwise
      */
@@ -187,9 +161,9 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     }
 
     /**
-     * Gets if the instance has been registered in {@link InstanceManager}.
+     * Gets if the chunk has been registered in {@link InstanceManager}.
      *
-     * @return true if the instance has been registered
+     * @return true if the chunk has been registered
      */
     boolean isRegistered();
 
@@ -198,22 +172,22 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
      * <p>
      * WARNING: should only be used by {@link InstanceManager}.
      *
-     * @param registered true to mark the instance as registered
+     * @param registered true to mark the chunk as registered
      */
     @ApiStatus.Internal
     void setRegistered(boolean registered);
 
     /**
-     * Gets the instance {@link DimensionType}.
+     * Gets the chunk {@link DimensionType}.
      *
-     * @return the dimension of the instance
+     * @return the dimension of the chunk
      */
     DimensionType getDimensionType();
 
     /**
-     * Gets the age of this instance in tick.
+     * Gets the age of this chunk in tick.
      *
-     * @return the age of this instance in tick
+     * @return the age of this chunk in tick
      */
     long getWorldAge();
 
@@ -225,7 +199,7 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     long getTime();
 
     /**
-     * Changes the current time in the instance, from 0 to 24000.
+     * Changes the current time in the chunk, from 0 to 24000.
      * <p>
      * If the time is negative, the vanilla client will not move the sun.
      * <p>
@@ -236,31 +210,31 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
      * <p>
      * This method is unaffected by {@link #getTimeRate()}
      * <p>
-     * It does send the new time to all players in the instance, unaffected by {@link #getTimeUpdate()}
+     * It does send the new time to all players in the chunk, unaffected by {@link #getTimeUpdate()}
      *
-     * @param time the new time of the instance
+     * @param time the new time of the chunk
      */
     void setTime(long time);
 
     /**
      * Gets the rate of the time passing, it is 1 by default
      *
-     * @return the time rate of the instance
+     * @return the time rate of the chunk
      */
     int getTimeRate();
 
     /**
-     * Changes the time rate of the instance
+     * Changes the time rate of the chunk
      * <p>
      * 1 is the default value and can be set to 0 to be completely disabled (constant time)
      *
-     * @param timeRate the new time rate of the instance
+     * @param timeRate the new time rate of the chunk
      * @throws IllegalStateException if {@code timeRate} is lower than 0
      */
     void setTimeRate(int timeRate);
 
     /**
-     * Gets the rate at which the client is updated with the current instance time
+     * Gets the rate at which the client is updated with the current chunk time
      *
      * @return the client update rate for time related packet
      */
@@ -282,10 +256,18 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
      * @return the {@link TimeUpdatePacket} with this instance data
      */
     @ApiStatus.Internal
-    @NotNull TimeUpdatePacket createTimePacket();
+    default @NotNull TimeUpdatePacket createTimePacket() {
+        long time = getTime();
+        if (getTimeRate() == 0) {
+            // Negative values stop the sun and moon from moving
+            // 0 as a long cannot be negative
+            time = time == 0 ? -24000L : -Math.abs(time);
+        }
+        return new TimeUpdatePacket(getWorldAge(), time);
+    }
 
     /**
-     * Gets the instance {@link WorldBorder};
+     * Gets the chunk {@link WorldBorder};
      *
      * @return the {@link WorldBorder} linked to the instance
      */
@@ -325,9 +307,9 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     }
 
     /**
-     * Gets the experience orbs in the instance.
+     * Gets the experience orbs in the chunk.
      *
-     * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
+     * @return an unmodifiable {@link Set} containing all the experience orbs in the chunk
      */
     @Deprecated
     @NotNull
@@ -345,7 +327,15 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link Set}
      */
-    @NotNull Set<@NotNull Entity> getChunkEntities(long chunk);
+    default @NotNull Set<@NotNull Entity> getChunkEntities(long chunk) {
+        return getEntities().stream()
+                .filter(entity -> {
+                    Point pos = entity.getPosition();
+                    long chunkIndex = ChunkUtils.getChunkIndex(pos.chunkX(), pos.chunkZ());
+                    return chunkIndex == chunk;
+                })
+                .collect(Collectors.toSet());
+    }
 
     /**
      * Gets nearby entities to the given position.
@@ -465,23 +455,23 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     /**
      * Gets the registered {@link ExplosionSupplier}, or null if none was provided.
      *
-     * @return the instance explosion supplier, null if none was provided
+     * @return the chunk explosion supplier, null if none was provided
      */
     @Nullable ExplosionSupplier getExplosionSupplier();
 
     /**
-     * Registers the {@link ExplosionSupplier} to use in this instance.
+     * Registers the {@link ExplosionSupplier} to use in this chunk.
      *
      * @param supplier the explosion supplier
      */
     void setExplosionSupplier(@Nullable ExplosionSupplier supplier);
 
     /**
-     * Gets the instance space.
+     * Gets the chunk space.
      * <p>
      * Used by the pathfinder for entities.
      *
-     * @return the instance space
+     * @return the chunk space
      */
     @ApiStatus.Internal
     @NotNull PFInstanceSpace getInstanceSpace();
@@ -490,41 +480,297 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     @NotNull Pointers pointers();
 
     /**
-     * This method is used to indicate whether the instance is read only or not.
-     * @return true if the instance is read only, false otherwise
+     * This method is used to indicate whether the chunk is read only or not.
+     * @return true if the chunk is read only, false otherwise
      */
     boolean isReadOnly();
 
-    @Deprecated
-    @NotNull CompletableFuture<Void> loadChunk(int chunkX, int chunkZ);
+    // Sections
+    /**
+     * Gets all the loaded sections in this chunk.
+     * @return a collection of all the loaded sections
+     */
+    Long2ObjectMap<Section> getLoadedSections();
 
-    @Deprecated
-    default @NotNull CompletableFuture<Void> loadChunk(Point blockPosition) {
-        return loadChunk(blockPosition.chunkX(), blockPosition.chunkZ());
+    /**
+     * Checks whether this section is loaded.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return true if the section is loaded, false otherwise
+     */
+    default boolean isSectionLoaded(int chunkX, int sectionY, int chunkZ) {
+        return getLoadedSections().containsKey(ChunkUtils.getSectionIndex(chunkX, sectionY, chunkZ));
     }
 
-    @Deprecated
-    default @NotNull CompletableFuture<Void> loadOptionalChunk(int chunkX, int chunkZ) {
+    /**
+     * @see #isSectionLoaded(int, int, int)
+     */
+    default boolean isSectionLoaded(long sectionIndex) {
+        return isSectionLoaded(ChunkUtils.getSectionCoordX(sectionIndex), ChunkUtils.getSectionCoordY(sectionIndex),
+                ChunkUtils.getSectionCoordZ(sectionIndex));
+    }
+
+    /**
+     * @see #isSectionLoaded(int, int, int)
+     */
+    default boolean isSectionLoaded(Point pos) {
+        return isSectionLoaded(pos.chunkX(), pos.section(), pos.chunkZ());
+    }
+
+    /**
+     * Gets the section at the given position.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return the section, or null if it is not loaded
+     */
+    default @Nullable Section getSection(int chunkX, int sectionY, int chunkZ) {
+        long sectionIndex = ChunkUtils.getSectionIndex(chunkX, sectionY, chunkZ);
+        return getLoadedSections().get(sectionIndex);
+    }
+
+    /**
+     * @see #getSection(int, int, int)
+     */
+    default @Nullable Section getSection(long sectionIndex) {
+        return getSection(ChunkUtils.getSectionCoordX(sectionIndex), ChunkUtils.getSectionCoordY(sectionIndex),
+                ChunkUtils.getSectionCoordZ(sectionIndex));
+    }
+
+    /**
+     * @see #getSection(int, int, int)
+     */
+    default @Nullable Section getSection(Point pos) {
+        return getSection(pos.chunkX(), pos.section(), pos.chunkZ());
+    }
+
+    /**
+     * Loads the section at the given coordinates, generating blocks for it if the section is not present.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return completable future that completes when the section is loaded, or exceptionally if the section cannot be
+     *         loaded (e.g. if it is loaded already)
+     */
+    CompletableFuture<Section> loadSection(int chunkX, int sectionY, int chunkZ);
+
+    /**
+     * @see #loadSection(int, int, int)
+     */
+    default CompletableFuture<Section> loadSection(long sectionIndex) {
+        return loadSection(ChunkUtils.getSectionCoordX(sectionIndex), ChunkUtils.getSectionCoordY(sectionIndex),
+                ChunkUtils.getSectionCoordZ(sectionIndex));
+    }
+
+    /**
+     * @see #loadSection(int, int, int)
+     */
+    default CompletableFuture<Section> loadSection(Point pos) {
+        return loadSection(pos.chunkX(), pos.section(), pos.chunkZ());
+    }
+
+    /**
+     * Unloads the section at the given coordinates.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return completable future that completes when the section is unloaded, or completes exceptionally if the
+     *         section cannot be unloaded
+     */
+    CompletableFuture<Void> unloadSection(int chunkX, int sectionY, int chunkZ);
+
+    /**
+     * @see #unloadSection(int, int, int)
+     */
+    default CompletableFuture<Void> unloadSection(long sectionIndex) {
+        return unloadSection(ChunkUtils.getSectionCoordX(sectionIndex), ChunkUtils.getSectionCoordY(sectionIndex),
+                ChunkUtils.getSectionCoordZ(sectionIndex));
+    }
+
+    /**
+     * @see #unloadSection(int, int, int)
+     */
+    default CompletableFuture<Void> unloadSection(Point pos) {
+        return unloadSection(pos.chunkX(), pos.section(), pos.chunkZ());
+    }
+
+    /**
+     * Loads the section at the given coordinates if {@link #hasEnabledAutoChunkLoad()} is enabled.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return completable future as seen in {@link #loadSection(int, int, int)}, or completed with null if
+     *         auto chunk load is disabled
+     */
+    default CompletableFuture<Section> loadOptionalSection(int chunkX, int sectionY, int chunkZ) {
+        if (hasEnabledAutoChunkLoad()) {
+            return loadSection(chunkX, sectionY, chunkZ);
+        } else {
+            return CompletableFuture.completedFuture(null);
+        }
+    }
+
+    /**
+     * @see #loadOptionalSection(int, int, int)
+     */
+    default CompletableFuture<Section> loadOptionalSection(long sectionIndex) {
+        return loadOptionalSection(ChunkUtils.getSectionCoordX(sectionIndex), ChunkUtils.getSectionCoordY(sectionIndex),
+                ChunkUtils.getSectionCoordZ(sectionIndex));
+    }
+
+    /**
+     * @see #loadOptionalSection(int, int, int)
+     */
+    default CompletableFuture<Section> loadOptionalSection(Point pos) {
+        return loadOptionalSection(pos.chunkX(), pos.section(), pos.chunkZ());
+    }
+
+    // Chunks
+
+    /**
+     * Gets all the loaded chunks in this instance.
+     * @return a collection of all the loaded chunks
+     */
+    @NotNull Long2ObjectMap<Chunk> getLoadedChunks();
+
+    /**
+     * Checks whether this chunk is loaded.
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return true if the chunk is loaded, false otherwise
+     */
+    default boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return getLoadedChunks().containsKey(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+    }
+
+    /**
+     * @see #isChunkLoaded(int, int)
+     */
+    default boolean isChunkLoaded(long chunkIndex) {
+        return isChunkLoaded(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex));
+    }
+
+    /**
+     * @see #isChunkLoaded(int, int)
+     */
+    default boolean isChunkLoaded(Point pos) {
+        return isChunkLoaded(pos.chunkX(), pos.chunkZ());
+    }
+
+    /**
+     * Gets the chunk at the given position.
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the chunk, or null if it is not loaded
+     */
+    default @Nullable Chunk getChunk(int chunkX, int chunkZ) {
+        long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        return getLoadedChunks().get(chunkIndex);
+    }
+
+    /**
+     * @see #getChunk(int, int)
+     */
+    default @Nullable Chunk getChunk(long chunkIndex) {
+        return getChunk(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex));
+    }
+
+    /**
+     * @see #getChunk(int, int)
+     */
+    default @Nullable Chunk getChunk(Point pos) {
+        return getChunk(pos.chunkX(), pos.chunkZ());
+    }
+
+    /**
+     * Loads the chunk at the given coordinates, generating blocks for it if the chunk is not present.
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return completable future that completes when the chunk is loaded, or exceptionally if the chunk cannot be
+     *         loaded (e.g. if it is loaded already)
+     */
+    default CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+        int minSection = getDimensionType().getMinY() / Section.SIZE_Y;
+        int maxSection = getDimensionType().getMaxY() / Section.SIZE_Y;
+
+        return CompletableFuture.allOf(IntStream.range(minSection, maxSection)
+                .mapToObj(sectionY -> loadSection(chunkX, sectionY, chunkZ))
+                .toArray(CompletableFuture[]::new))
+                .thenApply(v -> Chunk.viewInto(this, chunkX, chunkZ));
+    }
+
+    /**
+     * @see #loadChunk(int, int)
+     */
+    default CompletableFuture<Chunk> loadChunk(long chunkIndex) {
+        return loadChunk(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex));
+    }
+
+    /**
+     * @see #loadChunk(int, int)
+     */
+    default CompletableFuture<Chunk> loadChunk(Point pos) {
+        return loadChunk(pos.chunkX(), pos.chunkZ());
+    }
+
+    /**
+     * Unloads the chunk at the given coordinates.
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return completable future that completes when the chunk is unloaded, or completes exceptionally if the
+     *         chunk cannot be unloaded
+     */
+    default CompletableFuture<Void> unloadChunk(int chunkX, int chunkZ) {
+        int minSection = getDimensionType().getMinY() / Section.SIZE_Y;
+        int maxSection = getDimensionType().getMaxY() / Section.SIZE_Y;
+
+        return CompletableFuture.allOf(IntStream.range(minSection, maxSection)
+                .mapToObj(sectionY -> unloadSection(chunkX, sectionY, chunkZ))
+                .toArray(CompletableFuture[]::new));
+    }
+
+    /**
+     * @see #unloadChunk(int, int)
+     */
+    default CompletableFuture<Void> unloadChunk(long chunkIndex) {
+        return unloadChunk(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex));
+    }
+
+    /**
+     * @see #unloadChunk(int, int)
+     */
+    default CompletableFuture<Void> unloadChunk(Point pos) {
+        return unloadChunk(pos.chunkX(), pos.chunkZ());
+    }
+
+    /**
+     * Loads the chunk at the given coordinates if {@link #hasEnabledAutoChunkLoad()} is enabled.
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return completable future as seen in {@link #loadChunk(int, int)}, or completed with null if
+     *         auto chunk load is disabled
+     */
+    default CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         if (hasEnabledAutoChunkLoad()) {
             return loadChunk(chunkX, chunkZ);
+        } else {
+            return CompletableFuture.completedFuture(null);
         }
-        return CompletableFuture.completedFuture(null);
     }
 
-    @Deprecated
-    default @NotNull CompletableFuture<Void> loadOptionalChunk(Point blockPosition) {
-        return loadOptionalChunk(blockPosition.chunkX(), blockPosition.chunkZ());
+    /**
+     * @see #loadOptionalChunk(int, int)
+     */
+    default CompletableFuture<Chunk> loadOptionalChunk(long chunkIndex) {
+        return loadOptionalChunk(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex));
     }
 
-    @Deprecated
-    boolean isChunkLoaded(long currentChunk);
-    @Deprecated
-    default boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return isChunkLoaded(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-    }
-    @Deprecated
-    default boolean isChunkLoaded(Point blockPosition) {
-        return isChunkLoaded(ChunkUtils.getChunkIndex(blockPosition));
+    /**
+     * @see #loadOptionalChunk(int, int)
+     */
+    default CompletableFuture<Chunk> loadOptionalChunk(Point pos) {
+        return loadOptionalChunk(pos.chunkX(), pos.chunkZ());
     }
 
     /**
@@ -534,9 +780,24 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
      * @return the chunk packet, null if the chunk is not loaded
      */
     default @UnknownNullability ChunkDataPacket chunkPacket(int chunkX, int chunkZ) {
-        return InstanceBase.createChunk(this, chunkX, chunkZ).chunkPacket();
+        return Chunk.viewInto(this, chunkX, chunkZ).chunkPacket(chunkX, chunkZ);
     }
 
+    /**
+     * @see #chunkPacket(int, int)
+     */
+    default @UnknownNullability ChunkDataPacket chunkPacket(long chunkIndex) {
+        return chunkPacket(ChunkUtils.getChunkCoordX(chunkIndex), ChunkUtils.getChunkCoordZ(chunkIndex));
+    }
+
+    /**
+     * @see #chunkPacket(int, int)
+     */
+    default @UnknownNullability ChunkDataPacket chunkPacket(Point pos) {
+        return chunkPacket(pos.chunkX(), pos.chunkZ());
+    }
+
+    // Threading/ticks
     /**
      * Refreshes the chunk at the given coordinates.
      * @param tickable the tickable object being added to the chunk
@@ -547,28 +808,81 @@ public interface Instance extends Block.Getter, Block.Setter, Biome.Setter, Biom
     void refreshCurrentChunk(Tickable tickable, int newChunkX, int newChunkZ);
 
     @ApiStatus.Internal
-    void registerDispatcher(ThreadDispatcher<Chunk> dispatcher);
+    void registerDispatcher(ThreadDispatcher<SectionCache> dispatcher);
 
+    // Pathfinding
     IColumnarSpace createColumnarSpace(PFInstanceSpace instanceSpace, int cx, int cz);
 
+    // Batch
     default CompletableFuture<Void> applyBatch(SectionBatch batch, int chunkX, int sectionY, int chunkZ) {
         return CompletableFuture.runAsync(() -> {
-            int minX = chunkX * Chunk.CHUNK_SIZE_X;
-            int minY = sectionY * Chunk.CHUNK_SECTION_SIZE;
-            int minZ = chunkZ * Chunk.CHUNK_SIZE_Z;
+            int minX = chunkX * Chunk.SIZE_X;
+            int minY = sectionY * Section.SIZE_Y;
+            int minZ = chunkZ * Chunk.SIZE_Z;
 
             batch.blocks((x, y, z, block) -> setBlock(x + minX, y + minY, z + minZ, block));
         }, Batch.BLOCK_BATCH_POOL);
     }
 
     // Lighting
+
+    /**
+     * Gets the skylight at the given section.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return the skylight byte array, null if the section is not loaded
+     */
     ByteList getSkyLight(int chunkX, int sectionY, int chunkZ);
+
+    /**
+     * Gets the blocklight at the given section.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return the blocklight byte array, null if the section is not loaded
+     */
     ByteList getBlockLight(int chunkX, int sectionY, int chunkZ);
 
+    /**
+     * Sets the skylight at the given section.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @param light the skylight byte array
+     * @throws IllegalStateException if the section is not loaded
+     */
     void setSkyLight(int chunkX, int sectionY, int chunkZ, ByteList light);
+
+    /**
+     * Sets the skylight at the given section.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @param light the blocklight byte array
+     */
+    default void setSkyLight(int chunkX, int sectionY, int chunkZ, byte[] light) {
+        setSkyLight(chunkX, sectionY, chunkZ, ByteList.of(light));
+    }
+
+    /**
+     * Sets the blocklight at the given section.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @param light the blocklight byte array
+     * @throws IllegalStateException if the section is not loaded
+     */
     void setBlockLight(int chunkX, int sectionY, int chunkZ, ByteList light);
 
-    void clearSection(int chunkX, int sectionY, int chunkZ);
-
-    boolean isSectionLoaded(int chunkX, int sectionY, int chunkZ);
+    /**
+     * Sets the blocklight at the given section.
+     * @param chunkX the chunk X
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @param light the blocklight byte array
+     */
+    default void setBlockLight(int chunkX, int sectionY, int chunkZ, byte[] light) {
+        setBlockLight(chunkX, sectionY, chunkZ, ByteList.of(light));
+    }
 }

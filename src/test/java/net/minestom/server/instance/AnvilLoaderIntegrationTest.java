@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.instance.block.Block;
@@ -15,14 +17,16 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
 public class AnvilLoaderIntegrationTest {
 
-    private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "instance", "anvil_loader");
+    private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "chunk", "anvil_loader");
     private static final Path worldFolder = Path.of("integration_test_world");
 
 
@@ -87,7 +91,7 @@ public class AnvilLoaderIntegrationTest {
 
         for (int x = -2; x < 2; x++) {
             for (int z = -2; z < 2; z++) {
-                checkChunk.accept(instance.loadChunkOrRetrieve(x, z).join()); // this is a test so we don't care too much about waiting for each chunk
+                checkChunk.accept(instance.loadChunk(x, z).join()); // this is a test so we don't care too much about waiting for each chunk
             }
         }
 
@@ -161,29 +165,26 @@ public class AnvilLoaderIntegrationTest {
                 return false;
             }
         });
-        DynamicChunk originalChunk = (DynamicChunk) instance.loadChunkOrRetrieve(0,0).join();
 
-        synchronized (originalChunk) {
-            instance.saveChunkToStorage(originalChunk);
-            instance.unloadChunk(originalChunk);
-            while(originalChunk.isLoaded()) {
-                Thread.sleep(1);
-            }
-        }
+        instance.saveChunksToStorage().join();
+        instance.unloadChunk(0, 0).join();
+        Chunk originalChunk = instance.loadChunk(0,0).join();
+        Chunk reloadedChunk = instance.loadChunk(0,0).join();
 
-        DynamicChunk reloadedChunk = (DynamicChunk) instance.loadChunkOrRetrieve(0,0).join();
-        int hash = 0;
-        for (PaletteSectionData section : reloadedChunk.sections()) {
-            BinaryWriter writer = new BinaryWriter();
-            section.write(writer);
-            hash += Arrays.hashCode(writer.toByteArray());
-        }
-        for (PaletteSectionData section : originalChunk.sections()) {
-            BinaryWriter writer = new BinaryWriter();
-            section.write(writer);
-            hash -= Arrays.hashCode(writer.toByteArray());
-        }
-        Assertions.assertEquals(0, hash, "Chunk data should be the same after saving and reloading");
+        int original = IntStream.range(originalChunk.getMinSection(), originalChunk.getMaxSection())
+                .mapToObj(originalChunk::getSection)
+                .filter(Objects::nonNull)
+                .map(Section::hash)
+                .reduce(0, (a, b) -> a ^ b);
+
+        int reloaded = IntStream.range(reloadedChunk.getMinSection(), reloadedChunk.getMaxSection())
+                .mapToObj(reloadedChunk::getSection)
+                .filter(Objects::nonNull)
+                .map(Section::hash)
+                .reduce(0, (a, b) -> a ^ b);
+
+        int diff = original - reloaded;
+        Assertions.assertEquals(0, diff, "Chunk data should be the same after saving and reloading");
 
         env.destroyInstance(instance);
     }

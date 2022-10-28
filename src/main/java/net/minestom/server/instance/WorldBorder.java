@@ -201,7 +201,7 @@ public class WorldBorder {
 
     /**
      * Used to update in real-time the current diameter time.
-     * Called in the instance tick update.
+     * Called in the chunk tick update.
      */
     protected void update() {
         if (lerpStartTime == 0) {
@@ -245,7 +245,7 @@ public class WorldBorder {
     }
 
     /**
-     * Sends the new world border centers to all instance players.
+     * Sends the new world border centers to all chunk players.
      */
     private void refreshCenter() {
         sendPacket(new WorldBorderCenterPacket(centerX, centerZ));

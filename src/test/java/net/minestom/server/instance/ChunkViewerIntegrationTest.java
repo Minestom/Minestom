@@ -6,6 +6,7 @@ import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,7 @@ public class ChunkViewerIntegrationTest {
     public void basicJoin(boolean sharedInstance, Env env) {
         Instance instance = env.createFlatInstance();
         if (sharedInstance) {
-            // Chunks get their viewers from the instance
+            // Chunks get their viewers from the chunk
             // Ensuring that the system works with shared instances is therefore important
             var manager = env.process().instance();
             instance = manager.createSharedInstance((InstanceContainer) instance);
@@ -55,8 +56,8 @@ public class ChunkViewerIntegrationTest {
             var tracker = connection.trackIncoming(ChunkDataPacket.class);
             for (int x = -viewRadius; x <= viewRadius; x++) {
                 for (int z = -viewRadius; z <= viewRadius; z++) {
-                    Chunk chunk = instance.loadChunkOrRetrieve(x, z).join();
-                    chunk.sendChunk();
+                    ChunkDataPacket packet = instance.chunkPacket(x, z);
+                    PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
                 }
             }
             assertEquals(count, tracker.collect().size());

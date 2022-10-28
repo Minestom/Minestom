@@ -2,10 +2,12 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
@@ -19,9 +21,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public interface IChunkLoader {
 
     /**
-     * Loads instance data from the loader.
+     * Loads chunk data from the loader.
      *
-     * @param instance the instance to retrieve the data from
+     * @param instance the chunk to retrieve the data from
      */
     default void loadInstance(@NotNull Instance instance) {
     }
@@ -47,7 +49,7 @@ public interface IChunkLoader {
      * @return a {@link CompletableFuture} executed when the {@link Chunk} is done saving,
      * should be called even if the saving failed (you can throw an exception).
      */
-    @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk);
+    @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk, int chunkX, int chunkZ);
 
     /**
      * Saves multiple chunks with an optional callback for when it is done.
@@ -58,10 +60,14 @@ public interface IChunkLoader {
      * @return a {@link CompletableFuture} executed when the {@link Chunk} is done saving,
      * should be called even if the saving failed (you can throw an exception).
      */
-    default @NotNull CompletableFuture<Void> saveChunks(@NotNull Collection<Chunk> chunks) {
+    default @NotNull CompletableFuture<Void> saveChunks(@NotNull Map<Long, Chunk> chunks) {
         if (supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = ForkJoinPool.commonPool();
-            chunks.forEach(c -> parallelSavingThreadPool.execute(() -> saveChunk(c)));
+            chunks.forEach((index, chunk) -> {
+                int chunkX = ChunkUtils.getChunkCoordX(index);
+                int chunkZ = ChunkUtils.getChunkCoordZ(index);
+                parallelSavingThreadPool.execute(() -> saveChunk(chunk, chunkX, chunkZ));
+            });
             try {
                 parallelSavingThreadPool.shutdown();
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
@@ -72,8 +78,10 @@ public interface IChunkLoader {
         } else {
             CompletableFuture<Void> completableFuture = new CompletableFuture<>();
             AtomicInteger counter = new AtomicInteger();
-            for (Chunk chunk : chunks) {
-                saveChunk(chunk).whenComplete((unused, throwable) -> {
+            for (var entry : chunks.entrySet()) {
+                int chunkX = ChunkUtils.getChunkCoordX(entry.getKey());
+                int chunkZ = ChunkUtils.getChunkCoordZ(entry.getKey());
+                saveChunk(entry.getValue(), chunkX, chunkZ).whenComplete((unused, throwable) -> {
                     final boolean isLast = counter.incrementAndGet() == chunks.size();
                     if (isLast) {
                         completableFuture.complete(null);
@@ -109,5 +117,5 @@ public interface IChunkLoader {
      *
      * @param chunk the chunk to unload
      */
-    default void unloadChunk(Chunk chunk) {}
+    default void unloadChunk(Chunk chunk, int chunkX, int chunkZ) {}
 }

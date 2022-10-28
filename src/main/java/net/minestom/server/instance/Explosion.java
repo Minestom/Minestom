@@ -45,7 +45,7 @@ public abstract class Explosion {
     /**
      * Prepares the list of blocks that will be broken. Also pushes and damage entities affected by this explosion
      *
-     * @param instance instance to perform this explosion in
+     * @param instance chunk to perform this explosion in
      * @return list of blocks that will be broken.
      */
     protected abstract List<Point> prepare(Instance instance);
@@ -53,7 +53,7 @@ public abstract class Explosion {
     /**
      * Performs the explosion and send the corresponding packet
      *
-     * @param instance instance to perform this explosion in
+     * @param instance chunk to perform this explosion in
      */
     public void apply(@NotNull Instance instance) {
         List<Point> blocks = prepare(instance);
@@ -81,7 +81,7 @@ public abstract class Explosion {
     /**
      * Called after removing blocks and preparing the packet, but before sending it.
      *
-     * @param instance the instance in which the explosion occurs
+     * @param instance the chunk in which the explosion occurs
      * @param blocks   the block positions returned by prepare
      * @param packet   the explosion packet to sent to the client. Be careful with what you're doing.
      *                 It is initialized with the center and radius of the explosion. The positions in 'blocks' are also
@@ -95,7 +95,7 @@ public abstract class Explosion {
      * Called after sending the explosion packet. Can be used to (re)set blocks that have been destroyed.
      * This is necessary to do after the packet being sent, because the client sets the positions received to air.
      *
-     * @param instance the instance in which the explosion occurs
+     * @param instance the chunk in which the explosion occurs
      * @param blocks   the block positions returned by prepare
      */
     protected void postSend(Instance instance, List<Point> blocks) {

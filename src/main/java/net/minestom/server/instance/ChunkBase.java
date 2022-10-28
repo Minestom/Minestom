@@ -7,16 +7,13 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,10 +22,7 @@ import java.util.UUID;
 /**
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  * Should contains all the blocks located at those positions and manage their tick updates.
- * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
- * <p>
- * You can create your own implementation of this class by extending it
- * and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
+ * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own chunk ('this').
  * <p>
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
@@ -60,84 +54,10 @@ public abstract class ChunkBase implements Chunk, Block.Getter, Block.Setter, Bi
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
-        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
+        this.minSection = instance.getDimensionType().getMinY() / Section.SIZE_Y;
+        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / Section.SIZE_Y;
         this.viewers = new ChunkView(instance, toPosition());
     }
-
-    /**
-     * Sets a block at a position.
-     * <p>
-     * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
-     * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch batches})
-     * The thread-safe version is {@link Instance#setBlock(int, int, int, Block)} (or any similar instance methods)
-     * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
-     *
-     * @param x     the block X
-     * @param y     the block Y
-     * @param z     the block Z
-     * @param block the block to place
-     */
-    @Override
-    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
-
-    public abstract @NotNull List<Section> getSections();
-
-    public abstract @NotNull Section getSection(int section);
-
-    public @NotNull Section getSectionAt(int blockY) {
-        return getSection(ChunkUtils.getChunkCoordinate(blockY));
-    }
-
-    /**
-     * Executes a chunk tick.
-     * <p>
-     * Should be used to update all the blocks in the chunk.
-     * <p>
-     * WARNING: this method doesn't necessary have to be thread-safe, proceed with caution.
-     *
-     * @param time the time of the update in milliseconds
-     */
-    @Override
-    public abstract void tick(long time);
-
-    /**
-     * Gets the last time that this chunk changed.
-     * <p>
-     * "Change" means here data used in {@link ChunkDataPacket}.
-     * It is necessary to see if the cached version of this chunk can be used
-     * instead of re writing and compressing everything.
-     *
-     * @return the last change time in milliseconds
-     */
-    public abstract long getLastChangeTime();
-
-    /**
-     * Sends the chunk data to {@code player}.
-     *
-     * @param player the player
-     */
-    public abstract void sendChunk(@NotNull Player player);
-
-    public abstract void sendChunk();
-
-    /**
-     * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
-     * <p>
-     * The chunk position (X/Z) can be modified using the given arguments.
-     *
-     * @param instance the chunk owner
-     * @param chunkX   the chunk X of the copy
-     * @param chunkZ   the chunk Z of the copy
-     * @return a copy of this chunk with a potentially new instance and position
-     */
-    public abstract @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
-
-    /**
-     * Resets the chunk, this means clearing all the data making it empty.
-     */
-    public abstract void reset();
 
     /**
      * Gets the unique identifier of this chunk.
@@ -151,9 +71,9 @@ public abstract class ChunkBase implements Chunk, Block.Getter, Block.Setter, Bi
     }
 
     /**
-     * Gets the instance where this chunk is stored
+     * Gets the chunk where this chunk is stored
      *
-     * @return the linked instance
+     * @return the linked chunk
      */
     public @NotNull Instance getInstance() {
         return instance;
@@ -201,7 +121,7 @@ public abstract class ChunkBase implements Chunk, Block.Getter, Block.Setter, Bi
      * @return the position of this chunk
      */
     public @NotNull Point toPosition() {
-        return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+        return new Vec(SIZE_X * getChunkX(), 0, SIZE_Z * getChunkZ());
     }
 
     /**
@@ -281,13 +201,4 @@ public abstract class ChunkBase implements Chunk, Block.Getter, Block.Setter, Bi
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
     }
-
-    /**
-     * Sets the chunk as "unloaded".
-     */
-    public void unload() {
-        this.loaded = false;
-    }
-
-    public abstract ChunkDataPacket chunkPacket();
 }

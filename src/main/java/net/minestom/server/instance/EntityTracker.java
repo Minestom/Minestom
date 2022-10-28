@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Defines how {@link Entity entities} are tracked within an {@link Instance instance}.
+ * Defines how {@link Entity entities} are tracked within an {@link Instance chunk}.
  * <p>
  * Implementations are expected to be thread-safe.
  */

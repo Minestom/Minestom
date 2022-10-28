@@ -14,6 +14,7 @@ public class EntityProjectileIntegrationTest {
         var instance = env.createFlatInstance();
         var shooter = new EntityCreature(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 42, 0)).join();
+
         var projectile = new EntityProjectile(shooter, EntityType.ARROW);
         var from = new Pos(0, 42, 0).add(0,
                 shooter.getEyeHeight(), shooter.getPosition().direction().z());

@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import it.unimi.dsi.fastutil.bytes.ByteList;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
@@ -9,7 +10,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
@@ -19,7 +19,6 @@ import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
- * The {@link SharedInstance} is an instance that shares the same chunks as its linked {@link InstanceContainer},
+ * The {@link SharedInstance} is an chunk that shares the same chunks as its linked {@link InstanceContainer},
  * entities are separated.
  */
 public class SharedInstance extends InstanceBase {
@@ -60,7 +59,7 @@ public class SharedInstance extends InstanceBase {
         return instanceContainer.breakBlock(player, blockPosition);
     }
 
-    public @NotNull CompletableFuture<Void> loadChunk(int chunkX, int chunkZ) {
+    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadChunk(chunkX, chunkZ);
     }
 
@@ -84,7 +83,7 @@ public class SharedInstance extends InstanceBase {
     }
 
     @Override
-    public void registerDispatcher(ThreadDispatcher<Chunk> dispatcher) {
+    public void registerDispatcher(ThreadDispatcher<SectionCache> dispatcher) {
         instanceContainer.registerDispatcher(dispatcher);
     }
 
@@ -114,8 +113,13 @@ public class SharedInstance extends InstanceBase {
     }
 
     @Override
-    public void clearSection(int chunkX, int sectionY, int chunkZ) {
-        instanceContainer.clearSection(chunkX, sectionY, chunkZ);
+    public CompletableFuture<Void> unloadSection(int chunkX, int sectionY, int chunkZ) {
+        return instanceContainer.unloadSection(chunkX, sectionY, chunkZ);
+    }
+
+    @Override
+    public @NotNull Long2ObjectMap<Chunk> getLoadedChunks() {
+        return instanceContainer.getLoadedChunks();
     }
 
     @Override
@@ -123,8 +127,14 @@ public class SharedInstance extends InstanceBase {
         return instanceContainer.isSectionLoaded(chunkX, sectionY, chunkZ);
     }
 
-    public void unloadChunk(@NotNull Chunk chunk) {
-        instanceContainer.unloadChunk(chunk);
+    @Override
+    public CompletableFuture<Section> loadSection(int chunkX, int sectionY, int chunkZ) {
+        return null;
+    }
+
+    @Override
+    public Long2ObjectMap<Section> getLoadedSections() {
+        return instanceContainer.getLoadedSections();
     }
 
     public Chunk getChunk(int chunkX, int chunkZ) {
@@ -134,10 +144,6 @@ public class SharedInstance extends InstanceBase {
     @Override
     public @NotNull CompletableFuture<Void> saveInstance() {
         return instanceContainer.saveInstance();
-    }
-
-    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
-        return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
@@ -157,7 +163,7 @@ public class SharedInstance extends InstanceBase {
 
     @NotNull
     public Collection<Chunk> getChunks() {
-        return instanceContainer.getChunks();
+        return getLoadedChunks().values();
     }
 
     @Override
@@ -190,7 +196,7 @@ public class SharedInstance extends InstanceBase {
     @Override
     public @NotNull Viewable getViewersAt(int x, int y, int z) {
         // TODO: Find a better solution for this
-        double viewDistance = Math.pow(MinecraftServer.getEntityViewDistance() * Chunk.CHUNK_SIZE_X, 2.0);
+        double viewDistance = Math.pow(MinecraftServer.getEntityViewDistance() * Chunk.SIZE_X, 2.0);
         return new Viewable() {
 
             @Override
@@ -216,11 +222,18 @@ public class SharedInstance extends InstanceBase {
 
     @Override
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
-        final int[] entities = ArrayUtils.mapToIntArray(getEntityTracker().entities(), Entity::getEntityId);
+        // TODO: Instance snapshot using sections instead of chunks
+        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
+                chunk -> getLoadedChunks().long2ObjectEntrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue() == chunk)
+                        .findAny()
+                        .orElseThrow()
+                        .getLongKey());
+        final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
-                tagHandler().readableCopy());
+                tagHandler.readableCopy());
     }
 
     @Override
@@ -229,7 +242,7 @@ public class SharedInstance extends InstanceBase {
     }
 
     /**
-     * Gets the {@link InstanceContainer} from where this instance takes its chunks from.
+     * Gets the {@link InstanceContainer} from where this chunk takes its chunks from.
      *
      * @return the associated {@link InstanceContainer}
      */

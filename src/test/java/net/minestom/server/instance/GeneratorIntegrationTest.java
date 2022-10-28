@@ -2,12 +2,17 @@ package net.minestom.server.instance;
 
 import net.minestom.server.api.Env;
 import net.minestom.server.api.EnvTest;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.block.Block;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -98,4 +103,29 @@ public class GeneratorIntegrationTest {
             assertEquals(y == 39 ? Block.STONE : Block.GRASS_BLOCK, instance.getBlock(0, y, 0), "y=" + y);
         }
     }
+
+//    @Test
+//    public void temp(Env env) {
+//        Instance instance = env.createFlatInstance();
+//
+//        instance.loadChunk(0, 0).join();
+//        instance.loadChunk(0, -1).join();
+//        instance.loadChunk(-1, 0).join();
+//        instance.loadChunk(-1, -1).join();
+//
+//        env.process().eventHandler().addListener(PlayerLoginEvent.class, event -> {
+//            event.setSpawningInstance(instance);
+//            event.getPlayer().setRespawnPoint(new Pos(0, 0, 0));
+//        });
+//
+//        env.process().start(new InetSocketAddress(25565));
+//        while (true) {
+//            try {
+//                Thread.sleep(50);
+//                env.tick();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 }

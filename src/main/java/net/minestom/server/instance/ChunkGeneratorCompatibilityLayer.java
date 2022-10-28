@@ -10,8 +10,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
  * Provides full compatibility for the deprecated {@link ChunkGenerator}
  */
@@ -36,8 +34,8 @@ record ChunkGeneratorCompatibilityLayer(@NotNull ChunkGenerator chunkGenerator, 
         boolean containsSection = start.blockX() <= sectionX && start.blockY() <= sectionY && start.blockZ() <= sectionZ;
         if (!containsSection) return;
 
-        Point forkStart = new Vec(sectionX * Chunk.CHUNK_SIZE_X, dimensionType.getMinY(), sectionZ * Chunk.CHUNK_SIZE_Z);
-        Point forkEnd = forkStart.withY(dimensionType.getMaxY()).add(Chunk.CHUNK_SIZE_X, 0, Chunk.CHUNK_SIZE_Z);
+        Point forkStart = new Vec(sectionX * Chunk.SIZE_X, dimensionType.getMinY(), sectionZ * Chunk.SIZE_Z);
+        Point forkEnd = forkStart.withY(dimensionType.getMaxY()).add(Chunk.SIZE_X, 0, Chunk.SIZE_Z);
 
         // Fork the unit
         GenerationUnit fork = unit.fork(forkStart, forkEnd);

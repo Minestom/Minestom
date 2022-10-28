@@ -275,7 +275,8 @@ final class GeneratorImpl {
 
             @Override
             public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
-                sections.values().forEach(section -> section.modifier().fillHeight(minHeight, maxHeight, block));
+                sections.values().forEach(section ->
+                        section.modifier().fillHeight(minHeight, maxHeight, block));
             }
 
             @Override
@@ -315,9 +316,9 @@ final class GeneratorImpl {
 
         @Override
         public void setAllRelative(@NotNull Supplier supplier) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+            for (int x = 0; x < Chunk.SIZE_X; x++) {
+                for (int y = 0; y < Section.SIZE_Y; y++) {
+                    for (int z = 0; z < Chunk.SIZE_Z; z++) {
                         final Block block = supplier.get(x, y, z);
                         setBlock(x, y, z, block);
                     }
@@ -327,9 +328,9 @@ final class GeneratorImpl {
 
         @Override
         public void fill(@NotNull Block block) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+            for (int x = 0; x < Chunk.SIZE_X; x++) {
+                for (int y = 0; y < Section.SIZE_Y; y++) {
+                    for (int z = 0; z < Chunk.SIZE_Z; z++) {
                         this.section.setBlock(x, y, z, block);
                     }
                 }
@@ -338,9 +339,9 @@ final class GeneratorImpl {
 
         @Override
         public void fillBiome(@NotNull Biome biome) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X / 4; x++) {
-                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE / 4; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z / 4; z++) {
+            for (int x = 0; x < Chunk.SIZE_X / 4; x++) {
+                for (int y = 0; y < Section.SIZE_Y / 4; y++) {
+                    for (int z = 0; z < Chunk.SIZE_Z / 4; z++) {
                         setBiome(x, y, z, biome);
                     }
                 }

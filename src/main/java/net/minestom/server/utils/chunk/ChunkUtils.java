@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.Section;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -60,8 +60,7 @@ public final class ChunkUtils {
      * @return true if the chunk is loaded, false otherwise
      */
     public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
-        long chunkIndex = getChunkIndex(getChunkCoordinate(x), getChunkCoordinate(z));
-        return instance.isChunkLoaded(chunkIndex);
+        return instance.isChunkLoaded(getChunkCoordinate(x), getChunkCoordinate(z));
     }
 
     public static boolean isLoaded(@NotNull Instance instance, @NotNull Point point) {
@@ -93,10 +92,6 @@ public final class ChunkUtils {
      */
     public static long getChunkIndex(int chunkX, int chunkZ) {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
-    }
-
-    public static long getChunkIndex(@NotNull Chunk chunk) {
-        return getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
     }
 
     public static long getChunkIndex(@NotNull Point point) {
@@ -174,8 +169,8 @@ public final class ChunkUtils {
      * @return an index which can be used to store and retrieve later data linked to a block position
      */
     public static int getBlockIndex(int x, int y, int z) {
-        x = x % Chunk.CHUNK_SIZE_X;
-        z = z % Chunk.CHUNK_SIZE_Z;
+        x = x % Chunk.SIZE_X;
+        z = z % Chunk.SIZE_Z;
 
         int index = x & 0xF; // 4 bits
         if (y > 0) {
@@ -197,9 +192,9 @@ public final class ChunkUtils {
      * @return an index which can be used to store and retrieve later data linked to a block position
      */
     public static short getSectionBlockIndex(int x, int y, int z) {
-        x = x % Chunk.CHUNK_SIZE_X;
-        y = y % Chunk.CHUNK_SECTION_SIZE;
-        z = z % Chunk.CHUNK_SIZE_Z;
+        x = x % Chunk.SIZE_X;
+        y = y % Section.SIZE_Y;
+        z = z % Chunk.SIZE_Z;
 
         short index = 0;
         index |= (x << 0) & 0xF; // 4 bits
@@ -242,9 +237,9 @@ public final class ChunkUtils {
      * @return the instance position of the block located in {@code index}
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
-        final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
+        final int x = blockIndexToChunkPositionX(index) + Chunk.SIZE_X * chunkX;
         final int y = blockIndexToChunkPositionY(index);
-        final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
+        final int z = blockIndexToChunkPositionZ(index) + Chunk.SIZE_Z * chunkZ;
         return new Vec(x, y, z);
     }
 
@@ -322,24 +317,32 @@ public final class ChunkUtils {
         return (index >> 4) & 0x3;
     }
 
-    public static long getSectionIndex(int x, int y, int z) {
+    /**
+     * Gets the section index for the given section coordinates.
+     * @param chunkZ the chunk Z
+     * @param sectionY the section Y
+     * @param chunkZ the chunk Z
+     * @return the section index
+     */
+    public static long getSectionIndex(int chunkX, int sectionY, int chunkZ) {
         // 28 bits for x and z, 8 bits for y
         long index = 0;
-        index |= (x << 0) & 0xFFFFFFF; // 28 bits
-        index |= (y << 28) & 0xFF0000000L; // 8 bits
-        index |= (z << 36) & 0xFFFFFFF00000000L; // 28 bits
+        //noinspection PointlessBitwiseExpression
+        index |= ((long) chunkX << 0) & 0xFFFFFFF; // 28 bits
+        index |= ((long) sectionY << 28) & 0xFF0000000L; // 8 bits
+        index |= ((long) chunkZ << 36) & 0xFFFFFFF00000000L; // 28 bits
         return index;
     }
 
-    public static int getSectionIndexX(long index) {
+    public static int getSectionCoordX(long index) {
         return (int) (index & 0xFFFFFFF); // 28 bits
     }
 
-    public static int getSectionIndexY(long index) {
+    public static int getSectionCoordY(long index) {
         return (int) ((index >> 28) & 0xFF); // 8 bits
     }
 
-    public static int getSectionIndexZ(long index) {
+    public static int getSectionCoordZ(long index) {
         return (int) ((index >> 36) & 0xFFFFFFF); // 28 bits
     }
 }

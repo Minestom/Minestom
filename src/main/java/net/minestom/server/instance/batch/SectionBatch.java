@@ -8,8 +8,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.generator.GenerationUnit;
-import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.UnitModifier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -115,9 +113,9 @@ public class SectionBatch implements Batch {
 
         @Override
         public void setAll(@NotNull Supplier supplier) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+            for (int x = 0; x < Chunk.SIZE_X; x++) {
+                for (int y = 0; y < Section.SIZE_Y; y++) {
+                    for (int z = 0; z < Chunk.SIZE_Z; z++) {
                         int absX = x + originX;
                         int absY = y + originY;
                         int absZ = z + originZ;
@@ -130,9 +128,9 @@ public class SectionBatch implements Batch {
 
         @Override
         public void setAllRelative(@NotNull Supplier supplier) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+            for (int x = 0; x < Chunk.SIZE_X; x++) {
+                for (int y = 0; y < Section.SIZE_Y; y++) {
+                    for (int z = 0; z < Chunk.SIZE_Z; z++) {
                         short index = ChunkUtils.getSectionBlockIndex(x, y, z);
                         blocks.put(index, supplier.get(x, y, z));
                     }
@@ -157,9 +155,9 @@ public class SectionBatch implements Batch {
 
         @Override
         public void fillHeight(int minHeight, int maxHeight, @NotNull Block block) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+            for (int x = 0; x < Chunk.SIZE_X; x++) {
                 for (int y = minHeight; y < maxHeight; y++) {
-                    for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                    for (int z = 0; z < Chunk.SIZE_Z; z++) {
                         int relY = y - originY;
                         short index = ChunkUtils.getSectionBlockIndex(x, relY, z);
                         blocks.put(index, block);

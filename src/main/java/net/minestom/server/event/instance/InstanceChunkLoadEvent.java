@@ -13,9 +13,14 @@ public class InstanceChunkLoadEvent implements InstanceEvent {
     private final Instance instance;
     private final Chunk chunk;
 
-    public InstanceChunkLoadEvent(@NotNull Instance instance, @NotNull Chunk chunk) {
+    private final int chunkX;
+    private final int chunkZ;
+
+    public InstanceChunkLoadEvent(@NotNull Instance instance, @NotNull Chunk chunk, int chunkX, int chunkZ) {
         this.instance = instance;
         this.chunk = chunk;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
     }
 
     @Override
@@ -29,7 +34,7 @@ public class InstanceChunkLoadEvent implements InstanceEvent {
      * @return the chunk X
      */
     public int getChunkX() {
-        return chunk.getChunkX();
+        return chunkX;
     }
 
     /**
@@ -38,7 +43,7 @@ public class InstanceChunkLoadEvent implements InstanceEvent {
      * @return the chunk Z
      */
     public int getChunkZ() {
-        return chunk.getChunkZ();
+        return chunkZ;
     }
 
     /**

@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -49,6 +50,9 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public int get(int x, int y, int z) {
+        x = ChunkUtils.toSectionRelativeCoordinate(x);
+        y = ChunkUtils.toSectionRelativeCoordinate(y);
+        z = ChunkUtils.toSectionRelativeCoordinate(z);
         final int bitsPerEntry = this.bitsPerEntry;
         final int sectionIndex = getSectionIndex(dimension(), x, y, z);
         final int valuesPerLong = 64 / bitsPerEntry;
@@ -71,6 +75,9 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public void set(int x, int y, int z, int value) {
+        x = ChunkUtils.toSectionRelativeCoordinate(x);
+        y = ChunkUtils.toSectionRelativeCoordinate(y);
+        z = ChunkUtils.toSectionRelativeCoordinate(z);
         value = getPaletteIndex(value);
         final int bitsPerEntry = this.bitsPerEntry;
         final long[] values = this.values;

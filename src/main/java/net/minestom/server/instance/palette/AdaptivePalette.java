@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntUnaryOperator;
@@ -25,6 +26,9 @@ final class AdaptivePalette implements Palette, Cloneable {
 
     @Override
     public int get(int x, int y, int z) {
+        x = ChunkUtils.toSectionRelativeCoordinate(x);
+        y = ChunkUtils.toSectionRelativeCoordinate(y);
+        z = ChunkUtils.toSectionRelativeCoordinate(z);
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
@@ -43,6 +47,9 @@ final class AdaptivePalette implements Palette, Cloneable {
 
     @Override
     public void set(int x, int y, int z, int value) {
+        x = ChunkUtils.toSectionRelativeCoordinate(x);
+        y = ChunkUtils.toSectionRelativeCoordinate(y);
+        z = ChunkUtils.toSectionRelativeCoordinate(z);
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
         }
@@ -63,6 +70,9 @@ final class AdaptivePalette implements Palette, Cloneable {
 
     @Override
     public void replace(int x, int y, int z, @NotNull IntUnaryOperator operator) {
+        x = ChunkUtils.toSectionRelativeCoordinate(x);
+        y = ChunkUtils.toSectionRelativeCoordinate(y);
+        z = ChunkUtils.toSectionRelativeCoordinate(z);
         if (x < 0 || y < 0 || z < 0) {
             throw new IllegalArgumentException("Coordinates must be positive");
         }

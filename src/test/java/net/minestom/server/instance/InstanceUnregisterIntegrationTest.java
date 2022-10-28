@@ -15,7 +15,7 @@ public class InstanceUnregisterIntegrationTest {
 
     @Test
     public void sharedInstance(Env env) {
-        // Ensure that unregistering a shared instance does not unload the container chunks
+        // Ensure that unregistering a shared chunk does not unload the container chunks
         var instanceManager = env.process().instance();
         var instance = instanceManager.createInstanceContainer();
         var shared1 = instanceManager.createSharedInstance(instance);
@@ -48,11 +48,11 @@ public class InstanceUnregisterIntegrationTest {
 
     @Test
     public void chunkGC(Env env) {
-        // Ensure that unregistering an instance does release its chunks
+        // Ensure that unregistering an chunk does release its chunks
         var instance = env.createFlatInstance();
-        var chunk = instance.loadChunkOrRetrieve(0, 0).join();
+        var chunk = instance.loadChunk(0, 0).join();
         var ref = new WeakReference<>(chunk);
-        instance.unloadChunk(chunk);
+        instance.unloadChunk(0, 0).join();
         env.process().instance().unregisterInstance(instance);
         env.tick(); // Required to remove the chunk from the thread dispatcher
 

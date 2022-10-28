@@ -119,8 +119,8 @@ public class CoordinateTest {
                 Vec.ONE,
                 Vec.ONE.withY(-1),
                 // Vector with X/Z outside of chunk size
-                new Vec(Chunk.CHUNK_SIZE_X + 1, 20, Chunk.CHUNK_SIZE_Z + 1),
-                new Vec(Chunk.CHUNK_SIZE_X + 1, -20, Chunk.CHUNK_SIZE_Z + 1),
+                new Vec(Chunk.SIZE_X + 1, 20, Chunk.SIZE_Z + 1),
+                new Vec(Chunk.SIZE_X + 1, -20, Chunk.SIZE_Z + 1),
                 // Vector with negative X/Z block pos
                 new Vec(-1, 20, -1),
                 new Vec(-1, -20, -1),
@@ -154,8 +154,8 @@ public class CoordinateTest {
     public void blockIndexDuplicate() {
         LongSet temp = new LongOpenHashSet();
 
-        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+        for (int x = 0; x < Chunk.SIZE_X; x++) {
+            for (int z = 0; z < Chunk.SIZE_Z; z++) {
                 for (int y = -64; y < 364; y++) {
                     var vec = new Vec(x, y, z);
                     var index = getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
