@@ -16,7 +16,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ChatPreviewPacket(int queryId, @Nullable Component preview) implements ComponentHoldingServerPacket {
     public ChatPreviewPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(INT), reader.read(BOOLEAN) ? reader.read(COMPONENT) : null);
+        this(reader.read(INT), reader.readOptional(COMPONENT));
     }
 
     @Override
