@@ -1,13 +1,14 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagWritable;
-import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -167,8 +168,8 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(material(), amount(),
-                NBTUtils.asBinaryTagHolder(meta().toNBT()))));
+        final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(material(), amount(), tagHolder)));
     }
 
     /**
