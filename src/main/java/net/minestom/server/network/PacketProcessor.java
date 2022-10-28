@@ -27,16 +27,19 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
     }
 
     public @NotNull ClientPacket create(@NotNull ConnectionState connectionState, int packetId, ByteBuffer body) {
-        BinaryReader binaryReader = new BinaryReader(body);
-        return switch (connectionState) {
-            case PLAY -> playHandler.create(packetId, binaryReader);
-            case LOGIN -> loginHandler.create(packetId, binaryReader);
-            case STATUS -> statusHandler.create(packetId, binaryReader);
+        NetworkBuffer networkBuffer = new NetworkBuffer(body);
+        BinaryReader reader = new BinaryReader(networkBuffer);
+        final ClientPacket clientPacket = switch (connectionState) {
+            case PLAY -> playHandler.create(packetId, reader);
+            case LOGIN -> loginHandler.create(packetId, reader);
+            case STATUS -> statusHandler.create(packetId, reader);
             case UNKNOWN -> {
                 assert packetId == 0;
-                yield new HandshakePacket(binaryReader);
+                yield new HandshakePacket(reader);
             }
         };
+        body.position(networkBuffer.readIndex());
+        return clientPacket;
     }
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {

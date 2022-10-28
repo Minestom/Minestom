@@ -1,18 +1,16 @@
 package net.minestom.server.extras.velocity;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
  * Support for <a href="https://velocitypowered.com/">Velocity</a> modern forwarding.
@@ -47,12 +45,14 @@ public final class VelocityProxy {
         return enabled;
     }
 
-    public static boolean checkIntegrity(@NotNull BinaryReader reader) {
-        final byte[] signature = reader.readBytes(32);
-        ByteBuffer buf = reader.getBuffer();
-        buf.mark();
-        final byte[] data = reader.readRemainingBytes();
-        buf.reset();
+    public static boolean checkIntegrity(NetworkBuffer buffer) {
+        final byte[] signature = new byte[32];
+        for (int i = 0; i < signature.length; i++) {
+            signature[i] = buffer.read(BYTE);
+        }
+        final int index = buffer.readIndex();
+        final byte[] data = buffer.read(RAW_BYTES);
+        buffer.readIndex(index);
         try {
             Mac mac = Mac.getInstance(MAC_ALGORITHM);
             mac.init(key);
@@ -63,16 +63,7 @@ public final class VelocityProxy {
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
-        final int version = reader.readVarInt();
+        final int version = buffer.read(VAR_INT);
         return version == SUPPORTED_FORWARDING_VERSION;
-    }
-
-    public static InetAddress readAddress(@NotNull BinaryReader reader) {
-        try {
-            return InetAddress.getByName(reader.readSizedString());
-        } catch (UnknownHostException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
     }
 }

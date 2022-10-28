@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.GameProfile;
@@ -18,6 +19,10 @@ import org.jetbrains.annotations.Nullable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) implements ClientPreplayPacket {
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
@@ -41,14 +46,20 @@ public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) i
                 // Velocity
                 if (VelocityProxy.isEnabled() && channel.equals(VelocityProxy.PLAYER_INFO_CHANNEL)) {
                     if (data != null && data.length > 0) {
-                        BinaryReader reader = new BinaryReader(data);
-                        success = VelocityProxy.checkIntegrity(reader);
+                        NetworkBuffer buffer = new NetworkBuffer(ByteBuffer.wrap(data));
+                        success = VelocityProxy.checkIntegrity(buffer);
                         if (success) {
                             // Get the real connection address
-                            final InetAddress address = VelocityProxy.readAddress(reader);
+                            final InetAddress address;
+                            try {
+                                address = InetAddress.getByName(buffer.read(STRING));
+                            } catch (UnknownHostException e) {
+                                MinecraftServer.getExceptionManager().handleException(e);
+                                return;
+                            }
                             final int port = ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort();
                             socketAddress = new InetSocketAddress(address, port);
-                            gameProfile = new GameProfile(reader);
+                            gameProfile = new GameProfile(new BinaryReader(buffer));
                         }
                     }
                 }
