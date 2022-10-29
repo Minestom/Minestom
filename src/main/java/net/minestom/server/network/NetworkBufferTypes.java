@@ -55,6 +55,17 @@ final class NetworkBufferTypes {
                 buffer.readIndex += 2;
                 return value;
             });
+    static final TypeImpl<Integer> UNSIGNED_SHORT = new TypeImpl<>(Integer.class,
+            (buffer, value) -> {
+                buffer.ensureSize(2);
+                buffer.nioBuffer.putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
+                return 2;
+            },
+            buffer -> {
+                final short value = buffer.nioBuffer.getShort(buffer.readIndex());
+                buffer.readIndex += 2;
+                return value & 0xFFFF;
+            });
     static final TypeImpl<Integer> INT = new TypeImpl<>(Integer.class,
             (buffer, value) -> {
                 buffer.ensureSize(4);

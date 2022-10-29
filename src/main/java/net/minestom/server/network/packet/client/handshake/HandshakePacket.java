@@ -41,7 +41,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
 
     public HandshakePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(STRING),
-                reader.read(SHORT), reader.read(VAR_INT));
+                reader.read(UNSIGNED_SHORT), reader.read(VAR_INT));
     }
 
     @Override
@@ -52,7 +52,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
             throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
         writer.write(STRING, serverAddress);
-        writer.write(SHORT, (short) serverPort);
+        writer.write(UNSIGNED_SHORT, serverPort);
         writer.write(VAR_INT, nextState);
     }
 

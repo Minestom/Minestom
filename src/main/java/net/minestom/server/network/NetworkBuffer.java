@@ -27,6 +27,7 @@ public final class NetworkBuffer {
     public static final Type<Boolean> BOOLEAN = NetworkBufferTypes.BOOLEAN;
     public static final Type<Byte> BYTE = NetworkBufferTypes.BYTE;
     public static final Type<Short> SHORT = NetworkBufferTypes.SHORT;
+    public static final Type<Integer> UNSIGNED_SHORT = NetworkBufferTypes.UNSIGNED_SHORT;
     public static final Type<Integer> INT = NetworkBufferTypes.INT;
     public static final Type<Long> LONG = NetworkBufferTypes.LONG;
     public static final Type<Float> FLOAT = NetworkBufferTypes.FLOAT;

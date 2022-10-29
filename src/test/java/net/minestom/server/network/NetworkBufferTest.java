@@ -64,6 +64,12 @@ public class NetworkBufferTest {
         assertBufferType(NetworkBuffer.SHORT, (short) 0x8000, new byte[]{(byte) 0x80, 0x00});
         assertBufferType(NetworkBuffer.SHORT, (short) 0xFFFF, new byte[]{(byte) 0xFF, (byte) 0xFF});
 
+        assertBufferType(NetworkBuffer.UNSIGNED_SHORT, 0x0000, new byte[]{0x00, 0x00});
+        assertBufferType(NetworkBuffer.UNSIGNED_SHORT, 0x0001, new byte[]{0x00, 0x01});
+        assertBufferType(NetworkBuffer.UNSIGNED_SHORT, 0x7FFF, new byte[]{0x7F, (byte) 0xFF});
+        assertBufferType(NetworkBuffer.UNSIGNED_SHORT, 0x8000, new byte[]{(byte) 0x80, 0x00});
+        assertBufferType(NetworkBuffer.UNSIGNED_SHORT, 0xFFFF, new byte[]{(byte) 0xFF, (byte) 0xFF});
+
         assertBufferType(NetworkBuffer.INT, 0, new byte[]{0x00, 0x00, 0x00, 0x00});
         assertBufferType(NetworkBuffer.INT, 1, new byte[]{0x00, 0x00, 0x00, 0x01});
         assertBufferType(NetworkBuffer.INT, 2, new byte[]{0x00, 0x00, 0x00, 0x02});
