@@ -242,7 +242,12 @@ final class NetworkBufferTypes {
                     nbtReader = new NBTReader(new InputStream() {
                         @Override
                         public int read() {
-                            return buffer.read(BYTE);
+                            return buffer.read(BYTE) & 0xFF;
+                        }
+
+                        @Override
+                        public int available() {
+                            return buffer.readableBytes();
                         }
                     }, CompressedProcesser.NONE);
                     buffer.nbtReader = nbtReader;
