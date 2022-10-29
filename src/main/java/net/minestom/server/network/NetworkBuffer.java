@@ -213,6 +213,15 @@ public final class NetworkBuffer {
         this.nioBuffer.get(srcOffset, dest, destOffset, length);
     }
 
+    public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
+        final int startingPosition = readIndex();
+        extractor.accept(this);
+        final int endingPosition = readIndex();
+        byte[] output = new byte[endingPosition - startingPosition];
+        copyTo(startingPosition, output, 0, output.length);
+        return output;
+    }
+
     public void clear() {
         this.writeIndex = 0;
         this.readIndex = 0;

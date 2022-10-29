@@ -5,7 +5,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -91,7 +90,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             if (isArgument()) {
                 final ProtocolObject object = Argument.CONTAINER.getId(reader.read(VAR_INT));
                 parser = object.name();
-                properties = new byte[0];//getProperties(reader, parser);
+                properties = getProperties(reader, parser);
             }
 
             if ((flags & 0x10) != 0) {
@@ -99,29 +98,29 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             }
         }
 
-        //private byte[] getProperties(@NotNull NetworkBuffer reader, String parser) {
-        //    final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes(() -> {
-        //        byte flags = reader.read(BYTE);
-        //        if ((flags & 0x01) == 0x01) {
-        //            via.apply(reader); // min
-        //        }
-        //        if ((flags & 0x02) == 0x02) {
-        //            via.apply(reader); // max
-        //        }
-        //    });
-        //    return switch (parser) {
-        //        case "brigadier:double" -> minMaxExtractor.apply(BinaryReader::readDouble);
-        //        case "brigadier:integer" -> minMaxExtractor.apply(BinaryReader::readInt);
-        //        case "brigadier:float" -> minMaxExtractor.apply(BinaryReader::readFloat);
-        //        case "brigadier:long" -> minMaxExtractor.apply(BinaryReader::readLong);
-        //        case "brigadier:string" -> reader.extractBytes(reader::readVarInt);
-        //        case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(reader::readByte);
-        //        case "minecraft:range" ->
-        //                reader.extractBytes(reader::readBoolean); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
-        //        case "minecraft:resource_or_tag", "minecraft:registry" -> reader.extractBytes(reader::readSizedString);
-        //        default -> new byte[0]; // unknown
-        //    };
-        //}
+        private byte[] getProperties(@NotNull NetworkBuffer reader, String parser) {
+            final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
+                byte flags = extractor.read(BYTE);
+                if ((flags & 0x01) == 0x01) {
+                    via.apply(extractor); // min
+                }
+                if ((flags & 0x02) == 0x02) {
+                    via.apply(extractor); // max
+                }
+            });
+            return switch (parser) {
+                case "brigadier:double" -> minMaxExtractor.apply(b -> b.read(DOUBLE));
+                case "brigadier:integer" -> minMaxExtractor.apply(b -> b.read(INT));
+                case "brigadier:float" -> minMaxExtractor.apply(b -> b.read(FLOAT));
+                case "brigadier:long" -> minMaxExtractor.apply(b -> b.read(LONG));
+                case "brigadier:string" -> reader.extractBytes(b -> b.read(VAR_INT));
+                case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(b -> b.read(BYTE));
+                case "minecraft:range" ->
+                        reader.extractBytes(b -> b.read(BOOLEAN)); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
+                case "minecraft:resource_or_tag", "minecraft:registry" -> reader.extractBytes(b -> b.read(STRING));
+                default -> new byte[0]; // unknown
+            };
+        }
 
         private boolean isLiteral() {
             return (flags & 0b1) != 0;
