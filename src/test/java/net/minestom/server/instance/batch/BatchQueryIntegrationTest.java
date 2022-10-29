@@ -3,10 +3,12 @@ package net.minestom.server.instance.batch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class BatchQueryIntegrationTest {
@@ -85,5 +87,59 @@ public class BatchQueryIntegrationTest {
                 }
             }
         }
+    }
+
+
+    @Test
+    @Disabled("Should #count retrieve air blocks?")
+    public void airCount(Env env) {
+        var instance = env.process().instance().createInstanceContainer();
+        var batch = BatchQuery.radius(1);
+
+        instance.loadChunk(0, 0).join();
+
+        var result = instance.getBlocks(8, 8, 8, batch);
+        assertEquals(0, result.count());
+
+        instance.setBlock(8, 8, 8, Block.STONE);
+        result = instance.getBlocks(8, 8, 8, batch);
+        assertEquals(1, result.count());
+    }
+
+    @Test
+    public void anySolid(Env env) {
+        var instance = env.process().instance().createInstanceContainer();
+        var batch = BatchQuery.radius(1);
+
+        instance.loadChunk(0, 0).join();
+
+        var random = new Random(12345);
+
+        // Fill section with non-solid/air blocks
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    instance.setBlock(x, y, z, random.nextBoolean() ? Block.AIR : Block.SUNFLOWER);
+                }
+            }
+        }
+
+        // Place stone in the middle
+        for (int x = 7; x < 10; x++) {
+            for (int y = 7; y < 10; y++) {
+                for (int z = 7; z < 10; z++) {
+                    instance.setBlock(x, y, z, Block.STONE);
+                }
+            }
+        }
+
+        // Retrieve in the middle
+        var result = instance.getBlocks(8, 8, 8, batch);
+        assertTrue(result.anySolid());
+        assertEquals(27, result.count());
+
+        // Retrieve at the edge
+        result = instance.getBlocks(2, 2, 2, batch);
+        assertFalse(result.anySolid());
     }
 }

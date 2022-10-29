@@ -22,6 +22,9 @@ public sealed interface BatchQuery
     @NotNull BatchQuery withExact(@NotNull Block @NotNull ... blocks);
 
     interface Result extends Block.Getter {
+
+        boolean anySolid();
+
         /**
          * Gets the number of blocks successfully queried.
          *

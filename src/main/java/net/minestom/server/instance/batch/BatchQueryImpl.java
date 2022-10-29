@@ -77,6 +77,11 @@ record BatchQueryImpl(int radius,
         }
 
         @Override
+        public boolean anySolid() {
+            return blocks.values().stream().anyMatch(Block::isSolid);
+        }
+
+        @Override
         public int count() {
             return blocks.size();
         }
