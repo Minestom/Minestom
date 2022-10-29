@@ -4,17 +4,43 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 record BatchQueryImpl(int radius,
-                      @NotNull Predicate<Block> predicate) implements BatchQuery {
+                      @Nullable Set<Integer> type,
+                      @Nullable Set<Block> exact) implements BatchQuery {
+    public BatchQueryImpl {
+        type = type != null ? Set.copyOf(type) : null;
+        exact = exact != null ? Set.copyOf(exact) : null;
+    }
+
+    static BatchQuery radius(int radius) {
+        return new BatchQueryImpl(radius, null, null);
+    }
+
+    @Override
+    public @NotNull BatchQuery withType(@NotNull Block @NotNull ... blocks) {
+        var updatedType = Arrays.stream(blocks).map(Block::id).collect(Collectors.toUnmodifiableSet());
+        return new BatchQueryImpl(radius, updatedType, exact);
+    }
+
+    @Override
+    public @NotNull BatchQuery withExact(@NotNull Block @NotNull ... blocks) {
+        return new BatchQueryImpl(radius, type, Set.of(blocks));
+    }
+
+    private boolean valid(Block block) {
+        if (type != null && !type.contains(block.id()))
+            return false;
+        return exact == null || exact.contains(block);
+    }
 
     static Result fallback(Block.Getter getter, int x, int y, int z,
                            Block.Getter.Condition condition, BatchQuery query) {
@@ -29,7 +55,7 @@ record BatchQueryImpl(int radius,
                     final int blockY = y + j;
                     final int blockZ = z + k;
                     final Block block = getter.getBlock(blockX, blockY, blockZ);
-                    if (!queryImpl.predicate.test(block)) {
+                    if (!queryImpl.valid(block)) {
                         continue;
                     }
                     blocks.put(new Vec(blockX, blockY, blockZ), block);
@@ -53,42 +79,6 @@ record BatchQueryImpl(int radius,
         @Override
         public int count() {
             return blocks.size();
-        }
-    }
-
-    static final class Builder implements BatchQuery.Builder {
-        private final int radius;
-        private Set<Integer> type;
-        private Set<Block> exact;
-
-        Builder(Integer radius) {
-            this.radius = radius;
-        }
-
-        @Override
-        public BatchQuery.@NotNull Builder type(@NotNull Block @NotNull ... blocks) {
-            this.type = Arrays.stream(blocks).map(Block::id).collect(Collectors.toUnmodifiableSet());
-            return this;
-        }
-
-        @Override
-        public BatchQuery.@NotNull Builder exact(@NotNull Block @NotNull ... blocks) {
-            this.exact = Set.of(blocks);
-            return this;
-        }
-
-        @Override
-        public @NotNull BatchQuery build() {
-            var type = this.type != null ? Set.copyOf(this.type) : null;
-            var exact = this.exact != null ? Set.copyOf(this.exact) : null;
-            return new BatchQueryImpl(radius,
-                    block -> {
-                        if (type != null && !type.contains(block.id()))
-                            return false;
-                        if (exact != null && !exact.contains(block))
-                            return false;
-                        return true;
-                    });
         }
     }
 }

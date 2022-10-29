@@ -42,7 +42,7 @@ public class BatchQueryIntegrationTest {
     @Test
     public void type(Env env) {
         var instance = env.process().instance().createInstanceContainer();
-        var batch = BatchQuery.builder(3).type(Block.STONE).build();
+        var batch = BatchQuery.radius(3).withType(Block.STONE);
 
         instance.loadChunk(0, 0).join();
 
