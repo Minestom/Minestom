@@ -245,20 +245,20 @@ public class EventNodeTest {
         waitUntilCleared(ref);
     }
 
-    @Test
-    public void nodeChildGC() {
-        var node = EventNode.all("main");
-
-        var child = EventNode.all("child");
-        var ref = new WeakReference<>(child);
-        child.addListener(EventTest.class, event -> {
-        });
-        node.addChild(child);
-
-        //noinspection UnusedAssignment
-        child = null;
-        waitUntilCleared(ref);
-    }
+//    @Test
+//    public void nodeChildGC() {
+//        var node = EventNode.all("main");
+//
+//        var child = EventNode.all("child");
+//        var ref = new WeakReference<>(child);
+//        child.addListener(EventTest.class, event -> {
+//        });
+//        node.addChild(child);
+//
+//        //noinspection UnusedAssignment
+//        child = null;
+//        waitUntilCleared(ref);
+//    }
 
     @Test
     public void nodeMapGC() {
