@@ -21,8 +21,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
-    final Set<EventNodeImpl<T>> children = Collections.newSetFromMap(Caffeine.newBuilder()
-            .weakKeys().<EventNodeImpl<T>, Boolean>build().asMap());
+    final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
     final Map<Object, EventNodeImpl<T>> mappedNodeCache = Caffeine.newBuilder()
             .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
     final Map<Object, EventNodeImpl<T>> registeredMappedNode = Caffeine.newBuilder()
