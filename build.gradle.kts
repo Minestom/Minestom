@@ -2,6 +2,7 @@ plugins {
     `java-library`
     id("minestom.publishing-conventions")
     id("minestom.native-conventions")
+	id("org.hibernate.build.maven-repo-auth") version "3.0.4"
 }
 
 allprojects {

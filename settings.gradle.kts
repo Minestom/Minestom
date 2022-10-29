@@ -4,6 +4,10 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     repositories {
         maven("https://jitpack.io")
+		maven {
+			name = "tecno-repo"
+			url = uri("https://repo.mrtecno.tk/repository/public-maven/")
+		}
         mavenCentral()
     }
 }
@@ -16,7 +20,7 @@ pluginManagement {
     includeBuild("build-logic")
 }
 
-rootProject.name = "Minestom"
+rootProject.name = "Minestom-T"
 include("code-generators")
 include("jmh-benchmarks")
 include("jcstress-tests")

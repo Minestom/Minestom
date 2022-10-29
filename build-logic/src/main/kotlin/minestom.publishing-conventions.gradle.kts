@@ -1,7 +1,8 @@
 plugins {
     id("net.kyori.indra")
     id("net.kyori.indra.publishing")
-    id("net.kyori.indra.publishing.sonatype")
+	id("maven-publish")
+    // id("net.kyori.indra.publishing.sonatype")
 }
 
 indra {
@@ -14,6 +15,9 @@ indra {
         ci(true)
     }
     apache2License()
+	
+	publishReleasesTo("tecno-repo", "https://repo.mrtecno.tk/repository/maven-release/")
+	publishSnapshotsTo("tecno-repo", "https://repo.mrtecno.tk/repository/maven-snapshot/")
 
     configurePublications {
         pom {
@@ -29,4 +33,13 @@ indra {
             }
         }
     }
+}
+
+publishing {
+	repositories {
+		maven {
+			name = "tecno-repo"
+			url = uri("https://repo.mrtecno.tk/repository/personal-hosted/")
+		}
+	}
 }
