@@ -2,11 +2,10 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,23 +13,25 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
                                 @NotNull ItemStack carriedItem) implements ComponentHoldingServerPacket {
     public WindowItemsPacket {
         items = List.copyOf(items);
     }
 
-    public WindowItemsPacket(BinaryReader reader) {
-        this(reader.readByte(), reader.readVarInt(), reader.readVarIntList(BinaryReader::readItemStack),
-                reader.readItemStack());
+    public WindowItemsPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BYTE), reader.read(VAR_INT), reader.readCollection(ITEM),
+                reader.read(ITEM));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(windowId);
-        writer.writeVarInt(stateId);
-        writer.writeVarIntList(items, BinaryWriter::writeItemStack);
-        writer.writeItemStack(carriedItem);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, windowId);
+        writer.write(VAR_INT, stateId);
+        writer.writeCollection(ITEM, items);
+        writer.write(ITEM, carriedItem);
     }
 
     @Override

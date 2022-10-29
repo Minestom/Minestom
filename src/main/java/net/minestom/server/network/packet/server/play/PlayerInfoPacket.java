@@ -4,17 +4,20 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerInfoPacket(@NotNull Action action,
                                @NotNull List<Entry> entries) implements ComponentHoldingServerPacket {
@@ -30,7 +33,7 @@ public record PlayerInfoPacket(@NotNull Action action,
         this(action, List.of(entry));
     }
 
-    public PlayerInfoPacket(BinaryReader reader) {
+    public PlayerInfoPacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
 
@@ -38,12 +41,12 @@ public record PlayerInfoPacket(@NotNull Action action,
         this(packet.action, packet.entries);
     }
 
-    private static PlayerInfoPacket read(BinaryReader reader) {
-        var action = Action.values()[reader.readVarInt()];
-        final int playerInfoCount = reader.readVarInt();
+    private static PlayerInfoPacket read(@NotNull NetworkBuffer reader) {
+        var action = Action.values()[reader.read(VAR_INT)];
+        final int playerInfoCount = reader.read(VAR_INT);
         List<Entry> entries = new ArrayList<>(playerInfoCount);
         for (int i = 0; i < playerInfoCount; i++) {
-            final UUID uuid = reader.readUuid();
+            final UUID uuid = reader.read(UUID);
             entries.add(switch (action) {
                 case ADD_PLAYER -> new AddPlayer(uuid, reader);
                 case UPDATE_GAMEMODE -> new UpdateGameMode(uuid, reader);
@@ -56,10 +59,10 @@ public record PlayerInfoPacket(@NotNull Action action,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(action.ordinal());
-        writer.writeVarIntList(entries, (w, entry) -> {
-            w.writeUuid(entry.uuid());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, action.ordinal());
+        writer.writeCollection(entries, (w, entry) -> {
+            w.write(UUID, entry.uuid());
             entry.write(w);
         });
     }
@@ -72,8 +75,7 @@ public record PlayerInfoPacket(@NotNull Action action,
     @Override
     public @NotNull Collection<Component> components() {
         switch (this.action) {
-            case ADD_PLAYER:
-            case UPDATE_DISPLAY_NAME:
+            case ADD_PLAYER, UPDATE_DISPLAY_NAME -> {
                 List<Component> components = new ArrayList<>();
                 for (Entry entry : entries) {
                     if (entry instanceof ComponentHolder) {
@@ -81,8 +83,10 @@ public record PlayerInfoPacket(@NotNull Action action,
                     }
                 }
                 return components;
-            default:
+            }
+            default -> {
                 return List.of();
+            }
         }
     }
 
@@ -123,7 +127,7 @@ public record PlayerInfoPacket(@NotNull Action action,
         }
     }
 
-    public sealed interface Entry extends Writeable
+    public sealed interface Entry extends NetworkBuffer.Writer
             permits AddPlayer, UpdateGameMode, UpdateLatency, UpdateDisplayName, RemovePlayer {
         UUID uuid();
     }
@@ -135,24 +139,22 @@ public record PlayerInfoPacket(@NotNull Action action,
             properties = List.copyOf(properties);
         }
 
-        public AddPlayer(UUID uuid, BinaryReader reader) {
-            this(uuid, reader.readSizedString(),
-                    reader.readVarIntList(Property::new),
-                    GameMode.values()[reader.readVarInt()], reader.readVarInt(),
-                    reader.readBoolean() ? reader.readComponent() : null,
-                    reader.readBoolean() ? new PlayerPublicKey(reader) : null);
+        public AddPlayer(UUID uuid, NetworkBuffer reader) {
+            this(uuid, reader.read(STRING),
+                    reader.readCollection(Property::new),
+                    GameMode.values()[reader.read(VAR_INT)], reader.read(VAR_INT),
+                    reader.read(BOOLEAN) ? reader.read(COMPONENT) : null,
+                    reader.read(BOOLEAN) ? new PlayerPublicKey(reader) : null);
         }
 
         @Override
-        public void write(BinaryWriter writer) {
-            writer.writeSizedString(name);
-            writer.writeVarIntList(properties, BinaryWriter::write);
-            writer.writeVarInt(gameMode.id());
-            writer.writeVarInt(ping);
-            writer.writeBoolean(displayName != null);
-            if (displayName != null) writer.writeComponent(displayName);
-            writer.writeBoolean(playerPublicKey != null);
-            if (playerPublicKey != null) writer.write(playerPublicKey);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, name);
+            writer.writeCollection(properties);
+            writer.write(VAR_INT, (int) gameMode.id());
+            writer.write(VAR_INT, ping);
+            writer.writeOptional(COMPONENT, displayName);
+            writer.writeOptional(playerPublicKey);
         }
 
         @Override
@@ -167,58 +169,58 @@ public record PlayerInfoPacket(@NotNull Action action,
         }
 
         public record Property(@NotNull String name, @NotNull String value,
-                               @Nullable String signature) implements Writeable {
+                               @Nullable String signature) implements NetworkBuffer.Writer {
             public Property(String name, String value) {
                 this(name, value, null);
             }
 
-            public Property(BinaryReader reader) {
-                this(reader.readSizedString(), reader.readSizedString(),
-                        reader.readBoolean() ? reader.readSizedString() : null);
+            public Property(@NotNull NetworkBuffer reader) {
+                this(reader.read(STRING), reader.read(STRING),
+                        reader.read(BOOLEAN) ? reader.read(STRING) : null);
             }
 
             @Override
-            public void write(BinaryWriter writer) {
-                writer.writeSizedString(name);
-                writer.writeSizedString(value);
-                writer.writeBoolean(signature != null);
-                if (signature != null) writer.writeSizedString(signature);
+            public void write(@NotNull NetworkBuffer writer) {
+                writer.write(STRING, name);
+                writer.write(STRING, value);
+                writer.write(BOOLEAN, signature != null);
+                if (signature != null) writer.write(STRING, signature);
             }
         }
     }
 
     public record UpdateGameMode(UUID uuid, GameMode gameMode) implements Entry {
-        public UpdateGameMode(UUID uuid, BinaryReader reader) {
-            this(uuid, GameMode.fromId((byte) reader.readVarInt()));
+        public UpdateGameMode(UUID uuid, NetworkBuffer reader) {
+            this(uuid, GameMode.fromId(reader.read(VAR_INT).byteValue()));
         }
 
         @Override
-        public void write(BinaryWriter writer) {
-            writer.writeVarInt(gameMode.id());
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, (int) gameMode.id());
         }
     }
 
     public record UpdateLatency(UUID uuid, int ping) implements Entry {
-        public UpdateLatency(UUID uuid, BinaryReader reader) {
-            this(uuid, reader.readVarInt());
+        public UpdateLatency(UUID uuid, NetworkBuffer reader) {
+            this(uuid, reader.read(VAR_INT));
         }
 
         @Override
-        public void write(BinaryWriter writer) {
-            writer.writeVarInt(ping);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, ping);
         }
     }
 
     public record UpdateDisplayName(@NotNull UUID uuid,
                                     @Nullable Component displayName) implements Entry, ComponentHolder<UpdateDisplayName> {
-        public UpdateDisplayName(UUID uuid, BinaryReader reader) {
-            this(uuid, reader.readBoolean() ? reader.readComponent() : null);
+        public UpdateDisplayName(UUID uuid, NetworkBuffer reader) {
+            this(uuid, reader.read(BOOLEAN) ? reader.read(COMPONENT) : null);
         }
 
         @Override
-        public void write(BinaryWriter writer) {
-            writer.writeBoolean(displayName != null);
-            if (displayName != null) writer.writeComponent(displayName);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(BOOLEAN, displayName != null);
+            if (displayName != null) writer.write(COMPONENT, displayName);
         }
 
         @Override
@@ -234,7 +236,7 @@ public record PlayerInfoPacket(@NotNull Action action,
 
     public record RemovePlayer(@NotNull UUID uuid) implements Entry {
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull NetworkBuffer writer) {
         }
     }
 }

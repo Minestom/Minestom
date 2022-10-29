@@ -2,11 +2,10 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.MessageSignature;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +14,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 /**
  * Represents an outgoing chat message packet.
  */
@@ -22,23 +23,21 @@ public record PlayerChatMessagePacket(@NotNull Component signedContent, @Nullabl
                                       int type, @NotNull UUID uuid,
                                       @NotNull Component displayName, @Nullable Component teamDisplayName,
                                       @NotNull MessageSignature signature) implements ComponentHoldingServerPacket {
-    public PlayerChatMessagePacket(BinaryReader reader) {
-        this(reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
-                reader.readVarInt(), reader.readUuid(),
-                reader.readComponent(), reader.readBoolean() ? reader.readComponent() : null,
+    public PlayerChatMessagePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(COMPONENT), reader.readOptional(COMPONENT),
+                reader.read(VAR_INT), reader.read(NetworkBuffer.UUID),
+                reader.read(COMPONENT), reader.readOptional(COMPONENT),
                 new MessageSignature(reader));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeComponent(signedContent);
-        writer.writeBoolean(unsignedContent != null);
-        if (unsignedContent != null) writer.writeComponent(unsignedContent);
-        writer.writeVarInt(type);
-        writer.writeUuid(uuid);
-        writer.writeComponent(displayName);
-        writer.writeBoolean(teamDisplayName != null);
-        if (teamDisplayName != null) writer.writeComponent(teamDisplayName);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(COMPONENT, signedContent);
+        writer.writeOptional(COMPONENT, unsignedContent);
+        writer.write(VAR_INT, type);
+        writer.write(UUID, uuid);
+        writer.write(COMPONENT, displayName);
+        writer.writeOptional(COMPONENT, teamDisplayName);
         writer.write(signature);
     }
 

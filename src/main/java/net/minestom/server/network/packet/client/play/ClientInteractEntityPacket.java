@@ -1,43 +1,44 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boolean sneaking) implements ClientPacket {
-    public ClientInteractEntityPacket(BinaryReader reader) {
-        this(reader.readVarInt(), switch (reader.readVarInt()) {
+    public ClientInteractEntityPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), switch (reader.read(VAR_INT)) {
             case 0 -> new Interact(reader);
             case 1 -> new Attack();
             case 2 -> new InteractAt(reader);
             default -> throw new RuntimeException("Unknown action id");
-        }, reader.readBoolean());
+        }, reader.read(BOOLEAN));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(targetId);
-        writer.writeVarInt(type.id());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, targetId);
+        writer.write(VAR_INT, type.id());
         writer.write(type);
-        writer.writeBoolean(sneaking);
+        writer.write(BOOLEAN, sneaking);
     }
 
-    public sealed interface Type extends Writeable
+    public sealed interface Type extends Writer
             permits Interact, Attack, InteractAt {
         int id();
     }
 
-    public record Interact(@NotNull Player.Hand hand) implements Type {
-        public Interact(BinaryReader reader) {
-            this(Player.Hand.values()[reader.readVarInt()]);
+    public record Interact(Player.@NotNull Hand hand) implements Type {
+        public Interact(@NotNull NetworkBuffer reader) {
+            this(reader.readEnum(Player.Hand.class));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarInt(hand.ordinal());
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeEnum(Player.Hand.class, hand);
         }
 
         @Override
@@ -48,7 +49,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
 
     public record Attack() implements Type {
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull NetworkBuffer writer) {
             // Empty
         }
 
@@ -59,18 +60,18 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
     }
 
     public record InteractAt(float targetX, float targetY, float targetZ,
-                             Player.Hand hand) implements Type {
-        public InteractAt(BinaryReader reader) {
-            this(reader.readFloat(), reader.readFloat(), reader.readFloat(),
-                    Player.Hand.values()[reader.readVarInt()]);
+                             Player.@NotNull Hand hand) implements Type {
+        public InteractAt(@NotNull NetworkBuffer reader) {
+            this(reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT),
+                    reader.readEnum(Player.Hand.class));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeFloat(targetX);
-            writer.writeFloat(targetY);
-            writer.writeFloat(targetZ);
-            writer.writeVarInt(hand.ordinal());
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(FLOAT, targetX);
+            writer.write(FLOAT, targetY);
+            writer.write(FLOAT, targetZ);
+            writer.writeEnum(Player.Hand.class, hand);
         }
 
         @Override

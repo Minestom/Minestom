@@ -2,10 +2,11 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.crypto.LastSeenMessages;
 import net.minestom.server.crypto.MessageSignature;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientChatMessagePacket(@NotNull String message,
                                       long timestamp, long salt, @NotNull MessageSignature signature,
@@ -17,20 +18,20 @@ public record ClientChatMessagePacket(@NotNull String message,
         }
     }
 
-    public ClientChatMessagePacket(BinaryReader reader) {
-        this(reader.readSizedString(256),
-                reader.readLong(), reader.readLong(), new MessageSignature(reader),
-                reader.readBoolean(),
+    public ClientChatMessagePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(STRING),
+                reader.read(LONG), reader.read(LONG), new MessageSignature(reader),
+                reader.read(BOOLEAN),
                 new LastSeenMessages.Update(reader));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(message);
-        writer.writeLong(timestamp);
-        writer.writeLong(salt);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, message);
+        writer.write(LONG, timestamp);
+        writer.write(LONG, salt);
         writer.write(signature);
-        writer.writeBoolean(signedPreview);
+        writer.write(BOOLEAN, signedPreview);
         writer.write(lastSeenMessages);
     }
 }

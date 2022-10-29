@@ -11,8 +11,6 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,14 +20,14 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) implements ClientPreplayPacket {
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
-    public LoginPluginResponsePacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readBoolean() ? reader.readRemainingBytes() : null);
+    public LoginPluginResponsePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.readOptional(RAW_BYTES));
     }
 
     @Override
@@ -59,7 +57,7 @@ public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) i
                             }
                             final int port = ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort();
                             socketAddress = new InetSocketAddress(address, port);
-                            gameProfile = new GameProfile(new BinaryReader(buffer));
+                            gameProfile = new GameProfile(buffer);
                         }
                     }
                 }
@@ -77,9 +75,8 @@ public record LoginPluginResponsePacket(int messageId, byte @Nullable [] data) i
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(messageId);
-        writer.writeBoolean(data != null);
-        if (data != null) writer.writeBytes(data);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, messageId);
+        writer.writeOptional(RAW_BYTES, data);
     }
 }

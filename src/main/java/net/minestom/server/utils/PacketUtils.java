@@ -22,8 +22,6 @@ import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -254,15 +252,14 @@ public final class PacketUtils {
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          int id,
-                                         @NotNull Writeable writeable,
+                                         @NotNull NetworkBuffer.Writer writer,
                                          int compressionThreshold) {
         NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
-        BinaryWriter legacyWriter = new BinaryWriter(networkBuffer);
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = networkBuffer.skipWrite(3);
             networkBuffer.write(NetworkBuffer.VAR_INT, id);
-            writeable.write(legacyWriter);
+            networkBuffer.write(writer);
             final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             buffer.position(networkBuffer.writeIndex());
@@ -274,7 +271,7 @@ public final class PacketUtils {
 
         final int contentStart = networkBuffer.writeIndex();
         networkBuffer.write(NetworkBuffer.VAR_INT, id);
-        writeable.write(legacyWriter);
+        networkBuffer.write(writer);
         final int packetSize = networkBuffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {

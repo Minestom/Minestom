@@ -27,7 +27,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public class BinaryWriter extends OutputStream {
     private final NetworkBuffer buffer;
 
-    public BinaryWriter(NetworkBuffer buffer) {
+    public BinaryWriter(@NotNull NetworkBuffer buffer) {
         this.buffer = buffer;
     }
 

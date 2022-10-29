@@ -4,9 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.io.IOException;
@@ -51,6 +54,17 @@ final class NetworkBufferTypes {
                 final short value = buffer.nioBuffer.getShort(buffer.readIndex());
                 buffer.readIndex += 2;
                 return value;
+            });
+    static final TypeImpl<Integer> UNSIGNED_SHORT = new TypeImpl<>(Integer.class,
+            (buffer, value) -> {
+                buffer.ensureSize(2);
+                buffer.nioBuffer.putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
+                return 2;
+            },
+            buffer -> {
+                final short value = buffer.nioBuffer.getShort(buffer.readIndex());
+                buffer.readIndex += 2;
+                return value & 0xFFFF;
             });
     static final TypeImpl<Integer> INT = new TypeImpl<>(Integer.class,
             (buffer, value) -> {
@@ -306,6 +320,184 @@ final class NetworkBufferTypes {
 
                 return ItemStack.fromNBT(material, compound, amount);
             });
+    static final TypeImpl<byte[]> BYTE_ARRAY = new TypeImpl<>(byte[].class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.length);
+                buffer.write(RAW_BYTES, value);
+                return -1;
+            },
+            buffer -> {
+                final int length = buffer.read(VAR_INT);
+                final byte[] bytes = new byte[length];
+                buffer.nioBuffer.get(buffer.readIndex(), bytes);
+                buffer.readIndex += length;
+                return bytes;
+            });
+    static final TypeImpl<long[]> LONG_ARRAY = new TypeImpl<>(long[].class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.length);
+                for (long l : value) {
+                    buffer.write(LONG, l);
+                }
+                return -1;
+            },
+            buffer -> {
+                final int length = buffer.read(VAR_INT);
+                final long[] longs = new long[length];
+                for (int i = 0; i < length; i++) {
+                    longs[i] = buffer.read(LONG);
+                }
+                return longs;
+            });
+    static final TypeImpl<int[]> VAR_INT_ARRAY = new TypeImpl<>(int[].class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.length);
+                for (int i : value) {
+                    buffer.write(VAR_INT, i);
+                }
+                return -1;
+            },
+            buffer -> {
+                final int length = buffer.read(VAR_INT);
+                final int[] ints = new int[length];
+                for (int i = 0; i < length; i++) {
+                    ints[i] = buffer.read(VAR_INT);
+                }
+                return ints;
+            });
+    static final TypeImpl<long[]> VAR_LONG_ARRAY = new TypeImpl<>(long[].class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.length);
+                for (long l : value) {
+                    buffer.write(VAR_LONG, l);
+                }
+                return -1;
+            },
+            buffer -> {
+                final int length = buffer.read(VAR_INT);
+                final long[] longs = new long[length];
+                for (int i = 0; i < length; i++) {
+                    longs[i] = buffer.read(VAR_LONG);
+                }
+                return longs;
+            });
+    // METADATA
+    static final TypeImpl<Component> OPT_CHAT = new TypeImpl<>(Component.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(BOOLEAN, false);
+                    return -1;
+                }
+                buffer.write(BOOLEAN, true);
+                buffer.write(COMPONENT, value);
+                return -1;
+            },
+            buffer -> {
+                final boolean present = buffer.read(BOOLEAN);
+                if (!present) return null;
+                return buffer.read(COMPONENT);
+            });
+    static final TypeImpl<Point> ROTATION = new TypeImpl<>(Point.class,
+            (buffer, value) -> {
+                buffer.write(FLOAT, (float) value.x());
+                buffer.write(FLOAT, (float) value.y());
+                buffer.write(FLOAT, (float) value.z());
+                return -1;
+            },
+            buffer -> {
+                final float x = buffer.read(FLOAT);
+                final float y = buffer.read(FLOAT);
+                final float z = buffer.read(FLOAT);
+                return new Vec(x, y, z);
+            });
+    static final TypeImpl<Point> OPT_BLOCK_POSITION = new TypeImpl<>(Point.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(BOOLEAN, false);
+                    return -1;
+                }
+                buffer.write(BOOLEAN, true);
+                buffer.write(BLOCK_POSITION, value);
+                return -1;
+            },
+            buffer -> {
+                final boolean present = buffer.read(BOOLEAN);
+                if (!present) return null;
+                return buffer.read(BLOCK_POSITION);
+            });
+    static final TypeImpl<Direction> DIRECTION = new TypeImpl<>(Direction.class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.ordinal());
+                return -1;
+            },
+            buffer -> {
+                final int ordinal = buffer.read(VAR_INT);
+                return Direction.values()[ordinal];
+            });
+    static final TypeImpl<UUID> OPT_UUID = new TypeImpl<>(UUID.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(BOOLEAN, false);
+                    return -1;
+                }
+                buffer.write(BOOLEAN, true);
+                buffer.write(UUID, value);
+                return -1;
+            },
+            buffer -> {
+                final boolean present = buffer.read(BOOLEAN);
+                if (!present) return null;
+                return buffer.read(UUID);
+            });
+    static final TypeImpl<Integer> OPT_BLOCK_ID = new TypeImpl<>(Integer.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(NetworkBuffer.VAR_INT, 0);
+                    return -1;
+                }
+                buffer.write(VAR_INT, value);
+                return -1;
+            },
+            buffer -> {
+                final int value = buffer.read(VAR_INT);
+                return value == 0 ? null : value;
+            });
+    static final TypeImpl<int[]> VILLAGER_DATA = new TypeImpl<>(int[].class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value[0]);
+                buffer.write(VAR_INT, value[1]);
+                buffer.write(VAR_INT, value[2]);
+                return -1;
+            },
+            buffer -> {
+                final int[] value = new int[3];
+                value[0] = buffer.read(VAR_INT);
+                value[1] = buffer.read(VAR_INT);
+                value[2] = buffer.read(VAR_INT);
+                return value;
+            });
+    static final TypeImpl<Integer> OPT_VAR_INT = new TypeImpl<>(int.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(VAR_INT, 0);
+                    return -1;
+                }
+                buffer.write(VAR_INT, value + 1);
+                return -1;
+            },
+            buffer -> {
+                final int value = buffer.read(VAR_INT);
+                return value == 0 ? null : value - 1;
+            });
+    static final TypeImpl<Entity.Pose> POSE = new TypeImpl<>(Entity.Pose.class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.ordinal());
+                return -1;
+            },
+            buffer -> {
+                final int ordinal = buffer.read(VAR_INT);
+                return Entity.Pose.values()[ordinal];
+            });
 
     record TypeImpl<T>(@NotNull Class<T> type,
                        @NotNull TypeWriter<T> writer,
@@ -313,10 +505,10 @@ final class NetworkBufferTypes {
     }
 
     interface TypeWriter<T> {
-        long write(@NotNull NetworkBuffer buffer, @NotNull T value);
+        long write(@NotNull NetworkBuffer buffer, @UnknownNullability T value);
     }
 
     interface TypeReader<T> {
-        @NotNull T read(@NotNull NetworkBuffer buffer);
+        @UnknownNullability T read(@NotNull NetworkBuffer buffer);
     }
 }
