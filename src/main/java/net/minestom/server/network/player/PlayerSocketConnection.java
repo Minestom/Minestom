@@ -4,13 +4,13 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Worker;
@@ -61,6 +61,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     // Data from client packets
     private String loginUsername;
+    private GameProfile gameProfile;
     private String serverAddress;
     private int serverPort;
     private int protocolVersion;
@@ -68,10 +69,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
     private final Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
-
-    // Bungee
-    private UUID bungeeUuid;
-    private PlayerSkin bungeeSkin;
 
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(POOL.get());
@@ -85,8 +82,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.workerQueue = worker.queue();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
-        POOL.register(this, tickBuffer);
-        POOL.register(this, waitingBuffers);
     }
 
     public void processPackets(BinaryBuffer readBuffer, PacketProcessor packetProcessor) {
@@ -109,14 +104,15 @@ public class PlayerSocketConnection extends PlayerConnection {
                     (id, payload) -> {
                         if (!isOnline())
                             return; // Prevent packet corruption
+                        ClientPacket packet = null;
                         try {
-                            packetProcessor.process(this, id, payload);
+                            packet = packetProcessor.process(this, id, payload);
                         } catch (Exception e) {
                             // Error while reading the packet
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
                             if (payload.position() != payload.limit()) {
-                                LOGGER.warn("WARNING: Packet 0x{} not fully read ({})", Integer.toHexString(id), payload);
+                                LOGGER.warn("WARNING: Packet 0x{} not fully read ({}) {}", Integer.toHexString(id), payload, packet);
                             }
                         }
                     });
@@ -203,11 +199,25 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void disconnect() {
         super.disconnect();
-        this.workerQueue.relaxedOffer(() -> this.worker.disconnect(this, channel));
+        this.workerQueue.relaxedOffer(() -> {
+            this.worker.disconnect(this, channel);
+            final BinaryBuffer tick = tickBuffer.getAndSet(null);
+            if (tick != null) POOL.add(tick);
+            for (BinaryBuffer buffer : waitingBuffers) POOL.add(buffer);
+            this.waitingBuffers.clear();
+        });
     }
 
     public @NotNull SocketChannel getChannel() {
         return channel;
+    }
+
+    public @Nullable GameProfile gameProfile() {
+        return gameProfile;
+    }
+
+    public void UNSAFE_setProfile(@NotNull GameProfile gameProfile) {
+        this.gameProfile = gameProfile;
     }
 
     /**
@@ -275,22 +285,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.protocolVersion = protocolVersion;
-    }
-
-    public @Nullable UUID getBungeeUuid() {
-        return bungeeUuid;
-    }
-
-    public void UNSAFE_setBungeeUuid(UUID bungeeUuid) {
-        this.bungeeUuid = bungeeUuid;
-    }
-
-    public @Nullable PlayerSkin getBungeeSkin() {
-        return bungeeSkin;
-    }
-
-    public void UNSAFE_setBungeeSkin(PlayerSkin bungeeSkin) {
-        this.bungeeSkin = bungeeSkin;
     }
 
     /**
@@ -403,6 +397,8 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void writeBufferSync0(@NotNull ByteBuffer buffer, int index, int length) {
         BinaryBuffer localBuffer = tickBuffer.getPlain();
+        if (localBuffer == null)
+            return; // Socket is closed
         final int capacity = localBuffer.capacity();
         if (length <= capacity) {
             if (!localBuffer.canWrite(length)) localBuffer = updateLocalBuffer();
@@ -423,7 +419,10 @@ public class PlayerSocketConnection extends PlayerConnection {
         final List<BinaryBuffer> waitingBuffers = this.waitingBuffers;
         if (!channel.isConnected()) throw new ClosedChannelException();
         if (waitingBuffers.isEmpty()) {
-            tickBuffer.getPlain().writeChannel(channel);
+            BinaryBuffer localBuffer = tickBuffer.getPlain();
+            if (localBuffer == null)
+                return; // Socket is closed
+            localBuffer.writeChannel(channel);
         } else {
             // Write as much as possible from the waiting list
             Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();

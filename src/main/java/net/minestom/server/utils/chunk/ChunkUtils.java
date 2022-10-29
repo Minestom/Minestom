@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -33,21 +33,17 @@ public final class ChunkUtils {
      * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
     public static @NotNull CompletableFuture<Void> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
-                                                                   @Nullable ChunkCallback eachCallback) {
+                                                                   @Nullable Consumer<Chunk> eachCallback) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
             // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
             instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
                     .thenAccept((chunk) -> {
-                        OptionalCallback.execute(eachCallback, chunk);
-                        final boolean isLast = counter.get() == chunks.length - 1;
-                        if (isLast) {
+                        if (eachCallback != null) eachCallback.accept(chunk);
+                        if (counter.incrementAndGet() == chunks.length) {
                             // This is the last chunk to be loaded , spawn player
                             completableFuture.complete(null);
-                        } else {
-                            // Increment the counter of current loaded chunks
-                            counter.incrementAndGet();
                         }
                     });
         }
@@ -198,7 +194,7 @@ public final class ChunkUtils {
         z = z % Chunk.CHUNK_SIZE_Z;
 
         int index = x & 0xF; // 4 bits
-        if(y > 0) {
+        if (y > 0) {
             index |= (y << 4) & 0x07FFFFF0; // 23 bits (24th bit is always 0 because y is positive)
         } else {
             index |= ((-y) << 4) & 0x7FFFFF0; // Make positive and use 23 bits
@@ -239,7 +235,7 @@ public final class ChunkUtils {
      */
     public static int blockIndexToChunkPositionY(int index) {
         int y = (index & 0x07FFFFF0) >>> 4;
-        if(((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
+        if (((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
         return y; // 4-28 bits
     }
 

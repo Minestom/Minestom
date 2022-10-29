@@ -26,7 +26,7 @@ public class ServerAddressTest {
     }
 
     @Test
-    public void unixAddressTest() throws IOException, InterruptedException {
+    public void unixAddressTest() throws IOException {
         UnixDomainSocketAddress address = UnixDomainSocketAddress.of("minestom.sock");
         var server = new Server(new PacketProcessor());
         server.init(address);
@@ -38,5 +38,11 @@ public class ServerAddressTest {
         assertDoesNotThrow(server::start);
         assertDoesNotThrow(server::stop);
         assertFalse(Files.exists(address.getPath()), "The socket file should be deleted");
+    }
+
+    @Test
+    public void noAddressTest() throws IOException {
+        var server = new Server(new PacketProcessor());
+        assertDoesNotThrow(server::stop);
     }
 }

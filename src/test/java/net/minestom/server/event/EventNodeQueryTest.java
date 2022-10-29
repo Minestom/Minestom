@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static net.minestom.testing.TestUtils.assertEqualsIgnoreOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EventNodeQueryTest {
@@ -23,12 +24,12 @@ public class EventNodeQueryTest {
         node.addChild(child2);
         node.addChild(child3);
 
-        assertEquals(List.of(child1, child2), node.findChildren("test"));
-        assertEquals(List.of(child3), node.findChildren("test3"));
+        assertEqualsIgnoreOrder(List.of(child1, child2), node.findChildren("test"));
+        assertEqualsIgnoreOrder(List.of(child3), node.findChildren("test3"));
 
         node.removeChild(child1);
-        assertEquals(List.of(child2), node.findChildren("test"));
-        assertEquals(List.of(child3), node.findChildren("test3"));
+        assertEqualsIgnoreOrder(List.of(child2), node.findChildren("test"));
+        assertEqualsIgnoreOrder(List.of(child3), node.findChildren("test3"));
     }
 
     @Test
@@ -44,16 +45,16 @@ public class EventNodeQueryTest {
         node.addChild(child2);
         node.addChild(child3);
 
-        assertEquals(List.of(child1, child2), node.findChildren("test", Event.class));
-        assertEquals(List.of(child1, child2), node.findChildren("test", EntityEvent.class));
-        assertEquals(List.of(child1), node.findChildren("test", PlayerEvent.class));
-        assertEquals(List.of(child3), node.findChildren("test3", EntityEvent.class));
+        assertEqualsIgnoreOrder(List.of(child1, child2), node.findChildren("test", Event.class));
+        assertEqualsIgnoreOrder(List.of(child1, child2), node.findChildren("test", EntityEvent.class));
+        assertEqualsIgnoreOrder(List.of(child1), node.findChildren("test", PlayerEvent.class));
+        assertEqualsIgnoreOrder(List.of(child3), node.findChildren("test3", EntityEvent.class));
 
         node.removeChild(child1);
-        assertEquals(List.of(child2), node.findChildren("test", Event.class));
-        assertEquals(List.of(child2), node.findChildren("test", EntityEvent.class));
-        assertEquals(List.of(), node.findChildren("test", PlayerEvent.class));
-        assertEquals(List.of(child3), node.findChildren("test3", EntityEvent.class));
+        assertEqualsIgnoreOrder(List.of(child2), node.findChildren("test", Event.class));
+        assertEqualsIgnoreOrder(List.of(child2), node.findChildren("test", EntityEvent.class));
+        assertEqualsIgnoreOrder(List.of(), node.findChildren("test", PlayerEvent.class));
+        assertEqualsIgnoreOrder(List.of(child3), node.findChildren("test3", EntityEvent.class));
     }
 
     @Test
@@ -72,13 +73,13 @@ public class EventNodeQueryTest {
         var tmp2 = EventNode.all("tmp2");
 
         node.replaceChildren("test", tmp1);
-        assertEquals(List.of(child2), node.findChildren("test"));
-        assertEquals(List.of(tmp1), node.findChildren("tmp1"));
+        assertEqualsIgnoreOrder(List.of(child2), node.findChildren("test"));
+        assertEqualsIgnoreOrder(List.of(tmp1), node.findChildren("tmp1"));
 
         node.replaceChildren("test3", tmp2);
-        assertEquals(List.of(child2), node.findChildren("test"));
-        assertEquals(List.of(tmp1), node.findChildren("tmp1"));
-        assertEquals(List.of(), node.findChildren("test3"));
-        assertEquals(List.of(tmp2), node.findChildren("tmp2"));
+        assertEqualsIgnoreOrder(List.of(child2), node.findChildren("test"));
+        assertEqualsIgnoreOrder(List.of(tmp1), node.findChildren("tmp1"));
+        assertEqualsIgnoreOrder(List.of(), node.findChildren("test3"));
+        assertEqualsIgnoreOrder(List.of(tmp2), node.findChildren("tmp2"));
     }
 }

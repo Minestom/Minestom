@@ -63,6 +63,14 @@ public class TagTest {
     }
 
     @Test
+    public void fromNbtCache() {
+        // Ensure that TagHandler#asCompound reuse the same compound used for construction
+        var compound = NBT.Compound(Map.of("key", NBT.Int(5)));
+        var handler = TagHandler.fromCompound(compound);
+        assertSame(compound, handler.asCompound(), "NBT is not the same");
+    }
+
+    @Test
     public void defaultValue() {
         var nullable = Tag.String("key");
         var notNull = nullable.defaultValue("Hey");

@@ -86,6 +86,8 @@ import java.util.function.UnaryOperator;
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
         PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
+    private static final int VELOCITY_UPDATE_INTERVAL = 1;
+
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
@@ -106,6 +108,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
+    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
 
     /**
@@ -581,11 +584,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // World border collision
         final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         final boolean positionChanged = !finalVelocityPosition.samePoint(position);
-        final boolean flying = this instanceof Player player && player.isFlying();
+        final boolean isPlayer = this instanceof Player;
+        final boolean flying = isPlayer && ((Player) this).isFlying();
         if (!positionChanged) {
             if (flying) {
                 this.velocity = Vec.ZERO;
-                sendPacketToViewers(getVelocityPacket());
                 return;
             } else if (hasVelocity || newVelocity.isZero()) {
                 this.velocity = noGravity ? Vec.ZERO : new Vec(
@@ -593,7 +596,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         -gravityAcceleration * tps * (1 - gravityDragPerTick),
                         0
                 );
-                sendPacketToViewers(getVelocityPacket());
+                if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
+                    if (!isPlayer && !this.lastVelocityWasZero) {
+                        sendPacketToViewers(getVelocityPacket());
+                        this.lastVelocityWasZero = !hasVelocity;
+                    }
+                }
                 return;
             }
         }
@@ -620,8 +628,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
         // Verify if velocity packet has to be sent
-        if (!(this instanceof Player) && (hasVelocity || gravityTickCount > 0)) {
-            sendPacketToViewers(getVelocityPacket());
+        if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
+            if (!isPlayer && (hasVelocity || !lastVelocityWasZero)) {
+                sendPacketToViewers(getVelocityPacket());
+                this.lastVelocityWasZero = !hasVelocity;
+            }
         }
     }
 
@@ -1307,7 +1318,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Fix head rotation
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         } else if (positionChange) {
-            PacketUtils.prepareViewablePacket(chunk, EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround), this);
+            // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
+            // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
+            PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                    lastSyncedPosition, onGround), this);
         } else if (viewChange) {
             PacketUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
             PacketUtils.prepareViewablePacket(chunk, new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround), this);
@@ -1381,11 +1395,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) { // Update visible chunks
-                player.sendPacket(new UpdateViewPositionPacket(newChunkX, newChunkZ));
-                ChunkUtils.forDifferingChunksInRange(newChunkX, newChunkZ, lastChunkX, lastChunkZ,
-                        MinecraftServer.getChunkViewDistance(), player.chunkAdder, player.chunkRemover);
-            }
+            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
             refreshCurrentChunk(newChunk);
         }
     }
@@ -1638,7 +1648,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public List<Point> getLineOfSight(int maxDistance) {
         Instance instance = getInstance();
         if (instance == null) {
-            return Collections.emptyList();
+            return List.of();
         }
 
         List<Point> blocks = new ArrayList<>();
@@ -1717,6 +1727,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         SWIMMING,
         SPIN_ATTACK,
         SNEAKING,
-        DYING
+        LONG_JUMPING,
+        DYING,
+        CROAKING,
+        USING_TONGUE,
+        ROARING,
+        SNIFFING,
+        EMERGING,
+        DIGGING
     }
 }

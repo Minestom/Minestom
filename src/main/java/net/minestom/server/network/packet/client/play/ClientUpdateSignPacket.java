@@ -1,12 +1,14 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientUpdateSignPacket(@NotNull Point blockPosition,
                                      @NotNull List<String> lines) implements ClientPacket {
@@ -22,21 +24,21 @@ public record ClientUpdateSignPacket(@NotNull Point blockPosition,
         }
     }
 
-    public ClientUpdateSignPacket(BinaryReader reader) {
-        this(reader.readBlockPosition(), readLines(reader));
+    public ClientUpdateSignPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BLOCK_POSITION), readLines(reader));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBlockPosition(blockPosition);
-        writer.writeSizedString(lines.get(0));
-        writer.writeSizedString(lines.get(1));
-        writer.writeSizedString(lines.get(2));
-        writer.writeSizedString(lines.get(3));
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BLOCK_POSITION, blockPosition);
+        writer.write(STRING, lines.get(0));
+        writer.write(STRING, lines.get(1));
+        writer.write(STRING, lines.get(2));
+        writer.write(STRING, lines.get(3));
     }
 
-    private static List<String> readLines(BinaryReader reader) {
-        return List.of(reader.readSizedString(384), reader.readSizedString(384),
-                reader.readSizedString(384), reader.readSizedString(384));
+    private static List<String> readLines(@NotNull NetworkBuffer reader) {
+        return List.of(reader.read(STRING), reader.read(STRING),
+                reader.read(STRING), reader.read(STRING));
     }
 }

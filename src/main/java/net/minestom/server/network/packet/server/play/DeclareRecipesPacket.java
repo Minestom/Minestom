@@ -1,24 +1,24 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implements ServerPacket {
     public DeclareRecipesPacket {
         recipes = List.copyOf(recipes);
     }
 
-    public DeclareRecipesPacket(BinaryReader reader) {
-        this(reader.readVarIntList(r -> {
-            final String type = r.readSizedString();
+    public DeclareRecipesPacket(@NotNull NetworkBuffer reader) {
+        this(reader.readCollection(r -> {
+            final String type = r.read(STRING);
             return switch (type) {
                 case "crafting_shapeless" -> new DeclaredShapelessCraftingRecipe(reader);
                 case "crafting_shaped" -> new DeclaredShapedCraftingRecipe(reader);
@@ -34,10 +34,10 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarIntList(recipes, (bWriter, recipe)->{
-            bWriter.writeSizedString(recipe.type());
-            bWriter.writeSizedString(recipe.recipeId());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.writeCollection(recipes, (bWriter, recipe) -> {
+            bWriter.write(STRING, recipe.type());
+            bWriter.write(STRING, recipe.recipeId());
             bWriter.write(recipe);
         });
     }
@@ -47,7 +47,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         return ServerPacketIdentifier.DECLARE_RECIPES;
     }
 
-    public sealed interface DeclaredRecipe extends Writeable
+    public sealed interface DeclaredRecipe extends NetworkBuffer.Writer
             permits DeclaredShapelessCraftingRecipe, DeclaredShapedCraftingRecipe,
             DeclaredSmeltingRecipe, DeclaredBlastingRecipe, DeclaredSmokingRecipe,
             DeclaredCampfireCookingRecipe, DeclaredStonecutterRecipe, DeclaredSmithingRecipe {
@@ -59,16 +59,16 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public record DeclaredShapelessCraftingRecipe(String recipeId, String group,
                                                   List<Ingredient> ingredients,
                                                   ItemStack result) implements DeclaredRecipe {
-        private DeclaredShapelessCraftingRecipe(@NotNull BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    reader.readVarIntList(Ingredient::new), reader.readItemStack());
+        private DeclaredShapelessCraftingRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    reader.readCollection(Ingredient::new), reader.read(ITEM));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(group);
-            writer.writeVarIntList(ingredients, BinaryWriter::write);
-            writer.writeItemStack(result);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, group);
+            writer.writeCollection(ingredients);
+            writer.write(ITEM, result);
         }
 
         @Override
@@ -88,33 +88,33 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             this(packet.recipeId, packet.width, packet.height, packet.group, packet.ingredients, packet.result);
         }
 
-        public DeclaredShapedCraftingRecipe(BinaryReader reader) {
+        public DeclaredShapedCraftingRecipe(@NotNull NetworkBuffer reader) {
             this(read(reader));
         }
 
-        private static DeclaredShapedCraftingRecipe read(BinaryReader reader) {
+        private static DeclaredShapedCraftingRecipe read(@NotNull NetworkBuffer reader) {
 
-            String recipeId = reader.readSizedString();
-            int width = reader.readVarInt();
-            int height = reader.readVarInt();
-            String group = reader.readSizedString();
+            String recipeId = reader.read(STRING);
+            int width = reader.read(VAR_INT);
+            int height = reader.read(VAR_INT);
+            String group = reader.read(STRING);
             List<Ingredient> ingredients = new ArrayList<>();
             for (int slot = 0; slot < width * height; slot++) {
                 ingredients.add(new Ingredient(reader));
             }
-            ItemStack result = reader.readItemStack();
+            ItemStack result = reader.read(ITEM);
             return new DeclaredShapedCraftingRecipe(recipeId, width, height, group, ingredients, result);
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarInt(width);
-            writer.writeVarInt(height);
-            writer.writeSizedString(group);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, width);
+            writer.write(VAR_INT, height);
+            writer.write(STRING, group);
             for (Ingredient ingredient : ingredients) {
                 ingredient.write(writer);
             }
-            writer.writeItemStack(result);
+            writer.write(ITEM, result);
         }
 
         @Override
@@ -126,19 +126,19 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public record DeclaredSmeltingRecipe(@NotNull String recipeId, @NotNull String group,
                                          @NotNull Ingredient ingredient, @NotNull ItemStack result,
                                          float experience, int cookingTime) implements DeclaredRecipe {
-        public DeclaredSmeltingRecipe(BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    new Ingredient(reader), reader.readItemStack(),
-                    reader.readFloat(), reader.readVarInt());
+        public DeclaredSmeltingRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    new Ingredient(reader), reader.read(ITEM),
+                    reader.read(FLOAT), reader.read(VAR_INT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(group);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, group);
             writer.write(ingredient);
-            writer.writeItemStack(result);
-            writer.writeFloat(experience);
-            writer.writeVarInt(cookingTime);
+            writer.write(ITEM, result);
+            writer.write(FLOAT, experience);
+            writer.write(VAR_INT, cookingTime);
         }
 
         @Override
@@ -150,19 +150,19 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public record DeclaredBlastingRecipe(@NotNull String recipeId, @NotNull String group,
                                          @NotNull Ingredient ingredient, @NotNull ItemStack result,
                                          float experience, int cookingTime) implements DeclaredRecipe {
-        public DeclaredBlastingRecipe(BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    new Ingredient(reader), reader.readItemStack(),
-                    reader.readFloat(), reader.readVarInt());
+        public DeclaredBlastingRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    new Ingredient(reader), reader.read(ITEM),
+                    reader.read(FLOAT), reader.read(VAR_INT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(group);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, group);
             writer.write(ingredient);
-            writer.writeItemStack(result);
-            writer.writeFloat(experience);
-            writer.writeVarInt(cookingTime);
+            writer.write(ITEM, result);
+            writer.write(FLOAT, experience);
+            writer.write(VAR_INT, cookingTime);
         }
 
         @Override
@@ -174,19 +174,19 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public record DeclaredSmokingRecipe(@NotNull String recipeId, @NotNull String group,
                                         @NotNull Ingredient ingredient, @NotNull ItemStack result,
                                         float experience, int cookingTime) implements DeclaredRecipe {
-        public DeclaredSmokingRecipe(BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    new Ingredient(reader), reader.readItemStack(),
-                    reader.readFloat(), reader.readVarInt());
+        public DeclaredSmokingRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    new Ingredient(reader), reader.read(ITEM),
+                    reader.read(FLOAT), reader.read(VAR_INT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(group);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, group);
             writer.write(ingredient);
-            writer.writeItemStack(result);
-            writer.writeFloat(experience);
-            writer.writeVarInt(cookingTime);
+            writer.write(ITEM, result);
+            writer.write(FLOAT, experience);
+            writer.write(VAR_INT, cookingTime);
         }
 
         @Override
@@ -198,19 +198,19 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public record DeclaredCampfireCookingRecipe(@NotNull String recipeId, @NotNull String group,
                                                 @NotNull Ingredient ingredient, @NotNull ItemStack result,
                                                 float experience, int cookingTime) implements DeclaredRecipe {
-        public DeclaredCampfireCookingRecipe(BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    new Ingredient(reader), reader.readItemStack(),
-                    reader.readFloat(), reader.readVarInt());
+        public DeclaredCampfireCookingRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    new Ingredient(reader), reader.read(ITEM),
+                    reader.read(FLOAT), reader.read(VAR_INT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(group);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, group);
             writer.write(ingredient);
-            writer.writeItemStack(result);
-            writer.writeFloat(experience);
-            writer.writeVarInt(cookingTime);
+            writer.write(ITEM, result);
+            writer.write(FLOAT, experience);
+            writer.write(VAR_INT, cookingTime);
         }
 
         @Override
@@ -221,16 +221,16 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     public record DeclaredStonecutterRecipe(String recipeId, String group,
                                             Ingredient ingredient, ItemStack result) implements DeclaredRecipe {
-        public DeclaredStonecutterRecipe(@NotNull BinaryReader reader) {
-            this(reader.readSizedString(), reader.readSizedString(),
-                    new Ingredient(reader), reader.readItemStack());
+        public DeclaredStonecutterRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), reader.read(STRING),
+                    new Ingredient(reader), reader.read(ITEM));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(group);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, group);
             writer.write(ingredient);
-            writer.writeItemStack(result);
+            writer.write(ITEM, result);
         }
 
         @Override
@@ -241,15 +241,15 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     public record DeclaredSmithingRecipe(String recipeId, Ingredient base, Ingredient addition,
                                          ItemStack result) implements DeclaredRecipe {
-        public DeclaredSmithingRecipe(@NotNull BinaryReader reader) {
-            this(reader.readSizedString(), new Ingredient(reader), new Ingredient(reader), reader.readItemStack());
+        public DeclaredSmithingRecipe(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), new Ingredient(reader), new Ingredient(reader), reader.read(ITEM));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull NetworkBuffer writer) {
             writer.write(base);
             writer.write(addition);
-            writer.writeItemStack(result);
+            writer.write(ITEM, result);
         }
 
         @Override
@@ -258,17 +258,17 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
     }
 
-    public record Ingredient(@NotNull List<ItemStack> items) implements Writeable {
+    public record Ingredient(@NotNull List<ItemStack> items) implements NetworkBuffer.Writer {
         public Ingredient {
             items = List.copyOf(items);
         }
 
-        public Ingredient(BinaryReader reader) {
-            this(reader.readVarIntList(BinaryReader::readItemStack));
+        public Ingredient(@NotNull NetworkBuffer reader) {
+            this(reader.readCollection(ITEM));
         }
 
-        public void write(BinaryWriter writer) {
-            writer.writeVarIntList(items, BinaryWriter::writeItemStack);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeCollection(ITEM, items);
         }
     }
 }

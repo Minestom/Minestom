@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
@@ -18,17 +19,13 @@ import java.util.function.Consumer;
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final ClassValue<Handle<T>> handleMap = new ClassValue<>() {
-        @Override
-        protected Handle<T> computeValue(Class<?> type) {
-            //noinspection unchecked
-            return new Handle<>((Class<T>) type);
-        }
-    };
+    private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
-    final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
-    final Map<Object, EventNodeImpl<T>> registeredMappedNode = new WeakHashMap<>();
+    final Map<Object, EventNodeImpl<T>> mappedNodeCache = Caffeine.newBuilder()
+            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
+    final Map<Object, EventNodeImpl<T>> registeredMappedNode = Caffeine.newBuilder()
+            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
 
     final String name;
     final EventFilter<T, ?> filter;
@@ -49,13 +46,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
-        return (ListenerHandle<E>) handleMap.get(handleType);
+        return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
+                aClass -> new Handle<>((Class<T>) aClass));
     }
 
     @Override
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            if (children.isEmpty()) return Collections.emptyList();
+            final Set<EventNode<T>> children = getChildren();
+            if (children.isEmpty()) return List.of();
             List<EventNode<E>> result = new ArrayList<>();
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
@@ -75,6 +74,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
@@ -90,6 +90,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
@@ -245,9 +246,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         for (Iterator<? extends @NotNull Graph> iterator = nextNodes.iterator(); iterator.hasNext(); ) {
             Graph next = iterator.next();
             if (iterator.hasNext()) {
-                genToStringTree(buffer, childrenPrefix + '\u251C' + '\u2500' + " ", childrenPrefix + '\u2502' + "   ", next);
+                genToStringTree(buffer, childrenPrefix + '├' + '─' + " ", childrenPrefix + '│' + "   ", next);
             } else {
-                genToStringTree(buffer, childrenPrefix + '\u2514' + '\u2500' + " ", childrenPrefix + "    ", next);
+                genToStringTree(buffer, childrenPrefix + '└' + '─' + " ", childrenPrefix + "    ", next);
             }
         }
     }
@@ -272,7 +273,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
-            Handle<T> handle = handleMap.get(type);
+            Handle<T> handle = handleMap.computeIfAbsent(type,
+                    aClass -> new Handle<>((Class<T>) aClass));
             handle.invalidate();
         });
         final EventNodeImpl<? super T> parent = this.parent;

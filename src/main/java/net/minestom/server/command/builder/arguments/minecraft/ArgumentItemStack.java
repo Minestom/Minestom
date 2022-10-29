@@ -1,11 +1,9 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -37,11 +35,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:item_stack";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    public String parser() {
+        return "minecraft:item_stack";
     }
 
     /**

@@ -1,6 +1,6 @@
 package net.minestom.server.instance.palette;
 
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -60,14 +60,10 @@ public class PaletteOptimizationTest {
         }
         // Verify size
         {
-            var writer = new BinaryWriter(4096);
-            palette.write(writer);
-            int length1 = writer.toByteArray().length;
-            writer = new BinaryWriter(4096);
-            optimized.write(writer);
-            int length2 = writer.toByteArray().length;
-
-            //System.out.println("debug: " + Thread.currentThread().getStackTrace()[2].getMethodName() + " " + length1 + " " + length2);
+            var array = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(palette));
+            int length1 = array.length;
+            array = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(optimized));
+            int length2 = array.length;
             assertTrue(length1 >= length2, "Optimized palette is bigger than the original one: " + length1 + " : " + length2);
         }
     }

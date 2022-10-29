@@ -8,20 +8,20 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.FramedPacket;
-import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,10 +101,45 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
+        final var sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
+    }
+
+    /**
+     * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
+     * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
+     *
+     * @see CachedPacket#body()
+     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
+     */
+    static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return GROUPED_PACKET;
+        if (!(packet instanceof ComponentHoldingServerPacket holder)) return GROUPED_PACKET;
+        return !containsTranslatableComponents(holder);
+    }
+
+    private static boolean containsTranslatableComponents(final @NotNull ComponentHolder<?> holder) {
+        for (final Component component : holder.components()) {
+            if (isTranslatable(component)) return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isTranslatable(final @NotNull Component component) {
+        if (component instanceof TranslatableComponent) return true;
+
+        final var children = component.children();
+        if (children.isEmpty()) return false;
+
+        for (final Component child : children) {
+            if (isTranslatable(child)) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -172,6 +207,9 @@ public final class PacketUtils {
                 if (compressed) {
                     final int dataLength = readBuffer.readVarInt();
                     final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
+                    if (payloadLength < 0) {
+                        throw new DataFormatException("Negative payload length " + payloadLength);
+                    }
                     if (dataLength == 0) {
                         // Data is too small to be compressed, payload is following
                         decompressedSize = payloadLength;
@@ -214,26 +252,27 @@ public final class PacketUtils {
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          int id,
-                                         @NotNull Writeable writeable,
+                                         @NotNull NetworkBuffer.Writer writer,
                                          int compressionThreshold) {
-        BinaryWriter writerView = BinaryWriter.view(buffer); // ensure that the buffer is not resized
+        NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
-            final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-            Utils.writeVarInt(buffer, id);
-            writeable.write(writerView);
-            final int finalSize = buffer.position() - (lengthIndex + 3);
+            final int lengthIndex = networkBuffer.skipWrite(3);
+            networkBuffer.write(NetworkBuffer.VAR_INT, id);
+            networkBuffer.write(writer);
+            final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
+            buffer.position(networkBuffer.writeIndex());
             return;
         }
         // Compressed format https://wiki.vg/Protocol#With_compression
-        final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
+        final int compressedIndex = networkBuffer.skipWrite(3);
+        final int uncompressedIndex = networkBuffer.skipWrite(3);
 
-        final int contentStart = buffer.position();
-        Utils.writeVarInt(buffer, id);
-        writeable.write(writerView);
-        final int packetSize = buffer.position() - contentStart;
+        final int contentStart = networkBuffer.writeIndex();
+        networkBuffer.write(NetworkBuffer.VAR_INT, id);
+        networkBuffer.write(writer);
+        final int packetSize = networkBuffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
             // Packet large enough, compress it
@@ -244,11 +283,15 @@ public final class PacketUtils {
                 deflater.finish();
                 deflater.deflate(buffer.position(contentStart));
                 deflater.reset();
+
+                networkBuffer.skipWrite(buffer.position() - contentStart);
             }
         }
         // Packet header (Packet + Data Length)
-        Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+        Utils.writeVarIntHeader(buffer, compressedIndex, networkBuffer.writeIndex() - uncompressedIndex);
         Utils.writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
+
+        buffer.position(networkBuffer.writeIndex());
     }
 
     @ApiStatus.Internal

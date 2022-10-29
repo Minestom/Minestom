@@ -24,6 +24,12 @@ public class ArgumentSyntaxException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    @Override
+    public Throwable fillInStackTrace() {
+        // Stacktrace is useless to the parser
+        return this;
+    }
+
     /**
      * Gets the problematic command input.
      *

@@ -1,28 +1,29 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityPositionAndRotationPacket(int entityId, short deltaX, short deltaY, short deltaZ,
                                               float yaw, float pitch, boolean onGround) implements ServerPacket {
-    public EntityPositionAndRotationPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readShort(), reader.readShort(), reader.readShort(),
-                reader.readByte() * 360f / 256f, reader.readByte() * 360f / 256f, reader.readBoolean());
+    public EntityPositionAndRotationPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT),
+                reader.read(BYTE) * 360f / 256f, reader.read(BYTE) * 360f / 256f, reader.read(BOOLEAN));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(entityId);
-        writer.writeShort(deltaX);
-        writer.writeShort(deltaY);
-        writer.writeShort(deltaZ);
-        writer.writeByte((byte) (yaw * 256 / 360));
-        writer.writeByte((byte) (pitch * 256 / 360));
-        writer.writeBoolean(onGround);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, entityId);
+        writer.write(SHORT, deltaX);
+        writer.write(SHORT, deltaY);
+        writer.write(SHORT, deltaZ);
+        writer.write(BYTE, (byte) (yaw * 256 / 360));
+        writer.write(BYTE, (byte) (pitch * 256 / 360));
+        writer.write(BOOLEAN, onGround);
     }
 
     @Override

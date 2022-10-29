@@ -1,12 +1,16 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,16 +25,14 @@ public class EntityVelocityIntegrationTest {
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         env.tick(); // Ensure velocity downwards is present
 
-        testMovement(env, entity, new Vec[] {
-                new Vec(0.0, 42.0, 0.0),
+        testMovement(env, entity, new Vec(0.0, 42.0, 0.0),
                 new Vec(0.0, 41.92159999847412, 0.0),
                 new Vec(0.0, 41.76636799395752, 0.0),
                 new Vec(0.0, 41.53584062504456, 0.0),
                 new Vec(0.0, 41.231523797587016, 0.0),
                 new Vec(0.0, 40.85489329934836, 0.0),
                 new Vec(0.0, 40.40739540236494, 0.0),
-                new Vec(0.0, 40.0, 0.0)
-        });
+                new Vec(0.0, 40.0, 0.0));
     }
 
     @Test
@@ -44,8 +46,7 @@ public class EntityVelocityIntegrationTest {
         env.tick(); // Ensures the entity is onGround
         entity.takeKnockback(0.4f, 0, -1);
 
-        testMovement(env, entity, new Vec[] {
-                new Vec(0.0, 40.0, 0.0),
+        testMovement(env, entity, new Vec(0.0, 40.0, 0.0),
                 new Vec(0.0, 40.360800005197525, 0.4000000059604645),
                 new Vec(0.0, 40.63598401564693, 0.6184000345826153),
                 new Vec(0.0, 40.827264349610196, 0.8171440663565412),
@@ -62,8 +63,7 @@ public class EntityVelocityIntegrationTest {
                 new Vec(0.0, 40.0, 1.9757875252341128),
                 new Vec(0.0, 40.0, 1.9840936051840241),
                 new Vec(0.0, 40.0, 1.9886287253634418),
-                new Vec(0.0, 40.0, 1.9886287253634418),
-        });
+                new Vec(0.0, 40.0, 1.9886287253634418));
     }
 
     @Test
@@ -80,8 +80,7 @@ public class EntityVelocityIntegrationTest {
 
         assertTrue(entity.hasVelocity());
 
-        testMovement(env, entity, new Vec[] {
-                new Vec(0.0, 40.0, 0.0),
+        testMovement(env, entity, new Vec(0.0, 40.0, 0.0),
                 new Vec(0.0, 40.4, 0.7000000029802322),
                 new Vec(0.0, 40.71360000610351, 1.0822000490009787),
                 new Vec(0.0, 40.94252801654052, 1.4300021009034531),
@@ -99,8 +98,7 @@ public class EntityVelocityIntegrationTest {
                 new Vec(0.0, 40.0, 3.5916417190562298),
                 new Vec(0.0, 40.0, 3.6048691516168874),
                 new Vec(0.0, 40.0, 3.6120913306338815),
-                new Vec(0.0, 40.0, 3.616034640835186)
-        });
+                new Vec(0.0, 40.0, 3.616034640835186));
     }
 
     @Test
@@ -111,7 +109,7 @@ public class EntityVelocityIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         env.tick();
 
-        final double epsilon = 0.0000001;
+        final double epsilon = 0.00001;
 
         assertEquals(player.getVelocity().y(), -1.568, epsilon);
         double previousVelocity = player.getVelocity().y();
@@ -126,6 +124,20 @@ public class EntityVelocityIntegrationTest {
             env.tick();
         }
         assertEquals(player.getVelocity().y(), 0);
+    }
+
+    @Test
+    public void flyingPlayerMovement(Env env) {
+        // Player movement should not send velocity packets as already client predicted
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 42, 0));
+        player.setFlying(true);
+        var witness = env.createConnection();
+        witness.connect(instance, new Pos(0, 42, 0)).join();
+
+        var tracker = witness.trackIncoming(EntityVelocityPacket.class);
+        env.tick(); // Process gravity velocity
+        tracker.assertEmpty();
     }
 
     @Test
@@ -151,7 +163,31 @@ public class EntityVelocityIntegrationTest {
         assertFalse(entity.hasVelocity());
     }
 
-    private void testMovement(Env env, Entity entity, Vec[] sample) {
+    @Test
+    public void countVelocityPackets(Env env) {
+        final int VELOCITY_UPDATE_INTERVAL = 1;
+
+        var instance = env.createFlatInstance();
+        var viewerConnection = env.createConnection();
+        viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0,40,0)).join();
+
+        AtomicInteger i = new AtomicInteger();
+        BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(VELOCITY_UPDATE_INTERVAL, 1);
+
+        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        env.tickWhile(tickLoopCondition, null);
+        tracker.assertEmpty(); // Verify no updates are sent while the entity is not moving
+
+        entity.setVelocity(new Vec(0, 5, 0));
+        tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        i.set(0);
+        env.tickWhile(tickLoopCondition, null);
+        tracker.assertCount(1); // Verify the update is only sent once
+    }
+
+    private void testMovement(Env env, Entity entity, Vec... sample) {
         final double epsilon = 0.003;
         for (Vec vec : sample) {
             assertEquals(vec.x(), entity.getPosition().x(), epsilon);
@@ -162,7 +198,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     private void loadChunks(Instance instance) {
-        ChunkUtils.optionalLoadAll(instance, new long[] {
+        ChunkUtils.optionalLoadAll(instance, new long[]{
                 ChunkUtils.getChunkIndex(-1, -1),
                 ChunkUtils.getChunkIndex(-1, 0),
                 ChunkUtils.getChunkIndex(-1, 1),

@@ -2,11 +2,12 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.Rotation;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientUpdateStructureBlockPacket(Point location, Action action,
                                                Mode mode, String name,
@@ -14,13 +15,13 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
                                                Mirror mirror, Rotation rotation,
                                                String metadata, float integrity,
                                                long seed, byte flags) implements ClientPacket {
-    public ClientUpdateStructureBlockPacket(BinaryReader reader) {
-        this(reader.readBlockPosition(), Action.values()[reader.readVarInt()],
-                Mode.values()[reader.readVarInt()], reader.readSizedString(Short.MAX_VALUE),
-                new Vec(reader.readByte(), reader.readByte(), reader.readByte()), new Vec(reader.readByte(), reader.readByte(), reader.readByte()),
-                Mirror.values()[reader.readVarInt()], fromRestrictedRotation(reader.readVarInt()),
-                reader.readSizedString(Short.MAX_VALUE), reader.readFloat(),
-                reader.readVarLong(), reader.readByte());
+    public ClientUpdateStructureBlockPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BLOCK_POSITION), reader.readEnum(Action.class),
+                reader.readEnum(Mode.class), reader.read(STRING),
+                new Vec(reader.read(BYTE), reader.read(BYTE), reader.read(BYTE)), new Vec(reader.read(BYTE), reader.read(BYTE), reader.read(BYTE)),
+                Mirror.values()[reader.read(VAR_INT)], fromRestrictedRotation(reader.read(VAR_INT)),
+                reader.read(STRING), reader.read(FLOAT),
+                reader.read(VAR_LONG), reader.read(BYTE));
     }
 
     // Flag values
@@ -32,23 +33,23 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
     public static final byte SHOW_BOUNDING_BOX = 0x4;
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBlockPosition(location);
-        writer.writeVarInt(action.ordinal());
-        writer.writeVarInt(mode.ordinal());
-        writer.writeSizedString(name);
-        writer.writeByte((byte) offset.x());
-        writer.writeByte((byte) offset.y());
-        writer.writeByte((byte) offset.z());
-        writer.writeByte((byte) size.x());
-        writer.writeByte((byte) size.y());
-        writer.writeByte((byte) size.z());
-        writer.writeVarInt(mirror.ordinal());
-        writer.writeVarInt(toRestrictedRotation(rotation));
-        writer.writeSizedString(metadata);
-        writer.writeFloat(integrity);
-        writer.writeVarLong(seed);
-        writer.writeByte(flags);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BLOCK_POSITION, location);
+        writer.writeEnum(Action.class, action);
+        writer.writeEnum(Mode.class, mode);
+        writer.write(STRING, name);
+        writer.write(BYTE, (byte) offset.x());
+        writer.write(BYTE, (byte) offset.y());
+        writer.write(BYTE, (byte) offset.z());
+        writer.write(BYTE, (byte) size.x());
+        writer.write(BYTE, (byte) size.y());
+        writer.write(BYTE, (byte) size.z());
+        writer.write(VAR_INT, mirror.ordinal());
+        writer.write(VAR_INT, toRestrictedRotation(rotation));
+        writer.write(STRING, metadata);
+        writer.write(FLOAT, integrity);
+        writer.write(VAR_LONG, seed);
+        writer.write(BYTE, flags);
     }
 
     /**
@@ -72,7 +73,8 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
             case CLOCKWISE -> 1;
             case FLIPPED -> 2;
             case COUNTER_CLOCKWISE -> 3;
-            default -> throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
+            default ->
+                    throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
         };
     }
 
@@ -82,7 +84,8 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
             case 1 -> Rotation.CLOCKWISE;
             case 2 -> Rotation.FLIPPED;
             case 3 -> Rotation.COUNTER_CLOCKWISE;
-            default -> throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
+            default ->
+                    throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
         };
     }
 }

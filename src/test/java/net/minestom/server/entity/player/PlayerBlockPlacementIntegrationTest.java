@@ -1,7 +1,7 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
@@ -36,7 +36,7 @@ public class PlayerBlockPlacementIntegrationTest {
         var packet = new ClientPlayerBlockPlacementPacket(
                 Player.Hand.MAIN, new Pos(2, 41, 0), BlockFace.WEST,
                 1f, 1f, 1f,
-                false
+                false, 0
         );
         player.addPacketToQueue(packet);
         player.interpretPacketQueue();

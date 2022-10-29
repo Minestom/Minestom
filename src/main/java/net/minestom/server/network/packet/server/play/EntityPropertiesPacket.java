@@ -4,28 +4,29 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.AttributeModifier;
 import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityPropertiesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket {
     public EntityPropertiesPacket {
         properties = List.copyOf(properties);
     }
 
-    public EntityPropertiesPacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readVarIntList(r -> {
-            final Attribute attribute = Attribute.fromKey(reader.readSizedString());
-            final double value = reader.readDouble();
-            int modifierCount = reader.readVarInt();
+    public EntityPropertiesPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.readCollection(r -> {
+            final Attribute attribute = Attribute.fromKey(reader.read(STRING));
+            final double value = reader.read(DOUBLE);
+            int modifierCount = reader.read(VAR_INT);
             AttributeInstance instance = new AttributeInstance(attribute, null);
             for (int i = 0; i < modifierCount; i++) {
-                AttributeModifier modifier = new AttributeModifier(reader.readUuid(), "", (float) reader.readDouble(), AttributeOperation.fromId(reader.readByte()));
+                AttributeModifier modifier = new AttributeModifier(reader.read(UUID), "", reader.read(DOUBLE), AttributeOperation.fromId(reader.read(BYTE)));
                 instance.addModifier(modifier);
             }
             return instance;
@@ -33,23 +34,23 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(entityId);
-        writer.writeVarInt(properties.size());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, entityId);
+        writer.write(VAR_INT, properties.size());
         for (AttributeInstance instance : properties) {
             final Attribute attribute = instance.getAttribute();
 
-            writer.writeSizedString(attribute.key());
-            writer.writeDouble(instance.getBaseValue());
+            writer.write(STRING, attribute.key());
+            writer.write(DOUBLE, (double) instance.getBaseValue());
 
             {
                 Collection<AttributeModifier> modifiers = instance.getModifiers();
-                writer.writeVarInt(modifiers.size());
+                writer.write(VAR_INT, modifiers.size());
 
                 for (var modifier : modifiers) {
-                    writer.writeUuid(modifier.getId());
-                    writer.writeDouble(modifier.getAmount());
-                    writer.writeByte((byte) modifier.getOperation().getId());
+                    writer.write(UUID, modifier.getId());
+                    writer.write(DOUBLE, modifier.getAmount());
+                    writer.write(BYTE, (byte) modifier.getOperation().getId());
                 }
             }
         }

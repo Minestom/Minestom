@@ -21,6 +21,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
+import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -79,7 +80,7 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-            canPlaceBlock = usedItem.meta().getCanPlaceOn().contains(Block.fromNamespaceId(interactedBlock.namespace()));
+            canPlaceBlock = usedItem.meta().canPlaceOn(interactedBlock);
         }
 
         // Get the newly placed block position
@@ -139,6 +140,7 @@ public class BlockPlacementListener {
             return;
         }
         // Place the block
+        player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
                 packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()));
         // Block consuming

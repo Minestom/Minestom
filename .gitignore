@@ -57,6 +57,10 @@ gradle-app.setting
 /demo/extensions
 /extensions
 
+# When saving the world in the demo we generate the world folder
+# Incase people are using IntelliJ to run the server, this will exclude the world folder.
+/demo/world
+
 # Eclipse
 **/bin/
 **/.project

@@ -137,4 +137,17 @@ public final class RelativeVec {
     private interface CoordinateConverter {
         @NotNull Vec convert(Vec vec, Pos origin, boolean relativeX, boolean relativeY, boolean relativeZ);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RelativeVec that = (RelativeVec) o;
+        return relativeX == that.relativeX && relativeY == that.relativeY && relativeZ == that.relativeZ && Objects.equals(vec, that.vec) && coordinateType == that.coordinateType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vec, coordinateType, relativeX, relativeY, relativeZ);
+    }
 }

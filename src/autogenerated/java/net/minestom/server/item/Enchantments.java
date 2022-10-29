@@ -29,6 +29,8 @@ interface Enchantments {
 
     Enchantment SOUL_SPEED = EnchantmentImpl.get("minecraft:soul_speed");
 
+    Enchantment SWIFT_SNEAK = EnchantmentImpl.get("minecraft:swift_sneak");
+
     Enchantment SHARPNESS = EnchantmentImpl.get("minecraft:sharpness");
 
     Enchantment SMITE = EnchantmentImpl.get("minecraft:smite");

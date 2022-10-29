@@ -48,6 +48,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.*;
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
 public class InstanceContainer extends Instance {
+    private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -79,7 +80,7 @@ public class InstanceContainer extends Instance {
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
         super(uniqueId, dimensionType);
         setChunkSupplier(DynamicChunk::new);
-        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader("world")));
+        setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
     }
 
@@ -228,6 +229,9 @@ public class InstanceContainer extends Instance {
         // Clear cache
         this.chunks.remove(getChunkIndex(chunkX, chunkZ));
         chunk.unload();
+        if (chunkLoader != null) {
+            chunkLoader.unloadChunk(chunk);
+        }
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.deletePartition(chunk);
     }
@@ -322,6 +326,12 @@ public class InstanceContainer extends Instance {
                                 final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
                                 if (forkChunk != null) {
                                     applyFork(forkChunk, sectionModifier);
+                                    // Update players
+                                    if (forkChunk instanceof DynamicChunk dynamicChunk) {
+                                        dynamicChunk.chunkCache.invalidate();
+                                        dynamicChunk.lightCache.invalidate();
+                                    }
+                                    forkChunk.sendChunk();
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);
                                     this.generationForks.compute(index, (i, sectionModifiers) -> {
@@ -339,7 +349,6 @@ public class InstanceContainer extends Instance {
                     MinecraftServer.getExceptionManager().handleException(e);
                 } finally {
                     // End generation
-                    chunk.sendChunk();
                     refreshLastBlockChangeTime();
                     resultFuture.complete(chunk);
                 }

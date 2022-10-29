@@ -51,11 +51,11 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
@@ -72,6 +72,7 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -122,6 +123,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
+    /**
+     * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
+     * in the range of {@link MinecraftServer#getChunkViewDistance()}
+     */
+    private Vec chunksLoadedByClient = Vec.ZERO;
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
@@ -168,6 +174,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
+    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(6);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -240,10 +247,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionType = spawnInstance.getDimensionType();
 
         NBTCompound nbt = NBT.Compound(Map.of(
+                "minecraft:chat_type", Messenger.chatRegistry(),
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of("minestom:world"), nbt, dimensionType.toNBT(), dimensionType.getName().asString(),
+                List.of("minestom:world"), nbt, dimensionType.toString(), "minestom:world",
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, levelFlat);
         sendPacket(joinGamePacket);
@@ -256,7 +264,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacket(new SpawnPositionPacket(respawnPoint, 0));
 
         // Add player to list with spawning skin
-        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
+        PlayerSkin profileSkin = null;
+        if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+            final GameProfile gameProfile = socketConnection.gameProfile();
+            if (gameProfile != null) {
+                for (GameProfile.Property property : gameProfile.properties()) {
+                    if (property.name().equals("textures")) {
+                        profileSkin = new PlayerSkin(property.value(), property.signature());
+                        break;
+                    }
+                }
+            }
+        }
+        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
@@ -326,9 +346,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
+            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
-                        if (expandedBoundingBox.intersectEntity(position, experienceOrb)) {
+                        if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
                             PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                             EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                                 short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
@@ -422,8 +443,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setFireForDuration(0);
         setOnFire(false);
         refreshHealth();
-        sendPacket(new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+        sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
+               0, gameMode, gameMode, false, levelFlat, true));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -431,8 +452,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshIsDead(false);
         updatePose();
 
-        // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
+        Pos respawnPosition = respawnEvent.getRespawnPosition();
+
+        // The client unloads chunks when respawning, so resend all chunks next to spawn
+        ChunkUtils.forChunksInRange(respawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) ->
+                this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
+                    try {
+                        if (chunk != null) {
+                            chunk.sendChunk(this);
+                        }
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }));
+        chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
+        teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
     }
 
     /**
@@ -613,7 +647,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
-            sendPacket(new UpdateViewPositionPacket(spawnPosition.chunkX(), spawnPosition.chunkZ()));
+            final int chunkX = spawnPosition.chunkX();
+            final int chunkZ = spawnPosition.chunkZ();
+            chunksLoadedByClient = new Vec(chunkX, chunkZ);
+            sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
             ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
         }
 
@@ -651,15 +688,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
-    }
-
-    /**
-     * Makes the player send a message (can be used for commands).
-     *
-     * @param message the message that the player will send
-     */
-    public void chat(@NotNull String message) {
-        addPacketToQueue(new ClientChatMessagePacket(message));
     }
 
     @Override
@@ -926,7 +954,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType(), getDimensionType().getName().asString(),
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), "minestom:world",
                 0, gameMode, gameMode, false, levelFlat, true);
 
         sendPacket(removePlayerPacket);
@@ -1299,7 +1327,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType, dimensionType.getName().asString(),
+        sendPacket(new RespawnPacket(dimensionType.toString(), "minestom:world",
                 0, gameMode, gameMode, false, levelFlat, true));
         refreshClientStateAfterRespawn();
     }
@@ -1435,17 +1463,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        CloseWindowPacket closeWindowPacket;
-        if (openInventory == null) {
-            closeWindowPacket = new CloseWindowPacket((byte) 0);
-        } else {
-            closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-            openInventory.removeViewer(this); // Clear cache
-            this.openInventory = null;
+        if (openInventory == getOpenInventory()) {
+            CloseWindowPacket closeWindowPacket;
+            if (openInventory == null) {
+                closeWindowPacket = new CloseWindowPacket((byte) 0);
+            } else {
+                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
+                openInventory.removeViewer(this); // Clear cache
+                this.openInventory = null;
+            }
+            sendPacket(closeWindowPacket);
+            inventory.update();
+            this.didCloseInventory = true;
         }
-        sendPacket(closeWindowPacket);
-        inventory.update();
-        this.didCloseInventory = true;
     }
 
     /**
@@ -1874,9 +1904,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerSkin skin = this.skin;
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
-                Collections.emptyList();
+                List.of();
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName));
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName, null));
     }
 
     /**
@@ -2020,6 +2050,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public Player asPlayer() {
         return this;
+    }
+
+    protected void sendChunkUpdates(Chunk newChunk) {
+        if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
+            final int newX = newChunk.getChunkX();
+            final int newZ = newChunk.getChunkZ();
+            final Vec old = chunksLoadedByClient;
+            sendPacket(new UpdateViewPositionPacket(newX, newZ));
+            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
+                    MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
+            this.chunksLoadedByClient = new Vec(newX, newZ);
+        }
     }
 
     /**

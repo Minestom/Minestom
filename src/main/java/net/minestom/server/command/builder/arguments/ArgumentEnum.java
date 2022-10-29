@@ -1,10 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.UnaryOperator;
 
@@ -40,20 +40,12 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        // Create a primitive array for mapping
-        DeclareCommandsPacket.Node[] nodes = new DeclareCommandsPacket.Node[this.values.length];
+    public String parser() {
+        return null;
+    }
 
-        // Create a node for each restrictions as literal
-        for (int i = 0; i < nodes.length; i++) {
-            DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-
-            argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
-                    executable, false, false);
-            argumentNode.name = this.format.formatter.apply(this.values[i].name());
-            nodes[i] = argumentNode;
-        }
-        nodeMaker.addNodes(nodes);
+    public List<String> entries() {
+        return Arrays.stream(values).map(x -> format.formatter.apply(x.name())).toList();
     }
 
     public enum Format {

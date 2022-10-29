@@ -1,15 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record MapDataPacket(int mapId, byte scale, boolean locked,
                             boolean trackingPosition, @NotNull List<Icon> icons,
@@ -18,7 +18,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         icons = List.copyOf(icons);
     }
 
-    public MapDataPacket(BinaryReader reader) {
+    public MapDataPacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
 
@@ -28,35 +28,35 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
                 packet.colorContent);
     }
 
-    private static MapDataPacket read(BinaryReader reader) {
-        var mapId = reader.readVarInt();
-        var scale = reader.readByte();
-        var locked = reader.readBoolean();
-        var trackingPosition = reader.readBoolean();
-        List<Icon> icons = trackingPosition ? reader.readVarIntList(Icon::new) : List.of();
+    private static MapDataPacket read(@NotNull NetworkBuffer reader) {
+        var mapId = reader.read(VAR_INT);
+        var scale = reader.read(BYTE);
+        var locked = reader.read(BOOLEAN);
+        var trackingPosition = reader.read(BOOLEAN);
+        List<Icon> icons = trackingPosition ? reader.readCollection(Icon::new) : List.of();
 
-        var columns = reader.readByte();
+        var columns = reader.read(BYTE);
         if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);
-        byte rows = reader.readByte();
-        byte x = reader.readByte();
-        byte z = reader.readByte();
-        byte[] data = reader.readByteArray();
+        byte rows = reader.read(BYTE);
+        byte x = reader.read(BYTE);
+        byte z = reader.read(BYTE);
+        byte[] data = reader.read(BYTE_ARRAY);
         return new MapDataPacket(mapId, scale, locked,
                 trackingPosition, icons, new ColorContent(columns, rows, x, z,
                 data));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(mapId);
-        writer.writeByte(scale);
-        writer.writeBoolean(locked);
-        writer.writeBoolean(trackingPosition);
-        if (trackingPosition) writer.writeVarIntList(icons, BinaryWriter::write);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, mapId);
+        writer.write(BYTE, scale);
+        writer.write(BOOLEAN, locked);
+        writer.write(BOOLEAN, trackingPosition);
+        if (trackingPosition) writer.writeCollection(icons);
         if (colorContent != null) {
             writer.write(colorContent);
         } else {
-            writer.writeByte((byte) 0);
+            writer.write(BYTE, (byte) 0);
         }
     }
 
@@ -66,35 +66,35 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     }
 
     public record Icon(int type, byte x, byte z, byte direction,
-                       @Nullable Component displayName) implements Writeable {
-        public Icon(BinaryReader reader) {
-            this(reader.readVarInt(), reader.readByte(), reader.readByte(), reader.readByte(),
-                    reader.readBoolean() ? reader.readComponent() : null);
+                       @Nullable Component displayName) implements NetworkBuffer.Writer {
+        public Icon(@NotNull NetworkBuffer reader) {
+            this(reader.read(VAR_INT), reader.read(BYTE), reader.read(BYTE), reader.read(BYTE),
+                    reader.read(BOOLEAN) ? reader.read(COMPONENT) : null);
         }
 
-        public void write(BinaryWriter writer) {
-            writer.writeVarInt(type);
-            writer.writeByte(x);
-            writer.writeByte(z);
-            writer.writeByte(direction);
-            writer.writeBoolean(displayName != null);
-            if (displayName != null) writer.writeComponent(displayName);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, type);
+            writer.write(BYTE, x);
+            writer.write(BYTE, z);
+            writer.write(BYTE, direction);
+            writer.write(BOOLEAN, displayName != null);
+            if (displayName != null) writer.write(COMPONENT, displayName);
         }
     }
 
     public record ColorContent(byte columns, byte rows, byte x, byte z,
-                               byte @NotNull [] data) implements Writeable {
-        public ColorContent(BinaryReader reader) {
-            this(reader.readByte(), reader.readByte(), reader.readByte(), reader.readByte(),
-                    reader.readByteArray());
+                               byte @NotNull [] data) implements NetworkBuffer.Writer {
+        public ColorContent(@NotNull NetworkBuffer reader) {
+            this(reader.read(BYTE), reader.read(BYTE), reader.read(BYTE), reader.read(BYTE),
+                    reader.read(BYTE_ARRAY));
         }
 
-        public void write(BinaryWriter writer) {
-            writer.writeByte(columns);
-            writer.writeByte(rows);
-            writer.writeByte(x);
-            writer.writeByte(z);
-            writer.writeByteArray(data);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(BYTE, columns);
+            writer.write(BYTE, rows);
+            writer.write(BYTE, x);
+            writer.write(BYTE, z);
+            writer.write(BYTE_ARRAY, data);
         }
     }
 }

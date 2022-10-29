@@ -115,6 +115,10 @@
   "fields":[{"name":"parked"}]
 },
 {
+  "name": "net.minestom.server.terminal.MinestomConsoleWriter",
+  "methods": [{"name":"<init>","parameterTypes":["java.util.Map"] }]
+},
+{
   "name":"org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
   "fields":[{"name":"producerLimit"}]
 },

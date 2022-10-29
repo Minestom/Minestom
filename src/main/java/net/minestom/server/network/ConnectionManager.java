@@ -218,7 +218,7 @@ public final class ConnectionManager {
                 }
             }
             // Send login success packet
-            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
             playerConnection.setConnectionState(ConnectionState.PLAY);
             if (register) registerPlayer(player);

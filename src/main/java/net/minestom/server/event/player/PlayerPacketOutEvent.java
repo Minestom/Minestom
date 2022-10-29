@@ -15,7 +15,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
  */
 @ApiStatus.Experimental
 public class PlayerPacketOutEvent implements PlayerEvent, CancellableEvent {
-
     private final Player player;
     private ServerPacket packet;
     private boolean cancelled;
