@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientCommandChatPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message, long&nbsp;timestamp, long&nbsp;salt, @NotNull <a href="../../../../crypto/ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&nbsp;signatures, boolean&nbsp;signedPreview, @NotNull <a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;lastSeenMessages)
@@ -105,7 +105,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientCommandChatPacket</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.binary.BinaryReader)" class="member-name-link">ClientCommandChatPacket</a><wbr>(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">ClientCommandChatPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -167,10 +167,8 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="block">Returns a string representation of this record class.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
-</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -188,12 +186,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.binary.BinaryReader)">
-<h3>ClientCommandChatPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientCommandChatPacket</span><wbr><span class="parameters">(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</span></div>
-</section>
-</li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,long,long,net.minestom.server.crypto.ArgumentSignatures,boolean,net.minestom.server.crypto.LastSeenMessages.Update)">
 <h3>ClientCommandChatPacket</h3>
@@ -217,6 +209,13 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
+<h3>ClientCommandChatPacket</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientCommandChatPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -226,17 +225,13 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="write(net.minestom.server.utils.binary.BinaryWriter)">
+<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
 <h3>write</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">Writeable</a></code></span></div>
-<div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
+ @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>writer</code> - the writer to write to</dd>
+<dd><code><a href="../../../NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
 </dl>
 </section>
 </li>

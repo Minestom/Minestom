@@ -79,14 +79,14 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="TeamsPacket.Action.html" title="interface in net.minestom.server.network.packet.server.play">TeamsPacket.Action</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="TeamsPacket.Action.html" title="interface in net.minestom.server.network.packet.server.play">TeamsPacket.Action</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Enclosing class:</dt>
 <dd><a href="TeamsPacket.html" title="class in net.minestom.server.network.packet.server.play">TeamsPacket</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">TeamsPacket.RemoveEntitiesToTeamAction</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;entities)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">TeamsPacket.RemoveEntitiesToTeamAction</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;entities)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.server.network.packet.server.play">TeamsPacket.Action</a></span></div>
 </section>
@@ -100,11 +100,11 @@ implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.se
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String%5B%5D)" class="member-name-link">RemoveEntitiesToTeamAction</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;entities)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">RemoveEntitiesToTeamAction</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;entities)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>RemoveEntitiesToTeamAction</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.binary.BinaryReader)" class="member-name-link">RemoveEntitiesToTeamAction</a><wbr>(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">RemoveEntitiesToTeamAction</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -120,7 +120,7 @@ implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.se
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entities()" class="member-name-link">entities</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>entities</code> record component.</div>
@@ -144,10 +144,8 @@ implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.se
 <div class="block">Returns a string representation of this record class.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.utils.binary.BinaryWriter)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
-</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -166,20 +164,22 @@ implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.se
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.binary.BinaryReader)">
+<section class="detail" id="&lt;init&gt;(java.util.List)">
 <h3>RemoveEntitiesToTeamAction</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RemoveEntitiesToTeamAction</span><wbr><span class="parameters">(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(java.lang.String[])">
-<h3>RemoveEntitiesToTeamAction</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RemoveEntitiesToTeamAction</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;entities)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RemoveEntitiesToTeamAction</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;entities)</span></div>
 <div class="block">Creates an instance of a <code>RemoveEntitiesToTeamAction</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>entities</code> - the value for the <code>entities</code> record component</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
+<h3>RemoveEntitiesToTeamAction</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RemoveEntitiesToTeamAction</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
 </section>
 </li>
 </ul>
@@ -191,17 +191,13 @@ implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.se
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="write(net.minestom.server.utils.binary.BinaryWriter)">
+<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
 <h3>write</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">Writeable</a></code></span></div>
-<div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
+ @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>writer</code> - the writer to write to</dd>
+<dd><code><a href="../../../NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
 </dl>
 </section>
 </li>
@@ -259,7 +255,8 @@ implements <a href="TeamsPacket.Action.html" title="interface in net.minestom.se
 <li>
 <section class="detail" id="entities()">
 <h3>entities</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name">entities</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">entities</span>()</div>
 <div class="block">Returns the value of the <code>entities</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

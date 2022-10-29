@@ -90,15 +90,15 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,float,net.minestom.server.attribute.AttributeOperation)" class="member-name-link">AttributeModifier</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- float&nbsp;amount,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,double,net.minestom.server.attribute.AttributeOperation)" class="member-name-link">AttributeModifier</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ double&nbsp;amount,
  @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new modifier with a random id.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,float,net.minestom.server.attribute.AttributeOperation)" class="member-name-link">AttributeModifier</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;id,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,double,net.minestom.server.attribute.AttributeOperation)" class="member-name-link">AttributeModifier</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;id,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- float&nbsp;amount,
+ double&nbsp;amount,
  @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a new modifier.</div>
@@ -117,7 +117,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAmount()" class="member-name-link">getAmount</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the value of this modifier.</div>
@@ -155,11 +155,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,float,net.minestom.server.attribute.AttributeOperation)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,double,net.minestom.server.attribute.AttributeOperation)">
 <h3>AttributeModifier</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AttributeModifier</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- float&nbsp;amount,
+ double&nbsp;amount,
  @NotNull
  @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</span></div>
 <div class="block">Creates a new modifier with a random id.</div>
@@ -172,13 +172,13 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,float,net.minestom.server.attribute.AttributeOperation)">
+<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,double,net.minestom.server.attribute.AttributeOperation)">
 <h3>AttributeModifier</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AttributeModifier</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;id,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- float&nbsp;amount,
+ double&nbsp;amount,
  @NotNull
  @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</span></div>
 <div class="block">Creates a new modifier.</div>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAmount()">
 <h3>getAmount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">getAmount</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getAmount</span>()</div>
 <div class="block">Gets the value of this modifier.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 <span class="permits">permits <a href="ClientPacketsHandler.Status.html" title="class in net.minestom.server.network.packet.client">ClientPacketsHandler.Status</a>, <a href="ClientPacketsHandler.Login.html" title="class in net.minestom.server.network.packet.client">ClientPacketsHandler.Login</a>, <a href="ClientPacketsHandler.Play.html" title="class in net.minestom.server.network.packet.client">ClientPacketsHandler.Play</a></span></div>
 <div class="block">Contains registered packets and a way to instantiate them.
  <p>
- Packets are registered using <a href="#register(int,java.util.function.Function)"><code>register(int, Function)</code></a> and created using <a href="#create(int,net.minestom.server.utils.binary.BinaryReader)"><code>create(int, BinaryReader)</code></a>.</div>
+ Packets are registered using <a href="#register(int,java.util.function.Function)"><code>register(int, Function)</code></a> and created using <a href="#create(int,net.minestom.server.network.NetworkBuffer)"><code>create(int, NetworkBuffer)</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -122,12 +122,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@UnknownNullability <a href="ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#create(int,net.minestom.server.utils.binary.BinaryReader)" class="member-name-link">create</a><wbr>(int&nbsp;packetId,
- @NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#create(int,net.minestom.server.network.NetworkBuffer)" class="member-name-link">create</a><wbr>(int&nbsp;packetId,
+ @NotNull <a href="../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(int,java.util.function.Function)" class="member-name-link">register</a><wbr>(int&nbsp;id,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>,<wbr>@NotNull <a href="ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;&nbsp;packetSupplier)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull <a href="ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;&nbsp;packetSupplier)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -151,15 +151,15 @@ loadScripts(document, 'script');</script>
 <h3>register</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(int&nbsp;id,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>,<wbr>@NotNull <a href="ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;&nbsp;packetSupplier)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull <a href="ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;&nbsp;packetSupplier)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="create(int,net.minestom.server.utils.binary.BinaryReader)">
+<section class="detail" id="create(int,net.minestom.server.network.NetworkBuffer)">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@UnknownNullability <a href="ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(int&nbsp;packetId,
  @NotNull
- @NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</span></div>
+ @NotNull <a href="../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
 </section>
 </li>
 </ul>
