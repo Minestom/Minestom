@@ -14,6 +14,9 @@ public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
                                    @Nullable String title) implements ClientPacket {
     public ClientEditBookPacket {
         pages = List.copyOf(pages);
+        if (title != null && title.length() > 128) {
+            throw new IllegalArgumentException("Title length cannot be greater than 128");
+        }
     }
 
     public ClientEditBookPacket(@NotNull NetworkBuffer reader) {
