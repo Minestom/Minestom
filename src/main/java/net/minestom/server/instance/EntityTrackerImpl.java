@@ -1,8 +1,12 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,16 +15,15 @@ import org.jetbrains.annotations.UnmodifiableView;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
+import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class EntityTrackerImpl implements EntityTracker {
@@ -168,6 +171,12 @@ final class EntityTrackerImpl implements EntityTracker {
         return (Set<T>) entries[target.ordinal()].entitiesView;
     }
 
+    @Override
+    public @NotNull Viewable viewable(@NotNull List<@NotNull SharedInstance> sharedInstances, int chunkX, int chunkZ) {
+        var entry = entries[Target.PLAYERS.ordinal()];
+        return entry.viewers.computeIfAbsent(new ChunkViewKey(sharedInstances, chunkX, chunkZ), ChunkView::new);
+    }
+
     private <T extends Entity> void difference(Point oldPoint, Point newPoint,
                                                @NotNull Target<T> target, @NotNull Update<T> update) {
         final TargetEntry<Entity> entry = entries[target.ordinal()];
@@ -185,12 +194,24 @@ final class EntityTrackerImpl implements EntityTracker {
                 });
     }
 
+    record ChunkViewKey(List<SharedInstance> sharedInstances, int chunkX, int chunkZ) {
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof ChunkViewKey key)) return false;
+            return sharedInstances == key.sharedInstances &&
+                    chunkX == key.chunkX &&
+                    chunkZ == key.chunkZ;
+        }
+    }
+
     static final class TargetEntry<T extends Entity> {
         private final EntityTracker.Target<T> target;
         private final Set<T> entities = ConcurrentHashMap.newKeySet(); // Thread-safe since exposed
         private final Set<T> entitiesView = Collections.unmodifiableSet(entities);
         // Chunk index -> entities inside it
         final Long2ObjectSyncMap<List<T>> chunkEntities = Long2ObjectSyncMap.hashmap();
+        final Map<ChunkViewKey, ChunkView> viewers = new ConcurrentHashMap<>();
 
         TargetEntry(Target<T> target) {
             this.target = target;
@@ -207,6 +228,72 @@ final class EntityTrackerImpl implements EntityTracker {
         void removeFromChunk(long index, T entity) {
             List<T> entities = chunkEntities.get(index);
             if (entities != null) entities.remove(entity);
+        }
+    }
+
+    private final class ChunkView implements Viewable {
+        private final ChunkViewKey key;
+        private final int chunkX, chunkZ;
+        private final Point point;
+        final Set<Player> set = new SetImpl();
+        private int lastReferenceCount;
+
+        private ChunkView(ChunkViewKey key) {
+            this.key = key;
+
+            this.chunkX = key.chunkX;
+            this.chunkZ = key.chunkZ;
+
+            this.point = new Vec(CHUNK_SIZE_X * chunkX, 0, CHUNK_SIZE_Z * chunkZ);
+        }
+
+        @Override
+        public boolean addViewer(@NotNull Player player) {
+            throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        }
+
+        @Override
+        public boolean removeViewer(@NotNull Player player) {
+            throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        }
+
+        @Override
+        public @NotNull Set<@NotNull Player> getViewers() {
+            return set;
+        }
+
+        private Collection<Player> references() {
+            Int2ObjectOpenHashMap<Player> entityMap = new Int2ObjectOpenHashMap<>(lastReferenceCount);
+            collectPlayers(EntityTrackerImpl.this, entityMap);
+            if (!key.sharedInstances.isEmpty()) {
+                for (SharedInstance instance : key.sharedInstances) {
+                    collectPlayers(instance.getEntityTracker(), entityMap);
+                }
+            }
+            this.lastReferenceCount = entityMap.size();
+            return entityMap.values();
+        }
+
+        private void collectPlayers(EntityTracker tracker, Int2ObjectOpenHashMap<Player> map) {
+            tracker.nearbyEntitiesByChunkRange(point, MinecraftServer.getChunkViewDistance(),
+                    EntityTracker.Target.PLAYERS, (player) -> map.putIfAbsent(player.getEntityId(), player));
+        }
+
+        final class SetImpl extends AbstractSet<Player> {
+            @Override
+            public @NotNull Iterator<Player> iterator() {
+                return references().iterator();
+            }
+
+            @Override
+            public int size() {
+                return references().size();
+            }
+
+            @Override
+            public void forEach(Consumer<? super Player> action) {
+                references().forEach(action);
+            }
         }
     }
 }
