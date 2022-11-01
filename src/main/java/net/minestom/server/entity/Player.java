@@ -455,7 +455,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) ->
+        ChunkUtils.forChunksInRange(respawnPosition, settings.getViewDistance(), (chunkX, chunkZ) ->
                 this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                     try {
                         if (chunk != null) {
@@ -466,6 +466,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     }
                 }));
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
+        // Client also needs all entities resent to them, since those are unloaded as well
+        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getViewDistance(),
+                EntityTracker.Target.ENTITIES, entity -> {
+                    // Skip refreshing self with a new viewer
+                    if (!entity.getUuid().equals(uuid)) {
+                        entity.updateNewViewer(this);
+                    }
+                });
         teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
     }
 
