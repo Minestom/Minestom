@@ -1,6 +1,5 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
@@ -45,7 +44,7 @@ public class PlayerRespawnChunkIntegrationTest {
         player.setHealth(0);
         player.respawn();
         // Player should have all their chunks reloaded
-        int chunkLoads = ChunkUtils.getChunkCount(MinecraftServer.getChunkViewDistance());
+        int chunkLoads = ChunkUtils.getChunkCount(player.getSettings().getViewDistance());
         loadChunkTracker.assertCount(chunkLoads);
     }
 
@@ -61,12 +60,12 @@ public class PlayerRespawnChunkIntegrationTest {
         player.interpretPacketQueue();
         List<ChunkDataPacket> dataPacketList = loadChunkTracker.collect();
         Set<ChunkDataPacket> duplicateCheck = new HashSet<>();
-        int chunkLoads = ChunkUtils.getChunkCount(MinecraftServer.getChunkViewDistance());
+        int chunkLoads = ChunkUtils.getChunkCount(player.getSettings().getViewDistance());
         loadChunkTracker.assertCount(chunkLoads);
         for (ChunkDataPacket packet : dataPacketList) {
             assertFalse(duplicateCheck.contains(packet));
             duplicateCheck.add(packet);
-            assertTrue(Math.abs(packet.chunkX()) <= MinecraftServer.getChunkViewDistance() && Math.abs(packet.chunkZ()) <= MinecraftServer.getChunkViewDistance());
+            assertTrue(Math.abs(packet.chunkX()) <= player.getSettings().getViewDistance() && Math.abs(packet.chunkZ()) <= player.getSettings().getViewDistance());
         }
     }
 }
