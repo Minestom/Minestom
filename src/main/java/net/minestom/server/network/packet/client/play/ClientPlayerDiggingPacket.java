@@ -2,24 +2,25 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point blockPosition,
                                         @NotNull BlockFace blockFace, int sequence) implements ClientPacket {
-    public ClientPlayerDiggingPacket(BinaryReader reader) {
-        this(Status.values()[reader.readVarInt()], reader.readBlockPosition(),
-                BlockFace.values()[reader.readByte()], reader.readVarInt());
+    public ClientPlayerDiggingPacket(@NotNull NetworkBuffer reader) {
+        this(reader.readEnum(Status.class), reader.read(BLOCK_POSITION),
+                BlockFace.values()[reader.read(BYTE)], reader.read(VAR_INT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(status.ordinal());
-        writer.writeBlockPosition(blockPosition);
-        writer.writeByte((byte) blockFace.ordinal());
-        writer.writeVarInt(sequence);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.writeEnum(Status.class, status);
+        writer.write(BLOCK_POSITION, blockPosition);
+        writer.write(BYTE, (byte) blockFace.ordinal());
+        writer.write(VAR_INT, sequence);
     }
 
     public enum Status {

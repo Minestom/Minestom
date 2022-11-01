@@ -4,18 +4,20 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
                                  @NotNull List<String> identifiersToRemove,
@@ -26,18 +28,18 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         progressMappings = List.copyOf(progressMappings);
     }
 
-    public AdvancementsPacket(BinaryReader reader) {
-        this(reader.readBoolean(), reader.readVarIntList(AdvancementMapping::new),
-                reader.readVarIntList(BinaryReader::readSizedString),
-                reader.readVarIntList(ProgressMapping::new));
+    public AdvancementsPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BOOLEAN), reader.readCollection(AdvancementMapping::new),
+                reader.readCollection(STRING),
+                reader.readCollection(ProgressMapping::new));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBoolean(reset);
-        writer.writeVarIntList(advancementMappings, BinaryWriter::write);
-        writer.writeVarIntList(identifiersToRemove, BinaryWriter::writeSizedString);
-        writer.writeVarIntList(progressMappings, BinaryWriter::write);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BOOLEAN, reset);
+        writer.writeCollection(advancementMappings);
+        writer.writeCollection(STRING, identifiersToRemove);
+        writer.writeCollection(progressMappings);
     }
 
     @Override
@@ -73,14 +75,15 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     /**
      * AdvancementMapping maps the namespaced ID to the Advancement.
      */
-    public record AdvancementMapping(@NotNull String key, @NotNull Advancement value) implements Writeable, ComponentHolder<AdvancementMapping> {
-        public AdvancementMapping(BinaryReader reader) {
-            this(reader.readSizedString(), new Advancement(reader));
+    public record AdvancementMapping(@NotNull String key,
+                                     @NotNull Advancement value) implements NetworkBuffer.Writer, ComponentHolder<AdvancementMapping> {
+        public AdvancementMapping(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), new Advancement(reader));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(key);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, key);
             writer.write(value);
         }
 
@@ -97,27 +100,25 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
                               @NotNull List<String> criteria,
-                              @NotNull List<Requirement> requirements) implements Writeable, ComponentHolder<Advancement> {
+                              @NotNull List<Requirement> requirements) implements NetworkBuffer.Writer, ComponentHolder<Advancement> {
         public Advancement {
             criteria = List.copyOf(criteria);
             requirements = List.copyOf(requirements);
         }
 
-        public Advancement(BinaryReader reader) {
-            this(reader.readBoolean() ? reader.readSizedString() : null,
-                    reader.readBoolean() ? new DisplayData(reader) : null,
-                    reader.readVarIntList(BinaryReader::readSizedString),
-                    reader.readVarIntList(Requirement::new));
+        public Advancement(@NotNull NetworkBuffer reader) {
+            this(reader.read(BOOLEAN) ? reader.read(STRING) : null,
+                    reader.read(BOOLEAN) ? new DisplayData(reader) : null,
+                    reader.readCollection(STRING),
+                    reader.readCollection(Requirement::new));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeBoolean(parentIdentifier != null);
-            if (parentIdentifier != null) writer.writeSizedString(parentIdentifier);
-            writer.writeBoolean(displayData != null);
-            if (displayData != null) writer.write(displayData);
-            writer.writeVarIntList(criteria, BinaryWriter::writeSizedString);
-            writer.writeVarIntList(requirements, BinaryWriter::write);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeOptional(STRING, parentIdentifier);
+            writer.writeOptional(displayData);
+            writer.writeCollection(STRING, criteria);
+            writer.writeCollection(requirements);
         }
 
         @Override
@@ -131,26 +132,26 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
     }
 
-    public record Requirement(@NotNull List<String> requirements) implements Writeable {
+    public record Requirement(@NotNull List<String> requirements) implements NetworkBuffer.Writer {
         public Requirement {
             requirements = List.copyOf(requirements);
         }
 
-        public Requirement(BinaryReader reader) {
-            this(reader.readVarIntList(BinaryReader::readSizedString));
+        public Requirement(@NotNull NetworkBuffer reader) {
+            this(reader.readCollection(STRING));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarIntList(requirements, BinaryWriter::writeSizedString);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeCollection(STRING, requirements);
         }
     }
 
     public record DisplayData(@NotNull Component title, @NotNull Component description,
                               @NotNull ItemStack icon, @NotNull FrameType frameType,
                               int flags, @Nullable String backgroundTexture,
-                              float x, float y) implements Writeable, ComponentHolder<DisplayData> {
-        public DisplayData(BinaryReader reader) {
+                              float x, float y) implements NetworkBuffer.Writer, ComponentHolder<DisplayData> {
+        public DisplayData(@NotNull NetworkBuffer reader) {
             this(read(reader));
         }
 
@@ -161,15 +162,15 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
                     displayData.x, displayData.y);
         }
 
-        private static DisplayData read(BinaryReader reader) {
-            var title = reader.readComponent();
-            var description = reader.readComponent();
-            var icon = reader.readItemStack();
-            var frameType = FrameType.values()[reader.readVarInt()];
-            var flags = reader.readInt();
-            var backgroundTexture = (flags & 0x1) != 0 ? reader.readSizedString() : null;
-            var x = reader.readFloat();
-            var y = reader.readFloat();
+        private static DisplayData read(@NotNull NetworkBuffer reader) {
+            var title = reader.read(COMPONENT);
+            var description = reader.read(COMPONENT);
+            var icon = reader.read(ITEM);
+            var frameType = FrameType.values()[reader.read(VAR_INT)];
+            var flags = reader.read(INT);
+            var backgroundTexture = (flags & 0x1) != 0 ? reader.read(STRING) : null;
+            var x = reader.read(FLOAT);
+            var y = reader.read(FLOAT);
             return new DisplayData(title, description,
                     icon, frameType,
                     flags, backgroundTexture,
@@ -177,18 +178,18 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeComponent(title);
-            writer.writeComponent(description);
-            writer.writeItemStack(icon);
-            writer.writeVarInt(frameType.ordinal());
-            writer.writeInt(flags);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(COMPONENT, title);
+            writer.write(COMPONENT, description);
+            writer.write(ITEM, icon);
+            writer.write(VAR_INT, frameType.ordinal());
+            writer.write(INT, flags);
             if ((flags & 0x1) != 0) {
                 assert backgroundTexture != null;
-                writer.writeSizedString(backgroundTexture);
+                writer.write(STRING, backgroundTexture);
             }
-            writer.writeFloat(x);
-            writer.writeFloat(y);
+            writer.write(FLOAT, x);
+            writer.write(FLOAT, y);
         }
 
         @Override
@@ -202,55 +203,55 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
     }
 
-    public record ProgressMapping(@NotNull String key, @NotNull AdvancementProgress progress) implements Writeable {
-        public ProgressMapping(BinaryReader reader) {
-            this(reader.readSizedString(), new AdvancementProgress(reader));
+    public record ProgressMapping(@NotNull String key,
+                                  @NotNull AdvancementProgress progress) implements NetworkBuffer.Writer {
+        public ProgressMapping(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), new AdvancementProgress(reader));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(key);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, key);
             writer.write(progress);
         }
     }
 
-    public record AdvancementProgress(@NotNull List<Criteria> criteria) implements Writeable {
+    public record AdvancementProgress(@NotNull List<Criteria> criteria) implements NetworkBuffer.Writer {
         public AdvancementProgress {
             criteria = List.copyOf(criteria);
         }
 
-        public AdvancementProgress(BinaryReader reader) {
-            this(reader.readVarIntList(Criteria::new));
+        public AdvancementProgress(@NotNull NetworkBuffer reader) {
+            this(reader.readCollection(Criteria::new));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarIntList(criteria, BinaryWriter::write);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeCollection(criteria);
         }
     }
 
     public record Criteria(@NotNull String criterionIdentifier,
-                           @NotNull CriterionProgress criterionProgress) implements Writeable {
-        public Criteria(BinaryReader reader) {
-            this(reader.readSizedString(), new CriterionProgress(reader));
+                           @NotNull CriterionProgress criterionProgress) implements NetworkBuffer.Writer {
+        public Criteria(@NotNull NetworkBuffer reader) {
+            this(reader.read(STRING), new CriterionProgress(reader));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(criterionIdentifier);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(STRING, criterionIdentifier);
             writer.write(criterionProgress);
         }
     }
 
-    public record CriterionProgress(@Nullable Long dateOfAchieving) implements Writeable {
-        public CriterionProgress(BinaryReader reader) {
-            this(reader.readBoolean() ? reader.readLong() : null);
+    public record CriterionProgress(@Nullable Long dateOfAchieving) implements NetworkBuffer.Writer {
+        public CriterionProgress(@NotNull NetworkBuffer reader) {
+            this(reader.readOptional(LONG));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeBoolean(dateOfAchieving != null);
-            if (dateOfAchieving != null) writer.writeLong(dateOfAchieving);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeOptional(LONG, dateOfAchieving);
         }
     }
 }

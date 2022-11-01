@@ -1,14 +1,17 @@
 package net.minestom.server.item;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.NBT;
 
 record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
     static final ItemMetaImpl EMPTY = new ItemMetaImpl(TagHandler.newHandler());
@@ -36,16 +39,13 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
+    public void write(@NotNull NetworkBuffer writer) {
         final NBTCompound nbt = toNBT();
         if (nbt.isEmpty()) {
-            writer.writeByte((byte) 0);
+            writer.write(BYTE, (byte) 0);
             return;
         }
-        BinaryWriter w = new BinaryWriter();
-        w.writeNBT("", nbt);
-        var cachedBuffer = w.getBuffer();
-        writer.write(cachedBuffer.flip());
+        writer.write(NBT, nbt);
     }
 
     @Override

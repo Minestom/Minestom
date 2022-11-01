@@ -3,22 +3,19 @@ package net.minestom.server.entity;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBTEnd;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import static net.minestom.server.entity.Metadata.Boolean;
 import static net.minestom.server.entity.Metadata.Byte;
 import static net.minestom.server.entity.Metadata.Float;
 import static net.minestom.server.entity.Metadata.String;
 import static net.minestom.server.entity.Metadata.*;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 final class MetadataImpl {
     static final ObjectArray<Metadata.Entry<?>> EMPTY_VALUES = ObjectArray.singleThread(20);
@@ -47,22 +44,21 @@ final class MetadataImpl {
     }
 
     record EntryImpl<T>(int type, @UnknownNullability T value,
-                        @NotNull BiConsumer<BinaryWriter, T> writer,
-                        @NotNull Function<BinaryReader, T> reader) implements Metadata.Entry<T> {
-        static Entry<?> read(int type, @NotNull BinaryReader reader) {
+                        @NotNull NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
+        static Entry<?> read(int type, @NotNull NetworkBuffer reader) {
             final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
             if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);
             return value.withValue(reader);
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarInt(type);
-            this.writer.accept(writer, value);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, type);
+            writer.write(serializer, value);
         }
 
-        private EntryImpl<T> withValue(@NotNull BinaryReader reader) {
-            return new EntryImpl<>(type, this.reader.apply(reader), writer, this.reader);
+        private EntryImpl<T> withValue(@NotNull NetworkBuffer reader) {
+            return new EntryImpl<>(type, reader.read(serializer), serializer);
         }
     }
 }

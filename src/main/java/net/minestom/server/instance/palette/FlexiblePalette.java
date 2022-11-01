@@ -3,13 +3,15 @@ package net.minestom.server.instance.palette;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
  * Palette able to take any value anywhere. May consume more memory than required.
@@ -207,12 +209,12 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(bitsPerEntry);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, bitsPerEntry);
         if (bitsPerEntry <= maxBitsPerEntry()) { // Palette index
-            writer.writeVarIntList(paletteToValueList, BinaryWriter::writeVarInt);
+            writer.writeCollection(VAR_INT, paletteToValueList);
         }
-        writer.writeLongArray(values);
+        writer.write(LONG_ARRAY, values);
     }
 
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {

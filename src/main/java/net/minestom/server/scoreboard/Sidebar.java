@@ -317,7 +317,7 @@ public class Sidebar implements Scoreboard {
          * Creates a new {@link SidebarTeam}
          */
         private void createTeam() {
-            this.entityName = '\u00A7' + Integer.toHexString(colorName);
+            this.entityName = '§' + Integer.toHexString(colorName);
 
             this.sidebarTeam = new SidebarTeam(teamName, content, Component.empty(), entityName);
         }

@@ -1,25 +1,27 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+
 public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
-    public VehicleMovePacket(BinaryReader reader) {
-        this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(),
-                reader.readFloat(), reader.readFloat()));
+    public VehicleMovePacket(@NotNull NetworkBuffer reader) {
+        this(new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
+                reader.read(FLOAT), reader.read(FLOAT)));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(position.x());
-        writer.writeDouble(position.y());
-        writer.writeDouble(position.z());
-        writer.writeFloat(position.yaw());
-        writer.writeFloat(position.pitch());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(DOUBLE, position.x());
+        writer.write(DOUBLE, position.y());
+        writer.write(DOUBLE, position.z());
+        writer.write(FLOAT, position.yaw());
+        writer.write(FLOAT, position.pitch());
     }
 
     @Override

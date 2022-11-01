@@ -1,5 +1,6 @@
 package net.minestom.server;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
@@ -29,8 +30,6 @@ import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -44,7 +43,7 @@ import java.net.SocketAddress;
  */
 public final class MinecraftServer {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
+    public static final ComponentLogger LOGGER = ComponentLogger.logger(MinecraftServer.class);
 
     public static final String VERSION_NAME = "1.19.2";
     public static final int PROTOCOL_VERSION = 760;

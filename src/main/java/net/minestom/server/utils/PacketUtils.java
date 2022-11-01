@@ -17,12 +17,11 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -253,26 +252,27 @@ public final class PacketUtils {
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          int id,
-                                         @NotNull Writeable writeable,
+                                         @NotNull NetworkBuffer.Writer writer,
                                          int compressionThreshold) {
-        BinaryWriter writerView = BinaryWriter.view(buffer); // ensure that the buffer is not resized
+        NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
-            final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-            Utils.writeVarInt(buffer, id);
-            writeable.write(writerView);
-            final int finalSize = buffer.position() - (lengthIndex + 3);
+            final int lengthIndex = networkBuffer.skipWrite(3);
+            networkBuffer.write(NetworkBuffer.VAR_INT, id);
+            networkBuffer.write(writer);
+            final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
+            buffer.position(networkBuffer.writeIndex());
             return;
         }
         // Compressed format https://wiki.vg/Protocol#With_compression
-        final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
+        final int compressedIndex = networkBuffer.skipWrite(3);
+        final int uncompressedIndex = networkBuffer.skipWrite(3);
 
-        final int contentStart = buffer.position();
-        Utils.writeVarInt(buffer, id);
-        writeable.write(writerView);
-        final int packetSize = buffer.position() - contentStart;
+        final int contentStart = networkBuffer.writeIndex();
+        networkBuffer.write(NetworkBuffer.VAR_INT, id);
+        networkBuffer.write(writer);
+        final int packetSize = networkBuffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
             // Packet large enough, compress it
@@ -283,11 +283,15 @@ public final class PacketUtils {
                 deflater.finish();
                 deflater.deflate(buffer.position(contentStart));
                 deflater.reset();
+
+                networkBuffer.skipWrite(buffer.position() - contentStart);
             }
         }
         // Packet header (Packet + Data Length)
-        Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+        Utils.writeVarIntHeader(buffer, compressedIndex, networkBuffer.writeIndex() - uncompressedIndex);
         Utils.writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
+
+        buffer.position(networkBuffer.writeIndex());
     }
 
     @ApiStatus.Internal

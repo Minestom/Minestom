@@ -1,10 +1,10 @@
 package net.minestom.server.extensions;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,16 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Extension {
-    // Set by reflection
-    @SuppressWarnings("unused")
-    private DiscoveredExtension origin;
-    // Set by reflection
-    @SuppressWarnings("unused")
-    private Logger logger;
-    // Set by reflection
-    @SuppressWarnings("unused")
-    private EventNode<Event> eventNode;
-
     /**
      * List of extensions that depend on this extension.
      */
@@ -56,9 +46,16 @@ public abstract class Extension {
 
     }
 
+    ExtensionClassLoader getExtensionClassLoader() {
+        if (getClass().getClassLoader() instanceof ExtensionClassLoader extensionClassLoader) {
+            return extensionClassLoader;
+        }
+        throw new IllegalStateException("Extension class loader is not an ExtensionClassLoader");
+    }
+
     @NotNull
     public DiscoveredExtension getOrigin() {
-        return origin;
+        return getExtensionClassLoader().getDiscoveredExtension();
     }
 
     /**
@@ -67,12 +64,12 @@ public abstract class Extension {
      * @return The logger for the extension
      */
     @NotNull
-    public Logger getLogger() {
-        return logger;
+    public ComponentLogger getLogger() {
+        return getExtensionClassLoader().getLogger();
     }
 
     public @NotNull EventNode<Event> getEventNode() {
-        return eventNode;
+        return getExtensionClassLoader().getEventNode();
     }
 
     public @NotNull Path getDataDirectory() {

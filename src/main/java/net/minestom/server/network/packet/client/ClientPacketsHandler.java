@@ -1,12 +1,12 @@
 package net.minestom.server.network.packet.client;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.login.EncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.LoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.client.status.PingPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
-import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -16,20 +16,20 @@ import java.util.function.Function;
 /**
  * Contains registered packets and a way to instantiate them.
  * <p>
- * Packets are registered using {@link #register(int, Function)} and created using {@link #create(int, BinaryReader)}.
+ * Packets are registered using {@link #register(int, Function)} and created using {@link #create(int, NetworkBuffer)}.
  */
 public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, ClientPacketsHandler.Login, ClientPacketsHandler.Play {
-    private final ObjectArray<Function<BinaryReader, ClientPacket>> suppliers = ObjectArray.singleThread(0x10);
+    private final ObjectArray<Function<NetworkBuffer, ClientPacket>> suppliers = ObjectArray.singleThread(0x10);
 
     private ClientPacketsHandler() {
     }
 
-    public void register(int id, @NotNull Function<@NotNull BinaryReader, @NotNull ClientPacket> packetSupplier) {
+    public void register(int id, @NotNull Function<@NotNull NetworkBuffer, @NotNull ClientPacket> packetSupplier) {
         this.suppliers.set(id, packetSupplier);
     }
 
-    public @UnknownNullability ClientPacket create(int packetId, @NotNull BinaryReader reader) {
-        final Function<BinaryReader, ClientPacket> supplier = suppliers.get(packetId);
+    public @UnknownNullability ClientPacket create(int packetId, @NotNull NetworkBuffer reader) {
+        final Function<NetworkBuffer, ClientPacket> supplier = suppliers.get(packetId);
         if (supplier == null)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
         return supplier.apply(reader);

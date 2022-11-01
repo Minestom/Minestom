@@ -2,7 +2,7 @@ package net.minestom.server.crypto;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,8 +36,8 @@ public interface SignatureValidator {
      */
     boolean validate(byte[] payload, byte[] signature);
 
-    default boolean validate(Consumer<BinaryWriter> payload, byte[] signature) {
-        return validate(BinaryWriter.makeArray(payload), signature);
+    default boolean validate(Consumer<NetworkBuffer> payload, byte[] signature) {
+        return validate(NetworkBuffer.makeArray(payload), signature);
     }
 
     static SignatureValidator from(PublicKey publicKey, KeyUtils.SignatureAlgorithm algorithm) {

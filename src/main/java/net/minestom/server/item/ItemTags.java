@@ -1,9 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.tag.Tag;
 
 import java.util.ArrayList;

@@ -1,20 +1,22 @@
 package net.minestom.server.network.packet.client.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
 public record ClientSteerVehiclePacket(float sideways, float forward,
                                        byte flags) implements ClientPacket {
-    public ClientSteerVehiclePacket(BinaryReader reader) {
-        this(reader.readFloat(), reader.readFloat(), reader.readByte());
+    public ClientSteerVehiclePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(FLOAT), reader.read(FLOAT), reader.read(BYTE));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeFloat(sideways);
-        writer.writeFloat(forward);
-        writer.writeByte(flags);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(FLOAT, sideways);
+        writer.write(FLOAT, forward);
+        writer.write(BYTE, flags);
     }
 }

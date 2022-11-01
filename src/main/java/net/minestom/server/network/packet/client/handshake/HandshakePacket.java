@@ -1,21 +1,28 @@
 package net.minestom.server.network.packet.client.handshake;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
                               int serverPort, int nextState) implements ClientPreplayPacket {
@@ -26,60 +33,74 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
-    public HandshakePacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255),
-                reader.readUnsignedShort(), reader.readVarInt());
+    public HandshakePacket {
+        if (serverAddress.length() > (BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255)) {
+            throw new IllegalArgumentException("Server address too long: " + serverAddress.length());
+        }
+    }
+
+    public HandshakePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.read(STRING),
+                reader.read(UNSIGNED_SHORT), reader.read(VAR_INT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(protocolVersion);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, protocolVersion);
         int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
         if (serverAddress.length() > maxLength) {
             throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
-        writer.writeSizedString(serverAddress);
-        writer.writeUnsignedShort(serverPort);
-        writer.writeVarInt(nextState);
+        writer.write(STRING, serverAddress);
+        writer.write(UNSIGNED_SHORT, serverPort);
+        writer.write(VAR_INT, nextState);
     }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
-
         String address = serverAddress;
         // Bungee support (IP forwarding)
         if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection && nextState == 2) {
-            if (address != null) {
-                final String[] split = address.split("\00");
+            final String[] split = address.split("\00");
 
-                if (split.length == 3 || split.length == 4) {
-                    address = split[0];
+            if (split.length == 3 || split.length == 4) {
+                address = split[0];
 
-                    final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
-                            ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
-                    socketConnection.setRemoteAddress(socketAddress);
+                final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
+                        ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
+                socketConnection.setRemoteAddress(socketAddress);
 
-                    UUID playerUuid = UUID.fromString(
-                            split[2]
-                                    .replaceFirst(
-                                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-                                    )
-                    );
-                    PlayerSkin playerSkin = null;
+                UUID playerUuid = java.util.UUID.fromString(
+                        split[2]
+                                .replaceFirst(
+                                        "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
+                                )
+                );
 
-                    if (split.length == 4) {
-                        playerSkin = BungeeCordProxy.readSkin(split[3]);
+                List<GameProfile.Property> properties = new ArrayList<>();
+                if (split.length == 4) {
+                    final String rawPropertyJson = split[3];
+                    final JsonArray propertyJson = JsonParser.parseString(rawPropertyJson).getAsJsonArray();
+                    for (JsonElement element : propertyJson) {
+                        final JsonObject jsonObject = element.getAsJsonObject();
+                        final JsonElement name = jsonObject.get("name");
+                        final JsonElement value = jsonObject.get("value");
+                        final JsonElement signature = jsonObject.get("signature");
+                        if (name == null || value == null) continue;
+
+                        final String nameString = name.getAsString();
+                        final String valueString = value.getAsString();
+                        final String signatureString = signature == null ? null : signature.getAsString();
+
+                        properties.add(new GameProfile.Property(nameString, valueString, signatureString));
                     }
-
-                    socketConnection.UNSAFE_setBungeeUuid(playerUuid);
-                    socketConnection.UNSAFE_setBungeeSkin(playerSkin);
-                } else {
-                    socketConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
-                    socketConnection.disconnect();
-                    return;
                 }
+
+                final GameProfile gameProfile = new GameProfile(playerUuid, "test", properties);
+                socketConnection.UNSAFE_setProfile(gameProfile);
             } else {
-                // Happen when a client ping the server, ignore
+                socketConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
+                socketConnection.disconnect();
                 return;
             }
         }
@@ -90,10 +111,8 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
         }
 
         switch (nextState) {
-            case 1:
-                connection.setConnectionState(ConnectionState.STATUS);
-                break;
-            case 2:
+            case 1 -> connection.setConnectionState(ConnectionState.STATUS);
+            case 2 -> {
                 if (protocolVersion == MinecraftServer.PROTOCOL_VERSION) {
                     connection.setConnectionState(ConnectionState.LOGIN);
                 } else {
@@ -101,10 +120,10 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                     connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));
                     connection.disconnect();
                 }
-                break;
-            default:
+            }
+            default -> {
                 // Unexpected error
-                break;
+            }
         }
     }
 }

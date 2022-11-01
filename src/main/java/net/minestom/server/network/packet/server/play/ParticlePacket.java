@@ -1,36 +1,37 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ParticlePacket(int particleId, boolean longDistance,
                              double x, double y, double z,
                              float offsetX, float offsetY, float offsetZ,
                              float particleData, int particleCount, byte[] data) implements ServerPacket {
-    public ParticlePacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readBoolean(),
-                reader.readDouble(), reader.readDouble(), reader.readDouble(),
-                reader.readFloat(), reader.readFloat(), reader.readFloat(),
-                reader.readFloat(), reader.readInt(), reader.readRemainingBytes());
+    public ParticlePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.read(BOOLEAN),
+                reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
+                reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT),
+                reader.read(FLOAT), reader.read(INT), reader.read(RAW_BYTES));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(particleId);
-        writer.writeBoolean(longDistance);
-        writer.writeDouble(x);
-        writer.writeDouble(y);
-        writer.writeDouble(z);
-        writer.writeFloat(offsetX);
-        writer.writeFloat(offsetY);
-        writer.writeFloat(offsetZ);
-        writer.writeFloat(particleData);
-        writer.writeInt(particleCount);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, particleId);
+        writer.write(BOOLEAN, longDistance);
+        writer.write(DOUBLE, x);
+        writer.write(DOUBLE, y);
+        writer.write(DOUBLE, z);
+        writer.write(FLOAT, offsetX);
+        writer.write(FLOAT, offsetY);
+        writer.write(FLOAT, offsetZ);
+        writer.write(FLOAT, particleData);
+        writer.write(INT, particleCount);
 
-        writer.writeBytes(data);
+        writer.write(RAW_BYTES, data);
     }
 
     @Override

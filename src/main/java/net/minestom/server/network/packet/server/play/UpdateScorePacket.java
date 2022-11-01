@@ -1,14 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record UpdateScorePacket(@NotNull String entityName, byte action,
                                 @NotNull String objectiveName, int value) implements ServerPacket {
-    public UpdateScorePacket(BinaryReader reader) {
+    public UpdateScorePacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
 
@@ -16,20 +17,20 @@ public record UpdateScorePacket(@NotNull String entityName, byte action,
         this(packet.entityName, packet.action, packet.objectiveName, packet.value);
     }
 
-    private static UpdateScorePacket read(BinaryReader reader) {
-        var entityName = reader.readSizedString();
-        var action = reader.readByte();
-        var objectiveName = reader.readSizedString();
-        var value = action != 1 ? reader.readVarInt() : 0;
+    private static UpdateScorePacket read(@NotNull NetworkBuffer reader) {
+        var entityName = reader.read(STRING);
+        var action = reader.read(BYTE);
+        var objectiveName = reader.read(STRING);
+        var value = action != 1 ? reader.read(VAR_INT) : 0;
         return new UpdateScorePacket(entityName, action, objectiveName, value);
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(entityName);
-        writer.writeByte(action);
-        writer.writeSizedString(objectiveName);
-        if (action != 1) writer.writeVarInt(value);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, entityName);
+        writer.write(BYTE, action);
+        writer.write(STRING, objectiveName);
+        if (action != 1) writer.write(VAR_INT, value);
     }
 
     @Override
