@@ -455,7 +455,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, settings.getViewDistance(), (chunkX, chunkZ) ->
+        ChunkUtils.forChunksInRange(respawnPosition, Math.min(MinecraftServer.getChunkViewDistance(), settings.getViewDistance()), (chunkX, chunkZ) ->
                 this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                     try {
                         if (chunk != null) {
@@ -467,7 +467,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }));
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
-        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getViewDistance(),
+        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, Math.min(MinecraftServer.getChunkViewDistance(), settings.getViewDistance()),
                 EntityTracker.Target.ENTITIES, entity -> {
                     // Skip refreshing self with a new viewer
                     if (!entity.getUuid().equals(uuid)) {
@@ -2182,7 +2182,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
-            this.viewDistance = viewDistance;
+            // Clamp viewDistance to valid bounds
+            this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
             this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
             this.displayedSkinParts = displayedSkinParts;
