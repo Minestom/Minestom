@@ -137,7 +137,7 @@ public class RecipeManager {
         MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(this::refreshPlayerRecipes);
     }
 
-    public void refreshPlayerRecipes(Player player) {
+    private void refreshPlayerRecipes(Player player) {
         List<String> recipesIdentifier = new ArrayList<>();
         for (Recipe recipe : recipes) {
             if (!recipe.shouldShow(player))
