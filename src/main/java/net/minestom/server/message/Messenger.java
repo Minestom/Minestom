@@ -32,31 +32,31 @@ public final class Messenger {
     static {
         try {
             CHAT_REGISTRY = (NBTCompound) new SNBTParser(new StringReader(
-                    "{\n" +
-                            "    \"type\": \"minecraft:chat_type\",\n" +
-                            "    \"value\": [\n" +
-                            "         {\n" +
-                            "            \"name\":\"minecraft:chat\",\n" +
-                            "            \"id\":1,\n" +
-                            "            \"element\":{\n" +
-                            "               \"chat\":{\n" +
-                            "                  \"translation_key\":\"chat.type.text\",\n" +
-                            "                  \"parameters\":[\n" +
-                            "                     \"sender\",\n" +
-                            "                     \"content\"\n" +
-                            "                  ]\n" +
-                            "               },\n" +
-                            "               \"narration\":{\n" +
-                            "                  \"translation_key\":\"chat.type.text.narrate\",\n" +
-                            "                  \"parameters\":[\n" +
-                            "                     \"sender\",\n" +
-                            "                     \"content\"\n" +
-                            "                  ]\n" +
-                            "               }\n" +
-                            "            }\n" +
-                            "         }" +
-                            "    ]\n" +
-                            "}"
+                    """
+                            {
+                                "type": "minecraft:chat_type",
+                                "value": [
+                                     {
+                                        "name":"minecraft:chat",
+                                        "id":1,
+                                        "element":{
+                                           "chat":{
+                                              "translation_key":"chat.type.text",
+                                              "parameters":[
+                                                 "sender",
+                                                 "content"
+                                              ]
+                                           },
+                                           "narration":{
+                                              "translation_key":"chat.type.text.narrate",
+                                              "parameters":[
+                                                 "sender",
+                                                 "content"
+                                              ]
+                                           }
+                                        }
+                                     }    ]
+                            }"""
             )).parse();
         } catch (NBTException e) {
             throw new RuntimeException(e);

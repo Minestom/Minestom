@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -128,7 +129,7 @@ public class Team implements PacketGroupingAudience {
     public void removeMember(@NotNull String member) {
         // Initializes remove player packet
         final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
-                new TeamsPacket.RemoveEntitiesToTeamAction(new String[]{member}));
+                new TeamsPacket.RemoveEntitiesToTeamAction(List.of(member)));
         // Sends to all online player teh remove player packet
         PacketUtils.broadcastPacket(removePlayerPacket);
 

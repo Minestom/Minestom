@@ -5,8 +5,6 @@ import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.ServerProcess;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -320,47 +317,6 @@ public class ExtensionManager {
                     e.getTargetException()
             );
             return null;
-        }
-
-        // Set extension origin to its DiscoveredExtension
-        try {
-            Field originField = Extension.class.getDeclaredField("origin");
-            originField.setAccessible(true);
-            originField.set(extension, discoveredExtension);
-        } catch (IllegalAccessException e) {
-            // We made it accessible, should not occur
-        } catch (NoSuchFieldException e) {
-            LOGGER.error("Main class '{}' in '{}' has no description field.", mainClass, extensionName, e);
-            return null;
-        }
-
-        // Set logger
-        try {
-            Field loggerField = Extension.class.getDeclaredField("logger");
-            loggerField.setAccessible(true);
-            loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
-        } catch (IllegalAccessException e) {
-            // We made it accessible, should not occur
-            serverProcess.exception().handleException(e);
-        } catch (NoSuchFieldException e) {
-            // This should also not occur (unless someone changed the logger in Extension superclass).
-            LOGGER.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
-        }
-
-        // Set event node
-        try {
-            EventNode<Event> eventNode = EventNode.all(extensionName); // Use the extension name
-            Field loggerField = Extension.class.getDeclaredField("eventNode");
-            loggerField.setAccessible(true);
-            loggerField.set(extension, eventNode);
-
-            serverProcess.eventHandler().addChild(eventNode);
-        } catch (IllegalAccessException e) {
-            // We made it accessible, should not occur
-            serverProcess.exception().handleException(e);
-        } catch (NoSuchFieldException e) {
-            // This should also not occur
-            LOGGER.error("Main class '{}' in '{}' has no event node field.", mainClass, extensionName, e);
         }
 
         // add dependents to pre-existing extensions, so that they can easily be found during reloading
@@ -716,7 +672,7 @@ public class ExtensionManager {
 
         for (String dependentID : dependents) {
             Extension dependentExt = extensions.get(dependentID.toLowerCase());
-            if ( dependentExt != null ) { // check if extension isn't already unloaded.
+            if (dependentExt != null) { // check if extension isn't already unloaded.
                 LOGGER.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
                 unload(dependentExt);
             }
@@ -730,9 +686,7 @@ public class ExtensionManager {
         ext.preTerminate();
         ext.terminate();
 
-        // Remove event node
-        EventNode<Event> eventNode = ext.getEventNode();
-        serverProcess.eventHandler().removeChild(eventNode);
+        ext.getExtensionClassLoader().terminate();
 
         ext.postTerminate();
 

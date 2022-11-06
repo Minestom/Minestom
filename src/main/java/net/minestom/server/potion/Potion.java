@@ -1,15 +1,18 @@
 package net.minestom.server.potion;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+
 public record Potion(@NotNull PotionEffect effect, byte amplifier,
-                     int duration, byte flags) implements Writeable {
+                     int duration, byte flags) implements NetworkBuffer.Writer {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -41,9 +44,9 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         this(effect, amplifier, duration, (byte) 0);
     }
 
-    public Potion(BinaryReader reader) {
-        this(PotionEffect.fromId(reader.readVarInt()), reader.readByte(),
-                reader.readVarInt(), reader.readByte());
+    public Potion(@NotNull NetworkBuffer reader) {
+        this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
+                reader.read(VAR_INT), reader.read(BYTE));
     }
 
     /**
@@ -108,10 +111,10 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(effect.id());
-        writer.writeByte(amplifier);
-        writer.writeVarInt(duration);
-        writer.writeByte(flags);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, effect.id());
+        writer.write(BYTE, amplifier);
+        writer.write(VAR_INT, duration);
+        writer.write(BYTE, flags);
     }
 }

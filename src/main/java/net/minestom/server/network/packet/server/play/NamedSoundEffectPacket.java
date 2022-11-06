@@ -2,30 +2,31 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record NamedSoundEffectPacket(String soundName, Source source, int x, int y, int z,
                                      float volume, float pitch, long seed) implements ServerPacket {
-    public NamedSoundEffectPacket(BinaryReader reader) {
-        this(reader.readSizedString(), Source.values()[reader.readVarInt()],
-                reader.readInt() / 8, reader.readInt() / 8, reader.readInt() / 8,
-                reader.readFloat(), reader.readFloat(), reader.readLong());
+    public NamedSoundEffectPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(STRING), Source.values()[reader.read(VAR_INT)],
+                reader.read(INT) / 8, reader.read(INT) / 8, reader.read(INT) / 8,
+                reader.read(FLOAT), reader.read(FLOAT), reader.read(LONG));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(soundName);
-        writer.writeVarInt(AdventurePacketConvertor.getSoundSourceValue(source));
-        writer.writeInt(x * 8);
-        writer.writeInt(y * 8);
-        writer.writeInt(z * 8);
-        writer.writeFloat(volume);
-        writer.writeFloat(pitch);
-        writer.writeLong(seed);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, soundName);
+        writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(source));
+        writer.write(INT, x * 8);
+        writer.write(INT, y * 8);
+        writer.write(INT, z * 8);
+        writer.write(FLOAT, volume);
+        writer.write(FLOAT, pitch);
+        writer.write(LONG, seed);
     }
 
     @Override

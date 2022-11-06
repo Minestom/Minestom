@@ -3,7 +3,7 @@ package net.minestom.server.item;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
+import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ItemBlockTest {

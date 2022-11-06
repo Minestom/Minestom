@@ -89,10 +89,10 @@ public enum ServerListPingType {
         final String motd = SECTION.serialize(data.getDescription());
 
         if (supportsVersions) {
-            return String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d",
+            return String.format("§1\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d",
                     data.getProtocol(), data.getVersion(), motd, data.getOnline(), data.getMaxPlayer());
         } else {
-            return String.format("%s\u00a7%d\u00a7%d", motd, data.getOnline(), data.getMaxPlayer());
+            return String.format("%s§%d§%d", motd, data.getOnline(), data.getMaxPlayer());
         }
     }
 

@@ -1,19 +1,20 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+
 public record WorldBorderSizePacket(double diameter) implements ServerPacket {
-    public WorldBorderSizePacket(BinaryReader reader) {
-        this(reader.readDouble());
+    public WorldBorderSizePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(DOUBLE));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(diameter);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(DOUBLE, diameter);
     }
 
     @Override

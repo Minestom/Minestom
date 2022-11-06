@@ -7,14 +7,13 @@ import net.minestom.server.crypto.SaltSignaturePair;
 import net.minestom.server.crypto.SignatureValidator;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.InterfaceUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,11 +28,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
-public record EncryptionResponsePacket(byte[] sharedSecret, Either<byte[], SaltSignaturePair> nonceOrSignature) implements ClientPreplayPacket {
+import static net.minestom.server.network.NetworkBuffer.*;
+
+public record EncryptionResponsePacket(byte[] sharedSecret,
+                                       Either<byte[], SaltSignaturePair> nonceOrSignature) implements ClientPreplayPacket {
     private static final Gson GSON = new Gson();
 
-    public EncryptionResponsePacket(BinaryReader reader) {
-        this(reader.readByteArray(), reader.readEither(BinaryReader::readByteArray, SaltSignaturePair::new));
+    public EncryptionResponsePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BYTE_ARRAY), reader.readEither(networkBuffer -> networkBuffer.read(BYTE_ARRAY), SaltSignaturePair::new));
     }
 
     @Override
@@ -54,8 +56,8 @@ public record EncryptionResponsePacket(byte[] sharedSecret, Either<byte[], SaltS
                     signature -> !hasPublicKey || !SignatureValidator
                             .from(connection.playerPublicKey().publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA)
                             .validate(binaryWriter -> {
-                                binaryWriter.writeBytes(socketConnection.getNonce());
-                                binaryWriter.writeLong(signature.salt());
+                                binaryWriter.write(RAW_BYTES, socketConnection.getNonce());
+                                binaryWriter.write(LONG, signature.salt());
                             }, signature.signature()));
 
             if (verificationFailed) {
@@ -93,7 +95,7 @@ public record EncryptionResponsePacket(byte[] sharedSecret, Either<byte[], SaltS
                         return;
                     }
                     socketConnection.setEncryptionKey(getSecretKey());
-                    UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString()
+                    UUID profileUUID = java.util.UUID.fromString(gameProfile.get("id").getAsString()
                             .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
                     final String profileName = gameProfile.get("name").getAsString();
 
@@ -107,9 +109,10 @@ public record EncryptionResponsePacket(byte[] sharedSecret, Either<byte[], SaltS
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByteArray(sharedSecret);
-        writer.writeEither(nonceOrSignature, BinaryWriter::writeByteArray, InterfaceUtils.flipBiConsumer(SaltSignaturePair::write));
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE_ARRAY, sharedSecret);
+        writer.writeEither(nonceOrSignature, (networkBuffer, bytes) -> networkBuffer.write(BYTE_ARRAY, bytes),
+                InterfaceUtils.flipBiConsumer(SaltSignaturePair::write));
     }
 
     private SecretKey getSecretKey() {

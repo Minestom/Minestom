@@ -1,10 +1,10 @@
 package net.minestom.server.entity.player;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.api.Collector;
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
-import net.minestom.server.api.TestConnection;
+import net.minestom.testing.Collector;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
+import net.minestom.testing.TestConnection;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;

@@ -1,7 +1,10 @@
 package net.minestom.server.instance.palette;
 
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
  * Palette containing a single value. Useful for both empty and full palettes.
@@ -43,9 +46,9 @@ record FilledPalette(byte dim, int value) implements SpecializedPalette.Immutabl
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte((byte) 0);
-        writer.writeVarInt(value);
-        writer.writeVarInt(0);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, (byte) 0);
+        writer.write(VAR_INT, value);
+        writer.write(VAR_INT, 0);
     }
 }

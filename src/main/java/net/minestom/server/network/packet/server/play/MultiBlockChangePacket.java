@@ -1,10 +1,11 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record MultiBlockChangePacket(long chunkSectionPosition,
                                      boolean suppressLightUpdates,
@@ -16,15 +17,15 @@ public record MultiBlockChangePacket(long chunkSectionPosition,
                 suppressLightUpdates, blocks);
     }
 
-    public MultiBlockChangePacket(BinaryReader reader) {
-        this(reader.readLong(), reader.readBoolean(), reader.readVarLongArray());
+    public MultiBlockChangePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(LONG), reader.read(BOOLEAN), reader.read(VAR_LONG_ARRAY));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeLong(chunkSectionPosition);
-        writer.writeBoolean(suppressLightUpdates);
-        writer.writeVarLongArray(blocks);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(LONG, chunkSectionPosition);
+        writer.write(BOOLEAN, suppressLightUpdates);
+        writer.write(VAR_LONG_ARRAY, blocks);
     }
 
     @Override

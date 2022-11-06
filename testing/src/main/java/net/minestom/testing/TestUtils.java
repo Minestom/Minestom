@@ -1,4 +1,4 @@
-package net.minestom.server.api;
+package net.minestom.testing;
 
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -6,18 +6,31 @@ import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestUtils {
+public final class TestUtils {
     public static void waitUntilCleared(WeakReference<?> ref) {
-        while (ref.get() != null) {
+        final int maxTries = 100;
+
+        for (int i = 0; i < maxTries; i++) {
             System.gc();
+            if (ref.get() == null) {
+                return;
+            }
             try {
-                Thread.sleep(50);
-            } catch (InterruptedException ignore) {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
+        fail("Reference was not cleared");
+    }
+
+    public static <T> void assertEqualsIgnoreOrder(Collection<T> expected, Collection<? extends T> actual) {
+        assertEquals(Set.copyOf(expected), Set.copyOf(actual));
     }
 
     public static void assertEqualsSNBT(String snbt, NBTCompound compound) {

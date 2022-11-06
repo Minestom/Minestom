@@ -1,14 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode, GameMode previousGameMode,
                              List<String> worlds, NBTCompound dimensionCodec, String dimensionType, String world,
@@ -19,41 +20,41 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         worlds = List.copyOf(worlds);
     }
 
-    public JoinGamePacket(BinaryReader reader) {
-        this(reader.readVarInt(), reader.readBoolean(), GameMode.fromId(reader.readByte()), GameMode.fromId(reader.readByte()),
-                List.of(reader.readSizedStringArray()), (NBTCompound) reader.readTag(), reader.readSizedString(), reader.readSizedString(),
-                reader.readLong(), reader.readVarInt(), reader.readVarInt(), reader.readVarInt(),
-                reader.readBoolean(), reader.readBoolean(), reader.readBoolean(), reader.readBoolean());
+    public JoinGamePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT), reader.read(BOOLEAN), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
+                reader.readCollection(STRING), (NBTCompound) reader.read(NBT), reader.read(STRING), reader.read(STRING),
+                reader.read(LONG), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT),
+                reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeInt(entityId);
-        writer.writeBoolean(isHardcore);
-        writer.writeByte(gameMode.id());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(INT, entityId);
+        writer.write(BOOLEAN, isHardcore);
+        writer.write(BYTE, gameMode.id());
         if (previousGameMode != null) {
-            writer.writeByte(previousGameMode.id());
+            writer.write(BYTE, previousGameMode.id());
         } else {
-            writer.writeByte((byte) -1);
+            writer.write(BYTE, (byte) -1);
         }
 
-        writer.writeVarIntList(worlds, BinaryWriter::writeSizedString);
-        writer.writeNBT("", dimensionCodec);
+        writer.writeCollection(STRING, worlds);
+        writer.write(NBT, dimensionCodec);
 
-        writer.writeSizedString(dimensionType);
-        writer.writeSizedString(world);
-        writer.writeLong(hashedSeed);
-        writer.writeVarInt(maxPlayers);
-        writer.writeVarInt(viewDistance);
-        writer.writeVarInt(simulationDistance);
-        writer.writeBoolean(reducedDebugInfo);
-        writer.writeBoolean(enableRespawnScreen);
+        writer.write(STRING, dimensionType);
+        writer.write(STRING, world);
+        writer.write(LONG, hashedSeed);
+        writer.write(VAR_INT, maxPlayers);
+        writer.write(VAR_INT, viewDistance);
+        writer.write(VAR_INT, simulationDistance);
+        writer.write(BOOLEAN, reducedDebugInfo);
+        writer.write(BOOLEAN, enableRespawnScreen);
         //debug
-        writer.writeBoolean(isDebug);
+        writer.write(BOOLEAN, isDebug);
         //is flat
-        writer.writeBoolean(isFlat);
+        writer.write(BOOLEAN, isFlat);
 
-        writer.writeBoolean(false);
+        writer.write(BOOLEAN, false);
     }
 
     @Override

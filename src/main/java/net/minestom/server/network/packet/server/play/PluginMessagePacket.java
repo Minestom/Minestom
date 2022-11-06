@@ -1,21 +1,23 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+
 public record PluginMessagePacket(String channel, byte[] data) implements ServerPacket {
-    public PluginMessagePacket(BinaryReader reader) {
-        this(reader.readSizedString(), reader.readRemainingBytes());
+    public PluginMessagePacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(STRING), reader.read(RAW_BYTES));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(channel);
-        writer.writeBytes(data);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, channel);
+        writer.write(RAW_BYTES, data);
     }
 
     @Override
@@ -32,8 +34,7 @@ public record PluginMessagePacket(String channel, byte[] data) implements Server
      */
     public static @NotNull PluginMessagePacket getBrandPacket() {
         final String brandName = MinecraftServer.getBrandName();
-        BinaryWriter writer = new BinaryWriter(4 + brandName.length());
-        writer.writeSizedString(brandName);
-        return new PluginMessagePacket("minecraft:brand", writer.toByteArray());
+        final byte[] data = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(STRING, brandName));
+        return new PluginMessagePacket("minecraft:brand", data);
     }
 }
