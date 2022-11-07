@@ -340,12 +340,6 @@ public class BlockIterator implements Iterator<Point> {
         if (secondError > 0 && thirdError > 0) {
             blockQueue[2] = blockQueue[0].relative(mainFace);
 
-            System.out.println("secondStep " + secondStep + " thirdStep " + thirdStep);
-            System.out.println("secondError " + secondError + " thirdError " + thirdError);
-
-            System.out.println("c1 " + ((long) secondStep) * ((long) thirdError) + " c2 " + ((long) thirdStep) * ((long) secondError));
-            System.out.println("c1 - c2 " + (((long) secondStep) * ((long) thirdError) - ((long) thirdStep) * ((long) secondError)));
-
             if (((long) secondStep) * ((long) thirdError) - ((long) thirdStep) * ((long) secondError) <= 5955451) {
                 blockQueue[1] = blockQueue[2].relative(secondFace);
                 blockQueue[0] = blockQueue[1].relative(thirdFace);
