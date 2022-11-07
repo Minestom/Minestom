@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -52,6 +53,10 @@ public class BlockIterator implements Iterator<Point> {
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, int maxDistance) {
         this.maxDistance = maxDistance;
 
+        if (direction.isZero()) {
+            currentBlock = -1;
+            return;
+        }
 
         Vec startClone = start.withY(y -> y+yOffset);
 
@@ -334,7 +339,7 @@ public class BlockIterator implements Iterator<Point> {
 
         if (secondError > 0 && thirdError > 0) {
             blockQueue[2] = blockQueue[0].relative(mainFace);
-            if (((long) secondStep) * ((long) thirdError) < ((long) thirdStep) * ((long) secondError)) {
+            if (((long) secondStep) * ((long) thirdError) - ((long) thirdStep) * ((long) secondError) <= 5955451) {
                 blockQueue[1] = blockQueue[2].relative(secondFace);
                 blockQueue[0] = blockQueue[1].relative(thirdFace);
             } else {
