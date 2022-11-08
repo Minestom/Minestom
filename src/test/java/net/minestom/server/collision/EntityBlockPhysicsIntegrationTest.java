@@ -636,10 +636,6 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsSmallMoveC3(Env env) {
         var instance = env.createFlatInstance();
-        for (int i = -2; i <= 2; ++i)
-            for (int j = -2; j <= 2; ++j)
-                instance.loadChunk(i, j).join();
-
         instance.setBlock(0, 42, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);

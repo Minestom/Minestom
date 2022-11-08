@@ -6,29 +6,21 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
-    private final double maxDistance;
     private final Vec direction;
     private final Point start;
 
-    private Point[] points = new Point[3];
-    private double[] distances = new double[3];
-    private int[] signums = new int[3];
+    private final Point[] points = new Point[3];
+    private final double[] distances = new double[3];
+    private final int[] signums = new int[3];
 
-    private Point lastClosest;
-
-    private boolean lastBlockSent = false;
+    private boolean foundEnd;
     private final Point end;
-
-    ArrayDeque<Point> scuffedQueue = new ArrayDeque<>();
 
     /**
      * Constructs the BlockIterator.
@@ -44,19 +36,17 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
-        this.maxDistance = maxDistance;
         this.direction = direction;
         this.start = start.add(0, yOffset, 0);
         this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
-        this.lastClosest = start.add(0, yOffset, 0).sub(direction.normalize().mul(Vec.EPSILON)).apply(Vec.Operator.FLOOR);
 
-        points[0] = this.start;
-        points[1] = this.start;
-        points[2] = this.start;
+        signums[0] = (int) Math.signum(direction.x());
+        signums[1] = (int) Math.signum(direction.y());
+        signums[2] = (int) Math.signum(direction.z());
 
-        distances[0] = 0;
-        distances[1] = 0;
-        distances[2] = 0;
+        points[0] = start;
+        points[1] = start;
+        points[2] = start;
 
         if (direction.x() == 0) {
             points[0] = null;
@@ -70,10 +60,6 @@ public class BlockIterator implements Iterator<Point> {
             points[2] = null;
             distances[2] = Double.MAX_VALUE;
         }
-
-        signums[0] = (int) Math.signum(direction.x());
-        signums[1] = (int) Math.signum(direction.y());
-        signums[2] = (int) Math.signum(direction.z());
     }
 
     /**
@@ -152,7 +138,9 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public boolean hasNext() {
-        return !lastBlockSent;
+        System.out.println("POINTS " + points[0] + " " + points[1] + " " + points[2]);
+        System.out.println("DISTANCES " + distances[0] + " " + distances[1] + " " + distances[2]);
+        return !foundEnd;
     }
 
     @Override
@@ -168,32 +156,18 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public Point next() {
-        if (!scuffedQueue.isEmpty()) return scuffedQueue.poll();
-        Point closest = updateClosest();
+        var res = updateClosest();
+        if (end.sameBlock(res)) {
+            foundEnd = true;
+        }
 
-        int x = (int) Math.floor(closest.x());
-        int y = (int) Math.floor(closest.y());
-        int z = (int) Math.floor(closest.z());
-
-        // When moving in the positive direction, you want the previous block
-        if (z == closest.z() && signums[2] == 1 && z != closest.z()) z--;
-        if (x == closest.x() && signums[0] == 1 && x != closest.x()) x--;
-        if (y == closest.y() && signums[1] == 1 && y != closest.y()) y--;
-
-        Vec res = new Vec(x, y, z);
-
-        getInbetween(lastClosest, closest);
-        lastClosest = res;
-
-        if (res.equals(end)) lastBlockSent = true;
-
-        System.out.println("Queue " + scuffedQueue);
-
-        return scuffedQueue.poll();
+        return res;
     }
 
     private void calculateIntersectionX(Point start, Vec direction) {
-        double x = Math.floor(start.x()) + signums[0];
+        double x = Math.floor(start.x());
+        if (x == start.x() || signums[0] > 0) x += signums[0];
+
         double y = start.y() + (x - start.x()) * direction.y() / direction.x();
         double z = start.z() + (x - start.x()) * direction.z() / direction.x();
         points[0] = new Vec(x, y, z);
@@ -201,7 +175,9 @@ public class BlockIterator implements Iterator<Point> {
     }
 
     private void calculateIntersectionY(Point start, Vec direction) {
-        double y = Math.floor(start.y()) + signums[1];
+        double y = Math.floor(start.y());
+        if (y == start.y() || signums[1] > 0) y += signums[1];
+
         double x = start.x() + (y - start.y()) * direction.x() / direction.y();
         double z = start.z() + (y - start.y()) * direction.z() / direction.y();
         points[1] = new Vec(x, y, z);
@@ -209,11 +185,34 @@ public class BlockIterator implements Iterator<Point> {
     }
 
     private void calculateIntersectionZ(Point start, Vec direction) {
-        double z = Math.floor(start.z()) + signums[2];
+        double z = Math.floor(start.z());
+        if (z == start.z() || signums[2] > 0) z += signums[2];
+
         double x = start.x() + (z - start.z()) * direction.x() / direction.z();
         double y = start.y() + (z - start.z()) * direction.y() / direction.z();
         points[2] = new Vec(x, y, z);
         distances[2] = this.start.distance(points[2]);
+    }
+
+    private Point fixX(Point point) {
+        System.out.println("X " + point);
+        int x = (int) Math.floor(point.x());
+        if (x == point.x() && signums[0] == 1) x--;
+        return new Vec(x, point.blockY(), point.blockZ());
+    }
+
+    private Point fixY(Point point) {
+        System.out.println("Y " + point);
+        int y = (int) Math.floor(point.y());
+        if (y == point.y() && signums[1] == 1) y--;
+        return new Vec(point.blockX(), y, point.blockZ());
+    }
+
+    private Point fixZ(Point point) {
+        System.out.println("Z " + point);
+        int z = (int) Math.floor(point.z());
+        if (z == point.z() && signums[2] == 1) z--;
+        return new Vec(point.blockX(), point.blockY(), z);
     }
 
     private Point updateClosest() {
@@ -224,66 +223,26 @@ public class BlockIterator implements Iterator<Point> {
             }
         }
 
-        if (scuffedQueue.size() > 8) {
-            throw new IndexOutOfBoundsException("[BlockIterator] Queue is too big");
-        }
-
         // Update the closest grid intersections
         // If multiple points are the same, we can update them all
-        Point closest = null;
         if(distances[0] == minDistance) {
-            closest = points[0];
+            var res = fixX(points[0]);
             calculateIntersectionX(points[0], direction);
+            return res;
         }
+
         if(distances[1] == minDistance) {
-            closest = points[1];
+            var res = fixY(points[1]);
             calculateIntersectionY(points[1], direction);
+            return res;
         }
+
         if(distances[2] == minDistance) {
-            closest = points[2];
+            var res = fixZ(points[2]);
             calculateIntersectionZ(points[2], direction);
+            return res;
         }
 
-        return closest;
-    }
-
-    private void getInbetween(Point pointBefore, Point pointAfter) {
-        System.out.println("Point before " + pointBefore);
-        System.out.println("Point after " + pointAfter);
-
-        if (pointBefore.sameBlock(pointAfter))
-            scuffedQueue.add(new Vec(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ()));
-
-        if (pointAfter.blockX() != pointBefore.blockX() && pointAfter.x() == pointAfter.blockX()) {
-            // Pass through (+1, 0, 0)
-            scuffedQueue.add(new Vec(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ()));
-
-            // Checks for moving through 4 blocks
-            if (pointAfter.blockY() != pointBefore.blockY() && pointAfter.y() == pointAfter.blockY()) {
-                // Pass through (+1, +1, 0)
-                scuffedQueue.add(new Vec(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ()));
-            }
-
-            if (pointAfter.blockZ() != pointBefore.blockZ() && pointAfter.z() == pointAfter.blockZ()) {
-                // Pass through (+1, 0, +1)
-                scuffedQueue.add(new Vec(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ()));
-            }
-        }
-
-        if (pointAfter.blockY() != pointBefore.blockY() && pointAfter.y() == pointAfter.blockY()) {
-            // Pass through (0, +1, 0)
-            scuffedQueue.add(new Vec(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ()));
-
-            // Checks for moving through 4 blocks
-            if (pointAfter.blockZ() != pointBefore.blockZ() && pointAfter.z() == pointAfter.blockZ()) {
-                // Pass through (0, +1, +1)
-                scuffedQueue.add(new Vec(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ()));
-            }
-        }
-
-        if (pointAfter.blockZ() != pointBefore.blockZ() && pointAfter.z() == pointAfter.blockZ()) {
-            // Pass through (0, 0, +1)
-            scuffedQueue.add(new Vec(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ()));
-        }
+        return null;
     }
 }
