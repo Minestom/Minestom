@@ -6,7 +6,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -65,9 +64,32 @@ public class BlockIterator implements Iterator<Point> {
         signums[2] = (int) Math.signum(direction.z());
     }
 
+    /**
+     * Constructs the BlockIterator.
+     * <p>
+     * This considers all blocks as 1x1x1 in size.
+     *
+     * @param pos         The position for the start of the ray trace
+     * @param yOffset     The trace begins vertically offset from the start vector
+     *                    by this value
+     * @param maxDistance This is the maximum distance in blocks for the
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
+     */
+
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
         this(pos.asVec(), pos.direction(), yOffset, maxDistance);
     }
+
+    /**
+     * Constructs the BlockIterator.
+     * <p>
+     * This considers all blocks as 1x1x1 in size.
+     *
+     * @param pos     The position for the start of the ray trace
+     * @param yOffset The trace begins vertically offset from the start vector
+     *                by this value
+     */
 
     public BlockIterator(@NotNull Pos pos, double yOffset) {
         this(pos.asVec(), pos.direction(), yOffset, 0);
@@ -110,6 +132,27 @@ public class BlockIterator implements Iterator<Point> {
 
     public BlockIterator(@NotNull Entity entity) {
         this(entity, 0);
+    }
+
+    /**
+     * Returns true if the iteration has more elements
+     */
+
+    @Override
+    public boolean hasNext() {
+        return !(distances[0] > maxDistance && distances[1] > maxDistance && distances[2] > maxDistance);
+    }
+
+    /**
+     * Returns the next BlockPosition in the trace
+     *
+     * @return the next BlockPosition in the trace
+     */
+
+    @Override
+    public Point next() {
+        var res = updateClosest();
+        return new Vec(Math.floor(res.x()), Math.floor(res.y()), Math.floor(res.z()));
     }
 
     private void calculateIntersectionX(Point start, Vec direction) {
@@ -164,16 +207,5 @@ public class BlockIterator implements Iterator<Point> {
         }
 
         return closest;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return !(distances[0] > maxDistance && distances[1] > maxDistance && distances[2] > maxDistance);
-    }
-
-    @Override
-    public Point next() {
-        var res = updateClosest();
-        return new Vec(Math.floor(res.x()), Math.floor(res.y()), Math.floor(res.z()));
     }
 }
