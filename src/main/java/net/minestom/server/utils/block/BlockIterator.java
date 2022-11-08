@@ -157,7 +157,20 @@ public class BlockIterator implements Iterator<Point> {
     @Override
     public Point next() {
         var res = updateClosest();
-        return new Vec(Math.floor(res.x()), Math.floor(res.y()), Math.floor(res.z()));
+
+        int x = (int) Math.floor(res.x());
+        int y = (int) Math.floor(res.y());
+        int z = (int) Math.floor(res.z());
+
+        if (!res.sameBlock(start)) { // Always include starting block
+            // When moving in the negative direction, you want the previous block
+            // If the block is already an integer value, you have the correct block
+            if (signums[2] == -1 && z != res.z()) z++;
+            if (signums[0] == -1 && x != res.x()) x++;
+            if (signums[1] == -1 && y != res.y()) y++;
+        }
+
+        return new Vec(x, y, z);
     }
 
     private void calculateIntersectionX(Point start, Vec direction) {
@@ -192,23 +205,18 @@ public class BlockIterator implements Iterator<Point> {
             }
         }
 
-        boolean[] needsUpdate = new boolean[3];
-        needsUpdate[0] = distances[0] == minDistance && points[0] != null;
-        needsUpdate[1] = distances[1] == minDistance && points[1] != null;
-        needsUpdate[2] = distances[2] == minDistance && points[2] != null;
-
         // Update the closest grid intersections
         // If multiple points are the same, we can update them all
         Point closest = null;
-        if(needsUpdate[0]) {
+        if(distances[0] == minDistance && points[0] != null) {
             closest = points[0];
             calculateIntersectionX(points[0], direction);
         }
-        if(needsUpdate[1]) {
+        if(distances[1] == minDistance && points[1] != null) {
             closest = points[1];
             calculateIntersectionY(points[1], direction);
         }
-        if(needsUpdate[2]) {
+        if(distances[2] == minDistance && points[2] != null) {
             closest = points[2];
             calculateIntersectionZ(points[2], direction);
         }
