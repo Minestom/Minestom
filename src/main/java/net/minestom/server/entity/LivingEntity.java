@@ -533,7 +533,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingMainHand() {
-        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
+        sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
     }
 
     /**
@@ -541,7 +541,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingOffHand() {
-        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
+        sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
