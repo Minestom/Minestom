@@ -143,6 +143,11 @@ public class BlockIterator implements Iterator<Point> {
         return !(distances[0] > maxDistance && distances[1] > maxDistance && distances[2] > maxDistance);
     }
 
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("[BlockIterator] doesn't support block removal");
+    }
+
     /**
      * Returns the next BlockPosition in the trace
      *
@@ -192,16 +197,18 @@ public class BlockIterator implements Iterator<Point> {
         needsUpdate[1] = distances[1] == minDistance && points[1] != null;
         needsUpdate[2] = distances[2] == minDistance && points[2] != null;
 
+        // Update the closest grid intersections
+        // If multiple points are the same, we can update them all
         Point closest = null;
         if(needsUpdate[0]) {
             closest = points[0];
             calculateIntersectionX(points[0], direction);
         }
-        else if(needsUpdate[1]) {
+        if(needsUpdate[1]) {
             closest = points[1];
             calculateIntersectionY(points[1], direction);
         }
-        else if(needsUpdate[2]) {
+        if(needsUpdate[2]) {
             closest = points[2];
             calculateIntersectionZ(points[2], direction);
         }
