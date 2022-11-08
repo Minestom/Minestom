@@ -139,11 +139,7 @@ final class BlockCollision {
                                                 @NotNull SweepResult finalResult) {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
-        if (velocity.length() < 1) {
-            fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
-        } else {
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
-        }
 
         final boolean collisionX = finalResult.normalX != 0;
         final boolean collisionY = finalResult.normalY != 0;
@@ -175,14 +171,19 @@ final class BlockCollision {
                                     @NotNull SweepResult finalResult) {
         // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
         for (Vec point : allFaces) {
-            BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, (int) Math.ceil(velocity.length()));
+            System.out.println("START " + point.add(entityPosition) + " " + velocity + " " + velocity.length());
+            BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, velocity.length());
             while (iterator.hasNext()) {
                 Point p = iterator.next();
+                System.out.println("BLOCK: " + p);
+
                 // sqrt 3 (1.733) is the maximum error
-                if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
+                // if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
+                //     break;
+                if (checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult)) {
+                    System.out.println("HIT");
                     break;
-                if (checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult))
-                    break;
+                }
             }
         }
     }
