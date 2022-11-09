@@ -23,6 +23,8 @@ public class BlockIterator implements Iterator<Point> {
     private final Vec end;
     private boolean foundEnd = false;
 
+    private final ArrayDeque<Point> extraPoints = new ArrayDeque<>();
+
     /**
      * Constructs the BlockIterator.
      * <p>
@@ -156,7 +158,7 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public Point next() {
-        var res = updateClosest();
+        var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
         if (res.sameBlock(end)) foundEnd = true;
         return new Vec(res.blockX(), res.blockY(), res.blockZ());
     }
@@ -227,21 +229,21 @@ public class BlockIterator implements Iterator<Point> {
 
         if (needsX && needsY && needsZ) {
             System.out.println("X Y Z");
-            System.out.println(closest.add(signums[0], 0, 0));
-            System.out.println(closest.add(0, signums[1], 0));
-            System.out.println(closest.add(0, 0, signums[2]));
+            extraPoints.add(closest.add(signums[0], 0, 0));
+            extraPoints.add(closest.add(0, signums[1], 0));
+            extraPoints.add(closest.add(0, 0, signums[2]));
         } else if (needsX && needsY) {
             System.out.println("X Y");
-            System.out.println(closest.add(signums[0], 0, 0));
-            System.out.println(closest.add(0, signums[1], 0));
+            extraPoints.add(closest.add(signums[0], 0, 0));
+            extraPoints.add(closest.add(0, signums[1], 0));
         } else if (needsX && needsZ) {
             System.out.println("X Z");
-            System.out.println(closest.add(signums[0], 0, 0));
-            System.out.println(closest.add(0, 0, signums[2]));
+            extraPoints.add(closest.add(signums[0], 0, 0));
+            extraPoints.add(closest.add(0, 0, signums[2]));
         } else if (needsY && needsZ) {
             System.out.println("Y Z");
-            System.out.println(closest.add(0, signums[1], 0));
-            System.out.println(closest.add(0, 0, signums[2]));
+            extraPoints.add(closest.add(0, signums[1], 0));
+            extraPoints.add(closest.add(0, 0, signums[2]));
         }
 
         return closest;
