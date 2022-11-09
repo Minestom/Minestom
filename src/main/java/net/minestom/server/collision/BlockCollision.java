@@ -178,8 +178,8 @@ final class BlockCollision {
                 System.out.println("BLOCK: " + p);
 
                 // sqrt 3 (1.733) is the maximum error
-                // if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
-                //     break;
+                if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
+                    break;
                 if (checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult)) {
                     System.out.println("HIT");
                     break;

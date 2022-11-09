@@ -72,9 +72,9 @@ public class BlockIteratorTest {
     @Test
     public void failing() {
         // START Vec[x=0.7, y=42.0, z=1.1] Vec[x=0.6, y=0.0, z=-0.6] 1
-        Vec s = new Vec(0.7,  0, 1.1);
-        Vec e = new Vec(0.6, 0, -0.6);
-        BlockIterator iterator = new BlockIterator(s, e, 0, 1);
+        Vec s = new Vec(0.00001,  0, 0);
+        Vec e = new Vec(2, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
         while (iterator.hasNext()) {
             System.out.println(iterator.next());

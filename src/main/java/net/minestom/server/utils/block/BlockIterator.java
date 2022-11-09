@@ -12,7 +12,6 @@ import java.util.*;
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
-    private final double maxDistance;
     private final Vec direction;
     private final Point start;
 
@@ -39,7 +38,6 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
-        this.maxDistance = maxDistance;
         this.direction = direction;
         this.start = start.add(0, yOffset, 0);
         this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
@@ -48,9 +46,10 @@ public class BlockIterator implements Iterator<Point> {
         signums[1] = (int) Math.signum(direction.y());
         signums[2] = (int) Math.signum(direction.z());
 
-        calculateIntersectionX(start, direction, signums[0] > 0 ? 1 : 0);
-        calculateIntersectionY(start, direction, signums[1] > 0 ? 1 : 0);
-        calculateIntersectionZ(start, direction, signums[2] > 0 ? 1 : 0);
+        var startSmall = start.add(0, yOffset, 0).sub(direction.normalize().mul(0.01)).apply(Vec.Operator.FLOOR);
+        calculateIntersectionX(startSmall, direction, signums[0] > 0 ? 1 : 0);
+        calculateIntersectionY(startSmall, direction, signums[1] > 0 ? 1 : 0);
+        calculateIntersectionZ(startSmall, direction, signums[2] > 0 ? 1 : 0);
 
         if (direction.x() == 0) {
             points[0] = null;
@@ -159,7 +158,6 @@ public class BlockIterator implements Iterator<Point> {
     @Override
     public Point next() {
         var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
-        if (res.sameBlock(end)) foundEnd = true;
         return new Vec(res.blockX(), res.blockY(), res.blockZ());
     }
 
@@ -194,12 +192,8 @@ public class BlockIterator implements Iterator<Point> {
                 minDistance = distances[i];
             }
         }
-        System.out.println("DISTANCES " + distances[0] + " " + distances[1] + " " + distances[2]);
-        System.out.println("POINTS " + points[0] + " " + points[1] + " " + points[2]);
 
-        int subX = 0;
-        int subY = 0;
-        int subZ = 0;
+        int sub[] = new int[3];
 
         boolean needsX = distances[0] == minDistance;
         boolean needsY = distances[1] == minDistance;
@@ -208,43 +202,38 @@ public class BlockIterator implements Iterator<Point> {
         Point closest = null;
         if (needsX) {
             closest = points[0];
-            System.out.println("X " + points[0]);
-            if (signums[0] == 1) subX = 1;
+            if (signums[0] == 1) sub[0] = 1;
             calculateIntersectionX(points[0], direction, signums[0]);
         }
         if (needsY) {
             closest = points[1];
-            System.out.println("Y " + points[1]);
-            if (signums[1] == 1) subY = 1;
+            if (signums[1] == 1) sub[1] = 1;
             calculateIntersectionY(points[1], direction, signums[1]);
         }
         if (needsZ) {
             closest = points[2];
-            System.out.println("Z " + points[2]);
-            if (signums[2] == 1) subZ = 1;
+            if (signums[2] == 1) sub[2] = 1;
             calculateIntersectionZ(points[2], direction, signums[2]);
         }
 
-        closest = closest.sub(subX, subY, subZ);
+        closest = closest.sub(sub[0], sub[1], sub[2]);
 
         if (needsX && needsY && needsZ) {
-            System.out.println("X Y Z");
             extraPoints.add(closest.add(signums[0], 0, 0));
             extraPoints.add(closest.add(0, signums[1], 0));
             extraPoints.add(closest.add(0, 0, signums[2]));
         } else if (needsX && needsY) {
-            System.out.println("X Y");
             extraPoints.add(closest.add(signums[0], 0, 0));
             extraPoints.add(closest.add(0, signums[1], 0));
         } else if (needsX && needsZ) {
-            System.out.println("X Z");
             extraPoints.add(closest.add(signums[0], 0, 0));
             extraPoints.add(closest.add(0, 0, signums[2]));
         } else if (needsY && needsZ) {
-            System.out.println("Y Z");
             extraPoints.add(closest.add(0, signums[1], 0));
             extraPoints.add(closest.add(0, 0, signums[2]));
         }
+
+        if (closest.sameBlock(end)) foundEnd = true;
 
         return closest;
     }
