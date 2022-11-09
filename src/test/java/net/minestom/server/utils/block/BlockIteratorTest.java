@@ -1,14 +1,21 @@
 package net.minestom.server.utils.block;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BlockIteratorTest {
+    private void assertContains(List<Point> points, Point point) {
+        assertTrue(points.contains(point), "Expected " + points + " to contain " + point);
+    }
+
     @Test
-    public void test2dOffset() {
+    public void test2dOffsetppp() {
         Vec s = new Vec(0,  0.1, 0);
         Vec e = new Vec(2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
@@ -22,28 +29,131 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dpp() {
-        Vec s = new Vec(0,  0, 0);
-        Vec e = new Vec(2, 1, 0);
+    public void test2dOffsetppn() {
+        Vec s = new Vec(0,  0.1, 0);
+        Vec e = new Vec(-2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
         assertEquals(new Vec(0, 0, 0), iterator.next());
+        assertEquals(new Vec(-1, 0, 0), iterator.next());
+        assertEquals(new Vec(-2, 0, 0), iterator.next());
+        assertEquals(new Vec(-2, 1, 0), iterator.next());
+        assertEquals(new Vec(-3, 1, 0), iterator.next());
+        assertEquals(new Vec(-4, 1, 0), iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void test2dOffsetnpp() {
+        Vec s = new Vec(0,  -0.1, 0);
+        Vec e = new Vec(2, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
+
+        assertEquals(new Vec(0, -1, 0), iterator.next());
+        assertEquals(new Vec(0, 0, 0), iterator.next());
         assertEquals(new Vec(1, 0, 0), iterator.next());
+        assertEquals(new Vec(2, 0, 0), iterator.next());
         assertEquals(new Vec(2, 1, 0), iterator.next());
         assertEquals(new Vec(3, 1, 0), iterator.next());
         assertFalse(iterator.hasNext());
     }
 
     @Test
+    public void test2dOffsetnnp() {
+        Vec s = new Vec(0,  -0.1, 0);
+        Vec e = new Vec(-2, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
+
+        assertEquals(new Vec(0, -1, 0), iterator.next());
+        assertEquals(new Vec(-1, -1, 0), iterator.next());
+        assertEquals(new Vec(-1, 0, 0), iterator.next());
+        assertEquals(new Vec(-2, 0, 0), iterator.next());
+        assertEquals(new Vec(-3, 0, 0), iterator.next());
+        assertEquals(new Vec(-3, 1, 0), iterator.next());
+        assertEquals(new Vec(-4, 1, 0), iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void test3dExtraCollection() {
+        Vec s = new Vec(0.1,  0.1, 0.1);
+        Vec e = new Vec(1, 1, 1);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
+
+        List<Point> points = new ArrayList<>();
+        while (iterator.hasNext()) {
+            points.add(iterator.next());
+        }
+
+        Point[] validPoints = new Point[] {
+            new Vec(0.0, 0.0, 0.0),
+            new Vec(1.0, 0.0, 0.0),
+            new Vec(0.0, 1.0, 0.0),
+            new Vec(0.0, 0.0, 1.0),
+            new Vec(1.0, 1.0, 1.0),
+            new Vec(2.0, 1.0, 1.0),
+            new Vec(1.0, 2.0, 1.0),
+            new Vec(1.0, 1.0, 2.0),
+            new Vec(2.0, 2.0, 2.0)
+        };
+
+        for (Point p : validPoints) {
+            assertContains(points, p);
+        }
+        assertEquals(validPoints.length, points.size());
+    }
+
+    @Test
+    public void test2dpp() {
+        Vec s = new Vec(0,  0, 0);
+        Vec e = new Vec(2, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
+
+        List<Point> points = new ArrayList<>();
+        while (iterator.hasNext()) {
+            points.add(iterator.next());
+        }
+
+        Point[] validPoints = new Point[] {
+            new Vec(0.0, 0.0, 0.0),
+            new Vec(1.0, 0.0, 0.0),
+            new Vec(2.0, 0.0, 0.0),
+            new Vec(1.0, 1.0, 0.0),
+            new Vec(2.0, 1.0, 0.0),
+            new Vec(3.0, 1.0, 0.0),
+        };
+
+        for (Point p : validPoints) {
+            assertContains(points, p);
+        }
+        assertEquals(validPoints.length, points.size());
+    }
+
+    @Test
     public void test2dpn() {
         Vec s = new Vec(0,  0, 0);
-        Vec e = new Vec(1, 1, 1);
-        BlockIterator iterator = new BlockIterator(s, e, 0, 6);
+        Vec e = new Vec(-2, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
+        List<Point> points = new ArrayList<>();
         while (iterator.hasNext()) {
-            var out = iterator.next();
-            System.out.println("OUT " + out + "\n");
+            points.add(iterator.next());
         }
+
+        Point[] validPoints = new Point[] {
+            new Vec(0.0, 0.0, 0.0),
+            new Vec(-1.0, 0.0, 0.0),
+            new Vec(-2.0, 0.0, 0.0),
+            new Vec(-3.0, 0.0, 0.0),
+            new Vec(-2.0, 1.0, 0.0),
+            new Vec(-3.0, 1.0, 0.0),
+            new Vec(-4.0, 1.0, 0.0)
+        };
+
+        for (Point p : validPoints) {
+            assertContains(points, p);
+        }
+        assertEquals(validPoints.length, points.size());
     }
 
     @Test
@@ -52,31 +162,36 @@ public class BlockIteratorTest {
         Vec e = new Vec(-2, -1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
-        assertEquals(new Vec(-1, -1, 0), iterator.next());
-        assertEquals(new Vec(-2, -1, 0), iterator.next());
-        assertEquals(new Vec(-3, -2, 0), iterator.next());
-        assertEquals(new Vec(-4, -2, 0), iterator.next());
-        assertFalse(iterator.hasNext());
+        List<Point> points = new ArrayList<>();
+        while (iterator.hasNext()) {
+            points.add(iterator.next());
+        }
+
+        Point[] validPoints = new Point[] {
+                new Vec(0.0, 0.0, 0.0),
+                new Vec(-1.0, 0.0, 0.0),
+                new Vec(0.0, -1.0, 0.0),
+                new Vec(-1.0, -1.0, 0.0),
+                new Vec(-2.0, -1.0, 0.0),
+                new Vec(-3.0, -1.0, 0.0),
+                new Vec(-2.0, -2.0, 0.0),
+                new Vec(-3.0, -2.0, 0.0),
+                new Vec(-4.0, -2.0, 0.0)
+        };
+
+        for (Point p : validPoints) {
+            assertContains(points, p);
+        }
+        assertEquals(validPoints.length, points.size());
     }
 
     @Test
-    public void failing() {
+    public void falling() {
         Vec s = new Vec(0,  42, 0);
         Vec e = new Vec(0, -10, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 14.142135623730951);
 
-        for (int x = 42; x >= 27; --x) assertEquals(new Vec(0, x, 0), iterator.next());
+        for (int y = 42; y >= 27; --y) assertEquals(new Vec(0, y, 0), iterator.next());
         assertFalse(iterator.hasNext());
-    }
-
-    @Test
-    public void testComplex() {
-        Vec s = new Vec(0.3,  44, 0.3);
-        Vec e = new Vec(0, -10, 0);
-        BlockIterator iterator = new BlockIterator(s, e, 0, 10);
-
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next());
-        }
     }
 }
