@@ -4,38 +4,26 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.ArrayDeque;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
+    private final Vec direction;
+    private final Point start;
 
-    private final int maxDistance;
+    private final Point[] points = new Point[3];
+    private final double[] distances = new double[3];
+    private final short[] signums = new short[3];
 
-    private static final int gridSize = 1 << 24;
+    private final Vec end;
+    private boolean foundEnd = false;
 
-    private boolean end = false;
-
-    private Point[] blockQueue = new Point[3];
-    private int currentBlock = 0;
-    private int currentDistance = 0;
-    private int maxDistanceInt;
-
-    private int secondError;
-    private int thirdError;
-
-    private int secondStep;
-    private int thirdStep;
-
-    private BlockFace mainFace;
-    private BlockFace secondFace;
-    private BlockFace thirdFace;
+    private final ArrayDeque<Point> extraPoints = new ArrayDeque<>();
 
     /**
      * Constructs the BlockIterator.
@@ -50,174 +38,26 @@ public class BlockIterator implements Iterator<Point> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, int maxDistance) {
-        this.maxDistance = maxDistance;
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
+        this.direction = direction;
+        this.start = start.add(0, yOffset, 0);
+        this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
 
-        if (direction.isZero()) {
-            currentBlock = -1;
-            return;
-        }
+        signums[0] = (short) Math.signum(direction.x());
+        signums[1] = (short) Math.signum(direction.y());
+        signums[2] = (short) Math.signum(direction.z());
 
-        Vec startClone = start.withY(y -> y+yOffset);
+        // Find grid intersections for x, y, z
+        // This works by calculating and storing the distance to the next grid intersection on the x, y and z axis
+        // On every iteration, we return the nearest grid intersection and update it
+        calculateIntersectionX(start, direction, signums[0] > 0 ? 1 : 0);
+        calculateIntersectionY(start, direction, signums[1] > 0 ? 1 : 0);
+        calculateIntersectionZ(start, direction, signums[2] > 0 ? 1 : 0);
 
-        currentDistance = 0;
-
-        double mainDirection = 0;
-        double secondDirection = 0;
-        double thirdDirection = 0;
-
-        double mainPosition = 0;
-        double secondPosition = 0;
-        double thirdPosition = 0;
-
-        Vec startBlock = startClone.apply(Vec.Operator.FLOOR);
-
-        if (getXLength(direction) > mainDirection) {
-            mainFace = getXFace(direction);
-            mainDirection = getXLength(direction);
-            mainPosition = getXPosition(direction, startClone, startBlock);
-
-            secondFace = getYFace(direction);
-            secondDirection = getYLength(direction);
-            secondPosition = getYPosition(direction, startClone, startBlock);
-
-            thirdFace = getZFace(direction);
-            thirdDirection = getZLength(direction);
-            thirdPosition = getZPosition(direction, startClone, startBlock);
-        }
-        if (getYLength(direction) > mainDirection) {
-            mainFace = getYFace(direction);
-            mainDirection = getYLength(direction);
-            mainPosition = getYPosition(direction, startClone, startBlock);
-
-            secondFace = getZFace(direction);
-            secondDirection = getZLength(direction);
-            secondPosition = getZPosition(direction, startClone, startBlock);
-
-            thirdFace = getXFace(direction);
-            thirdDirection = getXLength(direction);
-            thirdPosition = getXPosition(direction, startClone, startBlock);
-        }
-        if (getZLength(direction) > mainDirection) {
-            mainFace = getZFace(direction);
-            mainDirection = getZLength(direction);
-            mainPosition = getZPosition(direction, startClone, startBlock);
-
-            secondFace = getXFace(direction);
-            secondDirection = getXLength(direction);
-            secondPosition = getXPosition(direction, startClone, startBlock);
-
-            thirdFace = getYFace(direction);
-            thirdDirection = getYLength(direction);
-            thirdPosition = getYPosition(direction, startClone, startBlock);
-        }
-
-        // trace line backwards to find intercept with plane perpendicular to the main axis
-
-        double d = mainPosition / mainDirection; // how far to hit face behind
-        double second = secondPosition - secondDirection * d;
-        double third = thirdPosition - thirdDirection * d;
-
-        // Guarantee that the ray will pass though the start block.
-        // It is possible that it would miss due to rounding
-        // This should only move the ray by 1 grid position
-        secondError = floor(second * gridSize);
-        secondStep = round(secondDirection / mainDirection * gridSize);
-        thirdError = floor(third * gridSize);
-        thirdStep = round(thirdDirection / mainDirection * gridSize);
-
-        if (secondError + secondStep <= 0) {
-            secondError = -secondStep + 1;
-        }
-
-        if (thirdError + thirdStep <= 0) {
-            thirdError = -thirdStep + 1;
-        }
-
-        Vec lastBlock;
-
-        lastBlock = startBlock.relative(mainFace.getOppositeFace());
-
-        if (secondError < 0) {
-            secondError += gridSize;
-            lastBlock = lastBlock.relative(secondFace.getOppositeFace());
-        }
-
-        if (thirdError < 0) {
-            thirdError += gridSize;
-            lastBlock = lastBlock.relative(thirdFace.getOppositeFace());
-        }
-
-        // This means that when the variables are positive, it means that the coord=1 boundary has been crossed
-        secondError -= gridSize;
-        thirdError -= gridSize;
-
-        blockQueue[0] = lastBlock;
-        currentBlock = -1;
-
-        scan();
-
-        boolean startBlockFound = false;
-
-        for (int cnt = currentBlock; cnt >= 0; cnt--) {
-            if (blockEquals(blockQueue[cnt], startBlock)) {
-                currentBlock = cnt;
-                startBlockFound = true;
-                break;
-            }
-        }
-
-        if (!startBlockFound) {
-            throw new IllegalStateException("Start block missed in BlockIterator");
-        }
-
-        // Calculate the number of planes passed to give max distance
-        maxDistanceInt = round(maxDistance / (Math.sqrt(mainDirection * mainDirection + secondDirection * secondDirection + thirdDirection * thirdDirection) / mainDirection));
-
-    }
-
-    private boolean blockEquals(@NotNull Point a, @NotNull Point b) {
-        return a.x() == b.x() && a.y() == b.y() && a.z() == b.z();
-    }
-
-    private BlockFace getXFace(@NotNull Point direction) {
-        return ((direction.x() > 0) ? BlockFace.EAST : BlockFace.WEST);
-    }
-
-    private BlockFace getYFace(@NotNull Point direction) {
-        return ((direction.y() > 0) ? BlockFace.TOP : BlockFace.BOTTOM);
-    }
-
-    private BlockFace getZFace(@NotNull Point direction) {
-        return ((direction.z() > 0) ? BlockFace.SOUTH : BlockFace.NORTH);
-    }
-
-    private double getXLength(@NotNull Point direction) {
-        return Math.abs(direction.x());
-    }
-
-    private double getYLength(@NotNull Point direction) {
-        return Math.abs(direction.y());
-    }
-
-    private double getZLength(@NotNull Point direction) {
-        return Math.abs(direction.z());
-    }
-
-    private double getPosition(double direction, double position, int blockPosition) {
-        return direction > 0 ? (position - blockPosition) : (blockPosition + 1 - position);
-    }
-
-    private double getXPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
-        return getPosition(direction.x(), position.x(), block.blockX());
-    }
-
-    private double getYPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
-        return getPosition(direction.y(), position.y(), block.blockY());
-    }
-
-    private double getZPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
-        return getPosition(direction.z(), position.z(), block.blockZ());
+        // If directions are 0, set distances to max to stop the intersection point from being used
+        if (direction.x() == 0) distances[0] = Double.MAX_VALUE;
+        if (direction.y() == 0) distances[1] = Double.MAX_VALUE;
+        if (direction.z() == 0) distances[2] = Double.MAX_VALUE;
     }
 
     /**
@@ -232,6 +72,7 @@ public class BlockIterator implements Iterator<Point> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
+
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
         this(pos.asVec(), pos.direction(), yOffset, maxDistance);
     }
@@ -295,24 +136,7 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public boolean hasNext() {
-        scan();
-        return currentBlock != -1;
-    }
-
-    /**
-     * Returns the next BlockPosition in the trace
-     *
-     * @return the next BlockPosition in the trace
-     */
-    @Override
-    @NotNull
-    public Point next() throws NoSuchElementException {
-        scan();
-        if (currentBlock <= -1) {
-            throw new NoSuchElementException();
-        } else {
-            return blockQueue[currentBlock--];
-        }
+        return !foundEnd;
     }
 
     @Override
@@ -320,57 +144,96 @@ public class BlockIterator implements Iterator<Point> {
         throw new UnsupportedOperationException("[BlockIterator] doesn't support block removal");
     }
 
-    private void scan() {
-        if (currentBlock >= 0) {
-            return;
-        }
-        if (maxDistance != 0 && currentDistance > maxDistanceInt) {
-            end = true;
-            return;
-        }
-        if (end) {
-            return;
-        }
+    /**
+     * Returns the next BlockPosition in the trace
+     *
+     * @return the next BlockPosition in the trace
+     */
 
-        currentDistance++;
+    @Override
+    public Point next() {
+        // If we have entries in the extra points queue, return those first
+        var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
+        // If we have reached the end, set the flag
+        if (res.sameBlock(end)) foundEnd = true;
+        return new Vec(res.blockX(), res.blockY(), res.blockZ());
+    }
 
-        secondError += secondStep;
-        thirdError += thirdStep;
+    private void calculateIntersectionX(Point start, Vec direction, int signum) {
+        double x = Math.floor(start.x()) + signum;
+        double y = start.y() + (x - start.x()) * direction.y() / direction.x();
+        double z = start.z() + (x - start.x()) * direction.z() / direction.x();
+        points[0] = new Vec(x, y, z);
+        distances[0] = this.start.distance(points[0]);
+    }
 
-        if (secondError > 0 && thirdError > 0) {
-            blockQueue[2] = blockQueue[0].relative(mainFace);
-            if (((long) secondStep) * ((long) thirdError) - ((long) thirdStep) * ((long) secondError) <= 5955451) {
-                blockQueue[1] = blockQueue[2].relative(secondFace);
-                blockQueue[0] = blockQueue[1].relative(thirdFace);
-            } else {
-                blockQueue[1] = blockQueue[2].relative(thirdFace);
-                blockQueue[0] = blockQueue[1].relative(secondFace);
+    private void calculateIntersectionY(Point start, Vec direction, int signum) {
+        double y = Math.floor(start.y()) + signum;
+        double x = start.x() + (y - start.y()) * direction.x() / direction.y();
+        double z = start.z() + (y - start.y()) * direction.z() / direction.y();
+        points[1] = new Vec(x, y, z);
+        distances[1] = this.start.distance(points[1]);
+    }
+
+    private void calculateIntersectionZ(Point start, Vec direction, int signum) {
+        double z = Math.floor(start.z()) + signum;
+        double x = start.x() + (z - start.z()) * direction.x() / direction.z();
+        double y = start.y() + (z - start.z()) * direction.y() / direction.z();
+        points[2] = new Vec(x, y, z);
+        distances[2] = this.start.distance(points[2]);
+    }
+
+    private Point updateClosest() {
+        // Find minimum distance
+        double minDistance = Double.MAX_VALUE;
+        for (int i = 0; i < 3; i++) {
+            if (distances[i] < minDistance) {
+                minDistance = distances[i];
             }
-            thirdError -= gridSize;
-            secondError -= gridSize;
-            currentBlock = 2;
-        } else if (secondError > 0) {
-            blockQueue[1] = blockQueue[0].relative(mainFace);
-            blockQueue[0] = blockQueue[1].relative(secondFace);
-            secondError -= gridSize;
-            currentBlock = 1;
-        } else if (thirdError > 0) {
-            blockQueue[1] = blockQueue[0].relative(mainFace);
-            blockQueue[0] = blockQueue[1].relative(thirdFace);
-            thirdError -= gridSize;
-            currentBlock = 1;
-        } else {
-            blockQueue[0] = blockQueue[0].relative(mainFace);
-            currentBlock = 0;
         }
-    }
 
-    public static int floor(double num) {
-        final int floor = (int) num;
-        return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);
-    }
+        int[] sub = new int[3];
+        boolean needsX = Math.abs(distances[0] - minDistance) <= Vec.EPSILON;
+        boolean needsY = Math.abs(distances[1] - minDistance) <= Vec.EPSILON;
+        boolean needsZ = Math.abs(distances[2] - minDistance) <= Vec.EPSILON;
 
-    public static int round(double num) {
-        return floor(num + 0.5d);
+        // Update all points that are minimum distance
+        Point closest = null;
+        if (needsX) {
+            closest = points[0];
+            if (signums[0] == 1) sub[0] = 1;
+            calculateIntersectionX(points[0], direction, signums[0]);
+        }
+        if (needsY) {
+            closest = points[1];
+            if (signums[1] == 1) sub[1] = 1;
+            calculateIntersectionY(points[1], direction, signums[1]);
+        }
+        if (needsZ) {
+            closest = points[2];
+            if (signums[2] == 1) sub[2] = 1;
+            calculateIntersectionZ(points[2], direction, signums[2]);
+        }
+
+        // If we pass a grid line in the positive direction, we subtract 1 to get the block we just passed over
+        closest = closest.sub(sub[0], sub[1], sub[2]);
+
+        // If multiple grid lines are cross at the same time, we need to add the blocks that are missed
+        if (needsX && needsY && needsZ) {
+            extraPoints.add(closest.add(signums[0], 0, 0));
+            extraPoints.add(closest.add(0, signums[1], 0));
+            extraPoints.add(closest.add(0, 0, signums[2]));
+        } else if (needsX && needsY) {
+            extraPoints.add(closest.add(signums[0], 0, 0));
+            extraPoints.add(closest.add(0, signums[1], 0));
+        } else if (needsX && needsZ) {
+            extraPoints.add(closest.add(signums[0], 0, 0));
+            extraPoints.add(closest.add(0, 0, signums[2]));
+        } else if (needsY && needsZ) {
+            extraPoints.add(closest.add(0, signums[1], 0));
+            extraPoints.add(closest.add(0, 0, signums[2]));
+        }
+
+        return closest;
     }
 }
