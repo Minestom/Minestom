@@ -42,6 +42,8 @@ public class BlockIterator implements Iterator<Point> {
         this.start = start.add(0, yOffset, 0);
         this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
 
+        System.out.println(end);
+
         signums[0] = (int) Math.signum(direction.x());
         signums[1] = (int) Math.signum(direction.y());
         signums[2] = (int) Math.signum(direction.z());
@@ -157,6 +159,8 @@ public class BlockIterator implements Iterator<Point> {
     @Override
     public Point next() {
         var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
+        System.out.println("FOUND " + new Vec(res.blockX(), res.blockY(), res.blockZ()));
+        if (res.sameBlock(end)) foundEnd = true;
         return new Vec(res.blockX(), res.blockY(), res.blockZ());
     }
 
@@ -194,9 +198,12 @@ public class BlockIterator implements Iterator<Point> {
 
         int[] sub = new int[3];
 
-        boolean needsX = distances[0] == minDistance;
-        boolean needsY = distances[1] == minDistance;
-        boolean needsZ = distances[2] == minDistance;
+        boolean needsX = Math.abs(distances[0] - minDistance) <= Vec.EPSILON;
+        boolean needsY = Math.abs(distances[1] - minDistance) <= Vec.EPSILON;
+        boolean needsZ = Math.abs(distances[2] - minDistance) <= Vec.EPSILON;
+
+        System.out.println("DISTANCES " + Arrays.toString(distances));
+        System.out.println("POSITIONS " + Arrays.toString(points));
 
         Point closest = null;
         if (needsX) {
@@ -232,7 +239,6 @@ public class BlockIterator implements Iterator<Point> {
             extraPoints.add(closest.add(0, 0, signums[2]));
         }
 
-        if (closest.sameBlock(end)) foundEnd = true;
         return closest;
     }
 }
