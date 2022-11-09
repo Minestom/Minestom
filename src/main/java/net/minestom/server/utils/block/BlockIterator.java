@@ -199,26 +199,51 @@ public class BlockIterator implements Iterator<Point> {
         int subY = 0;
         int subZ = 0;
 
+        boolean needsX = distances[0] == minDistance;
+        boolean needsY = distances[1] == minDistance;
+        boolean needsZ = distances[2] == minDistance;
+
         Point closest = null;
-        if(distances[0] == minDistance) {
+        if (needsX) {
             closest = points[0];
             System.out.println("X " + points[0]);
             if (signums[0] == 1) subX = 1;
             calculateIntersectionX(points[0], direction, signums[0]);
         }
-        if(distances[1] == minDistance) {
+        if (needsY) {
             closest = points[1];
             System.out.println("Y " + points[1]);
             if (signums[1] == 1) subY = 1;
             calculateIntersectionY(points[1], direction, signums[1]);
         }
-        if(distances[2] == minDistance) {
+        if (needsZ) {
             closest = points[2];
             System.out.println("Z " + points[2]);
             if (signums[2] == 1) subZ = 1;
             calculateIntersectionZ(points[2], direction, signums[2]);
         }
 
-        return closest.sub(subX, subY, subZ);
+        closest = closest.sub(subX, subY, subZ);
+
+        if (needsX && needsY && needsZ) {
+            System.out.println("X Y Z");
+            System.out.println(closest.add(signums[0], 0, 0));
+            System.out.println(closest.add(0, signums[1], 0));
+            System.out.println(closest.add(0, 0, signums[2]));
+        } else if (needsX && needsY) {
+            System.out.println("X Y");
+            System.out.println(closest.add(signums[0], 0, 0));
+            System.out.println(closest.add(0, signums[1], 0));
+        } else if (needsX && needsZ) {
+            System.out.println("X Z");
+            System.out.println(closest.add(signums[0], 0, 0));
+            System.out.println(closest.add(0, 0, signums[2]));
+        } else if (needsY && needsZ) {
+            System.out.println("Y Z");
+            System.out.println(closest.add(0, signums[1], 0));
+            System.out.println(closest.add(0, 0, signums[2]));
+        }
+
+        return closest;
     }
 }

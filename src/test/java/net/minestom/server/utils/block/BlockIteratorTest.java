@@ -36,8 +36,8 @@ public class BlockIteratorTest {
 
     @Test
     public void test2dpn() {
-        Vec s = new Vec(0,  0, 0.1);
-        Vec e = new Vec(-3, 1, 0);
+        Vec s = new Vec(0,  0, 0);
+        Vec e = new Vec(1, 1, 1);
         BlockIterator iterator = new BlockIterator(s, e, 0, 6);
 
         while (iterator.hasNext()) {
