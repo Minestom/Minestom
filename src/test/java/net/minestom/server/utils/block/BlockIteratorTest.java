@@ -75,6 +75,33 @@ public class BlockIteratorTest {
     }
 
     @Test
+    public void testZeroVelocity() {
+        Vec s = new Vec(0,  0, 0);
+        Vec e = new Vec(0, 0, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testExactEnd() {
+        Vec s = new Vec(0.5,  0, 0.5);
+        Vec e = new Vec(0, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 1);
+        assertEquals(new Vec(0, 0, 0), iterator.next());
+        assertEquals(new Vec(0, 1, 0), iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testSameEnd() {
+        Vec s = new Vec(0.5,  0, 0.5);
+        Vec e = new Vec(0, 1, 0);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 0.5);
+        assertEquals(new Vec(0, 0, 0), iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
     public void test3dExtraCollection() {
         Vec s = new Vec(0.1,  0.1, 0.1);
         Vec e = new Vec(1, 1, 1);
