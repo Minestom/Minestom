@@ -6,7 +6,8 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Iterator;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line

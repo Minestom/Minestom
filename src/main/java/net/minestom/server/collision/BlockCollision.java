@@ -140,9 +140,9 @@ final class BlockCollision {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
         if (velocity.length() < 1) {
-           fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
+            fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         } else {
-           slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
+            slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         }
 
         final boolean collisionX = finalResult.normalX != 0;
