@@ -44,16 +44,6 @@ public class BlockIteratorTest {
             var out = iterator.next();
             System.out.println("OUT " + out + "\n");
         }
-
-        // assertEquals(new Vec(-1, 0, 0), iterator.next());
-        // assertEquals(new Vec(0, 0, 0), iterator.next());
-        // assertEquals(new Vec(-1, -1, 0), iterator.next());
-
-        // assertEquals(new Vec(0, -1, 0), iterator.next());
-        // assertEquals(new Vec(1, -1, 0), iterator.next());
-        // assertEquals(new Vec(2, -2, 0), iterator.next());
-        // assertEquals(new Vec(3, -2, 0), iterator.next());
-        // assertFalse(iterator.hasNext());
     }
 
     @Test
@@ -71,14 +61,12 @@ public class BlockIteratorTest {
 
     @Test
     public void failing() {
-        // START Vec[x=0.7, y=42.0, z=1.1] Vec[x=0.6, y=0.0, z=-0.6] 1
         Vec s = new Vec(0,  42, 0);
         Vec e = new Vec(0, -10, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 14.142135623730951);
 
-        while (iterator.hasNext()) {
-            System.out.println("BLOCK " + iterator.next() + "\n");
-        }
+        for (int x = 42; x >= 27; --x) assertEquals(new Vec(0, x, 0), iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
     @Test

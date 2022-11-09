@@ -17,7 +17,7 @@ public class BlockIterator implements Iterator<Point> {
 
     private final Point[] points = new Point[3];
     private final double[] distances = new double[3];
-    private final int[] signums = new int[3];
+    private final short[] signums = new short[3];
 
     private final Vec end;
     private boolean foundEnd = false;
@@ -42,26 +42,21 @@ public class BlockIterator implements Iterator<Point> {
         this.start = start.add(0, yOffset, 0);
         this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
 
-        signums[0] = (int) Math.signum(direction.x());
-        signums[1] = (int) Math.signum(direction.y());
-        signums[2] = (int) Math.signum(direction.z());
+        signums[0] = (short) Math.signum(direction.x());
+        signums[1] = (short) Math.signum(direction.y());
+        signums[2] = (short) Math.signum(direction.z());
 
+        // Find grid intersections for x, y, z
+        // This works by calculating and storing the distance to the next grid intersection on the x, y and z axis
+        // On every iteration, we return the nearest grid intersection and update it
         calculateIntersectionX(start, direction, signums[0] > 0 ? 1 : 0);
         calculateIntersectionY(start, direction, signums[1] > 0 ? 1 : 0);
         calculateIntersectionZ(start, direction, signums[2] > 0 ? 1 : 0);
 
-        if (direction.x() == 0) {
-            points[0] = null;
-            distances[0] = Double.MAX_VALUE;
-        }
-        if (direction.y() == 0) {
-            points[1] = null;
-            distances[1] = Double.MAX_VALUE;
-        }
-        if (direction.z() == 0) {
-            points[2] = null;
-            distances[2] = Double.MAX_VALUE;
-        }
+        // If directions are 0, set distances to max to stop the intersection point from being used
+        if (direction.x() == 0) distances[0] = Double.MAX_VALUE;
+        if (direction.y() == 0) distances[1] = Double.MAX_VALUE;
+        if (direction.z() == 0) distances[2] = Double.MAX_VALUE;
     }
 
     /**
@@ -156,7 +151,9 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public Point next() {
+        // If we have entries in the extra points queue, return those first
         var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
+        // If we have reached the end, set the flag
         if (res.sameBlock(end)) foundEnd = true;
         return new Vec(res.blockX(), res.blockY(), res.blockZ());
     }
@@ -186,6 +183,7 @@ public class BlockIterator implements Iterator<Point> {
     }
 
     private Point updateClosest() {
+        // Find minimum distance
         double minDistance = Double.MAX_VALUE;
         for (int i = 0; i < 3; i++) {
             if (distances[i] < minDistance) {
@@ -194,11 +192,11 @@ public class BlockIterator implements Iterator<Point> {
         }
 
         int[] sub = new int[3];
-
         boolean needsX = Math.abs(distances[0] - minDistance) <= Vec.EPSILON;
         boolean needsY = Math.abs(distances[1] - minDistance) <= Vec.EPSILON;
         boolean needsZ = Math.abs(distances[2] - minDistance) <= Vec.EPSILON;
 
+        // Update all points that are minimum distance
         Point closest = null;
         if (needsX) {
             closest = points[0];
@@ -216,8 +214,10 @@ public class BlockIterator implements Iterator<Point> {
             calculateIntersectionZ(points[2], direction, signums[2]);
         }
 
+        // If we pass a grid line in the positive direction, we subtract 1 to get the block we just passed over
         closest = closest.sub(sub[0], sub[1], sub[2]);
 
+        // If multiple grid lines are cross at the same time, we need to add the blocks that are missed
         if (needsX && needsY && needsZ) {
             extraPoints.add(closest.add(signums[0], 0, 0));
             extraPoints.add(closest.add(0, signums[1], 0));
