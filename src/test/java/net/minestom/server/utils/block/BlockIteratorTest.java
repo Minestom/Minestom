@@ -42,7 +42,7 @@ public class BlockIteratorTest {
 
         while (iterator.hasNext()) {
             var out = iterator.next();
-            System.out.println("OUT " + out);
+            System.out.println("OUT " + out + "\n");
         }
 
         // assertEquals(new Vec(-1, 0, 0), iterator.next());

@@ -577,7 +577,7 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsSmallMoveCollide(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(1, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0.6, 42, 0)).join();
