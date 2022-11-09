@@ -46,10 +46,9 @@ public class BlockIterator implements Iterator<Point> {
         signums[1] = (int) Math.signum(direction.y());
         signums[2] = (int) Math.signum(direction.z());
 
-        var startSmall = start.add(0, yOffset, 0).sub(direction.normalize().mul(0.01)).apply(Vec.Operator.FLOOR);
-        calculateIntersectionX(startSmall, direction, signums[0] > 0 ? 1 : 0);
-        calculateIntersectionY(startSmall, direction, signums[1] > 0 ? 1 : 0);
-        calculateIntersectionZ(startSmall, direction, signums[2] > 0 ? 1 : 0);
+        calculateIntersectionX(start, direction, signums[0] > 0 ? 1 : 0);
+        calculateIntersectionY(start, direction, signums[1] > 0 ? 1 : 0);
+        calculateIntersectionZ(start, direction, signums[2] > 0 ? 1 : 0);
 
         if (direction.x() == 0) {
             points[0] = null;
@@ -193,7 +192,7 @@ public class BlockIterator implements Iterator<Point> {
             }
         }
 
-        int sub[] = new int[3];
+        int[] sub = new int[3];
 
         boolean needsX = distances[0] == minDistance;
         boolean needsY = distances[1] == minDistance;
@@ -234,7 +233,6 @@ public class BlockIterator implements Iterator<Point> {
         }
 
         if (closest.sameBlock(end)) foundEnd = true;
-
         return closest;
     }
 }
