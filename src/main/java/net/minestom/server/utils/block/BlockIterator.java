@@ -6,12 +6,13 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
+    private final double maxDistance;
     private final Vec direction;
     private final Point start;
 
@@ -19,8 +20,8 @@ public class BlockIterator implements Iterator<Point> {
     private final double[] distances = new double[3];
     private final int[] signums = new int[3];
 
-    private boolean foundEnd;
-    private final Point end;
+    private final Vec end;
+    private boolean foundEnd = false;
 
     /**
      * Constructs the BlockIterator.
@@ -36,6 +37,7 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
+        this.maxDistance = maxDistance;
         this.direction = direction;
         this.start = start.add(0, yOffset, 0);
         this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
@@ -44,9 +46,9 @@ public class BlockIterator implements Iterator<Point> {
         signums[1] = (int) Math.signum(direction.y());
         signums[2] = (int) Math.signum(direction.z());
 
-        points[0] = start;
-        points[1] = start;
-        points[2] = start;
+        calculateIntersectionX(start, direction, signums[0] > 0 ? 1 : 0);
+        calculateIntersectionY(start, direction, signums[1] > 0 ? 1 : 0);
+        calculateIntersectionZ(start, direction, signums[2] > 0 ? 1 : 0);
 
         if (direction.x() == 0) {
             points[0] = null;
@@ -138,8 +140,6 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public boolean hasNext() {
-        System.out.println("POINTS " + points[0] + " " + points[1] + " " + points[2]);
-        System.out.println("DISTANCES " + distances[0] + " " + distances[1] + " " + distances[2]);
         return !foundEnd;
     }
 
@@ -157,62 +157,32 @@ public class BlockIterator implements Iterator<Point> {
     @Override
     public Point next() {
         var res = updateClosest();
-        if (end.sameBlock(res)) {
-            foundEnd = true;
-        }
-
-        return res;
+        if (res.sameBlock(end)) foundEnd = true;
+        return new Vec(res.blockX(), res.blockY(), res.blockZ());
     }
 
-    private void calculateIntersectionX(Point start, Vec direction) {
-        double x = Math.floor(start.x());
-        if (x == start.x() || signums[0] > 0) x += signums[0];
-
+    private void calculateIntersectionX(Point start, Vec direction, int signum) {
+        double x = Math.floor(start.x()) + signum;
         double y = start.y() + (x - start.x()) * direction.y() / direction.x();
         double z = start.z() + (x - start.x()) * direction.z() / direction.x();
         points[0] = new Vec(x, y, z);
         distances[0] = this.start.distance(points[0]);
     }
 
-    private void calculateIntersectionY(Point start, Vec direction) {
-        double y = Math.floor(start.y());
-        if (y == start.y() || signums[1] > 0) y += signums[1];
-
+    private void calculateIntersectionY(Point start, Vec direction, int signum) {
+        double y = Math.floor(start.y()) + signum;
         double x = start.x() + (y - start.y()) * direction.x() / direction.y();
         double z = start.z() + (y - start.y()) * direction.z() / direction.y();
         points[1] = new Vec(x, y, z);
         distances[1] = this.start.distance(points[1]);
     }
 
-    private void calculateIntersectionZ(Point start, Vec direction) {
-        double z = Math.floor(start.z());
-        if (z == start.z() || signums[2] > 0) z += signums[2];
-
+    private void calculateIntersectionZ(Point start, Vec direction, int signum) {
+        double z = Math.floor(start.z()) + signum;
         double x = start.x() + (z - start.z()) * direction.x() / direction.z();
         double y = start.y() + (z - start.z()) * direction.y() / direction.z();
         points[2] = new Vec(x, y, z);
         distances[2] = this.start.distance(points[2]);
-    }
-
-    private Point fixX(Point point) {
-        System.out.println("X " + point);
-        int x = (int) Math.floor(point.x());
-        if (x == point.x() && signums[0] == 1) x--;
-        return new Vec(x, point.blockY(), point.blockZ());
-    }
-
-    private Point fixY(Point point) {
-        System.out.println("Y " + point);
-        int y = (int) Math.floor(point.y());
-        if (y == point.y() && signums[1] == 1) y--;
-        return new Vec(point.blockX(), y, point.blockZ());
-    }
-
-    private Point fixZ(Point point) {
-        System.out.println("Z " + point);
-        int z = (int) Math.floor(point.z());
-        if (z == point.z() && signums[2] == 1) z--;
-        return new Vec(point.blockX(), point.blockY(), z);
     }
 
     private Point updateClosest() {
@@ -222,27 +192,29 @@ public class BlockIterator implements Iterator<Point> {
                 minDistance = distances[i];
             }
         }
+        System.out.println("DISTANCES " + distances[0] + " " + distances[1] + " " + distances[2]);
+        System.out.println("POINTS " + points[0] + " " + points[1] + " " + points[2]);
 
-        // Update the closest grid intersections
-        // If multiple points are the same, we can update them all
+        Point closest = null;
         if(distances[0] == minDistance) {
-            var res = fixX(points[0]);
-            calculateIntersectionX(points[0], direction);
-            return res;
+            closest = points[0];
+            System.out.println("X " + points[0]);
+            if (signums[0] == 1) closest = closest.add(-1, 0, 0);
+            calculateIntersectionX(points[0], direction, signums[0]);
+        }
+        else if(distances[1] == minDistance) {
+            closest = points[1];
+            System.out.println("Y " + points[1]);
+            if (signums[1] == 1) closest = closest.add(0, -1, 0);
+            calculateIntersectionY(points[1], direction, signums[1]);
+        }
+        else if(distances[2] == minDistance) {
+            closest = points[2];
+            System.out.println("Z " + points[2]);
+            if (signums[2] == 1) closest = closest.add(0, 0, -1);
+            calculateIntersectionZ(points[2], direction, signums[2]);
         }
 
-        if(distances[1] == minDistance) {
-            var res = fixY(points[1]);
-            calculateIntersectionY(points[1], direction);
-            return res;
-        }
-
-        if(distances[2] == minDistance) {
-            var res = fixZ(points[2]);
-            calculateIntersectionZ(points[2], direction);
-            return res;
-        }
-
-        return null;
+        return closest;
     }
 }

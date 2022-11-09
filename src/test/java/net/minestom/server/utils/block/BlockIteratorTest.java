@@ -36,15 +36,16 @@ public class BlockIteratorTest {
 
     @Test
     public void test2dpn() {
-        Vec s = new Vec(0,  0, 0);
+        Vec s = new Vec(0,  0, 0.1);
         Vec e = new Vec(-3, 1, 0);
-        BlockIterator iterator = new BlockIterator(s, e, 0, 4);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 6);
 
         while (iterator.hasNext()) {
-            System.out.println("OUT " + iterator.next());
+            var out = iterator.next();
+            System.out.println("OUT " + out);
         }
-        // assertEquals(new Vec(-1, 0, 0), iterator.next());
 
+        // assertEquals(new Vec(-1, 0, 0), iterator.next());
         // assertEquals(new Vec(0, 0, 0), iterator.next());
         // assertEquals(new Vec(-1, -1, 0), iterator.next());
 
