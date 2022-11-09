@@ -110,10 +110,10 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-last even-row-color">
 <div class="block">Constructs the BlockIterator.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,int)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,double)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
  @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
  double&nbsp;yOffset,
- int&nbsp;maxDistance)</code></div>
+ double&nbsp;maxDistance)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructs the BlockIterator.</div>
 </div>
@@ -134,31 +134,25 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#floor(double)" class="member-name-link">floor</a><wbr>(double&nbsp;num)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasNext()" class="member-name-link">hasNext</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasNext()" class="member-name-link">hasNext</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns true if the iteration has more elements</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#next()" class="member-name-link">next</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#next()" class="member-name-link">next</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the next BlockPosition in the trace</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove()" class="member-name-link">remove</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#round(double)" class="member-name-link">round</a><wbr>(double&nbsp;num)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove()" class="member-name-link">remove</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -180,14 +174,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,int)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,double)">
 <h3>BlockIterator</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BlockIterator</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
  @NotNull
  @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
  double&nbsp;yOffset,
- int&nbsp;maxDistance)</span></div>
+ double&nbsp;maxDistance)</span></div>
 <div class="block">Constructs the BlockIterator.
  <p>
  This considers all blocks as 1x1x1 in size.</div>
@@ -307,23 +301,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="next()">
-<h3>next</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">next</span>()
-                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/NoSuchElementException.html" title="class or interface in java.util" class="external-link">NoSuchElementException</a></span></div>
-<div class="block">Returns the next BlockPosition in the trace</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html#next()" title="class or interface in java.util" class="external-link">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></dd>
-<dt>Returns:</dt>
-<dd>the next BlockPosition in the trace</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/NoSuchElementException.html" title="class or interface in java.util" class="external-link">NoSuchElementException</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="remove()">
 <h3>remove</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">remove</span>()</div>
@@ -334,15 +311,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="floor(double)">
-<h3>floor</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">floor</span><wbr><span class="parameters">(double&nbsp;num)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="round(double)">
-<h3>round</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">round</span><wbr><span class="parameters">(double&nbsp;num)</span></div>
+<section class="detail" id="next()">
+<h3>next</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">next</span>()</div>
+<div class="block">Returns the next BlockPosition in the trace</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html#next()" title="class or interface in java.util" class="external-link">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Iterator.html" title="class or interface in java.util" class="external-link">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>the next BlockPosition in the trace</dd>
+</dl>
 </section>
 </li>
 </ul>
