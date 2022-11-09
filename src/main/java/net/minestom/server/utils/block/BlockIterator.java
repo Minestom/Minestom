@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
@@ -42,6 +43,8 @@ public class BlockIterator implements Iterator<Point> {
         this.direction = direction;
         this.start = start.add(0, yOffset, 0);
         this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
+
+        if (this.direction.isZero()) this.foundEnd = true;
 
         signums[0] = (short) Math.signum(direction.x());
         signums[1] = (short) Math.signum(direction.y());
@@ -152,6 +155,8 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public Point next() {
+        if (foundEnd) throw new NoSuchElementException();
+
         // If we have entries in the extra points queue, return those first
         var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
         // If we have reached the end, set the flag
