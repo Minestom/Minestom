@@ -264,6 +264,9 @@ public final class NetworkBuffer {
         }
     }
 
+    public ByteBuffer getBuffer() {
+        return this.nioBuffer;
+    }
 
     public sealed interface Type<T> permits NetworkBufferTypes.TypeImpl {
     }
