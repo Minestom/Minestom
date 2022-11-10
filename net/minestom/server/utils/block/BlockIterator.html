@@ -117,13 +117,21 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="col-last odd-row-color">
 <div class="block">Constructs the BlockIterator.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,double,boolean)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
+ @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
+ double&nbsp;yOffset,
+ double&nbsp;maxDistance,
+ boolean&nbsp;smooth)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructs the BlockIterator.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,int)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- int&nbsp;maxDistance)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Constructs the BlockIterator.</div>
+</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,int)" class="member-name-link">BlockIterator</a><wbr>(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ int&nbsp;maxDistance)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Constructs the BlockIterator.</div>
 </div>
 </div>
@@ -173,6 +181,33 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,double,boolean)">
+<h3>BlockIterator</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BlockIterator</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
+ @NotNull
+ @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
+ double&nbsp;yOffset,
+ double&nbsp;maxDistance,
+ boolean&nbsp;smooth)</span></div>
+<div class="block">Constructs the BlockIterator.
+ <p>
+ This considers all blocks as 1x1x1 in size.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>start</code> - A Vector giving the initial position for the trace</dd>
+<dd><code>direction</code> - A Vector pointing in the direction for the trace</dd>
+<dd><code>yOffset</code> - The trace begins vertically offset from the start vector
+                    by this value</dd>
+<dd><code>smooth</code> - A boolean indicating whether the cast should be smooth.
+                    Smooth casts will only include one block when intersecting multiple axis lines.</dd>
+<dd><code>maxDistance</code> - This is the maximum distance in blocks for the
+                    trace. Setting this value above 140 may lead to problems with
+                    unloaded chunks. A value of 0 indicates no limit</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,double)">
 <h3>BlockIterator</h3>
