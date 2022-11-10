@@ -14,17 +14,83 @@ import java.util.NoSuchElementException;
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
-    private final Vec direction;
-    private final Point start;
-
-    private final Point[] points = new Point[3];
-    private final double[] distances = new double[3];
     private final short[] signums = new short[3];
-
     private final Vec end;
+    private final boolean smooth;
+
     private boolean foundEnd = false;
 
+    //length of ray from current position to next x or y-side
+    double sideDistX;
+    double sideDistY;
+    double sideDistZ;
+
+    //length of ray from one x or y-side to next x or y-side
+    private final double deltaDistX;
+    private final double deltaDistY;
+    private final double deltaDistZ;
+
+    //which box of the map we're in
+    int mapX;
+    int mapY;
+    int mapZ;
+
     private final ArrayDeque<Point> extraPoints = new ArrayDeque<>();
+
+    /**
+     * Constructs the BlockIterator.
+     * <p>
+     * This considers all blocks as 1x1x1 in size.
+     *
+     * @param start       A Vector giving the initial position for the trace
+     * @param direction   A Vector pointing in the direction for the trace
+     * @param yOffset     The trace begins vertically offset from the start vector
+     *                    by this value
+     * @param smooth      A boolean indicating whether the cast should be smooth.
+     *                    Smooth casts will only include one block when intersecting multiple axis lines.
+     * @param maxDistance This is the maximum distance in blocks for the
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
+     */
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance, boolean smooth) {
+        start = start.add(0, yOffset, 0);
+        end = start.add(direction.normalize().mul(maxDistance));
+        if (direction.isZero()) this.foundEnd = true;
+
+        this.smooth = smooth;
+
+        Vec ray = direction.normalize();
+
+        //which box of the map we're in
+        mapX = start.blockX();
+        mapY = start.blockY();
+        mapZ = start.blockZ();
+
+        signums[0] = (short) Math.signum(direction.x());
+        signums[1] = (short) Math.signum(direction.y());
+        signums[2] = (short) Math.signum(direction.z());
+
+        deltaDistX = (ray.x() == 0) ? 1e30 : Math.abs(1 / ray.x());
+        deltaDistY = (ray.y() == 0) ? 1e30 : Math.abs(1 / ray.y());        // Find grid intersections for x, y, z
+        deltaDistZ = (ray.z() == 0) ? 1e30 : Math.abs(1 / ray.z());        // This works by calculating and storing the distance to the next grid intersection on the x, y and z axis
+
+        //calculate step and initial sideDist
+        if (ray.x() < 0) {
+            sideDistX = (start.x() - mapX) * deltaDistX;
+        } else {
+            sideDistX = (mapX + 1.0 - start.x()) * deltaDistX;
+        }
+        if (ray.y() < 0) {
+            sideDistY = (start.y() - mapY) * deltaDistY;
+        } else {
+            sideDistY = (mapY + 1.0 - start.y()) * deltaDistY;
+        }
+        if (ray.z() < 0) {
+            sideDistZ = (start.z() - mapZ) * deltaDistZ;
+        } else {
+            sideDistZ = (mapZ + 1.0 - start.z()) * deltaDistZ;
+        }
+    }
 
     /**
      * Constructs the BlockIterator.
@@ -40,27 +106,7 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
-        this.direction = direction;
-        this.start = start.add(0, yOffset, 0);
-        this.end = start.add(0, yOffset, 0).add(direction.normalize().mul(maxDistance)).apply(Vec.Operator.FLOOR);
-
-        if (this.direction.isZero()) this.foundEnd = true;
-
-        signums[0] = (short) Math.signum(direction.x());
-        signums[1] = (short) Math.signum(direction.y());
-        signums[2] = (short) Math.signum(direction.z());
-
-        // Find grid intersections for x, y, z
-        // This works by calculating and storing the distance to the next grid intersection on the x, y and z axis
-        // On every iteration, we return the nearest grid intersection and update it
-        calculateIntersectionX(start, direction, signums[0] > 0 ? 1 : 0);
-        calculateIntersectionY(start, direction, signums[1] > 0 ? 1 : 0);
-        calculateIntersectionZ(start, direction, signums[2] > 0 ? 1 : 0);
-
-        // If directions are 0, set distances to max to stop the intersection point from being used
-        if (direction.x() == 0) distances[0] = Double.MAX_VALUE;
-        if (direction.y() == 0) distances[1] = Double.MAX_VALUE;
-        if (direction.z() == 0) distances[2] = Double.MAX_VALUE;
+        this(start, direction, yOffset, maxDistance, false);
     }
 
     /**
@@ -77,7 +123,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
-        this(pos.asVec(), pos.direction(), yOffset, maxDistance);
+        this(pos.asVec(), pos.direction(), yOffset, maxDistance, false);
     }
 
     /**
@@ -91,7 +137,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset) {
-        this(pos.asVec(), pos.direction(), yOffset, 0);
+        this(pos.asVec(), pos.direction(), yOffset, 0, false);
     }
 
     /**
@@ -156,89 +202,54 @@ public class BlockIterator implements Iterator<Point> {
     @Override
     public Point next() {
         if (foundEnd) throw new NoSuchElementException();
-
-        // If we have entries in the extra points queue, return those first
-        var res = extraPoints.isEmpty() ? updateClosest() : extraPoints.poll();
-        // If we have reached the end, set the flag
-        if (res.sameBlock(end)) foundEnd = true;
-        return new Vec(res.blockX(), res.blockY(), res.blockZ());
-    }
-
-    private void calculateIntersectionX(Point start, Vec direction, int signum) {
-        double x = Math.floor(start.x()) + signum;
-        double y = start.y() + (x - start.x()) * direction.y() / direction.x();
-        double z = start.z() + (x - start.x()) * direction.z() / direction.x();
-        points[0] = new Vec(x, y, z);
-        distances[0] = this.start.distance(points[0]);
-    }
-
-    private void calculateIntersectionY(Point start, Vec direction, int signum) {
-        double y = Math.floor(start.y()) + signum;
-        double x = start.x() + (y - start.y()) * direction.x() / direction.y();
-        double z = start.z() + (y - start.y()) * direction.z() / direction.y();
-        points[1] = new Vec(x, y, z);
-        distances[1] = this.start.distance(points[1]);
-    }
-
-    private void calculateIntersectionZ(Point start, Vec direction, int signum) {
-        double z = Math.floor(start.z()) + signum;
-        double x = start.x() + (z - start.z()) * direction.x() / direction.z();
-        double y = start.y() + (z - start.z()) * direction.y() / direction.z();
-        points[2] = new Vec(x, y, z);
-        distances[2] = this.start.distance(points[2]);
-    }
-
-    private Point updateClosest() {
-        // Find minimum distance
-        double minDistance = Double.MAX_VALUE;
-        for (int i = 0; i < 3; i++) {
-            if (distances[i] < minDistance) {
-                minDistance = distances[i];
-            }
+        if (!extraPoints.isEmpty()) {
+            var res = extraPoints.poll();
+            if (res.sameBlock(end)) foundEnd = true;
+            return res;
         }
 
-        int[] sub = new int[3];
-        boolean needsX = Math.abs(distances[0] - minDistance) <= Vec.EPSILON;
-        boolean needsY = Math.abs(distances[1] - minDistance) <= Vec.EPSILON;
-        boolean needsZ = Math.abs(distances[2] - minDistance) <= Vec.EPSILON;
+        var current = new Vec(mapX, mapY, mapZ);
+        if (current.sameBlock(end)) foundEnd = true;
 
-        // Update all points that are minimum distance
-        Point closest = null;
-        if (needsX) {
-            closest = points[0];
-            if (signums[0] == 1) sub[0] = 1;
-            calculateIntersectionX(points[0], direction, signums[0]);
-        }
-        if (needsY) {
-            closest = points[1];
-            if (signums[1] == 1) sub[1] = 1;
-            calculateIntersectionY(points[1], direction, signums[1]);
-        }
+        double closest = Math.min(sideDistX, Math.min(sideDistY, sideDistZ));
+        boolean needsX = sideDistX - closest < 1e-10;
+        boolean needsY = sideDistY - closest < 1e-10;
+        boolean needsZ = sideDistZ - closest < 1e-10;
+
         if (needsZ) {
-            closest = points[2];
-            if (signums[2] == 1) sub[2] = 1;
-            calculateIntersectionZ(points[2], direction, signums[2]);
+            sideDistZ += deltaDistZ;
+            mapZ += signums[2];
         }
 
-        // If we pass a grid line in the positive direction, we subtract 1 to get the block we just passed over
-        closest = closest.sub(sub[0], sub[1], sub[2]);
+        if (needsX) {
+            sideDistX += deltaDistX;
+            mapX += signums[0];
+        }
 
-        // If multiple grid lines are cross at the same time, we need to add the blocks that are missed
+        if (needsY) {
+            sideDistY += deltaDistY;
+            mapY += signums[1];
+        }
+
         if (needsX && needsY && needsZ) {
-            extraPoints.add(closest.add(signums[0], 0, 0));
-            extraPoints.add(closest.add(0, signums[1], 0));
-            extraPoints.add(closest.add(0, 0, signums[2]));
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsX && needsY) {
-            extraPoints.add(closest.add(signums[0], 0, 0));
-            extraPoints.add(closest.add(0, signums[1], 0));
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
         } else if (needsX && needsZ) {
-            extraPoints.add(closest.add(signums[0], 0, 0));
-            extraPoints.add(closest.add(0, 0, signums[2]));
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsY && needsZ) {
-            extraPoints.add(closest.add(0, signums[1], 0));
-            extraPoints.add(closest.add(0, 0, signums[2]));
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         }
 
-        return closest;
+        return current;
     }
 }
