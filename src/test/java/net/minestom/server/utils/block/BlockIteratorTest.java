@@ -163,6 +163,78 @@ public class BlockIteratorTest {
     }
 
     @Test
+    public void testSkipping() {
+        Vec s = new Vec(0.5, 40, 0.5);
+        Vec e = new Vec(27, 0, 21);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 34);
+
+        List<Point> points = new ArrayList<>();
+        while (iterator.hasNext()) {
+            points.add(iterator.next());
+        }
+
+        Point[] validPoints = new Point[] {
+            new Vec(0.0, 40.0, 0.0),
+            new Vec(1.0, 40.0, 0.0),
+            new Vec(1.0, 40.0, 1.0),
+            new Vec(2.0, 40.0, 1.0),
+            new Vec(2.0, 40.0, 2.0),
+            new Vec(3.0, 40.0, 2.0),
+            new Vec(3.0, 40.0, 3.0),
+            new Vec(4.0, 40.0, 3.0),
+            new Vec(5.0, 40.0, 3.0),
+            new Vec(4.0, 40.0, 4.0),
+            new Vec(5.0, 40.0, 4.0),
+            new Vec(6.0, 40.0, 4.0),
+            new Vec(6.0, 40.0, 5.0),
+            new Vec(7.0, 40.0, 5.0),
+            new Vec(7.0, 40.0, 6.0),
+            new Vec(8.0, 40.0, 6.0),
+            new Vec(8.0, 40.0, 7.0),
+            new Vec(9.0, 40.0, 7.0),
+            new Vec(10.0, 40.0, 7.0),
+            new Vec(10.0, 40.0, 8.0),
+            new Vec(11.0, 40.0, 8.0),
+            new Vec(11.0, 40.0, 9.0),
+            new Vec(12.0, 40.0, 9.0),
+            new Vec(12.0, 40.0, 10.0),
+            new Vec(13.0, 40.0, 10.0),
+            new Vec(14.0, 40.0, 10.0),
+            new Vec(13.0, 40.0, 11.0),
+            new Vec(14.0, 40.0, 11.0),
+            new Vec(15.0, 40.0, 11.0),
+            new Vec(15.0, 40.0, 12.0),
+            new Vec(16.0, 40.0, 12.0),
+            new Vec(16.0, 40.0, 13.0),
+            new Vec(17.0, 40.0, 13.0),
+            new Vec(17.0, 40.0, 14.0),
+            new Vec(18.0, 40.0, 14.0),
+            new Vec(19.0, 40.0, 14.0),
+            new Vec(19.0, 40.0, 15.0),
+            new Vec(20.0, 40.0, 15.0),
+            new Vec(20.0, 40.0, 16.0),
+            new Vec(21.0, 40.0, 16.0),
+            new Vec(21.0, 40.0, 17.0),
+            new Vec(22.0, 40.0, 17.0),
+            new Vec(23.0, 40.0, 17.0),
+            new Vec(22.0, 40.0, 18.0),
+            new Vec(23.0, 40.0, 18.0),
+            new Vec(24.0, 40.0, 18.0),
+            new Vec(24.0, 40.0, 19.0),
+            new Vec(25.0, 40.0, 19.0),
+            new Vec(25.0, 40.0, 20.0),
+            new Vec(26.0, 40.0, 20.0),
+            new Vec(26.0, 40.0, 21.0),
+            new Vec(27.0, 40.0, 21.0)
+        };
+
+        for (Point p : validPoints) {
+            assertContains(points, p);
+        }
+        assertEquals(validPoints.length, points.size());
+    }
+
+    @Test
     public void testExactEnd() {
         Vec s = new Vec(0.5,  0, 0.5);
         Vec e = new Vec(0, 1, 0);
