@@ -233,20 +233,20 @@ public class BlockIterator implements Iterator<Point> {
 
         if (needsX && needsY && needsZ) {
             extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
-            if (!smooth) return current;
+            if (smooth) return current;
             extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
             extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsX && needsY) {
             extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
-            if (!smooth) return current;
+            if (smooth) return current;
             extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
         } else if (needsX && needsZ) {
             extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
-            if (!smooth) return current;
+            if (smooth) return current;
             extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsY && needsZ) {
             extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
-            if (!smooth) return current;
+            if (smooth) return current;
             extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         }
 
