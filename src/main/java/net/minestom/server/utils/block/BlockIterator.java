@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -20,6 +21,7 @@ public class BlockIterator implements Iterator<Point> {
     private final Point[] points = new Point[3];
     private final double[] distances = new double[3];
     private final short[] signums = new short[3];
+    private final int[] steps = new int[3];
 
     private final Vec end;
     private boolean foundEnd = false;
@@ -49,6 +51,12 @@ public class BlockIterator implements Iterator<Point> {
         signums[0] = (short) Math.signum(direction.x());
         signums[1] = (short) Math.signum(direction.y());
         signums[2] = (short) Math.signum(direction.z());
+
+        steps[0] = start.blockX();
+        steps[1] = start.blockY();
+        steps[2] = start.blockZ();
+
+        System.out.println(steps[0] + " " + steps[1] + " " + steps[2]);
 
         // Find grid intersections for x, y, z
         // This works by calculating and storing the distance to the next grid intersection on the x, y and z axis
@@ -202,42 +210,50 @@ public class BlockIterator implements Iterator<Point> {
         boolean needsY = Math.abs(distances[1] - minDistance) <= Vec.EPSILON;
         boolean needsZ = Math.abs(distances[2] - minDistance) <= Vec.EPSILON;
 
+        int[] vals = new int[] { steps[0], steps[1], steps[2] };
+
+        System.out.println(Arrays.toString(vals));
+
         // Update all points that are minimum distance
-        Point closest = null;
         if (needsX) {
-            closest = points[0];
             if (signums[0] == 1) sub[0] = 1;
             calculateIntersectionX(points[0], direction, signums[0]);
+            steps[0] += signums[0];
         }
         if (needsY) {
-            closest = points[1];
             if (signums[1] == 1) sub[1] = 1;
             calculateIntersectionY(points[1], direction, signums[1]);
+            steps[1] += signums[1];
         }
         if (needsZ) {
-            closest = points[2];
             if (signums[2] == 1) sub[2] = 1;
             calculateIntersectionZ(points[2], direction, signums[2]);
+            steps[2] += signums[2];
         }
 
+        System.out.println("SIGNUMS " + Arrays.toString(signums));
+
         // If we pass a grid line in the positive direction, we subtract 1 to get the block we just passed over
-        closest = closest.sub(sub[0], sub[1], sub[2]);
+        var closest = new Vec(steps[0], steps[1], steps[2]).sub(sub[0], sub[1], sub[2]);
 
         // If multiple grid lines are cross at the same time, we need to add the blocks that are missed
         if (needsX && needsY && needsZ) {
-            extraPoints.add(closest.add(signums[0], 0, 0));
-            extraPoints.add(closest.add(0, signums[1], 0));
-            extraPoints.add(closest.add(0, 0, signums[2]));
+            extraPoints.add(new Vec(vals[0] + signums[0], vals[1], vals[2]));
+            extraPoints.add(new Vec(vals[0], vals[1] + signums[1], vals[1]));
+            extraPoints.add(new Vec(vals[0], vals[1], vals[2] + signums[2]));
         } else if (needsX && needsY) {
-            extraPoints.add(closest.add(signums[0], 0, 0));
-            extraPoints.add(closest.add(0, signums[1], 0));
+            extraPoints.add(new Vec(vals[0] + signums[0], vals[1], vals[2]));
+            extraPoints.add(new Vec(vals[0], vals[1] + signums[1], vals[1]));
         } else if (needsX && needsZ) {
-            extraPoints.add(closest.add(signums[0], 0, 0));
-            extraPoints.add(closest.add(0, 0, signums[2]));
+            extraPoints.add(new Vec(vals[0] + signums[0], vals[1], vals[2]));
+            extraPoints.add(new Vec(vals[0], vals[1], vals[2] + signums[2]));
         } else if (needsY && needsZ) {
-            extraPoints.add(closest.add(0, signums[1], 0));
-            extraPoints.add(closest.add(0, 0, signums[2]));
+            extraPoints.add(new Vec(vals[0], vals[1] + signums[1], vals[1]));
+            extraPoints.add(new Vec(vals[0], vals[1], vals[2] + signums[2]));
         }
+
+        System.out.println("CLOSEST " + closest);
+        System.out.println("ADDED " + extraPoints);
 
         return closest;
     }

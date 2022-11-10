@@ -83,6 +83,18 @@ public class BlockIteratorTest {
     }
 
     @Test
+    public void failing() {
+        Vec s = new Vec(42.5, 0, 51.5);
+        Vec e = new Vec(-12, 0, -36);
+        BlockIterator iterator = new BlockIterator(s, e, 0, 37);
+
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+
+    }
+
+    @Test
     public void testExactEnd() {
         Vec s = new Vec(0.5,  0, 0.5);
         Vec e = new Vec(0, 1, 0);
