@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 public class BlockIterator implements Iterator<Point> {
     private final short[] signums = new short[3];
     private final Vec end;
+    private final boolean smooth;
 
     private boolean foundEnd = false;
 
@@ -45,14 +46,18 @@ public class BlockIterator implements Iterator<Point> {
      * @param direction   A Vector pointing in the direction for the trace
      * @param yOffset     The trace begins vertically offset from the start vector
      *                    by this value
+     * @param smooth      A boolean indicating whether the cast should be smooth.
+     *                    Smooth casts will only include one block when intersecting multiple axis lines.
      * @param maxDistance This is the maximum distance in blocks for the
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance, boolean smooth) {
         start = start.add(0, yOffset, 0);
         end = start.add(direction.normalize().mul(maxDistance));
         if (direction.isZero()) this.foundEnd = true;
+
+        this.smooth = smooth;
 
         Vec ray = direction.normalize();
 
@@ -92,6 +97,23 @@ public class BlockIterator implements Iterator<Point> {
      * <p>
      * This considers all blocks as 1x1x1 in size.
      *
+     * @param start       A Vector giving the initial position for the trace
+     * @param direction   A Vector pointing in the direction for the trace
+     * @param yOffset     The trace begins vertically offset from the start vector
+     *                    by this value
+     * @param maxDistance This is the maximum distance in blocks for the
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
+     */
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
+        this(start, direction, yOffset, maxDistance, false);
+    }
+
+    /**
+     * Constructs the BlockIterator.
+     * <p>
+     * This considers all blocks as 1x1x1 in size.
+     *
      * @param pos         The position for the start of the ray trace
      * @param yOffset     The trace begins vertically offset from the start vector
      *                    by this value
@@ -101,7 +123,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
-        this(pos.asVec(), pos.direction(), yOffset, maxDistance);
+        this(pos.asVec(), pos.direction(), yOffset, maxDistance, false);
     }
 
     /**
@@ -115,7 +137,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset) {
-        this(pos.asVec(), pos.direction(), yOffset, 0);
+        this(pos.asVec(), pos.direction(), yOffset, 0, false);
     }
 
     /**
@@ -211,16 +233,20 @@ public class BlockIterator implements Iterator<Point> {
 
         if (needsX && needsY && needsZ) {
             extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (!smooth) return current;
             extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
             extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsX && needsY) {
             extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (!smooth) return current;
             extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
         } else if (needsX && needsZ) {
             extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (!smooth) return current;
             extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsY && needsZ) {
             extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+            if (!smooth) return current;
             extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         }
 
