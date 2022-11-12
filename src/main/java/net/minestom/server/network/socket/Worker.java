@@ -10,6 +10,7 @@ import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -80,8 +81,8 @@ public final class Worker extends MinestomThread {
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
-                    } catch (IllegalArgumentException e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                    } catch (Throwable t) {
+                        MinecraftServer.getExceptionManager().handleException(t);
                         connection.disconnect();
                     }
                 }, MinecraftServer.TICK_MS);
@@ -109,11 +110,13 @@ public final class Worker extends MinestomThread {
         this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
-        Socket socket = channel.socket();
-        socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
-        socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
-        socket.setTcpNoDelay(Server.NO_DELAY);
-        socket.setSoTimeout(30 * 1000); // 30 seconds
+        if (channel.getLocalAddress() instanceof InetSocketAddress) {
+            Socket socket = channel.socket();
+            socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
+            socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
+            socket.setTcpNoDelay(Server.NO_DELAY);
+            socket.setSoTimeout(30 * 1000); // 30 seconds
+        }
         this.selector.wakeup();
     }
 

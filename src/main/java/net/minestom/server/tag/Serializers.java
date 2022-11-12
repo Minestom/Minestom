@@ -12,8 +12,6 @@ import java.util.function.Function;
  * Basic serializers for {@link Tag tags}.
  */
 final class Serializers {
-    static final Entry<TagHandlerImpl, NBTCompound> PATH = new Entry<>(NBTType.TAG_Compound, TagHandlerImpl::fromCompound, TagHandlerImpl::asCompound);
-
     static final Entry<Byte, NBTByte> BYTE = new Entry<>(NBTType.TAG_Byte, NBTByte::getValue, NBT::Byte);
     static final Entry<Boolean, NBTByte> BOOLEAN = new Entry<>(NBTType.TAG_Byte, NBTByte::asBoolean, NBT::Boolean);
     static final Entry<Short, NBTShort> SHORT = new Entry<>(NBTType.TAG_Short, NBTShort::getValue, NBT::Short);
@@ -44,7 +42,11 @@ final class Serializers {
                 });
     }
 
-    record Entry<T, N extends NBT>(NBTType<N> nbtType, Function<N, T> reader, Function<T, N> writer) {
+    record Entry<T, N extends NBT>(NBTType<N> nbtType, Function<N, T> reader, Function<T, N> writer, boolean isPath) {
+        Entry(NBTType<N> nbtType, Function<N, T> reader, Function<T, N> writer) {
+            this(nbtType, reader, writer, false);
+        }
+
         T read(N nbt) {
             return reader.apply(nbt);
         }
