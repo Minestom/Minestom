@@ -113,4 +113,9 @@ public class SharedInstance extends Instance {
     public @NotNull InstanceContainer getInstanceContainer() {
         return instanceContainer;
     }
+
+    @Override
+    public void trackBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block.@NotNull Tracker tracker) {
+        instanceContainer.trackBlocks(minX, minY, minZ, maxX, maxY, maxZ, tracker);
+    }
 }

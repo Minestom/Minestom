@@ -60,6 +60,9 @@ public class InstanceContainer extends Instance {
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
 
+    // Block tracking
+    private final BlockTrackers blockTrackers = new BlockTrackers();
+
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
 
@@ -135,6 +138,12 @@ public class InstanceContainer extends Instance {
 
             // Set the block
             chunk.setBlock(x, y, z, block);
+
+            // Update the block trackers
+            // TODO: Write tests for duplicate block updates (two updates after another where the block has not changed)?
+            for (BlockTrackers.Entry entry : blockTrackers) {
+                entry.tracker().updateBlock(x, y, z, block);
+            }
 
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);
@@ -633,5 +642,10 @@ public class InstanceContainer extends Instance {
         this.chunks.put(getChunkIndex(chunk), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
+    }
+
+    @Override
+    public void trackBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block.@NotNull Tracker tracker) {
+        blockTrackers.add(new BlockTrackers.Entry(minX, minY, minZ, maxX, maxY, maxZ, tracker));
     }
 }

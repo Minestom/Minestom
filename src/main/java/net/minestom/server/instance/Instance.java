@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter,
+public abstract class Instance implements Block.Getter, Block.Setter, Block.Trackable,
         Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
 
     private boolean registered;

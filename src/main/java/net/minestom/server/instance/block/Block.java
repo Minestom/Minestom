@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 /**
  * Represents a block that can be placed anywhere.
@@ -250,6 +251,79 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
              * Be aware that the returned block may not return the proper handler/nbt.
              */
             TYPE
+        }
+    }
+
+    /**
+     * Represents an object in which blocks changes may be tracked.
+     */
+    interface Trackable {
+
+        /**
+         * Tracks the given rectangular area, listening for any block changes.
+         * All changes given to the tracker object are guaranteed to be within this area.
+         * @param minX the minimum x
+         * @param minY the minimum y
+         * @param minZ the minimum z
+         * @param maxX the maximum x
+         * @param maxY the maximum y
+         * @param maxZ the maximum z
+         * @param tracker the tracker object
+         */
+        void trackBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, @NotNull Tracker tracker);
+
+        /**
+         * Tracks all block changes.
+         * @param tracker the tracker object
+         */
+        default void trackBlocks(@NotNull Tracker tracker) {
+            trackBlocks(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, tracker);
+        }
+
+        /**
+         * Tracks this specific block position, running the given update consumer when the block changes.
+         * @param x the block x
+         * @param y the block y
+         * @param z the block z
+         * @param newBlock the update consumer
+         */
+        default void trackBlock(int x, int y, int z, @NotNull Consumer<Block> newBlock) {
+            trackBlocks(x, y, z, x + 1, y + 1, z + 1,
+                    (x1, y1, z1, block) -> newBlock.accept(block));
+        }
+    }
+
+    /**
+     * Represents a target for where block-trackable objects can update their changes to.
+     */
+    interface Tracker {
+        /**
+         * Called when the block at the given position has changed.
+         * @param x the block x
+         * @param y the block y
+         * @param z the block z
+         * @param block the new block
+         */
+        void updateBlock(int x, int y, int z, @NotNull Block block);
+
+        /**
+         * Updates the block at the given rectangular prism.
+         * @param minX the minimum x (inclusive)
+         * @param minY the minimum y (inclusive)
+         * @param minZ the minimum z (inclusive)
+         * @param maxX the maximum x (exclusive)
+         * @param maxY the maximum y (exclusive)
+         * @param maxZ the maximum z (exclusive)
+         * @param block the new block
+         */
+        default void updateBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, @NotNull Block block) {
+            for (int x = minX; x < maxX; x++) {
+                for (int y = minY; y < maxY; y++) {
+                    for (int z = minZ; z < maxZ; z++) {
+                        updateBlock(x, y, z, block);
+                    }
+                }
+            }
         }
     }
 }
