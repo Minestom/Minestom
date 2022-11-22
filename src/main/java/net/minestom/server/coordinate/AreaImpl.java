@@ -1,14 +1,12 @@
-package net.minestom.server.area;
+package net.minestom.server.coordinate;
 
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 class AreaImpl {
 
@@ -17,58 +15,7 @@ class AreaImpl {
         Set<Point> points = collection.stream()
                 .map(point -> new Vec(point.blockX(), point.blockY(), point.blockZ()))
                 .collect(Collectors.toSet());
-
-        Point largest = findLargestNxNxN(points);
-
-        Set<Area> newAreas = new HashSet<>();
-        while (largest != null) {
-            Area area = createNxNxNArea(largest, points);
-            newAreas.add(area);
-            area.allBlocks(points::remove);
-            largest = findLargestNxNxN(points);
-        }
-        newAreas.add(new SetArea(points));
-
-        return new Union(newAreas);
-    }
-
-    private static Area createNxNxNArea(Point largest, Set<Point> points) {
-        int size = 1;
-        while (findNxNxN(points, largest, size)) {
-            size++;
-        }
-        return new AreaImpl.Fill(largest, largest.add(size, size, size));
-    }
-
-    private static @Nullable Point findLargestNxNxN(Set<Point> points) {
-        Point largestNxNxN = null;
-        int largestNxNxNSize = 1;
-
-        for (Point point : points) {
-            int size = 1;
-            while (findNxNxN(points, point, size)) {
-                size++;
-            }
-            if (size > largestNxNxNSize) {
-                largestNxNxN = point;
-                largestNxNxNSize = size;
-            }
-        }
-
-        return largestNxNxN;
-    }
-
-    private static boolean findNxNxN(Set<Point> points, Point min, int n) {
-        for (int x = min.blockX(); x < min.blockX() + n; x++) {
-            for (int y = min.blockY(); y < min.blockY() + n; y++) {
-                for (int z = min.blockZ(); z < min.blockZ() + n; z++) {
-                    if (!points.contains(new Vec(x, y, z))) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return new SetArea(points);
     }
 
     private static Point findMin(Collection<Point> children) {
@@ -95,43 +42,36 @@ class AreaImpl {
         return new Vec(maxX, maxY, maxZ);
     }
 
-    interface HasChildren {
-        @NotNull Collection<Area> children();
-    }
-
     record SetArea(Set<Point> points, Point min, Point max) implements Area {
-
-        public SetArea {
-            if (!isFullyConnected()) {
-                throw new IllegalStateException("Area is not fully connected");
-            }
-        }
 
         public SetArea(Set<Point> points) {
             this(points, findMin(points), findMax(points));
+
+            if (!isFullyConnected()) {
+                throw new IllegalArgumentException("Points must be fully connected");
+            }
         }
 
         public boolean isFullyConnected() {
-            Map<Point, Boolean> isConnected = new HashMap<>();
+            if (points.size() == 1) return true;
+            Set<Point> connected = new HashSet<>();
 
             for (Point point : points) {
-                isConnected.putIfAbsent(point, false);
-                isConnected.put(point.add(1, 0, 0), true);
-                isConnected.put(point.add(-1, 0, 0), true);
-                isConnected.put(point.add(0, 1, 0), true);
-                isConnected.put(point.add(0, -1, 0), true);
-                isConnected.put(point.add(0, 0, 1), true);
-                isConnected.put(point.add(0, 0, -1), true);
+                connected.add(point.add(1, 0, 0));
+                connected.add(point.add(-1, 0, 0));
+                connected.add(point.add(0, 1, 0));
+                connected.add(point.add(0, -1, 0));
+                connected.add(point.add(0, 0, 1));
+                connected.add(point.add(0, 0, -1));
             }
 
-            return isConnected.values()
-                    .stream()
-                    .allMatch(Boolean::booleanValue);
+            return connected.containsAll(points);
         }
 
+        @NotNull
         @Override
-        public void allBlocks(@NotNull Consumer<@NotNull Point> consumer) {
-            points.forEach(consumer);
+        public Iterator<Point> iterator() {
+            return points.iterator();
         }
     }
 
@@ -148,17 +88,6 @@ class AreaImpl {
         }
 
         @Override
-        public void allBlocks(@NotNull Consumer<@NotNull Point> consumer) {
-            for (int x = min.blockX(); x < max.blockX(); x++) {
-                for (int y = min.blockY(); y < max.blockY(); y++) {
-                    for (int z = min.blockZ(); z < max.blockZ(); z++) {
-                        consumer.accept(new Vec(x, y, z));
-                    }
-                }
-            }
-        }
-
-        @Override
         public @NotNull Point min() {
             return min;
         }
@@ -166,6 +95,36 @@ class AreaImpl {
         @Override
         public @NotNull Point max() {
             return max;
+        }
+
+        @NotNull
+        @Override
+        public Iterator<Point> iterator() {
+            return new Iterator<>() {
+                private int x = min.blockX();
+                private int y = min.blockY();
+                private int z = min.blockZ();
+
+                @Override
+                public boolean hasNext() {
+                    return x < max.blockX() && y < max.blockY() && z < max.blockZ();
+                }
+
+                @Override
+                public Point next() {
+                    Point point = new Vec(x, y, z);
+                    z++;
+                    if (z >= max.blockZ()) {
+                        z = min.blockZ();
+                        y++;
+                        if (y >= max.blockY()) {
+                            y = min.blockY();
+                            x++;
+                        }
+                    }
+                    return point;
+                }
+            };
         }
     }
 
@@ -215,7 +174,7 @@ class AreaImpl {
         }
     }
 
-    record Union(Collection<Area> children, Point min, Point max) implements Area, HasChildren {
+    record Union(Collection<Area> children, Point min, Point max) implements Area, Area.HasChildren {
 
         public Union(Collection<Area> children) {
             this(children,
@@ -224,43 +183,52 @@ class AreaImpl {
         }
 
         @Override
-        public void allBlocks(@NotNull Consumer<@NotNull Point> consumer) {
-            children.forEach(area -> area.allBlocks(consumer));
+        public @NotNull Iterator<Point> iterator() {
+            return new Iterator<>() {
+                private final Iterator<Area> areaIterator = children.iterator();
+                private Iterator<Point> currentIterator = areaIterator.next().iterator();
+
+                @Override
+                public boolean hasNext() {
+                    if (currentIterator.hasNext()) {
+                        return true;
+                    }
+
+                    while (areaIterator.hasNext()) {
+                        currentIterator = areaIterator.next().iterator();
+                        if (currentIterator.hasNext()) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public Point next() {
+                    return currentIterator.next();
+                }
+            };
         }
     }
 
     record Intersection(Area area) implements Area {
 
-        @SafeVarargs
-        public Intersection(Collection<Area>... children) {
+        public Intersection(Area... children) {
             this(areaFromChildren(children));
         }
 
-        private static Area areaFromChildren(Collection<Area>[] children) {
-            int size = children.length;
-
-            Map<Point, Integer> pointCount = new HashMap<>();
-
-            for (Collection<Area> child : children) {
-                for (Area area : child) {
-                    area.allBlocks(point -> pointCount.merge(point, 1, Integer::sum));
-                }
+        private static Area areaFromChildren(Area[] children) {
+            if (children.length == 0) {
+                throw new IllegalArgumentException("Must have at least one child");
             }
+            Set<Point> points = new HashSet<>(StreamSupport.stream(children[0].spliterator(), false).toList());
 
-            Set<Point> points = new HashSet<>();
-
-            for (Map.Entry<Point, Integer> entry : pointCount.entrySet()) {
-                if (entry.getValue() == size) {
-                    points.add(entry.getKey());
-                }
+            for (Area child : children) {
+                points.retainAll(StreamSupport.stream(child.spliterator(), false).toList());
             }
 
             return fromCollection(points);
-        }
-
-        @Override
-        public void allBlocks(@NotNull Consumer<@NotNull Point> consumer) {
-            area.allBlocks(consumer);
         }
 
         @Override
@@ -271,6 +239,12 @@ class AreaImpl {
         @Override
         public @NotNull Point max() {
             return area.max();
+        }
+
+        @NotNull
+        @Override
+        public Iterator<Point> iterator() {
+            return area.iterator();
         }
     }
 }

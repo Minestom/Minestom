@@ -1,17 +1,18 @@
-package net.minestom.server.area;
+package net.minestom.server.coordinate;
 
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * An area is a spatially connected set of block positions.
  * These areas can be used for optimizations such as instance block queries, and pathfinding domains.
  */
-public interface Area {
+public interface Area extends Iterable<Point> {
 
     /**
      * Creates a new area from a collection of block positions. Note that these points will be block-aligned.
@@ -48,7 +49,7 @@ public interface Area {
      * @return a new area
      */
     static @NotNull Area intersection(@NotNull Area... areas) {
-        return new AreaImpl.Intersection(List.of(areas));
+        return new AreaImpl.Intersection(areas);
     }
 
     /**
@@ -58,12 +59,6 @@ public interface Area {
     static @NotNull Area.Path path() {
         return new AreaImpl.Path();
     }
-
-    /**
-     * Runs the given consumer for each block position within this area
-     * @param consumer the consumer to run
-     */
-    void allBlocks(@NotNull Consumer<@NotNull Point> consumer);
 
     /**
      * The minimum point of this area
@@ -76,6 +71,18 @@ public interface Area {
      * @return the maximum point
      */
     @NotNull Point max();
+
+    /**
+     * Moves this area by an offset
+     * @param offset the offset
+     * @return a new area
+     */
+    default @NotNull Area move(@NotNull Point offset) {
+        Set<Point> points = StreamSupport.stream(spliterator(), false)
+                .map(point -> point.add(offset))
+                .collect(Collectors.toUnmodifiableSet());
+        return AreaImpl.fromCollection(points);
+    }
 
     interface Path {
         @NotNull Area.Path north(double factor);
@@ -115,5 +122,9 @@ public interface Area {
         default @NotNull Area.Path down() {
             return down(1);
         }
+    }
+
+    sealed interface HasChildren permits AreaImpl.Union {
+        @NotNull Collection<Area> children();
     }
 }
