@@ -42,6 +42,19 @@ class AreaImpl {
         return new Vec(maxX, maxY, maxZ);
     }
 
+    static Area intersection(Area[] children) {
+        if (children.length == 0) {
+            throw new IllegalArgumentException("Must have at least one child");
+        }
+        Set<Point> points = new HashSet<>(StreamSupport.stream(children[0].spliterator(), false).toList());
+
+        for (Area child : children) {
+            points.retainAll(StreamSupport.stream(child.spliterator(), false).toList());
+        }
+
+        return fromCollection(points);
+    }
+
     record SetArea(Set<Point> points, Point min, Point max) implements Area {
 
         public SetArea(Set<Point> points) {
@@ -209,42 +222,6 @@ class AreaImpl {
                     return currentIterator.next();
                 }
             };
-        }
-    }
-
-    record Intersection(Area area) implements Area {
-
-        public Intersection(Area... children) {
-            this(areaFromChildren(children));
-        }
-
-        private static Area areaFromChildren(Area[] children) {
-            if (children.length == 0) {
-                throw new IllegalArgumentException("Must have at least one child");
-            }
-            Set<Point> points = new HashSet<>(StreamSupport.stream(children[0].spliterator(), false).toList());
-
-            for (Area child : children) {
-                points.retainAll(StreamSupport.stream(child.spliterator(), false).toList());
-            }
-
-            return fromCollection(points);
-        }
-
-        @Override
-        public @NotNull Point min() {
-            return area.min();
-        }
-
-        @Override
-        public @NotNull Point max() {
-            return area.max();
-        }
-
-        @NotNull
-        @Override
-        public Iterator<Point> iterator() {
-            return area.iterator();
         }
     }
 }

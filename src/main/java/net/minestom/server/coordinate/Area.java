@@ -49,7 +49,7 @@ public interface Area extends Iterable<Point> {
      * @return a new area
      */
     static @NotNull Area intersection(@NotNull Area... areas) {
-        return new AreaImpl.Intersection(areas);
+        return AreaImpl.intersection(areas);
     }
 
     /**
