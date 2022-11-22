@@ -1,6 +1,8 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.registry.ProtocolObject;
@@ -12,6 +14,7 @@ import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -260,36 +263,26 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
     interface Trackable {
 
         /**
-         * Tracks the given rectangular area, listening for any block changes.
+         * Tracks the given area, listening for any block changes.
          * All changes given to the tracker object are guaranteed to be within this area.
-         * @param minX the minimum x
-         * @param minY the minimum y
-         * @param minZ the minimum z
-         * @param maxX the maximum x
-         * @param maxY the maximum y
-         * @param maxZ the maximum z
+         * @param area the area to track
          * @param tracker the tracker object
          */
-        void trackBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, @NotNull Tracker tracker);
+        void trackBlocks(@NotNull Area area, @NotNull Tracker tracker);
 
         /**
          * Tracks all block changes.
          * @param tracker the tracker object
          */
-        default void trackBlocks(@NotNull Tracker tracker) {
-            trackBlocks(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, tracker);
-        }
+        void trackAllBlocks(@NotNull Tracker tracker);
 
         /**
          * Tracks this specific block position, running the given update consumer when the block changes.
-         * @param x the block x
-         * @param y the block y
-         * @param z the block z
+         * @param point the block position
          * @param newBlock the update consumer
          */
-        default void trackBlock(int x, int y, int z, @NotNull Consumer<Block> newBlock) {
-            trackBlocks(x, y, z, x + 1, y + 1, z + 1,
-                    (x1, y1, z1, block) -> newBlock.accept(block));
+        default void trackBlock(Point point, @NotNull Consumer<Block> newBlock) {
+            trackBlocks(Area.collection(List.of(point)), (pos, block) -> newBlock.accept(block));
         }
     }
 
@@ -299,30 +292,19 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
     interface Tracker {
         /**
          * Called when the block at the given position has changed.
-         * @param x the block x
-         * @param y the block y
-         * @param z the block z
+         * @param point the position
          * @param block the new block
          */
-        void updateBlock(int x, int y, int z, @NotNull Block block);
+        void updateBlock(Point point, @NotNull Block block);
 
         /**
          * Updates the block at the given rectangular prism.
-         * @param minX the minimum x (inclusive)
-         * @param minY the minimum y (inclusive)
-         * @param minZ the minimum z (inclusive)
-         * @param maxX the maximum x (exclusive)
-         * @param maxY the maximum y (exclusive)
-         * @param maxZ the maximum z (exclusive)
+         * @param area the area
          * @param block the new block
          */
-        default void updateBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, @NotNull Block block) {
-            for (int x = minX; x < maxX; x++) {
-                for (int y = minY; y < maxY; y++) {
-                    for (int z = minZ; z < maxZ; z++) {
-                        updateBlock(x, y, z, block);
-                    }
-                }
+        default void updateBlocks(Area area, @NotNull Block block) {
+            for (Point pos : area) {
+                updateBlock(pos, block);
             }
         }
     }

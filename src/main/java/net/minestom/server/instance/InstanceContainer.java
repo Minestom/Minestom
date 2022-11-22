@@ -2,6 +2,8 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Area;
+import net.minestom.server.coordinate.AreaQuery;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -61,7 +63,8 @@ public class InstanceContainer extends Instance {
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
 
     // Block tracking
-    private final BlockTrackers blockTrackers = new BlockTrackers();
+    private final Map<Area, Set<Block.Tracker>> blockTrackers = new HashMap<>();
+    private final Set<Block.Tracker> globalBlockTrackers = new HashSet<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
@@ -141,8 +144,20 @@ public class InstanceContainer extends Instance {
 
             // Update the block trackers
             // TODO: Write tests for duplicate block updates (two updates after another where the block has not changed)?
-            for (BlockTrackers.Entry entry : blockTrackers) {
-                entry.tracker().updateBlock(x, y, z, block);
+            synchronized (blockTrackers) {
+                for (var entry : blockTrackers.entrySet()) {
+                    Area area = entry.getKey();
+                    if (AreaQuery.contains(area, blockPosition)) {
+                        for (Block.Tracker tracker : entry.getValue()) {
+                            tracker.updateBlock(blockPosition, block);
+                        }
+                    }
+                }
+            }
+            synchronized (globalBlockTrackers) {
+                for (Block.Tracker tracker : globalBlockTrackers) {
+                    tracker.updateBlock(blockPosition, block);
+                }
             }
 
             // Refresh neighbors since a new block has been placed
@@ -286,6 +301,10 @@ public class InstanceContainer extends Instance {
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
+
+                    // Update the block trackers
+                    updateBlockTrackersForChunk(chunk);
+
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
                     assert future == completableFuture : "Invalid future: " + future;
                     completableFuture.complete(chunk);
@@ -300,6 +319,54 @@ public class InstanceContainer extends Instance {
             retriever.run();
         }
         return completableFuture;
+    }
+
+    private void updateBlockTrackersForChunk(Chunk chunk) {
+        if (blockTrackers.isEmpty()) return;
+
+        int chunkX = chunk.getChunkX();
+        int chunkZ = chunk.getChunkZ();
+
+        int minX = chunkX * Chunk.CHUNK_SIZE_X;
+        int minY = getDimensionType().getMinY();
+        int minZ = chunkZ * Chunk.CHUNK_SIZE_Z;
+
+        int maxX = minX + Chunk.CHUNK_SIZE_X;
+        int maxY = getDimensionType().getMaxY();
+        int maxZ = minZ + Chunk.CHUNK_SIZE_Z;
+
+        // Scan through the chunk and collect blocks that need to be tracked
+        // TODO: Optimize this using the generation api where possible
+        // Optimizing the block trackers using the generation api means saving a list of all the operations as fill
+        // areas, and using them here.
+
+        Map<Block, Set<Point>> areas = new HashMap<>();
+
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    Block block = chunk.getBlock(x, y, z);
+                    areas.computeIfAbsent(block, b -> new HashSet<>()).add(new Vec(x, y, z));
+                }
+            }
+        }
+
+        // Update the block trackers
+        for (var entry : areas.entrySet()) {
+            Block block = entry.getKey();
+            Set<Point> points = entry.getValue();
+            Area area = Area.collection(points);
+
+            for (var trackerEntry : blockTrackers.entrySet()) {
+                Area trackerArea = trackerEntry.getKey();
+                Set<Block.Tracker> tracker = trackerEntry.getValue();
+
+                if (AreaQuery.hasOverlap(area, trackerArea)) {
+                    Area intersection = Area.intersection(area, trackerArea);
+                    tracker.forEach(t -> t.updateBlocks(intersection, block));
+                }
+            }
+        }
     }
 
     Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
@@ -645,7 +712,16 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void trackBlocks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block.@NotNull Tracker tracker) {
-        blockTrackers.add(new BlockTrackers.Entry(minX, minY, minZ, maxX, maxY, maxZ, tracker));
+    public void trackBlocks(@NotNull Area area, Block.@NotNull Tracker tracker) {
+        synchronized (blockTrackers) {
+            blockTrackers.computeIfAbsent(area, a -> new HashSet<>()).add(tracker);
+        }
+    }
+
+    @Override
+    public void trackAllBlocks(Block.@NotNull Tracker tracker) {
+        synchronized (globalBlockTrackers) {
+            globalBlockTrackers.add(tracker);
+        }
     }
 }

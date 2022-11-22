@@ -7,8 +7,8 @@ public interface AreaQuery {
 
     static boolean contains(Area area, Point point) {
         if (area.min().x() > point.x() || area.max().x() < point.x() ||
-                area.min().y() > point.y() || area.max().y() < point.y() ||
-                area.min().z() > point.z() || area.max().z() < point.z()) {
+            area.min().y() > point.y() || area.max().y() < point.y() ||
+            area.min().z() > point.z() || area.max().z() < point.z()) {
             return false;
         }
 
