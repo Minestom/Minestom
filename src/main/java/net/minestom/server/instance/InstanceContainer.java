@@ -43,6 +43,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
@@ -145,19 +146,26 @@ public class InstanceContainer extends Instance {
             // Update the block trackers
             // TODO: Write tests for duplicate block updates (two updates after another where the block has not changed)?
             synchronized (blockTrackers) {
-                for (var entry : blockTrackers.entrySet()) {
-                    Area area = entry.getKey();
-                    if (AreaQuery.contains(area, blockPosition)) {
-                        for (Block.Tracker tracker : entry.getValue()) {
-                            tracker.updateBlock(blockPosition, block);
+                @NotNull Block newBlock = block;
+                if (blockTrackers.size() != 0) {
+                    for (var entry : blockTrackers.entrySet()) {
+                        Area area = entry.getKey();
+                        Set<Block.Tracker> trackers = entry.getValue();
+
+                        if (trackers.stream().noneMatch(Block.Tracker::trackBlockPlacement)) continue;
+                        if (AreaQuery.contains(area, blockPosition)) {
+                            trackers.stream()
+                                    .filter(Block.Tracker::trackBlockPlacement)
+                                    .forEach(tracker -> tracker.updateBlock(blockPosition, newBlock));
                         }
                     }
                 }
             }
             synchronized (globalBlockTrackers) {
-                for (Block.Tracker tracker : globalBlockTrackers) {
-                    tracker.updateBlock(blockPosition, block);
-                }
+                @NotNull Block newBlock = block;
+                globalBlockTrackers.stream()
+                        .filter(Block.Tracker::trackBlockPlacement)
+                        .forEach(tracker -> tracker.updateBlock(blockPosition, newBlock));
             }
 
             // Refresh neighbors since a new block has been placed
@@ -303,7 +311,9 @@ public class InstanceContainer extends Instance {
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
 
                     // Update the block trackers
-                    updateBlockTrackersForChunk(chunk);
+                    synchronized (chunk) {
+                        updateBlockTrackersForChunk(chunk);
+                    }
 
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
                     assert future == completableFuture : "Invalid future: " + future;
@@ -323,6 +333,10 @@ public class InstanceContainer extends Instance {
 
     private void updateBlockTrackersForChunk(Chunk chunk) {
         if (blockTrackers.isEmpty()) return;
+        if (blockTrackers.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .noneMatch(Block.Tracker::trackGeneration)) return;
 
         int chunkX = chunk.getChunkX();
         int chunkZ = chunk.getChunkZ();
@@ -340,32 +354,42 @@ public class InstanceContainer extends Instance {
         // Optimizing the block trackers using the generation api means saving a list of all the operations as fill
         // areas, and using them here.
 
-        Map<Block, Set<Point>> areas = new HashMap<>();
+        Map<Block, Set<Point>> block2points = new HashMap<>();
 
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
                 for (int z = minZ; z < maxZ; z++) {
                     Block block = chunk.getBlock(x, y, z);
-                    areas.computeIfAbsent(block, b -> new HashSet<>()).add(new Vec(x, y, z));
+                    block2points.computeIfAbsent(block, b -> new HashSet<>()).add(new Vec(x, y, z));
                 }
             }
         }
 
+        Map<Block, Area> areas = block2points.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> Area.collection(e.getValue())));
+
         // Update the block trackers
-        for (var entry : areas.entrySet()) {
-            Block block = entry.getKey();
-            Set<Point> points = entry.getValue();
-            Area area = Area.collection(points);
+        synchronized (blockTrackers) {
+            areas.forEach((block, area) -> {
+                blockTrackers.forEach((trackerArea, trackers) -> {
 
-            for (var trackerEntry : blockTrackers.entrySet()) {
-                Area trackerArea = trackerEntry.getKey();
-                Set<Block.Tracker> tracker = trackerEntry.getValue();
+                    // Exit early if none of the trackers are tracking generation
+                    if (trackers.stream().noneMatch(Block.Tracker::trackGeneration)) return;
 
-                if (AreaQuery.hasOverlap(area, trackerArea)) {
-                    Area intersection = Area.intersection(area, trackerArea);
-                    tracker.forEach(t -> t.updateBlocks(intersection, block));
-                }
-            }
+                    if (AreaQuery.hasOverlap(area, trackerArea)) {
+                        Area intersection = Area.intersection(trackerArea, area);
+                        trackers.stream()
+                                .filter(Block.Tracker::trackGeneration)
+                                .forEach(tracker -> tracker.updateBlocks(intersection, block));
+                    }
+                });
+            });
+        }
+
+        synchronized (globalBlockTrackers) {
+            areas.forEach((block, area) -> globalBlockTrackers.stream()
+                    .filter(Block.Tracker::trackGeneration)
+                    .forEach(tracker -> tracker.updateBlocks(area, block)));
         }
     }
 

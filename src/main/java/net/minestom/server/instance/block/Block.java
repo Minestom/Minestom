@@ -307,5 +307,13 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
                 updateBlock(pos, block);
             }
         }
+
+        default boolean trackGeneration() {
+            return true;
+        }
+
+        default boolean trackBlockPlacement() {
+            return true;
+        }
     }
 }
