@@ -88,10 +88,10 @@ class AreaImpl {
         }
     }
 
-    static class Fill implements Area {
+    static final class Fill implements Area {
         private final Point min, max;
 
-        protected Fill(Point pos1, Point pos2) {
+        Fill(Point pos1, Point pos2) {
             this.min = new Vec(Math.min(pos1.x(), pos2.x()),
                     Math.min(pos1.y(), pos2.y()),
                     Math.min(pos1.z(), pos2.z()));
@@ -108,6 +108,12 @@ class AreaImpl {
         @Override
         public @NotNull Point max() {
             return max;
+        }
+
+        public boolean contains(Point pos) {
+            return pos.x() >= min.x() && pos.x() <= max.x() &&
+                    pos.y() >= min.y() && pos.y() <= max.y() &&
+                    pos.z() >= min.z() && pos.z() <= max.z();
         }
 
         @NotNull

@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
  * An area is a spatially connected set of block positions.
  * These areas can be used for optimizations such as instance block queries, and pathfinding domains.
  */
-public interface Area extends Iterable<Point> {
+public sealed interface Area extends Iterable<Point> permits AreaImpl.Fill, AreaImpl.SetArea, AreaImpl.Union {
 
     /**
      * Creates a new area from a collection of block positions. Note that these points will be block-aligned.
