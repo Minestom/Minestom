@@ -560,6 +560,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return AsyncUtils.VOID_FUTURE;
         }
         // Must update the player chunks
+        chunkUpdateLimitChecker.clearHistory();
         final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
@@ -2062,6 +2063,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
+    }
+
+    @Override
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+        chunkUpdateLimitChecker.clearHistory();
+        return super.teleport(position, chunks);
     }
 
     /**
