@@ -64,6 +64,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.time.Duration;
@@ -838,7 +839,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
-    public @Nullable Instance getInstance() {
+    public @UnknownNullability Instance getInstance() {
         return instance;
     }
 
