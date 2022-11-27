@@ -105,7 +105,7 @@ public class DimensionType {
                 .effects(nbt.getString("effects"))
                 .piglinSafe(nbt.getByte("piglin_safe") != 0)
                 .logicalHeight(nbt.getInt("logical_height"))
-                .coordinateScale(nbt.getInt("coordinate_scale"))
+                .coordinateScale(nbt.getDouble("coordinate_scale"))
                 .build();
     }
 
