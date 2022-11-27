@@ -15,11 +15,6 @@ import java.util.Set;
  */
 public final class BungeeCordProxy {
 
-    /**
-     * Indicates that a BungeeGuard authentication was invalid due missing, multiple, or invalid tokens.
-     */
-    public static final Component INVALID_TOKEN = Component.text("Invalid connection, please connect through the proxy", NamedTextColor.RED);
-
     private static Set<String> bungeeGuardTokens = null;
 
     private static volatile boolean enabled;
