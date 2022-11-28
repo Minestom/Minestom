@@ -65,14 +65,4 @@ public final class BungeeCordProxy {
         return isBungeeGuardEnabled() && bungeeGuardTokens.contains(token);
     }
 
-    /**
-     * Gets the maximum length of the handshake packet.
-     *
-     * @return The maximum length of the handshake packet
-     */
-    public static int getMaxHandshakeLength() {
-        // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
-        return isEnabled() ? (isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;
-    }
-
 }

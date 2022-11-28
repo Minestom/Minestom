@@ -29,7 +29,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record HandshakePacket(int protocolVersion, @NotNull String serverAddress,
                               int serverPort, int nextState) implements ClientPreplayPacket {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(HandshakePacket.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(HandshakePacket.class);
 
     /**
      * Text sent if a player tries to connect with an invalid version of the client
@@ -37,12 +37,12 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
 
     /**
-     * Indicates that a BungeeGuard authentication was invalid due missing, multiple, or invalid tokens.
+     * Indicates that a BungeeGuard authentication was invalid due to missing, multiple, or invalid tokens.
      */
-    public static final Component INVALID_BUNGEE_FORWARDING = Component.text("Invalid connection, please connect through the BungeeCord proxy. If you believe this is an error, contact a server administrator.", NamedTextColor.RED);
+    private static final Component INVALID_BUNGEE_FORWARDING = Component.text("Invalid connection, please connect through the BungeeCord proxy. If you believe this is an error, contact a server administrator.", NamedTextColor.RED);
 
     public HandshakePacket {
-        if (serverAddress.length() > BungeeCordProxy.getMaxHandshakeLength()) {
+        if (serverAddress.length() > getMaxHandshakeLength()) {
             throw new IllegalArgumentException("Server address too long: " + serverAddress.length());
         }
     }
@@ -55,7 +55,7 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, protocolVersion);
-        int maxLength = BungeeCordProxy.getMaxHandshakeLength();
+        int maxLength = getMaxHandshakeLength();
         if (serverAddress.length() > maxLength) {
             throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
@@ -152,6 +152,11 @@ public record HandshakePacket(int protocolVersion, @NotNull String serverAddress
                 // Unexpected error
             }
         }
+    }
+
+    private static int getMaxHandshakeLength() {
+        // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
+        return BungeeCordProxy.isEnabled() ? (BungeeCordProxy.isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;
     }
 
     private void disconnect(@NotNull PlayerConnection connection, @NotNull Component reason) {
