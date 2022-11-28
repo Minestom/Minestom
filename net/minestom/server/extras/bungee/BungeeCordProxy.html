@@ -78,7 +78,8 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">BungeeCordProxy</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">BungeeCord forwarding support. This does not count as a security feature, and you will still be required to manage your firewall.
+<div class="block">BungeeCord forwarding support. Enabling BungeeGuard support with <a href="#setBungeeGuardTokens(java.util.Set)"><code>setBungeeGuardTokens(Set)</code></a> helps to secure the server,
+ but managing your firewall is still recommended.
  <p>
  Please consider using <a href="../velocity/VelocityProxy.html" title="class in net.minestom.server.extras.velocity"><code>VelocityProxy</code></a> instead.</div>
 </section>
@@ -114,9 +115,24 @@ loadScripts(document, 'script');</script>
 <div class="block">Enables bungee IP forwarding.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isEnabled()" class="member-name-link">isEnabled</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isBungeeGuardEnabled()" class="member-name-link">isBungeeGuardEnabled</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Checks whether BungeeGuard authentication is enabled.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isEnabled()" class="member-name-link">isEnabled</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets if bungee IP forwarding is enabled.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValidBungeeGuardToken(java.lang.String)" class="member-name-link">isValidBungeeGuardToken</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Checks whether a token is one of the valid BungeeGuard tokens</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setBungeeGuardTokens(java.util.Set)" class="member-name-link">setBungeeGuardTokens</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;tokens)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Sets the tokens used by BungeeGuard authentication.</div>
 </div>
 </div>
 </div>
@@ -164,6 +180,45 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>true if forwarding is enabled</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setBungeeGuardTokens(java.util.Set)">
+<h3>setBungeeGuardTokens</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBungeeGuardTokens</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;tokens)</span></div>
+<div class="block">Sets the tokens used by BungeeGuard authentication.
+ Setting the tokens to a not-null value enables BungeeGuard authentication,
+ and setting it to a null value disables BungeeGuard authentication.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>tokens</code> - The new BungeeGuard authentication tokens</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isBungeeGuardEnabled()">
+<h3>isBungeeGuardEnabled</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isBungeeGuardEnabled</span>()</div>
+<div class="block">Checks whether BungeeGuard authentication is enabled.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Whether BungeeGuard authentication is enabled</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isValidBungeeGuardToken(java.lang.String)">
+<h3>isValidBungeeGuardToken</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isValidBungeeGuardToken</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Checks whether a token is one of the valid BungeeGuard tokens</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - The token to test</dd>
+<dt>Returns:</dt>
+<dd>Whether the token is a valid BungeeGuard token</dd>
 </dl>
 </section>
 </li>
