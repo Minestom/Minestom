@@ -11,12 +11,16 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
 
     private final Player player;
     private final ItemStack itemStack;
+    private final DropReason dropReason;
+    private final DropAmount dropAmount;
 
     private boolean cancelled;
 
-    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack) {
+    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack, @NotNull DropReason reason, @NotNull DropAmount amount) {
         this.player = player;
         this.itemStack = itemStack;
+        this.dropReason = reason;
+        this.dropAmount = amount;
     }
 
     @Override
@@ -37,6 +41,26 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    public DropReason getDropReason() {
+        return dropReason;
+    }
+
+    public DropAmount getDropAmount() {
+        return dropAmount;
+    }
+
+
+    public enum DropReason {
+        INVENTORY,
+        CLOSED_INVENTORY,
+        HOTBAR
+    }
+
+    public enum DropAmount {
+        SINGLE,
+        STACK
     }
 
 }
