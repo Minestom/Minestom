@@ -18,7 +18,7 @@ public record EntityVelocityPacket(int entityId, int velocityX, int velocityY, i
     }
 
     public EntityVelocityPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT));
+        this(reader.read(VAR_INT), (int) reader.read(SHORT), (int) reader.read(SHORT), (int) reader.read(SHORT));
     }
 
     public EntityVelocityPacket(int entityId, Point velocity) {
