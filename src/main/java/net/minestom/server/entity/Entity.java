@@ -51,6 +51,7 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -1527,7 +1528,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected @NotNull Vec getVelocityForPacket() {
-        return this.velocity.mul(8000f / MinecraftServer.TICK_PER_SECOND);
+        return this.velocity.mul(8000f / MinecraftServer.TICK_PER_SECOND)
+                .withX(x -> MathUtils.clamp(x, Short.MIN_VALUE, Short.MAX_VALUE))
+                .withY(y -> MathUtils.clamp(y, Short.MIN_VALUE, Short.MAX_VALUE))
+                .withZ(z -> MathUtils.clamp(z, Short.MIN_VALUE, Short.MAX_VALUE));
     }
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {
