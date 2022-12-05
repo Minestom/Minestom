@@ -1528,10 +1528,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected @NotNull Vec getVelocityForPacket() {
-        return this.velocity.mul(8000f / MinecraftServer.TICK_PER_SECOND)
-                .withX(x -> MathUtils.clamp(x, Short.MIN_VALUE, Short.MAX_VALUE))
-                .withY(y -> MathUtils.clamp(y, Short.MIN_VALUE, Short.MAX_VALUE))
-                .withZ(z -> MathUtils.clamp(z, Short.MIN_VALUE, Short.MAX_VALUE));
+        return this.velocity.mul(8000f / MinecraftServer.TICK_PER_SECOND);
     }
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {
