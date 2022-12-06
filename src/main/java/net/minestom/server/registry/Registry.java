@@ -13,6 +13,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeEffects;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,6 +48,11 @@ public final class Registry {
     @ApiStatus.Internal
     public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
         return new EnchantmentEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static BiomeEntry biome(String namespace, @NotNull Properties main) {
+        return new BiomeEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -133,6 +140,8 @@ public final class Registry {
     @ApiStatus.Internal
     public enum Resource {
         BLOCKS("blocks.json"),
+
+        BIOMES("biomes.json"),
         ITEMS("items.json"),
         ENTITIES("entities.json"),
         ENCHANTMENTS("enchantments.json"),
@@ -389,6 +398,39 @@ public final class Registry {
         }
     }
 
+    public record BiomeEntry(NamespaceID namespace, int id,
+                             boolean humid,
+                             double temperature,
+                             double downfall,
+                             Biome.Precipitation precipitation,
+                             int fogColor,
+                             int waterColor,
+                             int waterFogColor,
+                             int skyColor,
+                             int foliageColor,
+                             int foliageColorOverride,
+                             int grassColorOverride,
+                             BiomeEffects.GrassColorModifier grassColorModifier,
+                             Properties custom) implements Entry {
+        public BiomeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getBoolean("humid"),
+                    main.getDouble("temperature"),
+                    main.getDouble("downfall"),
+                    Biome.Precipitation.valueOf(main.getString("precipitation").toUpperCase(Locale.ROOT)),
+                    main.getInt("fogColor"),
+                    main.getInt("waterColor"),
+                    main.getInt("waterFogColor"),
+                    main.getInt("skyColor"),
+                    main.getInt("foliageColor"),
+                    main.getInt("foliageColorOverride"),
+                    main.getInt("grassColorOverride"),
+                    BiomeEffects.GrassColorModifier.valueOf(main.getString("grassColorModifier").toUpperCase(Locale.ROOT)),
+                    custom);
+        }
+    }
+
     public record EnchantmentEntry(NamespaceID namespace, int id,
                                    String translationKey,
                                    double maxLevel,
@@ -550,4 +592,5 @@ public final class Registry {
             return asMap().size();
         }
     }
+
 }
