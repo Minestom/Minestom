@@ -25,6 +25,7 @@ public class Generators {
 
         var generator = new CodeGenerator(outputFolder);
         generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
+        generator.generate(resource("biomes.json"), "net.minestom.server.biome", "Biome", "BiomeImpl", "Biomes");
         generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "Materials");
         generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypes");
         generator.generate(resource("enchantments.json"), "net.minestom.server.item", "Enchantment", "EnchantmentImpl", "Enchantments");
