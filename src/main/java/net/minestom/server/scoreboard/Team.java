@@ -118,15 +118,15 @@ public class Team implements PacketGroupingAudience {
      * This member collection can contain {@link Player} or {@link LivingEntity}.
      * For players use their username, for entities use their UUID
      *
-     * @param members The members to be added
+     * @param toAdd The members to be added
      */
-    public void addMembers(@NotNull Collection<@NotNull String> members) {
+    public void addMembers(@NotNull Collection<@NotNull String> toAdd) {
         // Adds a new member to the team
-        this.members.addAll(members);
+        this.members.addAll(toAdd);
 
         // Initializes add player packet
         final TeamsPacket addPlayerPacket = new TeamsPacket(teamName,
-                new TeamsPacket.AddEntitiesToTeamAction(members));
+                new TeamsPacket.AddEntitiesToTeamAction(toAdd));
         // Sends to all online players the add player packet
         PacketUtils.broadcastPacket(addPlayerPacket);
 
@@ -152,17 +152,17 @@ public class Team implements PacketGroupingAudience {
      * This member collection can contain {@link Player} or {@link LivingEntity}.
      * For players use their username, for entities use their UUID
      *
-     * @param members The members to be removed
+     * @param toRemove The members to be removed
      */
-    public void removeMembers(@NotNull Collection<@NotNull String> members) {
+    public void removeMembers(@NotNull Collection<@NotNull String> toRemove) {
         // Initializes remove player packet
         final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
-                new TeamsPacket.RemoveEntitiesToTeamAction(members));
+                new TeamsPacket.RemoveEntitiesToTeamAction(toRemove));
         // Sends to all online player the remove player packet
         PacketUtils.broadcastPacket(removePlayerPacket);
 
         // Removes the member from the team
-        this.members.removeAll(members);
+        this.members.removeAll(toRemove);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
