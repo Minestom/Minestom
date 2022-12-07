@@ -129,79 +129,89 @@ implements <a href="../adventure/audience/PacketGroupingAudience.html" title="in
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a member to the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.html" title="class in net.minestom.server.network.packet.server.play">TeamsPacket</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createTeamDestructionPacket()" class="member-name-link">createTeamDestructionPacket</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addMembers(java.util.Collection)" class="member-name-link">addMembers</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;toAdd)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates an destruction packet to remove the team.</div>
+<div class="block">Adds a members to the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.html" title="class in net.minestom.server.network.packet.server.play">TeamsPacket</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createTeamsCreationPacket()" class="member-name-link">createTeamsCreationPacket</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createTeamDestructionPacket()" class="member-name-link">createTeamDestructionPacket</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates an destruction packet to remove the team.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.html" title="class in net.minestom.server.network.packet.server.play">TeamsPacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createTeamsCreationPacket()" class="member-name-link">createTeamsCreationPacket</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates the creation packet to add a team.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.CollisionRule.html" title="enum class in net.minestom.server.network.packet.server.play">TeamsPacket.CollisionRule</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCollisionRule()" class="member-name-link">getCollisionRule</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.CollisionRule.html" title="enum class in net.minestom.server.network.packet.server.play">TeamsPacket.CollisionRule</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCollisionRule()" class="member-name-link">getCollisionRule</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the collision rule of the team.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFriendlyFlags()" class="member-name-link">getFriendlyFlags</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFriendlyFlags()" class="member-name-link">getFriendlyFlags</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the friendly flags of the team.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMembers()" class="member-name-link">getMembers</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMembers()" class="member-name-link">getMembers</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Obtains an unmodifiable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link"><code>Set</code></a> of registered players who are on the team.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.NameTagVisibility.html" title="enum class in net.minestom.server.network.packet.server.play">TeamsPacket.NameTagVisibility</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNameTagVisibility()" class="member-name-link">getNameTagVisibility</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/TeamsPacket.NameTagVisibility.html" title="enum class in net.minestom.server.network.packet.server.play">TeamsPacket.NameTagVisibility</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNameTagVisibility()" class="member-name-link">getNameTagVisibility</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the tag visibility of the team.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayers()" class="member-name-link">getPlayers</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayers()" class="member-name-link">getPlayers</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets an iterable of the players this audience contains.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrefix()" class="member-name-link">getPrefix</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrefix()" class="member-name-link">getPrefix</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the prefix of the team.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSuffix()" class="member-name-link">getSuffix</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSuffix()" class="member-name-link">getSuffix</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the suffix of the team.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/format/NamedTextColor.html" title="class or interface in net.kyori.adventure.text.format" class="external-link">NamedTextColor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeamColor()" class="member-name-link">getTeamColor</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/format/NamedTextColor.html" title="class or interface in net.kyori.adventure.text.format" class="external-link">NamedTextColor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeamColor()" class="member-name-link">getTeamColor</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the color of the team.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeamDisplayName()" class="member-name-link">getTeamDisplayName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeamDisplayName()" class="member-name-link">getTeamDisplayName</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the display name of the team.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeamName()" class="member-name-link">getTeamName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeamName()" class="member-name-link">getTeamName</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the registry name of the team.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAllowFriendlyFire()" class="member-name-link">isAllowFriendlyFire</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSeeInvisiblePlayers()" class="member-name-link">isSeeInvisiblePlayers</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAllowFriendlyFire()" class="member-name-link">isAllowFriendlyFire</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/pointer/Pointers.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointers</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pointers()" class="member-name-link">pointers</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSeeInvisiblePlayers()" class="member-name-link">isSeeInvisiblePlayers</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeMember(java.lang.String)" class="member-name-link">removeMember</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;member)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.11.0/net/kyori/adventure/pointer/Pointers.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointers</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pointers()" class="member-name-link">pointers</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeMember(java.lang.String)" class="member-name-link">removeMember</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;member)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes a member from the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeMembers(java.util.Collection)" class="member-name-link">removeMembers</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;toRemove)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Removes members from the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendUpdatePacket()" class="member-name-link">sendUpdatePacket</a>()</code></div>
@@ -346,10 +356,26 @@ implements <a href="../adventure/audience/PacketGroupingAudience.html" title="in
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;member)</span></div>
 <div class="block">Adds a member to the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.
  <br>
- This member can be a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> or an <a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity"><code>LivingEntity</code></a>.</div>
+ This member collection can contain <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> or <a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity"><code>LivingEntity</code></a>.
+ For players use their username, for entities use their UUID</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>member</code> - The member to be added</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addMembers(java.util.Collection)">
+<h3>addMembers</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addMembers</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;toAdd)</span></div>
+<div class="block">Adds a members to the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.
+ <br>
+ This member collection can contain <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> or <a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity"><code>LivingEntity</code></a>.
+ For players use their username, for entities use their UUID</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>toAdd</code> - The members to be added</dd>
 </dl>
 </section>
 </li>
@@ -358,10 +384,28 @@ implements <a href="../adventure/audience/PacketGroupingAudience.html" title="in
 <h3>removeMember</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeMember</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;member)</span></div>
-<div class="block">Removes a member from the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
+<div class="block">Removes a member from the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.
+ <br>
+ This member collection can contain <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> or <a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity"><code>LivingEntity</code></a>.
+ For players use their username, for entities use their UUID</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>member</code> - The member to be removed</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="removeMembers(java.util.Collection)">
+<h3>removeMembers</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeMembers</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;toRemove)</span></div>
+<div class="block">Removes members from the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.
+ <br>
+ This member collection can contain <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> or <a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity"><code>LivingEntity</code></a>.
+ For players use their username, for entities use their UUID</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>toRemove</code> - The members to be removed</dd>
 </dl>
 </section>
 </li>
