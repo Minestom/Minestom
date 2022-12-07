@@ -1,42 +1,32 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.kyori.adventure.text.Component;
-import net.minestom.server.crypto.ChatBound;
-import net.minestom.server.crypto.FilterMask;
-import net.minestom.server.crypto.MessageSignature;
-import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.BitSet;
 
-import static net.minestom.server.network.NetworkBuffer.COMPONENT;
-import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientChatMessagePacket(@NotNull UUID sender, int index,
-                                      @Nullable MessageSignature signature,
-                                      SignedMessageBody.@NotNull Packed body,
-                                      @Nullable Component unsignedContent, FilterMask filterMask,
-                                      @NotNull ChatBound chatBound) implements ClientPacket {
+public record ClientChatMessagePacket(String message, long timestamp,
+                                      long salt, byte @Nullable [] signature,
+                                      int ackOffset, BitSet ackList) implements ClientPacket {
 
     public ClientChatMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), reader.read(VAR_INT),
-                reader.readOptional(MessageSignature::new),
-                new SignedMessageBody.Packed(reader),
-                reader.readOptional(COMPONENT), new FilterMask(reader),
-                new ChatBound(reader));
+        this(reader.read(STRING), reader.read(LONG),
+                reader.read(LONG), reader.readOptional(r -> r.readBytes(256)),
+                reader.read(VAR_INT), BitSet.valueOf(reader.readBytes(3)));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, sender);
-        writer.write(VAR_INT, index);
-        writer.writeOptional(signature);
-        writer.write(body);
-        writer.writeOptional(COMPONENT, unsignedContent);
-        writer.write(filterMask);
-        writer.write(chatBound);
+        writer.write(STRING, message);
+        writer.write(LONG, timestamp);
+        writer.write(LONG, salt);
+        writer.writeOptional(BYTE_ARRAY, signature);
+        writer.write(VAR_INT, ackOffset);
+        writer.write(RAW_BYTES, Arrays.copyOf(ackList.toByteArray(), 3));
     }
 }

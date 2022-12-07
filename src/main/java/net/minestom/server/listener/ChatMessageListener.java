@@ -32,15 +32,13 @@ public class ChatMessageListener {
     }
 
     public static void chatMessageListener(ClientChatMessagePacket packet, Player player) {
-        System.out.println("packet "+packet);
-        final String message = "test";
         if (!Messenger.canReceiveMessage(player)) {
             Messenger.sendRejectionMessage(player);
             return;
         }
 
         final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
-        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, message), message);
+        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, packet.message()), packet.message());
 
         // Call the event
         EventDispatcher.callCancellable(playerChatEvent, () -> {
