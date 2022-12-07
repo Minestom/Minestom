@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 public record PlayerInfoRemovePacket(@NotNull List<@NotNull UUID> uuids) implements ServerPacket {
+    public PlayerInfoRemovePacket(@NotNull UUID uuid) {
+        this(List.of(uuid));
+    }
+
     public PlayerInfoRemovePacket {
         uuids = List.copyOf(uuids);
     }

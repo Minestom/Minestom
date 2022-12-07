@@ -1918,7 +1918,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return a {@link PlayerInfoRemovePacket} to remove the player
      */
     protected @NotNull PlayerInfoRemovePacket getRemovePlayerToList() {
-        return new PlayerInfoRemovePacket(List.of(getUuid()));
+        return new PlayerInfoRemovePacket(getUuid());
     }
 
     private PlayerInfoUpdatePacket.Entry infoEntry() {
