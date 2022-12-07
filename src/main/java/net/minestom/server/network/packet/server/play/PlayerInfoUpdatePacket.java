@@ -16,6 +16,10 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerInfoUpdatePacket(@NotNull EnumSet<@NotNull Action> actions,
                                      @NotNull List<@NotNull Entry> entries) implements ServerPacket {
+    public PlayerInfoUpdatePacket(@NotNull Action action, @NotNull Entry entry) {
+        this(EnumSet.of(action), List.of(entry));
+    }
+
     public PlayerInfoUpdatePacket {
         actions = EnumSet.copyOf(actions);
         entries = List.copyOf(entries);
@@ -47,7 +51,7 @@ public record PlayerInfoUpdatePacket(@NotNull EnumSet<@NotNull Action> actions,
 
     public record Property(@NotNull String name, @NotNull String value,
                            @Nullable String signature) implements NetworkBuffer.Writer {
-        public Property(String name, String value) {
+        public Property(@NotNull String name, @NotNull String value) {
             this(name, value, null);
         }
 
