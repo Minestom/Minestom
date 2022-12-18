@@ -18,15 +18,4 @@ public final class PropertyUtils {
         }
         return result;
     }
-
-    @Contract("_, null -> null; _, !null -> !null")
-    public static String getString(@NotNull String name, @Nullable String defaultValue) {
-        final String value = System.getProperty(name);
-
-        if (value == null) {
-            return defaultValue;
-        } else {
-            return value;
-        }
-    }
 }

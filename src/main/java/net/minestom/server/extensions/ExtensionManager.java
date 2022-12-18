@@ -37,7 +37,7 @@ public class ExtensionManager {
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
     private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
 
-    private final File extensionFolder = new File(PropertyUtils.getString("minestom.extension.folder", "extensions"));
+    private final File extensionFolder = new File(System.getProperty("minestom.extension.folder", "extensions"));
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private Path extensionDataRoot = extensionFolder.toPath();
 
