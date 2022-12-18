@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -273,5 +274,15 @@ public class EventNodeTest {
         //noinspection UnusedAssignment
         mapped = null;
         waitUntilCleared(ref);
+    }
+
+    @Test
+    public void testGetListeners() {
+        var node = EventNode.all("main");
+        var listener = EventListener.of(EventTest.class, event -> {});
+        var listener2 = EventListener.of(EventTest.class, event -> {});
+        node.addListener(listener);
+        node.addListener(listener2);
+        assertEquals(List.of(listener, listener2), node.getListeners());
     }
 }

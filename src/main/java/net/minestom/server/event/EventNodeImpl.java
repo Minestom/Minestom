@@ -150,6 +150,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    public @NotNull Collection<EventListener<T>> getListeners() {
+        synchronized (GLOBAL_CHILD_LOCK) {
+            return listenerMap.values().stream().flatMap(entry -> entry.listeners.stream()).toList();
+        }
+    }
+
+    @Override
     public @NotNull <E extends T, H> EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter) {
         EventNodeImpl<E> node;
         synchronized (GLOBAL_CHILD_LOCK) {

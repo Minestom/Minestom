@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -331,6 +332,13 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
 
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
+
+    /**
+     * Get all listeners registered to this node.
+     * @return A collection of listeners.
+     */
+    @Contract(value = "-> this")
+    @NotNull Collection<EventListener<T>> getListeners();
 
     /**
      * Maps a specific object to a node.
