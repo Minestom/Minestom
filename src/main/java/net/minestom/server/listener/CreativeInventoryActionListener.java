@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.drop.DropReason;
 import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 
@@ -17,7 +18,7 @@ public final class CreativeInventoryActionListener {
         final ItemStack item = packet.item();
         if (slot == -1) {
             // Drop item
-            player.dropItem(item, ItemDropEvent.DropReason.INVENTORY, ItemDropEvent.DropAmount.STACK);
+            player.dropItem(item, DropReason.fromInventory(player.getInventory()), ItemDropEvent.DropAmount.STACK);
             return;
         }
         // Bounds check

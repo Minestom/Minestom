@@ -5,6 +5,7 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.drop.DropReason;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
@@ -49,13 +50,6 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
 
     public DropAmount getDropAmount() {
         return dropAmount;
-    }
-
-
-    public enum DropReason {
-        INVENTORY,
-        CLOSED_INVENTORY,
-        HOTBAR
     }
 
     public enum DropAmount {
