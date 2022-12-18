@@ -337,8 +337,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
      * Get all listeners registered to this node.
      * @return A collection of listeners.
      */
-    @Contract(value = "-> this")
-    @NotNull Collection<EventListener<T>> getListeners();
+    @NotNull Collection<EventListener<T>> listeners();
 
     /**
      * Maps a specific object to a node.

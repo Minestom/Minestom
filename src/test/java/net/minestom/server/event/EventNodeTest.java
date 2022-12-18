@@ -277,12 +277,12 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testGetListeners() {
+    public void testListeners() {
         var node = EventNode.all("main");
         var listener = EventListener.of(EventTest.class, event -> {});
         var listener2 = EventListener.of(EventTest.class, event -> {});
         node.addListener(listener);
         node.addListener(listener2);
-        assertEquals(List.of(listener, listener2), node.getListeners());
+        assertEquals(List.of(listener, listener2), node.listeners());
     }
 }
