@@ -59,6 +59,20 @@ public class Permission {
         return data;
     }
 
+    /**
+     * Checks by permission whether the command may be executed or not.
+     *
+     * @param sender
+     * @param commandString
+     * @return whether the sender has the authorization to execute the command.
+     */
+    public boolean matchCondition(@NotNull CommandSender sender, @Nullable String commandString) {
+        if (!(sender.hasPermission(getPermissionName()))) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

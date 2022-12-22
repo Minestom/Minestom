@@ -55,6 +55,10 @@ public class Main {
         commandManager.register(new ExecuteCommand());
         commandManager.register(new RedirectTestCommand());
 
+        commandManager.register(new PermissionsCheckCommand());
+        commandManager.register(new PermissionsAddCommand());
+        commandManager.register(new PermissionsRemoveCommand());
+
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
