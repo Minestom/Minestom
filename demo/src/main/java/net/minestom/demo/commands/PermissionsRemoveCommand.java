@@ -6,7 +6,7 @@ import net.minestom.server.entity.Player;
 
 public class PermissionsRemoveCommand extends Command {
     public PermissionsRemoveCommand() {
-        super("permissionsremove");
+        super("remove");
 
         setCondition(Conditions::playerOnly);
 

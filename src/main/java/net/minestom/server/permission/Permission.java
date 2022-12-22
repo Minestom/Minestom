@@ -67,10 +67,7 @@ public class Permission {
      * @return whether the sender has the authorization to execute the command.
      */
     public boolean matchCondition(@NotNull CommandSender sender, @Nullable String commandString) {
-        if (!(sender.hasPermission(getPermissionName()))) {
-            return false;
-        }
-        return true;
+        return sender.hasPermission(getPermissionName());
     }
 
     @Override

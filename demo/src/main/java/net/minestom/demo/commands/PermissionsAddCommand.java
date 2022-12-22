@@ -7,7 +7,7 @@ import net.minestom.server.permission.Permission;
 
 public class PermissionsAddCommand extends Command {
     public PermissionsAddCommand() {
-        super("permissionsadd");
+        super("add");
 
         setCondition(Conditions::playerOnly);
 
