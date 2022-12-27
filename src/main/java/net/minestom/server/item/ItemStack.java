@@ -138,6 +138,11 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         return withDisplayName(componentUnaryOperator.apply(getDisplayName()));
     }
 
+    @Contract(value = "_, -> new",pure = true)
+    default @NotNull ItemStack withCustomModelData(Integer customModelData){
+        return withMeta(builder -> builder.customModelData(customModelData));
+    }
+
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withLore(@NotNull List<? extends Component> lore) {
         return withMeta(builder -> builder.lore(lore));
