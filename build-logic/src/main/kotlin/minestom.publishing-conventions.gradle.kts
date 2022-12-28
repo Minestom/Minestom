@@ -1,7 +1,7 @@
 plugins {
+	id("maven-publish")
     id("net.kyori.indra")
     id("net.kyori.indra.publishing")
-	id("maven-publish")
     // id("net.kyori.indra.publishing.sonatype")
 }
 

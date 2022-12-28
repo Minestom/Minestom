@@ -2,10 +2,15 @@ plugins {
     `java-library`
     id("minestom.publishing-conventions")
     id("minestom.native-conventions")
-	id("org.hibernate.build.maven-repo-auth") version "3.0.4"
+	id("org.hibernate.build.maven-repo-auth") version "3.0.3"
 }
 
 allprojects {
+	repositories {
+		mavenCentral()
+        maven("https://jitpack.io")
+	}
+	
     group = "net.minestom.server"
     version = "1.0"
     description = "Lightweight and multi-threaded Minecraft server implementation"
@@ -47,8 +52,7 @@ dependencies {
     testImplementation(project(mapOf("path" to ":testing")))
     // Only here to ensure J9 module support for extensions and our classloaders
     testCompileOnly(libs.mockito.core)
-
-
+	
     // Logging
     implementation(libs.bundles.logging)
     // Libraries required for the terminal
