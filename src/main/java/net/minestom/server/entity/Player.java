@@ -251,7 +251,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of("minestom:world"), nbt, dimensionType.toString(), "minestom:world",
+                List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, levelFlat);
         sendPacket(joinGamePacket);
@@ -455,7 +455,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) ->
+        ChunkUtils.forChunksInRange(respawnPosition, Math.min(MinecraftServer.getChunkViewDistance(), settings.getViewDistance()), (chunkX, chunkZ) ->
                 this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                     try {
                         if (chunk != null) {
@@ -466,6 +466,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     }
                 }));
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
+        // Client also needs all entities resent to them, since those are unloaded as well
+        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, Math.min(MinecraftServer.getChunkViewDistance(), settings.getViewDistance()),
+                EntityTracker.Target.ENTITIES, entity -> {
+                    // Skip refreshing self with a new viewer
+                    if (!entity.getUuid().equals(uuid)) {
+                        entity.updateNewViewer(this);
+                    }
+                });
         teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
     }
 
@@ -560,6 +568,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return AsyncUtils.VOID_FUTURE;
         }
         // Must update the player chunks
+        chunkUpdateLimitChecker.clearHistory();
         final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
@@ -650,6 +659,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkX = spawnPosition.chunkX();
             final int chunkZ = spawnPosition.chunkZ();
             chunksLoadedByClient = new Vec(chunkX, chunkZ);
+            chunkUpdateLimitChecker.addToHistory(getChunk());
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
             ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
         }
@@ -954,7 +964,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), "minestom:world",
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true);
 
         sendPacket(removePlayerPacket);
@@ -1327,7 +1337,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType.toString(), "minestom:world",
+        sendPacket(new RespawnPacket(dimensionType.toString(), getDimensionType().getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true));
         refreshClientStateAfterRespawn();
     }
@@ -2064,6 +2074,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
+    @Override
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+        chunkUpdateLimitChecker.clearHistory();
+        return super.teleport(position, chunks);
+    }
+
     /**
      * Represents the main or off hand of the player.
      */
@@ -2174,7 +2190,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
-            this.viewDistance = viewDistance;
+            // Clamp viewDistance to valid bounds
+            this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
             this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
             this.displayedSkinParts = displayedSkinParts;

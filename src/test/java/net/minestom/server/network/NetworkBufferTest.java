@@ -18,6 +18,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class NetworkBufferTest {
 
     @Test
+    public void resize() {
+        var buffer = new NetworkBuffer(6);
+        buffer.write(INT, 6);
+        assertEquals(4, buffer.writeIndex());
+
+        buffer.write(INT, 7);
+        assertEquals(8, buffer.writeIndex());
+
+        assertEquals(6, buffer.read(INT));
+        assertEquals(7, buffer.read(INT));
+
+        // Test one-off length
+        buffer = new NetworkBuffer(1);
+        buffer.write(BYTE, (byte) 3);
+        assertEquals(1, buffer.writeIndex());
+
+        buffer.write(BYTE, (byte) 4);
+        assertEquals(2, buffer.writeIndex());
+
+        assertEquals((byte) 3, buffer.read(BYTE));
+        assertEquals((byte) 4, buffer.read(BYTE));
+    }
+
+    @Test
     public void readableBytes() {
         var buffer = new NetworkBuffer();
         assertEquals(0, buffer.readableBytes());
@@ -263,6 +287,20 @@ public class NetworkBufferTest {
             var bytes = new byte[expected.length];
             buffer.copyTo(0, bytes, 0, bytes.length);
             assertArrayEquals(expected, bytes, "Invalid bytes: " + Arrays.toString(expected) + " != " + Arrays.toString(bytes));
+        }
+
+        // Ensure resize support
+        {
+            var tmp = new NetworkBuffer(0);
+            action.write(tmp, type, value);
+            assertEquals(0, tmp.readIndex());
+            if (expected != null) assertEquals(expected.length, tmp.writeIndex());
+
+            var tmpRead = action.read(tmp, type);
+
+            assertEquals(value, tmpRead);
+            if (expected != null) assertEquals(expected.length, tmp.readIndex(), "Invalid read index");
+            if (expected != null) assertEquals(expected.length, tmp.writeIndex());
         }
     }
 

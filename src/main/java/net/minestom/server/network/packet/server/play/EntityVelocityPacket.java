@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.SHORT;
@@ -16,7 +17,12 @@ public record EntityVelocityPacket(int entityId, short velocityX, short velocity
     }
 
     public EntityVelocityPacket(int entityId, Point velocity) {
-        this(entityId, (short) velocity.x(), (short) velocity.y(), (short) velocity.z());
+        this(
+                entityId,
+                (short) MathUtils.clamp(velocity.x(), Short.MIN_VALUE, Short.MAX_VALUE),
+                (short) MathUtils.clamp(velocity.y(), Short.MIN_VALUE, Short.MAX_VALUE),
+                (short) MathUtils.clamp(velocity.z(), Short.MIN_VALUE, Short.MAX_VALUE)
+        );
     }
 
     @Override

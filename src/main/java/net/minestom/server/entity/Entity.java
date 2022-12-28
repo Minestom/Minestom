@@ -350,9 +350,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the view of the entity so that it looks in a direction to the given entity.
      *
      * @param entity the entity to look at.
+     * @throws IllegalArgumentException if the entities are not in the same instance
      */
     public void lookAt(@NotNull Entity entity) {
-        Check.argCondition(entity.instance != instance, "Entity can look at another entity that is within it's own instance");
+        Check.argCondition(entity.instance != instance, "Entity cannot look at an entity in another instance");
         lookAt(entity.position.withY(entity.position.y() + entity.getEyeHeight()));
     }
 

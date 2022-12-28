@@ -57,13 +57,13 @@ public class DimensionType {
     private final int minY;
     private final int height;
     private final int logicalHeight;
-    private final int coordinateScale;
+    private final double coordinateScale;
     private final NamespaceID infiniburn;
 
     DimensionType(NamespaceID name, boolean natural, float ambientLight, boolean ceilingEnabled,
                   boolean skylightEnabled, @Nullable Long fixedTime, boolean raidCapable,
                   boolean respawnAnchorSafe, boolean ultrawarm, boolean bedSafe, String effects, boolean piglinSafe,
-                  int minY, int height, int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
+                  int minY, int height, int logicalHeight, double coordinateScale, NamespaceID infiniburn) {
         this.name = name;
         this.natural = natural;
         this.ambientLight = ambientLight;
@@ -105,7 +105,7 @@ public class DimensionType {
                 .effects(nbt.getString("effects"))
                 .piglinSafe(nbt.getByte("piglin_safe") != 0)
                 .logicalHeight(nbt.getInt("logical_height"))
-                .coordinateScale(nbt.getInt("coordinate_scale"))
+                .coordinateScale(nbt.getDouble("coordinate_scale"))
                 .build();
     }
 
@@ -134,7 +134,7 @@ public class DimensionType {
             nbt.setInt("min_y", minY);
             nbt.setInt("height", height);
             nbt.setInt("logical_height", logicalHeight);
-            nbt.setInt("coordinate_scale", coordinateScale);
+            nbt.setDouble("coordinate_scale", coordinateScale);
             nbt.setString("name", name.toString());
             nbt.setInt("monster_spawn_block_light_limit", 0);
             nbt.setInt("monster_spawn_light_level", 11);
@@ -220,7 +220,7 @@ public class DimensionType {
         return this.logicalHeight;
     }
 
-    public int getCoordinateScale() {
+    public double getCoordinateScale() {
         return this.coordinateScale;
     }
 
@@ -264,7 +264,7 @@ public class DimensionType {
         private int minY = SizesKt.getVanillaMinY();
         private int logicalHeight = SizesKt.getVanillaMaxY() - SizesKt.getVanillaMinY() + 1;
         private int height = SizesKt.getVanillaMaxY() - SizesKt.getVanillaMinY() + 1;
-        private int coordinateScale = 1;
+        private double coordinateScale = 1.0;
         private NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
 
         DimensionTypeBuilder() {
@@ -345,7 +345,7 @@ public class DimensionType {
             return this;
         }
 
-        public DimensionType.DimensionTypeBuilder coordinateScale(int coordinateScale) {
+        public DimensionType.DimensionTypeBuilder coordinateScale(double coordinateScale) {
             this.coordinateScale = coordinateScale;
             return this;
         }

@@ -114,28 +114,30 @@ final class NetworkBufferTypes {
             (buffer, boxed) -> {
                 final int value = boxed;
                 final int index = buffer.writeIndex();
-                var nio = buffer.nioBuffer;
                 if ((value & (0xFFFFFFFF << 7)) == 0) {
                     buffer.ensureSize(1);
-                    nio.put(index, (byte) value);
+                    buffer.nioBuffer.put(index, (byte) value);
                     return 1;
                 } else if ((value & (0xFFFFFFFF << 14)) == 0) {
                     buffer.ensureSize(2);
-                    nio.putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
+                    buffer.nioBuffer.putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
                     return 2;
                 } else if ((value & (0xFFFFFFFF << 21)) == 0) {
                     buffer.ensureSize(3);
+                    var nio = buffer.nioBuffer;
                     nio.put(index, (byte) (value & 0x7F | 0x80));
                     nio.put(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
                     nio.put(index + 2, (byte) (value >>> 14));
                     return 3;
                 } else if ((value & (0xFFFFFFFF << 28)) == 0) {
                     buffer.ensureSize(4);
+                    var nio = buffer.nioBuffer;
                     nio.putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
                             | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
                     return 4;
                 } else {
                     buffer.ensureSize(5);
+                    var nio = buffer.nioBuffer;
                     nio.putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
                             | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
                     nio.put(index + 4, (byte) (value >>> 28));

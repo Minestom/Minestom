@@ -170,7 +170,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
         }
     }
 
-    public record AddEntitiesToTeamAction(Collection<String> entities) implements Action {
+    public record AddEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
         public AddEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
@@ -190,7 +190,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
         }
     }
 
-    public record RemoveEntitiesToTeamAction(@NotNull List<@NotNull String> entities) implements Action {
+    public record RemoveEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
         public RemoveEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }

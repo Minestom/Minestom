@@ -256,7 +256,8 @@ public final class NetworkBuffer {
     void ensureSize(int length) {
         if (!resizable) return;
         if (nioBuffer.capacity() < writeIndex + length) {
-            ByteBuffer newBuffer = ByteBuffer.allocateDirect(nioBuffer.capacity() * 2);
+            final int newCapacity = Math.max(nioBuffer.capacity() * 2, writeIndex + length);
+            ByteBuffer newBuffer = ByteBuffer.allocateDirect(newCapacity);
             nioBuffer.position(0);
             newBuffer.put(nioBuffer);
             nioBuffer = newBuffer.clear();

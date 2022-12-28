@@ -175,14 +175,17 @@ final class BlockCollision {
                                     @NotNull SweepResult finalResult) {
         // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
         for (Vec point : allFaces) {
-            BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, (int) Math.ceil(velocity.length()));
-            while (iterator.hasNext()) {
+            BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, velocity.length());
+            int timer = -1;
+
+            while (iterator.hasNext() && timer != 0) {
                 Point p = iterator.next();
-                // sqrt 3 (1.733) is the maximum error
-                if (Vec.fromPoint(p.sub(entityPosition)).length() > (finalResult.res * velocity.length() + 1.733))
-                    break;
+
+                // If we hit a block, there are at most 3 other blocks that could be closer
                 if (checkBoundingBox(p.blockX(), p.blockY(), p.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult))
-                    break;
+                    timer = 3;
+
+                timer--;
             }
         }
     }
@@ -201,43 +204,44 @@ final class BlockCollision {
             // There are 8 of these combinations
             // Checks can be limited by checking if we moved across an axis line
 
-            // Pass through (0, 0, 0)
+            boolean needsX = pointBefore.x() != pointAfter.x();
+            boolean needsY = pointBefore.y() != pointAfter.y();
+            boolean needsZ = pointBefore.z() != pointAfter.z();
+
             checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
 
-            if (pointBefore.blockX() != pointAfter.blockX()) {
-                // Pass through (+1, 0, 0)
+            if (needsX && needsY && needsZ) {
+                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+
+                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+
                 checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                // Checks for moving through 4 blocks
-                if (pointBefore.blockY() != pointAfter.blockY())
-                    // Pass through (+1, +1, 0)
-                    checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-
-                if (pointBefore.blockZ() != pointAfter.blockZ())
-                    // Pass through (+1, 0, +1)
-                    checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            }
-
-            if (pointBefore.blockY() != pointAfter.blockY()) {
-                // Pass through (0, +1, 0)
                 checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            } else if (needsX && needsY) {
+                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
 
-                // Checks for moving through 4 blocks
-                if (pointBefore.blockZ() != pointAfter.blockZ())
-                    // Pass through (0, +1, +1)
-                    checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-            }
+                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            } else if (needsX && needsZ) {
+                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
 
-            if (pointBefore.blockZ() != pointAfter.blockZ()) {
-                // Pass through (0, 0, +1)
+                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            } else if (needsY && needsZ) {
+                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+
+                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            } else if (needsX) {
+                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            } else if (needsY) {
+                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            } else if (needsZ) {
                 checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
             }
-
-            // Pass through (+1, +1, +1)
-            if (pointBefore.blockX() != pointAfter.blockX()
-                    && pointBefore.blockY() != pointAfter.blockY()
-                    && pointBefore.blockZ() != pointAfter.blockZ())
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
         }
     }
 
