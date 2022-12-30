@@ -101,6 +101,22 @@ public class Main {
         MinecraftServer.getGlobalEventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
             event.setCancelled(true);
         });
+
+        FakePlayer.initPlayer(UUID.randomUUID(), "TEST", new FakePlayerOption().setInTabList(false).setRegistered(false), fakePlayer -> {
+            fakePlayer.setSkin(PlayerSkin.fromUsername("ArizeFreddi"));
+            Player.PlayerSettings old = fakePlayer.getSettings();
+          /*  fakePlayer.getSettings().refresh(
+                    old.getLocale(),
+                    old.getViewDistance(),
+                    old.getChatMessageType(),
+                    old.hasChatColors(),
+                    (byte) 127,
+                    old.getMainHand(),
+                    old.enableTextFiltering(),
+                    old.allowServerListings()
+            );*/
+        });
+
         PlayerInit.init();
 
         OptifineSupport.enable();
