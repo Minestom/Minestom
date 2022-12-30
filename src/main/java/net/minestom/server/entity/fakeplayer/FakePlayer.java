@@ -6,7 +6,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.Instance;
@@ -63,6 +62,16 @@ public class FakePlayer extends Player implements NavigableEntity {
                             if (event.isFirstSpawn()) {
                                 spawnCallback.accept(this);
                                 MinecraftServer.getGlobalEventHandler().removeListener(spawnListener);
+                                getSettings().refresh(
+                                        getSettings().getLocale(),
+                                        getSettings().getViewDistance(),
+                                        getSettings().getChatMessageType(),
+                                        getSettings().hasChatColors(),
+                                        (byte) 127,
+                                        getSettings().getMainHand(),
+                                        getSettings().enableTextFiltering(),
+                                        getSettings().allowServerListings()
+                                );
                             }
                     }).build();
             MinecraftServer.getGlobalEventHandler().addListener(spawnListener);
