@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -14,8 +15,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode, GameMode previousGameMode,
                              List<String> worlds, NBTCompound dimensionCodec, String dimensionType, String world,
                              long hashedSeed, int maxPlayers, int viewDistance, int simulationDistance,
-                             boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug,
-                             boolean isFlat) implements ServerPacket {
+                             boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug, boolean isFlat,
+                             JoinGamePacket.DeathLocation deathLocation) implements ServerPacket {
     public JoinGamePacket {
         worlds = List.copyOf(worlds);
     }
@@ -24,7 +25,8 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         this(reader.read(VAR_INT), reader.read(BOOLEAN), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
                 reader.readCollection(STRING), (NBTCompound) reader.read(NBT), reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT),
-                reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN));
+                reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN),
+                reader.read(BOOLEAN) ? new DeathLocation(reader.read(STRING), reader.read(BLOCK_POSITION)) : null);
     }
 
     @Override
@@ -54,12 +56,23 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         //is flat
         writer.write(BOOLEAN, isFlat);
 
-        writer.write(BOOLEAN, false);
+        if (deathLocation() == null) {
+            writer.write(BOOLEAN, false);
+        }
+        else {
+            writer.write(BOOLEAN, true);
+            writer.write(STRING, deathLocation().dimension());
+            writer.write(BLOCK_POSITION, deathLocation().position());
+        }
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.JOIN_GAME;
+    }
+
+    public record DeathLocation(@NotNull String dimension, @NotNull Point position) {
+
     }
 
 }
