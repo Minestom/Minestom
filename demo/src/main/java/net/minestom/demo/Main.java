@@ -8,7 +8,14 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.fakeplayer.FakePlayerOption;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -19,6 +26,7 @@ import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public class Main {
 
@@ -98,6 +106,15 @@ public class Main {
             //responseData.setPlayersHidden(true);
         });
 
+        MinecraftServer.getGlobalEventHandler().addListener(InventoryPreClickEvent.class, event -> {
+            Player player = event.getPlayer();
+            player.sendMessage("Inventory: " + event.getInventory());
+            player.sendMessage("ClickedItem: " + event.getClickedItem());
+            player.sendMessage("Slot: " + event.getSlot());
+            player.sendMessage("ClickType: " + event.getClickType());
+            player.sendMessage("CursorItem: " + event.getCursorItem());
+        });
+
         MinecraftServer.getGlobalEventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
             event.setCancelled(true);
         });
@@ -124,7 +141,7 @@ public class Main {
         //VelocityProxy.enable("rBeJJ79W4MVU");
         //BungeeCordProxy.enable();
 
-        //MojangAuth.init();
+        MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));

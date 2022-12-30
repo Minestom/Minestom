@@ -1,6 +1,7 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
@@ -23,6 +24,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.item.ItemHideFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.BundleMeta;
@@ -107,9 +109,16 @@ public class PlayerInit {
                         .meta(BundleMeta.class, bundleMetaBuilder -> {
                             bundleMetaBuilder.addItem(ItemStack.of(Material.DIAMOND, 5));
                             bundleMetaBuilder.addItem(ItemStack.of(Material.RABBIT_FOOT, 5));
+                            bundleMetaBuilder.lore(Component.text("TEST")
+                                    .decoration(TextDecoration.ITALIC, false));
+                            bundleMetaBuilder.hideFlag(ItemHideFlag.values());
                         })
                         .build();
                 player.getInventory().addItemStack(bundle);
+
+            })
+            .addListener(PlayerSettingsChangeEvent.class, event -> {
+                event.getPlayer().sendMessage(event.getPlayer().getSettings().getDisplayedSkinParts() + " Byte");
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
