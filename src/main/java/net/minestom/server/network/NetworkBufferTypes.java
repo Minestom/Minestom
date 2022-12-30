@@ -510,8 +510,7 @@ final class NetworkBufferTypes {
             (buffer, value) -> {
                 if (value == null) {
                     buffer.write(BOOLEAN, false);
-                }
-                else {
+                } else {
                     buffer.write(BOOLEAN, true);
                     buffer.write(STRING, value.dimension());
                     buffer.write(BLOCK_POSITION, value.position());
