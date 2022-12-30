@@ -13,7 +13,7 @@ public record RespawnPacket(String dimensionType, String worldName,
                             boolean isDebug, boolean isFlat, boolean copyMeta) implements ServerPacket {
     public RespawnPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.read(STRING),
-                reader.read(LONG), GameMode.values()[reader.read(BYTE)], GameMode.values()[reader.read(BYTE)],
+                reader.read(LONG), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
                 reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN));
     }
 
