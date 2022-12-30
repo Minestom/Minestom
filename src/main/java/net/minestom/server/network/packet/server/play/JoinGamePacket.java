@@ -22,7 +22,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
     }
 
     public JoinGamePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(BOOLEAN), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
+        this(reader.read(INT), reader.read(BOOLEAN), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
                 reader.readCollection(STRING), (NBTCompound) reader.read(NBT), reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT),
                 reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN),
