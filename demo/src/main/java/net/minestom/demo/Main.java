@@ -98,6 +98,9 @@ public class Main {
             //responseData.setPlayersHidden(true);
         });
 
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
+            event.setCancelled(true);
+        });
         PlayerInit.init();
 
         OptifineSupport.enable();
