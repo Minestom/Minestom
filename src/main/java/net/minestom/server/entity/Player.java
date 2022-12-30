@@ -55,6 +55,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -252,7 +253,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
 
         // TODO: Add some way to determine last death location
-        final JoinGamePacket.DeathLocation deathLocation = null;
+        final DeathLocation deathLocation = null;
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
                 List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
