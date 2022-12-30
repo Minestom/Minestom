@@ -4,6 +4,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -15,7 +16,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
                              List<String> worlds, NBTCompound dimensionCodec, String dimensionType, String world,
                              long hashedSeed, int maxPlayers, int viewDistance, int simulationDistance,
                              boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug, boolean isFlat,
-                             JoinGamePacket.DeathLocation deathLocation) implements ServerPacket {
+                             DeathLocation deathLocation) implements ServerPacket {
     public JoinGamePacket {
         worlds = List.copyOf(worlds);
     }
@@ -25,7 +26,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
                 reader.readCollection(STRING), (NBTCompound) reader.read(NBT), reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT),
                 reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN),
-                reader.read(BOOLEAN) ? new DeathLocation(reader.read(STRING), reader.read(BLOCK_POSITION)) : null);
+                reader.read(DEATH_LOCATION));
     }
 
     @Override
@@ -55,14 +56,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         //is flat
         writer.write(BOOLEAN, isFlat);
 
-        if (deathLocation() == null) {
-            writer.write(BOOLEAN, false);
-        }
-        else {
-            writer.write(BOOLEAN, true);
-            writer.write(STRING, deathLocation().dimension());
-            writer.write(BLOCK_POSITION, deathLocation().position());
-        }
+        writer.write(DEATH_LOCATION, deathLocation);
     }
 
     @Override
