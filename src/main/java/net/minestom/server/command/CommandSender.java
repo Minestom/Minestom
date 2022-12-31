@@ -1,7 +1,5 @@
 package net.minestom.server.command;
 
-import java.util.UUID;
-
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.text.Component;
