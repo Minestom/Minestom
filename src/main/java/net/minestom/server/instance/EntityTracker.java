@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ExperienceOrb;
@@ -55,7 +56,7 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
      * Gets the entities within a chunk range.
      */
     <T extends Entity> void nearbyEntitiesByChunkRange(@NotNull Point point, int chunkRange,
-                                           @NotNull Target<T> target, @NotNull Consumer<T> query);
+                                                       @NotNull Target<T> target, @NotNull Consumer<T> query);
 
     /**
      * Gets the entities within a range.
@@ -72,6 +73,12 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     @UnmodifiableView
     default @NotNull Set<@NotNull Entity> entities() {
         return entities(Target.ENTITIES);
+    }
+
+    @NotNull Viewable viewable(@NotNull List<@NotNull SharedInstance> sharedInstances, int chunkX, int chunkZ);
+
+    default @NotNull Viewable viewable(int chunkX, int chunkZ) {
+        return viewable(List.of(), chunkX, chunkZ);
     }
 
     /**
