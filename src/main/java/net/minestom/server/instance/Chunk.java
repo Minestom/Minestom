@@ -49,7 +49,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    private final ChunkView viewers;
+    private final Viewable viewable;
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
@@ -65,7 +65,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.shouldGenerate = shouldGenerate;
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
-        this.viewers = new ChunkView(instance, toPosition());
+        final List<SharedInstance> shared = instance instanceof InstanceContainer instanceContainer ?
+                instanceContainer.getSharedInstances() : List.of();
+        this.viewable = instance.getEntityTracker().viewable(shared, chunkX, chunkZ);
     }
 
     /**
@@ -267,17 +269,17 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        return viewable.addViewer(player);
     }
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        return viewable.removeViewer(player);
     }
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        return viewers.set;
+        return viewable.getViewers();
     }
 
     @Override

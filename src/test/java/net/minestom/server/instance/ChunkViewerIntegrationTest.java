@@ -1,11 +1,11 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,7 +30,8 @@ public class ChunkViewerIntegrationTest {
         assertEquals(0, chunk.getViewers().size());
 
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
-        assertEquals(1, chunk.getViewers().size());
+        assertEquals(1, chunk.getViewers().size(), sharedInstance ?
+                "Chunk viewer set must include players from shared instance" : "Instance should have 1 viewer");
         assertEquals(player, chunk.getViewers().iterator().next());
     }
 
