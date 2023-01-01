@@ -361,7 +361,7 @@ public class AnvilLoader implements IChunkLoader {
         return blockStateId2ObjectCacheTLS.get().computeIfAbsent(block.stateId(), _unused -> new BlockState(block.name(), block.properties()));
     }
 
-    private Path getPath() {
+    public Path getPath() {
         return this.path;
     }
 
