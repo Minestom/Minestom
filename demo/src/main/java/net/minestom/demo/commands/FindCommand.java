@@ -33,7 +33,7 @@ public class FindCommand extends Command {
         for (Entity entity : entities) {
             player.sendMessage("    " + entity.getEntityType() + ": ");
             player.sendMessage("        Meta: " + entity.getEntityMeta());
-            player.sendMessage("        Permissions: " + entity.getAllPermissions());
+//            player.sendMessage("        Permissions: " + entity.getAllPermissions());
             player.sendMessage("        Position: " + entity.getPosition());
         }
 

@@ -6,14 +6,9 @@ metadata.format.version = "1.1"
 adventure = "4.12.0"
 kotlin = "1.7.22"
 hydrazine = "1.7.2"
-dependencyGetter = "v1.0.1"
 minestomData = "53e0da5be1"
 hephaistos = "2.5.3"
 jetbrainsAnnotations = "23.0.0"
-
-# Terminal / Logging
-tinylog = "2.5.0"
-jline = "3.21.0"
 
 # Performance / Data Structures
 caffeine = "3.1.2"
@@ -58,18 +53,8 @@ kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk
 
 # Miscellaneous
 hydrazine = { group = "com.github.MadMartian", name = "hydrazine-path-finding", version.ref = "hydrazine" }
-dependencyGetter = { group = "com.github.Minestom", name = "DependencyGetter", version.ref = "dependencyGetter" }
 minestomData = { group = "com.github.Minestom", name = "MinestomDataGenerator", version.ref = "minestomData" }
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
-
-# Logging
-tinylog-api = { group = "org.tinylog", name = "tinylog-api", version.ref = "tinylog" }
-tinylog-impl = { group = "org.tinylog", name = "tinylog-impl", version.ref = "tinylog" }
-tinylog-slf4j = { group = "org.tinylog", name = "slf4j-tinylog", version.ref = "tinylog" }
-
-# Terminal
-jline = { group = "org.jline", name = "jline", version.ref = "jline" }
-jline-jansi = { group = "org.jline", name = "jline-terminal-jansi", version.ref = "jline" }
 
 # Performance / Data Structures
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
@@ -105,8 +90,6 @@ jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", versio
 kotlin = ["kotlin-stdlib-jdk8", "kotlin-reflect"]
 flare = ["flare", "flare-fastutil"]
 adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
-logging = ["tinylog-api", "tinylog-impl", "tinylog-slf4j"]
-terminal = ["jline", "jline-jansi"]
 
 [plugins]
 

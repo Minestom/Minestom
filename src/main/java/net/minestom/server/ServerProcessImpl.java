@@ -23,7 +23,6 @@ import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
-import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
@@ -215,9 +214,6 @@ final class ServerProcessImpl implements ServerProcess {
 
         LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
 
-        if (MinecraftServer.isTerminalEnabled()) {
-            MinestomTerminal.start();
-        }
         // Stop the server on SIGINT
         Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
@@ -232,7 +228,6 @@ final class ServerProcessImpl implements ServerProcess {
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
-        MinestomTerminal.stop();
         dispatcher.shutdown();
         LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
     }

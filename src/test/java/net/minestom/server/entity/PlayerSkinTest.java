@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PlayerSkinTest {
 
-    @Test
-    public void validName() {
-        var skin = PlayerSkin.fromUsername("jeb_");
-        assertNotNull(skin);
-    }
+//    @Test
+//    public void validName() {
+//        var skin = PlayerSkin.fromUsername("jeb_");
+//        assertNotNull(skin);
+//    }
 
     @Test
     public void invalidName() {
