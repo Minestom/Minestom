@@ -37,7 +37,7 @@ public class PlayerItemAnimationEvent implements PlayerInstanceEvent, Cancellabl
      *
      * @return the hand
      */
-    public Player.Hand getHand() {
+    public @NotNull Player.Hand getHand() {
         return hand;
     }
 
