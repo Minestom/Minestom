@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.NetworkBuffer;
@@ -123,7 +124,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder displayName(@Nullable Component displayName) {
-            return set(ItemTags.NAME, displayName);
+            return set(ItemTags.NAME, Component.empty().decoration(TextDecoration.ITALIC, false).append(displayName));
         }
 
         @Contract("_ -> this")

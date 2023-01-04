@@ -98,6 +98,7 @@ public class PlayerInit {
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
+                        .displayName(Component.text("Stones ;)"))
                         .amount(64)
                         .meta(itemMetaBuilder ->
                                 itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
@@ -118,7 +119,7 @@ public class PlayerInit {
 
             })
             .addListener(PlayerSettingsChangeEvent.class, event -> {
-                event.getPlayer().sendMessage(event.getPlayer().getSettings().getDisplayedSkinParts() + " Byte");
+                //event.getPlayer().sendMessage(event.getPlayer().getSettings().getDisplayedSkinParts() + " Byte");
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
