@@ -83,11 +83,14 @@ public class BlockPlacementListener {
             canPlaceBlock = usedItem.meta().canPlaceOn(interactedBlock);
         }
 
+
         // Get the newly placed block position
         final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
         final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
         final int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
         final Point placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
+
+        if(placementPosition.y() >= instance.getDimensionType().getMaxY()) return;
 
         if (!canPlaceBlock) {
             // Send a block change with the real block in the instance to keep the client in sync,
@@ -127,8 +130,6 @@ public class BlockPlacementListener {
             refresh(player, chunk);
             return;
         }
-
-        if(placementPosition.y() >= instance.getDimensionType().getMaxY()) return;
 
         // BlockPlacementRule check
         Block resultBlock = playerBlockPlaceEvent.getBlock();
