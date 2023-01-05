@@ -28,6 +28,7 @@ import net.minestom.server.utils.validate.Check;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
+    private static final double BLOCK_HEIGHT = 320.0;
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
@@ -131,7 +132,7 @@ public class BlockPlacementListener {
         // BlockPlacementRule check
         Block resultBlock = playerBlockPlaceEvent.getBlock();
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-        if(placementPosition.y() >= 320) return;
+        if(placementPosition.y() >= BLOCK_HEIGHT) return;
         if (blockPlacementRule != null) {
             // Get id from block placement rule instead of the event
             resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
