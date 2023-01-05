@@ -129,10 +129,11 @@ public class BlockPlacementListener {
             return;
         }
 
+        if(placementPosition.y() >= BLOCK_HEIGHT) return;
+
         // BlockPlacementRule check
         Block resultBlock = playerBlockPlaceEvent.getBlock();
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-        if(placementPosition.y() >= BLOCK_HEIGHT) return;
         if (blockPlacementRule != null) {
             // Get id from block placement rule instead of the event
             resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
