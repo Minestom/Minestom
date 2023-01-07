@@ -138,7 +138,8 @@ public final class PlayerDiggingListener {
             player.refreshActiveHand(true, false, false);
         } else {
             final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-            player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffHand, false);
+            player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
+                    isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
         }
     }
 
