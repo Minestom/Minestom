@@ -234,7 +234,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the leggings.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata">LivingEntityMeta</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata">LivingEntityMeta</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLivingEntityMeta()" class="member-name-link">getLivingEntityMeta</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets <a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>EntityMeta</code></a> of this entity casted to <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>LivingEntityMeta</code></a>.</div>
@@ -249,12 +249,12 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets an <a href="../network/packet/server/play/EntityPropertiesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityPropertiesPacket</code></a> for this entity with all of its attributes values.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTargetBlockPosition(int)" class="member-name-link">getTargetBlockPosition</a><wbr>(int&nbsp;maxDistance)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the target (not-air) block position of the entity.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeam()" class="member-name-link">getTeam</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> of the entity.</div>
@@ -393,7 +393,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Changes the leggings.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTeam(net.minestom.server.scoreboard.Team)" class="member-name-link">setTeam</a><wbr>(<a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTeam(net.minestom.server.scoreboard.Team)" class="member-name-link">setTeam</a><wbr>(@Nullable <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> for the entity.</div>
 </div>
@@ -1129,7 +1129,8 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <li>
 <section class="detail" id="setTeam(net.minestom.server.scoreboard.Team)">
 <h3>setTeam</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTeam</span><wbr><span class="parameters">(<a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTeam</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</span></div>
 <div class="block">Changes the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> for the entity.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1140,7 +1141,8 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <li>
 <section class="detail" id="getTeam()">
 <h3>getTeam</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></span>&nbsp;<span class="element-name">getTeam</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></span>&nbsp;<span class="element-name">getTeam</span>()</div>
 <div class="block">Gets the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> of the entity.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1151,7 +1153,8 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <li>
 <section class="detail" id="getTargetBlockPosition(int)">
 <h3>getTargetBlockPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getTargetBlockPosition</span><wbr><span class="parameters">(int&nbsp;maxDistance)</span></div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getTargetBlockPosition</span><wbr><span class="parameters">(int&nbsp;maxDistance)</span></div>
 <div class="block">Gets the target (not-air) block position of the entity.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1164,7 +1167,8 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <li>
 <section class="detail" id="getLivingEntityMeta()">
 <h3>getLivingEntityMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata">LivingEntityMeta</a></span>&nbsp;<span class="element-name">getLivingEntityMeta</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata">LivingEntityMeta</a></span>&nbsp;<span class="element-name">getLivingEntityMeta</span>()</div>
 <div class="block">Gets <a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>EntityMeta</code></a> of this entity casted to <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>LivingEntityMeta</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
