@@ -422,8 +422,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return the last damage source, null if not any
      */
-    @Nullable
-    public DamageType getLastDamageSource() {
+    public @Nullable DamageType getLastDamageSource() {
         return lastDamageSource;
     }
 
@@ -626,7 +625,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param team The new team
      */
-    public void setTeam(Team team) {
+    public void setTeam(@Nullable Team team) {
         if (this.team == team) return;
         String member = this instanceof Player player ? player.getUsername() : uuid.toString();
         if (this.team != null) {
@@ -643,7 +642,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return the {@link Team}
      */
-    public Team getTeam() {
+    public @Nullable Team getTeam() {
         return team;
     }
 
@@ -653,7 +652,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param maxDistance The max distance to scan before returning null
      * @return The block position targeted by this entity, null if non are found
      */
-    public Point getTargetBlockPosition(int maxDistance) {
+    public @Nullable Point getTargetBlockPosition(int maxDistance) {
         Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
@@ -667,7 +666,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return null if meta of this entity does not inherit {@link LivingEntityMeta}, casted value otherwise.
      */
-    public LivingEntityMeta getLivingEntityMeta() {
+    public @Nullable LivingEntityMeta getLivingEntityMeta() {
         if (this.entityMeta instanceof LivingEntityMeta) {
             return (LivingEntityMeta) this.entityMeta;
         }
