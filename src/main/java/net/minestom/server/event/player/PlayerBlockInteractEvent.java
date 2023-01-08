@@ -30,7 +30,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     private boolean cancelled;
 
     public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                    @NotNull Block block, @NotNull Point blockPosition,
+                                    @NotNull Block block, @NotNull Point blockPosition, @NotNull Point cursorPosition,
                                     @NotNull BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
