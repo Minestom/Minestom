@@ -114,7 +114,7 @@ public class PacketWriteReadTest {
         final PlayerSkin skin = new PlayerSkin("hh", "hh");
         List<PlayerInfoUpdatePacket.Property> prop = List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature()));
         var entry =  new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "TheMode911", prop,
-                true, 5, GameMode.CREATIVE, Component.text("display"));
+                true, 5, GameMode.CREATIVE, Component.text("display"), null);
 
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, entry));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, entry));
