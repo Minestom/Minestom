@@ -34,7 +34,7 @@ public class FollowTargetGoal extends GoalSelector {
         Entity target = entityCreature.getTarget();
         if (target == null) target = findTarget();
         if (target == null) return false;
-        final boolean result = target.getPosition().distance(entityCreature.getPosition()) >= 2;
+        final boolean result = target.getPosition().distanceSquared(entityCreature.getPosition()) >= 2 * 2;
         if (result) {
             this.target = target;
         }
