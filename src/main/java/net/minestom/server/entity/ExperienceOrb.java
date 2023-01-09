@@ -99,10 +99,10 @@ public class ExperienceOrb extends Entity {
         Player closest = entity.getInstance()
                 .getPlayers()
                 .stream()
-                .min(Comparator.comparingDouble(a -> a.getDistance(entity)))
+                .min(Comparator.comparingDouble(a -> a.getDistanceSquared(entity)))
                 .orElse(null);
         if (closest == null) return null;
-        if (closest.getDistance(entity) > maxDistance) return null;
+        if (closest.getDistanceSquared(entity) > maxDistance * maxDistance) return null;
         return closest;
     }
 }
