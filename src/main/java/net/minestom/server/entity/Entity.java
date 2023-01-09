@@ -1000,6 +1000,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return getDistance(entity.getPosition());
     }
 
+    public double getDistanceSquared(@NotNull Point point) {
+        return getPosition().distanceSquared(point);
+    }
+
     /**
      * Gets the distance squared between two entities.
      *
