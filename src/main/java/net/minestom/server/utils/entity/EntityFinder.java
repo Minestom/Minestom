@@ -148,7 +148,7 @@ public class EntityFinder {
             final int minDistance = distance.getMinimum();
             final int maxDistance = distance.getMaximum();
             result = result.stream()
-                    .filter(entity -> MathUtils.isBetween(entity.getDistance(pos), minDistance, maxDistance))
+                    .filter(entity -> MathUtils.isBetween(entity.getPosition().distanceSquared(pos), minDistance * minDistance, maxDistance * maxDistance))
                     .toList();
         }
 
@@ -223,11 +223,11 @@ public class EntityFinder {
                         case ARBITRARY, RANDOM ->
                             // RANDOM is handled below
                                 1;
-                        case FURTHEST -> pos.distance(ent1.getPosition()) >
-                                pos.distance(ent2.getPosition()) ?
+                        case FURTHEST -> pos.distanceSquared(ent1.getPosition()) >
+                                pos.distanceSquared(ent2.getPosition()) ?
                                 1 : 0;
-                        case NEAREST -> pos.distance(ent1.getPosition()) <
-                                pos.distance(ent2.getPosition()) ?
+                        case NEAREST -> pos.distanceSquared(ent1.getPosition()) <
+                                pos.distanceSquared(ent2.getPosition()) ?
                                 1 : 0;
                     })
                     .limit(limit != null ? limit : Integer.MAX_VALUE)
@@ -311,7 +311,7 @@ public class EntityFinder {
                 instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             return players.stream()
-                    .min(Comparator.comparingDouble(p -> p.getPosition().distance(startPosition)))
+                    .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
                     .<List<Entity>>map(Collections::singletonList).orElse(List.of());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
             final int index = ThreadLocalRandom.current().nextInt(players.size());
