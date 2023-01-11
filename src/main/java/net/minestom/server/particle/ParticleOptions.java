@@ -73,7 +73,7 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
         }
     }
 
-    private sealed static class BlockStateOptions extends ParticleOptions permits Block, BlockMarker, FallingDust {
+    protected sealed static class BlockStateOptions extends ParticleOptions permits Block, BlockMarker, FallingDust {
 
         public BlockStateOptions(Particle particle, @NotNull net.minestom.server.instance.block.Block block) {
             super(particle);
