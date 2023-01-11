@@ -81,6 +81,9 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
         }
     }
 
+    /**
+     * Options for {@link Particle#BLOCK}
+     */
     public static final class Block extends BlockStateOptions {
 
         public Block(@NotNull net.minestom.server.instance.block.Block block) {
@@ -88,6 +91,9 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
         }
     }
 
+    /**
+     * Options for {@link Particle#BLOCK_MARKER}
+     */
     public static final class BlockMarker extends BlockStateOptions {
 
         public BlockMarker(@NotNull net.minestom.server.instance.block.Block block) {
@@ -95,6 +101,9 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
         }
     }
 
+    /**
+     * Options for {@link Particle#FALLING_DUST}
+     */
     public static final class FallingDust extends BlockStateOptions {
 
         public FallingDust(@NotNull net.minestom.server.instance.block.Block block) {
@@ -102,6 +111,9 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
         }
     }
 
+    /**
+     * Options for {@link Particle#ITEM}
+     */
     public static final class Item extends ParticleOptions {
 
         public Item(@NotNull ItemStack item) {
@@ -111,6 +123,9 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
 
     }
 
+    /**
+     * Options for {@link Particle#SCULK_CHARGE}
+     */
     public static final class SculkCharge extends ParticleOptions {
 
         public SculkCharge(float angle) {
@@ -120,6 +135,9 @@ public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, Du
         }
     }
 
+    /**
+     * Options for {@link Particle#SHRIEK}
+     */
     public static final class Shriek extends ParticleOptions {
 
         public Shriek(int ticks) {
