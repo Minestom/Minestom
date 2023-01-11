@@ -41,7 +41,8 @@ public class ParticleCreator {
                                                       float offsetX, float offsetY, float offsetZ,
                                                       float particleData, int count, @NotNull ParticleOptions options) {
 
-        Check.argCondition(particleType != options.type(), "ParticleOptions mismatch!");
+        Check.argCondition(particleType != options.type(), "Particle type ''{0}'' does not support Particle options ''{1}''",
+                particleType.namespace(), options.getClass().getSimpleName());
         return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, options.getData());
     }
 
