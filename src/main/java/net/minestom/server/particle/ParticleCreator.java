@@ -3,6 +3,7 @@ package net.minestom.server.particle;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -35,10 +36,10 @@ public class ParticleCreator {
     }
 
 
-    public static ParticlePacket createParticlePacket(Particle particleType, boolean distance,
+    public static ParticlePacket createParticlePacket(@NotNull Particle particleType, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
-                                                      float particleData, int count, ParticleOptions options) {
+                                                      float particleData, int count, @NotNull ParticleOptions options) {
 
         Check.argCondition(particleType != options.type(), "ParticleOptions mismatch!");
         return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, options.getData());
