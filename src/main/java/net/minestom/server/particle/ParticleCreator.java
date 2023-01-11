@@ -40,8 +40,7 @@ public class ParticleCreator {
                                                       float offsetX, float offsetY, float offsetZ,
                                                       float particleData, int count, ParticleOptions options) {
 
-
-        Check.argCondition(particleType == options.type(), "ParticleOptions is not applicable to Particle{0}", particleType.name());
+        Check.argCondition(particleType != options.type(), "ParticleOptions mismatch!");
         return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, options.getData());
     }
 
