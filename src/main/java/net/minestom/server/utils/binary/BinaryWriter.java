@@ -1,6 +1,7 @@
 package net.minestom.server.utils.binary;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
@@ -157,6 +158,12 @@ public class BinaryWriter extends OutputStream {
 
     public void writeBlockPosition(@NotNull Point point) {
         writeBlockPosition(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    public void writeColor(@NotNull Color color) {
+        writeFloat(color.red() / 255f);
+        writeFloat(color.green() / 255f);
+        writeFloat(color.blue() / 255f);
     }
 
     public void writeBlockPosition(int x, int y, int z) {
