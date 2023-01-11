@@ -2,147 +2,193 @@ package net.minestom.server.particle;
 
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.particle.ParticleOptions.*;
 
-public sealed abstract class ParticleOptions permits BlockStateOptions, Dust, DustColorTransition, Item, SculkCharge, Shriek, Vibration {
-    protected final BinaryWriter writer = new BinaryWriter();
-    private final Particle type;
+public sealed interface ParticleOptions extends Writeable permits ParticleOptions.Block, BlockMarker, Dust, DustColorTransition, FallingDust, Item, SculkCharge, Shriek, Vibration {
 
-    public ParticleOptions(Particle type) {
-        this.type = type;
-    }
+    Particle type();
 
-    public byte[] getData() {
-        return writer.toByteArray();
-    }
-
-    public Particle type() {
-        return type;
-    }
-    
     /**
      * Options for {@link Particle#DUST}
      */
-    public static final class Dust extends ParticleOptions {
+    record Dust(Color color, float scale) implements ParticleOptions {
 
-        public Dust(Color color, float scale) {
-            super(Particle.DUST);
+        @Override
+        public Particle type() {
+            return Particle.DUST;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeColor(color);
-            writer.writeFloat(Math.max(0.01f, Math.min(4f, scale)));
+            writer.writeFloat(Math.min(4f, scale));
         }
     }
 
     /**
      * Options for {@link Particle#DUST_COLOR_TRANSITION}
      */
-    public static final class DustColorTransition extends ParticleOptions {
+    record DustColorTransition(Color from, Color to, float scale) implements ParticleOptions {
 
-        public DustColorTransition(Color from, Color to, float scale) {
-            super(Particle.DUST_COLOR_TRANSITION);
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeColor(from);
             writer.writeFloat(Math.max(0.01f, Math.min(4f, scale)));
             writer.writeColor(to);
+        }
+
+        @Override
+        public Particle type() {
+            return Particle.DUST_COLOR_TRANSITION;
         }
     }
 
     /**
      * Options for {@link Particle#VIBRATION}
      */
-    public static final class Vibration extends ParticleOptions {
+    record Vibration(Target target, int ticks) implements ParticleOptions {
 
-        public Vibration(@NotNull Entity entity, int ticks) {
-            super(Particle.VIBRATION);
-            writer.writeSizedString("minecraft:entity");
-            writer.writeVarInt(entity.getEntityId());
-            writer.writeFloat((float) entity.getEyeHeight());
+        private sealed interface Target extends Writeable permits Block, Entity {}
+
+        public record Block(Point blockPosition) implements Target {
+
+            @Override
+            public void write(@NotNull BinaryWriter writer) {
+                writer.writeSizedString("minecraft:block");
+                writer.writeBlockPosition(blockPosition);
+            }
+        }
+
+        public record Entity(int entityId, float eyeHeight) implements Target {
+
+            public Entity(@NotNull net.minestom.server.entity.Entity e) {
+                this(e.getEntityId(), (float) e.getEyeHeight());
+            }
+
+            @Override
+            public void write(@NotNull BinaryWriter writer) {
+                writer.writeSizedString("minecraft:entity");
+                writer.writeVarInt(entityId);
+                writer.writeFloat(eyeHeight);
+            }
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            target.write(writer);
             writer.writeVarInt(ticks);
         }
 
-        public Vibration(@NotNull Point blockPosition, int ticks) {
-            super(Particle.VIBRATION);
-            writer.writeSizedString("minecraft:block");
-            writer.writeBlockPosition(blockPosition);
-            writer.writeVarInt(ticks);
-        }
-    }
-
-    protected sealed static class BlockStateOptions extends ParticleOptions permits Block, BlockMarker, FallingDust {
-
-        public BlockStateOptions(Particle particle, @NotNull net.minestom.server.instance.block.Block block) {
-            super(particle);
-            writer.writeVarInt(block.id());
+        @Override
+        public Particle type() {
+            return Particle.VIBRATION;
         }
     }
 
     /**
      * Options for {@link Particle#BLOCK}
      */
-    public static final class Block extends BlockStateOptions {
+    record Block(net.minestom.server.instance.block.Block block) implements ParticleOptions {
 
-        public Block(@NotNull net.minestom.server.instance.block.Block block) {
-            super(Particle.BLOCK, block);
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            writer.writeVarInt(block.id());
+        }
+
+        @Override
+        public Particle type() {
+            return Particle.BLOCK;
         }
     }
 
     /**
      * Options for {@link Particle#BLOCK_MARKER}
      */
-    public static final class BlockMarker extends BlockStateOptions {
+    record BlockMarker(net.minestom.server.instance.block.Block block) implements ParticleOptions {
 
-        public BlockMarker(@NotNull net.minestom.server.instance.block.Block block) {
-            super(Particle.BLOCK_MARKER, block);
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            writer.writeVarInt(block.id());
+        }
+
+        @Override
+        public Particle type() {
+            return Particle.BLOCK_MARKER;
         }
     }
 
     /**
      * Options for {@link Particle#FALLING_DUST}
      */
-    public static final class FallingDust extends BlockStateOptions {
+    record FallingDust(net.minestom.server.instance.block.Block block) implements ParticleOptions {
 
-        public FallingDust(@NotNull net.minestom.server.instance.block.Block block) {
-            super(Particle.FALLING_DUST, block);
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            writer.writeVarInt(block.id());
+        }
+
+        @Override
+        public Particle type() {
+            return Particle.FALLING_DUST;
         }
     }
 
     /**
      * Options for {@link Particle#ITEM}
      */
-    public static final class Item extends ParticleOptions {
+    record Item(ItemStack item) implements ParticleOptions {
 
-        public Item(@NotNull ItemStack item) {
-            super(Particle.ITEM);
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeItemStack(item);
         }
 
+        @Override
+        public Particle type() {
+            return Particle.ITEM;
+        }
     }
 
     /**
      * Options for {@link Particle#SCULK_CHARGE}
      */
-    public static final class SculkCharge extends ParticleOptions {
+    record SculkCharge(float angle) implements ParticleOptions {
 
-        public SculkCharge(float angle) {
-            super(Particle.SCULK_CHARGE);
-            Check.argCondition(MathUtils.isBetween(angle, 0, 2*Math.PI), "Angle is not within bounds");
+        public SculkCharge {
+            Check.argCondition(MathUtils.isBetween(angle, 0, 2 * Math.PI), "Angle is not within bounds");
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeFloat(angle);
+        }
+
+        @Override
+        public Particle type() {
+            return Particle.SCULK_CHARGE;
         }
     }
 
     /**
      * Options for {@link Particle#SHRIEK}
      */
-    public static final class Shriek extends ParticleOptions {
+    record Shriek(int ticks) implements ParticleOptions {
 
-        public Shriek(int ticks) {
-            super(Particle.SHRIEK);
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeVarInt(ticks);
+        }
+
+        @Override
+        public Particle type() {
+            return Particle.SHRIEK;
         }
     }
 }
