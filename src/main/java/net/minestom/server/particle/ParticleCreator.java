@@ -43,7 +43,7 @@ public class ParticleCreator {
 
         Check.argCondition(particleType != options.type(), "Particle type ''{0}'' does not support Particle options ''{1}''",
                 particleType.namespace(), options.getClass().getSimpleName());
-        return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, options.getData());
+        return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, options);
     }
 
 
@@ -52,6 +52,6 @@ public class ParticleCreator {
                                                       float offsetX, float offsetY, float offsetZ,
                                                       int count) {
         return new ParticlePacket(particleType.id(), distance, x, y, z,
-                offsetX, offsetY, offsetZ, 0, count, new byte[0]);
+                offsetX, offsetY, offsetZ, 0, count, (ParticleOptions) null);
     }
 }
