@@ -90,7 +90,8 @@ public class BlockPlacementListener {
         final int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
         final Point placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
-        if(placementPosition.y() >= instance.getDimensionType().getMaxY()) return;
+        if(placementPosition.y() >= instance.getDimensionType().getMaxY()
+                || placementPosition.y() <= instance.getDimensionType().getMinY()) return;
 
         if (!canPlaceBlock) {
             // Send a block change with the real block in the instance to keep the client in sync,
