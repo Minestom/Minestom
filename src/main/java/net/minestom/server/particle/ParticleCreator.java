@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ParticleCreator {
 
     /**
-     * @deprecated Use {@link #createParticlePacket(Particle, boolean, double, double, double, float, float, float, float, int, ParticleOptions)} instead
+     * @deprecated Use {@link #createParticlePacket(Particle, boolean, double, double, double, float, float, float, float, int, ParticleOption)} instead
      */
 
     @Deprecated(forRemoval = true)
@@ -39,7 +39,7 @@ public class ParticleCreator {
     public static ParticlePacket createParticlePacket(@NotNull Particle particleType, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
-                                                      float particleData, int count, ParticleOptions options) {
+                                                      float particleData, int count, ParticleOption options) {
 
         Check.argCondition(particleType != options.type(), "Particle type ''{0}'' does not support Particle options ''{1}''",
                 particleType.namespace(), options.getClass().getSimpleName());
@@ -52,6 +52,6 @@ public class ParticleCreator {
                                                       float offsetX, float offsetY, float offsetZ,
                                                       int count) {
         return new ParticlePacket(particleType.id(), distance, x, y, z,
-                offsetX, offsetY, offsetZ, 0, count, (ParticleOptions) null);
+                offsetX, offsetY, offsetZ, 0, count, (ParticleOption) null);
     }
 }
