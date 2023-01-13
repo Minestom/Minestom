@@ -39,7 +39,7 @@ public class ParticleCreator {
     public static ParticlePacket createParticlePacket(@NotNull Particle particleType, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
-                                                      float particleData, int count, @NotNull ParticleOptions options) {
+                                                      float particleData, int count, ParticleOptions options) {
 
         Check.argCondition(particleType != options.type(), "Particle type ''{0}'' does not support Particle options ''{1}''",
                 particleType.namespace(), options.getClass().getSimpleName());
