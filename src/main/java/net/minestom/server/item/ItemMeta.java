@@ -21,7 +21,6 @@ import java.util.function.Consumer;
 
 public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
         permits ItemMetaImpl {
-
     @Override
     <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
@@ -96,8 +95,6 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
             permits ItemMetaImpl.Builder, ItemMetaView.Builder {
         @NotNull ItemMeta build();
 
-        MiniMessage miniMessage = MiniMessage.builder().build();
-
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
             setTag(tag, value);
             return this;
@@ -131,23 +128,33 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
         }
 
         @Contract("_ -> this")
-        default @NotNull Builder displayName(@Nullable String displayName) {
-            return displayName(displayName == null ? null : miniMessage.deserialize(displayName));
+        default @NotNull Builder displayName(MiniMessage miniMessage, @Nullable String displayName) {
+            return displayName(displayName == null ? null : Component.empty().decoration(TextDecoration.ITALIC, false).append(miniMessage.deserialize(displayName)));
         }
 
         @Contract("_ -> this")
-        default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore));
+        default @NotNull Builder displayName(@Nullable String displayName) {
+            return displayName(MiniMessage.miniMessage(), displayName);
         }
 
         @Contract("_ -> this")
         default @NotNull Builder lore(String... lore) {
+            return lore(MiniMessage.miniMessage(), lore);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder lore(MiniMessage miniMessage, String... lore) {
             return lore(Arrays.stream(lore).map(s -> Component.empty().decoration(TextDecoration.ITALIC, false).append(miniMessage.deserialize(s))).toList());
         }
 
         @Contract("_ -> this")
         default @NotNull Builder lore(Component... lore) {
             return lore(Arrays.asList(lore));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
+            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore));
         }
 
         @Contract("_ -> this")
