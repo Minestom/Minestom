@@ -109,18 +109,17 @@ public class PlayerInit {
                 player.getInventory().addItemStack(ItemStack.of(Material.STONE)
                         .withDisplayName("<rainbow>Stones ;)")
                         .withLore("<red>Stone 1", "<green>Stone 2", "<blue>Stone 3")
-                                .withAmount(64)
+                        .withAmount(64)
                         .withMeta(itemMetaBuilder ->
                                 itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
                                         .canDestroy(Set.of(Block.DIAMOND_ORE)))
-                       );
+                );
 
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
+                        .lore("<red>Bundle 1", "<green>Bundle 2", "<blue>Bundle 3")
                         .meta(BundleMeta.class, bundleMetaBuilder -> {
                             bundleMetaBuilder.addItem(ItemStack.of(Material.DIAMOND, 5));
                             bundleMetaBuilder.addItem(ItemStack.of(Material.RABBIT_FOOT, 5));
-                            bundleMetaBuilder.lore(Component.text("TEST")
-                                    .decoration(TextDecoration.ITALIC, false));
                             bundleMetaBuilder.hideFlag(ItemHideFlag.values());
                         })
                         .build();

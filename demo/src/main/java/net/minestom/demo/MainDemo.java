@@ -7,13 +7,18 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.extras.lan.OpenToLAN;
+import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.instance.AnvilLoader;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
+
+import java.time.Duration;
 
 public class MainDemo {
 
@@ -40,6 +45,7 @@ public class MainDemo {
         });
 
         // Start the server on port 25565
-        minecraftServer.start("0.0.0.0", 25565);
+        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
+        minecraftServer.start("0.0.0.0", 0);
     }
 }

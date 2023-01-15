@@ -4,8 +4,6 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
@@ -15,12 +13,10 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 /**
  * Represents an immutable item to be placed inside {@link net.minestom.server.inventory.PlayerInventory},
@@ -134,7 +130,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withDisplayName(@Nullable String displayName) {
-        return withDisplayName(MiniMessage.miniMessage().deserialize(displayName));
+        return withMeta(builder -> builder.displayName(displayName));
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -155,7 +151,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Contract(value = "_ -> this")
     default @NotNull ItemStack withLore(@NotNull String... lore) {
-        return withLore(Arrays.stream(lore).map(s -> Component.empty().decoration(TextDecoration.ITALIC, false).append(MiniMessage.miniMessage().deserialize(s))).collect(Collectors.toList()));
+        return withMeta(builder -> builder.lore(lore));
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -251,7 +247,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
         @Contract(value = "_ -> this")
         default @NotNull Builder displayName(@Nullable String displayName) {
-            return meta(builder -> builder.displayName(MiniMessage.miniMessage().deserialize(displayName)));
+            return meta(builder -> builder.displayName(displayName));
         }
 
         @Contract(value = "_ -> this")
@@ -261,7 +257,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
         @Contract(value = "_ -> this")
         default @NotNull Builder lore(@NotNull String... lore) {
-            return lore(Arrays.stream(lore).map(s -> Component.empty().decoration(TextDecoration.ITALIC, false).append(MiniMessage.miniMessage().deserialize(s))).collect(Collectors.toList()));
+            return meta(builder -> builder.lore(lore));
         }
 
         @Contract(value = "_ -> this")

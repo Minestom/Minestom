@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.NetworkBuffer;
@@ -95,6 +96,8 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
             permits ItemMetaImpl.Builder, ItemMetaView.Builder {
         @NotNull ItemMeta build();
 
+        MiniMessage miniMessage = MiniMessage.builder().build();
+
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
             setTag(tag, value);
             return this;
@@ -124,12 +127,22 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder displayName(@Nullable Component displayName) {
-            return set(ItemTags.NAME, Component.empty().decoration(TextDecoration.ITALIC, false).append(displayName));
+            return set(ItemTags.NAME, displayName);
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder displayName(@Nullable String displayName) {
+            return displayName(displayName == null ? null : miniMessage.deserialize(displayName));
         }
 
         @Contract("_ -> this")
         default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            return set(ItemTags.LORE, lore.isEmpty() ? null : List.class.cast(lore));
+            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore));
+        }
+
+        @Contract("_ -> this")
+        default @NotNull Builder lore(String... lore) {
+            return lore(Arrays.stream(lore).map(s -> Component.empty().decoration(TextDecoration.ITALIC, false).append(miniMessage.deserialize(s))).toList());
         }
 
         @Contract("_ -> this")
