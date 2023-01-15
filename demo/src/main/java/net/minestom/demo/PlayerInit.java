@@ -97,14 +97,23 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
-                ItemStack itemStack = ItemStack.builder(Material.STONE)
-                        .displayName(Component.text("Stones ;)"))
+                player.getInventory().addItemStack(ItemStack.builder(Material.STONE)
+                        .displayName("<rainbow>Stones ;)")
+                        .lore("<red>Stone 1", "<green>Stone 2", "<blue>Stone 3")
                         .amount(64)
                         .meta(itemMetaBuilder ->
                                 itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
                                         .canDestroy(Set.of(Block.DIAMOND_ORE)))
-                        .build();
-                player.getInventory().addItemStack(itemStack);
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.of(Material.STONE)
+                        .withDisplayName("<rainbow>Stones ;)")
+                        .withLore("<red>Stone 1", "<green>Stone 2", "<blue>Stone 3")
+                                .withAmount(64)
+                        .withMeta(itemMetaBuilder ->
+                                itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
+                                        .canDestroy(Set.of(Block.DIAMOND_ORE)))
+                       );
 
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
                         .meta(BundleMeta.class, bundleMetaBuilder -> {
