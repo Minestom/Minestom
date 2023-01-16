@@ -20,6 +20,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
@@ -150,7 +151,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
