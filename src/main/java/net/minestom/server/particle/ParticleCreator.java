@@ -42,13 +42,4 @@ public class ParticleCreator {
 
         return new ParticlePacket(option.type().id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, BinaryWriter.makeArray(option::write));
     }
-
-
-    public static ParticlePacket createParticlePacket(Particle particleType, boolean distance,
-                                                      double x, double y, double z,
-                                                      float offsetX, float offsetY, float offsetZ,
-                                                      int count) {
-        return new ParticlePacket(particleType.id(), distance, x, y, z,
-                offsetX, offsetY, offsetZ, 0, count, (ParticleOption) null);
-    }
 }
