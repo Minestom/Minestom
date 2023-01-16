@@ -1,6 +1,5 @@
 package net.minestom.server.particle;
 
-
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -12,381 +11,381 @@ import static net.minestom.server.particle.ParticleOption.*;
 
 public interface ParticleOptionImpl {
 
-    static ParticleOption AMBIENT_ENTITY_EFFECT() {
-        return new AMBIENT_ENTITY_EFFECT();
+    static ParticleOption AmbientEntityEffect() {
+        return AmbientEntityEffect.INSTANCE;
     }
 
-    static ParticleOption ANGRY_VILLAGER() {
-        return new ANGRY_VILLAGER();
+    static ParticleOption AngryVillager() {
+        return AngryVillager.INSTANCE;
     }
 
-    static ParticleOption BUBBLE() {
-        return new BUBBLE();
+    static ParticleOption Block(@NotNull Block block) {
+        return new ParticleOption.Block(block);
     }
 
-    static ParticleOption CLOUD() {
-        return new CLOUD();
+    static ParticleOption BlockMarker(@NotNull Block block) {
+        return new BlockMarker(block);
     }
 
-    static ParticleOption CRIT() {
-        return new CRIT();
+    static ParticleOption Bubble() {
+        return Bubble.INSTANCE;
     }
 
-    static ParticleOption DAMAGE_INDICATOR() {
-        return new DAMAGE_INDICATOR();
+    static ParticleOption Cloud() {
+        return Cloud.INSTANCE;
     }
 
-    static ParticleOption DRAGON_BREATH() {
-        return new DRAGON_BREATH();
+    static ParticleOption Crit() {
+        return Crit.INSTANCE;
     }
 
-    static ParticleOption DRIPPING_LAVA() {
-        return new DRIPPING_LAVA();
+    static ParticleOption DamageIndicator() {
+        return DamageIndicator.INSTANCE;
     }
 
-    static ParticleOption FALLING_LAVA() {
-        return new FALLING_LAVA();
+    static ParticleOption DragonBreath() {
+        return DragonBreath.INSTANCE;
     }
 
-    static ParticleOption LANDING_LAVA() {
-        return new LANDING_LAVA();
+    static ParticleOption DrippingLava() {
+        return DrippingLava.INSTANCE;
     }
 
-    static ParticleOption DRIPPING_WATER() {
-        return new DRIPPING_WATER();
+    static ParticleOption FallingLava() {
+        return FallingLava.INSTANCE;
     }
 
-    static ParticleOption FALLING_WATER() {
-        return new FALLING_WATER();
+    static ParticleOption LandingLava() {
+        return LandingLava.INSTANCE;
     }
 
-    static ParticleOption EFFECT() {
-        return new EFFECT();
+    static ParticleOption DrippingWater() {
+        return DrippingWater.INSTANCE;
     }
 
-    static ParticleOption ELDER_GUARDIAN() {
-        return new ELDER_GUARDIAN();
+    static ParticleOption FallingWater() {
+        return FallingWater.INSTANCE;
     }
 
-    static ParticleOption ENCHANTED_HIT() {
-        return new ENCHANTED_HIT();
+    static ParticleOption Dust(@NotNull Color color, float scale) {
+        return new Dust(color, scale);
     }
 
-    static ParticleOption ENCHANT() {
-        return new ENCHANT();
+    static ParticleOption DustColorTransition(@NotNull Color from, @NotNull Color to, float scale) {
+        return new DustColorTransition(from, to, scale);
     }
 
-    static ParticleOption END_ROD() {
-        return new END_ROD();
+    static ParticleOption Effect() {
+        return Effect.INSTANCE;
     }
 
-    static ParticleOption ENTITY_EFFECT() {
-        return new ENTITY_EFFECT();
+    static ParticleOption ElderGuardian() {
+        return ElderGuardian.INSTANCE;
     }
 
-    static ParticleOption EXPLOSION_EMITTER() {
-        return new EXPLOSION_EMITTER();
+    static ParticleOption EnchantedHit() {
+        return EnchantedHit.INSTANCE;
     }
 
-    static ParticleOption EXPLOSION() {
-        return new EXPLOSION();
+    static ParticleOption Enchant() {
+        return Enchant.INSTANCE;
     }
 
-    static ParticleOption SONIC_BOOM() {
-        return new SONIC_BOOM();
+    static ParticleOption EndRod() {
+        return EndRod.INSTANCE;
     }
 
-    static ParticleOption FIREWORK() {
-        return new FIREWORK();
+    static ParticleOption EntityEffect() {
+        return EntityEffect.INSTANCE;
     }
 
-    static ParticleOption FISHING() {
-        return new FISHING();
+    static ParticleOption ExplosionEmitter() {
+        return ExplosionEmitter.INSTANCE;
     }
 
-    static ParticleOption FLAME() {
-        return new FLAME();
+    static ParticleOption Explosion() {
+        return Explosion.INSTANCE;
     }
 
-    static ParticleOption SCULK_SOUL() {
-        return new SCULK_SOUL();
+    static ParticleOption SonicBoom() {
+        return SonicBoom.INSTANCE;
     }
 
-    static ParticleOption SCULK_CHARGE_POP() {
-        return new SCULK_CHARGE_POP();
+    static ParticleOption FallingDust(@NotNull Block block) {
+        return new FallingDust(block);
     }
 
-    static ParticleOption SOUL_FIRE_FLAME() {
-        return new SOUL_FIRE_FLAME();
+    static ParticleOption Firework() {
+        return Firework.INSTANCE;
     }
 
-    static ParticleOption SOUL() {
-        return new SOUL();
+    static ParticleOption Fishing() {
+        return Fishing.INSTANCE;
     }
 
-    static ParticleOption FLASH() {
-        return new FLASH();
+    static ParticleOption Flame() {
+        return Flame.INSTANCE;
     }
 
-    static ParticleOption HAPPY_VILLAGER() {
-        return new HAPPY_VILLAGER();
+    static ParticleOption SculkSoul() {
+        return SculkSoul.INSTANCE;
     }
 
-    static ParticleOption COMPOSTER() {
-        return new COMPOSTER();
+    static ParticleOption SculkCharge(float angle) {
+        return new SculkCharge(angle);
     }
 
-    static ParticleOption HEART() {
-        return new HEART();
+    static ParticleOption SculkChargePop() {
+        return SculkChargePop.INSTANCE;
     }
 
-    static ParticleOption INSTANT_EFFECT() {
-        return new INSTANT_EFFECT();
+    static ParticleOption SoulFireFlame() {
+        return SoulFireFlame.INSTANCE;
     }
 
-    static ParticleOption ITEM_SLIME() {
-        return new ITEM_SLIME();
+    static ParticleOption Soul() {
+        return Soul.INSTANCE;
     }
 
-    static ParticleOption ITEM_SNOWBALL() {
-        return new ITEM_SNOWBALL();
+    static ParticleOption Flash() {
+        return Flash.INSTANCE;
     }
 
-    static ParticleOption LARGE_SMOKE() {
-        return new LARGE_SMOKE();
+    static ParticleOption HappyVillager() {
+        return HappyVillager.INSTANCE;
     }
 
-    static ParticleOption LAVA() {
-        return new LAVA();
+    static ParticleOption Composter() {
+        return Composter.INSTANCE;
     }
 
-    static ParticleOption MYCELIUM() {
-        return new MYCELIUM();
+    static ParticleOption Heart() {
+        return Heart.INSTANCE;
     }
 
-    static ParticleOption NOTE() {
-        return new NOTE();
+    static ParticleOption InstantEffect() {
+        return InstantEffect.INSTANCE;
     }
 
-    static ParticleOption POOF() {
-        return new POOF();
+    static ParticleOption Item(@NotNull ItemStack item) {
+        return new Item(item);
     }
 
-    static ParticleOption PORTAL() {
-        return new PORTAL();
+    static ParticleOption VibrationForEntity(@NotNull Entity entity, int ticks) {
+        Vibration.Entity target = new Vibration.Entity(entity);
+        return new Vibration(target, ticks);
     }
 
-    static ParticleOption RAIN() {
-        return new RAIN();
+    static ParticleOption VibrationForBlock(@NotNull Point position, int ticks) {
+        Vibration.Block target = new Vibration.Block(position);
+        return new Vibration(target, ticks);
     }
 
-    static ParticleOption SMOKE() {
-        return new SMOKE();
+    static ParticleOption ItemSlime() {
+        return ItemSlime.INSTANCE;
     }
 
-    static ParticleOption SNEEZE() {
-        return new SNEEZE();
+    static ParticleOption ItemSnowball() {
+        return ItemSnowball.INSTANCE;
     }
 
-    static ParticleOption SPIT() {
-        return new SPIT();
+    static ParticleOption LargeSmoke() {
+        return LargeSmoke.INSTANCE;
     }
 
-    static ParticleOption SQUID_INK() {
-        return new SQUID_INK();
+    static ParticleOption Lava() {
+        return Lava.INSTANCE;
     }
 
-    static ParticleOption SWEEP_ATTACK() {
-        return new SWEEP_ATTACK();
+    static ParticleOption Mycelium() {
+        return Mycelium.INSTANCE;
     }
 
-    static ParticleOption TOTEM_OF_UNDYING() {
-        return new TOTEM_OF_UNDYING();
+    static ParticleOption Note() {
+        return Note.INSTANCE;
     }
 
-    static ParticleOption UNDERWATER() {
-        return new UNDERWATER();
+    static ParticleOption Poof() {
+        return Poof.INSTANCE;
     }
 
-    static ParticleOption SPLASH() {
-        return new SPLASH();
+    static ParticleOption Portal() {
+        return Portal.INSTANCE;
     }
 
-    static ParticleOption WITCH() {
-        return new WITCH();
+    static ParticleOption Rain() {
+        return Rain.INSTANCE;
     }
 
-    static ParticleOption BUBBLE_POP() {
-        return new BUBBLE_POP();
+    static ParticleOption Smoke() {
+        return Smoke.INSTANCE;
     }
 
-    static ParticleOption CURRENT_DOWN() {
-        return new CURRENT_DOWN();
+    static ParticleOption Sneeze() {
+        return Sneeze.INSTANCE;
     }
 
-    static ParticleOption BUBBLE_COLUMN_UP() {
-        return new BUBBLE_COLUMN_UP();
+    static ParticleOption Spit() {
+        return Spit.INSTANCE;
     }
 
-    static ParticleOption NAUTILUS() {
-        return new NAUTILUS();
+    static ParticleOption SquidInk() {
+        return SquidInk.INSTANCE;
     }
 
-    static ParticleOption DOLPHIN() {
-        return new DOLPHIN();
+    static ParticleOption SweepAttack() {
+        return SweepAttack.INSTANCE;
     }
 
-    static ParticleOption CAMPFIRE_COSY_SMOKE() {
-        return new CAMPFIRE_COSY_SMOKE();
+    static ParticleOption TotemOfUndying() {
+        return TotemOfUndying.INSTANCE;
     }
 
-    static ParticleOption CAMPFIRE_SIGNAL_SMOKE() {
-        return new CAMPFIRE_SIGNAL_SMOKE();
+    static ParticleOption Underwater() {
+        return Underwater.INSTANCE;
     }
 
-    static ParticleOption DRIPPING_HONEY() {
-        return new DRIPPING_HONEY();
+    static ParticleOption Splash() {
+        return Splash.INSTANCE;
     }
 
-    static ParticleOption FALLING_HONEY() {
-        return new FALLING_HONEY();
+    static ParticleOption Witch() {
+        return Witch.INSTANCE;
     }
 
-    static ParticleOption LANDING_HONEY() {
-        return new LANDING_HONEY();
+    static ParticleOption BubblePop() {
+        return BubblePop.INSTANCE;
     }
 
-    static ParticleOption FALLING_NECTAR() {
-        return new FALLING_NECTAR();
+    static ParticleOption CurrentDown() {
+        return CurrentDown.INSTANCE;
     }
 
-    static ParticleOption FALLING_SPORE_BLOSSOM() {
-        return new FALLING_SPORE_BLOSSOM();
+    static ParticleOption BubbleColumnUp() {
+        return BubbleColumnUp.INSTANCE;
     }
 
-    static ParticleOption ASH() {
-        return new ASH();
+    static ParticleOption Nautilus() {
+        return Nautilus.INSTANCE;
     }
 
-    static ParticleOption CRIMSON_SPORE() {
-        return new CRIMSON_SPORE();
+    static ParticleOption Dolphin() {
+        return Dolphin.INSTANCE;
     }
 
-    static ParticleOption WARPED_SPORE() {
-        return new WARPED_SPORE();
+    static ParticleOption CampfireCosySmoke() {
+        return CampfireCosySmoke.INSTANCE;
     }
 
-    static ParticleOption SPORE_BLOSSOM_AIR() {
-        return new SPORE_BLOSSOM_AIR();
+    static ParticleOption CampfireSignalSmoke() {
+        return CampfireSignalSmoke.INSTANCE;
     }
 
-    static ParticleOption DRIPPING_OBSIDIAN_TEAR() {
-        return new DRIPPING_OBSIDIAN_TEAR();
+    static ParticleOption DrippingHoney() {
+        return DrippingHoney.INSTANCE;
     }
 
-    static ParticleOption FALLING_OBSIDIAN_TEAR() {
-        return new FALLING_OBSIDIAN_TEAR();
+    static ParticleOption FallingHoney() {
+        return FallingHoney.INSTANCE;
     }
 
-    static ParticleOption LANDING_OBSIDIAN_TEAR() {
-        return new LANDING_OBSIDIAN_TEAR();
+    static ParticleOption LandingHoney() {
+        return LandingHoney.INSTANCE;
     }
 
-    static ParticleOption REVERSE_PORTAL() {
-        return new REVERSE_PORTAL();
+    static ParticleOption FallingNectar() {
+        return FallingNectar.INSTANCE;
     }
 
-    static ParticleOption WHITE_ASH() {
-        return new WHITE_ASH();
+    static ParticleOption FallingSporeBlossom() {
+        return FallingSporeBlossom.INSTANCE;
     }
 
-    static ParticleOption SMALL_FLAME() {
-        return new SMALL_FLAME();
+    static ParticleOption Ash() {
+        return Ash.INSTANCE;
     }
 
-    static ParticleOption SNOWFLAKE() {
-        return new SNOWFLAKE();
+    static ParticleOption CrimsonSpore() {
+        return CrimsonSpore.INSTANCE;
     }
 
-    static ParticleOption DRIPPING_DRIPSTONE_LAVA() {
-        return new DRIPPING_DRIPSTONE_LAVA();
+    static ParticleOption WarpedSpore() {
+        return WarpedSpore.INSTANCE;
     }
 
-    static ParticleOption FALLING_DRIPSTONE_LAVA() {
-        return new FALLING_DRIPSTONE_LAVA();
+    static ParticleOption SporeBlossomAir() {
+        return SporeBlossomAir.INSTANCE;
     }
 
-    static ParticleOption DRIPPING_DRIPSTONE_WATER() {
-        return new DRIPPING_DRIPSTONE_WATER();
+    static ParticleOption DrippingObsidianTear() {
+        return DrippingObsidianTear.INSTANCE;
     }
 
-    static ParticleOption FALLING_DRIPSTONE_WATER() {
-        return new FALLING_DRIPSTONE_WATER();
+    static ParticleOption FallingObsidianTear() {
+        return FallingObsidianTear.INSTANCE;
     }
 
-    static ParticleOption GLOW_SQUID_INK() {
-        return new GLOW_SQUID_INK();
+    static ParticleOption LandingObsidianTear() {
+        return LandingObsidianTear.INSTANCE;
     }
 
-    static ParticleOption GLOW() {
-        return new GLOW();
+    static ParticleOption ReversePortal() {
+        return ReversePortal.INSTANCE;
     }
 
-    static ParticleOption WAX_ON() {
-        return new WAX_ON();
+    static ParticleOption WhiteAsh() {
+        return WhiteAsh.INSTANCE;
     }
 
-    static ParticleOption WAX_OFF() {
-        return new WAX_OFF();
+    static ParticleOption SmallFlame() {
+        return SmallFlame.INSTANCE;
     }
 
-    static ParticleOption ELECTRIC_SPARK() {
-        return new ELECTRIC_SPARK();
+    static ParticleOption Snowflake() {
+        return Snowflake.INSTANCE;
     }
 
-    static ParticleOption SCRAPE() {
-        return new SCRAPE();
+    static ParticleOption DrippingDripstoneLava() {
+        return DrippingDripstoneLava.INSTANCE;
     }
 
-    static ParticleOption BLOCK(@NotNull Block block) {
-        return new BLOCK(block);
+    static ParticleOption FallingDripstoneLava() {
+        return FallingDripstoneLava.INSTANCE;
     }
 
-    static ParticleOption BLOCK_MARKER(@NotNull Block block) {
-        return new BLOCK_MARKER(block);
+    static ParticleOption DrippingDripstoneWater() {
+        return DrippingDripstoneWater.INSTANCE;
     }
 
-    static ParticleOption DUST(@NotNull Color color, float scale) {
-        return new DUST(color, scale);
+    static ParticleOption FallingDripstoneWater() {
+        return FallingDripstoneWater.INSTANCE;
     }
 
-    static ParticleOption DUST_COLOR_TRANSITION(@NotNull Color from, @NotNull Color to, float scale) {
-        return new DUST_COLOR_TRANSITION(from, to, scale);
+    static ParticleOption GlowSquidInk() {
+        return GlowSquidInk.INSTANCE;
     }
 
-    static ParticleOption FALLING_DUST(@NotNull Block block) {
-        return new FALLING_DUST(block);
+    static ParticleOption Glow() {
+        return Glow.INSTANCE;
     }
 
-    static ParticleOption SCULK_CHARGE(float angle) {
-        return new SCULK_CHARGE(angle);
+    static ParticleOption WaxOn() {
+        return WaxOn.INSTANCE;
     }
 
-    static ParticleOption ITEM(@NotNull ItemStack item) {
-        return new ITEM(item);
+    static ParticleOption WaxOff() {
+        return WaxOff.INSTANCE;
     }
 
-    static ParticleOption VIBRATION_ENTITY(@NotNull Entity entity, int ticks) {
-        final VIBRATION.Entity target = new VIBRATION.Entity(entity);
-        return new VIBRATION(target, ticks);
+    static ParticleOption ElectricSpark() {
+        return ElectricSpark.INSTANCE;
     }
 
-    static ParticleOption VIBRATION_ENTITY(@NotNull Point blockPosition, int ticks) {
-        final VIBRATION.Block target = new VIBRATION.Block(blockPosition);
-        return new VIBRATION(target, ticks);
+    static ParticleOption Scrape() {
+        return Scrape.INSTANCE;
     }
 
-    static ParticleOption SHRIEK(int ticks) {
-        return new SHRIEK(ticks);
+    static ParticleOption Shriek(int ticks) {
+        return new Shriek(ticks);
     }
 }
