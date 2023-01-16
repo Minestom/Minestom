@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.particle.ParticleOption.*;
 
-public interface ParticleOptionImpl {
+public interface ParticleOptions {
 
     static ParticleOption AmbientEntityEffect() {
         return AmbientEntityEffect.INSTANCE;
