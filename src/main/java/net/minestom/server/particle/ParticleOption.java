@@ -6,12 +6,11 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.particle.ParticleOption.*;
 
-public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_EFFECT, ANGRY_VILLAGER, ASH, BLOCK, BLOCK_MARKER, BUBBLE, BUBBLE_COLUMN_UP, BUBBLE_POP, CAMPFIRE_COSY_SMOKE, CAMPFIRE_SIGNAL_SMOKE, CLOUD, COMPOSTER, CRIMSON_SPORE, CRIT, CURRENT_DOWN, DAMAGE_INDICATOR, DOLPHIN, DRAGON_BREATH, DRIPPING_DRIPSTONE_LAVA, DRIPPING_DRIPSTONE_WATER, DRIPPING_HONEY, DRIPPING_LAVA, DRIPPING_OBSIDIAN_TEAR, DRIPPING_WATER, DUST, DUST_COLOR_TRANSITION, EFFECT, ELDER_GUARDIAN, ELECTRIC_SPARK, ENCHANT, ENCHANTED_HIT, END_ROD, ENTITY_EFFECT, EXPLOSION, EXPLOSION_EMITTER, FALLING_DRIPSTONE_LAVA, FALLING_DRIPSTONE_WATER, FALLING_DUST, FALLING_HONEY, FALLING_LAVA, FALLING_NECTAR, FALLING_OBSIDIAN_TEAR, FALLING_SPORE_BLOSSOM, FALLING_WATER, FIREWORK, FISHING, FLAME, FLASH, GLOW, GLOW_SQUID_INK, HAPPY_VILLAGER, HEART, INSTANT_EFFECT, ITEM, ITEM_SLIME, ITEM_SNOWBALL, LANDING_HONEY, LANDING_LAVA, LANDING_OBSIDIAN_TEAR, LARGE_SMOKE, LAVA, MYCELIUM, NAUTILUS, NOTE, POOF, PORTAL, RAIN, REVERSE_PORTAL, SCRAPE, SCULK_CHARGE, SCULK_CHARGE_POP, SCULK_SOUL, SHRIEK, SMALL_FLAME, SMOKE, SNEEZE, SNOWFLAKE, SONIC_BOOM, SOUL, SOUL_FIRE_FLAME, SPIT, SPLASH, SPORE_BLOSSOM_AIR, SQUID_INK, SWEEP_ATTACK, TOTEM_OF_UNDYING, UNDERWATER, VIBRATION, WARPED_SPORE, WAX_OFF, WAX_ON, WHITE_ASH, WITCH {
+public sealed interface ParticleOption extends Writeable permits AmbientEntityEffect, AngryVillager, Ash, Block, BlockMarker, Bubble, BubbleColumnUp, BubblePop, CampfireCosySmoke, CampfireSignalSmoke, Cloud, Composter, CrimsonSpore, Crit, CurrentDown, DamageIndicator, Dolphin, DragonBreath, DrippingDripstoneLava, DrippingDripstoneWater, DrippingHoney, DrippingLava, DrippingObsidianTear, DrippingWater, Dust, DustColorTransition, Effect, ElderGuardian, ElectricSpark, Enchant, EnchantedHit, EndRod, EntityEffect, Explosion, ExplosionEmitter, FallingDripstoneLava, FallingDripstoneWater, FallingDust, FallingHoney, FallingLava, FallingNectar, FallingObsidianTear, FallingSporeBlossom, FallingWater, Firework, Fishing, Flame, Flash, Glow, GlowSquidInk, HappyVillager, Heart, InstantEffect, Item, ItemSlime, ItemSnowball, LandingHoney, LandingLava, LandingObsidianTear, LargeSmoke, Lava, Mycelium, Nautilus, Note, Poof, Portal, Rain, ReversePortal, Scrape, SculkCharge, SculkChargePop, SculkSoul, Shriek, SmallFlame, Smoke, Sneeze, Snowflake, SonicBoom, Soul, SoulFireFlame, Spit, Splash, SporeBlossomAir, SquidInk, SweepAttack, TotemOfUndying, Underwater, Vibration, WarpedSpore, WaxOff, WaxOn, WhiteAsh, Witch {
 
     Particle type();
 
@@ -19,21 +18,25 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
 
     }
 
-    record AMBIENT_ENTITY_EFFECT() implements ParticleOption {
+    record AmbientEntityEffect() implements ParticleOption {
+        static final AmbientEntityEffect INSTANCE = new AmbientEntityEffect();
+
         @Override
         public Particle type() {
             return Particle.AMBIENT_ENTITY_EFFECT;
         }
     }
 
-    record ANGRY_VILLAGER() implements ParticleOption {
+    record AngryVillager() implements ParticleOption {
+        static final AngryVillager INSTANCE = new AngryVillager();
+
         @Override
         public Particle type() {
             return Particle.ANGRY_VILLAGER;
         }
     }
 
-    record BLOCK(net.minestom.server.instance.block.Block block) implements ParticleOption {
+    record Block(net.minestom.server.instance.block.Block block) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
@@ -46,7 +49,7 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record BLOCK_MARKER(net.minestom.server.instance.block.Block block) implements ParticleOption {
+    record BlockMarker(net.minestom.server.instance.block.Block block) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
@@ -59,77 +62,97 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record BUBBLE() implements ParticleOption {
+    record Bubble() implements ParticleOption {
+        static final Bubble INSTANCE = new Bubble();
+
         @Override
         public Particle type() {
             return Particle.BUBBLE;
         }
     }
 
-    record CLOUD() implements ParticleOption {
+    record Cloud() implements ParticleOption {
+        static final Cloud INSTANCE = new Cloud();
+
         @Override
         public Particle type() {
             return Particle.CLOUD;
         }
     }
 
-    record CRIT() implements ParticleOption {
+    record Crit() implements ParticleOption {
+        static final Crit INSTANCE = new Crit();
+
         @Override
         public Particle type() {
             return Particle.CRIT;
         }
     }
 
-    record DAMAGE_INDICATOR() implements ParticleOption {
+    record DamageIndicator() implements ParticleOption {
+        static final DamageIndicator INSTANCE = new DamageIndicator();
+
         @Override
         public Particle type() {
             return Particle.DAMAGE_INDICATOR;
         }
     }
 
-    record DRAGON_BREATH() implements ParticleOption {
+    record DragonBreath() implements ParticleOption {
+        static final DragonBreath INSTANCE = new DragonBreath();
+
         @Override
         public Particle type() {
             return Particle.DRAGON_BREATH;
         }
     }
 
-    record DRIPPING_LAVA() implements ParticleOption {
+    record DrippingLava() implements ParticleOption {
+        static final DrippingLava INSTANCE = new DrippingLava();
+
         @Override
         public Particle type() {
             return Particle.DRIPPING_LAVA;
         }
     }
 
-    record FALLING_LAVA() implements ParticleOption {
+    record FallingLava() implements ParticleOption {
+        static final FallingLava INSTANCE = new FallingLava();
+
         @Override
         public Particle type() {
             return Particle.FALLING_LAVA;
         }
     }
 
-    record LANDING_LAVA() implements ParticleOption {
+    record LandingLava() implements ParticleOption {
+        static final LandingLava INSTANCE = new LandingLava();
+
         @Override
         public Particle type() {
             return Particle.LANDING_LAVA;
         }
     }
 
-    record DRIPPING_WATER() implements ParticleOption {
+    record DrippingWater() implements ParticleOption {
+        static final DrippingWater INSTANCE = new DrippingWater();
+
         @Override
         public Particle type() {
             return Particle.DRIPPING_WATER;
         }
     }
 
-    record FALLING_WATER() implements ParticleOption {
+    record FallingWater() implements ParticleOption {
+        static final FallingWater INSTANCE = new FallingWater();
+
         @Override
         public Particle type() {
             return Particle.FALLING_WATER;
         }
     }
 
-    record DUST(Color color, float scale) implements ParticleOption {
+    record Dust(@NotNull Color color, float scale) implements ParticleOption {
 
         @Override
         public Particle type() {
@@ -139,16 +162,16 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         @Override
         public void write(@NotNull BinaryWriter writer) {
             writer.writeColor(color);
-            writer.writeFloat(Math.min(4f, scale));
+            writer.writeFloat(MathUtils.clamp(scale, 0.01f, 4f));
         }
     }
 
-    record DUST_COLOR_TRANSITION(Color from, Color to, float scale) implements ParticleOption {
+    record DustColorTransition(@NotNull Color from, @NotNull Color to, float scale) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
             writer.writeColor(from);
-            writer.writeFloat(Math.max(0.01f, Math.min(4f, scale)));
+            writer.writeFloat(MathUtils.clamp(scale, 0.01f, 4f));
             writer.writeColor(to);
         }
 
@@ -158,70 +181,88 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record EFFECT() implements ParticleOption {
+    record Effect() implements ParticleOption {
+        static final Effect INSTANCE = new Effect();
+
         @Override
         public Particle type() {
             return Particle.EFFECT;
         }
     }
 
-    record ELDER_GUARDIAN() implements ParticleOption {
+    record ElderGuardian() implements ParticleOption {
+        static final ElderGuardian INSTANCE = new ElderGuardian();
+
         @Override
         public Particle type() {
             return Particle.ELDER_GUARDIAN;
         }
     }
 
-    record ENCHANTED_HIT() implements ParticleOption {
+    record EnchantedHit() implements ParticleOption {
+        static final EnchantedHit INSTANCE = new EnchantedHit();
+
         @Override
         public Particle type() {
             return Particle.ENCHANTED_HIT;
         }
     }
 
-    record ENCHANT() implements ParticleOption {
+    record Enchant() implements ParticleOption {
+        static final Enchant INSTANCE = new Enchant();
+
         @Override
         public Particle type() {
             return Particle.ENCHANT;
         }
     }
 
-    record END_ROD() implements ParticleOption {
+    record EndRod() implements ParticleOption {
+        static final EndRod INSTANCE = new EndRod();
+
         @Override
         public Particle type() {
             return Particle.END_ROD;
         }
     }
 
-    record ENTITY_EFFECT() implements ParticleOption {
+    record EntityEffect() implements ParticleOption {
+        static final EntityEffect INSTANCE = new EntityEffect();
+
         @Override
         public Particle type() {
             return Particle.ENTITY_EFFECT;
         }
     }
 
-    record EXPLOSION_EMITTER() implements ParticleOption {
+    record ExplosionEmitter() implements ParticleOption {
+        static final ExplosionEmitter INSTANCE = new ExplosionEmitter();
+
         @Override
         public Particle type() {
             return Particle.EXPLOSION_EMITTER;
         }
     }
 
-    record EXPLOSION() implements ParticleOption {
+    record Explosion() implements ParticleOption {
+        static final Explosion INSTANCE = new Explosion();
+
         @Override
         public Particle type() {
             return Particle.EXPLOSION;
         }
     }
 
-    record SONIC_BOOM() implements ParticleOption {
+    record SonicBoom() implements ParticleOption {
+        static final SonicBoom INSTANCE = new SonicBoom();
+
         @Override
         public Particle type() {
             return Particle.SONIC_BOOM;
         }
     }
 
-    record FALLING_DUST(net.minestom.server.instance.block.Block block) implements ParticleOption {
+    record FallingDust(@NotNull net.minestom.server.instance.block.Block block) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
@@ -234,39 +275,43 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record FIREWORK() implements ParticleOption {
+    record Firework() implements ParticleOption {
+        static final Firework INSTANCE = new Firework();
+
         @Override
         public Particle type() {
             return Particle.FIREWORK;
         }
     }
 
-    record FISHING() implements ParticleOption {
+    record Fishing() implements ParticleOption {
+        static final Fishing INSTANCE = new Fishing();
+
         @Override
         public Particle type() {
             return Particle.FISHING;
         }
     }
 
-    record FLAME() implements ParticleOption {
+    record Flame() implements ParticleOption {
+        static final Flame INSTANCE = new Flame();
+
         @Override
         public Particle type() {
             return Particle.FLAME;
         }
     }
 
-    record SCULK_SOUL() implements ParticleOption {
+    record SculkSoul() implements ParticleOption {
+        static final SculkSoul INSTANCE = new SculkSoul();
+
         @Override
         public Particle type() {
             return Particle.SCULK_SOUL;
         }
     }
 
-    record SCULK_CHARGE(float angle) implements ParticleOption {
-
-        public SCULK_CHARGE {
-            Check.argCondition(MathUtils.isBetween(angle, 0, 2 * Math.PI), "Angle is not within bounds");
-        }
+    record SculkCharge(float angle) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
@@ -279,63 +324,79 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record SCULK_CHARGE_POP() implements ParticleOption {
+    record SculkChargePop() implements ParticleOption {
+        static final SculkChargePop INSTANCE = new SculkChargePop();
+
         @Override
         public Particle type() {
             return Particle.SCULK_CHARGE_POP;
         }
     }
 
-    record SOUL_FIRE_FLAME() implements ParticleOption {
+    record SoulFireFlame() implements ParticleOption {
+        static final SoulFireFlame INSTANCE = new SoulFireFlame();
+
         @Override
         public Particle type() {
             return Particle.SOUL_FIRE_FLAME;
         }
     }
 
-    record SOUL() implements ParticleOption {
+    record Soul() implements ParticleOption {
+        static final Soul INSTANCE = new Soul();
+
         @Override
         public Particle type() {
             return Particle.SOUL;
         }
     }
 
-    record FLASH() implements ParticleOption {
+    record Flash() implements ParticleOption {
+        static final Flash INSTANCE = new Flash();
+
         @Override
         public Particle type() {
             return Particle.FLASH;
         }
     }
 
-    record HAPPY_VILLAGER() implements ParticleOption {
+    record HappyVillager() implements ParticleOption {
+        static final HappyVillager INSTANCE = new HappyVillager();
+
         @Override
         public Particle type() {
             return Particle.HAPPY_VILLAGER;
         }
     }
 
-    record COMPOSTER() implements ParticleOption {
+    record Composter() implements ParticleOption {
+        static final Composter INSTANCE = new Composter();
+
         @Override
         public Particle type() {
             return Particle.COMPOSTER;
         }
     }
 
-    record HEART() implements ParticleOption {
+    record Heart() implements ParticleOption {
+        static final Heart INSTANCE = new Heart();
+
         @Override
         public Particle type() {
             return Particle.HEART;
         }
     }
 
-    record INSTANT_EFFECT() implements ParticleOption {
+    record InstantEffect() implements ParticleOption {
+        static final InstantEffect INSTANCE = new InstantEffect();
+
         @Override
         public Particle type() {
             return Particle.INSTANT_EFFECT;
         }
     }
 
-    record ITEM(ItemStack item) implements ParticleOption {
+    record Item(@NotNull ItemStack item) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
@@ -348,12 +409,12 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record VIBRATION(Target target, int ticks) implements ParticleOption {
+    record Vibration(Target target, int ticks) implements ParticleOption {
 
         private sealed interface Target extends Writeable permits Block, Entity {
         }
 
-        public record Block(Point blockPosition) implements Target {
+        public record Block(@NotNull Point blockPosition) implements Target {
 
             @Override
             public void write(@NotNull BinaryWriter writer) {
@@ -388,364 +449,466 @@ public sealed interface ParticleOption extends Writeable permits AMBIENT_ENTITY_
         }
     }
 
-    record ITEM_SLIME() implements ParticleOption {
+    record ItemSlime() implements ParticleOption {
+        static final ItemSlime INSTANCE = new ItemSlime();
+
         @Override
         public Particle type() {
             return Particle.ITEM_SLIME;
         }
     }
 
-    record ITEM_SNOWBALL() implements ParticleOption {
+    record ItemSnowball() implements ParticleOption {
+        static final ItemSnowball INSTANCE = new ItemSnowball();
+
         @Override
         public Particle type() {
             return Particle.ITEM_SNOWBALL;
         }
     }
 
-    record LARGE_SMOKE() implements ParticleOption {
+    record LargeSmoke() implements ParticleOption {
+        static final LargeSmoke INSTANCE = new LargeSmoke();
+
         @Override
         public Particle type() {
             return Particle.LARGE_SMOKE;
         }
     }
 
-    record LAVA() implements ParticleOption {
+    record Lava() implements ParticleOption {
+        static final Lava INSTANCE = new Lava();
+
         @Override
         public Particle type() {
             return Particle.LAVA;
         }
     }
 
-    record MYCELIUM() implements ParticleOption {
+    record Mycelium() implements ParticleOption {
+        static final Mycelium INSTANCE = new Mycelium();
+
         @Override
         public Particle type() {
             return Particle.MYCELIUM;
         }
     }
 
-    record NOTE() implements ParticleOption {
+    record Note() implements ParticleOption {
+        static final Note INSTANCE = new Note();
+
         @Override
         public Particle type() {
             return Particle.NOTE;
         }
     }
 
-    record POOF() implements ParticleOption {
+    record Poof() implements ParticleOption {
+        static final Poof INSTANCE = new Poof();
+
         @Override
         public Particle type() {
             return Particle.POOF;
         }
     }
 
-    record PORTAL() implements ParticleOption {
+    record Portal() implements ParticleOption {
+        static final Portal INSTANCE = new Portal();
+
         @Override
         public Particle type() {
             return Particle.PORTAL;
         }
     }
 
-    record RAIN() implements ParticleOption {
+    record Rain() implements ParticleOption {
+        static final Rain INSTANCE = new Rain();
+
         @Override
         public Particle type() {
             return Particle.RAIN;
         }
     }
 
-    record SMOKE() implements ParticleOption {
+    record Smoke() implements ParticleOption {
+        static final Smoke INSTANCE = new Smoke();
+
         @Override
         public Particle type() {
             return Particle.SMOKE;
         }
     }
 
-    record SNEEZE() implements ParticleOption {
+    record Sneeze() implements ParticleOption {
+        static final Sneeze INSTANCE = new Sneeze();
+
         @Override
         public Particle type() {
             return Particle.SNEEZE;
         }
     }
 
-    record SPIT() implements ParticleOption {
+    record Spit() implements ParticleOption {
+        static final Spit INSTANCE = new Spit();
+
         @Override
         public Particle type() {
             return Particle.SPIT;
         }
     }
 
-    record SQUID_INK() implements ParticleOption {
+    record SquidInk() implements ParticleOption {
+        static final SquidInk INSTANCE = new SquidInk();
+
         @Override
         public Particle type() {
             return Particle.SQUID_INK;
         }
     }
 
-    record SWEEP_ATTACK() implements ParticleOption {
+    record SweepAttack() implements ParticleOption {
+        static final SweepAttack INSTANCE = new SweepAttack();
+
         @Override
         public Particle type() {
             return Particle.SWEEP_ATTACK;
         }
     }
 
-    record TOTEM_OF_UNDYING() implements ParticleOption {
+    record TotemOfUndying() implements ParticleOption {
+        static final TotemOfUndying INSTANCE = new TotemOfUndying();
+
         @Override
         public Particle type() {
             return Particle.TOTEM_OF_UNDYING;
         }
     }
 
-    record UNDERWATER() implements ParticleOption {
+    record Underwater() implements ParticleOption {
+        static final Underwater INSTANCE = new Underwater();
+
         @Override
         public Particle type() {
             return Particle.UNDERWATER;
         }
     }
 
-    record SPLASH() implements ParticleOption {
+    record Splash() implements ParticleOption {
+        static final Splash INSTANCE = new Splash();
+
         @Override
         public Particle type() {
             return Particle.SPLASH;
         }
     }
 
-    record WITCH() implements ParticleOption {
+    record Witch() implements ParticleOption {
+        static final Witch INSTANCE = new Witch();
+
         @Override
         public Particle type() {
             return Particle.WITCH;
         }
     }
 
-    record BUBBLE_POP() implements ParticleOption {
+    record BubblePop() implements ParticleOption {
+        static final BubblePop INSTANCE = new BubblePop();
+
         @Override
         public Particle type() {
             return Particle.BUBBLE_POP;
         }
     }
 
-    record CURRENT_DOWN() implements ParticleOption {
+    record CurrentDown() implements ParticleOption {
+        static final CurrentDown INSTANCE = new CurrentDown();
+
         @Override
         public Particle type() {
             return Particle.CURRENT_DOWN;
         }
     }
 
-    record BUBBLE_COLUMN_UP() implements ParticleOption {
+    record BubbleColumnUp() implements ParticleOption {
+        static final BubbleColumnUp INSTANCE = new BubbleColumnUp();
+
         @Override
         public Particle type() {
             return Particle.BUBBLE_COLUMN_UP;
         }
     }
 
-    record NAUTILUS() implements ParticleOption {
+    record Nautilus() implements ParticleOption {
+        static final Nautilus INSTANCE = new Nautilus();
+
         @Override
         public Particle type() {
             return Particle.NAUTILUS;
         }
     }
 
-    record DOLPHIN() implements ParticleOption {
+    record Dolphin() implements ParticleOption {
+        static final Dolphin INSTANCE = new Dolphin();
+
         @Override
         public Particle type() {
             return Particle.DOLPHIN;
         }
     }
 
-    record CAMPFIRE_COSY_SMOKE() implements ParticleOption {
+    record CampfireCosySmoke() implements ParticleOption {
+        static final CampfireCosySmoke INSTANCE = new CampfireCosySmoke();
+
         @Override
         public Particle type() {
             return Particle.CAMPFIRE_COSY_SMOKE;
         }
     }
 
-    record CAMPFIRE_SIGNAL_SMOKE() implements ParticleOption {
+    record CampfireSignalSmoke() implements ParticleOption {
+        static final CampfireSignalSmoke INSTANCE = new CampfireSignalSmoke();
+
         @Override
         public Particle type() {
             return Particle.CAMPFIRE_SIGNAL_SMOKE;
         }
     }
 
-    record DRIPPING_HONEY() implements ParticleOption {
+    record DrippingHoney() implements ParticleOption {
+        static final DrippingHoney INSTANCE = new DrippingHoney();
+
         @Override
         public Particle type() {
             return Particle.DRIPPING_HONEY;
         }
     }
 
-    record FALLING_HONEY() implements ParticleOption {
+    record FallingHoney() implements ParticleOption {
+        static final FallingHoney INSTANCE = new FallingHoney();
+
         @Override
         public Particle type() {
             return Particle.FALLING_HONEY;
         }
     }
 
-    record LANDING_HONEY() implements ParticleOption {
+    record LandingHoney() implements ParticleOption {
+        static final LandingHoney INSTANCE = new LandingHoney();
+
         @Override
         public Particle type() {
             return Particle.LANDING_HONEY;
         }
     }
 
-    record FALLING_NECTAR() implements ParticleOption {
+    record FallingNectar() implements ParticleOption {
+        static final FallingNectar INSTANCE = new FallingNectar();
+
         @Override
         public Particle type() {
             return Particle.FALLING_NECTAR;
         }
     }
 
-    record FALLING_SPORE_BLOSSOM() implements ParticleOption {
+    record FallingSporeBlossom() implements ParticleOption {
+        static final FallingSporeBlossom INSTANCE = new FallingSporeBlossom();
+
         @Override
         public Particle type() {
             return Particle.FALLING_SPORE_BLOSSOM;
         }
     }
 
-    record ASH() implements ParticleOption {
+    record Ash() implements ParticleOption {
+        static final Ash INSTANCE = new Ash();
+
         @Override
         public Particle type() {
             return Particle.ASH;
         }
     }
 
-    record CRIMSON_SPORE() implements ParticleOption {
+    record CrimsonSpore() implements ParticleOption {
+        static final CrimsonSpore INSTANCE = new CrimsonSpore();
+
         @Override
         public Particle type() {
             return Particle.CRIMSON_SPORE;
         }
     }
 
-    record WARPED_SPORE() implements ParticleOption {
+    record WarpedSpore() implements ParticleOption {
+        static final WarpedSpore INSTANCE = new WarpedSpore();
+
         @Override
         public Particle type() {
             return Particle.WARPED_SPORE;
         }
     }
 
-    record SPORE_BLOSSOM_AIR() implements ParticleOption {
+    record SporeBlossomAir() implements ParticleOption {
+        static final SporeBlossomAir INSTANCE = new SporeBlossomAir();
+
         @Override
         public Particle type() {
             return Particle.SPORE_BLOSSOM_AIR;
         }
     }
 
-    record DRIPPING_OBSIDIAN_TEAR() implements ParticleOption {
+    record DrippingObsidianTear() implements ParticleOption {
+        static final DrippingObsidianTear INSTANCE = new DrippingObsidianTear();
+
         @Override
         public Particle type() {
             return Particle.DRIPPING_OBSIDIAN_TEAR;
         }
     }
 
-    record FALLING_OBSIDIAN_TEAR() implements ParticleOption {
+    record FallingObsidianTear() implements ParticleOption {
+        static final FallingObsidianTear INSTANCE = new FallingObsidianTear();
+
         @Override
         public Particle type() {
             return Particle.FALLING_OBSIDIAN_TEAR;
         }
     }
 
-    record LANDING_OBSIDIAN_TEAR() implements ParticleOption {
+    record LandingObsidianTear() implements ParticleOption {
+        static final LandingObsidianTear INSTANCE = new LandingObsidianTear();
+
         @Override
         public Particle type() {
             return Particle.LANDING_OBSIDIAN_TEAR;
         }
     }
 
-    record REVERSE_PORTAL() implements ParticleOption {
+    record ReversePortal() implements ParticleOption {
+        static final ReversePortal INSTANCE = new ReversePortal();
+
         @Override
         public Particle type() {
             return Particle.REVERSE_PORTAL;
         }
     }
 
-    record WHITE_ASH() implements ParticleOption {
+    record WhiteAsh() implements ParticleOption {
+        static final WhiteAsh INSTANCE = new WhiteAsh();
+
         @Override
         public Particle type() {
             return Particle.WHITE_ASH;
         }
     }
 
-    record SMALL_FLAME() implements ParticleOption {
+    record SmallFlame() implements ParticleOption {
+        static final SmallFlame INSTANCE = new SmallFlame();
+
         @Override
         public Particle type() {
             return Particle.SMALL_FLAME;
         }
     }
 
-    record SNOWFLAKE() implements ParticleOption {
+    record Snowflake() implements ParticleOption {
+        static final Snowflake INSTANCE = new Snowflake();
+
         @Override
         public Particle type() {
             return Particle.SNOWFLAKE;
         }
     }
 
-    record DRIPPING_DRIPSTONE_LAVA() implements ParticleOption {
+    record DrippingDripstoneLava() implements ParticleOption {
+        static final DrippingDripstoneLava INSTANCE = new DrippingDripstoneLava();
+
         @Override
         public Particle type() {
             return Particle.DRIPPING_DRIPSTONE_LAVA;
         }
     }
 
-    record FALLING_DRIPSTONE_LAVA() implements ParticleOption {
+    record FallingDripstoneLava() implements ParticleOption {
+        static final FallingDripstoneLava INSTANCE = new FallingDripstoneLava();
+
         @Override
         public Particle type() {
             return Particle.FALLING_DRIPSTONE_LAVA;
         }
     }
 
-    record DRIPPING_DRIPSTONE_WATER() implements ParticleOption {
+    record DrippingDripstoneWater() implements ParticleOption {
+        static final DrippingDripstoneWater INSTANCE = new DrippingDripstoneWater();
+
         @Override
         public Particle type() {
             return Particle.DRIPPING_DRIPSTONE_WATER;
         }
     }
 
-    record FALLING_DRIPSTONE_WATER() implements ParticleOption {
+    record FallingDripstoneWater() implements ParticleOption {
+        static final FallingDripstoneWater INSTANCE = new FallingDripstoneWater();
+
         @Override
         public Particle type() {
             return Particle.FALLING_DRIPSTONE_WATER;
         }
     }
 
-    record GLOW_SQUID_INK() implements ParticleOption {
+    record GlowSquidInk() implements ParticleOption {
+        static final GlowSquidInk INSTANCE = new GlowSquidInk();
+
         @Override
         public Particle type() {
             return Particle.GLOW_SQUID_INK;
         }
     }
 
-    record GLOW() implements ParticleOption {
+    record Glow() implements ParticleOption {
+        static final Glow INSTANCE = new Glow();
+
         @Override
         public Particle type() {
             return Particle.GLOW;
         }
     }
 
-    record WAX_ON() implements ParticleOption {
+    record WaxOn() implements ParticleOption {
+        static final WaxOn INSTANCE = new WaxOn();
+
         @Override
         public Particle type() {
             return Particle.WAX_ON;
         }
     }
 
-    record WAX_OFF() implements ParticleOption {
+    record WaxOff() implements ParticleOption {
+        static final WaxOff INSTANCE = new WaxOff();
+
         @Override
         public Particle type() {
             return Particle.WAX_OFF;
         }
     }
 
-    record ELECTRIC_SPARK() implements ParticleOption {
+    record ElectricSpark() implements ParticleOption {
+        static final ElectricSpark INSTANCE = new ElectricSpark();
+
         @Override
         public Particle type() {
             return Particle.ELECTRIC_SPARK;
         }
     }
 
-    record SCRAPE() implements ParticleOption {
+    record Scrape() implements ParticleOption {
+        static final Scrape INSTANCE = new Scrape();
+
         @Override
         public Particle type() {
             return Particle.SCRAPE;
         }
     }
 
-    record SHRIEK(int ticks) implements ParticleOption {
+    record Shriek(int ticks) implements ParticleOption {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
