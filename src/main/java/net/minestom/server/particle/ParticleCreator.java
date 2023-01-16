@@ -2,7 +2,6 @@ package net.minestom.server.particle;
 
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +13,7 @@ import java.util.function.Consumer;
 public class ParticleCreator {
 
     /**
-     * @deprecated Use {@link #createParticlePacket(Particle, boolean, double, double, double, float, float, float, float, int, ParticleOption)} instead
+     * @deprecated Use {@link #createParticlePacket(ParticleOption, boolean, double, double, double, float, float, float, float, int)} instead
      */
 
     @Deprecated(forRemoval = true)
@@ -36,14 +35,12 @@ public class ParticleCreator {
     }
 
 
-    public static ParticlePacket createParticlePacket(@NotNull Particle particleType, boolean distance,
+    public static ParticlePacket createParticlePacket(@NotNull ParticleOption option, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
-                                                      float particleData, int count, ParticleOption options) {
+                                                      float particleData, int count) {
 
-        Check.argCondition(particleType != options.type(), "Particle type ''{0}'' does not support Particle options ''{1}''",
-                particleType.namespace(), options.getClass().getSimpleName());
-        return new ParticlePacket(particleType.id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, options);
+        return new ParticlePacket(option.type().id(), distance, x, y, z, offsetX, offsetY, offsetZ, particleData, count, BinaryWriter.makeArray(option::write));
     }
 
 
