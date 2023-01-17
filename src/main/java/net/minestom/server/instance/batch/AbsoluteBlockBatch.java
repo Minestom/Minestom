@@ -6,12 +6,16 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -125,6 +129,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
+            Set<Chunk> updated = ConcurrentHashMap.newKeySet();
+
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
                 final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
@@ -144,6 +150,25 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
                                 instance.scheduleNextTick(inst -> callback.run());
                             } else {
                                 callback.run();
+                            }
+                        }
+
+                        Set<Chunk> expanded = new HashSet<>();
+                        for (Chunk chunk : updated) {
+                            for (int i = -1; i <= 1; ++i) {
+                                for (int j = -1; j <= 1; ++j) {
+                                    Chunk toAdd = instance.getChunk(chunk.getChunkX() + i, chunk.getChunkZ() + j);
+                                    if (toAdd != null) {
+                                        expanded.add(toAdd);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Update the chunk's light
+                        for (Chunk chunk : expanded) {
+                            if (chunk instanceof LightingChunk dc) {
+                                dc.sendLighting();
                             }
                         }
                     }

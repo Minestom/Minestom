@@ -328,10 +328,7 @@ public class InstanceContainer extends Instance {
                                 if (forkChunk != null) {
                                     applyFork(forkChunk, sectionModifier);
                                     // Update players
-                                    if (forkChunk instanceof DynamicChunk dynamicChunk) {
-                                        dynamicChunk.chunkCache.invalidate();
-                                        dynamicChunk.lightCache.invalidate();
-                                    }
+                                    forkChunk.invalidate();
                                     forkChunk.sendChunk();
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);
@@ -427,6 +424,7 @@ public class InstanceContainer extends Instance {
      * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
+    @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
     }

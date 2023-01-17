@@ -113,7 +113,7 @@ public final class CollisionUtils {
         };
     }
 
-    public static Shape parseBlockShape(String str, Registry.BlockEntry blockEntry) {
-        return ShapeImpl.parseBlockFromRegistry(str, blockEntry);
+    public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
+        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry);
     }
 }

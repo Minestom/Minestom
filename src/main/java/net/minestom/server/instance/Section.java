@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
@@ -7,22 +8,20 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 
 public final class Section implements NetworkBuffer.Writer {
-    private Palette blockPalette;
-    private Palette biomePalette;
-    private byte[] skyLight;
-    private byte[] blockLight;
+    private final Palette blockPalette;
+    private final Palette biomePalette;
+    private final Light skyLight;
+    private final Light blockLight;
 
-    private Section(Palette blockPalette, Palette biomePalette,
-                    byte[] skyLight, byte[] blockLight) {
+    private Section(Palette blockPalette, Palette biomePalette) {
         this.blockPalette = blockPalette;
         this.biomePalette = biomePalette;
-        this.skyLight = skyLight;
-        this.blockLight = blockLight;
+        this.skyLight = Light.sky(blockPalette);
+        this.blockLight = Light.block(blockPalette);
     }
 
     public Section() {
-        this(Palette.blocks(), Palette.biomes(),
-                new byte[0], new byte[0]);
+        this(Palette.blocks(), Palette.biomes());
     }
 
     public Palette blockPalette() {
@@ -33,33 +32,14 @@ public final class Section implements NetworkBuffer.Writer {
         return biomePalette;
     }
 
-    public byte[] getSkyLight() {
-        return skyLight;
-    }
-
-    public void setSkyLight(byte[] skyLight) {
-        this.skyLight = skyLight;
-    }
-
-    public byte[] getBlockLight() {
-        return blockLight;
-    }
-
-    public void setBlockLight(byte[] blockLight) {
-        this.blockLight = blockLight;
-    }
-
     public void clear() {
         this.blockPalette.fill(0);
         this.biomePalette.fill(0);
-        this.skyLight = new byte[0];
-        this.blockLight = new byte[0];
     }
 
     @Override
     public @NotNull Section clone() {
-        return new Section(blockPalette.clone(), biomePalette.clone(),
-                skyLight.clone(), blockLight.clone());
+        return new Section(this.blockPalette.clone(), this.biomePalette.clone());
     }
 
     @Override
@@ -67,5 +47,21 @@ public final class Section implements NetworkBuffer.Writer {
         writer.write(SHORT, (short) blockPalette.count());
         writer.write(blockPalette);
         writer.write(biomePalette);
+    }
+
+    public void setSkyLight(byte[] copyArray) {
+        this.skyLight.set(copyArray);
+    }
+
+    public void setBlockLight(byte[] copyArray) {
+        this.blockLight.set(copyArray);
+    }
+
+    public Light skyLight() {
+        return skyLight;
+    }
+
+    public Light blockLight() {
+        return blockLight;
     }
 }
