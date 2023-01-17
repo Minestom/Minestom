@@ -96,10 +96,11 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)" class="member-name-link">PlayerBlockInteractEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)" class="member-name-link">PlayerBlockInteractEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
  @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+ @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition,
  @NotNull <a href="../../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -181,7 +182,7 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">
 <h3>PlayerBlockInteractEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerBlockInteractEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
@@ -191,6 +192,8 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
  @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  @NotNull
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+ @NotNull
+ @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition,
  @NotNull
  @NotNull <a href="../../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</span></div>
 </section>

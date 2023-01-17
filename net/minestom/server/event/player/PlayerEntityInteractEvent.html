@@ -95,9 +95,10 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand)" class="member-name-link">PlayerEntityInteractEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand,net.minestom.server.coordinate.Point)" class="member-name-link">PlayerEntityInteractEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
- <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></div>
+ <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+ @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;interactPosition)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -118,14 +119,19 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets with which hand the player interacted with the entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInteractPosition()" class="member-name-link">getInteractPosition</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the position at which the entity was interacted</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with who <a href="#getPlayer()"><code>getPlayer()</code></a> is interacting.</div>
 </div>
 </div>
@@ -152,14 +158,16 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand,net.minestom.server.coordinate.Point)">
 <h3>PlayerEntityInteractEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerEntityInteractEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull
  @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
  @NotNull
- <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</span></div>
+ <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+ @NotNull
+ @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;interactPosition)</span></div>
 </section>
 </li>
 </ul>
@@ -170,6 +178,21 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="getPlayer()">
+<h3>getPlayer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></span>&nbsp;<span class="element-name">getPlayer</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../trait/PlayerEvent.html#getPlayer()">PlayerEvent</a></code></span></div>
+<div class="block">Gets the player.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../trait/PlayerEvent.html#getPlayer()">getPlayer</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
+<dt>Returns:</dt>
+<dd>the player</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="getTarget()">
 <h3>getTarget</h3>
@@ -195,17 +218,20 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 </section>
 </li>
 <li>
-<section class="detail" id="getPlayer()">
-<h3>getPlayer</h3>
+<section class="detail" id="getInteractPosition()">
+<h3>getInteractPosition</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></span>&nbsp;<span class="element-name">getPlayer</span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../trait/PlayerEvent.html#getPlayer()">PlayerEvent</a></code></span></div>
-<div class="block">Gets the player.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getInteractPosition</span>()</div>
+<div class="block">Gets the position at which the entity was interacted</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../trait/PlayerEvent.html#getPlayer()">getPlayer</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 <dt>Returns:</dt>
-<dd>the player</dd>
+<dd>the interaction position</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="../../network/packet/client/play/ClientInteractEntityPacket.InteractAt.html" title="class in net.minestom.server.network.packet.client.play"><code>ClientInteractEntityPacket.InteractAt</code></a></li>
+</ul>
+</dd>
 </dl>
 </section>
 </li>

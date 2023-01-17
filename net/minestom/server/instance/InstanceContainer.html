@@ -153,8 +153,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Assigns a <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a> to this container.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point)" class="member-name-link">breakBlock</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)" class="member-name-link">breakBlock</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+ @NotNull <a href="block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Does call <a href="../event/player/PlayerBlockBreakEvent.html" title="class in net.minestom.server.event.player"><code>PlayerBlockBreakEvent</code></a>
  and send particle packets</div>
@@ -406,18 +407,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point)">
+<section class="detail" id="breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">
 <h3>breakBlock</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">breakBlock</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Instance.html#breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point)">Instance</a></code></span></div>
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+ @NotNull
+ @NotNull <a href="block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Instance.html#breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">Instance</a></code></span></div>
 <div class="block">Does call <a href="../event/player/PlayerBlockBreakEvent.html" title="class in net.minestom.server.event.player"><code>PlayerBlockBreakEvent</code></a>
  and send particle packets</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="Instance.html#breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point)">breakBlock</a></code>&nbsp;in class&nbsp;<code><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></dd>
+<dd><code><a href="Instance.html#breakBlock(net.minestom.server.entity.Player,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">breakBlock</a></code>&nbsp;in class&nbsp;<code><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> who break the block</dd>
 <dd><code>blockPosition</code> - the position of the broken block</dd>
