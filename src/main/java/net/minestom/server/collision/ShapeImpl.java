@@ -94,7 +94,7 @@ final class ShapeImpl implements Shape {
      * @param covering The rectangle set to check for covering.
      * @return 0 if face is not covered, 1 if face is covered partially, 2 if face is fully covered.
      */
-    public static byte isFaceCovered(List<Rectangle> covering) {
+    private static byte isFaceCovered(List<Rectangle> covering) {
         if (covering.isEmpty()) return 0;
         Rectangle r = new Rectangle(0, 0, 1, 1);
         List<Rectangle> toCover = new ArrayList<>();
