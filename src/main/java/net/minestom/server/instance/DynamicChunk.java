@@ -59,7 +59,7 @@ public class DynamicChunk extends Chunk {
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         assertLock();
         this.lastChange = System.currentTimeMillis();
-        invalidate();
+        this.chunkCache.invalidate();
 
         // Update pathfinder
         if (columnarSpace != null) {
@@ -180,11 +180,6 @@ public class DynamicChunk extends Chunk {
     public void reset() {
         for (Section section : sections) section.clear();
         this.entries.clear();
-    }
-
-    @Override
-    protected void invalidate() {
-        this.chunkCache.invalidate();
     }
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {

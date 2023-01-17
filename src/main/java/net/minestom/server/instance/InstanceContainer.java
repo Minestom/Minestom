@@ -328,7 +328,13 @@ public class InstanceContainer extends Instance {
                                 if (forkChunk != null) {
                                     applyFork(forkChunk, sectionModifier);
                                     // Update players
-                                    forkChunk.invalidate();
+                                    if (forkChunk instanceof LightingChunk lightingChunk) {
+                                        lightingChunk.chunkCache.invalidate();
+                                        lightingChunk.lightCache.invalidate();
+                                    } else if (forkChunk instanceof DynamicChunk dynamicChunk) {
+                                        dynamicChunk.chunkCache.invalidate();
+                                    }
+
                                     forkChunk.sendChunk();
                                 } else {
                                     final long index = ChunkUtils.getChunkIndex(start);

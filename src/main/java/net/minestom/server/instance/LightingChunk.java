@@ -57,7 +57,10 @@ public class LightingChunk extends DynamicChunk {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
                 if (neighborChunk == null) continue;
-                neighborChunk.invalidate();
+
+                if (neighborChunk instanceof LightingChunk lightingChunk) {
+                    lightingChunk.lightCache.invalidate();
+                }
 
                 for (int k = -1; k <= 1; k++) {
                     if (k + coordinate < neighborChunk.getMinSection() || k + coordinate >= neighborChunk.getMaxSection()) continue;
@@ -152,12 +155,6 @@ public class LightingChunk extends DynamicChunk {
                 skyLights, blockLights);
     }
 
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        this.lightCache.invalidate();
-    }
-
     private static void flushQueue(Instance instance, Set<Point> queue, boolean block) {
         var updateQueue =
                 queue.parallelStream()
@@ -165,7 +162,9 @@ public class LightingChunk extends DynamicChunk {
                             Chunk chunk = instance.getChunk(sectionLocation.blockX(), sectionLocation.blockZ());
                             if (chunk == null) return null;
 
-                            chunk.invalidate();
+                            if (chunk instanceof LightingChunk lightingChunk) {
+                                lightingChunk.lightCache.invalidate();
+                            }
 
                             if (block) {
                                 return chunk.getSection(sectionLocation.blockY()).blockLight()
