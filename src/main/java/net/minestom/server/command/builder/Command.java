@@ -58,7 +58,7 @@ public class Command {
 
     public Command() {
         this.name = getClass().getSimpleName().replaceFirst("Command", "").toLowerCase();
-        this.aliases = null;
+        this.aliases = new String[0];
         this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
 
         this.subcommands = new ArrayList<>();
