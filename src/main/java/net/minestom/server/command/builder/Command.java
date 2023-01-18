@@ -56,6 +56,15 @@ public class Command {
     private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
 
+    public Command() {
+        this.name = getClass().getSimpleName().replaceFirst("Command", "").toLowerCase();
+        this.aliases = null;
+        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
+
+        this.subcommands = new ArrayList<>();
+        this.syntaxes = new ArrayList<>();
+    }
+
     /**
      * Creates a {@link Command} with a name and one or multiple aliases.
      *
