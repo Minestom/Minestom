@@ -1,6 +1,8 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.instance.block.Block;
@@ -124,12 +126,12 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder displayName(@Nullable Component displayName) {
-            return set(ItemTags.NAME, displayName);
+            return set(ItemTags.NAME, Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false).append(displayName));
         }
 
         @Contract("_ -> this")
         default @NotNull Builder displayName(MiniMessage miniMessage, @Nullable String displayName) {
-            return displayName(displayName == null ? null : Component.empty().decoration(TextDecoration.ITALIC, false).append(miniMessage.deserialize(displayName)));
+            return displayName(displayName == null ? null : miniMessage.deserialize(displayName));
         }
 
         @Contract("_ -> this")
@@ -144,7 +146,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder lore(MiniMessage miniMessage, String... lore) {
-            return lore(Arrays.stream(lore).map(s -> Component.empty().decoration(TextDecoration.ITALIC, false).append(miniMessage.deserialize(s))).toList());
+            return lore(Arrays.stream(lore).map(s -> miniMessage.deserialize(s)).toList());
         }
 
         @Contract("_ -> this")
@@ -154,7 +156,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore));
+            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore.stream().map(line -> Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false).append(line)).toList()));
         }
 
         @Contract("_ -> this")
