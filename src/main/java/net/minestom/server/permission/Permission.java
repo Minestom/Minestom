@@ -1,6 +1,7 @@
 package net.minestom.server.permission;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.ConsoleSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -67,7 +68,7 @@ public class Permission {
      * @return whether the sender has the authorization to execute the command.
      */
     public boolean matchCondition(@NotNull CommandSender sender, @Nullable String commandString) {
-        return sender.hasPermission(getPermissionName());
+        return (sender instanceof ConsoleSender || sender.hasPermission(this));
     }
 
     @Override
