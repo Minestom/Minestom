@@ -1,5 +1,6 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityProjectile;
@@ -26,7 +27,7 @@ public class RangedAttackGoal extends GoalSelector {
     private final double power;
     private final double spread;
 
-    private Function<Entity, EntityProjectile> projectileGenerator;
+    private ProjectileGenerator projectileGenerator;
 
     private boolean stop;
     private Entity cachedTarget;
@@ -69,8 +70,23 @@ public class RangedAttackGoal extends GoalSelector {
         return this.cooldown;
     }
 
-    public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
+    public void setProjectileGenerator(ProjectileGenerator projectileGenerator) {
         this.projectileGenerator = projectileGenerator;
+    }
+
+    public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
+        this.projectileGenerator = (shooter, target, pow, spr) -> {
+            EntityProjectile projectile = projectileGenerator.apply(shooter);
+            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D));
+            projectile.shoot(target, pow, spr);
+        };
+    }
+
+    private ProjectileGenerator getProjectileGeneratorOrDefault() {
+        if (projectileGenerator == null) {
+            setProjectileGenerator(shooter -> new EntityProjectile(shooter, EntityType.ARROW));
+        }
+        return projectileGenerator;
     }
 
     @Override
@@ -103,15 +119,8 @@ public class RangedAttackGoal extends GoalSelector {
             if (!Cooldown.hasCooldown(time, this.lastShot, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     final var to = target.getPosition().add(0D, target.getEyeHeight(), 0D);
+                    this.getProjectileGeneratorOrDefault().shootProjectile(this.entityCreature, to, this.power, this.spread);
 
-                    Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
-                    if (projectileGenerator == null) {
-                        projectileGenerator = shooter -> new EntityProjectile(shooter, EntityType.ARROW);
-                    }
-                    EntityProjectile projectile = projectileGenerator.apply(this.entityCreature);
-                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition().add(0D, this.entityCreature.getEyeHeight(), 0D));
-
-                    projectile.shoot(to, this.power, this.spread);
                     this.lastShot = time;
                 } else {
                     comeClose = this.comeClose;
@@ -145,5 +154,20 @@ public class RangedAttackGoal extends GoalSelector {
     public void end() {
         // Stop following the target
         this.entityCreature.getNavigator().setPathTo(null);
+    }
+
+    /**
+     * The function used to generate a projectile.
+     */
+    public interface ProjectileGenerator {
+        /**
+         * Shoots a projectile.
+         *
+         * @param shooter the shooter.
+         * @param target  the target position.
+         * @param power   the shot power.
+         * @param spread  the shot spread.
+         */
+        void shootProjectile(EntityCreature shooter, Pos target, double power, double spread);
     }
 }
