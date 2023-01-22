@@ -19,6 +19,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     private final Player.Hand hand;
     private final Block block;
     private final Point blockPosition;
+    private final Point cursorPosition;
     private final BlockFace blockFace;
 
     /**
@@ -36,6 +37,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
         this.hand = hand;
         this.block = block;
         this.blockPosition = blockPosition;
+        this.cursorPosition = cursorPosition;
         this.blockFace = blockFace;
     }
 
@@ -73,6 +75,15 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      */
     public @NotNull Player.Hand getHand() {
         return hand;
+    }
+
+    /**
+     * Gets the position of the player's cursor for the interaction.
+     *
+     * @return the cursor position
+     */
+    public @NotNull Point getCursorPosition() {
+        return cursorPosition;
     }
 
     /**
