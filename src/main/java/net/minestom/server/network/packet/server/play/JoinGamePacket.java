@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
     }
 
     public JoinGamePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(INT), reader.read(BOOLEAN), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
+        this(reader.read(INT), reader.read(BOOLEAN), GameMode.fromId(reader.read(BYTE)), getNullableGameMode(reader.read(BYTE)),
                 reader.readCollection(STRING), (NBTCompound) reader.read(NBT), reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT),
                 reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN),
@@ -62,6 +63,16 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
     @Override
     public int getId() {
         return ServerPacketIdentifier.JOIN_GAME;
+    }
+
+    /**
+     * This method exists in lieu of a NetworkBufferType since -1 is only a
+     * valid value in this packet and changing behaviour of GameMode.fromId()
+     * to be nullable would be too big of a change. Also, game modes are often
+     * represented as other data types, including floats.
+     */
+    private static @Nullable GameMode getNullableGameMode(final byte id) {
+        return id == (byte) -1 ? null : GameMode.fromId(id);
     }
 
 }
