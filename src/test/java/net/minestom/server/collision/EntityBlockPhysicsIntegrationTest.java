@@ -1029,4 +1029,34 @@ public class EntityBlockPhysicsIntegrationTest {
 
         assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
     }
+
+    @Test
+    public void entityBlockPositionTestSlightlyAbove(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.00001, 0));
+
+        var deltaPos = new Vec(0.0, -10, 0.0);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+
+        var newPos = physicsResult.newPosition();
+        assertEquals(43, newPos.blockY());
+    }
+
+    @Test
+    public void entityBlockPositionTestFarAbove(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.5, 0));
+
+        var deltaPos = new Vec(0.0, -10, 0.0);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+
+        var newPos = physicsResult.newPosition();
+        assertEquals(43, newPos.blockY());
+    }
 }
