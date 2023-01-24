@@ -3,23 +3,26 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
  * The packet creates or updates teams
  */
-public record TeamsPacket(String teamName, Action action) implements ServerPacket {
-    public TeamsPacket(BinaryReader reader) {
-        this(reader.readSizedString(), switch (reader.readByte()) {
+public record TeamsPacket(String teamName, Action action) implements ComponentHoldingServerPacket {
+    public TeamsPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(STRING), switch (reader.read(BYTE)) {
             case 0 -> new CreateTeamAction(reader);
             case 1 -> new RemoveTeamAction();
             case 2 -> new UpdateTeamAction(reader);
@@ -30,13 +33,28 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(teamName);
-        writer.writeByte((byte) action.id());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, teamName);
+        writer.write(BYTE, (byte) action.id());
         writer.write(action);
     }
 
-    public sealed interface Action extends Writeable
+    @Override
+    public @NotNull Collection<Component> components() {
+        return this.action instanceof ComponentHolder<?> holder ? holder.components() : List.of();
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        return new TeamsPacket(
+                this.teamName,
+                this.action instanceof ComponentHolder<?> holder
+                        ? (Action) holder.copyWithOperator(operator)
+                        : this.action
+        );
+    }
+
+    public sealed interface Action extends NetworkBuffer.Writer
             permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
         int id();
     }
@@ -44,39 +62,58 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record CreateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   Collection<String> entities) implements Action {
+                                   Collection<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
         public CreateTeamAction {
             entities = List.copyOf(entities);
         }
 
-        public CreateTeamAction(BinaryReader reader) {
-            this(reader.readComponent(), reader.readByte(),
-                    NameTagVisibility.fromIdentifier(reader.readSizedString()), CollisionRule.fromIdentifier(reader.readSizedString()),
-                    NamedTextColor.ofExact(reader.readVarInt()), reader.readComponent(), reader.readComponent(),
-                    reader.readVarIntList(BinaryReader::readSizedString));
+        public CreateTeamAction(@NotNull NetworkBuffer reader) {
+            this(reader.read(COMPONENT), reader.read(BYTE),
+                    NameTagVisibility.fromIdentifier(reader.read(STRING)), CollisionRule.fromIdentifier(reader.read(STRING)),
+                    NamedTextColor.namedColor(reader.read(VAR_INT)), reader.read(COMPONENT), reader.read(COMPONENT),
+                    reader.readCollection(STRING));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeComponent(displayName);
-            writer.writeByte(friendlyFlags);
-            writer.writeSizedString(nameTagVisibility.getIdentifier());
-            writer.writeSizedString(collisionRule.getIdentifier());
-            writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(teamColor));
-            writer.writeComponent(teamPrefix);
-            writer.writeComponent(teamSuffix);
-            writer.writeVarIntList(entities, BinaryWriter::writeSizedString);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(COMPONENT, displayName);
+            writer.write(BYTE, friendlyFlags);
+            writer.write(STRING, nameTagVisibility.getIdentifier());
+            writer.write(STRING, collisionRule.getIdentifier());
+            writer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(teamColor));
+            writer.write(COMPONENT, teamPrefix);
+            writer.write(COMPONENT, teamSuffix);
+            writer.writeCollection(STRING, entities);
         }
 
         @Override
         public int id() {
             return 0;
         }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+        }
+
+        @Override
+        public @NotNull CreateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new CreateTeamAction(
+                    operator.apply(this.displayName),
+                    this.friendlyFlags,
+                    this.nameTagVisibility,
+                    this.collisionRule,
+                    this.teamColor,
+                    operator.apply(this.teamPrefix),
+                    operator.apply(this.teamSuffix),
+                    entities
+            );
+        }
     }
 
     public record RemoveTeamAction() implements Action {
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull NetworkBuffer writer) {
         }
 
         @Override
@@ -88,44 +125,63 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record UpdateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor,
-                                   Component teamPrefix, Component teamSuffix) implements Action {
+                                   Component teamPrefix,
+                                   Component teamSuffix) implements Action, ComponentHolder<UpdateTeamAction> {
 
-        public UpdateTeamAction(BinaryReader reader) {
-            this(reader.readComponent(), reader.readByte(),
-                    NameTagVisibility.fromIdentifier(reader.readSizedString()), CollisionRule.fromIdentifier(reader.readSizedString()),
-                    NamedTextColor.ofExact(reader.readVarInt()),
-                    reader.readComponent(), reader.readComponent());
+        public UpdateTeamAction(@NotNull NetworkBuffer reader) {
+            this(reader.read(COMPONENT), reader.read(BYTE),
+                    NameTagVisibility.fromIdentifier(reader.read(STRING)), CollisionRule.fromIdentifier(reader.read(STRING)),
+                    NamedTextColor.namedColor(reader.read(VAR_INT)),
+                    reader.read(COMPONENT), reader.read(COMPONENT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeComponent(displayName);
-            writer.writeByte(friendlyFlags);
-            writer.writeSizedString(nameTagVisibility.getIdentifier());
-            writer.writeSizedString(collisionRule.getIdentifier());
-            writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(teamColor));
-            writer.writeComponent(teamPrefix);
-            writer.writeComponent(teamSuffix);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(COMPONENT, displayName);
+            writer.write(BYTE, friendlyFlags);
+            writer.write(STRING, nameTagVisibility.getIdentifier());
+            writer.write(STRING, collisionRule.getIdentifier());
+            writer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(teamColor));
+            writer.write(COMPONENT, teamPrefix);
+            writer.write(COMPONENT, teamSuffix);
         }
 
         @Override
         public int id() {
             return 2;
         }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+        }
+
+        @Override
+        public @NotNull UpdateTeamAction copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new UpdateTeamAction(
+                    operator.apply(this.displayName),
+                    this.friendlyFlags,
+                    this.nameTagVisibility,
+                    this.collisionRule,
+                    this.teamColor,
+                    operator.apply(this.teamPrefix),
+                    operator.apply(this.teamSuffix)
+            );
+        }
     }
 
-    public record AddEntitiesToTeamAction(Collection<String> entities) implements Action {
+    public record AddEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
         public AddEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
 
-        public AddEntitiesToTeamAction(BinaryReader reader) {
-            this(reader.readVarIntList(BinaryReader::readSizedString));
+        public AddEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
+            this(reader.readCollection(STRING));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarIntList(entities, BinaryWriter::writeSizedString);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeCollection(STRING, entities);
         }
 
         @Override
@@ -134,14 +190,18 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record RemoveEntitiesToTeamAction(String[] entities) implements Action {
-        public RemoveEntitiesToTeamAction(BinaryReader reader) {
-            this(reader.readSizedStringArray());
+    public record RemoveEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
+        public RemoveEntitiesToTeamAction {
+            entities = List.copyOf(entities);
+        }
+
+        public RemoveEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
+            this(reader.readCollection(STRING));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeStringArray(entities);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeCollection(STRING, entities);
         }
 
         @Override

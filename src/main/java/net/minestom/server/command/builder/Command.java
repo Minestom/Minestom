@@ -161,7 +161,7 @@ public class Command {
         if (!hasOptional) {
             final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
             this.syntaxes.add(syntax);
-            return Collections.singleton(syntax);
+            return List.of(syntax);
         } else {
             List<CommandSyntax> optionalSyntaxes = new ArrayList<>();
 
@@ -365,7 +365,7 @@ public class Command {
                         addArguments.accept(node, arguments);
                         arguments = new ArrayList<>();
 
-                        node = findNode.apply(node, Collections.singleton(literal));
+                        node = findNode.apply(node, Set.of(literal));
                         continue;
                     } else if (argument instanceof ArgumentWord argumentWord) {
                         if (argumentWord.hasRestrictions()) {

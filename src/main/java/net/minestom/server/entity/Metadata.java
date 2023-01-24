@@ -2,126 +2,97 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public final class Metadata {
     public static Entry<Byte> Byte(byte value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_BYTE, value, BinaryWriter::writeByte, BinaryReader::readByte);
+        return new MetadataImpl.EntryImpl<>(TYPE_BYTE, value, NetworkBuffer.BYTE);
     }
 
     public static Entry<Integer> VarInt(int value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, BinaryWriter::writeVarInt, BinaryReader::readVarInt);
+        return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, NetworkBuffer.VAR_INT);
     }
 
     public static Entry<Float> Float(float value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_FLOAT, value, BinaryWriter::writeFloat, BinaryReader::readFloat);
+        return new MetadataImpl.EntryImpl<>(TYPE_FLOAT, value, NetworkBuffer.FLOAT);
     }
 
     public static Entry<String> String(@NotNull String value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_STRING, value, BinaryWriter::writeSizedString, BinaryReader::readSizedString);
+        return new MetadataImpl.EntryImpl<>(TYPE_STRING, value, NetworkBuffer.STRING);
     }
 
     public static Entry<Component> Chat(@NotNull Component value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_CHAT, value, BinaryWriter::writeComponent, BinaryReader::readComponent);
+        return new MetadataImpl.EntryImpl<>(TYPE_CHAT, value, NetworkBuffer.COMPONENT);
     }
 
     public static Entry<Component> OptChat(@Nullable Component value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTCHAT, value, (writer, v) -> {
-            writer.writeBoolean(v != null);
-            if (v != null) writer.writeComponent(v);
-        }, reader -> reader.readBoolean() ? reader.readComponent() : null);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTCHAT, value, NetworkBuffer.OPT_CHAT);
     }
 
     public static Entry<ItemStack> Slot(@NotNull ItemStack value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_SLOT, value, BinaryWriter::writeItemStack, BinaryReader::readItemStack);
+        return new MetadataImpl.EntryImpl<>(TYPE_SLOT, value, NetworkBuffer.ITEM);
     }
 
     public static Entry<Boolean> Boolean(boolean value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_BOOLEAN, value, BinaryWriter::writeBoolean, BinaryReader::readBoolean);
+        return new MetadataImpl.EntryImpl<>(TYPE_BOOLEAN, value, NetworkBuffer.BOOLEAN);
     }
 
     public static Entry<Point> Rotation(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, (writer, v) -> {
-            writer.writeFloat((float) v.x());
-            writer.writeFloat((float) v.y());
-            writer.writeFloat((float) v.z());
-        }, reader -> new Vec(reader.readFloat(), reader.readFloat(), reader.readFloat()));
+        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.ROTATION);
     }
 
     public static Entry<Point> Position(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_POSITION, value, BinaryWriter::writeBlockPosition, BinaryReader::readBlockPosition);
+        return new MetadataImpl.EntryImpl<>(TYPE_POSITION, value, NetworkBuffer.BLOCK_POSITION);
     }
 
     public static Entry<Point> OptPosition(@Nullable Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTPOSITION, value, (writer, v) -> {
-            writer.writeBoolean(v != null);
-            if (v != null) writer.writeBlockPosition(v);
-        }, reader -> reader.readBoolean() ? reader.readBlockPosition() : null);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTPOSITION, value, NetworkBuffer.OPT_BLOCK_POSITION);
     }
 
     public static Entry<Direction> Direction(@NotNull Direction value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_DIRECTION, value,
-                (writer, v) -> writer.writeVarInt(v.ordinal()),
-                reader -> Direction.values()[reader.readVarInt()]);
+        return new MetadataImpl.EntryImpl<>(TYPE_DIRECTION, value, NetworkBuffer.DIRECTION);
     }
 
     public static Entry<UUID> OptUUID(@Nullable UUID value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, (writer, v) -> {
-            writer.writeBoolean(v != null);
-            if (v != null) writer.writeUuid(v);
-        }, reader -> reader.readBoolean() ? reader.readUuid() : null);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, NetworkBuffer.OPT_UUID);
     }
 
     public static Entry<Integer> OptBlockID(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKID, value,
-                (writer, v) -> writer.writeVarInt(v != null ? v : 0),
-                reader -> reader.readBoolean() ? reader.readVarInt() : null);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKID, value, NetworkBuffer.OPT_BLOCK_ID);
     }
 
     public static Entry<NBT> NBT(@NotNull NBT nbt) {
-        return new MetadataImpl.EntryImpl<>(TYPE_NBT, nbt, (writer, v) -> writer.writeNBT("", v), BinaryReader::readTag);
+        return new MetadataImpl.EntryImpl<>(TYPE_NBT, nbt, NetworkBuffer.NBT);
     }
 
     public static Entry<int[]> VillagerData(int villagerType,
                                             int villagerProfession,
                                             int level) {
         return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, new int[]{villagerType, villagerProfession, level},
-                (writer, v) -> {
-                    writer.writeVarInt(v[0]);
-                    writer.writeVarInt(v[1]);
-                    writer.writeVarInt(v[2]);
-                },
-                reader -> new int[]{reader.readVarInt(), reader.readVarInt(), reader.readVarInt()});
+                NetworkBuffer.VILLAGER_DATA);
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTVARINT,
-                value, (writer, v) -> writer.writeVarInt(v != null ? v + 1 : 0),
-                reader -> reader.readBoolean() ? reader.readVarInt() : null);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTVARINT, value, NetworkBuffer.OPT_VAR_INT);
     }
 
     public static Entry<Entity.Pose> Pose(@NotNull Entity.Pose value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_POSE, value,
-                (writer, v) -> writer.writeVarInt(v.ordinal()),
-                reader -> Entity.Pose.values()[reader.readVarInt()]);
+        return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
     public static final byte TYPE_BYTE = 0;
@@ -155,7 +126,8 @@ public final class Metadata {
     }
 
     private final Entity entity;
-    private final Int2ObjectSyncMap<Entry<?>> metadataMap = Int2ObjectSyncMap.hashmap();
+    private volatile Entry<?>[] entries = new Entry<?>[0];
+    private volatile Map<Integer, Entry<?>> entryMap = null;
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
@@ -167,12 +139,21 @@ public final class Metadata {
 
     @SuppressWarnings("unchecked")
     public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final Entry<?> entry = this.metadataMap.get(index);
+        final Entry<?>[] entries = this.entries;
+        if (index < 0 || index >= entries.length) return defaultValue;
+        final Entry<?> entry = entries[index];
         return entry != null ? (T) entry.value() : defaultValue;
     }
 
     public void setIndex(int index, @NotNull Entry<?> entry) {
-        this.metadataMap.put(index, entry);
+        Entry<?>[] entries = this.entries;
+        // Resize array if necessary
+        if (index >= entries.length) {
+            final int newLength = Math.max(entries.length * 2, index + 1);
+            this.entries = entries = Arrays.copyOf(entries, newLength);
+        }
+        entries[index] = entry;
+        this.entryMap = null;
         // Send metadata packet to update viewers and self
         final Entity entity = this.entity;
         if (entity != null && entity.isActive()) {
@@ -206,17 +187,27 @@ public final class Metadata {
     }
 
     public @NotNull Map<Integer, Entry<?>> getEntries() {
-        return metadataMap;
+        Map<Integer, Entry<?>> map = entryMap;
+        if (map == null) {
+            map = new HashMap<>();
+            final Entry<?>[] entries = this.entries;
+            for (int i = 0; i < entries.length; i++) {
+                final Entry<?> entry = entries[i];
+                if (entry != null) map.put(i, entry);
+            }
+            this.entryMap = Map.copyOf(map);
+        }
+        return map;
     }
 
-    public sealed interface Entry<T> extends Writeable
+    public sealed interface Entry<T> extends NetworkBuffer.Writer
             permits MetadataImpl.EntryImpl {
         int type();
 
         @UnknownNullability T value();
 
         @ApiStatus.Internal
-        static @NotNull Entry<?> read(int type, @NotNull BinaryReader reader) {
+        static @NotNull Entry<?> read(int type, @NotNull NetworkBuffer reader) {
             return MetadataImpl.EntryImpl.read(type, reader);
         }
     }

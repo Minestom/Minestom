@@ -3,11 +3,11 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.Taggable;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.*;
 import java.util.function.Consumer;
 
-public sealed interface ItemMeta extends TagReadable, Writeable
+public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
         permits ItemMetaImpl {
 
     @Override

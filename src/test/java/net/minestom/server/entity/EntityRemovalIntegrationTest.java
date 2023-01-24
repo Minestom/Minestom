@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
 import java.time.temporal.TemporalUnit;
 import java.util.List;
 
-import static net.minestom.server.api.TestUtils.waitUntilCleared;
+import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest

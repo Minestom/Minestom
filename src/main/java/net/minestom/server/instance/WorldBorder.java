@@ -27,7 +27,7 @@ public class WorldBorder {
     private long lerpStartTime;
 
     private long speed;
-    private int portalTeleportBoundary;
+    private final int portalTeleportBoundary;
     private int warningTime;
     private int warningBlocks;
 
@@ -39,8 +39,7 @@ public class WorldBorder {
 
         this.speed = 0;
 
-        this.portalTeleportBoundary = 29999984;
-
+        this.portalTeleportBoundary = Integer.getInteger("minestom.world-border-size", 29999984);
     }
 
     /**

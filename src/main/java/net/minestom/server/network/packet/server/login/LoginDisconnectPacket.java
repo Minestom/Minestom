@@ -1,24 +1,25 @@
 package net.minestom.server.network.packet.server.login;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+
 public record LoginDisconnectPacket(@NotNull Component kickMessage) implements ComponentHoldingServerPacket {
-    public LoginDisconnectPacket(BinaryReader reader) {
-        this(reader.readComponent());
+    public LoginDisconnectPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(COMPONENT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeComponent(kickMessage);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(COMPONENT, kickMessage);
     }
 
     @Override

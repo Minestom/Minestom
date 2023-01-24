@@ -1,19 +1,28 @@
 package net.minestom.demo;
 
+import net.minestom.demo.commands.GamemodeCommand;
+import net.minestom.demo.commands.SaveCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.instance.AnvilLoader;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeManager;
 
 public class MainDemo {
 
     public static void main(String[] args) {
         // Initialization
         MinecraftServer minecraftServer = MinecraftServer.init();
+
+        MinecraftServer.getCommandManager().register(new GamemodeCommand());
+        MinecraftServer.getCommandManager().register(new SaveCommand());
 
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         // Create the instance

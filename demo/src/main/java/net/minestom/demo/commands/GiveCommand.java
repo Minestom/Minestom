@@ -10,7 +10,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
@@ -32,7 +31,7 @@ public class GiveCommand extends Command {
             List<ItemStack> itemStacks;
             if (count <= 64) {
                 itemStack = itemStack.withAmount(count);
-                itemStacks = Collections.singletonList(itemStack);
+                itemStacks = List.of(itemStack);
             } else {
                 itemStacks = new ArrayList<>();
                 while (count > 64) {

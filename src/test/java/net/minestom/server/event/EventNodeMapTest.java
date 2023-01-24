@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static net.minestom.server.api.TestUtils.waitUntilCleared;
+import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventNodeMapTest {

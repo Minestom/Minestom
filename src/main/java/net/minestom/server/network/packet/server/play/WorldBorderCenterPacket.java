@@ -1,20 +1,21 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+
 public record WorldBorderCenterPacket(double x, double z) implements ServerPacket {
-    public WorldBorderCenterPacket(BinaryReader reader) {
-        this(reader.readDouble(), reader.readDouble());
+    public WorldBorderCenterPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(DOUBLE), reader.read(DOUBLE));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(x);
-        writer.writeDouble(z);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(DOUBLE, x);
+        writer.write(DOUBLE, z);
     }
 
     @Override

@@ -4,9 +4,9 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -14,27 +14,83 @@ import java.util.NoSuchElementException;
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
+    private final short[] signums = new short[3];
+    private final Vec end;
+    private final boolean smooth;
 
-    private final int maxDistance;
+    private boolean foundEnd = false;
 
-    private static final int gridSize = 1 << 24;
+    //length of ray from current position to next x or y-side
+    double sideDistX;
+    double sideDistY;
+    double sideDistZ;
 
-    private boolean end = false;
+    //length of ray from one x or y-side to next x or y-side
+    private final double deltaDistX;
+    private final double deltaDistY;
+    private final double deltaDistZ;
 
-    private Point[] blockQueue = new Point[3];
-    private int currentBlock = 0;
-    private int currentDistance = 0;
-    private int maxDistanceInt;
+    //which box of the map we're in
+    int mapX;
+    int mapY;
+    int mapZ;
 
-    private int secondError;
-    private int thirdError;
+    private final ArrayDeque<Point> extraPoints = new ArrayDeque<>();
 
-    private int secondStep;
-    private int thirdStep;
+    /**
+     * Constructs the BlockIterator.
+     * <p>
+     * This considers all blocks as 1x1x1 in size.
+     *
+     * @param start       A Vector giving the initial position for the trace
+     * @param direction   A Vector pointing in the direction for the trace
+     * @param yOffset     The trace begins vertically offset from the start vector
+     *                    by this value
+     * @param smooth      A boolean indicating whether the cast should be smooth.
+     *                    Smooth casts will only include one block when intersecting multiple axis lines.
+     * @param maxDistance This is the maximum distance in blocks for the
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
+     */
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance, boolean smooth) {
+        start = start.add(0, yOffset, 0);
+        end = start.add(direction.normalize().mul(maxDistance));
+        if (direction.isZero()) this.foundEnd = true;
 
-    private BlockFace mainFace;
-    private BlockFace secondFace;
-    private BlockFace thirdFace;
+        this.smooth = smooth;
+
+        Vec ray = direction.normalize();
+
+        //which box of the map we're in
+        mapX = start.blockX();
+        mapY = start.blockY();
+        mapZ = start.blockZ();
+
+        signums[0] = (short) Math.signum(direction.x());
+        signums[1] = (short) Math.signum(direction.y());
+        signums[2] = (short) Math.signum(direction.z());
+
+        deltaDistX = (ray.x() == 0) ? 1e30 : Math.abs(1 / ray.x());
+        deltaDistY = (ray.y() == 0) ? 1e30 : Math.abs(1 / ray.y());        // Find grid intersections for x, y, z
+        deltaDistZ = (ray.z() == 0) ? 1e30 : Math.abs(1 / ray.z());        // This works by calculating and storing the distance to the next grid intersection on the x, y and z axis
+
+        //calculate step and initial sideDist
+        if (ray.x() < 0) {
+            sideDistX = (start.x() - mapX) * deltaDistX;
+        } else {
+            sideDistX = (mapX + 1.0 - start.x()) * deltaDistX;
+        }
+        if (ray.y() < 0) {
+            sideDistY = (start.y() - mapY) * deltaDistY;
+        } else {
+            sideDistY = (mapY + 1.0 - start.y()) * deltaDistY;
+        }
+        if (ray.z() < 0) {
+            sideDistZ = (start.z() - mapZ) * deltaDistZ;
+        } else {
+            sideDistZ = (mapZ + 1.0 - start.z()) * deltaDistZ;
+        }
+    }
 
     /**
      * Constructs the BlockIterator.
@@ -49,170 +105,8 @@ public class BlockIterator implements Iterator<Point> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, int maxDistance) {
-        this.maxDistance = maxDistance;
-
-
-        Vec startClone = start.withY(y -> y+yOffset);
-
-        currentDistance = 0;
-
-        double mainDirection = 0;
-        double secondDirection = 0;
-        double thirdDirection = 0;
-
-        double mainPosition = 0;
-        double secondPosition = 0;
-        double thirdPosition = 0;
-
-        Vec startBlock = startClone.apply(Vec.Operator.FLOOR);
-
-        if (getXLength(direction) > mainDirection) {
-            mainFace = getXFace(direction);
-            mainDirection = getXLength(direction);
-            mainPosition = getXPosition(direction, startClone, startBlock);
-
-            secondFace = getYFace(direction);
-            secondDirection = getYLength(direction);
-            secondPosition = getYPosition(direction, startClone, startBlock);
-
-            thirdFace = getZFace(direction);
-            thirdDirection = getZLength(direction);
-            thirdPosition = getZPosition(direction, startClone, startBlock);
-        }
-        if (getYLength(direction) > mainDirection) {
-            mainFace = getYFace(direction);
-            mainDirection = getYLength(direction);
-            mainPosition = getYPosition(direction, startClone, startBlock);
-
-            secondFace = getZFace(direction);
-            secondDirection = getZLength(direction);
-            secondPosition = getZPosition(direction, startClone, startBlock);
-
-            thirdFace = getXFace(direction);
-            thirdDirection = getXLength(direction);
-            thirdPosition = getXPosition(direction, startClone, startBlock);
-        }
-        if (getZLength(direction) > mainDirection) {
-            mainFace = getZFace(direction);
-            mainDirection = getZLength(direction);
-            mainPosition = getZPosition(direction, startClone, startBlock);
-
-            secondFace = getXFace(direction);
-            secondDirection = getXLength(direction);
-            secondPosition = getXPosition(direction, startClone, startBlock);
-
-            thirdFace = getYFace(direction);
-            thirdDirection = getYLength(direction);
-            thirdPosition = getYPosition(direction, startClone, startBlock);
-        }
-
-        // trace line backwards to find intercept with plane perpendicular to the main axis
-
-        double d = mainPosition / mainDirection; // how far to hit face behind
-        double second = secondPosition - secondDirection * d;
-        double third = thirdPosition - thirdDirection * d;
-
-        // Guarantee that the ray will pass though the start block.
-        // It is possible that it would miss due to rounding
-        // This should only move the ray by 1 grid position
-        secondError = floor(second * gridSize);
-        secondStep = round(secondDirection / mainDirection * gridSize);
-        thirdError = floor(third * gridSize);
-        thirdStep = round(thirdDirection / mainDirection * gridSize);
-
-        if (secondError + secondStep <= 0) {
-            secondError = -secondStep + 1;
-        }
-
-        if (thirdError + thirdStep <= 0) {
-            thirdError = -thirdStep + 1;
-        }
-
-        Vec lastBlock;
-
-        lastBlock = startBlock.relative(mainFace.getOppositeFace());
-
-        if (secondError < 0) {
-            secondError += gridSize;
-            lastBlock = lastBlock.relative(secondFace.getOppositeFace());
-        }
-
-        if (thirdError < 0) {
-            thirdError += gridSize;
-            lastBlock = lastBlock.relative(thirdFace.getOppositeFace());
-        }
-
-        // This means that when the variables are positive, it means that the coord=1 boundary has been crossed
-        secondError -= gridSize;
-        thirdError -= gridSize;
-
-        blockQueue[0] = lastBlock;
-        currentBlock = -1;
-
-        scan();
-
-        boolean startBlockFound = false;
-
-        for (int cnt = currentBlock; cnt >= 0; cnt--) {
-            if (blockEquals(blockQueue[cnt], startBlock)) {
-                currentBlock = cnt;
-                startBlockFound = true;
-                break;
-            }
-        }
-
-        if (!startBlockFound) {
-            throw new IllegalStateException("Start block missed in BlockIterator");
-        }
-
-        // Calculate the number of planes passed to give max distance
-        maxDistanceInt = round(maxDistance / (Math.sqrt(mainDirection * mainDirection + secondDirection * secondDirection + thirdDirection * thirdDirection) / mainDirection));
-
-    }
-
-    private boolean blockEquals(@NotNull Point a, @NotNull Point b) {
-        return a.x() == b.x() && a.y() == b.y() && a.z() == b.z();
-    }
-
-    private BlockFace getXFace(@NotNull Point direction) {
-        return ((direction.x() > 0) ? BlockFace.EAST : BlockFace.WEST);
-    }
-
-    private BlockFace getYFace(@NotNull Point direction) {
-        return ((direction.y() > 0) ? BlockFace.TOP : BlockFace.BOTTOM);
-    }
-
-    private BlockFace getZFace(@NotNull Point direction) {
-        return ((direction.z() > 0) ? BlockFace.SOUTH : BlockFace.NORTH);
-    }
-
-    private double getXLength(@NotNull Point direction) {
-        return Math.abs(direction.x());
-    }
-
-    private double getYLength(@NotNull Point direction) {
-        return Math.abs(direction.y());
-    }
-
-    private double getZLength(@NotNull Point direction) {
-        return Math.abs(direction.z());
-    }
-
-    private double getPosition(double direction, double position, int blockPosition) {
-        return direction > 0 ? (position - blockPosition) : (blockPosition + 1 - position);
-    }
-
-    private double getXPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
-        return getPosition(direction.x(), position.x(), block.blockX());
-    }
-
-    private double getYPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
-        return getPosition(direction.y(), position.y(), block.blockY());
-    }
-
-    private double getZPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
-        return getPosition(direction.z(), position.z(), block.blockZ());
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance) {
+        this(start, direction, yOffset, maxDistance, false);
     }
 
     /**
@@ -227,8 +121,9 @@ public class BlockIterator implements Iterator<Point> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
+
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
-        this(pos.asVec(), pos.direction(), yOffset, maxDistance);
+        this(pos.asVec(), pos.direction(), yOffset, maxDistance, false);
     }
 
     /**
@@ -242,7 +137,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset) {
-        this(pos.asVec(), pos.direction(), yOffset, 0);
+        this(pos.asVec(), pos.direction(), yOffset, 0, false);
     }
 
     /**
@@ -290,24 +185,7 @@ public class BlockIterator implements Iterator<Point> {
 
     @Override
     public boolean hasNext() {
-        scan();
-        return currentBlock != -1;
-    }
-
-    /**
-     * Returns the next BlockPosition in the trace
-     *
-     * @return the next BlockPosition in the trace
-     */
-    @Override
-    @NotNull
-    public Point next() throws NoSuchElementException {
-        scan();
-        if (currentBlock <= -1) {
-            throw new NoSuchElementException();
-        } else {
-            return blockQueue[currentBlock--];
-        }
+        return !foundEnd;
     }
 
     @Override
@@ -315,57 +193,63 @@ public class BlockIterator implements Iterator<Point> {
         throw new UnsupportedOperationException("[BlockIterator] doesn't support block removal");
     }
 
-    private void scan() {
-        if (currentBlock >= 0) {
-            return;
+    /**
+     * Returns the next BlockPosition in the trace
+     *
+     * @return the next BlockPosition in the trace
+     */
+
+    @Override
+    public Point next() {
+        if (foundEnd) throw new NoSuchElementException();
+        if (!extraPoints.isEmpty()) {
+            var res = extraPoints.poll();
+            if (res.sameBlock(end)) foundEnd = true;
+            return res;
         }
-        if (maxDistance != 0 && currentDistance > maxDistanceInt) {
-            end = true;
-            return;
+
+        var current = new Vec(mapX, mapY, mapZ);
+        if (current.sameBlock(end)) foundEnd = true;
+
+        double closest = Math.min(sideDistX, Math.min(sideDistY, sideDistZ));
+        boolean needsX = sideDistX - closest < 1e-10;
+        boolean needsY = sideDistY - closest < 1e-10;
+        boolean needsZ = sideDistZ - closest < 1e-10;
+
+        if (needsZ) {
+            sideDistZ += deltaDistZ;
+            mapZ += signums[2];
         }
-        if (end) {
-            return;
+
+        if (needsX) {
+            sideDistX += deltaDistX;
+            mapX += signums[0];
         }
 
-        currentDistance++;
-
-        secondError += secondStep;
-        thirdError += thirdStep;
-
-        if (secondError > 0 && thirdError > 0) {
-            blockQueue[2] = blockQueue[0].relative(mainFace);
-            if (((long) secondStep) * ((long) thirdError) < ((long) thirdStep) * ((long) secondError)) {
-                blockQueue[1] = blockQueue[2].relative(secondFace);
-                blockQueue[0] = blockQueue[1].relative(thirdFace);
-            } else {
-                blockQueue[1] = blockQueue[2].relative(thirdFace);
-                blockQueue[0] = blockQueue[1].relative(secondFace);
-            }
-            thirdError -= gridSize;
-            secondError -= gridSize;
-            currentBlock = 2;
-        } else if (secondError > 0) {
-            blockQueue[1] = blockQueue[0].relative(mainFace);
-            blockQueue[0] = blockQueue[1].relative(secondFace);
-            secondError -= gridSize;
-            currentBlock = 1;
-        } else if (thirdError > 0) {
-            blockQueue[1] = blockQueue[0].relative(mainFace);
-            blockQueue[0] = blockQueue[1].relative(thirdFace);
-            thirdError -= gridSize;
-            currentBlock = 1;
-        } else {
-            blockQueue[0] = blockQueue[0].relative(mainFace);
-            currentBlock = 0;
+        if (needsY) {
+            sideDistY += deltaDistY;
+            mapY += signums[1];
         }
-    }
 
-    public static int floor(double num) {
-        final int floor = (int) num;
-        return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);
-    }
+        if (needsX && needsY && needsZ) {
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
+        } else if (needsX && needsY) {
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+        } else if (needsX && needsZ) {
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
+        } else if (needsY && needsZ) {
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+            if (smooth) return current;
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
+        }
 
-    public static int round(double num) {
-        return floor(num + 0.5d);
+        return current;
     }
 }
