@@ -361,6 +361,11 @@ public class AnvilLoader implements IChunkLoader {
         return blockStateId2ObjectCacheTLS.get().computeIfAbsent(block.stateId(), _unused -> new BlockState(block.name(), block.properties()));
     }
 
+    @NotNull
+    public Path getPath() {
+        return this.path;
+    }
+
     private void save(Chunk chunk, ChunkWriter chunkWriter) {
         final int minY = chunk.getMinSection() * Chunk.CHUNK_SECTION_SIZE;
         final int maxY = chunk.getMaxSection() * Chunk.CHUNK_SECTION_SIZE - 1;
