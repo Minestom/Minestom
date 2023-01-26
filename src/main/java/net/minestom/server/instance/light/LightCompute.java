@@ -19,7 +19,7 @@ final class LightCompute {
     static final int SECTION_SIZE = 16;
 
     private static final byte[][] emptyBorders = new byte[FACES.length][SIDE_LENGTH];
-    private static final byte[] emptyContent = new byte[LIGHT_LENGTH];
+    static final byte[] emptyContent = new byte[LIGHT_LENGTH];
 
     static @NotNull Result compute(Palette blockPalette) {
         Block[] blocks = new Block[4096];

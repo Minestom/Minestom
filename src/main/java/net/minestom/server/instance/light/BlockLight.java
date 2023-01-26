@@ -29,6 +29,7 @@ final class BlockLight implements Light {
     private byte[][] bordersPropagation;
     private byte[][] bordersPropagationSwap;
     private boolean isValidBorders = true;
+    private boolean needsSend = true;
     private Set<Point> toUpdateSet = new HashSet<>();
 
     BlockLight(Palette blockPalette) {
@@ -52,7 +53,6 @@ final class BlockLight implements Light {
 
     static IntArrayFIFOQueue buildInternalQueue(Palette blockPalette, Block[] blocks) {
         IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
-
         // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
             final Block block = Block.fromStateId((short) stateId);
@@ -190,7 +190,6 @@ final class BlockLight implements Light {
 
     @Override
     public void invalidate() {
-        this.isValidBorders = false;
         invalidatePropagation();
     }
 
@@ -204,17 +203,27 @@ final class BlockLight implements Light {
         this.content = copyArray.clone();
     }
 
+    @Override
+    public boolean requiresSend() {
+        boolean res = needsSend;
+        needsSend = false;
+        return res;
+    }
+
     private void clearCache() {
         this.contentPropagation = null;
         this.bordersPropagation = null;
         isValidBorders = true;
+        needsSend = true;
     }
 
     @Override
     public byte[] array() {
-        if (content == null) return new byte[LIGHT_LENGTH];
-        if (contentPropagation == null) return new byte[LIGHT_LENGTH];
-        return bake(contentPropagation, content);
+        if (content == null) return new byte[0];
+        if (contentPropagation == null) return new byte[0];
+        var res = bake(contentPropagation, content);
+        if (res == emptyContent) return new byte[0];
+        return res;
     }
 
     private boolean compareBorders(byte[] a, byte[] b) {
@@ -249,7 +258,7 @@ final class BlockLight implements Light {
 
         Block[] blocks = blocks();
         IntArrayFIFOQueue queue = buildExternalQueue(instance, blocks, neighbors, borders);
-        Result result = LightCompute.compute(blocks, queue);
+        LightCompute.Result result = LightCompute.compute(blocks, queue);
 
         byte[] contentPropagationTemp = result.light();
         byte[][] borderTemp = result.borders();
@@ -288,7 +297,8 @@ final class BlockLight implements Light {
     }
 
     private byte[] bake(byte[] content1, byte[] content2) {
-        if (content1 == null && content2 == null) return new byte[LIGHT_LENGTH];
+        if (content1 == null && content2 == null) return emptyContent;
+        if (content1 == emptyContent && content2 == emptyContent) return emptyContent;
 
         if (content1 == null) return content2;
         if (content2 == null) return content1;
@@ -325,6 +335,7 @@ final class BlockLight implements Light {
     @Override
     public void invalidatePropagation() {
         this.isValidBorders = false;
+        this.needsSend = false;
         this.bordersPropagation = null;
         this.contentPropagation = null;
     }

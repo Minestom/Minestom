@@ -23,6 +23,8 @@ public interface Light {
         return new BlockLight(blockPalette);
     }
 
+    boolean requiresSend();
+
     @ApiStatus.Internal
     byte[] array();
 

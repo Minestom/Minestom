@@ -30,6 +30,7 @@ final class SkyLight implements Light {
     private byte[][] bordersPropagation;
     private byte[][] bordersPropagationSwap;
     private boolean isValidBorders = true;
+    private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
 
@@ -64,7 +65,7 @@ final class SkyLight implements Light {
     }
 
     static IntArrayFIFOQueue buildInternalQueue(Chunk c, int sectionY) {
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue(SECTION_SIZE * SECTION_SIZE * SECTION_SIZE);
+        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
 
         if (c instanceof LightingChunk lc) {
             int[] heightmap = lc.calculateHeightMap();
@@ -82,6 +83,10 @@ final class SkyLight implements Light {
                     }
                 }
             }
+        }
+
+        if (lightSources.size() > SECTION_SIZE * SECTION_SIZE * SECTION_SIZE) {
+            System.out.println("Light sources size: " + lightSources.size());
         }
 
         return lightSources;
@@ -221,7 +226,6 @@ final class SkyLight implements Light {
 
     @Override
     public void invalidate() {
-        this.isValidBorders = false;
         invalidatePropagation();
     }
 
@@ -235,18 +239,28 @@ final class SkyLight implements Light {
         this.content = copyArray.clone();
     }
 
+    @Override
+    public boolean requiresSend() {
+        boolean res = needsSend;
+        needsSend = false;
+        return res;
+    }
+
     private void clearCache() {
         this.contentPropagation = null;
         this.bordersPropagation = null;
         isValidBorders = true;
+        needsSend = true;
         fullyLit = false;
     }
 
     @Override
     public byte[] array() {
-        if (content == null) return new byte[LIGHT_LENGTH];
-        if (contentPropagation == null) return new byte[LIGHT_LENGTH];
-        return bake(contentPropagation, content);
+        if (content == null) return new byte[0];
+        if (contentPropagation == null) return new byte[0];
+        var res = bake(contentPropagation, content);
+        if (res == emptyContent) return new byte[0];
+        return res;
     }
 
     private boolean compareBorders(byte[] a, byte[] b) {
@@ -286,7 +300,7 @@ final class SkyLight implements Light {
         byte[][] borderTemp = bordersFullyLit;
         if (!fullyLit) {
             queue = buildExternalQueue(instance, blocks, neighbors, borders);
-            Result result = LightCompute.compute(blocks, queue);
+            LightCompute.Result result = LightCompute.compute(blocks, queue);
 
             byte[] contentPropagationTemp = result.light();
             borderTemp = result.borders();
@@ -326,7 +340,8 @@ final class SkyLight implements Light {
     }
 
     private byte[] bake(byte[] content1, byte[] content2) {
-        if (content1 == null && content2 == null) return new byte[LIGHT_LENGTH];
+        if (content1 == null && content2 == null) return emptyContent;
+        if (content1 == emptyContent && content2 == emptyContent) return emptyContent;
 
         if (content1 == null) return content2;
         if (content2 == null) return content1;
@@ -363,6 +378,7 @@ final class SkyLight implements Light {
     @Override
     public void invalidatePropagation() {
         this.isValidBorders = false;
+        this.needsSend = false;
         this.bordersPropagation = null;
         this.contentPropagation = null;
     }
@@ -384,3 +400,4 @@ final class SkyLight implements Light {
         return newBorder;
     }
 }
+
