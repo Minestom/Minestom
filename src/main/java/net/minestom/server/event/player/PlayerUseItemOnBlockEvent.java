@@ -21,7 +21,8 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
 
     public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull Player.Hand hand,
                                      @NotNull ItemStack itemStack,
-                                     @NotNull Point position, @NotNull BlockFace blockFace) {
+                                     @NotNull Point position, @NotNull Point cursorPosition,
+                                     @NotNull BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;

@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -13,11 +14,19 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
     private final Player player;
     private final Entity entityTarget;
     private final Player.Hand hand;
+    private final Point interactPosition;
 
-    public PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity entityTarget, @NotNull Player.Hand hand) {
+    public PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity entityTarget, @NotNull Player.Hand hand,
+                                     @NotNull Point interactPosition) {
         this.player = player;
         this.entityTarget = entityTarget;
         this.hand = hand;
+        this.interactPosition = interactPosition;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 
     /**
@@ -40,8 +49,14 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
         return hand;
     }
 
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
+    /**
+     * Gets the position at which the entity was interacted
+     *
+     * @see net.minestom.server.network.packet.client.play.ClientInteractEntityPacket.InteractAt
+     * @return the interaction position
+     */
+    @NotNull
+    public Point getInteractPosition() {
+        return interactPosition;
     }
 }
