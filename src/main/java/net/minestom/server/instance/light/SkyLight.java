@@ -400,4 +400,3 @@ final class SkyLight implements Light {
         return newBorder;
     }
 }
-

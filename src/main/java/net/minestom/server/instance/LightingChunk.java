@@ -364,5 +364,12 @@ public class LightingChunk extends DynamicChunk {
 
         flushQueue(instance, toPropagate, block);
     }
-}
 
+    @Override
+    public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
+        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ);
+        lightingChunk.sections = sections.stream().map(Section::clone).toList();
+        lightingChunk.entries.putAll(entries);
+        return lightingChunk;
+    }
+}
