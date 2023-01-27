@@ -57,14 +57,14 @@ public final class PlayerDiggingListener {
         final Block block = instance.getBlock(blockPosition);
         final GameMode gameMode = player.getGameMode();
 
-        PlayerBlockHitEvent playerBlockHitEvent = new PlayerBlockHitEvent(player, block, blockPosition, blockFace);
-        EventDispatcher.call(playerBlockHitEvent);
-        if (playerBlockHitEvent.isCancelled()) {
+        // Prevent spectators and check players in adventure mode
+        if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
         }
 
-        // Prevent spectators and check players in adventure mode
-        if (shouldPreventBreaking(player, block)) {
+        PlayerBlockHitEvent playerBlockHitEvent = new PlayerBlockHitEvent(player, block, blockPosition, blockFace);
+        EventDispatcher.call(playerBlockHitEvent);
+        if (playerBlockHitEvent.isCancelled()) {
             return new DiggingResult(block, false);
         }
 
