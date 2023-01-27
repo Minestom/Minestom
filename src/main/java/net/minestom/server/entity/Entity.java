@@ -24,6 +24,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
+import net.minestom.server.event.player.PlayerTeleportEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
@@ -295,6 +296,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
+        
+        EntityTeleportEvent teleportEvent = this instanceof Player p ? new PlayerTeleportEvent(p, position) : new EntityTeleportEvent(this, position);
+        EventDispatcher.call(teleportEvent);
+        if(teleportEvent.isCancelled()) // event cancelled
+            return AsyncUtils.empty();
+        
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = position;
