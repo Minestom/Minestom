@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -17,14 +18,14 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class PlayerIntegrationTest {
 
     /**
-     * Test to see whether player abilities are updated correctly when changing gamemodes
+     * Test to see whether player abilities are updated correctly and events
+     * are handled properly when changing gamemode.
      */
     @Test
     public void gamemodeTest(Env env) {
@@ -33,16 +34,38 @@ public class PlayerIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        player.setGameMode(GameMode.CREATIVE);
-        assertAbilities(player, true, false, true, true);
-        player.setGameMode(GameMode.SPECTATOR);
-        assertAbilities(player, true, true, true, false);
-        player.setGameMode(GameMode.CREATIVE);
-        assertAbilities(player, true, true, true, true);
-        player.setGameMode(GameMode.ADVENTURE);
-        assertAbilities(player, false, false, false, false);
-        player.setGameMode(GameMode.SURVIVAL);
-        assertAbilities(player, false, false, false, false);
+        // Abilities
+        {
+            player.setGameMode(GameMode.CREATIVE);
+            assertAbilities(player, true, false, true, true);
+            player.setGameMode(GameMode.SPECTATOR);
+            assertAbilities(player, true, true, true, false);
+            player.setGameMode(GameMode.CREATIVE);
+            assertAbilities(player, true, true, true, true);
+            player.setGameMode(GameMode.ADVENTURE);
+            assertAbilities(player, false, false, false, false);
+            player.setGameMode(GameMode.SURVIVAL);
+            assertAbilities(player, false, false, false, false);
+        }
+
+        var listener = env.listen(PlayerGameModeChangeEvent.class);
+        // Normal change
+        {
+            listener.followup();
+            assertTrue(player.setGameMode(GameMode.ADVENTURE));
+        }
+        // Change target gamemode event
+        {
+            listener.followup(event -> event.setNewGameMode(GameMode.SPECTATOR));
+            assertTrue(player.setGameMode(GameMode.CREATIVE));
+            assertEquals(GameMode.SPECTATOR, player.getGameMode());
+        }
+        // Cancel event
+        {
+            listener.followup(event -> event.setCancelled(true));
+            assertFalse(player.setGameMode(GameMode.CREATIVE));
+            assertEquals(GameMode.SPECTATOR, player.getGameMode());
+        }
     }
 
     private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
