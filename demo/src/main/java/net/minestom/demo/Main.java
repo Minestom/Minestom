@@ -33,6 +33,8 @@ public class Main {
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
+        MinecraftServer.getConnectionManager().setPlayerProvider(DemoPlayer::new);
+
         BlockManager blockManager = MinecraftServer.getBlockManager();
 
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
