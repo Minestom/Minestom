@@ -1,6 +1,7 @@
 package net.minestom.server.command;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
-public interface CommandSender extends PermissionHandler, Audience, Taggable {
+public interface CommandSender extends PermissionHandler, Audience, Taggable, Identified {
 
     /**
      * Sends a raw string message.

@@ -14,12 +14,25 @@ public class ServerAddressTest {
 
     @Test
     public void inetAddressTest() throws IOException {
-        InetSocketAddress address = new InetSocketAddress("localhost", 0);
+        InetSocketAddress address = new InetSocketAddress("localhost", 25565);
         var server = new Server(new PacketProcessor());
         server.init(address);
         assertSame(address, server.socketAddress());
         assertEquals(address.getHostString(), server.getAddress());
         assertEquals(address.getPort(), server.getPort());
+
+        assertDoesNotThrow(server::start);
+        assertDoesNotThrow(server::stop);
+    }
+
+    @Test
+    public void inetAddressDynamicTest() throws IOException {
+        InetSocketAddress address = new InetSocketAddress("localhost", 0);
+        var server = new Server(new PacketProcessor());
+        server.init(address);
+        assertSame(address, server.socketAddress());
+        assertEquals(address.getHostString(), server.getAddress());
+        assertNotEquals(address.getPort(), server.getPort());
 
         assertDoesNotThrow(server::start);
         assertDoesNotThrow(server::stop);

@@ -39,6 +39,9 @@ jmh = "1.35"
 # JCStress
 jcstress = "0.8"
 
+# Gradle plugins
+blossom = "1.3.0"
+
 [libraries]
 
 # Important Dependencies
@@ -104,3 +107,7 @@ flare = ["flare", "flare-fastutil"]
 adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
 logging = ["tinylog-api", "tinylog-impl", "tinylog-slf4j"]
 terminal = ["jline", "jline-jansi"]
+
+[plugins]
+
+blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
