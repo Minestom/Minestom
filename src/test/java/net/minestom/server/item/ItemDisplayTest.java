@@ -21,7 +21,7 @@ public class ItemDisplayTest {
         assertNull(item.meta().toNBT().get("display"));
 
         {
-            var lore = List.of(Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false).append(Component.text("Hello")));
+            var lore = List.of(Component.text("Hello"));
             item = item.withLore(lore);
             assertEquals(lore, item.getLore());
             var loreNbt = item.meta().toNBT().getCompound("display").<NBTString>getList("Lore");

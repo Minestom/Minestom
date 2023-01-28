@@ -146,7 +146,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder lore(MiniMessage miniMessage, String... lore) {
-            return lore(Arrays.stream(lore).map(s -> miniMessage.deserialize(s)).toList());
+            return lore(Arrays.stream(lore).map(s -> Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false).append(miniMessage.deserialize(s))).toList());
         }
 
         @Contract("_ -> this")
@@ -156,7 +156,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore.stream().map(line -> Component.empty().color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false).append(line)).toList()));
+            return set(ItemTags.LORE, lore.isEmpty() ? null : new ArrayList<>(lore));
         }
 
         @Contract("_ -> this")
