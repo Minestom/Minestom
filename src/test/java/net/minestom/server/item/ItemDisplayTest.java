@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jglrxavpok.hephaistos.nbt.NBTString;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class ItemDisplayTest {
         assertNull(item.meta().toNBT().get("display"));
 
         {
-            var lore = List.of(Component.text("Hello"));
+            var lore = List.of(Component.empty().decoration(TextDecoration.ITALIC, false).append(Component.text("Hello")));
             item = item.withLore(lore);
             assertEquals(lore, item.getLore());
             var loreNbt = item.meta().toNBT().getCompound("display").<NBTString>getList("Lore");
