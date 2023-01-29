@@ -2205,7 +2205,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // TODO: Use the metadata object here
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
-            metadata.setIndex((byte) 18, Metadata.Byte(this.mainHand != MainHand.LEFT ? 1 : 0));
+            metadata.setIndex((byte) 18, Metadata.Byte(this.mainHand != MainHand.LEFT ? (byte) 1 : (byte) 0));
         }
 
     }
