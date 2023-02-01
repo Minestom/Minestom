@@ -2204,7 +2204,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.allowServerListings = allowServerListings;
 
             // TODO: Use the metadata object here
+            metadata.setNotifyAboutChanges(false);
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
+            metadata.setIndex((byte) 18, Metadata.Byte((byte) (this.mainHand == MainHand.RIGHT ? 1 : 0)));
+            metadata.setNotifyAboutChanges(true);
         }
 
     }
