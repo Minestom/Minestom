@@ -1431,6 +1431,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Gets if the entity has an active potion effect
+     *
+     * @param effect The effect you want to search
+     * @return true if the entity has the potion effect, false otherwise
+     */
+    public boolean hasEffect(@NotNull PotionEffect effect) {
+        return getEffect(effect) != null;
+    }
+
+    /**
+     * Gets the effect if the entity has it
+     *
+     * @param effect The effect you want to search
+     * @return the effect if the entity has it, null otherwise
+     */
+    public @Nullable TimedPotion getEffect(@NotNull PotionEffect effect) {
+        return effects.parallelStream().unordered().filter(timedPotion -> timedPotion.getPotion().effect() == effect).findFirst().orElse(null);
+    }
+
+    /**
      * Adds an effect to an entity.
      *
      * @param potion The potion to add
