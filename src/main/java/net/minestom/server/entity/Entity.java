@@ -648,7 +648,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
         } else drag = airDrag;
 
-        double gravity = flying ? 0 : gravityAcceleration;
+        // Checking for slow falling effect and applying it
+        boolean slowFall = velocity.y() < 0 && hasEffect(PotionEffect.SLOW_FALLING);
+        double gravity = flying ? 0 : slowFall ? 0.01 : gravityAcceleration;
         double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
 
         this.velocity = newVelocity
@@ -662,6 +664,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 .mul(MinecraftServer.TICK_PER_SECOND)
                 // Prevent infinitely decreasing velocity
                 .apply(Vec.Operator.EPSILON);
+
+        // Checking for levitation effect and applying it
+        TimedPotion levitation = getEffect(PotionEffect.LEVITATION);
+        if(levitation != null) {
+            velocity = velocity.withY(
+                    ((0.05 * (levitation.getPotion().amplifier() + 1) - (velocity.y() / MinecraftServer.TICK_PER_SECOND)) * 0.2) * MinecraftServer.TICK_PER_SECOND);
+        }
     }
 
     private void touchTick() {
