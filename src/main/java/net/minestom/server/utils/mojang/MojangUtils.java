@@ -31,7 +31,9 @@ public final class MojangUtils {
 
     @Blocking
     public static @Nullable JsonObject fromUsername(@NotNull String username) {
-        return retrieve(String.format(FROM_USERNAME_URL, username));
+        var response = retrieve(String.format(FROM_USERNAME_URL, username));
+        if(response == null || response.has("errorMessage")) return null;
+        return response;
     }
 
     private static @Nullable JsonObject retrieve(@NotNull String url) {
