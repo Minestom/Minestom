@@ -14,6 +14,7 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.entity.EntityVelocityEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
@@ -28,8 +29,12 @@ import net.minestom.server.item.ItemHideFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.BundleMeta;
+import net.minestom.server.listener.PlayerVehicleListener;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -134,49 +139,76 @@ public class PlayerInit {
             })
             .addListener(PlayerPacketEvent.class, event -> {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(PlayerEntityInteractEvent.class, event -> {
+                if (event.getHand() == Player.Hand.MAIN)
+                    if (event.getPlayer().getItemInMainHand().material() == Material.AIR) {
+                        if (event.getTarget().getVehicle() != null) {
+                            if (event.getTarget().getVehicle().equals(event.getPlayer())) {
+                                event.getTarget().getVehicle().removePassenger(event.getTarget());
+                            }
+                        } else {
+                            if (event.getPlayer().isSneaking())
+                                event.getTarget().addPassenger(event.getPlayer());
+                            else
+                                event.getPlayer().addPassenger(event.getTarget());
+
+                        }
+                    }
+            })
+            .addListener(PlayerUnmountVehicleEvent.class, event -> {
+
             });
 
-    static {
-        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+static {
+        InstanceManager instanceManager=MinecraftServer.getInstanceManager();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        InstanceContainer instanceContainer=instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.setGenerator(unit->unit.modifier().fillHeight(0,40,Block.STONE));
 
-        if (false) {
-            System.out.println("start");
-            ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> instanceContainer.loadChunk(x, z).join());
-            System.out.println("load end");
+        if(false){
+        System.out.println("start");
+        ChunkUtils.forChunksInRange(0,0,10,(x,z)->instanceContainer.loadChunk(x,z).join());
+        System.out.println("load end");
         }
 
-        inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
-        inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
-    }
+        inventory=new Inventory(InventoryType.CHEST_1_ROW,Component.text("Test inventory"));
+        inventory.setItemStack(3,ItemStack.of(Material.DIAMOND,34));
+        }
 
-    private static final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+private static final AtomicReference<TickMonitor> LAST_TICK=new AtomicReference<>();
 
-    public static void init() {
-        var eventHandler = MinecraftServer.getGlobalEventHandler();
+public static void init(){
+        var eventHandler=MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
 
-        eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.getTickMonitor()));
+        eventHandler.addListener(ServerTickMonitorEvent.class,event->LAST_TICK.set(event.getTickMonitor()));
 
-        BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            if (players.isEmpty())
-                return;
+        BenchmarkManager benchmarkManager=MinecraftServer.getBenchmarkManager();
+        MinecraftServer.getSchedulerManager().buildTask(()->{
+        Collection<Player> players=MinecraftServer.getConnectionManager().getOnlinePlayers();
+        if(players.isEmpty())
+        return;
 
-            long ramUsage = benchmarkManager.getUsedMemory();
-            ramUsage /= 1e6; // bytes to MB
+        long ramUsage=benchmarkManager.getUsedMemory();
+        ramUsage/=1e6; // bytes to MB
 
-            TickMonitor tickMonitor = LAST_TICK.get();
-            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
-                    .append(Component.newline())
-                    .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
-                    .append(Component.newline())
-                    .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
-            final Component footer = benchmarkManager.getCpuMonitoringMessage();
-            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
-    }
-}
+        TickMonitor tickMonitor=LAST_TICK.get();
+final Component header=Component.text("RAM USAGE: "+ramUsage+" MB")
+        .append(Component.newline())
+        .append(Component.text("TICK TIME: "+MathUtils.round(tickMonitor.getTickTime(),2)+"ms"))
+        .append(Component.newline())
+        .append(Component.text("ACQ TIME: "+MathUtils.round(tickMonitor.getAcquisitionTime(),2)+"ms"));
+final Component footer=benchmarkManager.getCpuMonitoringMessage();
+        Audiences.players().sendPlayerListHeaderAndFooter(header,footer);
+        }).repeat(10,TimeUnit.SERVER_TICK).schedule();
+        MinecraftServer.getSchedulerManager().buildTask(()->{
+        Collection<Player> players=MinecraftServer.getConnectionManager().getOnlinePlayers();
+        if(players.isEmpty())
+        return;
+        players.forEach(player->{
+        player.sendMessage("shouldUnmount: "+player.getVehicleInformation().shouldUnmount());
+        });
+        }).repeat(20,TimeUnit.SERVER_TICK).schedule();
+        }
+        }

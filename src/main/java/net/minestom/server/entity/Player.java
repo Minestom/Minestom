@@ -383,6 +383,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
+        // Unmount Player
+        if (getVehicle() != null)
+            if (getVehicleInformation().shouldUnmount()) {
+                PlayerUnmountVehicleEvent playerEatEvent = new PlayerUnmountVehicleEvent(this);
+                EventDispatcher.callCancellable(playerEatEvent, () -> {
+                    getVehicle().removePassenger(this);
+                    MinecraftServer.getSchedulerManager().buildTask(() -> {
+                        refreshPosition(getPosition());
+                        getVehicleInformation().refresh(0, 0, false, false);
+                    }).delay(1, TimeUnit.CLIENT_TICK).schedule();
+                });
+            }
+
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
     }
@@ -444,7 +457,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-               0, gameMode, gameMode, false, levelFlat, true));
+                0, gameMode, gameMode, false, levelFlat, true));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
