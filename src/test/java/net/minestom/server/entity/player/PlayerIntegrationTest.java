@@ -1,5 +1,7 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.packet.client.play.ClientSettingsPacket;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -43,6 +45,36 @@ public class PlayerIntegrationTest {
         assertAbilities(player, false, false, false, false);
         player.setGameMode(GameMode.SURVIVAL);
         assertAbilities(player, false, false, false, false);
+    }
+
+    @Test
+    public void handSwapTest(Env env) {
+        ClientSettingsPacket packet = new ClientSettingsPacket("en_us", (byte) 16, ChatMessageType.FULL,
+                true, (byte) 127, Player.MainHand.LEFT, true, true);
+
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, player.getInstance());
+        env.tick();
+        env.tick();
+
+        player.addPacketToQueue(packet);
+        var collector = connection.trackIncoming();
+        env.tick();
+        env.tick();
+        assertEquals(Player.MainHand.LEFT, player.getSettings().getMainHand());
+
+        boolean found = false;
+        for (ServerPacket serverPacket : collector.collect()) {
+            if (!(serverPacket instanceof EntityMetaDataPacket metaDataPacket)) {
+                continue;
+            }
+            assertEquals((byte) 0, metaDataPacket.entries().get(18).value(),
+                    "EntityMetaDataPacket has the incorrect hand after client settings update.");
+            found = true;
+        }
+        Assertions.assertTrue(found, "EntityMetaDataPacket not sent after client settings update.");
     }
 
     private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
