@@ -386,8 +386,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Unmount Player
         if (getVehicle() != null)
             if (getVehicleInformation().shouldUnmount()) {
-                PlayerUnmountVehicleEvent playerEatEvent = new PlayerUnmountVehicleEvent(this);
-                EventDispatcher.callCancellable(playerEatEvent, () -> {
+                PlayerUnmountVehicleEvent playerUnmountVehicleEvent = new PlayerUnmountVehicleEvent(this, getVehicle());
+                EventDispatcher.callCancellable(playerUnmountVehicleEvent, () -> {
                     getVehicle().removePassenger(this);
                     MinecraftServer.getSchedulerManager().buildTask(() -> {
                         refreshPosition(getPosition());
