@@ -1,5 +1,7 @@
-![banner](banner_dark.png#gh-dark-mode-only)
-![banner](banner_light.png#gh-light-mode-only)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./banner_dark.png">
+  <img alt="banner" src="./banner_light.png">
+</picture>
 
 # Minestom
 
