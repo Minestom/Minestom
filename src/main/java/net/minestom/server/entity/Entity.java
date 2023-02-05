@@ -286,20 +286,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Teleports the entity only if the chunk at {@code position} is loaded or if
      * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
+     * <p>
+     * Note: using relative positions behaves differently than absolute ones as the client
+     * will retain extra information such as its velocity which typically resets on normal teleport.
      *
-     * @param position the teleport position
-     * @param chunks   the chunk indexes to load before teleporting the entity,
-     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
-     *                 can be null or empty to only load the chunk at {@code position}
+     * @param position         the teleport position
+     * @param chunks           the chunk indexes to load before teleporting the entity,
+     *                         indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                         can be null or empty to only load the chunk at {@code position}
+     * @param relativePosition whether the position is relative to the entity (true) or absolute (false)
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, boolean relativePosition) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
+        Pos absolutePosition = relativePosition ? this.position.add(position) : position;
+
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
-            this.position = position;
-            refreshCoordinate(position);
-            synchronizePosition(true);
+            this.position = absolutePosition;
+            refreshCoordinate(absolutePosition);
+            synchronizePosition(true, relativePosition);
         };
 
         if (chunks != null && chunks.length > 0) {
@@ -307,9 +313,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
         final Pos currentPosition = this.position;
-        if (!currentPosition.sameChunk(position)) {
+        if (!currentPosition.sameChunk(absolutePosition)) {
             // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(position).thenRun(endCallback);
+            return instance.loadOptionalChunk(absolutePosition).thenRun(endCallback);
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
@@ -317,8 +323,29 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
+    /**
+     * Teleport to an absolute position.
+     *
+     * @see Entity#teleport(Pos, long[], boolean)
+     */
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+        return teleport(position, chunks, false);
+    }
+
+    /**
+     * @see Entity#teleport(Pos, long[], boolean)
+     */
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, boolean relativePosition) {
+        return teleport(position, null, relativePosition);
+    }
+
+    /**
+     * Teleport to an absolute position.
+     *
+     * @see Entity#teleport(Pos, long[], boolean)
+     */
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
-        return teleport(position, null);
+        return teleport(position, null, false);
     }
 
     /**
@@ -1543,22 +1570,36 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
 
+
     /**
      * Used to synchronize entity position with viewers by sending an
      * {@link EntityTeleportPacket} to viewers, in case of a player this is
      * overridden in order to send an additional {@link PlayerPositionAndLookPacket}
      * to itself.
+     * <p>
+     * Note: synchronizing relative positions behaves differently than absolute ones as
+     * the client will retain extra information such as its velocity which typically resets on normal teleport.
      *
-     * @param includeSelf if {@code true} and this is a {@link Player} an additional {@link PlayerPositionAndLookPacket}
-     *                    will be sent to the player itself
+     * @param includeSelf      if {@code true} and this is a {@link Player} an additional
+     *                         {@link PlayerPositionAndLookPacket} will be sent to the player itself
+     * @param relativePosition if the outgoing position packet should use relative coordinates
      */
     @ApiStatus.Internal
-    protected void synchronizePosition(boolean includeSelf) {
+    protected void synchronizePosition(boolean includeSelf, boolean relativePosition) {
         final Pos posCache = this.position;
         final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
         PacketUtils.prepareViewablePacket(currentChunk, packet, this);
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = posCache;
+    }
+
+    /**
+     * @see Entity#synchronizePosition(boolean, boolean)
+     */
+
+    @ApiStatus.Internal
+    protected void synchronizePosition(boolean includeSelf) {
+        synchronizePosition(includeSelf, false);
     }
 
     /**
