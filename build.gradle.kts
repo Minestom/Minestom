@@ -40,7 +40,7 @@ publishing {
 
             groupId = "net.minestom.server"
             artifactId = "sakura"
-            version = "${project.version}${System.getenv("VERSION_SUFFIX")}"
+            version = "${project.version}${System.getenv("VERSION_SUFFIX") ?: "-local"}"
         }
     }
 }
