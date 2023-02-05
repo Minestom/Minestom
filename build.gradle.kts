@@ -28,7 +28,13 @@ publishing {
     publications {
         getByName<MavenPublication>("maven") {
             repositories {
-                maven(url = "https://maven.pkg.github.com/NxDs/Minestom")
+                maven {
+                    url = uri("https://maven.pkg.github.com/NxDs/Minestom")
+                    credentials {
+                        username = System.getenv("USERNAME")
+                        password = System.getenv("TOKEN")
+                    }
+                }
             }
 
             groupId = "net.minestom.server"
