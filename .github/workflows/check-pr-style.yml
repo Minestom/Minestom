@@ -2,7 +2,7 @@ name: Check PR code style
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ sakura ]
 
 jobs:
   build:

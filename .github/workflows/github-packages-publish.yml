@@ -1,0 +1,35 @@
+name: Build and Publish to GPR
+on:
+  workflow_dispatch:
+  push:
+    branches: [ sakura ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      USERNAME: ${{ github.actor }}
+      VERSION_SUFFIX: ${{ github.run_number }}-${{ github.sha:0:6 }}
+      TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: github
+          settings-path: ${{ github.workspace }}
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build and Publish to GitHub Packages
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: publish

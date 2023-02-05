@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "net.minestom.server"
-    version = "1.0"
+    version = "1.0-sakura"
     description = "Lightweight and multi-threaded Minecraft server implementation"
 }
 
@@ -22,6 +22,22 @@ sourceSets {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+publishing {
+    publications {
+        getByName<MavenPublication>("maven") {
+            repositories {
+                maven(url = "https://maven.pkg.github.com/NxDs/Minestom")
+            }
+
+            groupId = "net.minestom.server"
+            artifactId = "sakura"
+            version = "${project.version}-${System.getenv("VERSION_SUFFIX")}"
+
+            from(components["java"])
+        }
+    }
 }
 
 tasks {
