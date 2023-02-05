@@ -2,7 +2,7 @@ name: Build and Publish to GPR
 on:
   workflow_dispatch:
   push:
-    branches: [ sakura ]
+    branches: [ master ]
 
 jobs:
   build:

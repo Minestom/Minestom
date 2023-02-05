@@ -2,7 +2,7 @@ name: Build and deploy Javadoc
 
 on:
   push:
-    branches: [sakura]
+    branches: [ master ]
 
 jobs:
   build:
