@@ -23,7 +23,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           server-id: github
-          
+
       - name: Retrieve short SHA
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -36,5 +36,5 @@ jobs:
         with:
           arguments: publish
         env:
-          VERSION_SUFFIX: ${{ github.run_number }}-${{ steps.vars.outputs.sha_short }}
+          VERSION_SUFFIX: ${{ github.run_number }}-${{ steps.vars.outputs.sha_short }}-sakura
 

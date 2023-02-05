@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "net.minestom.server"
-    version = "1.0-sakura"
+    version = "1.0"
     description = "Lightweight and multi-threaded Minecraft server implementation"
 }
 
