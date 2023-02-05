@@ -444,7 +444,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-               0, gameMode, gameMode, false, levelFlat, true));
+                0, gameMode, gameMode, false, levelFlat, true));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -1531,16 +1531,28 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.receivedTeleportId = receivedTeleportId;
     }
 
+    @Override
+    protected void synchronizePosition(boolean includeSelf) {
+        synchronizePosition(includeSelf, false);
+    }
+
     /**
-     * @see Entity#synchronizePosition(boolean)
+     * @see Entity#synchronizePosition(boolean, boolean)
      */
     @Override
     @ApiStatus.Internal
-    protected void synchronizePosition(boolean includeSelf) {
+    protected void synchronizePosition(boolean includeSelf, boolean relativePosition) {
         if (includeSelf) {
-            sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId(), false));
+            Pos pos = position;
+            byte flag = PlayerPositionAndLookPacket.FLAG_ABSOLUTE;
+            if (relativePosition) {
+                pos = position.sub(previousPosition)
+                        .withView(position.yaw() - previousPosition.yaw(), position.pitch() - previousPosition.pitch());
+                flag = PlayerPositionAndLookPacket.FLAG_RELATIVE;
+            }
+            sendPacket(new PlayerPositionAndLookPacket(pos, flag, getNextTeleportId(), false));
         }
-        super.synchronizePosition(includeSelf);
+        super.synchronizePosition(includeSelf, relativePosition);
     }
 
     /**
