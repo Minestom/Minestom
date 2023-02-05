@@ -1,7 +1,6 @@
 plugins {
     id("net.kyori.indra")
     id("net.kyori.indra.publishing")
-    id("net.kyori.indra.publishing.sonatype")
 }
 
 indra {
@@ -10,7 +9,7 @@ indra {
         testWith(17)
     }
 
-    github("Minestom", "Minestom") {
+    github("NxDs", "Minestom") {
         ci(true)
     }
     apache2License()
@@ -25,6 +24,10 @@ indra {
                 developer {
                     id.set("jglrxavpok")
                     name.set("jglrxavpok")
+                }
+                developer {
+                    id.set("NxDs")
+                    name.set("NxDs")
                 }
             }
         }

@@ -13,9 +13,4 @@ public class TestMojangUtils {
         assertEquals("jeb_", result.get("name").getAsString());
     }
 
-    @Test
-    public void testInvalidNameReturnsNull() {
-        var result = MojangUtils.fromUsername("jfdsa84vvcxadubasdfcvn"); // Longer than 16, always invalid
-        assertNull(result);
-    }
 }

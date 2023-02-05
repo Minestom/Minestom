@@ -2,9 +2,9 @@ name: Build and test Minestom
 
 on:
   push:
-    branches: [ master ]
+    branches: [ sakura ]
   pull_request:
-    branches: [ master ]
+    branches: [ sakura ]
 
 jobs:
   build:
