@@ -1,4 +1,4 @@
-## How to contribute to Minestom
+## How to contribute to Sakura Minestom
 #### **Did you find a bug?**
 * Open a new GitHub issue if it's not already reported.
 
@@ -10,19 +10,7 @@
 * Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
 #### **Do you intend to add a new feature or change an existing one?**
-* Do not open a pull-request on GitHub until you have collected positive feedback about the change from a maintainer.
-
-#### **Do you have questions about the source code?**
-* Ask any question about how to use Minestom in the GitHub issues section or the community portals.
-
-#### **Do you want to contribute to the Minestom documentation?**
-* Feel free to do so! Just make sure to conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification when editing the README.md.
+* If your feature is not strictly related to Sakura Minestom then I'd rather you open a PR in the [original Minestom repository](https://github.com/Minestom/Minestom/) and then eventually opening the same PR here. Ideally this project shouldn't steer too much from the original repo and any noteworthy feature should be added there first, please note you need to contact collaborators there before making a PR, you don't need to do so to open a PR here, just open it and if it's good it will be merged.
 
 ## General Contribution Rules
-* By contributing to the Minestom project your code/contribution will be licensed under the [Apache Version 2.0](../LICENSE) license.
-
-Minestom is a community project. We encourage you to contribute! :)
-
-Thanks! :heart: :heart: :heart:
-
-~Minestom Community
+* By contributing to the Sakura Minestom project your code/contribution will be licensed under the [Apache Version 2.0](../LICENSE) license.
