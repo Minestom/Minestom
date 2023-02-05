@@ -30,7 +30,7 @@ publishing {
         getByName<MavenPublication>("maven") {
             repositories {
                 maven {
-                    url = uri("https://maven.pkg.github.com/NxDs/Minestom")
+                    url = uri("https://maven.pkg.github.com/NxDs/SakuraMinestom")
                     credentials {
                         username = System.getenv("USERNAME")
                         password = System.getenv("TOKEN")
