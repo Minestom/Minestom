@@ -13,7 +13,7 @@ jobs:
       packages: write
     env:
       USERNAME: ${{ github.actor }}
-      VERSION_SUFFIX: ${{ github.run_number }}-${{ github.sha:0:6 }}
+      VERSION_SUFFIX: ${{ github.run_number }}-${ GITHUB_SHA:0:6 }
       TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
