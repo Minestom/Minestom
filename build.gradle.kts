@@ -22,6 +22,27 @@ sourceSets {
 java {
     withJavadocJar()
     withSourcesJar()
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+publishing {
+    publications {
+        getByName<MavenPublication>("maven") {
+            repositories {
+                maven {
+                    url = uri("https://maven.pkg.github.com/NxDs/SakuraMinestom")
+                    credentials {
+                        username = System.getenv("USERNAME")
+                        password = System.getenv("TOKEN")
+                    }
+                }
+            }
+
+            groupId = "net.minestom.server"
+            artifactId = "sakura"
+            version = "${project.version}${System.getenv("VERSION_SUFFIX") ?: "-local"}"
+        }
+    }
 }
 
 tasks {

@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.event.player.PlayerBlockHitEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
@@ -58,6 +59,12 @@ public final class PlayerDiggingListener {
 
         // Prevent spectators and check players in adventure mode
         if (shouldPreventBreaking(player, block)) {
+            return new DiggingResult(block, false);
+        }
+
+        PlayerBlockHitEvent playerBlockHitEvent = new PlayerBlockHitEvent(player, block, blockPosition, blockFace);
+        EventDispatcher.call(playerBlockHitEvent);
+        if (playerBlockHitEvent.isCancelled()) {
             return new DiggingResult(block, false);
         }
 
