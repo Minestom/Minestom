@@ -34,8 +34,6 @@ publishing {
             groupId = "net.minestom.server"
             artifactId = "sakura"
             version = "${project.version}-${System.getenv("VERSION_SUFFIX")}"
-
-            from(components["java"])
         }
     }
 }
