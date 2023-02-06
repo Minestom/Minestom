@@ -236,7 +236,7 @@ public sealed interface Point permits Vec, Pos {
         return samePoint(point.x(), point.y(), point.z());
     }
 
-    default boolean isWithin(double x, double y, double z, double range) {
+    default boolean isPointWithinRange(double x, double y, double z, double range) {
         return distanceSquared(x, y, z) <= range * range;
     }
 
@@ -247,8 +247,8 @@ public sealed interface Point permits Vec, Pos {
      * @param range the maximum distance
      * @return true if within range, false otherwise
      */
-    default boolean isWithin(@NotNull Point point, double range) {
-        return isWithin(point.x(), point.y(), point.z(), range);
+    default boolean isPointWithinRange(@NotNull Point point, double range) {
+        return isPointWithinRange(point.x(), point.y(), point.z(), range);
     }
 
     /**
