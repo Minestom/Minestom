@@ -227,13 +227,28 @@ public sealed interface Point permits Vec, Pos {
     }
 
     /**
-     * Checks it two points have similar (x/y/z).
+     * Checks if two points have similar (x/y/z).
      *
      * @param point the point to compare
      * @return true if the two positions are similar
      */
     default boolean samePoint(@NotNull Point point) {
         return samePoint(point.x(), point.y(), point.z());
+    }
+
+    default boolean isWithin(double x, double y, double z, double range) {
+        return distanceSquared(x, y, z) <= range * range;
+    }
+
+    /**
+     * Checks if two points are within a given distance range from each other.
+     *
+     * @param point the other point
+     * @param range the maximum distance
+     * @return true if within range, false otherwise
+     */
+    default boolean isWithin(@NotNull Point point, double range) {
+        return isWithin(point.x(), point.y(), point.z(), range);
     }
 
     /**
