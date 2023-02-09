@@ -10,6 +10,13 @@ import net.minestom.server.instance.block.rule.vanilla.WallPlacementRule;
 
 public final class PlacementRules {
 
+    /**
+     * Register all the block placement rules supported:
+     * - axis blocks (logs, hay block, etc)
+     * - stairs
+     * - walls
+     * - redstone dust
+     */
     public static void init() {
         initAxisBlocks();
         initStairs();
@@ -17,6 +24,10 @@ public final class PlacementRules {
         initRedstone();
     }
 
+    /**
+     * Register all the blocks that support axis placement (logs, hay block, etc)
+     * using {@link AxisPlacementRule}.
+     */
     public static void initAxisBlocks() {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         for (Block block : Block.values()) {
@@ -26,6 +37,9 @@ public final class PlacementRules {
         }
     }
 
+    /**
+     * Register all the stairs blocks using {@link StairsPlacementRule}.
+     */
     public static void initStairs() {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         for (Block block : Block.values()) {
@@ -35,6 +49,9 @@ public final class PlacementRules {
         }
     }
 
+    /**
+     * Register all the wall blocks using {@link WallPlacementRule}.
+     */
     public static void initWalls() {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         for (Block block : Block.values()) {
@@ -45,6 +62,9 @@ public final class PlacementRules {
         }
     }
 
+    /**
+     * Register the {@link RedstonePlacementRule}.
+     */
     public static void initRedstone() {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
