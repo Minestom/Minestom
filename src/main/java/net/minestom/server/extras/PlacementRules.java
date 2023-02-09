@@ -39,7 +39,7 @@ public final class PlacementRules {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         for (Block block : Block.values()) {
             String namespace = block.namespace().value();
-            if (namespace.endsWith("wall") || namespace.endsWith("fence")) {
+            if (namespace.endsWith("wall")) {
                 blockManager.registerBlockPlacementRule(new WallPlacementRule(block));
             }
         }
