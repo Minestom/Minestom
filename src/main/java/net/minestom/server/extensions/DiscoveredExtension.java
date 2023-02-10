@@ -116,7 +116,7 @@ public final class DiscoveredExtension {
     void createClassLoader() {
         Check.stateCondition(classLoader != null, "Extension classloader has already been created");
         final URL[] urls = this.files.toArray(new URL[0]);
-        classLoader = new ExtensionClassLoader(this.getName(), urls);
+        classLoader = new ExtensionClassLoader(this.getName(), urls, this);
     }
 
     @NotNull

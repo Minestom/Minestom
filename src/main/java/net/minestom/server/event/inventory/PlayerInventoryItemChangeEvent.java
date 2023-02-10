@@ -1,8 +1,7 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * listen only for an ancestor event and check whether it is an instance of that class.
  */
 @SuppressWarnings("JavadocReference")
-public class PlayerInventoryItemChangeEvent extends InventoryItemChangeEvent implements PlayerEvent, EntityInstanceEvent {
+public class PlayerInventoryItemChangeEvent extends InventoryItemChangeEvent implements PlayerInstanceEvent {
 
     private final Player player;
 

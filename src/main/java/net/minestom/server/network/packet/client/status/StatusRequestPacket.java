@@ -2,16 +2,15 @@ package net.minestom.server.network.packet.client.status;
 
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ServerListPingType;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public record StatusRequestPacket() implements ClientPreplayPacket {
-    public StatusRequestPacket(BinaryReader reader) {
+    public StatusRequestPacket(@NotNull NetworkBuffer reader) {
         this();
     }
 
@@ -24,7 +23,7 @@ public record StatusRequestPacket() implements ClientPreplayPacket {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
+    public void write(@NotNull NetworkBuffer writer) {
         // Empty
     }
 }

@@ -13,7 +13,7 @@ import java.util.function.IntUnaryOperator;
 public interface StackingRule {
 
     static @NotNull StackingRule get() {
-        return ItemStack.DEFAULT_STACKING_RULE;
+        return ItemStackImpl.DEFAULT_STACKING_RULE;
     }
 
     /**

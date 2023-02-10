@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an object which is regularly saved into a snapshot.
+ * <p>
+ * Implementations must be identity-based.
  */
 @ApiStatus.Experimental
 public interface Snapshotable {

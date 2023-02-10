@@ -14,7 +14,8 @@ import java.util.Objects;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
 
-public interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable {
+public sealed interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable
+        permits SnapshotImpl.Instance {
     @NotNull DimensionType dimensionType();
 
     long worldAge();

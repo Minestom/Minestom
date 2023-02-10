@@ -2,8 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,16 +10,17 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ItemAnimationType
  */
-public class PlayerItemAnimationEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerItemAnimationEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final ItemAnimationType itemAnimationType;
-
+    private final Player.Hand hand;
     private boolean cancelled;
 
-    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType itemAnimationType) {
+    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType itemAnimationType, @NotNull Player.Hand hand) {
         this.player = player;
         this.itemAnimationType = itemAnimationType;
+        this.hand = hand;
     }
 
     /**
@@ -30,6 +30,15 @@ public class PlayerItemAnimationEvent implements PlayerEvent, EntityInstanceEven
      */
     public @NotNull ItemAnimationType getItemAnimationType() {
         return itemAnimationType;
+    }
+
+    /**
+     * Gets the hand that was used.
+     *
+     * @return the hand
+     */
+    public @NotNull Player.Hand getHand() {
+        return hand;
     }
 
     @Override

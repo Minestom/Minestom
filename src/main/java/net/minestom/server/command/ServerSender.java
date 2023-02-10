@@ -1,6 +1,7 @@
 package net.minestom.server.command;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.TagHandler;
@@ -31,5 +32,10 @@ public class ServerSender implements CommandSender {
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
+    }
+
+    @Override
+    public @NotNull Identity identity() {
+        return Identity.nil();
     }
 }

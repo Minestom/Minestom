@@ -45,7 +45,7 @@ public class BossBarManager {
     public void addBossBar(@NotNull Player player, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
         if (holder.addViewer(player)) {
-            player.getPlayerConnection().sendPacket(holder.createAddPacket());
+            player.sendPacket(holder.createAddPacket());
             this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
         }
     }
@@ -59,7 +59,7 @@ public class BossBarManager {
     public void removeBossBar(@NotNull Player player, @NotNull BossBar bar) {
         BossBarHolder holder = this.bars.get(bar);
         if (holder != null && holder.removeViewer(player)) {
-            player.getPlayerConnection().sendPacket(holder.createRemovePacket());
+            player.sendPacket(holder.createRemovePacket());
             this.removePlayer(player, holder);
         }
     }
@@ -135,7 +135,7 @@ public class BossBarManager {
     public @NotNull Collection<BossBar> getPlayerBossBars(@NotNull Player player) {
         Collection<BossBarHolder> holders = this.playerBars.get(player.getUuid());
         return holders != null ?
-                holders.stream().map(holder -> holder.bar).toList() : Collections.emptyList();
+                holders.stream().map(holder -> holder.bar).toList() : List.of();
     }
 
     /**
@@ -147,7 +147,7 @@ public class BossBarManager {
     public @NotNull Collection<Player> getBossBarViewers(@NotNull BossBar bossBar) {
         BossBarHolder holder = this.bars.get(bossBar);
         return holder != null ?
-                Collections.unmodifiableCollection(holder.players) : Collections.emptyList();
+                Collections.unmodifiableCollection(holder.players) : List.of();
     }
 
     /**

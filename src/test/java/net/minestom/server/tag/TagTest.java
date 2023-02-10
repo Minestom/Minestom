@@ -63,6 +63,14 @@ public class TagTest {
     }
 
     @Test
+    public void fromNbtCache() {
+        // Ensure that TagHandler#asCompound reuse the same compound used for construction
+        var compound = NBT.Compound(Map.of("key", NBT.Int(5)));
+        var handler = TagHandler.fromCompound(compound);
+        assertSame(compound, handler.asCompound(), "NBT is not the same");
+    }
+
+    @Test
     public void defaultValue() {
         var nullable = Tag.String("key");
         var notNull = nullable.defaultValue("Hey");
@@ -120,5 +128,16 @@ public class TagTest {
 
         assertEquals(5, handler.getTag(Tag.Integer("tag1")));
         assertEquals(1, handler.getTag(Tag.Integer("tag2")));
+    }
+
+    @Test
+    public void rehashing() {
+        var handler = TagHandler.newHandler();
+        for (int i = 0; i < 1000; i++) {
+            handler.setTag(Tag.Integer("rehashing" + i), i);
+            for (int j = i; j > 0; j--) {
+                assertEquals(j, handler.getTag(Tag.Integer("rehashing" + j)));
+            }
+        }
     }
 }

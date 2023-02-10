@@ -12,7 +12,8 @@ import java.util.Collection;
 /**
  * Represents the complete state of the server at a given moment.
  */
-public interface ServerSnapshot extends Snapshot {
+public sealed interface ServerSnapshot extends Snapshot
+        permits SnapshotImpl.Server {
     @NotNull Collection<@NotNull InstanceSnapshot> instances();
 
     @NotNull Collection<EntitySnapshot> entities();

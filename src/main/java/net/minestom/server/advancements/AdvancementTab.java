@@ -3,7 +3,6 @@ package net.minestom.server.advancements;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,17 +114,10 @@ public class AdvancementTab implements Viewable {
     @Override
     public synchronized boolean addViewer(@NotNull Player player) {
         final boolean result = viewers.add(player);
-        if (!result) {
-            return false;
-        }
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
+        if (!result) return false;
         // Send the tab to the player
-        playerConnection.sendPacket(createPacket());
-
+        player.sendPacket(createPacket());
         addPlayer(player);
-
         return true;
     }
 
@@ -134,16 +126,9 @@ public class AdvancementTab implements Viewable {
         if (!isViewer(player)) {
             return false;
         }
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
         // Remove the tab
-        if (!player.isRemoved()) {
-            playerConnection.sendPacket(removePacket);
-        }
-
+        if (!player.isRemoved()) player.sendPacket(removePacket);
         removePlayer(player);
-
         return viewers.remove(player);
     }
 

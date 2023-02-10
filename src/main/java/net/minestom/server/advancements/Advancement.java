@@ -1,16 +1,13 @@
 package net.minestom.server.advancements;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents an advancement located in an {@link AdvancementTab}.
@@ -323,13 +320,8 @@ public class Advancement {
      */
     protected void update() {
         updateCriteria();
-
         if (tab != null) {
-            final Set<Player> viewers = tab.getViewers();
-            AdvancementsPacket createPacket = tab.createPacket();
-
-            PacketUtils.sendGroupedPacket(viewers, tab.removePacket);
-            PacketUtils.sendGroupedPacket(viewers, createPacket);
+            tab.sendPacketsToViewers(tab.removePacket, tab.createPacket());
         }
     }
 

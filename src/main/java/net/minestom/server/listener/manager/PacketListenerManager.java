@@ -26,7 +26,8 @@ public final class PacketListenerManager {
         this.serverProcess = serverProcess;
 
         setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
-        setListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
+        setListener(ClientCommandChatPacket.class, ChatMessageListener::commandChatListener);
+        setListener(ClientChatMessagePacket.class, ChatMessageListener::chatMessageListener);
         setListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
         setListener(ClientPongPacket.class, WindowListener::pong);
@@ -55,6 +56,7 @@ public final class PacketListenerManager {
         setListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
         setListener(ClientSpectatePacket.class, SpectateListener::listener);
+        setListener(ClientEditBookPacket.class, BookListener::listener);
     }
 
     /**

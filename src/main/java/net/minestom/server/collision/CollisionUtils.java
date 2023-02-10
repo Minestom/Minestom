@@ -8,13 +8,11 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.chunk.ChunkCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 @ApiStatus.Internal
 @ApiStatus.Experimental
@@ -31,8 +29,9 @@ public final class CollisionUtils {
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
                                               @Nullable PhysicsResult lastPhysicsResult) {
-        assert entity.getInstance() != null;
-        return handlePhysics(entity.getInstance(), entity.getChunk(),
+        final Instance instance = entity.getInstance();
+        assert instance != null;
+        return handlePhysics(instance, entity.getChunk(),
                 entity.getBoundingBox(),
                 entity.getPosition(), entityVelocity,
                 lastPhysicsResult);
@@ -48,9 +47,9 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
-                                               @NotNull BoundingBox boundingBox,
-                                               @NotNull Pos position, @NotNull Vec velocity,
-                                               @Nullable PhysicsResult lastPhysicsResult) {
+                                              @NotNull BoundingBox boundingBox,
+                                              @NotNull Pos position, @NotNull Vec velocity,
+                                              @Nullable PhysicsResult lastPhysicsResult) {
         final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
         return BlockCollision.handlePhysics(boundingBox,
                 velocity, position,
@@ -69,20 +68,20 @@ public final class CollisionUtils {
      * @return true is shape is reachable by the given line of sight; false otherwise.
      */
     public static boolean isLineOfSightReachingShape(@NotNull Instance instance, @Nullable Chunk chunk,
-                                             @NotNull Point start, @NotNull Point end,
-                                             @NotNull Shape shape) {
+                                                     @NotNull Point start, @NotNull Point end,
+                                                     @NotNull Shape shape) {
         final PhysicsResult result = handlePhysics(instance, chunk,
                 BoundingBox.ZERO,
                 Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
                 null);
-        return shape.intersectBox(end.sub(result.newPosition()), BoundingBox.ZERO);
+        return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
     }
 
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
         return handlePhysics(entity, entityVelocity, null);
     }
 
-    public static boolean canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
     }
 
@@ -114,7 +113,7 @@ public final class CollisionUtils {
         };
     }
 
-    public static Shape parseBlockShape(String str, Supplier<Material> block) {
-        return ShapeImpl.parseBlockFromRegistry(str, block);
+    public static Shape parseBlockShape(String str, Registry.BlockEntry blockEntry) {
+        return ShapeImpl.parseBlockFromRegistry(str, blockEntry);
     }
 }

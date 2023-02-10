@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -36,7 +37,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param players the players
      * @return the audience
      */
-    static PacketGroupingAudience of(Collection<Player> players) {
+    static @NotNull PacketGroupingAudience of(@NotNull Collection<Player> players) {
         return () -> players;
     }
 
@@ -45,15 +46,15 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      *
      * @return the connections
      */
-    @NotNull Collection<Player> getPlayers();
+    @NotNull Collection<@NotNull Player> getPlayers();
 
     /**
      * Broadcast a ServerPacket to all players of this audience
      *
      * @param packet the packet to broadcast
      */
-    default void sendGroupedPacket(ServerPacket packet) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), packet);
+    default void sendGroupedPacket(@NotNull ServerPacket packet) {
+        PacketUtils.sendGroupedPacket(getPlayers(), packet);
     }
 
     @Override
@@ -94,6 +95,15 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     @Override
     default void hideBossBar(@NotNull BossBar bar) {
         MinecraftServer.getBossBarManager().removeBossBar(this.getPlayers(), bar);
+    }
+
+    /**
+     * Plays a {@link Sound} at a given point
+     * @param sound The sound to play
+     * @param point The point in this instance at which to play the sound
+     */
+    default void playSound(@NotNull Sound sound, @NotNull Point point) {
+        playSound(sound, point.x(), point.y(), point.z());
     }
 
     @Override

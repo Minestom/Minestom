@@ -184,10 +184,12 @@ final class GeneratorImpl {
         public void fork(@NotNull Consumer<Block.@NotNull Setter> consumer) {
             DynamicFork dynamicFork = new DynamicFork();
             consumer.accept(dynamicFork);
+            final Point startSection = dynamicFork.minSection;
+            if (startSection == null)
+                return; // No block has been placed
             final int width = dynamicFork.width;
             final int height = dynamicFork.height;
             final int depth = dynamicFork.depth;
-            final Point startSection = dynamicFork.minSection;
             final List<GenerationUnit> sections = dynamicFork.sections;
             registerFork(startSection, sections, width, height, depth);
         }

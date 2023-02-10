@@ -12,7 +12,7 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
+import java.util.List;
 
 public final class FluidGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FluidGenerator.class);
@@ -132,7 +132,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
 
         // Write files to outputFolder
         writeFiles(
-                Collections.singletonList(
+                List.of(
                         JavaFile.builder("net.minestom.server.fluid", fluidClass.build())
                                 .indent("    ")
                                 .skipJavaLangImports(true)

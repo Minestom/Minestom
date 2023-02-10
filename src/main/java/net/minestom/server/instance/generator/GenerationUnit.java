@@ -7,6 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Represents an area that can be generated.
+ * <p>
+ * The size is guaranteed to be a multiple of 16 (section).
+ */
 public interface GenerationUnit {
     /**
      * This unit's modifier, used to place blocks and biomes within this unit.
@@ -17,6 +22,8 @@ public interface GenerationUnit {
 
     /**
      * The size of this unit in blocks.
+     * <p>
+     * Guaranteed to be a multiple of 16.
      *
      * @return the size of this unit
      */
@@ -40,7 +47,7 @@ public interface GenerationUnit {
      * Creates a fork of this unit, which will be applied to the instance whenever possible.
      *
      * @param start the start of the fork
-     * @param end the end of the fork
+     * @param end   the end of the fork
      * @return the fork
      */
     @NotNull GenerationUnit fork(@NotNull Point start, @NotNull Point end);

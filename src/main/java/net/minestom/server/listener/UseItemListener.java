@@ -28,7 +28,7 @@ public class UseItemListener {
         }
 
         itemStack = useItemEvent.getItemStack();
-        final Material material = itemStack.getMaterial();
+        final Material material = itemStack.material();
 
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
@@ -66,7 +66,7 @@ public class UseItemListener {
         }
 
         if (!cancelAnimation && itemAnimationType != null) {
-            PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
+            PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
                 player.refreshActiveHand(true, hand == Player.Hand.OFF, riptideSpinAttack);
                 player.sendPacketToViewers(player.getMetadataPacket());

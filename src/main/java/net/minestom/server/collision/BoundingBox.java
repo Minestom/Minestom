@@ -6,11 +6,15 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public final class BoundingBox implements Shape {
+    private static final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
+    private static final BoundingBox sneakingBoundingBox = new BoundingBox(0.6, 1.5, 0.6);
+    private static final BoundingBox smallBoundingBox = new BoundingBox(0.6, 0.6, 0.6);
 
     final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
 
@@ -32,21 +36,15 @@ public final class BoundingBox implements Shape {
     @Override
     @ApiStatus.Experimental
     public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
-        return (minX() + positionRelative.x() <= boundingBox.maxX() && maxX() + positionRelative.x() >= boundingBox.minX()) &&
-                (minY() + positionRelative.y() <= boundingBox.maxY() && maxY() + positionRelative.y() >= boundingBox.minY()) &&
-                (minZ() + positionRelative.z() <= boundingBox.maxZ() && maxZ() + positionRelative.z() >= boundingBox.minZ());
+        return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
+                (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
+                (minZ() + positionRelative.z() <= boundingBox.maxZ() - Vec.EPSILON / 2 && maxZ() + positionRelative.z() >= boundingBox.minZ() + Vec.EPSILON / 2);
     }
 
     @Override
     @ApiStatus.Experimental
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
-        final boolean isHit = RayUtils.BoundingBoxIntersectionCheck(
-                moving, rayStart, rayDirection,
-                this,
-                shapePos
-        );
-        if (!isHit) return false;
-        if (RayUtils.SweptAABB(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
+        if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
             finalResult.collidedShapePosition = shapePos;
             finalResult.collidedShape = this;
             finalResult.blockType = null;
@@ -152,5 +150,25 @@ public final class BoundingBox implements Shape {
 
     public double maxZ() {
         return relativeEnd().z();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoundingBox that = (BoundingBox) o;
+        if (Double.compare(that.width, width) != 0) return false;
+        if (Double.compare(that.height, height) != 0) return false;
+        if (Double.compare(that.depth, depth) != 0) return false;
+        return offset.equals(that.offset);
+    }
+
+    public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
+        return switch (pose) {
+            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> smallBoundingBox;
+            case SLEEPING, DYING -> sleepingBoundingBox;
+            case SNEAKING -> sneakingBoundingBox;
+            default -> null;
+        };
     }
 }

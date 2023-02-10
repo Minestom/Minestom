@@ -1,11 +1,11 @@
 package net.minestom.server.network.packet.client;
 
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 
 /**
  * Represents a packet received from a client.
  * <p>
- * Packets are value-based, and should therefore be reliant on identity.
+ * Packets are value-based, and should therefore not be reliant on identity.
  */
-public interface ClientPacket extends Writeable {
+public interface ClientPacket extends NetworkBuffer.Writer {
 }

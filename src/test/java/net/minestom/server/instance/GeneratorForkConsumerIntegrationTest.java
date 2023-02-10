@@ -1,19 +1,37 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class GeneratorForkConsumerIntegrationTest {
+
+    @Test
+    public void empty(Env env) {
+        var manager = env.process().instance();
+        var instance = manager.createInstanceContainer();
+        AtomicReference<Exception> failed = new AtomicReference<>();
+        instance.setGenerator(unit -> {
+            try {
+                unit.fork(setter -> {
+                });
+            } catch (Exception e) {
+                failed.set(e);
+            }
+        });
+        instance.loadChunk(0, 0).join();
+        assertNull(failed.get(), "Failed: " + failed.get());
+    }
 
     @Test
     public void local(Env env) {

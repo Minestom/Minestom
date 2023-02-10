@@ -27,7 +27,7 @@ public class WorldBorder {
     private long lerpStartTime;
 
     private long speed;
-    private int portalTeleportBoundary;
+    private final int portalTeleportBoundary;
     private int warningTime;
     private int warningBlocks;
 
@@ -39,8 +39,7 @@ public class WorldBorder {
 
         this.speed = 0;
 
-        this.portalTeleportBoundary = 29999984;
-
+        this.portalTeleportBoundary = Integer.getInteger("minestom.world-border-size", 29999984);
     }
 
     /**
@@ -210,14 +209,15 @@ public class WorldBorder {
             double diameterDelta = newDiameter - oldDiameter;
             long elapsedTime = System.currentTimeMillis() - lerpStartTime;
             double percentage = (double) elapsedTime / (double) speed;
-            percentage = Math.max(percentage, 1);
-            this.currentDiameter = oldDiameter + (diameterDelta * percentage);
 
             // World border finished lerp
-            if (percentage == 1) {
+            if (percentage > 0.99) {
                 this.lerpStartTime = 0;
                 this.speed = 0;
                 this.oldDiameter = newDiameter;
+                this.currentDiameter = newDiameter;
+            } else {
+                this.currentDiameter = oldDiameter + (diameterDelta * percentage);
             }
         }
     }

@@ -30,9 +30,7 @@ public record BiomeParticle(float probability, Option option) {
                 nbtCompound.setString("Name", block.name());
                 Map<String, String> propertiesMap = block.properties();
                 if (propertiesMap.size() != 0) {
-                    nbtCompound.set("Properties", NBT.Compound(p -> {
-                        propertiesMap.forEach(p::setString);
-                    }));
+                    nbtCompound.set("Properties", NBT.Compound(p -> propertiesMap.forEach(p::setString)));
                 }
             });
         }
@@ -58,10 +56,8 @@ public record BiomeParticle(float probability, Option option) {
         @Override
         public NBTCompound toNbt() {
             //todo test count might be wrong type
-            NBTCompound nbtCompound = item.getMeta().toNBT();
-            return nbtCompound.modify(n -> {
-                n.setString("type", type);
-            });
+            NBTCompound nbtCompound = item.meta().toNBT();
+            return nbtCompound.modify(n -> n.setString("type", type));
         }
     }
 

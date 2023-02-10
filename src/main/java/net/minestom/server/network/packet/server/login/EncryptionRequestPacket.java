@@ -1,25 +1,27 @@
 package net.minestom.server.network.packet.server.login;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record EncryptionRequestPacket(@NotNull String serverId,
                                       byte @NotNull [] publicKey,
                                       byte @NotNull [] verifyToken) implements ServerPacket {
-    public EncryptionRequestPacket(BinaryReader reader) {
-        this(reader.readSizedString(),
-                reader.readByteArray(),
-                reader.readByteArray());
+    public EncryptionRequestPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(STRING),
+                reader.read(BYTE_ARRAY),
+                reader.read(BYTE_ARRAY));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(serverId);
-        writer.writeByteArray(publicKey);
-        writer.writeByteArray(verifyToken);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, serverId);
+        writer.write(BYTE_ARRAY, publicKey);
+        writer.write(BYTE_ARRAY, verifyToken);
     }
 
     @Override

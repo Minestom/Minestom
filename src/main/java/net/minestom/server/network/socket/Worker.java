@@ -3,13 +3,14 @@ package net.minestom.server.network.socket;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
+import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.PooledBuffers;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -64,22 +65,24 @@ public final class Worker extends MinestomThread {
                         try {
                             channel.close();
                         } catch (IOException e) {
-                           // Empty
+                            // Empty
                         }
                         return;
                     }
                     try {
-                        BinaryBuffer readBuffer = BinaryBuffer.wrap(PooledBuffers.packetBuffer());
-                        // Consume last incomplete packet
-                        connection.consumeCache(readBuffer);
-                        // Read & process
-                        readBuffer.readChannel(channel);
-                        connection.processPackets(readBuffer, server.packetProcessor());
+                        try (var holder = ObjectPool.PACKET_POOL.hold()) {
+                            BinaryBuffer readBuffer = BinaryBuffer.wrap(holder.get());
+                            // Consume last incomplete packet
+                            connection.consumeCache(readBuffer);
+                            // Read & process
+                            readBuffer.readChannel(channel);
+                            connection.processPackets(readBuffer, server.packetProcessor());
+                        }
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
                         connection.disconnect();
-                    } catch (IllegalArgumentException e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                    } catch (Throwable t) {
+                        MinecraftServer.getExceptionManager().handleException(t);
                         connection.disconnect();
                     }
                 }, MinecraftServer.TICK_MS);
@@ -107,11 +110,13 @@ public final class Worker extends MinestomThread {
         this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
-        Socket socket = channel.socket();
-        socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
-        socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
-        socket.setTcpNoDelay(Server.NO_DELAY);
-        socket.setSoTimeout(30 * 1000); // 30 seconds
+        if (channel.getLocalAddress() instanceof InetSocketAddress) {
+            Socket socket = channel.socket();
+            socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
+            socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
+            socket.setTcpNoDelay(Server.NO_DELAY);
+            socket.setSoTimeout(30 * 1000); // 30 seconds
+        }
         this.selector.wakeup();
     }
 

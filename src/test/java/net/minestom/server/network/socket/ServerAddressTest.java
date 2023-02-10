@@ -14,7 +14,7 @@ public class ServerAddressTest {
 
     @Test
     public void inetAddressTest() throws IOException {
-        InetSocketAddress address = new InetSocketAddress("localhost", 0);
+        InetSocketAddress address = new InetSocketAddress("localhost", 25565);
         var server = new Server(new PacketProcessor());
         server.init(address);
         assertSame(address, server.socketAddress());
@@ -26,7 +26,20 @@ public class ServerAddressTest {
     }
 
     @Test
-    public void unixAddressTest() throws IOException, InterruptedException {
+    public void inetAddressDynamicTest() throws IOException {
+        InetSocketAddress address = new InetSocketAddress("localhost", 0);
+        var server = new Server(new PacketProcessor());
+        server.init(address);
+        assertSame(address, server.socketAddress());
+        assertEquals(address.getHostString(), server.getAddress());
+        assertNotEquals(address.getPort(), server.getPort());
+
+        assertDoesNotThrow(server::start);
+        assertDoesNotThrow(server::stop);
+    }
+
+    @Test
+    public void unixAddressTest() throws IOException {
         UnixDomainSocketAddress address = UnixDomainSocketAddress.of("minestom.sock");
         var server = new Server(new PacketProcessor());
         server.init(address);
@@ -38,5 +51,11 @@ public class ServerAddressTest {
         assertDoesNotThrow(server::start);
         assertDoesNotThrow(server::stop);
         assertFalse(Files.exists(address.getPath()), "The socket file should be deleted");
+    }
+
+    @Test
+    public void noAddressTest() throws IOException {
+        var server = new Server(new PacketProcessor());
+        assertDoesNotThrow(server::stop);
     }
 }

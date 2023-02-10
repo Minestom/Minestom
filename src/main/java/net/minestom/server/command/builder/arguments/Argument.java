@@ -3,10 +3,12 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
-import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +27,16 @@ import java.util.function.Supplier;
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
+    @ApiStatus.Internal
+    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createContainer(Registry.Resource.COMMAND_ARGUMENTS,
+            (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id")));
+
+    record ArgumentImpl(NamespaceID namespace, int id) implements ProtocolObject {
+        @Override
+        public String toString() {
+            return name();
+        }
+    }
 
     private final String id;
     protected final boolean allowSpace;
@@ -35,6 +47,7 @@ public abstract class Argument<T> {
     private Supplier<T> defaultValue;
 
     private SuggestionCallback suggestionCallback;
+    protected SuggestionType suggestionType;
 
     /**
      * Creates a new argument.
@@ -91,30 +104,14 @@ public abstract class Argument<T> {
      */
     public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
 
-    /**
-     * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
-     *
-     * @param nodeMaker  helper object used to create and modify nodes
-     * @param executable true if this will be the last argument, false otherwise
-     */
-    public abstract void processNodes(@NotNull NodeMaker nodeMaker, boolean executable);
+    public abstract String parser();
 
-    /**
-     * Builds an argument node.
-     *
-     * @param argument   the argument
-     * @param executable true if this will be the last argument, false otherwise
-     * @return the created {@link DeclareCommandsPacket.Node}
-     */
-    @NotNull
-    protected static DeclareCommandsPacket.Node simpleArgumentNode(@NotNull Argument<?> argument,
-                                                                   boolean executable, boolean redirect, boolean suggestion) {
-        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
+    public byte @Nullable [] nodeProperties() {
+        return null;
+    }
 
-        argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, executable, redirect, suggestion);
-        argumentNode.name = argument.getId();
-
-        return argumentNode;
+    public @Nullable SuggestionType suggestionType() {
+        return suggestionType;
     }
 
     /**
@@ -242,6 +239,7 @@ public abstract class Argument<T> {
      */
     public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
         this.suggestionCallback = suggestionCallback;
+        this.suggestionType = SuggestionType.ASK_SERVER;
         return this;
     }
 
@@ -251,7 +249,7 @@ public abstract class Argument<T> {
      * @return If this argument has a suggestion.
      */
     public boolean hasSuggestion() {
-        return suggestionCallback != null;
+        return suggestionType != null;
     }
 
     /**
@@ -317,8 +315,13 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-            argument.processNodes(nodeMaker, executable);
+        public String parser() {
+            return argument.parser();
+        }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return argument.nodeProperties();
         }
     }
 
@@ -346,8 +349,13 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-            argument.processNodes(nodeMaker, executable);
+        public String parser() {
+            return argument.parser();
+        }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return argument.nodeProperties();
         }
     }
 }

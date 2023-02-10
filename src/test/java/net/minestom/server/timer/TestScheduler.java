@@ -2,6 +2,7 @@ package net.minestom.server.timer;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -63,6 +64,22 @@ public class TestScheduler {
         task.cancel();
         assertFalse(task.isAlive(), "Task should not be alive anymore");
         scheduler.process();
+        assertFalse(result.get(), "Task should be cancelled");
+    }
+
+    @Test
+    public void cancelAsyncDelayedTask() throws InterruptedException {
+        Scheduler scheduler = Scheduler.newScheduler();
+        AtomicBoolean result = new AtomicBoolean(false);
+        var task = scheduler.buildTask(() -> result.set(true))
+                .delay(Duration.ofMillis(1))
+                .executionType(ExecutionType.ASYNC)
+                .schedule();
+        assertTrue(task.isAlive(), "Task should still be alive");
+        task.cancel();
+        assertFalse(task.isAlive(), "Task should not be alive anymore");
+        scheduler.process();
+        Thread.sleep(10L);
         assertFalse(result.get(), "Task should be cancelled");
     }
 
