@@ -32,4 +32,21 @@ public enum BlockFace {
             case EAST -> WEST;
         };
     }
+
+    /**
+     * Get the BlockFace corresponding to the given {@link Direction}.
+     *
+     * @param direction the direction
+     * @return the corresponding BlockFace
+     */
+    public static BlockFace fromDirection(Direction direction) {
+        return switch (direction) {
+            case UP -> TOP;
+            case DOWN -> BOTTOM;
+            case NORTH -> NORTH;
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            case EAST -> EAST;
+        };
+    }
 }
