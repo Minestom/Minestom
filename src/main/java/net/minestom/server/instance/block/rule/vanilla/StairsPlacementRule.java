@@ -30,7 +30,8 @@ public class StairsPlacementRule extends BlockPlacementRule {
                             @NotNull Point blockPosition, @NotNull Player player) {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
-        BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
+        BlockFace half = blockFace; // waiting for new block faces to be implemented
+        
         String waterlogged = "false"; // waiting for water to be implemented
 
         return block.withProperties(Map.of(
