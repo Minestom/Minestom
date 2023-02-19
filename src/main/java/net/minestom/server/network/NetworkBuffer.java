@@ -30,7 +30,7 @@ public final class NetworkBuffer {
     public static final Type<Short> SHORT = NetworkBufferTypes.SHORT;
     public static final Type<Integer> UNSIGNED_SHORT = NetworkBufferTypes.UNSIGNED_SHORT;
     public static final Type<Integer> INT = NetworkBufferTypes.INT;
-    public static final Type<Long> LONG = NetworkBufferTypes.LONG;
+    public static final Type<Long> LONG = NetworkBufferTypes.VAR_LONG;
     public static final Type<Float> FLOAT = NetworkBufferTypes.FLOAT;
     public static final Type<Double> DOUBLE = NetworkBufferTypes.DOUBLE;
     public static final Type<Integer> VAR_INT = NetworkBufferTypes.VAR_INT;
