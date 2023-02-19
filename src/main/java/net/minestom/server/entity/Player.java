@@ -61,6 +61,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
@@ -90,6 +91,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -248,13 +250,38 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        NBTCompound nbt = NBT.Compound(Map.of(
-                "minecraft:chat_type", Messenger.chatRegistry(),
-                "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
-                "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
+        var registry = new HashMap<String, NBT>();
+        registry.put("minecraft:chat_type", Messenger.chatRegistry());
+        registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
+        registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
+
+        var damageTypeData = Registry.load(Registry.Resource.DAMAGE_TYPES);
+        var damageTypes = new ArrayList<NBT>();
+        int i = 0;
+        for (var entry : damageTypeData.entrySet()) {
+            var elem = new HashMap<String, NBT>();
+            for (var e : entry.getValue().entrySet()) {
+                if (e.getValue() instanceof String s) {
+                    elem.put(e.getKey(), NBT.String(s));
+                } else if (e.getValue() instanceof Double f) {
+                    elem.put(e.getKey(), NBT.Float(f.floatValue()));
+                } else if (e.getValue() instanceof Integer integer) {
+                    elem.put(e.getKey(), NBT.Int(integer));
+                }
+            }
+            damageTypes.add(NBT.Compound(Map.of(
+                    "id", NBT.Int(i++),
+                    "name", NBT.String(entry.getKey()),
+                    "element", NBT.Compound(elem)
+            )));
+        }
+        registry.put("minecraft:damage_type", NBT.Compound(Map.of(
+                "type", NBT.String("minecraft:damage_type"),
+                "value", NBT.List(NBTType.TAG_Compound, damageTypes)
+        )));
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
+                List.of(dimensionType.getName().asString()), NBT.Compound(registry), dimensionType.toString(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, levelFlat, deathLocation);
         sendPacket(joinGamePacket);
