@@ -24,12 +24,12 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET, Metadata.Long(value));
     }
 
-    public long getInterpolationDuration() {
-        return super.metadata.getIndex(OFFSET + 1, 0L);
+    public int getInterpolationDuration() {
+        return super.metadata.getIndex(OFFSET + 1, 0);
     }
 
-    public void setInterpolationDuration(long value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Long(value));
+    public void setInterpolationDuration(int value) {
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
     public @NotNull Point getTranslation() {
