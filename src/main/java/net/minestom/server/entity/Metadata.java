@@ -78,8 +78,12 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Integer> OptBlockID(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKID, value, NetworkBuffer.OPT_BLOCK_ID);
+    public static Entry<Integer> BlockState(@Nullable Integer value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, NetworkBuffer.BLOCK_STATE);
+    }
+
+    public static Entry<Integer> OptBlockState(@Nullable Integer value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKSTATE, value, NetworkBuffer.OPT_BLOCK_STATE);
     }
 
     public static Entry<NBT> NBT(@NotNull NBT nbt) {
@@ -109,6 +113,16 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
     }
 
+    public static Entry<Point> Vector3(@NotNull Point value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
+    }
+
+    public static Entry<float[]> Quaternion(float @NotNull[] value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
+    }
+
+    private static byte id = 0;
+
     public static final byte TYPE_BYTE = 0;
     public static final byte TYPE_VARINT = 1;
     public static final byte TYPE_LONG = 2;
@@ -123,14 +137,20 @@ public final class Metadata {
     public static final byte TYPE_OPTPOSITION = 11;
     public static final byte TYPE_DIRECTION = 12;
     public static final byte TYPE_OPTUUID = 13;
-    public static final byte TYPE_OPTBLOCKID = 14;
-    public static final byte TYPE_NBT = 15;
-    public static final byte TYPE_PARTICLE = 16;
-    public static final byte TYPE_VILLAGERDATA = 17;
-    public static final byte TYPE_OPTVARINT = 18;
-    public static final byte TYPE_POSE = 19;
-    public static final byte TYPE_CAT_VARIANT = 20;
-    public static final byte TYPE_FROG_VARIANT = 21;
+    public static final byte TYPE_BLOCKSTATE = 14;
+    public static final byte TYPE_OPTBLOCKSTATE = 15;
+    public static final byte TYPE_NBT = 16;
+    public static final byte TYPE_PARTICLE = 17;
+    public static final byte TYPE_VILLAGERDATA = 18;
+    public static final byte TYPE_OPTVARINT = 19;
+    public static final byte TYPE_POSE = 20;
+    public static final byte TYPE_CATVARIANT = 21;
+    public static final byte TYPE_FROGVARIANT = 22;
+    public static final byte TYPE_OPTGLOBALPOS = 23;
+    public static final byte TYPE_PAINTINGVARIANT = 24;
+    // todo sniffer shit
+    public static final byte TYPE_VECTOR3 = 26;
+    public static final byte TYPE_QUATERNION = 27;
 
     private static final VarHandle NOTIFIED_CHANGES;
 
