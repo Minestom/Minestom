@@ -72,6 +72,7 @@ public final class Biome {
                 element.setFloat("scale", scale);
                 element.setFloat("downfall", downfall);
                 element.setString("category", category.name().toLowerCase(Locale.ROOT));
+                element.setByte("has_precipitation", (byte) 1); //todo bad fix
                 element.setString("precipitation", precipitation.name().toLowerCase(Locale.ROOT));
                 if (temperatureModifier != TemperatureModifier.NONE)
                     element.setString("temperature_modifier", temperatureModifier.name().toLowerCase(Locale.ROOT));
