@@ -78,8 +78,12 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Integer> OptBlockID(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKID, value, NetworkBuffer.OPT_BLOCK_ID);
+    public static Entry<Integer> BlockState(@Nullable Integer value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, NetworkBuffer.BLOCK_STATE);
+    }
+
+    public static Entry<Integer> OptBlockState(@Nullable Integer value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKSTATE, value, NetworkBuffer.OPT_BLOCK_STATE);
     }
 
     public static Entry<NBT> NBT(@NotNull NBT nbt) {
@@ -109,28 +113,43 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
     }
 
-    public static final byte TYPE_BYTE = 0;
-    public static final byte TYPE_VARINT = 1;
-    public static final byte TYPE_LONG = 2;
-    public static final byte TYPE_FLOAT = 3;
-    public static final byte TYPE_STRING = 4;
-    public static final byte TYPE_CHAT = 5;
-    public static final byte TYPE_OPTCHAT = 6;
-    public static final byte TYPE_SLOT = 7;
-    public static final byte TYPE_BOOLEAN = 8;
-    public static final byte TYPE_ROTATION = 9;
-    public static final byte TYPE_POSITION = 10;
-    public static final byte TYPE_OPTPOSITION = 11;
-    public static final byte TYPE_DIRECTION = 12;
-    public static final byte TYPE_OPTUUID = 13;
-    public static final byte TYPE_OPTBLOCKID = 14;
-    public static final byte TYPE_NBT = 15;
-    public static final byte TYPE_PARTICLE = 16;
-    public static final byte TYPE_VILLAGERDATA = 17;
-    public static final byte TYPE_OPTVARINT = 18;
-    public static final byte TYPE_POSE = 19;
-    public static final byte TYPE_CAT_VARIANT = 20;
-    public static final byte TYPE_FROG_VARIANT = 21;
+    public static Entry<Point> Vector3(@NotNull Point value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
+    }
+
+    public static Entry<float[]> Quaternion(float @NotNull[] value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
+    }
+
+    private static byte id = 0;
+
+    public static final byte TYPE_BYTE = id++;
+    public static final byte TYPE_VARINT = id++;
+    public static final byte TYPE_LONG = id++;
+    public static final byte TYPE_FLOAT = id++;
+    public static final byte TYPE_STRING = id++;
+    public static final byte TYPE_CHAT = id++;
+    public static final byte TYPE_OPTCHAT = id++;
+    public static final byte TYPE_SLOT = id++;
+    public static final byte TYPE_BOOLEAN = id++;
+    public static final byte TYPE_ROTATION = id++;
+    public static final byte TYPE_POSITION = id++;
+    public static final byte TYPE_OPTPOSITION = id++;
+    public static final byte TYPE_DIRECTION = id++;
+    public static final byte TYPE_OPTUUID = id++;
+    public static final byte TYPE_BLOCKSTATE = id++;
+    public static final byte TYPE_OPTBLOCKSTATE = id++;
+    public static final byte TYPE_NBT = id++;
+    public static final byte TYPE_PARTICLE = id++;
+    public static final byte TYPE_VILLAGERDATA = id++;
+    public static final byte TYPE_OPTVARINT = id++;
+    public static final byte TYPE_POSE = id++;
+    public static final byte TYPE_CAT_VARIANT = id++;
+    public static final byte TYPE_FROG_VARIANT = id++;
+    public static final byte TYPE_OPTGLOBALPOS = id++;
+    public static final byte TYPE_PAINTINGVARIANT = id++;
+    public static final byte TYPE_VECTOR3 = id++;
+    public static final byte TYPE_QUATERNION = id++;
 
     private static final VarHandle NOTIFIED_CHANGES;
 
