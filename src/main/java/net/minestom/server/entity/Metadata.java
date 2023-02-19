@@ -31,7 +31,7 @@ public final class Metadata {
     }
 
     public static Entry<Long> Long(long value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.LONG);
+        return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.VAR_LONG);
     }
 
     public static Entry<Float> Float(float value) {
