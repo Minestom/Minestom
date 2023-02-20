@@ -9,6 +9,12 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
     public static final byte OFFSET = AbstractDisplayMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 5;
 
+    private static final byte SHADOW = 1;
+    private static final byte SEE_THROUGH = 2;
+    private static final byte USE_DEFAULT_BACKGROUND = 4;
+    private static final byte ALIGN_LEFT = 8;
+    private static final byte ALIGN_RIGHT = 16;
+
     public TextDisplayMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
@@ -45,12 +51,43 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value));
     }
 
-    public byte getStyleFlags() {
-        return super.metadata.getIndex(OFFSET + 4, (byte)0);
+    public boolean isShadow() {
+        return getMaskBit(OFFSET + 4, SHADOW);
     }
 
-    public void setStyleFlags(byte value) {
-        super.metadata.setIndex(OFFSET + 4, Metadata.Byte(value));
+    public void setShadow(boolean value) {
+        setMaskBit(OFFSET + 4, SHADOW, value);
     }
 
+    public boolean isSeeThrough() {
+        return getMaskBit(OFFSET + 4, SEE_THROUGH);
+    }
+
+    public void setSeeThrough(boolean value) {
+        setMaskBit(OFFSET + 4, SEE_THROUGH, value);
+    }
+
+    public boolean isUseDefaultBackground() {
+        return getMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND);
+    }
+
+    public void setUseDefaultBackground(boolean value) {
+        setMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND, value);
+    }
+
+    public boolean isAlignLeft() {
+        return getMaskBit(OFFSET + 4, ALIGN_LEFT);
+    }
+
+    public void setAlignLeft(boolean value) {
+        setMaskBit(OFFSET + 4, ALIGN_LEFT, value);
+    }
+
+    public boolean isAlignRight() {
+        return getMaskBit(OFFSET + 4, ALIGN_RIGHT);
+    }
+
+    public void setAlignRight(boolean value) {
+        setMaskBit(OFFSET + 4, ALIGN_RIGHT, value);
+    }
 }
