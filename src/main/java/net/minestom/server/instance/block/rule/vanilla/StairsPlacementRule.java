@@ -21,20 +21,23 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @Override
     public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
-        Shape shape = this.getShape(instance, blockPosition, Facing.valueOf(block.getProperty("facing").toUpperCase()));
+        Shape shape = getShape(instance, blockPosition, Facing.valueOf(block.getProperty("facing").toUpperCase()));
         return block.withProperty("shape", shape.toString().toLowerCase());
     }
 
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace,
-                            @NotNull Point blockPosition, @NotNull Player player, float cursorX, float cursorY, float cursorZ) {
-        Facing facing = this.getFacing(player);
-        Shape shape = this.getShape(instance, blockPosition, facing);
-        BlockFace half = (cursorY > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM);
-        if(blockFace == BlockFace.BOTTOM || blockFace == BlockFace.TOP) half = blockFace.getOppositeFace();
-        String waterlogged = "false";
+                            @NotNull Point blockPosition, @NotNull Player player, @NotNull Point cursorPosition) {
+        Facing facing = getFacing(player);
+        Shape shape = getShape(instance, blockPosition, facing);
 
+        BlockFace half = (cursorPosition.y() > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM);
+        if (blockFace == BlockFace.BOTTOM || blockFace == BlockFace.TOP) {
+            half = blockFace.getOppositeFace();
+        }
+
+        String waterlogged = "false";
         return block.withProperties(Map.of(
                 "facing", facing.toString().toLowerCase(),
                 "half", half.toString().toLowerCase(),
