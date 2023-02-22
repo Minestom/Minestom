@@ -63,7 +63,7 @@ public class HeadPlacementRule extends BlockPlacementRule {
         String name = block.namespace().value();
 
         // player_head -> player
-        String rawName = name.substring(0, name.indexOf("_"));
+        String rawName = name.substring(0, name.lastIndexOf("_"));
         // player_head -> _head
         String rawType = name.substring(rawName.length());
 
