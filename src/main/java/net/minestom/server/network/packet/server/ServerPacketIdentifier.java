@@ -24,6 +24,7 @@ public final class ServerPacketIdentifier {
     public static final int BLOCK_CHANGE = nextPlayId();
     public static final int BOSS_BAR = nextPlayId();
     public static final int SERVER_DIFFICULTY = nextPlayId();
+    public static final int CHUNK_BIOME_DATA = nextPlayId();
     public static final int CLEAR_TITLES = nextPlayId();
     public static final int TAB_COMPLETE = nextPlayId();
     public static final int DECLARE_COMMANDS = nextPlayId();
