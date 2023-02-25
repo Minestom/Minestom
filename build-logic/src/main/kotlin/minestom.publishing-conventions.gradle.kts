@@ -16,8 +16,8 @@ indra {
     }
     apache2License()
 	
-	publishReleasesTo("tecno-repo", "https://repo.mrtecno.tk/repository/maven-release/")
-	publishSnapshotsTo("tecno-repo", "https://repo.mrtecno.tk/repository/maven-snapshot/")
+	publishReleasesTo("tecno-repo", "https://repo.mrtecno.dev/repository/maven-release/")
+	publishSnapshotsTo("tecno-repo", "https://repo.mrtecno.dev/repository/maven-snapshot/")
 
     configurePublications {
         pom {
@@ -39,7 +39,7 @@ publishing {
 	repositories {
 		maven {
 			name = "tecno-repo"
-			url = uri("https://repo.mrtecno.tk/repository/personal-hosted/")
+			url = uri("https://repo.mrtecno.dev/repository/personal-hosted/")
 		}
 	}
 }
