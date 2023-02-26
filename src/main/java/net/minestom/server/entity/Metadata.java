@@ -148,7 +148,7 @@ public final class Metadata {
     public static final byte TYPE_FROGVARIANT = 22;
     public static final byte TYPE_OPTGLOBALPOS = 23;
     public static final byte TYPE_PAINTINGVARIANT = 24;
-    // todo sniffer shit
+    public static final byte TYPE_SNIFFER_STATE = 25;
     public static final byte TYPE_VECTOR3 = 26;
     public static final byte TYPE_QUATERNION = 27;
 
