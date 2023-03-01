@@ -11,6 +11,14 @@ import java.util.Objects;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
+/**
+ * Represents a potion effect that can be added to an {@link net.minestom.server.entity.Entity}.
+ *
+ * @param effect    the potion effect
+ * @param amplifier the amplifier starting at 0 (level 1)
+ * @param duration  the duration (in ticks) that the potion will last
+ * @param flags     the flags of the potion, see {@link #flags()}
+ */
 public record Potion(@NotNull PotionEffect effect, byte amplifier,
                      int duration, byte flags) implements NetworkBuffer.Writer {
     /**
@@ -40,6 +48,11 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      */
     public static final byte ICON_FLAG = 0x04;
 
+    /**
+     * Creates a new Potion with no flags.
+     *
+     * @see #Potion(PotionEffect, byte, int, byte)
+     */
     public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
         this(effect, amplifier, duration, (byte) 0);
     }
