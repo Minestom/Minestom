@@ -858,11 +858,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (Objects.equals(previousInstance, instance)) {
             return teleport(spawnPosition); // Already in the instance, teleport to spawn point
         }
+        if (previousInstance != null) removeFromInstance(previousInstance);
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
         EventDispatcher.call(event);
         if (event.isCancelled()) return null; // TODO what to return?
 
-        if (previousInstance != null) removeFromInstance(previousInstance);
 
         this.isActive = true;
         this.position = spawnPosition;
