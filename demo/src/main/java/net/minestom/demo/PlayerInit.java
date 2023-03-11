@@ -204,13 +204,13 @@ public class PlayerInit {
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
+       /* MinecraftServer.getSchedulerManager().buildTask(() -> {
             Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             if (players.isEmpty())
                 return;
             players.forEach(player -> {
                 player.sendMessage("shouldUnmount: " + player.getVehicleInformation().shouldUnmount());
             });
-        }).repeat(20, TimeUnit.SERVER_TICK).schedule();
+        }).repeat(20, TimeUnit.SERVER_TICK).schedule();*/
     }
 }

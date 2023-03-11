@@ -258,6 +258,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Server brand name
         sendPacket(PluginMessagePacket.getBrandPacket());
+
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
 
@@ -280,9 +281,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        PacketUtils.broadcastPacket(getAddPlayerToList());
-        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            if (player != this) sendPacket(player.getAddPlayerToList());
+        for (var reciever : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            reciever.sendPacket(getAddPlayerToList(reciever));
+            if (reciever != this) sendPacket(reciever.getAddPlayerToList(this));
         }
 
         //Teams
@@ -971,7 +972,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
      * @see PlayerSkinInitEvent if you want to apply the skin at connection
      */
-    public synchronized void setSkin(@Nullable PlayerSkin skin) {
+    public synchronized void setSkin(@Nullable PlayerSkin skin, @Nullable Player receiver) {
         this.skin = skin;
         if (instance == null)
             return;
@@ -979,7 +980,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
+        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList(receiver);
 
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
                 0, gameMode, gameMode, false, levelFlat, true);
@@ -991,13 +992,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshClientStateAfterRespawn();
 
         {
-            // Remove player
-            PacketUtils.broadcastPacket(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
+            if (receiver == null) {
+                // Remove player
+                PacketUtils.broadcastPacket(removePlayerPacket);
+                sendPacketToViewers(destroyEntitiesPacket);
 
-            // Show player again
-            PacketUtils.broadcastPacket(addPlayerPacket);
-            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+                // Show player again
+                PacketUtils.broadcastPacket(addPlayerPacket);
+                getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+            } else {
+                // Remove player
+                receiver.sendPacket(removePlayerPacket);
+                receiver.sendPacket(destroyEntitiesPacket);
+
+                // Show player again
+                receiver.sendPacket(addPlayerPacket);
+                receiver.showPlayer(getPlayerConnection());
+            }
+
+
         }
 
         getInventory().update();
@@ -1927,13 +1940,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
-    protected @NotNull PlayerInfoPacket getAddPlayerToList() {
+    protected @NotNull PlayerInfoPacket getAddPlayerToList(@Nullable Player receiver) {
         final PlayerSkin skin = this.skin;
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
+
+        AddPlayerToListEvent addPlayerToListEvent = new AddPlayerToListEvent(this, uuid, username, prop, gameMode, latency, displayName, null, receiver);
+        EventDispatcher.call(addPlayerToListEvent);
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName, null));
+                new PlayerInfoPacket.AddPlayer(addPlayerToListEvent.getUuid(), addPlayerToListEvent.getUsername(), addPlayerToListEvent.getProperties(), addPlayerToListEvent.getGameMode(), addPlayerToListEvent.getPing(), addPlayerToListEvent.getDisplayName(), addPlayerToListEvent.getPublicKey()));
     }
 
     /**

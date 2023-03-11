@@ -14,6 +14,7 @@ import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerOption;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
+import net.minestom.server.event.player.AddPlayerToListEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
@@ -117,14 +118,21 @@ public class Main {
             player.sendMessage("CursorItem: " + event.getCursorItem());
         });
 
+        MinecraftServer.getGlobalEventHandler().addListener(AddPlayerToListEvent.class, event -> {
+            System.out.println("PlayerInfoPacketEvent: " + event.getPlayer().getUsername() + " for Player: " + (event.getReceiver() == null ? "ALL" : event.getReceiver().getUsername()));
+            event.setUsername((event.getReceiver() != null ? event.getReceiver().getUsername() : "Unknown"));
+            //event.setSkin(PlayerSkin.fromUsername("Freddiio"));
+            //  event.setDisplayName(Component.text("Freddiio").decoration(TextDecoration.ITALIC, true));
+        });
+
         MinecraftServer.getGlobalEventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
             event.setCancelled(true);
         });
 
-        FakePlayer.initPlayer(UUID.randomUUID(), "TEST", new FakePlayerOption().setInTabList(false).setRegistered(false), fakePlayer -> {
-            fakePlayer.setSkin(PlayerSkin.fromUsername("ArizeFreddi"));
+       /* FakePlayer.initPlayer(UUID.randomUUID(), "TEST", new FakePlayerOption().setInTabList(false).setRegistered(false), fakePlayer -> {
+            fakePlayer.setSkin(PlayerSkin.fromUsername("ArizeFreddi"), null);
         });
-
+*/
         PlayerInit.init();
 
         OptifineSupport.enable();
