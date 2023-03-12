@@ -78,6 +78,13 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>Record Components:</dt>
+<dd><code><span id="param-effect">effect</span></code> - the potion effect</dd>
+<dd><code><span id="param-amplifier">amplifier</span></code> - the amplifier starting at 0 (level 1)</dd>
+<dd><code><span id="param-duration">duration</span></code> - the duration (in ticks) that the potion will last</dd>
+<dd><code><span id="param-flags">flags</span></code> - the flags of the potion, see <a href="#flags()"><code>flags()</code></a></dd>
+</dl>
+<dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
 </dl>
@@ -85,6 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">Potion</span>(@NotNull <a href="PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a>&nbsp;effect, byte&nbsp;amplifier, int&nbsp;duration, byte&nbsp;flags)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></span></div>
+<div class="block">Represents a potion effect that can be added to an <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -128,7 +136,9 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int)" class="member-name-link">Potion</a><wbr>(@NotNull <a href="PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
  byte&nbsp;amplifier,
  int&nbsp;duration)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a new Potion with no flags.</div>
+</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,byte)" class="member-name-link">Potion</a><wbr>(@NotNull <a href="PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
  byte&nbsp;amplifier,
  int&nbsp;duration,
@@ -153,17 +163,17 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#amplifier()" class="member-name-link">amplifier</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>amplifier</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-amplifier"><code>amplifier</code></a> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#duration()" class="member-name-link">duration</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>duration</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-duration"><code>duration</code></a> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#effect()" class="member-name-link">effect</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>effect</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-effect"><code>effect</code></a> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -299,6 +309,15 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
  @NotNull <a href="PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
  byte&nbsp;amplifier,
  int&nbsp;duration)</span></div>
+<div class="block">Creates a new Potion with no flags.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,byte)"><code>Potion(PotionEffect, byte, int, byte)</code></a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -319,10 +338,10 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="block">Creates an instance of a <code>Potion</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>effect</code> - the value for the <code>effect</code> record component</dd>
-<dd><code>amplifier</code> - the value for the <code>amplifier</code> record component</dd>
-<dd><code>duration</code> - the value for the <code>duration</code> record component</dd>
-<dd><code>flags</code> - the value for the <code>flags</code> record component</dd>
+<dd><code>effect</code> - the value for the <a href="#param-effect"><code>effect</code></a> record component</dd>
+<dd><code>amplifier</code> - the value for the <a href="#param-amplifier"><code>amplifier</code></a> record component</dd>
+<dd><code>duration</code> - the value for the <a href="#param-duration"><code>duration</code></a> record component</dd>
+<dd><code>flags</code> - the value for the <a href="#param-flags"><code>flags</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -469,10 +488,10 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <h3>effect</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a></span>&nbsp;<span class="element-name">effect</span>()</div>
-<div class="block">Returns the value of the <code>effect</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-effect"><code>effect</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>effect</code> record component</dd>
+<dd>the value of the <a href="#param-effect"><code>effect</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -480,10 +499,10 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <section class="detail" id="amplifier()">
 <h3>amplifier</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte</span>&nbsp;<span class="element-name">amplifier</span>()</div>
-<div class="block">Returns the value of the <code>amplifier</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-amplifier"><code>amplifier</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>amplifier</code> record component</dd>
+<dd>the value of the <a href="#param-amplifier"><code>amplifier</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -491,10 +510,10 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <section class="detail" id="duration()">
 <h3>duration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">duration</span>()</div>
-<div class="block">Returns the value of the <code>duration</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-duration"><code>duration</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>duration</code> record component</dd>
+<dd>the value of the <a href="#param-duration"><code>duration</code></a> record component</dd>
 </dl>
 </section>
 </li>
