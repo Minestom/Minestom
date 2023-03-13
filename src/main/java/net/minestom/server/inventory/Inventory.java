@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
 public non-sealed class Inventory extends AbstractInventory implements Viewable {
-    private static final AtomicInteger ID_COUNTER = new AtomicInteger();
+    private static final AtomicInteger ID_COUNTER = new AtomicInteger(1);
 
     // the id of this inventory
     private final byte id;
@@ -58,11 +58,12 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     private static byte generateId() {
-        final byte id = (byte) Math.abs((byte) ID_COUNTER.incrementAndGet());
-        if (id == 0) { // zero is player's inventory id
-            return generateId();
+        int id = ID_COUNTER.incrementAndGet();
+        if (id > 127) {
+            ID_COUNTER.set(1);
+            id = 1;
         }
-        return id;
+        return (byte) id;
     }
 
     /**
