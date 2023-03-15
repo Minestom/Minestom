@@ -78,9 +78,9 @@ public class InventoryTest {
 
     @Test
     public void testIds() {
-        for (int i = 0; i <= 256; ++i) {
-            final Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
-            assertTrue(inventory.getWindowId() != 0);
+        for (int i = 0; i <= 1000; ++i) {
+            final byte windowId = new Inventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
+            assertTrue(windowId > 0);
         }
     }
 }
