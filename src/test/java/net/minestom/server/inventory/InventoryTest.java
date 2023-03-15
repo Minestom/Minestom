@@ -79,7 +79,7 @@ public class InventoryTest {
     @Test
     public void testIds() {
         for (int i = 0; i <= 1000; ++i) {
-            final int windowId = new Inventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
+            final byte windowId = new Inventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
             assertTrue(windowId > 0);
         }
     }
