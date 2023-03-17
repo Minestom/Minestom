@@ -15,7 +15,7 @@ final class RayUtils {
      * @return true if an intersection between the ray and the bounding box was found
      */
     public static boolean BoundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult finalResult) {
-        Point bbCentre = new Vec(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2 + Vec.EPSILON, moving.minZ() + moving.depth() / 2);
+        Point bbCentre = new Vec(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2, moving.minZ() + moving.depth() / 2);
         Point rayCentre = rayStart.add(bbCentre);
 
         // Translate bounding box
@@ -36,7 +36,7 @@ final class RayUtils {
         // Intersect X
         // Left side of bounding box
         if (rayDirection.x() > 0) {
-            double xFac = bbOffMin.x() / rayDirection.x();
+            double xFac = epsilon(bbOffMin.x() / rayDirection.x());
             if (xFac < percentage) {
                 double yix = rayDirection.y() * xFac + rayCentre.y();
                 double zix = rayDirection.z() * xFac + rayCentre.z();
@@ -56,7 +56,7 @@ final class RayUtils {
         }
         // Right side of bounding box
         if (rayDirection.x() < 0) {
-            double xFac = bbOffMax.x() / rayDirection.x();
+            double xFac = epsilon(bbOffMax.x() / rayDirection.x());
             if (xFac < percentage) {
                 double yix = rayDirection.y() * xFac + rayCentre.y();
                 double zix = rayDirection.z() * xFac + rayCentre.z();
@@ -76,7 +76,7 @@ final class RayUtils {
 
         // Intersect Z
         if (rayDirection.z() > 0) {
-            double zFac = bbOffMin.z() / rayDirection.z();
+            double zFac = epsilon(bbOffMin.z() / rayDirection.z());
             if (zFac < percentage) {
                 double xiz = rayDirection.x() * zFac + rayCentre.x();
                 double yiz = rayDirection.y() * zFac + rayCentre.y();
@@ -94,7 +94,7 @@ final class RayUtils {
             }
         }
         if (rayDirection.z() < 0) {
-            double zFac = bbOffMax.z() / rayDirection.z();
+            double zFac = epsilon(bbOffMax.z() / rayDirection.z());
             if (zFac < percentage) {
                 double xiz = rayDirection.x() * zFac + rayCentre.x();
                 double yiz = rayDirection.y() * zFac + rayCentre.y();
@@ -114,7 +114,7 @@ final class RayUtils {
 
         // Intersect Y
         if (rayDirection.y() > 0) {
-            double yFac = bbOffMin.y() / rayDirection.y();
+            double yFac = epsilon(bbOffMin.y() / rayDirection.y());
             if (yFac < percentage) {
                 double xiy = rayDirection.x() * yFac + rayCentre.x();
                 double ziy = rayDirection.z() * yFac + rayCentre.z();
@@ -133,7 +133,7 @@ final class RayUtils {
         }
 
         if (rayDirection.y() < 0) {
-            double yFac = bbOffMax.y() / rayDirection.y();
+            double yFac = epsilon(bbOffMax.y() / rayDirection.y());
             if (yFac < percentage) {
                 double xiy = rayDirection.x() * yFac + rayCentre.x();
                 double ziy = rayDirection.z() * yFac + rayCentre.z();
@@ -165,6 +165,10 @@ final class RayUtils {
         }
 
         return isHit;
+    }
+
+    private static double epsilon(double value) {
+        return Math.abs(value) < Vec.EPSILON ? 0 : value;
     }
 
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
