@@ -281,7 +281,7 @@ final class TagHandlerImpl implements TagHandler {
                 this.entries.forValues(entry -> {
                     final Tag tag = entry.tag;
                     final NBT nbt = entry.updatedNbt();
-                    if (!tag.entry.isPath() || !((NBTCompound) nbt).isEmpty()) {
+                    if (nbt != null && (!tag.entry.isPath() || !((NBTCompound) nbt).isEmpty())) {
                         tmp.put(tag.getKey(), nbt);
                     }
                 });
@@ -310,7 +310,8 @@ final class TagHandlerImpl implements TagHandler {
                     nbt = entry.updatedNbt();
                 }
 
-                tmp.put(tag.getKey(), nbt);
+                if (nbt != null)
+                    tmp.put(tag.getKey(), nbt);
                 entries.put(tag.index, valueToEntry(result, tag, value));
             });
             if (tmp.isEmpty() && parent != null)
