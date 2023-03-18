@@ -30,6 +30,8 @@ final class Serializers {
     static final Entry<Component, NBTString> COMPONENT = new Entry<>(NBTType.TAG_String, input -> GsonComponentSerializer.gson().deserialize(input.getValue()),
             component -> NBT.String(GsonComponentSerializer.gson().serialize(component)));
 
+    static final Entry<Object, NBTByte> EMPTY = new Entry<>(NBTType.TAG_Byte, unused -> null, component -> null);
+
     static <T> Entry<T, NBTCompound> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(NBTType.TAG_Compound,
                 (NBTCompound compound) -> {
