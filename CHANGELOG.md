@@ -9,3 +9,5 @@ Some of these are pending, some deserve PRs, others are just minor tweaks
 * Support custom component translator for serverside translation
 * **breaking** Replace permission system with a simple user pluggable alternative
 * **breaking** Remove tinylog and MinestomTerminal implementation
+* Add `Tag.Transient`
+* Optionally allow multiple parents in event nodes
