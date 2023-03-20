@@ -26,7 +26,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                 case "blasting" -> new DeclaredBlastingRecipe(reader);
                 case "smoking" -> new DeclaredSmokingRecipe(reader);
                 case "campfire_cooking" -> new DeclaredCampfireCookingRecipe(reader);
-                case "stonecutter" -> new DeclaredStonecutterRecipe(reader);
+                case "stonecutting" -> new DeclaredStonecutterRecipe(reader);
                 case "smithing" -> new DeclaredSmithingRecipe(reader);
                 default -> throw new UnsupportedOperationException("Unrecognized type: " + type);
             };
@@ -235,7 +235,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
         @Override
         public @NotNull String type() {
-            return "stonecutter";
+            return "stonecutting";
         }
     }
 
