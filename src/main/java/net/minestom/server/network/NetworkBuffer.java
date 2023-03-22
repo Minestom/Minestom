@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.ApiStatus;
@@ -57,6 +58,7 @@ public final class NetworkBuffer {
     public static final Type<int[]> VILLAGER_DATA = NetworkBufferTypes.VILLAGER_DATA;
     public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypes.OPT_VAR_INT;
     public static final Type<Entity.Pose> POSE = NetworkBufferTypes.POSE;
+    public static final Type<DeathLocation> DEATH_LOCATION = NetworkBufferTypes.DEATH_LOCATION;
 
     ByteBuffer nioBuffer;
     final boolean resizable;

@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -504,6 +505,23 @@ final class NetworkBufferTypes {
             buffer -> {
                 final int ordinal = buffer.read(VAR_INT);
                 return Entity.Pose.values()[ordinal];
+            });
+    static final TypeImpl<DeathLocation> DEATH_LOCATION = new TypeImpl<>(DeathLocation.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(BOOLEAN, false);
+                } else {
+                    buffer.write(BOOLEAN, true);
+                    buffer.write(STRING, value.dimension());
+                    buffer.write(BLOCK_POSITION, value.position());
+                }
+                return -1;
+            },
+            buffer -> {
+                if (buffer.read(BOOLEAN)) {
+                    return new DeathLocation(buffer.read(STRING), buffer.read(BLOCK_POSITION));
+                }
+                return null;
             });
 
     record TypeImpl<T>(@NotNull Class<T> type,

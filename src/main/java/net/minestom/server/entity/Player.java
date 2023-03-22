@@ -55,6 +55,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -250,10 +251,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "minecraft:chat_type", Messenger.chatRegistry(),
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
+
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
+
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
                 List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
-                false, true, false, levelFlat);
+                false, true, false, levelFlat, deathLocation);
         sendPacket(joinGamePacket);
 
         // Server brand name
@@ -443,8 +448,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setFireForDuration(0);
         setOnFire(false);
         refreshHealth();
+
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-               0, gameMode, gameMode, false, levelFlat, true));
+               0, gameMode, gameMode, false, levelFlat, true, deathLocation));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -968,8 +976,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true);
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1341,8 +1351,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
         sendPacket(new RespawnPacket(dimensionType.toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation));
         refreshClientStateAfterRespawn();
     }
 
