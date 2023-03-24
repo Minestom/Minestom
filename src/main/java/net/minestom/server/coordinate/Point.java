@@ -261,10 +261,10 @@ public sealed interface Point permits Vec, Pos {
     }
 
     /**
-     * Gets if two points are in the same chunk.
+     * Gets if two points are in the same block.
      *
-     * @param point the point to compare two
-     * @return true if 'this' is in the same chunk as {@code point}
+     * @param point the point to compare to
+     * @return true if 'this' is in the same block as {@code point}
      */
     default boolean sameBlock(@NotNull Point point) {
         return sameBlock(point.blockX(), point.blockY(), point.blockZ());
