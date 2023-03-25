@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -51,7 +52,7 @@ public class ArgumentWord extends Argument<String> {
 
     @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
+    public String parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         if (input.contains(StringUtils.SPACE))
             throw new ArgumentSyntaxException("Word cannot contain space character", input, SPACE_ERROR);
 

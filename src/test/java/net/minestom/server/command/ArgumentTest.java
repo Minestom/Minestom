@@ -15,8 +15,8 @@ public class ArgumentTest {
 
     @Test
     public void testParseSelf() {
-        assertEquals("example", Argument.parse(ArgumentType.String("example")));
-        assertEquals(55, Argument.parse(ArgumentType.Integer("55")));
+        assertEquals("example", Argument.parse(new ServerSender(), ArgumentType.String("example")));
+        assertEquals(55, Argument.parse(new ServerSender(), ArgumentType.Integer("55")));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class ArgumentTest {
         assertFalse(arg.isOptional());
         arg.setDefaultValue("default value");
         assertTrue(arg.isOptional());
-        assertEquals("default value", arg.getDefaultValue().get());
+        assertEquals("default value", arg.getDefaultValue().apply(new ServerSender()));
     }
 
     @Test

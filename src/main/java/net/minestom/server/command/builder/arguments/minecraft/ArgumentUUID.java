@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ public class ArgumentUUID extends Argument<UUID> {
 
     @NotNull
     @Override
-    public UUID parse(@NotNull String input) throws ArgumentSyntaxException {
+    public UUID parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
             return UUID.fromString(input);
         } catch (IllegalArgumentException exception) {

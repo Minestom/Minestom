@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -22,7 +24,7 @@ import java.util.function.Supplier;
  * <p>
  * You can create your own with your own special conditions.
  * <p>
- * Arguments are parsed using {@link #parse(String)}.
+ * Arguments are parsed using {@link #parse(CommandSender, String)}.
  *
  * @param <T> the type of this parsed argument
  */
@@ -44,7 +46,7 @@ public abstract class Argument<T> {
 
     private ArgumentCallback callback;
 
-    private Supplier<T> defaultValue;
+    private Function<CommandSender, T> defaultValue;
 
     private SuggestionCallback suggestionCallback;
     protected SuggestionType suggestionType;
@@ -90,8 +92,8 @@ public abstract class Argument<T> {
      * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
      */
     @ApiStatus.Experimental
-    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
-        return argument.parse(argument.getId());
+    public static <T> @NotNull T parse(@NotNull CommandSender sender, @NotNull Argument<T> argument) throws ArgumentSyntaxException {
+        return argument.parse(sender, argument.getId());
     }
 
     /**
@@ -102,7 +104,7 @@ public abstract class Argument<T> {
      * @return the parsed argument
      * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public abstract @NotNull T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException;
 
     public abstract String parser();
 
@@ -187,7 +189,7 @@ public abstract class Argument<T> {
     }
 
     @Nullable
-    public Supplier<T> getDefaultValue() {
+    public Function<CommandSender, T> getDefaultValue() {
         return defaultValue;
     }
 
@@ -202,6 +204,12 @@ public abstract class Argument<T> {
      */
     @NotNull
     public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
+        this.defaultValue = unused -> defaultValue.get();
+        return this;
+    }
+
+    @NotNull
+    public Argument<T> setDefaultValue(@Nullable Function<CommandSender, T> defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
@@ -214,7 +222,7 @@ public abstract class Argument<T> {
      */
     @NotNull
     public Argument<T> setDefaultValue(@NotNull T defaultValue) {
-        this.defaultValue = () -> defaultValue;
+        this.defaultValue = unused -> defaultValue;
         return this;
     }
 
@@ -261,6 +269,11 @@ public abstract class Argument<T> {
      */
     @ApiStatus.Experimental
     public <O> @NotNull Argument<O> map(@NotNull Function<T, O> mapper) {
+        return new ArgumentMap<>(this, (p, i) -> mapper.apply(i));
+    }
+
+    @ApiStatus.Experimental
+    public <O> @NotNull Argument<O> map(@NotNull BiFunction<CommandSender, T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }
 
@@ -293,22 +306,22 @@ public abstract class Argument<T> {
     private static final class ArgumentMap<I, O> extends Argument<O> {
         public static final int INVALID_MAP = 555;
         final Argument<I> argument;
-        final Function<I, O> mapper;
+        final BiFunction<@NotNull CommandSender, I, O> mapper;
 
-        private ArgumentMap(@NotNull Argument<I> argument, @NotNull Function<I, O> mapper) {
+        private ArgumentMap(@NotNull Argument<I> argument, @NotNull BiFunction<@NotNull CommandSender, I, O> mapper) {
             super(argument.getId(), argument.allowSpace(), argument.useRemaining());
             if (argument.getSuggestionCallback() != null)
                 this.setSuggestionCallback(argument.getSuggestionCallback());
             if (argument.getDefaultValue() != null)
-                this.setDefaultValue(() -> mapper.apply(argument.getDefaultValue().get()));
+                this.setDefaultValue(sender -> mapper.apply(sender, argument.getDefaultValue().apply(sender)));
             this.argument = argument;
             this.mapper = mapper;
         }
 
         @Override
-        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
-            final I value = argument.parse(input);
-            final O mappedValue = mapper.apply(value);
+        public @NotNull O parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+            final I value = argument.parse(sender, input);
+            final O mappedValue = mapper.apply(sender, value);
             if (mappedValue == null)
                 throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
             return mappedValue;
@@ -341,8 +354,8 @@ public abstract class Argument<T> {
         }
 
         @Override
-        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
-            final T result = argument.parse(input);
+        public @NotNull T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+            final T result = argument.parse(sender, input);
             if (!predicate.test(result))
                 throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
             return result;

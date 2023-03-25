@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.parser;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
@@ -139,7 +140,8 @@ public class ArgumentParser {
     }
 
     @Nullable
-    public static ArgumentResult validate(@NotNull Argument<?> argument,
+    public static ArgumentResult validate(@NotNull CommandSender sender,
+                                          @NotNull Argument<?> argument,
                                           @NotNull Argument<?>[] arguments, int argIndex,
                                           @NotNull String[] inputArguments, int inputIndex) {
         final boolean end = inputIndex == inputArguments.length;
@@ -171,7 +173,7 @@ public class ArgumentParser {
                 rawArg = builder.toString();
 
                 try {
-                    parsedValue = argument.parse(rawArg);
+                    parsedValue = argument.parse(sender, rawArg);
                     correct = true;
                 } catch (ArgumentSyntaxException exception) {
                     argumentSyntaxException = exception;
@@ -186,7 +188,7 @@ public class ArgumentParser {
                 rawArg = builder.toString();
 
                 try {
-                    parsedValue = argument.parse(rawArg);
+                    parsedValue = argument.parse(sender, rawArg);
 
                     // Prevent quitting the parsing too soon if the argument
                     // does not allow space

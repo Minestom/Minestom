@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandDispatcher;
@@ -51,7 +52,8 @@ public final class CommandParser {
         return recursiveCommandQuery(dispatcher, parents, null, commandName, args);
     }
 
-    public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
+    public static void parse(@NotNull CommandSender sender, @Nullable CommandSyntax syntax,
+                             @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
                              @NotNull String commandString,
                              @Nullable List<ValidSyntaxHolder> validSyntaxes,
                              @Nullable Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions) {
@@ -65,7 +67,7 @@ public final class CommandParser {
         // Check the validity of the arguments...
         for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
             final Argument<?> argument = commandArguments[argIndex];
-            ArgumentParser.ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, inputArguments, inputIndex);
+            ArgumentParser.ArgumentResult argumentResult = validate(sender, argument, commandArguments, argIndex, inputArguments, inputIndex);
             if (argumentResult == null) {
                 break;
             }
@@ -145,7 +147,8 @@ public final class CommandParser {
     }
 
     @Nullable
-    public static ArgumentQueryResult findEligibleArgument(@NotNull Command command, String[] args, String commandString,
+    public static ArgumentQueryResult findEligibleArgument(@NotNull CommandSender sender,
+                                                           @NotNull Command command, String[] args, String commandString,
                                                            boolean trailingSpace, boolean forceCorrect,
                                                            Predicate<CommandSyntax> syntaxPredicate,
                                                            Predicate<Argument<?>> argumentPredicate) {
@@ -167,7 +170,7 @@ public final class CommandParser {
             int maxArgIndex = 0;
             for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
                 Argument<?> argument = commandArguments[argIndex];
-                ArgumentParser.ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, args, inputIndex);
+                ArgumentParser.ArgumentResult argumentResult = validate(sender, argument, commandArguments, argIndex, args, inputIndex);
                 if (argumentResult == null) {
                     // Nothing to analyze, create a dummy object
                     argumentResult = new ArgumentParser.ArgumentResult();

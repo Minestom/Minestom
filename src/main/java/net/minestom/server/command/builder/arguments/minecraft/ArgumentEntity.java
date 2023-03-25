@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
@@ -66,8 +67,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     @NotNull
     @Override
-    public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, onlySingleEntity, onlyPlayers);
+    public EntityFinder parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(sender, input, onlySingleEntity, onlyPlayers);
     }
 
     @Override
@@ -90,11 +91,11 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     /**
-     * @deprecated use {@link Argument#parse(Argument)}
+     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
     @NotNull
-    public static EntityFinder staticParse(@NotNull String input,
+    public static EntityFinder staticParse(@NotNull CommandSender sender, @NotNull String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
         // Check for raw player name or UUID
         if (!input.contains(SELECTOR_PREFIX) && !input.contains(StringUtils.SPACE)) {
@@ -148,11 +149,12 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
         // START PARSING THE STRUCTURE
         final String structure = input.substring(2);
-        return parseStructure(input, entityFinder, structure);
+        return parseStructure(sender, input, entityFinder, structure);
     }
 
     @NotNull
-    private static EntityFinder parseStructure(@NotNull String input,
+    private static EntityFinder parseStructure(@NotNull CommandSender sender,
+                                               @NotNull String input,
                                                @NotNull EntityFinder entityFinder,
                                                @NotNull String structure) throws ArgumentSyntaxException {
         // The structure isn't opened or closed properly
@@ -174,7 +176,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 if (!VALID_ARGUMENTS.contains(currentArgument))
                     throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not exist", input, INVALID_ARGUMENT_NAME);
 
-                i = parseArgument(entityFinder, currentArgument, input, structureData, i);
+                i = parseArgument(sender, entityFinder, currentArgument, input, structureData, i);
                 currentArgument = ""; // Reset current argument
             } else {
                 currentArgument += c;
@@ -184,7 +186,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return entityFinder;
     }
 
-    private static int parseArgument(@NotNull EntityFinder entityFinder,
+    private static int parseArgument(@NotNull CommandSender sender,
+                                     @NotNull EntityFinder entityFinder,
                                      @NotNull String argumentName,
                                      @NotNull String input,
                                      @NotNull String structureData, int beginIndex) throws ArgumentSyntaxException {
@@ -249,7 +252,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "level":
                 try {
-                    final IntRange level = Argument.parse(new ArgumentIntRange(value));
+                    final IntRange level = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setLevel(level);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
@@ -257,7 +260,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "distance":
                 try {
-                    final IntRange distance = Argument.parse(new ArgumentIntRange(value));
+                    final IntRange distance = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setDistance(distance);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);

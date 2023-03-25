@@ -74,8 +74,8 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the parsing result
      */
-    public @NotNull CommandResult parse(@NotNull String commandString) {
-        final net.minestom.server.command.CommandParser.Result test = manager.parseCommand(commandString);
+    public @NotNull CommandResult parse(@NotNull CommandSender sender, @NotNull String commandString) {
+        final net.minestom.server.command.CommandParser.Result test = manager.parseCommand(sender, commandString);
         return resultConverter(test, commandString);
     }
 
