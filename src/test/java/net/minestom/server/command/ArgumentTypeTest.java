@@ -379,13 +379,13 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.Group("group", ArgumentType.Integer("integer"), ArgumentType.String("string"), ArgumentType.Double("double"));
 
         // Test normal input
-        var context1 = arg.parse("1234 1234 1234");
+        var context1 = arg.parse(new ServerSender(), "1234 1234 1234");
         assertEquals(1234, context1.<Integer>get("integer"));
         assertEquals("1234", context1.<String>get("string"));
         assertEquals(1234.0, context1.<Double>get("double"));
 
         // Test different input + trailing spaces
-        var context2 = arg.parse("1234 abcd 1234.5678   ");
+        var context2 = arg.parse(new ServerSender(), "1234 abcd 1234.5678   ");
         assertEquals(1234, context2.<Integer>get("integer"));
         assertEquals("abcd", context2.<String>get("string"));
         assertEquals(1234.5678, context2.<Double>get("double"));
@@ -450,19 +450,32 @@ public class ArgumentTypeTest {
         assertInvalidArg(arg, "word4");
     }
 
+    @Test
+    public void testArgumentMapWithSender() {
+        var serverSender = new ServerSender();
+
+        var arg = ArgumentType.Word("word").from("word1", "word2", "word3")
+                .map((sender, s) -> {
+                    assertEquals(serverSender, sender);
+                    return s;
+                });
+
+        assertEquals("word1", arg.parse(serverSender, "word1"));
+    }
+
     private static <T> void assertArg(Argument<T> arg, T expected, String input) {
-        assertEquals(expected, arg.parse(input));
+        assertEquals(expected, arg.parse(new ServerSender(), input));
     }
 
     private static <T> void assertArrayArg(Argument<T[]> arg, T[] expected, String input) {
-        assertArrayEquals(expected, arg.parse(input));
+        assertArrayEquals(expected, arg.parse(new ServerSender(), input));
     }
 
     private static <T> void assertValidArg(Argument<T> arg, String input) {
-        assertDoesNotThrow(() -> arg.parse(input));
+        assertDoesNotThrow(() -> arg.parse(new ServerSender(), input));
     }
 
     private static <T> void assertInvalidArg(Argument<T> arg, String input) {
-        assertThrows(ArgumentSyntaxException.class, () -> arg.parse(input));
+        assertThrows(ArgumentSyntaxException.class, () -> arg.parse(new ServerSender(), input));
     }
 }

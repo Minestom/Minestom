@@ -108,7 +108,7 @@ public final class CommandManager {
             command = playerCommandEvent.getCommand();
         }
         // Process the command
-        final CommandParser.Result parsedCommand = parseCommand(command);
+        final CommandParser.Result parsedCommand = parseCommand(sender, command);
         final ExecutableCommand executable = parsedCommand.executable();
         final ExecutableCommand.Result executeResult = executable.execute(sender);
         final CommandResult result = resultConverter(executable, executeResult, command);
@@ -184,8 +184,8 @@ public final class CommandManager {
      * @param input commands string without prefix
      * @return the parsing result
      */
-    public CommandParser.Result parseCommand(String input) {
-        return parser.parse(getGraph(), input);
+    public CommandParser.Result parseCommand(@NotNull CommandSender sender, String input) {
+        return parser.parse(sender, getGraph(), input);
     }
 
     private Graph getGraph() {

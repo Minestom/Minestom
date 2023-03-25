@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.relative;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
@@ -38,7 +39,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     @NotNull
     @Override
-    public RelativeVec parse(@NotNull String input) throws ArgumentSyntaxException {
+    public RelativeVec parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         final String[] split = input.split(StringUtils.SPACE);
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);

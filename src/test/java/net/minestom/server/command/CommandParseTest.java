@@ -143,7 +143,7 @@ public class CommandParseTest {
     }
 
     private static CommandParser.Result parseCommand(Graph graph, String input) {
-        return CommandParser.parser().parse(graph, input);
+        return CommandParser.parser().parse(new ServerSender(), graph, input);
     }
 
     @NotNull

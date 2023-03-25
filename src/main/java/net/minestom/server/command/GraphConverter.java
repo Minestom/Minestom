@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -77,7 +78,8 @@ final class GraphConverter {
                     redirects.add((graph, root) -> node.redirectedNode = root);
                 } else {
                     redirects.add((graph, root) -> {
-                        final List<Argument<?>> args = CommandParser.parser().parse(graph, shortcut).args();
+                        var sender = player == null ? MinecraftServer.getCommandManager().getConsoleSender() : player;
+                        final List<Argument<?>> args = CommandParser.parser().parse(sender, graph, shortcut).args();
                         final Argument<?> last = args.get(args.size() - 1);
                         if (last.allowSpace()) {
                             node.redirectedNode = argToPacketId.get(args.get(args.size()-2));

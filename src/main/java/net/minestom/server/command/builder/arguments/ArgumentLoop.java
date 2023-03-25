@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
 
     @NotNull
     @Override
-    public List<T> parse(@NotNull String input) throws ArgumentSyntaxException {
+    public List<T> parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         List<T> result = new ArrayList<>();
         final String[] split = input.split(StringUtils.SPACE);
 
@@ -34,7 +35,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
             for (Argument<T> argument : arguments) {
                 try {
                     final String inputString = builder.toString();
-                    final T value = argument.parse(inputString);
+                    final T value = argument.parse(sender, inputString);
                     success = true;
                     result.add(value);
                     break;
