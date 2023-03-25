@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
@@ -18,7 +19,7 @@ public class ArgumentBlockState extends Argument<Block> {
     }
 
     @Override
-    public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull Block parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
@@ -28,7 +29,7 @@ public class ArgumentBlockState extends Argument<Block> {
     }
 
     /**
-     * @deprecated use {@link Argument#parse(Argument)}
+     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
     public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {

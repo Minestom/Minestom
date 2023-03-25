@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -21,12 +22,12 @@ public class ArgumentCommand extends Argument<CommandResult> {
 
     @NotNull
     @Override
-    public CommandResult parse(@NotNull String input) throws ArgumentSyntaxException {
+    public CommandResult parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         final String commandString = !shortcut.isEmpty() ?
                 shortcut + StringUtils.SPACE + input
                 : input;
         CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
-        CommandResult result = dispatcher.parse(commandString);
+        CommandResult result = dispatcher.parse(sender, commandString);
 
         if (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS)
             throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);

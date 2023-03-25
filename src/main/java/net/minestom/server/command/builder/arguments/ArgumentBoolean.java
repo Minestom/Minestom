@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ public class ArgumentBoolean extends Argument<Boolean> {
 
     @NotNull
     @Override
-    public Boolean parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Boolean parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         if (input.equalsIgnoreCase("true"))
             return true;
         if (input.equalsIgnoreCase("false"))

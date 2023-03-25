@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.math.Range;
@@ -32,7 +33,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
 
     @NotNull
     @Override
-    public T parse(@NotNull String input) throws ArgumentSyntaxException {
+    public T parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
             final String[] split = input.split(Pattern.quote(".."), -1);
 

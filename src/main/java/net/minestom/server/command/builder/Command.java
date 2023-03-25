@@ -16,10 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 /**
@@ -167,14 +164,14 @@ public class Command {
 
             // the 'args' array starts by all the required arguments, followed by the optional ones
             List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
+            Map<String, Function<CommandSender, Object>> defaultValuesMap = new HashMap<>();
             boolean optionalBranch = false;
             int i = 0;
             for (Argument<?> argument : args) {
                 final boolean isLast = ++i == args.length;
                 if (argument.isOptional()) {
                     // Set default value
-                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
+                    defaultValuesMap.put(argument.getId(), (Function<CommandSender, Object>) argument.getDefaultValue());
 
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
                         // First optional argument, create a syntax with current cached arguments

@@ -1,10 +1,7 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.Graph.Node;
-import net.minestom.server.command.builder.ArgumentCallback;
-import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.CommandData;
-import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -79,13 +76,13 @@ final class CommandParserImpl implements CommandParser {
     }
 
     @Override
-    public @NotNull CommandParser.Result parse(@NotNull Graph graph, @NotNull String input) {
+    public @NotNull CommandParser.Result parse(@NotNull CommandSender sender, @NotNull Graph graph, @NotNull String input) {
         final CommandStringReader reader = new CommandStringReader(input);
         final Chain chain = new Chain();
         // Read from input
         NodeResult result;
         Node parent = graph.root();
-        while ((result = parseChild(parent, reader)) != null) {
+        while ((result = parseChild(sender, parent, reader)) != null) {
             chain.append(result);
             if (result.argumentResult instanceof ArgumentResult.SyntaxError<?> e) {
                 // Syntax error stop at this arg
@@ -106,9 +103,9 @@ final class CommandParserImpl implements CommandParser {
             parent = null;
             for (Node child : tmp.next()) {
                 final Argument<?> argument = child.argument();
-                final Supplier<?> defaultSupplier = argument.getDefaultValue();
+                final Function<CommandSender, ?> defaultSupplier = argument.getDefaultValue();
                 if (defaultSupplier != null) {
-                    final Object value = defaultSupplier.get();
+                    final Object value = defaultSupplier.apply(sender);
                     final ArgumentResult<Object> argumentResult = new ArgumentResult.Success<>(value, "");
                     chain.append(new NodeResult(child, argumentResult, argument.getSuggestionCallback()));
                     parent = child;
@@ -145,12 +142,12 @@ final class CommandParserImpl implements CommandParser {
         return obj == null ? null : getter.apply(obj);
     }
 
-    private static NodeResult parseChild(Node parent, CommandStringReader reader) {
+    private static NodeResult parseChild(@NotNull CommandSender sender, Node parent, CommandStringReader reader) {
         if (!reader.hasRemaining()) return null;
         for (Node child : parent.next()) {
             final Argument<?> argument = child.argument();
             final int start = reader.cursor();
-            final ArgumentResult<?> parse = parse(argument, reader);
+            final ArgumentResult<?> parse = parse(sender, argument, reader);
             if (parse instanceof ArgumentResult.Success<?> success) {
                 return new NodeResult(child, (ArgumentResult<Object>) success,
                         argument.getSuggestionCallback());
@@ -375,18 +372,18 @@ final class CommandParserImpl implements CommandParser {
 
     // ARGUMENT
 
-    private static <T> ArgumentResult<T> parse(Argument<T> argument, CommandStringReader reader) {
+    private static <T> ArgumentResult<T> parse(@NotNull CommandSender sender, Argument<T> argument, CommandStringReader reader) {
         // Handle specific type without loop
         try {
             // Single word argument
             if (!argument.allowSpace()) {
                 final String word = reader.readWord();
-                return new ArgumentResult.Success<>(argument.parse(word), word);
+                return new ArgumentResult.Success<>(argument.parse(sender, word), word);
             }
             // Complete input argument
             if (argument.useRemaining()) {
                 final String remaining = reader.readRemaining();
-                return new ArgumentResult.Success<>(argument.parse(remaining), remaining);
+                return new ArgumentResult.Success<>(argument.parse(sender, remaining), remaining);
             }
         } catch (ArgumentSyntaxException ignored) {
             return new ArgumentResult.IncompatibleType<>();
@@ -397,7 +394,7 @@ final class CommandParserImpl implements CommandParser {
         while (true) {
             try {
                 final String input = current.toString();
-                return new ArgumentResult.Success<>(argument.parse(input), input);
+                return new ArgumentResult.Success<>(argument.parse(sender, input), input);
             } catch (ArgumentSyntaxException ignored) {
                 if (!reader.hasRemaining()) break;
                 current.append(" ");
