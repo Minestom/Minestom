@@ -966,7 +966,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
      * @see PlayerSkinInitEvent if you want to apply the skin at connection
      */
-    public synchronized void setSkin(@Nullable PlayerSkin skin) {
+    public synchronized void setSkin(@Nullable PlayerSkin skin, @Nullable Player receiver) {
         this.skin = skin;
         if (instance == null)
             return;
@@ -974,12 +974,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
+        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList(receiver);
 
-        // TODO: Add some way to determine last death location
-        final DeathLocation deathLocation = null;
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true, deathLocation);
+                0, gameMode, gameMode, false, levelFlat, true);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -988,13 +986,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshClientStateAfterRespawn();
 
         {
-            // Remove player
-            PacketUtils.broadcastPacket(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
+            if (receiver == null) {
+                // Remove player
+                PacketUtils.broadcastPacket(removePlayerPacket);
+                sendPacketToViewers(destroyEntitiesPacket);
 
-            // Show player again
-            PacketUtils.broadcastPacket(addPlayerPacket);
-            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+                // Show player again
+                PacketUtils.broadcastPacket(addPlayerPacket);
+                getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+            } else {
+                // Remove player
+                receiver.sendPacket(removePlayerPacket);
+                receiver.sendPacket(destroyEntitiesPacket);
+
+                // Show player again
+                receiver.sendPacket(addPlayerPacket);
+                receiver.showPlayer(getPlayerConnection());
+            }
+
+
         }
 
         getInventory().update();
