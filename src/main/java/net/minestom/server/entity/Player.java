@@ -1940,13 +1940,29 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
-    protected @NotNull PlayerInfoPacket getAddPlayerToList(@Nullable Player receiver) {
+    protected @NotNull PlayerInfoPacket getAddPlayerToList(@NotNull Player receiver) {
         final PlayerSkin skin = this.skin;
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
 
         AddPlayerToListEvent addPlayerToListEvent = new AddPlayerToListEvent(this, uuid, username, prop, gameMode, latency, displayName, null, receiver);
+        EventDispatcher.call(addPlayerToListEvent);
+        return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
+                new PlayerInfoPacket.AddPlayer(addPlayerToListEvent.getUuid(), addPlayerToListEvent.getUsername(), addPlayerToListEvent.getProperties(), addPlayerToListEvent.getGameMode(), addPlayerToListEvent.getPing(), addPlayerToListEvent.getDisplayName(), addPlayerToListEvent.getPublicKey()));
+    }
+    /**
+     * Gets the packet to add the player from the tab-list.
+     *
+     * @return a {@link PlayerInfoPacket} to add the player
+     */
+    protected @NotNull PlayerInfoPacket getAddPlayerToList() {
+        final PlayerSkin skin = this.skin;
+        List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
+                List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
+                List.of();
+
+        AddPlayerToListEvent addPlayerToListEvent = new AddPlayerToListEvent(this, uuid, username, prop, gameMode, latency, displayName, null, null);
         EventDispatcher.call(addPlayerToListEvent);
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
                 new PlayerInfoPacket.AddPlayer(addPlayerToListEvent.getUuid(), addPlayerToListEvent.getUsername(), addPlayerToListEvent.getProperties(), addPlayerToListEvent.getGameMode(), addPlayerToListEvent.getPing(), addPlayerToListEvent.getDisplayName(), addPlayerToListEvent.getPublicKey()));
