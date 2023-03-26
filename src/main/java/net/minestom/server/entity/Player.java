@@ -285,9 +285,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        PacketUtils.broadcastPacket(getAddPlayerToList());
-        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            if (player != this) sendPacket(player.getAddPlayerToList());
+        for (var reciever : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            reciever.sendPacket(getAddPlayerToList(reciever));
+            if (reciever != this) sendPacket(reciever.getAddPlayerToList(this));
         }
 
         //Teams
@@ -452,7 +452,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // TODO: Add some way to determine last death location
         final DeathLocation deathLocation = null;
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-               0, gameMode, gameMode, false, levelFlat, true, deathLocation));
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -977,7 +977,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList(receiver);
 
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true);
+                0, gameMode, gameMode, false, levelFlat, true, new DeathLocation(getDimensionType().getName().toString(), getPosition()));
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
