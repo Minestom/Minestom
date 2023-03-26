@@ -41,10 +41,15 @@ public final class MojangUtils {
                 final String response = URLUtils.getText(url);
                 // If our response is "", that means the url did not get a proper object from the url
                 // So the username or UUID was invalid, and therefore we return null
-                if(response.isEmpty()) {
+                if (response.isEmpty()) {
                     return null;
                 }
-                return JsonParser.parseString(response).getAsJsonObject();
+
+                JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
+                if (jsonObject.has("errorMessage")) {
+                    return null;
+                }
+                return jsonObject;
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
                 throw new RuntimeException(e);

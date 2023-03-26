@@ -55,6 +55,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -250,15 +251,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "minecraft:chat_type", Messenger.chatRegistry(),
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
+
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
+
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
                 List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
-                false, true, false, levelFlat);
+                false, true, false, levelFlat, deathLocation);
         sendPacket(joinGamePacket);
 
         // Server brand name
         sendPacket(PluginMessagePacket.getBrandPacket());
-
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
 
@@ -281,9 +285,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        for (var reciever : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            reciever.sendPacket(getAddPlayerToList(reciever));
-            if (reciever != this) sendPacket(reciever.getAddPlayerToList(this));
+        PacketUtils.broadcastPacket(getAddPlayerToList());
+        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            if (player != this) sendPacket(player.getAddPlayerToList());
         }
 
         //Teams
@@ -384,19 +388,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        // Unmount Player
-        if (getVehicle() != null)
-            if (getVehicleInformation().shouldUnmount()) {
-                PlayerUnmountVehicleEvent playerUnmountVehicleEvent = new PlayerUnmountVehicleEvent(this, getVehicle());
-                EventDispatcher.callCancellable(playerUnmountVehicleEvent, () -> {
-                    getVehicle().removePassenger(this);
-                    MinecraftServer.getSchedulerManager().buildTask(() -> {
-                        refreshPosition(getPosition());
-                        getVehicleInformation().refresh(0, 0, false, false);
-                    }).delay(1, TimeUnit.CLIENT_TICK).schedule();
-                });
-            }
-
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
     }
@@ -457,8 +448,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setFireForDuration(0);
         setOnFire(false);
         refreshHealth();
+
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+               0, gameMode, gameMode, false, levelFlat, true, deathLocation));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -972,7 +966,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
      * @see PlayerSkinInitEvent if you want to apply the skin at connection
      */
-    public synchronized void setSkin(@Nullable PlayerSkin skin, @Nullable Player receiver) {
+    public synchronized void setSkin(@Nullable PlayerSkin skin) {
         this.skin = skin;
         if (instance == null)
             return;
@@ -980,10 +974,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList(receiver);
+        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true);
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -992,25 +988,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshClientStateAfterRespawn();
 
         {
-            if (receiver == null) {
-                // Remove player
-                PacketUtils.broadcastPacket(removePlayerPacket);
-                sendPacketToViewers(destroyEntitiesPacket);
+            // Remove player
+            PacketUtils.broadcastPacket(removePlayerPacket);
+            sendPacketToViewers(destroyEntitiesPacket);
 
-                // Show player again
-                PacketUtils.broadcastPacket(addPlayerPacket);
-                getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
-            } else {
-                // Remove player
-                receiver.sendPacket(removePlayerPacket);
-                receiver.sendPacket(destroyEntitiesPacket);
-
-                // Show player again
-                receiver.sendPacket(addPlayerPacket);
-                receiver.showPlayer(getPlayerConnection());
-            }
-
-
+            // Show player again
+            PacketUtils.broadcastPacket(addPlayerPacket);
+            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
         getInventory().update();
@@ -1367,8 +1351,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
+        // TODO: Add some way to determine last death location
+        final DeathLocation deathLocation = null;
         sendPacket(new RespawnPacket(dimensionType.toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation));
         refreshClientStateAfterRespawn();
     }
 
@@ -1940,16 +1926,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
-    protected @NotNull PlayerInfoPacket getAddPlayerToList(@Nullable Player receiver) {
+    protected @NotNull PlayerInfoPacket getAddPlayerToList() {
         final PlayerSkin skin = this.skin;
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
-
-        AddPlayerToListEvent addPlayerToListEvent = new AddPlayerToListEvent(this, uuid, username, prop, gameMode, latency, displayName, null, receiver);
-        EventDispatcher.call(addPlayerToListEvent);
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(addPlayerToListEvent.getUuid(), addPlayerToListEvent.getUsername(), addPlayerToListEvent.getProperties(), addPlayerToListEvent.getGameMode(), addPlayerToListEvent.getPing(), addPlayerToListEvent.getDisplayName(), addPlayerToListEvent.getPublicKey()));
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName, null));
     }
 
     /**
