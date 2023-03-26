@@ -1936,13 +1936,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
-    protected @NotNull PlayerInfoPacket getAddPlayerToList() {
+    protected @NotNull PlayerInfoPacket getAddPlayerToList(@NotNull Player receiver) {
         final PlayerSkin skin = this.skin;
         List<PlayerInfoPacket.AddPlayer.Property> prop = skin != null ?
                 List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
+
+        AddPlayerToListEvent addPlayerToListEvent = new AddPlayerToListEvent(this, uuid, username, prop, gameMode, latency, displayName, null, receiver);
+        EventDispatcher.call(addPlayerToListEvent);
         return new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), prop, getGameMode(), getLatency(), displayName, null));
+                new PlayerInfoPacket.AddPlayer(addPlayerToListEvent.getUuid(), addPlayerToListEvent.getUsername(), addPlayerToListEvent.getProperties(), addPlayerToListEvent.getGameMode(), addPlayerToListEvent.getPing(), addPlayerToListEvent.getDisplayName(), addPlayerToListEvent.getPublicKey()));
     }
 
     /**
