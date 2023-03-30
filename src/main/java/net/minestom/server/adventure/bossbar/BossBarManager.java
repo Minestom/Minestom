@@ -135,7 +135,7 @@ public class BossBarManager {
     public @NotNull Collection<BossBar> getPlayerBossBars(@NotNull Player player) {
         Collection<BossBarHolder> holders = this.playerBars.get(player.getUuid());
         return holders != null ?
-                holders.stream().map(holder -> holder.bar).toList() : Collections.emptyList();
+                holders.stream().map(holder -> holder.bar).toList() : List.of();
     }
 
     /**
@@ -147,7 +147,7 @@ public class BossBarManager {
     public @NotNull Collection<Player> getBossBarViewers(@NotNull BossBar bossBar) {
         BossBarHolder holder = this.bars.get(bossBar);
         return holder != null ?
-                Collections.unmodifiableCollection(holder.players) : Collections.emptyList();
+                Collections.unmodifiableCollection(holder.players) : List.of();
     }
 
     /**

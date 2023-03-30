@@ -105,6 +105,10 @@ public final class Registry {
             return ids.get(id);
         }
 
+        public int toId(@NotNull String namespace) {
+            return get(namespace).id();
+        }
+
         public Collection<T> values() {
             return namespaces.values();
         }
@@ -133,6 +137,7 @@ public final class Registry {
         ENTITIES("entities.json"),
         ENCHANTMENTS("enchantments.json"),
         SOUNDS("sounds.json"),
+        COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),

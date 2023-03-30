@@ -1,11 +1,11 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -45,7 +45,6 @@ public class AnvilLoaderIntegrationTest {
             }
         });
     }
-
 
 
     @Test
@@ -103,7 +102,7 @@ public class AnvilLoaderIntegrationTest {
 
         // side walls
         for (int x = -2; x <= 3; x++) {
-            if(x != 0) { // bedrock block at center
+            if (x != 0) { // bedrock block at center
                 assertEquals(Block.NETHERRACK, instance.getBlock(x, 0, 0));
             }
             assertEquals(Block.NETHERRACK, instance.getBlock(x, 0, -4));
@@ -127,8 +126,7 @@ public class AnvilLoaderIntegrationTest {
                 .withProperty("facing", "west")
                 .withProperty("hinge", "left")
                 .withProperty("open", "false")
-                .withProperty("powered", "false")
-                ;
+                .withProperty("powered", "false");
         Block bottomDoorPart = baseDoor.withProperty("half", "lower");
         Block topDoorPart = baseDoor.withProperty("half", "upper");
         assertEquals(bottomDoorPart, instance.getBlock(3, 1, -3));
@@ -160,28 +158,25 @@ public class AnvilLoaderIntegrationTest {
                 return false;
             }
         });
-        Chunk originalChunk = instance.loadChunk(0,0).join();
+        Chunk originalChunk = instance.loadChunk(0, 0).join();
 
         synchronized (originalChunk) {
             instance.saveChunkToStorage(originalChunk);
             instance.unloadChunk(originalChunk);
-            while(originalChunk.isLoaded()) {
+            while (originalChunk.isLoaded()) {
                 Thread.sleep(1);
             }
         }
 
-        Chunk reloadedChunk = instance.loadChunk(0,0).join();
-        for(int section = reloadedChunk.getMinSection(); section < reloadedChunk.getMaxSection(); section++) {
+        Chunk reloadedChunk = instance.loadChunk(0, 0).join();
+        for (int section = reloadedChunk.getMinSection(); section < reloadedChunk.getMaxSection(); section++) {
             Section originalSection = originalChunk.getSection(section);
             Section reloadedSection = reloadedChunk.getSection(section);
 
             // easiest equality check to write is a memory compare on written output
-            BinaryWriter originalWriter = new BinaryWriter();
-            BinaryWriter reloadedWriter = new BinaryWriter();
-            originalSection.write(originalWriter);
-            reloadedSection.write(reloadedWriter);
-
-            Assertions.assertArrayEquals(originalWriter.toByteArray(), reloadedWriter.toByteArray());
+            var original = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(originalSection));
+            var reloaded = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(reloadedSection));
+            Assertions.assertArrayEquals(original, reloaded);
         }
 
         env.destroyInstance(instance);

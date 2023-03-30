@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.tag.Tag;
@@ -19,8 +20,7 @@ public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<Writ
     private static final Tag<String> AUTHOR = Tag.String("author");
     private static final Tag<String> TITLE = Tag.String("title");
     private static final Tag<List<Component>> PAGES = Tag.String("pages")
-            .<Component>map(s -> LegacyComponentSerializer.legacySection().deserialize(s),
-                    textComponent -> LegacyComponentSerializer.legacySection().serialize(textComponent))
+            .map(GsonComponentSerializer.gson()::deserialize, GsonComponentSerializer.gson()::serialize)
             .list().defaultValue(List.of());
 
     public boolean isResolved() {

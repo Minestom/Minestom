@@ -9,10 +9,8 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
@@ -21,9 +19,6 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.PongPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -58,10 +53,10 @@ public class PacketWriteReadTest {
         //SERVER_PACKETS.add(new EncryptionRequestPacket("server", generateByteArray(16), generateByteArray(16)));
         SERVER_PACKETS.add(new LoginDisconnectPacket(COMPONENT));
         //SERVER_PACKETS.add(new LoginPluginRequestPacket(5, "id", generateByteArray(16)));
-        SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911"));
+        SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911", 0));
         SERVER_PACKETS.add(new SetCompressionPacket(256));
         // Play
-        SERVER_PACKETS.add(new AcknowledgePlayerDiggingPacket(VEC, 5, ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true));
+        SERVER_PACKETS.add(new AcknowledgeBlockChangePacket(0));
         SERVER_PACKETS.add(new ActionBarPacket(COMPONENT));
         SERVER_PACKETS.add(new AttachEntityPacket(5, 10));
         SERVER_PACKETS.add(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5));
@@ -76,7 +71,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.UpdateFlagsAction((byte) 5)));
         SERVER_PACKETS.add(new CameraPacket(5));
         SERVER_PACKETS.add(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.RAIN_LEVEL_CHANGE, 2));
-        SERVER_PACKETS.add(new ChatMessagePacket(COMPONENT, ChatPosition.CHAT, UUID.randomUUID()));
+        SERVER_PACKETS.add(new SystemChatPacket(COMPONENT, false));
         SERVER_PACKETS.add(new ClearTitlesPacket(false));
         SERVER_PACKETS.add(new CloseWindowPacket((byte) 2));
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
@@ -124,7 +119,8 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY,
                 new PlayerInfoPacket.UpdateLatency(UUID.randomUUID(), 5)));
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER,
-                new PlayerInfoPacket.AddPlayer(UUID.randomUUID(), "TheMode911", List.of(new PlayerInfoPacket.AddPlayer.Property("name", "value")), GameMode.CREATIVE, 5, COMPONENT)));
+                new PlayerInfoPacket.AddPlayer(UUID.randomUUID(), "TheMode911",
+                        List.of(new PlayerInfoPacket.AddPlayer.Property("name", "value")), GameMode.CREATIVE, 5, COMPONENT, null)));
         SERVER_PACKETS.add(new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER, new PlayerInfoPacket.RemovePlayer(UUID.randomUUID())));
 
         //SERVER_PACKETS.add(new MultiBlockChangePacket(5,5,5,true, new long[]{0,5,543534,1321}));
@@ -145,13 +141,13 @@ public class PacketWriteReadTest {
         CLIENT_PACKETS.forEach(PacketWriteReadTest::testPacket);
     }
 
-    private static void testPacket(Writeable writeable) {
+    private static void testPacket(NetworkBuffer.Writer writeable) {
         try {
-            BinaryWriter writer = new BinaryWriter();
-            writeable.write(writer);
-            var readerConstructor = writeable.getClass().getConstructor(BinaryReader.class);
+            byte[] bytes = NetworkBuffer.makeArray(buffer -> buffer.write(writeable));
+            var readerConstructor = writeable.getClass().getConstructor(NetworkBuffer.class);
 
-            BinaryReader reader = new BinaryReader(writer.toByteArray());
+            NetworkBuffer reader = new NetworkBuffer();
+            reader.write(NetworkBuffer.RAW_BYTES, bytes);
             var createdPacket = readerConstructor.newInstance(reader);
             assertEquals(writeable, createdPacket);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException

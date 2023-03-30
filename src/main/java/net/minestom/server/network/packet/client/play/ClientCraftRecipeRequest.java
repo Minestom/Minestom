@@ -1,9 +1,10 @@
 package net.minestom.server.network.packet.client.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientCraftRecipeRequest(byte windowId, String recipe, boolean makeAll) implements ClientPacket {
     public ClientCraftRecipeRequest {
@@ -12,14 +13,14 @@ public record ClientCraftRecipeRequest(byte windowId, String recipe, boolean mak
         }
     }
 
-    public ClientCraftRecipeRequest(BinaryReader reader) {
-        this(reader.readByte(), reader.readSizedString(256), reader.readBoolean());
+    public ClientCraftRecipeRequest(@NotNull NetworkBuffer reader) {
+        this(reader.read(BYTE), reader.read(STRING), reader.read(BOOLEAN));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(windowId);
-        writer.writeSizedString(recipe);
-        writer.writeBoolean(makeAll);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, windowId);
+        writer.write(STRING, recipe);
+        writer.write(BOOLEAN, makeAll);
     }
 }

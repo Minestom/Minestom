@@ -3,7 +3,7 @@ package net.minestom.server.tag;
 import net.minestom.server.coordinate.Vec;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
+import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TagUpdateTest {

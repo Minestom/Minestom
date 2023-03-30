@@ -1,8 +1,8 @@
 package net.minestom.server.advancements;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;

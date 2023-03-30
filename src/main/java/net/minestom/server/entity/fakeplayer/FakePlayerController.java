@@ -139,7 +139,7 @@ public class FakePlayerController {
      * @param hand The hand in which an ite mshould be.
      */
     public void useItem(Player.Hand hand) {
-        addToQueue(new ClientUseItemPacket(hand));
+        addToQueue(new ClientUseItemPacket(hand, 0));
     }
 
     /**
@@ -159,7 +159,7 @@ public class FakePlayerController {
      * @param blockFace     From where the block is struck.
      */
     public void startDigging(Point blockPosition, BlockFace blockFace) {
-        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.STARTED_DIGGING, blockPosition, blockFace));
+        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.STARTED_DIGGING, blockPosition, blockFace, 0));
     }
 
     /**
@@ -169,7 +169,7 @@ public class FakePlayerController {
      * @param blockFace     From where the block is struck.
      */
     public void stopDigging(Point blockPosition, BlockFace blockFace) {
-        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, blockPosition, blockFace));
+        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, blockPosition, blockFace, 0));
     }
 
     /**
@@ -179,7 +179,7 @@ public class FakePlayerController {
      * @param blockFace     From where the block is struck.
      */
     public void finishDigging(Point blockPosition, BlockFace blockFace) {
-        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, blockPosition, blockFace));
+        addToQueue(new ClientPlayerDiggingPacket(ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, blockPosition, blockFace, 0));
     }
 
     /**

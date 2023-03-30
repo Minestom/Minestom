@@ -1,11 +1,12 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
-public final class Section implements Writeable {
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+
+public final class Section implements NetworkBuffer.Writer {
     private Palette blockPalette;
     private Palette biomePalette;
     private byte[] skyLight;
@@ -62,8 +63,8 @@ public final class Section implements Writeable {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeShort((short) blockPalette.count());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(SHORT, (short) blockPalette.count());
         writer.write(blockPalette);
         writer.write(biomePalette);
     }

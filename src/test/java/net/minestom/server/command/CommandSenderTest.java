@@ -76,5 +76,10 @@ public class CommandSenderTest {
         public @Nullable Component getMostRecentMessage() {
             return mostRecentMessage;
         }
+
+        @Override
+        public @NotNull Identity identity() {
+            return Identity.nil();
+        }
     }
 }
