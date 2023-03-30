@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.play.ClientSettingsPacket;
 import net.minestom.testing.Collector;
@@ -19,8 +20,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class PlayerIntegrationTest {
@@ -152,4 +152,21 @@ public class PlayerIntegrationTest {
         }
     }
 
+    @Test
+    public void deathLocationTest(Env env) {
+        String dimensionNamespace = "minestom:test_dimension";
+        final var testDimension = DimensionType.builder(NamespaceID.from(dimensionNamespace)).build();
+        env.process().dimension().addDimension(testDimension);
+
+        var instance = env.process().instance().createInstanceContainer(testDimension);
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(5, 42, 2)).join();
+
+        assertNull(player.getDeathLocation());
+        player.damage(DamageType.VOID, 30);
+        
+        assertNotNull(player.getDeathLocation());
+        assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
+        assertEquals(5, player.getDeathLocation().position().x());
+    }
 }
