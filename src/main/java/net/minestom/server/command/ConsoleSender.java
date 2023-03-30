@@ -1,16 +1,16 @@
 package net.minestom.server.command;
 
+import java.util.UUID;
+
 import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.permission.Permission;
-import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -19,11 +19,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * Represents the console when sending a command to the server.
  */
 public class ConsoleSender implements CommandSender {
-    private static final PlainTextComponentSerializer PLAIN_SERIALIZER = PlainTextComponentSerializer.plainText();
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleSender.class);
+    private static final ComponentLogger LOGGER = ComponentLogger.logger(ConsoleSender.class);
 
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
-    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
+    private final TagHandler tagHandler = TagHandler.newHandler();
+
+    private final Identity identity = Identity.nil();
+    private final Pointers pointers = Pointers.builder()
+            .withStatic(Identity.UUID, this.identity.uuid())
+            .build();
 
     @Override
     public void sendMessage(@NotNull String message) {
@@ -32,8 +36,7 @@ public class ConsoleSender implements CommandSender {
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        // we don't use the serializer here as we just need the plain text of the message
-        this.sendMessage(PLAIN_SERIALIZER.serialize(message));
+        LOGGER.info(message);
     }
 
     @NotNull
@@ -53,12 +56,17 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbtCompound);
+    public @NotNull TagHandler tagHandler() {
+        return tagHandler;
     }
 
     @Override
-    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-        tag.write(nbtCompound, value);
+    public @NotNull Identity identity() {
+        return this.identity;
+    }
+
+    @Override
+    public @NotNull Pointers pointers() {
+        return this.pointers;
     }
 }

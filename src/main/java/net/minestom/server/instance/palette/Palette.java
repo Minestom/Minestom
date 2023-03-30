@@ -1,6 +1,6 @@
 package net.minestom.server.instance.palette;
 
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntUnaryOperator;
@@ -10,7 +10,7 @@ import java.util.function.IntUnaryOperator;
  * <p>
  * 0 is the default value.
  */
-public interface Palette extends Writeable {
+public interface Palette extends NetworkBuffer.Writer {
     static Palette blocks() {
         return newPalette(16, 8, 4);
     }

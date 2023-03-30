@@ -26,16 +26,20 @@ public record PlayerSkin(String textures, String signature) {
     public static @Nullable PlayerSkin fromUuid(@NotNull String uuid) {
         final JsonObject jsonObject = MojangUtils.fromUuid(uuid);
         if (jsonObject == null) return null;
-        final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
-        for (JsonElement jsonElement : propertiesArray) {
-            final JsonObject propertyObject = jsonElement.getAsJsonObject();
-            final String name = propertyObject.get("name").getAsString();
-            if (!name.equals("textures")) continue;
-            final String textureValue = propertyObject.get("value").getAsString();
-            final String signatureValue = propertyObject.get("signature").getAsString();
-            return new PlayerSkin(textureValue, signatureValue);
+        try {
+            final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
+            for (JsonElement jsonElement : propertiesArray) {
+                final JsonObject propertyObject = jsonElement.getAsJsonObject();
+                final String name = propertyObject.get("name").getAsString();
+                if (!name.equals("textures")) continue;
+                final String textureValue = propertyObject.get("value").getAsString();
+                final String signatureValue = propertyObject.get("signature").getAsString();
+                return new PlayerSkin(textureValue, signatureValue);
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 
     /**
@@ -48,9 +52,13 @@ public record PlayerSkin(String textures, String signature) {
     public static @Nullable PlayerSkin fromUsername(@NotNull String username) {
         final JsonObject jsonObject = MojangUtils.fromUsername(username);
         if (jsonObject == null) return null;
-        final String uuid = jsonObject.get("id").getAsString();
-        // Retrieve the skin data from the mojang uuid
-        return fromUuid(uuid);
+        try {
+            final String uuid = jsonObject.get("id").getAsString();
+            // Retrieve the skin data from the mojang uuid
+            return fromUuid(uuid);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

@@ -1,9 +1,8 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.InventoryEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
  * are already moved.
  */
-public class InventoryClickEvent implements InventoryEvent, PlayerEvent, EntityInstanceEvent {
+public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent {
 
     private final Inventory inventory;
     private final Player player;

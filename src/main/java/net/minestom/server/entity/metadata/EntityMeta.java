@@ -14,7 +14,7 @@ public class EntityMeta {
     public static final byte MAX_OFFSET = OFFSET + 8;
 
     private final static byte ON_FIRE_BIT = 0x01;
-    private final static byte CROUNCHING_BIT = 0x02;
+    private final static byte CROUCHING_BIT = 0x02;
     private final static byte SPRINTING_BIT = 0x08;
     private final static byte SWIMMING_BIT = 0x10;
     private final static byte INVISIBLE_BIT = 0x20;
@@ -55,11 +55,11 @@ public class EntityMeta {
     }
 
     public boolean isSneaking() {
-        return getMaskBit(OFFSET, CROUNCHING_BIT);
+        return getMaskBit(OFFSET, CROUCHING_BIT);
     }
 
     public void setSneaking(boolean value) {
-        setMaskBit(OFFSET, CROUNCHING_BIT, value);
+        setMaskBit(OFFSET, CROUCHING_BIT, value);
     }
 
     public boolean isSprinting() {

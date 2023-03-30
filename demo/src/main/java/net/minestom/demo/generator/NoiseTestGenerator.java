@@ -1,166 +1,139 @@
 package net.minestom.demo.generator;
 
-import de.articdive.jnoise.JNoise;
-import de.articdive.jnoise.interpolation.InterpolationType;
+import de.articdive.jnoise.generators.noise_parameters.interpolation.Interpolation;
+import de.articdive.jnoise.generators.noisegen.opensimplex.FastSimplexNoiseGenerator;
+import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator;
+import de.articdive.jnoise.pipeline.JNoise;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.ChunkGenerator;
-import net.minestom.server.instance.ChunkPopulator;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.generator.GenerationUnit;
+import net.minestom.server.instance.generator.Generator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+public class NoiseTestGenerator implements Generator {
 
-public class NoiseTestGenerator implements ChunkGenerator {
+    private final JNoise treeNoise = JNoise.newBuilder()
+            .fastSimplex(FastSimplexNoiseGenerator.newBuilder().setSeed(123).build())
+            .scale(999)
+            .build();
 
-    private Random random = new Random();
-    private JNoise jNoise = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(random.nextInt()).setFrequency(0.4).build();
-    private JNoise jNoise2 = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(random.nextInt()).setFrequency(0.6).build();
-    private TreePopulator treeGen = new TreePopulator();
+    private final JNoise jNoise = JNoise.newBuilder()
+            .perlin(PerlinNoiseGenerator.newBuilder().setSeed(123).setInterpolation(Interpolation.LINEAR).build())
+            .scale(0.4).build();
 
     public int getHeight(int x, int z) {
-        double preHeight = jNoise.getNoise(x / 16.0, z / 16.0);
+        double preHeight = jNoise.evaluateNoise(x / 16.0, z / 16.0);
         return (int) ((preHeight > 0 ? preHeight * 6 : preHeight * 4) + 64);
     }
 
     @Override
-    public void generateChunkData(@NotNull ChunkBatch batch, int chunkX, int chunkZ) {
+    public void generate(@NotNull GenerationUnit unit) {
+        Point start = unit.absoluteStart();
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                final int height = getHeight(x + chunkX * 16, z + chunkZ * 16);
-                for (int y = 0; y < height; y++) {
-                    if (y == 0) {
-                        batch.setBlock(x, y, z, Block.BEDROCK);
-                    } else if (y == height - 1) {
-                        batch.setBlock(x, y, z, Block.GRASS_BLOCK);
-                    } else if (y > height - 7) {
-                        batch.setBlock(x, y, z, Block.DIRT);
-                    } else {
-                        batch.setBlock(x, y, z, Block.STONE);
-                    }
+                Point pos;
+                {
+                    int absX = start.blockX() + x;
+                    int absZ = start.blockZ() + z;
+                    final int height = getHeight(absX, absZ);
+                    pos = new Vec(absX, height, absZ);
                 }
-                if (height < 61) {
-                    batch.setBlock(x, height - 1, z, Block.DIRT);
-                    for (int y = 0; y < 61 - height; y++) {
-                        batch.setBlock(x, y + height, z, Block.WATER);
-                    }
+                Point posp1 = pos.add(1, 0, 1);
+
+                // Water
+                if (pos.y() < 61) {
+                    unit.modifier().fill(pos, posp1.withY(61), Block.WATER);
+                    unit.modifier().fill(pos.withY(0), posp1, Block.AIR);
+                    return;
+                }
+
+                // Regular terrain
+                unit.modifier().fill(pos.withY(0), posp1, Block.STONE);
+                unit.modifier().fill(pos.withY(pos.y() - 7), posp1, Block.DIRT);
+                unit.modifier().fill(pos.withY(pos.y() - 1), posp1, Block.GRASS_BLOCK);
+                unit.modifier().fill(pos.withY(0), posp1.withY(1), Block.BEDROCK);
+
+                if (treeNoise.evaluateNoise(pos.x(), pos.z()) > 0.8) {
+                    TreePopulator.populate(pos, unit);
                 }
             }
         }
     }
 
-    @Override
-    public List<ChunkPopulator> getPopulators() {
-        List<ChunkPopulator> list = new ArrayList<>();
-        list.add(treeGen);
-        return list;
-    }
-
-    private class TreePopulator implements ChunkPopulator {
-
-        final Structure tree;
-
-        public TreePopulator() {
-            tree = new Structure();
-            tree.addBlock(Block.DIRT, 0, -1, 0);
-            tree.addBlock(Block.OAK_LOG, 0, 0, 0);
-            tree.addBlock(Block.OAK_LOG, 0, 1, 0);
-            tree.addBlock(Block.OAK_LOG, 0, 2, 0);
-            tree.addBlock(Block.OAK_LOG, 0, 3, 0);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 1, 0);
-            tree.addBlock(Block.OAK_LEAVES, 2, 1, 0);
-            tree.addBlock(Block.OAK_LEAVES, -1, 1, 0);
-            tree.addBlock(Block.OAK_LEAVES, -2, 1, 0);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 1, 1);
-            tree.addBlock(Block.OAK_LEAVES, 2, 1, 1);
-            tree.addBlock(Block.OAK_LEAVES, 0, 1, 1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 1, 1);
-            tree.addBlock(Block.OAK_LEAVES, -2, 1, 1);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 1, 2);
-            tree.addBlock(Block.OAK_LEAVES, 2, 1, 2);
-            tree.addBlock(Block.OAK_LEAVES, 0, 1, 2);
-            tree.addBlock(Block.OAK_LEAVES, -1, 1, 2);
-            tree.addBlock(Block.OAK_LEAVES, -2, 1, 2);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 1, -1);
-            tree.addBlock(Block.OAK_LEAVES, 2, 1, -1);
-            tree.addBlock(Block.OAK_LEAVES, 0, 1, -1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 1, -1);
-            tree.addBlock(Block.OAK_LEAVES, -2, 1, -1);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 1, -2);
-            tree.addBlock(Block.OAK_LEAVES, 2, 1, -2);
-            tree.addBlock(Block.OAK_LEAVES, 0, 1, -2);
-            tree.addBlock(Block.OAK_LEAVES, -1, 1, -2);
-            tree.addBlock(Block.OAK_LEAVES, -2, 1, -2);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 2, 0);
-            tree.addBlock(Block.OAK_LEAVES, 2, 2, 0);
-            tree.addBlock(Block.OAK_LEAVES, -1, 2, 0);
-            tree.addBlock(Block.OAK_LEAVES, -2, 2, 0);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 2, 1);
-            tree.addBlock(Block.OAK_LEAVES, 2, 2, 1);
-            tree.addBlock(Block.OAK_LEAVES, 0, 2, 1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 2, 1);
-            tree.addBlock(Block.OAK_LEAVES, -2, 2, 1);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 2, 2);
-            tree.addBlock(Block.OAK_LEAVES, 2, 2, 2);
-            tree.addBlock(Block.OAK_LEAVES, 0, 2, 2);
-            tree.addBlock(Block.OAK_LEAVES, -1, 2, 2);
-            tree.addBlock(Block.OAK_LEAVES, -2, 2, 2);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 2, -1);
-            tree.addBlock(Block.OAK_LEAVES, 2, 2, -1);
-            tree.addBlock(Block.OAK_LEAVES, 0, 2, -1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 2, -1);
-            tree.addBlock(Block.OAK_LEAVES, -2, 2, -1);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 2, -2);
-            tree.addBlock(Block.OAK_LEAVES, 2, 2, -2);
-            tree.addBlock(Block.OAK_LEAVES, 0, 2, -2);
-            tree.addBlock(Block.OAK_LEAVES, -1, 2, -2);
-            tree.addBlock(Block.OAK_LEAVES, -2, 2, -2);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 3, 0);
-            tree.addBlock(Block.OAK_LEAVES, -1, 3, 0);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 3, 1);
-            tree.addBlock(Block.OAK_LEAVES, 0, 3, 1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 3, 1);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 3, -1);
-            tree.addBlock(Block.OAK_LEAVES, 0, 3, -1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 3, -1);
-
-            tree.addBlock(Block.OAK_LEAVES, 1, 4, 0);
-            tree.addBlock(Block.OAK_LEAVES, 0, 4, 0);
-            tree.addBlock(Block.OAK_LEAVES, -1, 4, 0);
-
-            tree.addBlock(Block.OAK_LEAVES, 0, 4, 1);
-
-            tree.addBlock(Block.OAK_LEAVES, 0, 4, -1);
-            tree.addBlock(Block.OAK_LEAVES, -1, 4, -1);
-        }
-
-        //todo improve
-        @Override
-        public void populateChunk(ChunkBatch batch, Chunk chunk) {
-            for (int i = -2; i < 18; i++) {
-                for (int j = -2; j < 18; j++) {
-                    if (jNoise2.getNoise(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16) > 0.75) {
-                        int y = getHeight(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16);
-                        tree.build(batch, new Vec(i, y, j));
-                    }
-                }
-            }
+    private static class TreePopulator {
+        private static void populate(Point origin, GenerationUnit unit) {
+            unit.fork(setter -> {
+                setter.setBlock(origin.add(0, -1, 0), Block.DIRT);
+                setter.setBlock(origin.add(0, -1, 0), Block.DIRT);
+                setter.setBlock(origin.add(0, 0, 0), Block.OAK_LOG);
+                setter.setBlock(origin.add(0, 1, 0), Block.OAK_LOG);
+                setter.setBlock(origin.add(0, 2, 0), Block.OAK_LOG);
+                setter.setBlock(origin.add(0, 3, 0), Block.OAK_LOG);
+                setter.setBlock(origin.add(1, 1, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 1, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 1, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 1, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 1, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 1, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 1, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 1, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 1, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 1, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 1, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 1, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 1, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 1, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 1, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 1, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 1, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 1, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 1, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 1, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 1, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 1, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 1, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 1, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 2, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 2, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 2, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 2, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 2, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 2, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 2, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 2, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 2, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 2, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 2, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 2, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 2, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 2, 2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 2, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 2, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 2, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 2, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 2, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 2, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(2, 2, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 2, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 2, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-2, 2, -2), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 3, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 3, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 3, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 3, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 3, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 3, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 3, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 3, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(1, 4, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 4, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 4, 0), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 4, 1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(0, 4, -1), Block.OAK_LEAVES);
+                setter.setBlock(origin.add(-1, 4, -1), Block.OAK_LEAVES);
+            });
         }
 
 

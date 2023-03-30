@@ -2,8 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player change his held slot (by pressing 1-9 keys).
  */
-public class PlayerChangeHeldSlotEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private byte slot;

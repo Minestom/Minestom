@@ -1,6 +1,8 @@
 package net.minestom.server.event;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.item.ItemStack;
@@ -8,9 +10,11 @@ import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventNodeTest {
@@ -42,6 +46,13 @@ public class EventNodeTest {
         @Override
         public @NotNull ItemStack getItemStack() {
             return item;
+        }
+    }
+
+    record EntityTestEvent(Entity entity) implements EntityEvent {
+        @Override
+        public @NotNull Entity getEntity() {
+            return entity;
         }
     }
 
@@ -172,7 +183,7 @@ public class EventNodeTest {
         AtomicBoolean childResult = new AtomicBoolean(false);
 
         var node = EventNode.type("item_node", EventFilter.ITEM,
-                (event, item) -> item.getMaterial() == Material.DIAMOND);
+                (event, item) -> item.material() == Material.DIAMOND);
         var child = EventNode.type("item_node2", EventFilter.ITEM)
                 .addListener(ItemTestEvent.class, event -> childResult.set(true));
         node.addChild(child);
@@ -195,7 +206,7 @@ public class EventNodeTest {
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
-        var binding = EventBinding.filtered(EventFilter.ITEM, itemStack -> itemStack.getMaterial() == Material.DIAMOND)
+        var binding = EventBinding.filtered(EventFilter.ITEM, itemStack -> itemStack.material() == Material.DIAMOND)
                 .map(ItemTestEvent.class, (itemStack, itemTestEvent) -> result.set(true))
                 .build();
         node.register(binding);
@@ -213,25 +224,54 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testMap() {
-        var item = ItemStack.of(Material.DIAMOND);
+    public void nodeEmptyGC() {
+        var node = EventNode.all("main");
+        var ref = new WeakReference<>(node);
+
+        //noinspection UnusedAssignment
+        node = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void nodeGC() {
+        var node = EventNode.all("main");
+        var ref = new WeakReference<>(node);
+        node.addListener(EventTest.class, event -> {
+        });
+
+        //noinspection UnusedAssignment
+        node = null;
+        waitUntilCleared(ref);
+    }
+
+//    @Test
+//    public void nodeChildGC() {
+//        var node = EventNode.all("main");
+//
+//        var child = EventNode.all("child");
+//        var ref = new WeakReference<>(child);
+//        child.addListener(EventTest.class, event -> {
+//        });
+//        node.addChild(child);
+//
+//        //noinspection UnusedAssignment
+//        child = null;
+//        waitUntilCleared(ref);
+//    }
+
+    @Test
+    public void nodeMapGC() {
         var node = EventNode.all("main");
 
-        AtomicBoolean result = new AtomicBoolean(false);
-        var itemNode = EventNode.type("item_node", EventFilter.ITEM);
-        itemNode.addListener(ItemTestEvent.class, event -> result.set(true));
-        assertDoesNotThrow(() -> node.map(itemNode, item));
+        var handler = ItemStack.AIR;
+        var mapped = node.map(handler, EventFilter.ITEM);
+        var ref = new WeakReference<>(mapped);
+        mapped.addListener(ItemTestEvent.class, event -> {
+        });
 
-        node.call(new ItemTestEvent(item));
-        assertTrue(result.get());
-
-        result.set(false);
-        node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_INGOT)));
-        assertFalse(result.get());
-
-        result.set(false);
-        assertTrue(node.unmap(item));
-        node.call(new ItemTestEvent(item));
-        assertFalse(result.get());
+        //noinspection UnusedAssignment
+        mapped = null;
+        waitUntilCleared(ref);
     }
 }

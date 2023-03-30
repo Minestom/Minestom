@@ -8,7 +8,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.event.FullQueryEvent;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.time.TimeUnit;
@@ -55,15 +54,7 @@ public class Query {
         if (socket != null) {
             throw new IllegalArgumentException("System is already running");
         } else {
-            int port;
-
-            try {
-                port = NetworkUtils.getFreePort();
-            } catch (IOException e) {
-                LOGGER.warn("Could not find an open port!", e);
-                return -1;
-            }
-
+            int port = 0;
             start(port);
             return port;
         }

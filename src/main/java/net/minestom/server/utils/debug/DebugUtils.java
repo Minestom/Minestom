@@ -1,12 +1,16 @@
 package net.minestom.server.utils.debug;
 
+import net.minestom.server.utils.PropertyUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Utils class useful for debugging purpose.
  */
+@ApiStatus.Internal
 public final class DebugUtils {
+    public static boolean INSIDE_TEST = PropertyUtils.getBoolean("minestom.inside-test", false);
 
     public final static Logger LOGGER = LoggerFactory.getLogger(DebugUtils.class);
 

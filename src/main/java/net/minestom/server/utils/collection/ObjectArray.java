@@ -1,6 +1,9 @@
 package net.minestom.server.utils.collection;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 /**
  * Represents an array which will be resized to the highest required index.
@@ -8,43 +11,33 @@ import org.jetbrains.annotations.ApiStatus;
  * @param <T> the type of the array
  */
 @ApiStatus.Internal
-public final class ObjectArray<T> {
-    private T[] array;
-    private int max;
-
-    public ObjectArray(int size) {
-        this.array = allocate(size);
+public sealed interface ObjectArray<T>
+        permits ObjectArrayImpl.SingleThread, ObjectArrayImpl.Concurrent {
+    static <T> @NotNull ObjectArray<T> singleThread(int initialSize) {
+        return new ObjectArrayImpl.SingleThread<>(initialSize);
     }
 
-    public ObjectArray() {
-        this(0);
+    static <T> @NotNull ObjectArray<T> singleThread() {
+        return singleThread(0);
     }
 
-    public void set(int index, T object) {
-        T[] array = this.array;
-        if (index >= array.length) {
-            T[] temp = allocate(index * 2 + 1);
-            System.arraycopy(array, 0, temp, 0, array.length);
-            this.array = array = temp;
-        }
-        array[index] = object;
-        this.max = Math.max(max, index);
+    static <T> @NotNull ObjectArray<T> concurrent(int initialSize) {
+        return new ObjectArrayImpl.Concurrent<>(initialSize);
     }
 
-    public T get(int index) {
-        final T[] array = this.array;
-        return index < array.length ? array[index] : null;
+    static <T> @NotNull ObjectArray<T> concurrent() {
+        return concurrent(0);
     }
 
-    public void trim() {
-        final int max = this.max;
-        T[] temp = allocate(max + 1);
-        System.arraycopy(array, 0, temp, 0, max + 1);
-        this.array = temp;
+    @UnknownNullability T get(int index);
+
+    void set(int index, @Nullable T object);
+
+    default void remove(int index) {
+        set(index, null);
     }
 
-    private static <T> T[] allocate(int length) {
-        //noinspection unchecked
-        return (T[]) new Object[length];
-    }
+    void trim();
+
+    @UnknownNullability T @NotNull [] arrayCopy(@NotNull Class<T> type);
 }

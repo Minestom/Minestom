@@ -3,8 +3,11 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.Generator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -33,8 +36,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
-        return instanceContainer.breakBlock(player, blockPosition);
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
+        return instanceContainer.breakBlock(player, blockPosition, blockFace);
     }
 
     @Override
@@ -73,13 +76,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        this.instanceContainer.setChunkGenerator(chunkGenerator);
+    public @Nullable Generator generator() {
+        return instanceContainer.generator();
     }
 
     @Override
-    public ChunkGenerator getChunkGenerator() {
-        return instanceContainer.getChunkGenerator();
+    public void setGenerator(@Nullable Generator generator) {
+        instanceContainer.setGenerator(generator);
     }
 
     @NotNull

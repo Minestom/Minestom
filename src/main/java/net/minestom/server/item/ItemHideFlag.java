@@ -1,7 +1,7 @@
 package net.minestom.server.item;
 
 /**
- * Represents a hide flag which can be applied to an {@link ItemStack} using {@link ItemMetaBuilder#hideFlag(int)}.
+ * Represents a hide flag which can be applied to an {@link ItemStack} using {@link ItemMeta.Builder#hideFlag(int)}.
  */
 public enum ItemHideFlag {
     HIDE_ENCHANTS,

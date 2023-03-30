@@ -1,6 +1,6 @@
 package net.minestom.server.entity;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the game mode of a player.
@@ -8,11 +8,12 @@ import org.jetbrains.annotations.Nullable;
  * Can be set with {@link Player#setGameMode(GameMode)}.
  */
 public enum GameMode {
-
-    SURVIVAL((byte) 0, true), CREATIVE((byte) 1, false), ADVENTURE((byte) 2, true), SPECTATOR((byte) 3, false);
+    SURVIVAL((byte) 0, true),
+    CREATIVE((byte) 1, false),
+    ADVENTURE((byte) 2, true),
+    SPECTATOR((byte) 3, false);
 
     private final byte id;
-    private boolean hardcore;
     private final boolean canTakeDamage;
 
     GameMode(byte id, boolean canTakeDamage) {
@@ -20,29 +21,21 @@ public enum GameMode {
         this.canTakeDamage = canTakeDamage;
     }
 
-    public void setHardcore(boolean hardcore) {
-        this.hardcore = hardcore;
-    }
-
-    public byte getId() {
+    public byte id() {
         return id;
-    }
-
-    public boolean isHardcore() {
-        return hardcore;
     }
 
     public boolean canTakeDamage() {
         return canTakeDamage;
     }
 
-    @Nullable
-    public static GameMode fromId(byte id) {
-        for (GameMode gameMode : values()) {
-            if (gameMode.id == id) {
-                return gameMode;
-            }
-        }
-        return null;
+    public static @NotNull GameMode fromId(int id) {
+        return switch (id) {
+            case 0 -> SURVIVAL;
+            case 1 -> CREATIVE;
+            case 2 -> ADVENTURE;
+            case 3 -> SPECTATOR;
+            default -> throw new IllegalArgumentException("Unknown game mode id: " + id);
+        };
     }
 }

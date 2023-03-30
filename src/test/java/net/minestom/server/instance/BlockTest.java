@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -33,7 +35,7 @@ public class BlockTest {
     }
 
     @Test
-    public void testProperty() {
+    public void validProperties() {
         Block block = Block.CHEST;
         assertEquals(block.properties(), Objects.requireNonNull(Block.fromBlockId(block.id())).properties());
 
@@ -48,8 +50,13 @@ public class BlockTest {
 
         assertEquals(block.withProperty("facing", "north").getProperty("facing"), "north");
         assertNotEquals(block.withProperty("facing", "north"), block.withProperty("facing", "south"));
+    }
 
+    @Test
+    public void invalidProperties() {
+        Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
+        assertThrows(Exception.class, () -> block.withProperties(Map.of("random", "randomKey")));
     }
 
     @Test
@@ -68,5 +75,14 @@ public class BlockTest {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.properties().put("facing", "north"));
         assertThrows(Exception.class, () -> block.withProperty("facing", "north").properties().put("facing", "south"));
+    }
+
+    @Test
+    public void testShape() {
+        Point start = Block.LANTERN.registry().collisionShape().relativeStart();
+        Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
+
+        assertEquals(start, new Vec(0.312, 0, 0.312));
+        assertEquals(end, new Vec(0.687, 0.562, 0.687));
     }
 }

@@ -21,7 +21,7 @@ public interface TransactionType {
      */
     TransactionType ADD = (inventory, itemStack, slotPredicate, start, end, step) -> {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-        final StackingRule stackingRule = itemStack.getStackingRule();
+        final StackingRule stackingRule = StackingRule.get();
         // Check filled slot (not air)
         for (int i = start; i < end; i += step) {
             ItemStack inventoryItem = inventory.getItemStack(i);
@@ -73,7 +73,7 @@ public interface TransactionType {
      */
     TransactionType TAKE = (inventory, itemStack, slotPredicate, start, end, step) -> {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-        final StackingRule stackingRule = itemStack.getStackingRule();
+        final StackingRule stackingRule = StackingRule.get();
         for (int i = start; i < end; i += step) {
             final ItemStack inventoryItem = inventory.getItemStack(i);
             if (inventoryItem.isAir()) continue;

@@ -67,9 +67,7 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
      * @return a new block with different nbt
      */
     @Contract(pure = true)
-    default @NotNull Block withNbt(@Nullable NBTCompound compound) {
-        return withTag(Tag.NBT, compound);
-    }
+    @NotNull Block withNbt(@Nullable NBTCompound compound);
 
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
@@ -88,9 +86,7 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
      * @return the block nbt, null if not present
      */
     @Contract(pure = true)
-    default @Nullable NBTCompound nbt() {
-        return getTag(Tag.NBT);
-    }
+    @Nullable NBTCompound nbt();
 
     @Contract(pure = true)
     default boolean hasNbt() {

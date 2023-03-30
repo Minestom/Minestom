@@ -33,22 +33,11 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
     }
 
     /**
-     * Gets the time spent acquiring since last tick.
-     *
-     * @return the acquiring time
-     */
-    static long getAcquiringTime() {
-        return AcquirableImpl.WAIT_COUNTER_NANO.get();
-    }
-
-    /**
-     * Resets {@link #getAcquiringTime()}.
-     * <p>
-     * Mostly for internal use.
+     * Retrieve and reset acquiring time.
      */
     @ApiStatus.Internal
-    static void resetAcquiringTime() {
-        AcquirableImpl.WAIT_COUNTER_NANO.set(0);
+    static long resetAcquiringTime() {
+        return AcquirableImpl.WAIT_COUNTER_NANO.getAndSet(0);
     }
 
     /**

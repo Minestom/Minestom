@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.api.Env;
-import net.minestom.server.api.EnvTest;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,9 +25,9 @@ public class EntityInstanceIntegrationTest {
     @Test
     public void playerJoin(Env env) {
         var instance = env.createFlatInstance();
-        var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = env.createPlayer(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
+        assertEquals(new Pos(0, 42, 0), player.getPosition());
     }
 
     @Test

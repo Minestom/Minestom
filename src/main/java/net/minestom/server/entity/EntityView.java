@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 final class EntityView {
-    private static final int RANGE = MinecraftServer.getEntityViewDistance() * 16;
+    private static final int RANGE = MinecraftServer.getEntityViewDistance();
     private final Entity entity;
     private final Set<Player> manualViewers = new HashSet<>();
 
@@ -163,6 +163,7 @@ final class EntityView {
         }
 
         public void register(T entity) {
+            assert Entity.getEntity(entity.getEntityId()) == entity : "Unregistered entity shouldn't be registered as viewer";
             this.bitSet.add(entity.getEntityId());
         }
 
@@ -228,7 +229,7 @@ final class EntityView {
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            instance.getEntityTracker().nearbyEntities(point, RANGE, target,
+            instance.getEntityTracker().nearbyEntitiesByChunkRange(point, RANGE, target,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             this.lastSize = entityMap.size();
             return entityMap.values();
@@ -238,20 +239,18 @@ final class EntityView {
     final class SetImpl extends AbstractSet<Player> {
         @Override
         public @NotNull Iterator<Player> iterator() {
-            Player[] players;
+            List<Player> players;
             synchronized (mutex) {
                 var bitSet = viewableOption.bitSet;
                 if (bitSet.isEmpty()) return Collections.emptyIterator();
-                players = new Player[bitSet.size()];
-                int i = 0;
+                players = new ArrayList<>(bitSet.size());
                 for (IntIterator it = bitSet.intIterator(); it.hasNext(); ) {
                     final int id = it.nextInt();
                     final Player player = (Player) Entity.getEntity(id);
-                    assert player != null;
-                    players[i++] = player;
+                    if (player != null) players.add(player);
                 }
             }
-            return Arrays.asList(players).iterator();
+            return players.iterator();
         }
 
         @Override

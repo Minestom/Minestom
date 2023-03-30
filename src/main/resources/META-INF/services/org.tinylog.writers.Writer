@@ -1,0 +1,8 @@
+net.minestom.server.terminal.MinestomConsoleWriter
+org.tinylog.writers.ConsoleWriter
+org.tinylog.writers.FileWriter
+org.tinylog.writers.JdbcWriter
+org.tinylog.writers.LogcatWriter
+org.tinylog.writers.RollingFileWriter
+org.tinylog.writers.SharedFileWriter
+org.tinylog.writers.JsonWriter

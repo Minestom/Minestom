@@ -1,15 +1,26 @@
 package net.minestom.server.potion;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+
+/**
+ * Represents a potion effect that can be added to an {@link net.minestom.server.entity.Entity}.
+ *
+ * @param effect    the potion effect
+ * @param amplifier the amplifier starting at 0 (level 1)
+ * @param duration  the duration (in ticks) that the potion will last
+ * @param flags     the flags of the potion, see {@link #flags()}
+ */
 public record Potion(@NotNull PotionEffect effect, byte amplifier,
-                     int duration, byte flags) implements Writeable {
+                     int duration, byte flags) implements NetworkBuffer.Writer {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -37,13 +48,18 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      */
     public static final byte ICON_FLAG = 0x04;
 
+    /**
+     * Creates a new Potion with no flags.
+     *
+     * @see #Potion(PotionEffect, byte, int, byte)
+     */
     public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
         this(effect, amplifier, duration, (byte) 0);
     }
 
-    public Potion(BinaryReader reader) {
-        this(PotionEffect.fromId(reader.readVarInt()), reader.readByte(),
-                reader.readVarInt(), reader.readByte());
+    public Potion(@NotNull NetworkBuffer reader) {
+        this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
+                reader.read(VAR_INT), reader.read(BYTE));
     }
 
     /**
@@ -93,7 +109,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      * @param entity the entity to add the effect to
      */
     public void sendAddPacket(@NotNull Entity entity) {
-        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
+        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this, null));
     }
 
     /**
@@ -108,10 +124,10 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(effect.id());
-        writer.writeByte(amplifier);
-        writer.writeVarInt(duration);
-        writer.writeByte(flags);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, effect.id());
+        writer.write(BYTE, amplifier);
+        writer.write(VAR_INT, duration);
+        writer.write(BYTE, flags);
     }
 }

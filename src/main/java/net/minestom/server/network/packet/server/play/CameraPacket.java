@@ -1,15 +1,16 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+
 public record CameraPacket(int cameraId) implements ServerPacket {
-    public CameraPacket(BinaryReader reader) {
-        this(reader.readVarInt());
+    public CameraPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(VAR_INT));
     }
 
     public CameraPacket(@NotNull Entity camera) {
@@ -17,8 +18,8 @@ public record CameraPacket(int cameraId) implements ServerPacket {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(cameraId);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(VAR_INT, cameraId);
     }
 
     @Override

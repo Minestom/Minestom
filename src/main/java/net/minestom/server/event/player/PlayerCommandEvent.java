@@ -2,14 +2,13 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called every time a player send a message starting by '/'.
  */
-public class PlayerCommandEvent implements PlayerEvent, EntityInstanceEvent, CancellableEvent {
+public class PlayerCommandEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private String command;

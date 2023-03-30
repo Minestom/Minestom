@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
@@ -33,21 +33,17 @@ public final class ChunkUtils {
      * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
     public static @NotNull CompletableFuture<Void> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
-                                                                   @Nullable ChunkCallback eachCallback) {
+                                                                   @Nullable Consumer<Chunk> eachCallback) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
             // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
             instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
                     .thenAccept((chunk) -> {
-                        OptionalCallback.execute(eachCallback, chunk);
-                        final boolean isLast = counter.get() == chunks.length - 1;
-                        if (isLast) {
+                        if (eachCallback != null) eachCallback.accept(chunk);
+                        if (counter.incrementAndGet() == chunks.length) {
                             // This is the last chunk to be loaded , spawn player
                             completableFuture.complete(null);
-                        } else {
-                            // Increment the counter of current loaded chunks
-                            counter.incrementAndGet();
                         }
                     });
         }
@@ -79,8 +75,8 @@ public final class ChunkUtils {
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);
-        final boolean sameChunk = originChunk.getChunkX() == chunkX &&
-                originChunk.getChunkZ() == chunkZ;
+        final boolean sameChunk = originChunk != null &&
+                originChunk.getChunkX() == chunkX && originChunk.getChunkZ() == chunkZ;
         return sameChunk ? originChunk : instance.getChunk(chunkX, chunkZ);
     }
 
@@ -198,7 +194,12 @@ public final class ChunkUtils {
         z = z % Chunk.CHUNK_SIZE_Z;
 
         int index = x & 0xF; // 4 bits
-        index |= (y << 4) & 0x0FFFFFF0; // 24 bits
+        if (y > 0) {
+            index |= (y << 4) & 0x07FFFFF0; // 23 bits (24th bit is always 0 because y is positive)
+        } else {
+            index |= ((-y) << 4) & 0x7FFFFF0; // Make positive and use 23 bits
+            index |= 1 << 27; // Set negative sign at 24th bit
+        }
         index |= (z << 28) & 0xF0000000; // 4 bits
         return index;
     }
@@ -211,7 +212,7 @@ public final class ChunkUtils {
      */
     public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
         final int x = blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
-        final int y = index >>> 4 & 0xFF;
+        final int y = blockIndexToChunkPositionY(index);
         final int z = blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
         return new Vec(x, y, z);
     }
@@ -233,7 +234,9 @@ public final class ChunkUtils {
      * @return the chunk position Y of the specified index
      */
     public static int blockIndexToChunkPositionY(int index) {
-        return (index >> 4) & 0x0FFFFFF; // 4-28 bits
+        int y = (index & 0x07FFFFF0) >>> 4;
+        if (((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
+        return y; // 4-28 bits
     }
 
     /**
@@ -253,10 +256,14 @@ public final class ChunkUtils {
      * @return section coordinate
      */
     public static int toSectionRelativeCoordinate(int xyz) {
-        xyz %= 16;
-        if (xyz < 0) {
-            xyz += Chunk.CHUNK_SECTION_SIZE;
-        }
-        return xyz;
+        return xyz & 0xF;
+    }
+
+    public static int floorSection(int coordinate) {
+        return coordinate - (coordinate & 0xF);
+    }
+
+    public static int ceilSection(int coordinate) {
+        return ((coordinate - 1) | 15) + 1;
     }
 }

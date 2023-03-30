@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.PathOptions;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -43,7 +44,7 @@ public final class Navigator {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Point direction, double speed) {
+    public PhysicsResult moveTowards(@NotNull Point direction, double speed) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -62,6 +63,7 @@ public final class Navigator {
         // Prevent ghosting
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
         this.entity.refreshPosition(physicsResult.newPosition().withView(yaw, pitch));
+        return physicsResult;
     }
 
     public void jump(float height) {

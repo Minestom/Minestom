@@ -63,6 +63,10 @@ public final class Server {
         server.register(selector, SelectionKey.OP_ACCEPT);
         this.serverSocket = server;
         this.socketAddress = address;
+
+        if (address instanceof InetSocketAddress && port == 0) {
+            port = server.socket().getLocalPort();
+        }
     }
 
     @ApiStatus.Internal
@@ -97,7 +101,10 @@ public final class Server {
     public void stop() {
         this.stop = true;
         try {
-            this.serverSocket.close();
+            if(serverSocket != null) {
+                this.serverSocket.close();
+            }
+
             if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
                 Files.deleteIfExists(unixDomainSocketAddress.getPath());
             }

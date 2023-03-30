@@ -1,31 +1,32 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId,
                                           boolean dismountVehicle) implements ServerPacket {
-    public PlayerPositionAndLookPacket(BinaryReader reader) {
-        this(new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(), reader.readFloat(), reader.readFloat()),
-                reader.readByte(), reader.readVarInt(), reader.readBoolean());
+    public PlayerPositionAndLookPacket(@NotNull NetworkBuffer reader) {
+        this(new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE), reader.read(FLOAT), reader.read(FLOAT)),
+                reader.read(BYTE), reader.read(VAR_INT), reader.read(BOOLEAN));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(position.x());
-        writer.writeDouble(position.y());
-        writer.writeDouble(position.z());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(DOUBLE, position.x());
+        writer.write(DOUBLE, position.y());
+        writer.write(DOUBLE, position.z());
 
-        writer.writeFloat(position.yaw());
-        writer.writeFloat(position.pitch());
+        writer.write(FLOAT, position.yaw());
+        writer.write(FLOAT, position.pitch());
 
-        writer.writeByte(flags);
-        writer.writeVarInt(teleportId);
-        writer.writeBoolean(dismountVehicle);
+        writer.write(BYTE, flags);
+        writer.write(VAR_INT, teleportId);
+        writer.write(BOOLEAN, dismountVehicle);
     }
 
     @Override

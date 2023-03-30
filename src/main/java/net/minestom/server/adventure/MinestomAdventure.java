@@ -21,7 +21,7 @@ public final class MinestomAdventure {
      * A codec to convert between strings and NBT.
      */
     public static final Codec<NBT, String, NBTException, RuntimeException> NBT_CODEC
-            = Codec.of(encoded -> new SNBTParser(new StringReader(encoded)).parse(), NBT::toSNBT);
+            = Codec.codec(encoded -> new SNBTParser(new StringReader(encoded)).parse(), NBT::toSNBT);
 
     /**
      * If components should be automatically translated in outgoing packets.

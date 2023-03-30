@@ -11,7 +11,9 @@ import java.util.List;
  * Responsible for the {@link Chunk} generation, can be set using {@link Instance#setChunkGenerator(ChunkGenerator)}.
  * <p>
  * Called if the instance {@link IChunkLoader} hasn't been able to load the chunk.
+ * @deprecated Replaced by {@link net.minestom.server.instance.generator.Generator}
  */
+@Deprecated
 public interface ChunkGenerator {
 
     /**

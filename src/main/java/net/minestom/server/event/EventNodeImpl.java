@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
@@ -7,8 +8,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,25 +17,22 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
-    private static final Object GLOBAL_CHILD_LOCK = new Object();
+    static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final ClassValue<Handle<T>> handleMap = new ClassValue<>() {
-        @Override
-        protected Handle<T> computeValue(Class<?> type) {
-            //noinspection unchecked
-            return new Handle<>((Class<T>) type);
-        }
-    };
-    private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
-    private final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
-    private final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
+    private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
+    final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
+    final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
+    final Map<Object, EventNodeImpl<T>> mappedNodeCache = Caffeine.newBuilder()
+            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
+    final Map<Object, EventNodeImpl<T>> registeredMappedNode = Caffeine.newBuilder()
+            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
 
-    private final String name;
-    private final EventFilter<T, ?> filter;
-    private final BiPredicate<T, Object> predicate;
-    private final Class<T> eventType;
-    private volatile int priority;
-    private volatile EventNodeImpl<? super T> parent;
+    final String name;
+    final EventFilter<T, ?> filter;
+    final BiPredicate<T, Object> predicate;
+    final Class<T> eventType;
+    volatile int priority;
+    volatile EventNodeImpl<? super T> parent;
 
     EventNodeImpl(@NotNull String name,
                   @NotNull EventFilter<T, ?> filter,
@@ -50,13 +46,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
-        return (ListenerHandle<E>) handleMap.get(handleType);
+        return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
+                aClass -> new Handle<>((Class<T>) aClass));
     }
 
     @Override
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            if (children.isEmpty()) return Collections.emptyList();
+            final Set<EventNode<T>> children = getChildren();
+            if (children.isEmpty()) return List.of();
             List<EventNode<E>> result = new ArrayList<>();
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
@@ -76,12 +74,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
                     removeChild(child);
                     addChild(eventNode);
-                    continue;
+                    break;
                 }
                 child.replaceChildren(name, eventType, eventNode);
             }
@@ -91,6 +90,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
@@ -150,27 +150,24 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
+    public @NotNull <E extends T, H> EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter) {
+        EventNodeImpl<E> node;
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var nodeImpl = (EventNodeImpl<? extends T>) node;
-            Check.stateCondition(nodeImpl.parent != null, "Node already has a parent");
-            Check.stateCondition(Objects.equals(parent, nodeImpl), "Cannot map to self");
-            EventNodeImpl<T> previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
-            if (previous != null) previous.parent = null;
-            nodeImpl.parent = this;
-            nodeImpl.invalidateEventsFor(this);
+            node = new EventNodeLazyImpl<>(this, value, filter);
+            Check.stateCondition(node.parent != null, "Node already has a parent");
+            Check.stateCondition(Objects.equals(parent, node), "Cannot map to self");
+            EventNodeImpl<T> previous = this.mappedNodeCache.putIfAbsent(value, (EventNodeImpl<T>) node);
+            if (previous != null) return (EventNode<E>) previous;
+            node.parent = this;
         }
+        return node;
     }
 
     @Override
-    public boolean unmap(@NotNull Object value) {
+    public void unmap(@NotNull Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var mappedNode = this.mappedNodeCache.remove(value);
-            if (mappedNode == null) return false; // Mapped node not found
-            final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
-            childImpl.parent = null;
-            childImpl.invalidateEventsFor(this);
-            return true;
+            final var mappedNode = this.registeredMappedNode.remove(value);
+            if (mappedNode != null) mappedNode.invalidateEventsFor(this);
         }
     }
 
@@ -249,9 +246,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         for (Iterator<? extends @NotNull Graph> iterator = nextNodes.iterator(); iterator.hasNext(); ) {
             Graph next = iterator.next();
             if (iterator.hasNext()) {
-                genToStringTree(buffer, childrenPrefix + '\u251C' + '\u2500' + " ", childrenPrefix + '\u2502' + "   ", next);
+                genToStringTree(buffer, childrenPrefix + '├' + '─' + " ", childrenPrefix + '│' + "   ", next);
             } else {
-                genToStringTree(buffer, childrenPrefix + '\u2514' + '\u2500' + " ", childrenPrefix + "    ", next);
+                genToStringTree(buffer, childrenPrefix + '└' + '─' + " ", childrenPrefix + "    ", next);
             }
         }
     }
@@ -263,7 +260,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
     }
 
-    private void invalidateEventsFor(EventNodeImpl<? super T> node) {
+    void invalidateEventsFor(EventNodeImpl<? super T> node) {
+        assert Thread.holdsLock(GLOBAL_CHILD_LOCK);
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);
         }
@@ -275,8 +273,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
-            ListenerHandle<T> handle = getHandle((Class<T>) type);
-            Handle.UPDATED.setRelease(handle, false);
+            Handle<T> handle = handleMap.computeIfAbsent(type,
+                    aClass -> new Handle<>((Class<T>) aClass));
+            handle.invalidate();
         });
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
@@ -308,20 +307,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @SuppressWarnings("unchecked")
     final class Handle<E extends Event> implements ListenerHandle<E> {
-        private static final VarHandle UPDATED;
-
-        static {
-            try {
-                UPDATED = MethodHandles.lookup().findVarHandle(EventNodeImpl.Handle.class, "updated", boolean.class);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new IllegalStateException(e);
-            }
-        }
-
         private final Class<E> eventType;
         private Consumer<E> listener = null;
-        @SuppressWarnings("unused")
-        private boolean updated; // Use the UPDATED var handle
+        private volatile boolean updated;
 
         Handle(Class<E> eventType) {
             this.eventType = eventType;
@@ -343,13 +331,17 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             return updatedListener() != null;
         }
 
+        void invalidate() {
+            this.updated = false;
+        }
+
         @Nullable Consumer<E> updatedListener() {
-            if ((boolean) UPDATED.getAcquire(this)) return listener;
+            if (updated) return listener;
             synchronized (GLOBAL_CHILD_LOCK) {
-                if ((boolean) UPDATED.getAcquire(this)) return listener;
+                if (updated) return listener;
                 final Consumer<E> listener = createConsumer();
                 this.listener = listener;
-                UPDATED.setRelease(this, true);
+                this.updated = true;
                 return listener;
             }
         }
@@ -442,15 +434,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         /**
-         * Create a consumer handling {@link EventNode#map(EventNode, Object)}.
+         * Create a consumer handling {@link EventNode#map(Object, EventFilter)}.
          * The goal is to limit the amount of map lookup.
          */
         private @Nullable Consumer<E> mappedConsumer() {
             var node = (EventNodeImpl<E>) EventNodeImpl.this;
-            final var mappedNodeCache = node.mappedNodeCache;
+            final var mappedNodeCache = node.registeredMappedNode;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
-            Map<Object, Handle<E>> handlers = new HashMap<>(mappedNodeCache.size());
+            Map<Object, Handle<E>> handlers = new WeakHashMap<>(mappedNodeCache.size());
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
@@ -493,7 +485,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventListener.Result result = listener.run(event);
             if (result == EventListener.Result.EXPIRED) {
                 node.removeListener(listener);
-                UPDATED.setRelease(this, false);
+                invalidate();
             }
         }
     }

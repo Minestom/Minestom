@@ -8,22 +8,20 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.FramedPacket;
-import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.PooledBuffers;
-import net.minestom.server.utils.binary.Writeable;
-import net.minestom.server.utils.cache.LocalCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,11 +45,11 @@ import java.util.zip.Inflater;
  * Be sure to check the implementation code.
  */
 public final class PacketUtils {
-    private static final LocalCache<Deflater> LOCAL_DEFLATER = LocalCache.of(Deflater::new);
+    private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
 
-    public static final boolean GROUPED_PACKET = getBoolean("minestom.grouped-packet", true);
-    public static final boolean CACHED_PACKET = getBoolean("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = getBoolean("minestom.viewable-packet", true);
+    public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);
+    public static final boolean CACHED_PACKET = PropertyUtils.getBoolean("minestom.cached-packet", true);
+    public static final boolean VIEWABLE_PACKET = PropertyUtils.getBoolean("minestom.viewable-packet", true);
 
     // Viewable packets
     private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
@@ -79,14 +77,14 @@ public final class PacketUtils {
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
-        if (audience instanceof Player) {
-            ((Player) audience).getPlayerConnection().sendPacket(packet);
-        } else if (audience instanceof PacketGroupingAudience) {
-            PacketUtils.sendGroupedPacket(((PacketGroupingAudience) audience).getPlayers(), packet);
-        } else if (audience instanceof ForwardingAudience.Single) {
-            PacketUtils.sendPacket(((ForwardingAudience.Single) audience).audience(), packet);
-        } else if (audience instanceof ForwardingAudience) {
-            for (Audience member : ((ForwardingAudience) audience).audiences()) {
+        if (audience instanceof Player player) {
+            player.sendPacket(packet);
+        } else if (audience instanceof PacketGroupingAudience groupingAudience) {
+            PacketUtils.sendGroupedPacket(groupingAudience.getPlayers(), packet);
+        } else if (audience instanceof ForwardingAudience.Single singleAudience) {
+            PacketUtils.sendPacket(singleAudience.audience(), packet);
+        } else if (audience instanceof ForwardingAudience forwardingAudience) {
+            for (Audience member : forwardingAudience.audiences()) {
                 PacketUtils.sendPacket(member, packet);
             }
         }
@@ -103,10 +101,45 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final SendablePacket sendablePacket = GROUPED_PACKET ? new CachedPacket(packet) : packet;
+        final var sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
+    }
+
+    /**
+     * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
+     * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
+     *
+     * @see CachedPacket#body()
+     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
+     */
+    static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return GROUPED_PACKET;
+        if (!(packet instanceof ComponentHoldingServerPacket holder)) return GROUPED_PACKET;
+        return !containsTranslatableComponents(holder);
+    }
+
+    private static boolean containsTranslatableComponents(final @NotNull ComponentHolder<?> holder) {
+        for (final Component component : holder.components()) {
+            if (isTranslatable(component)) return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isTranslatable(final @NotNull Component component) {
+        if (component instanceof TranslatableComponent) return true;
+
+        final var children = component.children();
+        if (children.isEmpty()) return false;
+
+        for (final Component child : children) {
+            if (isTranslatable(child)) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -157,6 +190,7 @@ public final class PacketUtils {
     public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
                                                      BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
         BinaryBuffer remaining = null;
+        ByteBuffer pool = ObjectPool.PACKET_POOL.get();
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
             try {
@@ -173,12 +207,15 @@ public final class PacketUtils {
                 if (compressed) {
                     final int dataLength = readBuffer.readVarInt();
                     final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
+                    if (payloadLength < 0) {
+                        throw new DataFormatException("Negative payload length " + payloadLength);
+                    }
                     if (dataLength == 0) {
                         // Data is too small to be compressed, payload is following
                         decompressedSize = payloadLength;
                     } else {
                         // Decompress to content buffer
-                        content = BinaryBuffer.wrap(PooledBuffers.tempBuffer());
+                        content = BinaryBuffer.wrap(pool);
                         decompressedSize = dataLength;
                         Inflater inflater = new Inflater(); // TODO: Pool?
                         inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
@@ -202,6 +239,7 @@ public final class PacketUtils {
                 break;
             }
         }
+        ObjectPool.PACKET_POOL.add(pool);
         return remaining;
     }
 
@@ -214,90 +252,96 @@ public final class PacketUtils {
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          int id,
-                                         @NotNull Writeable writeable,
+                                         @NotNull NetworkBuffer.Writer writer,
                                          int compressionThreshold) {
-        BinaryWriter writerView = BinaryWriter.view(buffer); // ensure that the buffer is not resized
+        NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
-            final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-            Utils.writeVarInt(buffer, id);
-            writeable.write(writerView);
-            final int finalSize = buffer.position() - (lengthIndex + 3);
+            final int lengthIndex = networkBuffer.skipWrite(3);
+            networkBuffer.write(NetworkBuffer.VAR_INT, id);
+            networkBuffer.write(writer);
+            final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
+            buffer.position(networkBuffer.writeIndex());
             return;
         }
         // Compressed format https://wiki.vg/Protocol#With_compression
-        final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
+        final int compressedIndex = networkBuffer.skipWrite(3);
+        final int uncompressedIndex = networkBuffer.skipWrite(3);
 
-        final int contentStart = buffer.position();
-        Utils.writeVarInt(buffer, id);
-        writeable.write(writerView);
-        final int packetSize = buffer.position() - contentStart;
+        final int contentStart = networkBuffer.writeIndex();
+        networkBuffer.write(NetworkBuffer.VAR_INT, id);
+        networkBuffer.write(writer);
+        final int packetSize = networkBuffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
             // Packet large enough, compress it
-            final ByteBuffer input = PooledBuffers.tempBuffer().put(0, buffer, contentStart, packetSize);
-            Deflater deflater = LOCAL_DEFLATER.get();
-            deflater.setInput(input.limit(packetSize));
-            deflater.finish();
-            deflater.deflate(buffer.position(contentStart));
-            deflater.reset();
+            try (var hold = ObjectPool.PACKET_POOL.hold()) {
+                final ByteBuffer input = hold.get().put(0, buffer, contentStart, packetSize);
+                Deflater deflater = LOCAL_DEFLATER.get();
+                deflater.setInput(input.limit(packetSize));
+                deflater.finish();
+                deflater.deflate(buffer.position(contentStart));
+                deflater.reset();
+
+                networkBuffer.skipWrite(buffer.position() - contentStart);
+            }
         }
         // Packet header (Packet + Data Length)
-        Utils.writeVarIntHeader(buffer, compressedIndex, buffer.position() - uncompressedIndex);
+        Utils.writeVarIntHeader(buffer, compressedIndex, networkBuffer.writeIndex() - uncompressedIndex);
         Utils.writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
+
+        buffer.position(networkBuffer.writeIndex());
     }
 
     @ApiStatus.Internal
-    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        ByteBuffer buffer = PooledBuffers.packetBuffer();
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer buffer, @NotNull ServerPacket packet, boolean compression) {
         writeFramedPacket(buffer, packet, compression);
         return buffer.flip();
     }
 
     @ApiStatus.Internal
-    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(packet, MinecraftServer.getCompressionThreshold() > 0);
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer buffer, @NotNull ServerPacket packet) {
+        return createFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
     }
 
     @ApiStatus.Internal
     public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
-        final ByteBuffer temp = PacketUtils.createFramedPacket(packet);
-        final int size = temp.remaining();
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
-        return new FramedPacket(packet, buffer);
+        try (var hold = ObjectPool.PACKET_POOL.hold()) {
+            final ByteBuffer temp = PacketUtils.createFramedPacket(hold.get(), packet);
+            final int size = temp.remaining();
+            final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
+            return new FramedPacket(packet, buffer);
+        }
     }
 
     private static final class ViewableStorage {
         // Player id -> list of offsets to ignore (32:32 bits)
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
-        private final BinaryBuffer buffer = PooledBuffers.get();
-
-        {
-            PooledBuffers.registerBuffer(this, buffer);
-        }
+        private final BinaryBuffer buffer = ObjectPool.BUFFER_POOL.getAndRegister(this);
 
         private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
-            final ByteBuffer framedPacket = createFramedPacket(serverPacket);
-            final int packetSize = framedPacket.limit();
-            if (packetSize >= buffer.capacity()) {
-                process(viewable);
-                for (Player viewer : viewable.getViewers()) {
-                    if (!Objects.equals(player, viewer)) {
-                        writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
+            try (var hold = ObjectPool.PACKET_POOL.hold()) {
+                final ByteBuffer framedPacket = createFramedPacket(hold.get(), serverPacket);
+                final int packetSize = framedPacket.limit();
+                if (packetSize >= buffer.capacity()) {
+                    process(viewable);
+                    for (Player viewer : viewable.getViewers()) {
+                        if (!Objects.equals(player, viewer)) {
+                            writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
+                        }
                     }
+                    return;
                 }
-                return;
-            }
-            if (!buffer.canWrite(packetSize)) process(viewable);
-            final int start = buffer.writerOffset();
-            this.buffer.write(framedPacket);
-            final int end = buffer.writerOffset();
-            if (player != null) {
-                final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
-                LongList list = entityIdMap.computeIfAbsent(player.getEntityId(), id -> new LongArrayList());
-                list.add(offsets);
+                if (!buffer.canWrite(packetSize)) process(viewable);
+                final int start = buffer.writerOffset();
+                this.buffer.write(framedPacket);
+                final int end = buffer.writerOffset();
+                if (player != null) {
+                    final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
+                    LongList list = entityIdMap.computeIfAbsent(player.getEntityId(), id -> new LongArrayList());
+                    list.add(offsets);
+                }
             }
         }
 
@@ -338,15 +382,5 @@ public final class PacketUtils {
             }
             // TODO for non-socket connection
         }
-    }
-
-    private static boolean getBoolean(String name, boolean defaultValue) {
-        boolean result = defaultValue;
-        try {
-            final String value = System.getProperty(name);
-            if (value != null) result = Boolean.parseBoolean(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
-        }
-        return result;
     }
 }

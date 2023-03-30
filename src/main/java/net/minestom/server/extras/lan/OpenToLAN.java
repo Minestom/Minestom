@@ -4,7 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -61,18 +60,8 @@ public class OpenToLAN {
         Objects.requireNonNull(config, "config");
         if (socket != null) return false;
 
-        int port = config.port;
-        if (port == 0) {
-            try {
-                port = NetworkUtils.getFreePort();
-            } catch (IOException e) {
-                LOGGER.warn("Could not find an open port!", e);
-                return false;
-            }
-        }
-
         try {
-            socket = new DatagramSocket(port);
+            socket = new DatagramSocket(config.port);
         } catch (SocketException e) {
             LOGGER.warn("Could not bind to the port!", e);
             return false;

@@ -11,11 +11,12 @@ import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
-import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
+import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlayerDiggingListener {
@@ -28,11 +29,14 @@ public final class PlayerDiggingListener {
 
         DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
-            diggingResult = startDigging(player, instance, blockPosition);
+            if (!instance.isChunkLoaded(blockPosition)) return;
+            diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = cancelDigging(instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
-            diggingResult = finishDigging(player, instance, blockPosition);
+            if (!instance.isChunkLoaded(blockPosition)) return;
+            diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
             dropStack(player);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
@@ -42,41 +46,35 @@ public final class PlayerDiggingListener {
         } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
             swapItemHand(player);
         }
-
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
-            player.getPlayerConnection().sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, diggingResult.block,
-                    status, diggingResult.success));
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         }
     }
 
-    private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition) {
+    private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
         final GameMode gameMode = player.getGameMode();
 
-        if (gameMode == GameMode.SPECTATOR) {
-            // Spectators can't break blocks
+        // Prevent spectators and check players in adventure mode
+        if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
-        } else if (gameMode == GameMode.ADVENTURE) {
-            // Check if the item can break the block with the current item
-            final ItemStack itemInMainHand = player.getItemInMainHand();
-            if (!itemInMainHand.getMeta().getCanDestroy().contains(block)) {
-                return new DiggingResult(block, false);
-            }
-        } else if (gameMode == GameMode.CREATIVE) {
-            return breakBlock(instance, player, blockPosition, block);
+        }
+
+        if (gameMode == GameMode.CREATIVE) {
+            return breakBlock(instance, player, blockPosition, block, blockFace);
         }
 
         // Survival digging
         // FIXME: verify mineable tag and enchantment
         final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition, blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
         // Client only send a single STARTED_DIGGING when insta-break is enabled
-        return breakBlock(instance, player, blockPosition, block);
+        return breakBlock(instance, player, blockPosition, block, blockFace);
     }
 
     private static DiggingResult cancelDigging(Instance instance, Point blockPosition) {
@@ -84,10 +82,28 @@ public final class PlayerDiggingListener {
         return new DiggingResult(block, true);
     }
 
-    private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition) {
+    private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
-        // TODO sanity check
-        return breakBlock(instance, player, blockPosition, block);
+
+        if (shouldPreventBreaking(player, block)) {
+            return new DiggingResult(block, false);
+        }
+
+        return breakBlock(instance, player, blockPosition, block, blockFace);
+    }
+
+    private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            // Spectators can't break blocks
+            return true;
+        } else if (player.getGameMode() == GameMode.ADVENTURE) {
+            // Check if the item can break the block with the current item
+            final ItemStack itemInMainHand = player.getItemInMainHand();
+            if (!itemInMainHand.meta().canDestroy(block)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void dropStack(Player player) {
@@ -97,7 +113,7 @@ public final class PlayerDiggingListener {
 
     private static void dropSingle(Player player) {
         final ItemStack handItem = player.getInventory().getItemInMainHand();
-        final StackingRule stackingRule = handItem.getStackingRule();
+        final StackingRule stackingRule = StackingRule.get();
         final int handAmount = stackingRule.getAmount(handItem);
         if (handAmount <= 1) {
             // Drop the whole item without copy
@@ -140,9 +156,9 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult breakBlock(Instance instance,
                                             Player player,
-                                            Point blockPosition, Block previousBlock) {
+                                            Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        final boolean success = instance.breakBlock(player, blockPosition);
+        final boolean success = instance.breakBlock(player, blockPosition, blockFace);
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {
@@ -166,13 +182,6 @@ public final class PlayerDiggingListener {
         }
     }
 
-    private static final class DiggingResult {
-        public final Block block;
-        public final boolean success;
-
-        public DiggingResult(Block block, boolean success) {
-            this.block = block;
-            this.success = success;
-        }
+    private record DiggingResult(Block block, boolean success) {
     }
 }
