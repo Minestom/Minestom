@@ -158,13 +158,13 @@ public class PlayerIntegrationTest {
         final var testDimension = DimensionType.builder(NamespaceID.from(dimensionNamespace)).build();
         env.process().dimension().addDimension(testDimension);
 
-        var instance = env.createFlatInstance();
+        var instance = env.process().instance().createInstanceContainer(testDimension);
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(5, 42, 2)).join();
 
         assertNull(player.getDeathLocation());
         player.damage(DamageType.VOID, 30);
-
+        
         assertNotNull(player.getDeathLocation());
         assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
         assertEquals(5, player.getDeathLocation().position().x());
