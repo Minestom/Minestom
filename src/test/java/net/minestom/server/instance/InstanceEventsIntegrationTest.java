@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 @EnvTest
 public class InstanceEventsIntegrationTest {
     @Test
-    public void createAndDeleteInstance(Env env) {
+    public void registerAndUnregisterInstance(Env env) {
         var registerListener = env.listen(InstanceRegisterEvent.class);
         var unregisterListener = env.listen(InstanceUnregisterEvent.class);
 
