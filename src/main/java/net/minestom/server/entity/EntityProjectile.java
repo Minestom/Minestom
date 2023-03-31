@@ -99,14 +99,19 @@ public class EntityProjectile extends Entity {
         }
     }
 
-    private boolean shouldUnstuck() {
-        Point collidedPoint = position.add(collisionSignum.x(), collisionSignum.y(), collisionSignum.z())
-                .asVec().apply(Vec.Operator.FLOOR);
+    private boolean isFree(Point collidedPoint) {
         Block block = instance.getBlock(collidedPoint);
 
         // Move position slightly towards collision point because we will check for collision
         Point intersectPos = position.add(collidedPoint.sub(position).mul(0.003));
         return !block.registry().collisionShape().intersectBox(intersectPos.sub(collidedPoint), getBoundingBox());
+    }
+
+    private boolean shouldUnstuck() {
+        Vec blockPosition = this.position.asVec().apply(Vec.Operator.FLOOR);
+        return isFree(blockPosition.add(collisionSignum.x(), 0, 0))
+                && isFree(blockPosition.add(0, collisionSignum.y(), 0))
+                && isFree(blockPosition.add(0, 0, collisionSignum.z()));
     }
 
     @Override
