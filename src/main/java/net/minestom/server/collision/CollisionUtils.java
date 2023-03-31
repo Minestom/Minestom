@@ -29,10 +29,25 @@ public final class CollisionUtils {
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
                                               @Nullable PhysicsResult lastPhysicsResult) {
+        return handlePhysics(entity, entityVelocity, entity.getBoundingBox(), lastPhysicsResult);
+    }
+
+    /**
+     * Moves an entity with physics applied (ie checking against blocks)
+     * <p>
+     * Works by getting all the full blocks that an entity could interact with.
+     * All bounding boxes inside the full blocks are checked for collisions with the entity.
+     *
+     * @param entity the entity to move
+     * @return the result of physics simulation
+     */
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
+                                              @NotNull BoundingBox entityBoundingBox,
+                                              @Nullable PhysicsResult lastPhysicsResult) {
         final Instance instance = entity.getInstance();
         assert instance != null;
         return handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
+                entityBoundingBox,
                 entity.getPosition(), entityVelocity,
                 lastPhysicsResult);
     }

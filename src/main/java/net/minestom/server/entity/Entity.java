@@ -637,6 +637,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
+    /**
+     * Handles entity physics and returns the result.
+     *
+     * @param deltaPos the amount the entity will move during this tick
+     * @return the result of the physics simulation
+     */
     protected PhysicsResult handlePhysics(@NotNull Vec deltaPos) {
         return CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
     }

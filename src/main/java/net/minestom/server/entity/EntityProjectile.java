@@ -1,6 +1,8 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -37,7 +39,6 @@ public class EntityProjectile extends Entity {
     }
 
     private void setup() {
-        super.hasPhysics = false;
         if (getEntityMeta() instanceof ProjectileMeta) {
             ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
         }
@@ -88,24 +89,47 @@ public class EntityProjectile extends Entity {
 
     @Override
     public void tick(long time) {
-        final Pos posBefore = getPosition();
         super.tick(time);
-        final Pos posNow = getPosition();
-        if (isStuck(posBefore, posNow)) {
-            if (super.onGround) {
-                return;
-            }
-            super.onGround = true;
-            this.velocity = Vec.ZERO;
-            sendPacketToViewersAndSelf(getVelocityPacket());
-            setNoGravity(true);
-        } else {
-            if (!super.onGround) {
-                return;
-            }
-            super.onGround = false;
+
+        if (hasNoGravity() && shouldUnstuck()) {
             setNoGravity(false);
             EventDispatcher.call(new ProjectileUncollideEvent(this));
+        }
+    }
+
+    private boolean shouldUnstuck() {
+        return false; //TODO
+    }
+
+    @Override
+    protected PhysicsResult handlePhysics(@NotNull Vec deltaPos) {
+        // Handle block physics as if the bounding box didn't exist
+        //TODO improve
+        final BoundingBox physicsBoundingBox = new BoundingBox(0, 0, 0);
+        final PhysicsResult result = CollisionUtils.handlePhysics(this,
+                deltaPos, physicsBoundingBox, lastPhysicsResult);
+
+        //TODO collision with entities
+
+        boolean stuck = result.collisionX() || result.collisionY() || result.collisionZ();
+        if (stuck && !hasNoGravity()) {
+            final Pos newPosition = result.newPosition();
+            final Block block = instance.getBlock(newPosition);
+            var event = new ProjectileCollideWithBlockEvent(this, newPosition, block);
+            EventDispatcher.callCancellable(event, () -> {
+                setNoGravity(true);
+                setVelocity(Vec.ZERO);
+            });
+        }
+
+        if (!stuck) {
+            return result;
+        } else {
+            return new PhysicsResult(
+                    result.newPosition(), Vec.ZERO, result.isOnGround(),
+                    result.collisionX(), result.collisionY(), result.collisionZ(),
+                    result.originalDelta(), result.collidedBlockY(), result.blockTypeY()
+            );
         }
     }
 
