@@ -102,7 +102,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     private BoundingBox boundingBox;
-    private PhysicsResult lastPhysicsResult = null;
+    protected PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
 
@@ -570,7 +570,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
+            final var physicsResult = handlePhysics(deltaPos);
             this.lastPhysicsResult = physicsResult;
             if (!PlayerUtils.isSocketClient(this))
                 this.onGround = physicsResult.isOnGround();
@@ -635,6 +635,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 this.lastVelocityWasZero = !hasVelocity;
             }
         }
+    }
+
+    protected PhysicsResult handlePhysics(@NotNull Vec deltaPos) {
+        return CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
     }
 
     protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
