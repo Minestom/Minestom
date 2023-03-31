@@ -32,6 +32,8 @@ public class EntityProjectile extends Entity {
 
     private final Entity shooter;
 
+    private Vec collisionSignum;
+
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
         super(entityType);
         this.shooter = shooter;
@@ -98,7 +100,13 @@ public class EntityProjectile extends Entity {
     }
 
     private boolean shouldUnstuck() {
-        return false; //TODO
+        Point collidedPoint = position.add(collisionSignum.x(), collisionSignum.y(), collisionSignum.z())
+                .asVec().apply(Vec.Operator.FLOOR);
+        Block block = instance.getBlock(collidedPoint);
+
+        // Move position slightly towards collision point because we will check for collision
+        Point intersectPos = position.add(collidedPoint.sub(position).mul(0.003));
+        return !block.registry().collisionShape().intersectBox(intersectPos.sub(collidedPoint), getBoundingBox());
     }
 
     @Override
@@ -118,7 +126,11 @@ public class EntityProjectile extends Entity {
             var event = new ProjectileCollideWithBlockEvent(this, newPosition, block);
             EventDispatcher.callCancellable(event, () -> {
                 setNoGravity(true);
-                setVelocity(Vec.ZERO);
+
+                double signumX = result.collisionX() ? Math.signum(deltaPos.x()) : 0;
+                double signumY = result.collisionY() ? Math.signum(deltaPos.y()) : 0;
+                double signumZ = result.collisionZ() ? Math.signum(deltaPos.z()) : 0;
+                this.collisionSignum = new Vec(signumX, signumY, signumZ);
             });
         }
 
