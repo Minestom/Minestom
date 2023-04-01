@@ -64,8 +64,13 @@ public final class BoundingBox implements Shape {
     }
 
     @ApiStatus.Experimental
-    public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
+    public boolean boundingBoxRayIntersectionCheck(@NotNull Vec start, @NotNull Vec direction, @NotNull Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
+    }
+
+    @ApiStatus.Experimental
+    public boolean boundingBoxFullIntersectionCheck(@NotNull BoundingBox moving, @NotNull Point start, @NotNull Vec direction, @NotNull Pos position) {
+        return RayUtils.BoundingBoxIntersectionCheck(moving, start, direction, this, position);
     }
 
     @Override

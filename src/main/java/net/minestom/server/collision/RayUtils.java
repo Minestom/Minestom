@@ -171,6 +171,10 @@ final class RayUtils {
         return Math.abs(value) < Vec.EPSILON ? 0 : value;
     }
 
+    public static boolean BoundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset) {
+        return BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, collidableStatic, staticCollidableOffset, new SweepResult(Double.MAX_VALUE, 0, 0, 0, null));
+    }
+
     public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
         return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position, new SweepResult(Double.MAX_VALUE, 0, 0, 0, null));
     }

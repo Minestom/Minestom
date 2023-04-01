@@ -12,18 +12,13 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEvent;
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
 import net.minestom.server.event.entity.projectile.ProjectileUncollideEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Class that allows to instantiate entities with projectile-like physics handling.
@@ -117,18 +112,18 @@ public class EntityProjectile extends Entity {
     @Override
     protected PhysicsResult handlePhysics(@NotNull Vec deltaPos) {
         // Handle block physics as if the bounding box didn't exist
+        // Also only check for a single collision, because the velocity has to immediately be set to zero,
+        // and not move the entity slightly on the axes that didn't collide
         //TODO improve
         final BoundingBox physicsBoundingBox = new BoundingBox(0, 0, 0);
         final PhysicsResult result = CollisionUtils.handlePhysics(this,
                 deltaPos, physicsBoundingBox, true, lastPhysicsResult);
 
-        //TODO collision with entities
-
-        boolean stuck = result.collisionX() || result.collisionY() || result.collisionZ();
+        final boolean stuck = result.collisionX() || result.collisionY() || result.collisionZ();
         if (stuck && !hasNoGravity()) {
             final Pos newPosition = result.newPosition();
             final Block block = instance.getBlock(newPosition);
-            var event = new ProjectileCollideWithBlockEvent(this, newPosition, block);
+            final var event = new ProjectileCollideWithBlockEvent(this, newPosition, block);
             EventDispatcher.callCancellable(event, () -> {
                 setNoGravity(true);
 
@@ -140,6 +135,35 @@ public class EntityProjectile extends Entity {
         }
 
         if (!stuck) {
+            final BoundingBox boundingBox = getBoundingBox();
+            final Entity shooter = getShooter();
+
+            // Go over nearby entities and check which one will be hit and is the nearest
+            Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 1);
+            Entity nearest = null;
+            double nearestDistanceSquared = Double.MAX_VALUE;
+            for (Entity entity : entities) {
+                // We won't check collisions with the shooter for the first ticks of the projectile's life,
+                // because it spawns in them and will immediately be triggered
+                if (getAliveTicks() < 6 && entity == shooter) continue;
+                if (!(entity instanceof LivingEntity)) continue;
+
+                // Check if moving projectile will hit the entity
+                if (!entity.getBoundingBox().boundingBoxFullIntersectionCheck(boundingBox,
+                        position, deltaPos, entity.getPosition())) continue;
+
+                final double distanceSquared = getDistanceSquared(entity);
+                if (distanceSquared < nearestDistanceSquared) {
+                    nearest = entity;
+                    nearestDistanceSquared = distanceSquared;
+                }
+            }
+
+            if (nearest != null) {
+                final var event = new ProjectileCollideWithEntityEvent(this, position, nearest);
+                EventDispatcher.call(event);
+            }
+
             return result;
         } else {
             return new PhysicsResult(
@@ -148,80 +172,5 @@ public class EntityProjectile extends Entity {
                     result.originalDelta(), result.collidedBlockY(), result.blockTypeY()
             );
         }
-    }
-
-    /**
-     * Checks whether an arrow is stuck in block / hit an entity.
-     *
-     * @param pos    position right before current tick.
-     * @param posNow position after current tick.
-     * @return if an arrow is stuck in block / hit an entity.
-     */
-    @SuppressWarnings("ConstantConditions")
-    private boolean isStuck(Pos pos, Pos posNow) {
-        final Instance instance = getInstance();
-        if (pos.samePoint(posNow)) {
-            return instance.getBlock(pos).isSolid();
-        }
-
-        Chunk chunk = null;
-        Collection<LivingEntity> entities = null;
-        final BoundingBox bb = getBoundingBox();
-
-        /*
-          What we're about to do is to discretely jump from a previous position to the new one.
-          For each point we will be checking blocks and entities we're in.
-         */
-        final double part = bb.width() / 2;
-        final Vec dir = posNow.sub(pos).asVec();
-        final int parts = (int) Math.ceil(dir.length() / part);
-        final Pos direction = dir.normalize().mul(part).asPosition();
-        final long aliveTicks = getAliveTicks();
-        Block block = null;
-        Point blockPos = null;
-        for (int i = 0; i < parts; ++i) {
-            // If we're at last part, we can't just add another direction-vector, because we can exceed the end point.
-            pos = (i == parts - 1) ? posNow : pos.add(direction);
-            if (block == null || !pos.sameBlock(blockPos)) {
-                block = instance.getBlock(pos);
-                blockPos = pos;
-            }
-            if (block.isSolid()) {
-                final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
-                EventDispatcher.call(event);
-                if (!event.isCancelled()) {
-                    teleport(pos);
-                    return true;
-                }
-            }
-            if (currentChunk != chunk) {
-                chunk = currentChunk;
-                entities = instance.getChunkEntities(chunk)
-                        .stream()
-                        .filter(entity -> entity instanceof LivingEntity)
-                        .map(entity -> (LivingEntity) entity)
-                        .collect(Collectors.toSet());
-            }
-            final Point currentPos = pos;
-            Stream<LivingEntity> victimsStream = entities.stream()
-                    .filter(entity -> bb.intersectEntity(currentPos, entity));
-            /*
-              We won't check collisions with a shooter for first ticks of arrow's life, because it spawns in him
-              and will immediately deal damage.
-             */
-            if (aliveTicks < 3 && shooter != null) {
-                victimsStream = victimsStream.filter(entity -> entity != shooter);
-            }
-            final Optional<LivingEntity> victimOptional = victimsStream.findAny();
-            if (victimOptional.isPresent()) {
-                final LivingEntity target = victimOptional.get();
-                final ProjectileCollideWithEntityEvent event = new ProjectileCollideWithEntityEvent(this, pos, target);
-                EventDispatcher.call(event);
-                if (!event.isCancelled()) {
-                    return super.onGround;
-                }
-            }
-        }
-        return false;
     }
 }
