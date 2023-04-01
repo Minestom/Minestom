@@ -142,7 +142,6 @@ public class EntityProjectile extends Entity {
         if (!stuck) {
             return result;
         } else {
-            //TODO fix velocity still being applied in axes that didn't collide
             return new PhysicsResult(
                     result.newPosition(), Vec.ZERO, result.isOnGround(),
                     result.collisionX(), result.collisionY(), result.collisionZ(),
