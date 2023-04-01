@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
@@ -92,6 +93,45 @@ public class EntityProjectile extends Entity {
             setNoGravity(false);
             EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
+
+        if (!hasNoGravity()) {
+            Vec deltaPos = velocity.div(MinecraftServer.TICK_PER_SECOND);
+            handleEntityCollision(position, deltaPos);
+        }
+    }
+
+    private void handleEntityCollision(@NotNull Pos position, @NotNull Vec deltaPos) {
+        final BoundingBox boundingBox = getBoundingBox();
+        final Entity shooter = getShooter();
+
+        // Go over nearby entities and check which one will be hit and is the nearest
+        Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 1);
+        Entity nearest = null;
+        double nearestDistanceSquared = Double.MAX_VALUE;
+        for (Entity entity : entities) {
+            // We won't check collisions with the shooter for the first ticks of the projectile's life,
+            // because it spawns in them and will immediately be triggered
+            if (getAliveTicks() < 6 && entity == shooter) continue;
+            if (!(entity instanceof LivingEntity)) continue;
+
+            // Check if moving projectile will hit the entity
+            if (!entity.getBoundingBox().boundingBoxFullIntersectionCheck(boundingBox,
+                    position, deltaPos, entity.getPosition())) continue;
+
+            final double distanceSquared = getDistanceSquared(entity);
+            if (distanceSquared < nearestDistanceSquared) {
+                nearest = entity;
+                nearestDistanceSquared = distanceSquared;
+            }
+        }
+
+        if (nearest != null) {
+            final var event = new ProjectileCollideWithEntityEvent(this, position, nearest);
+            EventDispatcher.call(event);
+            //teleport(position.add(0, 3, 0));
+            //setVelocity(Vec.ZERO);
+            remove();
+        }
     }
 
     private boolean isFree(Point collidedPoint) {
@@ -135,35 +175,6 @@ public class EntityProjectile extends Entity {
         }
 
         if (!stuck) {
-            final BoundingBox boundingBox = getBoundingBox();
-            final Entity shooter = getShooter();
-
-            // Go over nearby entities and check which one will be hit and is the nearest
-            Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 1);
-            Entity nearest = null;
-            double nearestDistanceSquared = Double.MAX_VALUE;
-            for (Entity entity : entities) {
-                // We won't check collisions with the shooter for the first ticks of the projectile's life,
-                // because it spawns in them and will immediately be triggered
-                if (getAliveTicks() < 6 && entity == shooter) continue;
-                if (!(entity instanceof LivingEntity)) continue;
-
-                // Check if moving projectile will hit the entity
-                if (!entity.getBoundingBox().boundingBoxFullIntersectionCheck(boundingBox,
-                        position, deltaPos, entity.getPosition())) continue;
-
-                final double distanceSquared = getDistanceSquared(entity);
-                if (distanceSquared < nearestDistanceSquared) {
-                    nearest = entity;
-                    nearestDistanceSquared = distanceSquared;
-                }
-            }
-
-            if (nearest != null) {
-                final var event = new ProjectileCollideWithEntityEvent(this, position, nearest);
-                EventDispatcher.call(event);
-            }
-
             return result;
         } else {
             return new PhysicsResult(
