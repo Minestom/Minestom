@@ -1,5 +1,6 @@
 package net.minestom.server.event.entity.projectile;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.EntityInstanceEvent;
@@ -9,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 class ProjectileCollideEvent implements EntityInstanceEvent, RecursiveEvent {
 
     private final @NotNull Entity projectile;
-    private final @NotNull Pos position;
+    private final @NotNull Point position;
 
-    protected ProjectileCollideEvent(@NotNull Entity projectile, @NotNull Pos position) {
+    protected ProjectileCollideEvent(@NotNull Entity projectile, @NotNull Point position) {
         this.projectile = projectile;
         this.position = position;
     }
@@ -21,7 +22,7 @@ class ProjectileCollideEvent implements EntityInstanceEvent, RecursiveEvent {
         return projectile;
     }
 
-    public @NotNull Pos getCollisionPosition() {
+    public @NotNull Point getCollisionPosition() {
         return position;
     }
 }

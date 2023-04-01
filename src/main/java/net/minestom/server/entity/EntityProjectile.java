@@ -96,6 +96,7 @@ public class EntityProjectile extends Entity {
         final boolean stuck = isStuck();
         if (stuck && shouldUnstuck()) {
             setNoGravity(false);
+            collisionDirection = null;
             EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
 
@@ -113,6 +114,7 @@ public class EntityProjectile extends Entity {
         Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 1);
         Entity nearest = null;
         double nearestDistanceSquared = Double.MAX_VALUE;
+        Point nearestIntersection = null;
         for (Entity entity : entities) {
             // We won't check collisions with the shooter for the first ticks of the projectile's life,
             // because it spawns in them and will immediately be triggered
@@ -120,18 +122,20 @@ public class EntityProjectile extends Entity {
             if (!(entity instanceof LivingEntity)) continue;
 
             // Check if moving projectile will hit the entity
-            if (!entity.getBoundingBox().boundingBoxFullIntersectionCheck(boundingBox,
-                    position, deltaPos, entity.getPosition())) continue;
+            Point intersection = entity.getBoundingBox().getBoundingBoxIntersectionPoint(boundingBox,
+                    position, deltaPos, entity.getPosition());
+            if (intersection == null) continue;
 
             final double distanceSquared = getDistanceSquared(entity);
             if (distanceSquared < nearestDistanceSquared) {
                 nearest = entity;
                 nearestDistanceSquared = distanceSquared;
+                nearestIntersection = intersection;
             }
         }
 
         if (nearest != null) {
-            final var event = new ProjectileCollideWithEntityEvent(this, position, nearest);
+            final var event = new ProjectileCollideWithEntityEvent(this, nearestIntersection, nearest);
             EventDispatcher.call(event);
         }
     }
@@ -162,17 +166,20 @@ public class EntityProjectile extends Entity {
                 deltaPos, physicsBoundingBox, true, lastPhysicsResult);
 
         final boolean stuck = result.collisionX() || result.collisionY() || result.collisionZ();
-        if (stuck && !hasNoGravity()) {
+        if (stuck && !isStuck()) {
             final Pos newPosition = result.newPosition();
-            final Block block = instance.getBlock(newPosition);
-            final var event = new ProjectileCollideWithBlockEvent(this, newPosition, block);
+
+            double signumX = result.collisionX() ? Math.signum(deltaPos.x()) : 0;
+            double signumY = result.collisionY() ? Math.signum(deltaPos.y()) : 0;
+            double signumZ = result.collisionZ() ? Math.signum(deltaPos.z()) : 0;
+            Vec collisionDirection = new Vec(signumX, signumY, signumZ);
+
+            final Point collidedPosition = collisionDirection.add(newPosition).apply(Vec.Operator.FLOOR);
+            final Block block = instance.getBlock(collidedPosition);
+            final var event = new ProjectileCollideWithBlockEvent(this, newPosition, collidedPosition, block);
             EventDispatcher.callCancellable(event, () -> {
                 setNoGravity(true);
-
-                double signumX = result.collisionX() ? Math.signum(deltaPos.x()) : 0;
-                double signumY = result.collisionY() ? Math.signum(deltaPos.y()) : 0;
-                double signumZ = result.collisionZ() ? Math.signum(deltaPos.z()) : 0;
-                this.collisionDirection = new Vec(signumX, signumY, signumZ);
+                this.collisionDirection = collisionDirection;
             });
         }
 
