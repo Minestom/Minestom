@@ -85,16 +85,21 @@ public class EntityProjectile extends Entity {
         );
     }
 
+    public boolean isStuck() {
+        return collisionDirection != null;
+    }
+
     @Override
     public void tick(long time) {
         super.tick(time);
 
-        if (hasNoGravity() && shouldUnstuck()) {
+        final boolean stuck = isStuck();
+        if (stuck && shouldUnstuck()) {
             setNoGravity(false);
             EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
 
-        if (!hasNoGravity()) {
+        if (!stuck) {
             Vec deltaPos = velocity.div(MinecraftServer.TICK_PER_SECOND);
             handleEntityCollision(position, deltaPos);
         }
@@ -128,9 +133,6 @@ public class EntityProjectile extends Entity {
         if (nearest != null) {
             final var event = new ProjectileCollideWithEntityEvent(this, position, nearest);
             EventDispatcher.call(event);
-            //teleport(position.add(0, 3, 0));
-            //setVelocity(Vec.ZERO);
-            remove();
         }
     }
 
