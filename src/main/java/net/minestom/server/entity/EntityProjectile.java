@@ -120,7 +120,7 @@ public class EntityProjectile extends Entity {
         //TODO improve
         final BoundingBox physicsBoundingBox = new BoundingBox(0, 0, 0);
         final PhysicsResult result = CollisionUtils.handlePhysics(this,
-                deltaPos, physicsBoundingBox, lastPhysicsResult);
+                deltaPos, physicsBoundingBox, true, lastPhysicsResult);
 
         //TODO collision with entities
 
@@ -142,6 +142,7 @@ public class EntityProjectile extends Entity {
         if (!stuck) {
             return result;
         } else {
+            //TODO fix velocity still being applied in axes that didn't collide
             return new PhysicsResult(
                     result.newPosition(), Vec.ZERO, result.isOnGround(),
                     result.collisionX(), result.collisionY(), result.collisionZ(),

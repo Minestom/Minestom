@@ -24,6 +24,7 @@ final class BlockCollision {
     static PhysicsResult handlePhysics(@NotNull BoundingBox boundingBox,
                                        @NotNull Vec velocity, @NotNull Pos entityPosition,
                                        @NotNull Block.Getter getter,
+                                       boolean singleCollision,
                                        @Nullable PhysicsResult lastPhysicsResult) {
         if (velocity.isZero()) {
             // TODO should return a constant
@@ -35,7 +36,7 @@ final class BlockCollision {
             return cachedResult;
         }
         // Expensive AABB computation
-        return stepPhysics(boundingBox, velocity, entityPosition, getter);
+        return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
     }
 
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
@@ -84,7 +85,7 @@ final class BlockCollision {
 
     private static PhysicsResult stepPhysics(@NotNull BoundingBox boundingBox,
                                              @NotNull Vec velocity, @NotNull Pos entityPosition,
-                                             @NotNull Block.Getter getter) {
+                                             @NotNull Block.Getter getter, boolean singleCollision) {
         // Allocate once and update values
         SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null);
 
@@ -115,6 +116,8 @@ final class BlockCollision {
                     blockYType = result.blockTypeY();
                 }
             }
+            // If we're only checking a single collision, break
+            if (singleCollision) break;
             // If all axis have had collisions, break
             if (foundCollisionX && foundCollisionY && foundCollisionZ) break;
             // If the entity isn't moving, break

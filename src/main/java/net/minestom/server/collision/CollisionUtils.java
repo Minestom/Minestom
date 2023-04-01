@@ -29,7 +29,7 @@ public final class CollisionUtils {
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
                                               @Nullable PhysicsResult lastPhysicsResult) {
-        return handlePhysics(entity, entityVelocity, entity.getBoundingBox(), lastPhysicsResult);
+        return handlePhysics(entity, entityVelocity, entity.getBoundingBox(), false, lastPhysicsResult);
     }
 
     /**
@@ -42,14 +42,14 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @NotNull BoundingBox entityBoundingBox,
+                                              @NotNull BoundingBox entityBoundingBox, boolean singleCollision,
                                               @Nullable PhysicsResult lastPhysicsResult) {
         final Instance instance = entity.getInstance();
         assert instance != null;
         return handlePhysics(instance, entity.getChunk(),
                 entityBoundingBox,
                 entity.getPosition(), entityVelocity,
-                lastPhysicsResult);
+                singleCollision, lastPhysicsResult);
     }
 
     /**
@@ -64,11 +64,13 @@ public final class CollisionUtils {
     public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
                                               @NotNull BoundingBox boundingBox,
                                               @NotNull Pos position, @NotNull Vec velocity,
+                                              boolean singleCollision,
                                               @Nullable PhysicsResult lastPhysicsResult) {
         final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
         return BlockCollision.handlePhysics(boundingBox,
                 velocity, position,
-                getter, lastPhysicsResult);
+                getter, singleCollision,
+                lastPhysicsResult);
     }
 
     /**
@@ -88,7 +90,7 @@ public final class CollisionUtils {
         final PhysicsResult result = handlePhysics(instance, chunk,
                 BoundingBox.ZERO,
                 Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
-                null);
+                false, null);
         return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
     }
 
