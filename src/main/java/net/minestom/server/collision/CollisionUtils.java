@@ -42,12 +42,12 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @NotNull BoundingBox entityBoundingBox, boolean singleCollision,
+                                              @NotNull BoundingBox physicsBoundingBox, boolean singleCollision,
                                               @Nullable PhysicsResult lastPhysicsResult) {
         final Instance instance = entity.getInstance();
         assert instance != null;
         return handlePhysics(instance, entity.getChunk(),
-                entityBoundingBox,
+                physicsBoundingBox,
                 entity.getPosition(), entityVelocity,
                 singleCollision, lastPhysicsResult);
     }

@@ -28,7 +28,7 @@ public class EntityProjectile extends Entity {
 
     private final Entity shooter;
 
-    private Vec collisionSignum;
+    private Vec collisionDirection;
 
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
         super(entityType);
@@ -144,9 +144,9 @@ public class EntityProjectile extends Entity {
 
     private boolean shouldUnstuck() {
         Vec blockPosition = this.position.asVec().apply(Vec.Operator.FLOOR);
-        return isFree(blockPosition.add(collisionSignum.x(), 0, 0))
-                && isFree(blockPosition.add(0, collisionSignum.y(), 0))
-                && isFree(blockPosition.add(0, 0, collisionSignum.z()));
+        return isFree(blockPosition.add(collisionDirection.x(), 0, 0))
+                && isFree(blockPosition.add(0, collisionDirection.y(), 0))
+                && isFree(blockPosition.add(0, 0, collisionDirection.z()));
     }
 
     @Override
@@ -170,7 +170,7 @@ public class EntityProjectile extends Entity {
                 double signumX = result.collisionX() ? Math.signum(deltaPos.x()) : 0;
                 double signumY = result.collisionY() ? Math.signum(deltaPos.y()) : 0;
                 double signumZ = result.collisionZ() ? Math.signum(deltaPos.z()) : 0;
-                this.collisionSignum = new Vec(signumX, signumY, signumZ);
+                this.collisionDirection = new Vec(signumX, signumY, signumZ);
             });
         }
 
