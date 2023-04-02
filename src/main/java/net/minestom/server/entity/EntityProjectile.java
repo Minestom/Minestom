@@ -91,6 +91,7 @@ public class EntityProjectile extends Entity {
 
     @Override
     public void tick(long time) {
+        final Pos previousPosition = getPosition();
         super.tick(time);
 
         final boolean stuck = isStuck();
@@ -100,18 +101,20 @@ public class EntityProjectile extends Entity {
             EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
 
-        if (!stuck) {
-            Vec deltaPos = velocity.div(MinecraftServer.TICK_PER_SECOND);
-            handleEntityCollision(position, deltaPos);
-        }
+        //if (!stuck) {
+            //Vec deltaPos = velocity.div(MinecraftServer.TICK_PER_SECOND);
+            handleEntityCollision(previousPosition, lastPhysicsResult.originalDelta(), stuck);
+        //}
     }
 
-    private void handleEntityCollision(@NotNull Pos position, @NotNull Vec deltaPos) {
+    private void handleEntityCollision(@NotNull Pos position, @NotNull Vec deltaPos, boolean stuck) {
         final BoundingBox boundingBox = getBoundingBox();
         final Entity shooter = getShooter();
+        final double collisionDistanceSquared = stuck ?
+                position.distanceSquared(lastPhysicsResult.newPosition()) : Double.MAX_VALUE;
 
         // Go over nearby entities and check which one will be hit and is the nearest
-        Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 1);
+        Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 3);
         Entity nearest = null;
         double nearestDistanceSquared = Double.MAX_VALUE;
         Point nearestIntersection = null;
@@ -124,7 +127,8 @@ public class EntityProjectile extends Entity {
             // Check if moving projectile will hit the entity
             Point intersection = entity.getBoundingBox().getBoundingBoxIntersectionPoint(boundingBox,
                     position, deltaPos, entity.getPosition());
-            if (intersection == null) continue;
+            if (intersection == null || intersection.distanceSquared(position) > collisionDistanceSquared)
+                continue;
 
             final double distanceSquared = getDistanceSquared(entity);
             if (distanceSquared < nearestDistanceSquared) {
