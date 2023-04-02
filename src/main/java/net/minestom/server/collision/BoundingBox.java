@@ -71,7 +71,7 @@ public final class BoundingBox implements Shape {
     @ApiStatus.Experimental
     public @Nullable Point getBoundingBoxIntersectionPoint(@NotNull BoundingBox moving, @NotNull Point start, @NotNull Vec direction, @NotNull Pos position) {
         SweepResult result = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null);
-        if (RayUtils.BoundingBoxIntersectionCheck(moving, start, direction, this, position)) {
+        if (RayUtils.BoundingBoxIntersectionCheck(moving, start, direction, this, position, result)) {
             return start.add(
                     result.res * direction.x(),
                     result.res * direction.y(),

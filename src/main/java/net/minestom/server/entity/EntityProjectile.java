@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
@@ -92,6 +91,7 @@ public class EntityProjectile extends Entity {
     @Override
     public void tick(long time) {
         final Pos previousPosition = getPosition();
+        final boolean stuckBefore = isStuck();
         super.tick(time);
 
         final boolean stuck = isStuck();
@@ -101,17 +101,19 @@ public class EntityProjectile extends Entity {
             EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
 
-        //if (!stuck) {
-            //Vec deltaPos = velocity.div(MinecraftServer.TICK_PER_SECOND);
-            handleEntityCollision(previousPosition, lastPhysicsResult.originalDelta(), stuck);
-        //}
+        if (!stuckBefore) {
+            // If the entity wasn't stuck before, we also want to check if entity collisions should have happened
+            // and if they were closer to the previous position that the block collision
+            //TODO this might result in entity collide event being called as well as block collide event
+            final double collisionDistanceSquared = stuck ?
+                    previousPosition.distanceSquared(lastPhysicsResult.newPosition()) : Double.MAX_VALUE;
+            handleEntityCollision(previousPosition, lastPhysicsResult.originalDelta(), collisionDistanceSquared);
+        }
     }
 
-    private void handleEntityCollision(@NotNull Pos position, @NotNull Vec deltaPos, boolean stuck) {
+    private void handleEntityCollision(@NotNull Pos position, @NotNull Vec deltaPos, double collisionDistanceSquared) {
         final BoundingBox boundingBox = getBoundingBox();
         final Entity shooter = getShooter();
-        final double collisionDistanceSquared = stuck ?
-                position.distanceSquared(lastPhysicsResult.newPosition()) : Double.MAX_VALUE;
 
         // Go over nearby entities and check which one will be hit and is the nearest
         Collection<Entity> entities = instance.getNearbyEntities(position, deltaPos.length() + 3);
@@ -119,6 +121,7 @@ public class EntityProjectile extends Entity {
         double nearestDistanceSquared = Double.MAX_VALUE;
         Point nearestIntersection = null;
         for (Entity entity : entities) {
+            if (entity == this) continue;
             // We won't check collisions with the shooter for the first ticks of the projectile's life,
             // because it spawns in them and will immediately be triggered
             if (getAliveTicks() < 6 && entity == shooter) continue;
@@ -141,6 +144,7 @@ public class EntityProjectile extends Entity {
         if (nearest != null) {
             final var event = new ProjectileCollideWithEntityEvent(this, nearestIntersection, nearest);
             EventDispatcher.call(event);
+            if (shooter instanceof Player player) player.sendMessage("You hit");
         }
     }
 
