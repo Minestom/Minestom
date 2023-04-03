@@ -29,6 +29,7 @@ final class RayUtils {
         double signumRayY = Math.signum(rayDirection.y());
         double signumRayZ = Math.signum(rayDirection.z());
 
+        boolean isHit = false;
         double percentage = Double.MAX_VALUE;
         int collisionFace = -1;
 
@@ -47,6 +48,7 @@ final class RayUtils {
                         && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
                         && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
                         && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = xFac;
                     collisionFace = 0;
                 }
@@ -65,6 +67,7 @@ final class RayUtils {
                         && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
                         && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
                         && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = xFac;
                     collisionFace = 0;
                 }
@@ -84,6 +87,7 @@ final class RayUtils {
                         && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
                         && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
                         && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
+                    isHit = true;
                     percentage = zFac;
                     collisionFace = 1;
                 }
@@ -101,6 +105,7 @@ final class RayUtils {
                         && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
                         && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
                         && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
+                    isHit = true;
                     percentage = zFac;
                     collisionFace = 1;
                 }
@@ -120,6 +125,7 @@ final class RayUtils {
                         && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
                         && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
                         && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = yFac;
                     collisionFace = 2;
                 }
@@ -138,6 +144,7 @@ final class RayUtils {
                         && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
                         && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
                         && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
+                    isHit = true;
                     percentage = yFac;
                     collisionFace = 2;
                 }
@@ -146,7 +153,7 @@ final class RayUtils {
 
         percentage *= 0.99999;
 
-        if (percentage >= 0 && percentage <= finalResult.res) {
+        if (isHit && percentage >= 0 && percentage <= finalResult.res) {
             finalResult.res = percentage;
             finalResult.normalX = 0;
             finalResult.normalY = 0;
