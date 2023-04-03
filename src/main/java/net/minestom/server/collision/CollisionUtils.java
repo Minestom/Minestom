@@ -41,6 +41,30 @@ public final class CollisionUtils {
     }
 
     /**
+     *
+     * @param entity the entity to move
+     * @param entityVelocity the velocity of the entity
+     * @return the closest entity we collide with
+     */
+    public static Entity checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity) {
+        return checkEntityCollisions(entity, entityVelocity, 3);
+    }
+
+    /**
+     *
+     * @param entity the entity to move
+     * @param entityVelocity the velocity of the entity
+     * @param extendRadius the largest entity bounding box we can collide with
+     *                     Measured from bottom center to top corner
+     *                     This is used to extend the search radius for entities we collide with
+     *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
+     * @return the closest entity we collide with
+     */
+    public static Entity checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity, double extendRadius) {
+        return EntityCollision.checkCollision(entity, entityVelocity, extendRadius);
+    }
+
+    /**
      * Moves an entity with physics applied (ie checking against blocks)
      * <p>
      * Works by getting all the full blocks that an entity could interact with.
