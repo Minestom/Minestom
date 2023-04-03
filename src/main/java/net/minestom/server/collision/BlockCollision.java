@@ -75,7 +75,7 @@ final class BlockCollision {
             if (lastPhysicsResult.collisionY()
                     && velocity.y() == lastPhysicsResult.originalDelta().y()
                     // Check block below to fast exit gravity
-                    && getter.getBlock(lastPhysicsResult.collisionPoints()[1].sub(0, 1, 0), Block.Getter.Condition.TYPE) == collisionBlockY
+                    && getter.getBlock(lastPhysicsResult.collisionPoints()[1].sub(0, Vec.EPSILON, 0), Block.Getter.Condition.TYPE) == collisionBlockY
                     && velocity.x() == 0 && velocity.z() == 0
                     && entityPosition.samePoint(lastPhysicsResult.newPosition())
                     && collisionBlockY != Block.AIR) {
