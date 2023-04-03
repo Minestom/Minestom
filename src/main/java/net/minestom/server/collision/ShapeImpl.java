@@ -94,16 +94,15 @@ final class ShapeImpl implements Shape {
         for (BoundingBox blockSection : blockSections) {
             // Update final result if the temp result collision is sooner than the current final result
             if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
-                finalResult.collidedShapePosition = shapePos;
+                finalResult.collidedPosition = rayStart.add(rayDirection.mul(finalResult.res));
                 finalResult.collidedShape = this;
-                finalResult.blockType = block();
                 hitBlock = true;
             }
         }
         return hitBlock;
     }
 
-    private Block block() {
+    public Block block() {
         Block block = this.block;
         if (block == null) this.block = block = Block.fromStateId((short) blockEntry.stateId());
         return block;

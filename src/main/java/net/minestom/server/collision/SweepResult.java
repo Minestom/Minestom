@@ -1,13 +1,11 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.block.Block;
 
 final class SweepResult {
     double res;
     double normalX, normalY, normalZ;
-    Point collidedShapePosition;
-    Block blockType;
+    Point collidedPosition;
     Shape collidedShape;
 
     /**
