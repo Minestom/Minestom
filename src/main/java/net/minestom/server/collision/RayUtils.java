@@ -153,7 +153,7 @@ final class RayUtils {
 
         percentage *= 0.99999;
 
-        if (percentage >= 0 && percentage <= finalResult.res) {
+        if (isHit && percentage >= 0 && percentage <= finalResult.res) {
             finalResult.res = percentage;
             finalResult.normalX = 0;
             finalResult.normalY = 0;
@@ -162,9 +162,11 @@ final class RayUtils {
             if (collisionFace == 0) finalResult.normalX = 1;
             if (collisionFace == 1) finalResult.normalZ = 1;
             if (collisionFace == 2) finalResult.normalY = 1;
+
+            return true;
         }
 
-        return isHit;
+        return false;
     }
 
     private static double epsilon(double value) {
