@@ -124,7 +124,7 @@ public class EntityProjectile extends Entity {
             if (entity == this) continue;
             // We won't check collisions with the shooter for the first ticks of the projectile's life,
             // because it spawns in them and will immediately be triggered
-            if (getAliveTicks() < 6 && entity == shooter) continue;
+            //if (getAliveTicks() < 6 && entity == shooter) continue;
             if (!(entity instanceof LivingEntity)) continue;
 
             // Check if moving projectile will hit the entity
