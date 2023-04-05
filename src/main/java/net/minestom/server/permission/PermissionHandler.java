@@ -115,6 +115,8 @@ public interface PermissionHandler {
         final Permission permission = getPermission(permissionName);
 
         if (permission != null) {
+            // If no permission verifier, hand off to no-verifier hasPermission for wildcard support
+            if(permissionVerifier == null) { return hasPermission(permission); }
             // Verify using the permission verifier
             return permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
         }
