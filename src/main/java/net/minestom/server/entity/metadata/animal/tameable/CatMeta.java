@@ -14,11 +14,11 @@ public class CatMeta extends TameableAnimalMeta {
 
     @NotNull
     public Color getColor() {
-        return Color.VALUES[super.metadata.getIndex(OFFSET, 1)];
+        return super.metadata.getIndex(OFFSET, Color.BLACK);
     }
 
     public void setColor(@NotNull Color value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex(OFFSET, Metadata.CatVariant(value));
     }
 
     public boolean isLying() {
