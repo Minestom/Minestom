@@ -28,6 +28,7 @@ public record PhysicsResult(
         boolean collisionZ,
         Vec originalDelta,
         @NotNull Point[] collisionPoints,
-        @NotNull Shape[] collisionShapes
+        @NotNull Shape[] collisionShapes,
+        boolean hasCollision
 ) {
 }
