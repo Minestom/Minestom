@@ -459,8 +459,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final EventFilter<E, ?>[] filterList = filters.toArray(EventFilter[]::new);
             final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                 final Object handler = filter.castHandler(event);
-                final Handle<E> handle = handlers.get(handler).get();
-                if (handle != null) handle.call(event);
+                final WeakReference<Handle<E>> handle = handlers.get(handler);
+                if (handle != null && handle.get() != null) handle.get().call(event);
             };
             // Specialize the consumer depending on the number of filters to avoid looping
             return switch (filterList.length) {
