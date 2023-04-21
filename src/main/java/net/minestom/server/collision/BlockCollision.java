@@ -85,7 +85,6 @@ final class BlockCollision {
         return null;
     }
 
-
     private static PhysicsResult stepPhysics(@NotNull BoundingBox boundingBox,
                                              @NotNull Vec velocity, @NotNull Pos entityPosition,
                                              @NotNull Block.Getter getter, boolean singleCollision) {
