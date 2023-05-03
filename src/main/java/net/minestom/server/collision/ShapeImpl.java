@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-final class ShapeImpl implements Shape {
+public final class ShapeImpl implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d{1,3}", Pattern.MULTILINE);
     private final BoundingBox[] blockSections;
     private final Point relativeStart, relativeEnd;
