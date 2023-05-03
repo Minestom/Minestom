@@ -107,7 +107,7 @@ public class EntityProjectile extends Entity {
             //TODO this might result in entity collide event being called as well as block collide event
             final double collisionDistanceSquared = stuck ?
                     previousPosition.distanceSquared(lastPhysicsResult.newPosition()) : Double.MAX_VALUE;
-            handleEntityCollision(previousPosition, lastPhysicsResult.originalDelta(), collisionDistanceSquared);
+            //handleEntityCollision(previousPosition, lastPhysicsResult.originalDelta(), collisionDistanceSquared);
         }
     }
 
@@ -168,10 +168,8 @@ public class EntityProjectile extends Entity {
         // Handle block physics as if the bounding box didn't exist
         // Also only check for a single collision, because the velocity has to immediately be set to zero,
         // and not move the entity slightly on the axes that didn't collide
-        //TODO improve
-        final BoundingBox physicsBoundingBox = new BoundingBox(0, 0, 0);
         final PhysicsResult result = CollisionUtils.handlePhysics(this,
-                deltaPos, physicsBoundingBox, true, lastPhysicsResult);
+                deltaPos, null, true, lastPhysicsResult);
 
         final boolean stuck = result.collisionX() || result.collisionY() || result.collisionZ();
         if (stuck && !isStuck()) {
