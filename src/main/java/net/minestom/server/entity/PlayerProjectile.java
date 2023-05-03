@@ -12,10 +12,12 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEvent;
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerProjectile extends LivingEntity {
@@ -38,6 +40,20 @@ public class PlayerProjectile extends LivingEntity {
     public void shoot(Point from, double power, double spread) {
         var to = from.add(shooter.getPosition().direction());
         shoot(from, to, power, spread);
+    }
+
+    @Override
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+        var res = super.setInstance(instance, spawnPosition);
+
+        Pos insideBlock = checkInsideBlock(instance);
+        // Check if we're inside of a block
+        if (insideBlock != null) {
+            var e = new ProjectileCollideWithBlockEvent(this, Pos.fromPoint(insideBlock), instance.getBlock(insideBlock));
+            MinecraftServer.getGlobalEventHandler().call(e);
+        }
+
+        return res;
     }
 
     public void shoot(@NotNull Point from, @NotNull Point to, double power, double spread) {
@@ -90,6 +106,19 @@ public class PlayerProjectile extends LivingEntity {
         cooldown = System.currentTimeMillis();
     }
 
+    private Pos checkInsideBlock(@NotNull Instance instance) {
+        var iterator = this.getBoundingBox().getBlocks(this.getPosition());
+
+        while (iterator.hasNext()) {
+            var block = iterator.next();
+            Block b = instance.getBlock(block);
+            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block), this.getBoundingBox());
+            if (hit) return Pos.fromPoint(block);
+        }
+
+        return null;
+    }
+
     @Override
     public void refreshPosition(@NotNull Pos newPosition) {
     }
@@ -105,7 +134,7 @@ public class PlayerProjectile extends LivingEntity {
                 instance, this.getChunk(),
                 this.getBoundingBox(),
                 posBefore, diff,
-                null, false
+                null, true
         );
 
         if (cooldown + 500 < System.currentTimeMillis()) {
