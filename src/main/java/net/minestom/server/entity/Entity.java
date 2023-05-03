@@ -645,7 +645,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
             synchronized (chunk) {
                 drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
-                System.out.println(drag);
             }
         } else drag = airDrag;
 
