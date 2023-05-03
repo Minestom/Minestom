@@ -49,7 +49,7 @@ public class PlayerProjectile extends LivingEntity {
         Pos insideBlock = checkInsideBlock(instance);
         // Check if we're inside of a block
         if (insideBlock != null) {
-            var e = new ProjectileCollideWithBlockEvent(this, Pos.fromPoint(insideBlock), instance.getBlock(insideBlock));
+            var e = new ProjectileCollideWithBlockEvent(this, Pos.fromPoint(spawnPosition), instance.getBlock(spawnPosition));
             MinecraftServer.getGlobalEventHandler().call(e);
         }
 
