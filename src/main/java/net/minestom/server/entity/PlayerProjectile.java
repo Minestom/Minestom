@@ -101,6 +101,12 @@ public class PlayerProjectile extends LivingEntity {
         final Pos posNow = getPosition();
 
         Vec diff = Vec.fromPoint(posNow.sub(posBefore));
+        PhysicsResult result = CollisionUtils.handlePhysics(
+                instance, this.getChunk(),
+                this.getBoundingBox(),
+                posBefore, diff,
+                null, false
+        );
 
         if (cooldown + 500 < System.currentTimeMillis()) {
             float yaw = (float) Math.toDegrees(Math.atan2(diff.x(), diff.z()));
@@ -115,8 +121,6 @@ public class PlayerProjectile extends LivingEntity {
             MinecraftServer.getGlobalEventHandler().call(e);
             return;
         }
-
-        PhysicsResult result = CollisionUtils.handlePhysics(this, diff, null, false);
 
         if (result.hasCollision()) {
             Block hitBlock = null;
