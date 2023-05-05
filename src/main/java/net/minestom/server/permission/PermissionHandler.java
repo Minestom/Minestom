@@ -1,5 +1,8 @@
 package net.minestom.server.permission;
 
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerCheckPermissionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -63,12 +66,22 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull Permission permission) {
+        boolean result = false;
+
         for (Permission permissionLoop : getAllPermissions()) {
             if (permissionLoop.equals(permission)) {
-                return true;
+                result = true;
+                break;
             }
         }
-        return false;
+
+        if (this instanceof Player player) {
+            PlayerCheckPermissionEvent checkPermissionEvent = new PlayerCheckPermissionEvent(player, permission, permission.getPermissionName(), result);
+            EventDispatcher.call(checkPermissionEvent);
+            result = checkPermissionEvent.hasPermission();
+        }
+
+        return result;
     }
 
     /**
@@ -100,13 +113,21 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
-        final Permission permission = getPermission(permissionName);
+        boolean result = false;
 
+        final Permission permission = getPermission(permissionName);
         if (permission != null) {
             // Verify using the permission verifier
-            return permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
+            result = permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
         }
-        return false;
+
+        if (this instanceof Player player) {
+            PlayerCheckPermissionEvent checkPermissionEvent = new PlayerCheckPermissionEvent(player, permission, permissionName, result);
+            EventDispatcher.call(checkPermissionEvent);
+            result = checkPermissionEvent.hasPermission();
+        }
+
+        return result;
     }
 
     /**
