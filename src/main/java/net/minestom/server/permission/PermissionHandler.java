@@ -1,5 +1,9 @@
 package net.minestom.server.permission;
 
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.permission.PermissionCheckEvent;
+import net.minestom.server.event.permission.PermissionNameCheckEvent;
+import net.minestom.server.event.trait.PermissionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -63,6 +67,13 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull Permission permission) {
+        PermissionEvent event = new PermissionCheckEvent(this, permission);
+        EventDispatcher.call(event);
+        PermissionEvent.Result result = event.getResult();
+        if (result != PermissionEvent.Result.DEFAULT) {
+            return result == PermissionEvent.Result.ALLOW;
+        }
+
         for (Permission permissionLoop : getAllPermissions()) {
             if (permissionLoop.equals(permission)) {
                 return true;
@@ -100,6 +111,13 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
+        PermissionEvent event = new PermissionNameCheckEvent(this, permissionName, permissionVerifier);
+        EventDispatcher.call(event);
+        PermissionEvent.Result result = event.getResult();
+        if (result != PermissionEvent.Result.DEFAULT) {
+            return result == PermissionEvent.Result.ALLOW;
+        }
+
         final Permission permission = getPermission(permissionName);
 
         if (permission != null) {
