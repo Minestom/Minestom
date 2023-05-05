@@ -2,6 +2,7 @@ package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.utils.block.BlockIterator;
 
 final class EntityCollision {
     public static Entity checkCollision(Entity entity, Vec entityVelocity, double extendRadius) {
@@ -16,20 +17,26 @@ final class EntityCollision {
         var boundingBox = new BoundingBox(0.00, 0.00, 0.00);
         var maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth()/2 * boundingBox.depth()/2 + boundingBox.width()/2 * boundingBox.width()/2, 1/3.0);
 
-        for (Entity e : entity.getInstance().getNearbyEntities(entity.getPosition(), extendRadius + maxDistance)) {
-            if (e == entity) continue;
+        BlockIterator iterator = new BlockIterator(Vec.fromPoint(entity.getPosition()), entityVelocity, 0, entityVelocity.length());
 
-            // Overlapping with entity, math can't be done we return the entity
-            if (e.getBoundingBox().intersectBox(entity.getPosition().sub(e.getPosition()), entity.getBoundingBox())) {
-                return e;
-            }
+        while (iterator.hasNext()) {
+            var pos = iterator.next();
 
-            // Check collisions with entity
-            e.getBoundingBox().intersectBoxSwept(entity.getPosition(), entityVelocity, e.getPosition(), boundingBox, sweepResult);
+            for (Entity e : entity.getInstance().getNearbyEntities(pos, extendRadius + maxDistance)) {
+                if (e == entity) continue;
 
-            if (sweepResult.res < closestDistance && sweepResult.res < 1) {
-                closestDistance = sweepResult.res;
-                closestEntity = e;
+                // Overlapping with entity, math can't be done we return the entity
+                if (e.getBoundingBox().intersectBox(entity.getPosition().sub(e.getPosition()), entity.getBoundingBox())) {
+                    return e;
+                }
+
+                // Check collisions with entity
+                e.getBoundingBox().intersectBoxSwept(entity.getPosition(), entityVelocity, e.getPosition(), boundingBox, sweepResult);
+
+                if (sweepResult.res < closestDistance && sweepResult.res < 1) {
+                    closestDistance = sweepResult.res;
+                    closestEntity = e;
+                }
             }
         }
 
