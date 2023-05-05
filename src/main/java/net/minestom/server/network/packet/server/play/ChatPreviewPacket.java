@@ -32,7 +32,7 @@ public record ChatPreviewPacket(int queryId, @Nullable Component preview) implem
 
     @Override
     public @NotNull Collection<Component> components() {
-        return List.of(preview);
+        return preview == null ? List.of() : List.of(preview);
     }
 
     @Override

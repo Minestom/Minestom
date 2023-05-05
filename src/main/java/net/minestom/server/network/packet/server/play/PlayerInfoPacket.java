@@ -79,7 +79,7 @@ public record PlayerInfoPacket(@NotNull Action action,
                 List<Component> components = new ArrayList<>();
                 for (Entry entry : entries) {
                     if (entry instanceof ComponentHolder) {
-                        components.addAll(((ComponentHolder<? extends Entry>) entry).components());
+                        components.addAll(((ComponentHolder<?>) entry).components());
                     }
                 }
                 return components;
@@ -164,8 +164,7 @@ public record PlayerInfoPacket(@NotNull Action action,
 
         @Override
         public @NotNull AddPlayer copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            return displayName != null ?
-                    new AddPlayer(uuid, name, properties, gameMode, ping, operator.apply(displayName), playerPublicKey) : this;
+            return new AddPlayer(uuid, name, properties, gameMode, ping, operator.apply(displayName), playerPublicKey);
         }
 
         public record Property(@NotNull String name, @NotNull String value,
@@ -230,7 +229,7 @@ public record PlayerInfoPacket(@NotNull Action action,
 
         @Override
         public @NotNull UpdateDisplayName copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            return displayName != null ? new UpdateDisplayName(uuid, operator.apply(displayName)) : this;
+            return new UpdateDisplayName(uuid, operator.apply(displayName));
         }
     }
 

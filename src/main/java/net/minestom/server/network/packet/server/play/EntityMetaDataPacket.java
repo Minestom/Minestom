@@ -2,16 +2,16 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -59,8 +59,11 @@ public record EntityMetaDataPacket(int entityId,
         return this.entries.values()
                 .stream()
                 .map(Metadata.Entry::value)
-                .filter(entry -> entry instanceof Component)
-                .map(entry -> (Component) entry)
+                .filter(entry -> entry instanceof Component || entry instanceof ItemStack)
+                .flatMap(entry -> entry instanceof Component component
+                        ? Stream.ofNullable(component)
+                        : Stream.concat(((ItemStack) entry).getLore().stream(),
+                        Stream.ofNullable(((ItemStack) entry).getDisplayName())))
                 .toList();
     }
 
@@ -71,7 +74,19 @@ public record EntityMetaDataPacket(int entityId,
         this.entries.forEach((key, value) -> {
             final var v = value.value();
 
-            entries.put(key, v instanceof Component c ? Metadata.OptChat(operator.apply(c)) : value);
+            if(v instanceof ItemStack item) {
+                value = Metadata.Slot(item.withDisplayName(operator).withLore(lines -> {
+                    lines.replaceAll(operator);
+
+                    return lines;
+                }));
+            } else if(v instanceof Component component) {
+                component = operator.apply(component);
+
+                value = value.type() == Metadata.TYPE_OPTCHAT ? Metadata.OptChat(component) : Metadata.Chat(component);
+            }
+
+            entries.put(key, value);
         });
 
         return new EntityMetaDataPacket(this.entityId, entries);
