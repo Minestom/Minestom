@@ -28,7 +28,7 @@ final class BlockCollision {
                                        boolean singleCollision) {
         if (velocity.isZero()) {
             // TODO should return a constant
-            return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, velocity, new Point[3], new Shape[3], false);
+            return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false, velocity, new Point[3], new Shape[3], false, 1);
         }
         // Fast-exit using cache
         final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);
@@ -145,7 +145,7 @@ final class BlockCollision {
 
         return new PhysicsResult(result.newPosition(), new Vec(newDeltaX, newDeltaY, newDeltaZ),
                 newDeltaY == 0 && velocity.y() < 0,
-                foundCollisionX, foundCollisionY, foundCollisionZ, velocity, collidedPoints, collisionShapes, hasCollided);
+                foundCollisionX, foundCollisionY, foundCollisionZ, velocity, collidedPoints, collisionShapes, hasCollided, result.percentage());
     }
 
     private static PhysicsResult computePhysics(@NotNull BoundingBox boundingBox,
@@ -181,7 +181,7 @@ final class BlockCollision {
 
         return new PhysicsResult(finalPos, new Vec(remainingX, remainingY, remainingZ),
                 collisionY, collisionX, collisionY, collisionZ,
-                Vec.ZERO, null, null, false);
+                Vec.ZERO, null, null, false, finalResult.res);
     }
 
     private static void slowPhysics(@NotNull BoundingBox boundingBox,

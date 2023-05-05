@@ -47,7 +47,7 @@ public final class CollisionUtils {
      * @return the closest entity we collide with
      */
     public static Entity checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        return checkEntityCollisions(entity, entityVelocity, 3);
+        return checkEntityCollisions(entity, entityVelocity, 3, Double.MAX_VALUE);
     }
 
     /**
@@ -60,8 +60,8 @@ public final class CollisionUtils {
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
      * @return the closest entity we collide with
      */
-    public static Entity checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity, double extendRadius) {
-        return EntityCollision.checkCollision(entity, entityVelocity, extendRadius);
+    public static Entity checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity, double extendRadius, double startPercentage) {
+        return EntityCollision.checkCollision(entity, entityVelocity, extendRadius, startPercentage);
     }
 
     /**

@@ -5,10 +5,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.block.BlockIterator;
 
 final class EntityCollision {
-    public static Entity checkCollision(Entity entity, Vec entityVelocity, double extendRadius) {
+    public static Entity checkCollision(Entity entity, Vec entityVelocity, double extendRadius, double startPercentage) {
         if (entity.getInstance() == null) return null;
 
-        SweepResult sweepResult = new SweepResult(Double.MAX_VALUE, 0, 0, 0, null);
+        SweepResult sweepResult = new SweepResult(startPercentage, 0, 0, 0, null);
 
         double closestDistance = Double.MAX_VALUE;
         Entity closestEntity = null;

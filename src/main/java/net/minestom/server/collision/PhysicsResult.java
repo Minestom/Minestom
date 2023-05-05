@@ -29,6 +29,7 @@ public record PhysicsResult(
         Vec originalDelta,
         @NotNull Point[] collisionPoints,
         @NotNull Shape[] collisionShapes,
-        boolean hasCollision
+        boolean hasCollision,
+        double percentage
 ) {
 }
