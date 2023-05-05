@@ -10,7 +10,7 @@ final class EntityCollision {
 
         SweepResult sweepResult = new SweepResult(startPercentage, 0, 0, 0, null);
 
-        double closestDistance = Double.MAX_VALUE;
+        double closestDistance = startPercentage;
         Entity closestEntity = null;
 
         // var boundingBox = entity.getBoundingBox();
