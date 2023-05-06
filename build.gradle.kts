@@ -104,13 +104,17 @@ tasks {
         replaceToken("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"", gitFile)
     }
 
-    nexusPublishing.repositories.sonatype {
-        nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"))
-        snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+    nexusPublishing{
+        useStaging.set(true)
 
-        if (System.getenv("SONATYPE_USERNAME") != null) {
-            username.set(System.getenv("SONATYPE_USERNAME"))
-            password.set(System.getenv("SONATYPE_PASSWORD"))
+        repositories.sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+
+            if (System.getenv("SONATYPE_USERNAME") != null) {
+                username.set(System.getenv("SONATYPE_USERNAME"))
+                password.set(System.getenv("SONATYPE_PASSWORD"))
+            }
         }
     }
 
