@@ -2,7 +2,7 @@ name: Gradle Publish to Maven Central
 
 on:
   push:
-    branches: [ feat/gradle_to_the_stone_age ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -28,4 +28,4 @@ jobs:
           SHORT_COMMIT_HASH: ${{ steps.vars.outputs.short_commit_hash }}
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_SUMMARY
+          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
