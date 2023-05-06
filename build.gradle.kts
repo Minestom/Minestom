@@ -106,6 +106,7 @@ tasks {
 
     nexusPublishing{
         useStaging.set(true)
+        this.packageGroup.set("dev.hollowcube")
 
         repositories.sonatype {
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
