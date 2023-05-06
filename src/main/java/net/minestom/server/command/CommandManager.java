@@ -98,7 +98,7 @@ public final class CommandManager {
      * Executes a command for a {@link CommandSender}.
      *
      * @param sender  the sender of the command
-     * @param command the raw command string (without the command prefix)
+     * @param rawCommand the raw command string (without the command prefix)
      * @return the execution result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String rawCommand) {
