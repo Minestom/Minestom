@@ -1,7 +1,7 @@
 name: Trigger Jitpack Build
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
   workflow_dispatch:
 jobs:
@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Jitpack Build
-        run: curl "https://jitpack.io/com/github/Minestom/Minestom/${GITHUB_SHA:0:10}/build.log"
+        run: curl "https://jitpack.io/com/github/hollow-cube/minestom-ce/${GITHUB_SHA:0:10}/build.log"
