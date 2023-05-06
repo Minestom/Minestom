@@ -4,6 +4,10 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.tag.TagWritable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,6 +26,19 @@ public class ItemAttributeTest {
         var item = ItemStack.builder(Material.STICK)
                 .meta(builder -> builder.attributes(attributes))
                 .build();
+        assertEquals(attributes, item.meta().getAttributes());
+    }
+
+    @Test
+    public void attributeReader() {
+        var attributes = List.of(new ItemAttribute(
+                new UUID(0, 0), "generic.attack_damage", Attribute.ATTACK_DAMAGE,
+                AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND));
+
+        TagHandler handler = TagHandler.newHandler();
+        handler.setTag(ItemTags.ATTRIBUTES, attributes);
+        var item = ItemStack.fromNBT(Material.STICK, handler.asCompound());
+
         assertEquals(attributes, item.meta().getAttributes());
     }
 

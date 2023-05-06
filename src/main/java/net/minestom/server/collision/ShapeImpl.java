@@ -97,8 +97,8 @@ final class ShapeImpl implements Shape {
                 finalResult.collidedShapePosition = shapePos;
                 finalResult.collidedShape = this;
                 finalResult.blockType = block();
+                hitBlock = true;
             }
-            hitBlock = true;
         }
         return hitBlock;
     }

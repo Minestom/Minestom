@@ -58,11 +58,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     private static byte generateId() {
-        final byte id = (byte) Math.abs((byte) ID_COUNTER.incrementAndGet());
-        if (id == 0) { // zero is player's inventory id
-            return generateId();
-        }
-        return id;
+        return (byte) ID_COUNTER.updateAndGet(i -> i + 1 >= 128 ? 1 : i + 1);
     }
 
     /**
