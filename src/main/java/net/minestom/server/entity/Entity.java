@@ -9,9 +9,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
+import net.minestom.server.collision.*;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -84,7 +82,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
 
     private static final int VELOCITY_UPDATE_INTERVAL = 1;
 
@@ -1719,6 +1717,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 
         return nearby.orElse(null);
+    }
+
+    @Override
+    public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
+        return boundingBox.intersectBox(positionRelative, boundingBox);
+    }
+
+    @Override
+    public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
+        return boundingBox.intersectBoxSwept(rayStart, rayDirection, shapePos, moving, finalResult);
+    }
+
+    @Override
+    public @NotNull Point relativeStart() {
+        return boundingBox.relativeStart();
+    }
+
+    @Override
+    public @NotNull Point relativeEnd() {
+        return boundingBox.relativeEnd();
     }
 
     public enum Pose {

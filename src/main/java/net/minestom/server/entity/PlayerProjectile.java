@@ -144,11 +144,13 @@ public class PlayerProjectile extends LivingEntity {
             cooldown = System.currentTimeMillis();
         }
 
-        Entity collided = CollisionUtils.checkEntityCollisions(this, posBefore, diff, 3, result.percentage());
-        if (collided != null && collided != shooter && collided != this) {
-            var e = new ProjectileCollideWithEntityEvent(this, collided.getPosition(), collided);
-            MinecraftServer.getGlobalEventHandler().call(e);
-            return;
+        PhysicsResult collided = CollisionUtils.checkEntityCollisions(this, posBefore, diff, 3, result);
+        if (collided != null && collided.collisionShapes()[0] != shooter) {
+            if (collided.collisionShapes()[0] instanceof Entity entity) {
+                var e = new ProjectileCollideWithEntityEvent(this, collided.newPosition(), entity);
+                MinecraftServer.getGlobalEventHandler().call(e);
+                return;
+            }
         }
 
         if (result.hasCollision()) {

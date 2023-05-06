@@ -2,7 +2,7 @@ package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
 
-final class SweepResult {
+public final class SweepResult {
     double res;
     double normalX, normalY, normalZ;
     Point collidedPosition;

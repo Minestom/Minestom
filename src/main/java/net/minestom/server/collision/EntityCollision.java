@@ -1,21 +1,23 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.block.BlockIterator;
 
 final class EntityCollision {
-    public static Entity checkCollision(Entity entity, Point point, Vec entityVelocity, double extendRadius, double res) {
-        if (entity.getInstance() == null) return null;
-        SweepResult sweepResult = new SweepResult(res, 0, 0, 0, null);
+    public static PhysicsResult checkCollision(Entity entity, Point point, Vec entityVelocity, double extendRadius, PhysicsResult res) {
+        double minimumRes = res != null ? res.percentage() : Double.MAX_VALUE;
 
-        double closestDistance = res;
+        if (entity.getInstance() == null) return null;
+        SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null);
+
+        double closestDistance = minimumRes;
         Entity closestEntity = null;
 
         var boundingBox = entity.getBoundingBox();
-        // var boundingBox = new BoundingBox(0.00, 0.00, 0.00);
         var maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth()/2 * boundingBox.depth()/2 + boundingBox.width()/2 * boundingBox.width()/2, 1/3.0);
 
         BlockIterator iterator = new BlockIterator(Vec.fromPoint(point), entityVelocity, 0, entityVelocity.length());
@@ -28,7 +30,18 @@ final class EntityCollision {
 
                 // Overlapping with entity, math can't be done we return the entity
                 if (e.getBoundingBox().intersectBox(point.sub(e.getPosition()), entity.getBoundingBox())) {
-                    return e;
+                    var p = Pos.fromPoint(point);
+                    return new PhysicsResult(p,
+                            Vec.ZERO,
+                            false,
+                            true,
+                            true,
+                            true,
+                            entityVelocity,
+                            new Pos[] {p, p, p},
+                            new Shape[] {e.getBoundingBox(), e.getBoundingBox(), e.getBoundingBox()},
+                            true,
+                            0);
                 }
 
                 // Check collisions with entity
@@ -39,9 +52,21 @@ final class EntityCollision {
                     closestEntity = e;
                 }
             }
-
         }
 
-        return closestEntity;
+        Pos[] collisionPoints = new Pos[3];
+
+        return new PhysicsResult(Pos.fromPoint(point).add(entityVelocity.mul(closestDistance)),
+                Vec.ZERO,
+                sweepResult.normalY == -1,
+                sweepResult.normalX != 0,
+                sweepResult.normalY != 0,
+                sweepResult.normalZ != 0,
+                entityVelocity,
+                collisionPoints,
+                new Shape[] {closestEntity, closestEntity, closestEntity},
+                sweepResult.normalX != 0 || sweepResult.normalZ != 0 || sweepResult.normalY != 0,
+                sweepResult.res
+        );
     }
 }
