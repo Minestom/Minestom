@@ -97,7 +97,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
-    public static Entry<CatMeta.Color> CatVariant(@NotNull CatMeta.Color value) {
+    public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, NetworkBuffer.CAT_VARIANT);
     }
 

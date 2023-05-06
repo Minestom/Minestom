@@ -61,7 +61,7 @@ public final class NetworkBuffer {
     public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypes.OPT_VAR_INT;
     public static final Type<Entity.Pose> POSE = NetworkBufferTypes.POSE;
     public static final Type<DeathLocation> DEATH_LOCATION = NetworkBufferTypes.DEATH_LOCATION;
-    public static final Type<CatMeta.Color> CAT_VARIANT = NetworkBufferTypes.CAT_VARIANT;
+    public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypes.CAT_VARIANT;
     public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypes.FROG_VARIANT;
 
     ByteBuffer nioBuffer;
