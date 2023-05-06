@@ -39,7 +39,7 @@ final class EntityCollision {
                             true,
                             entityVelocity,
                             new Pos[] {p, p, p},
-                            new Shape[] {e.getBoundingBox(), e.getBoundingBox(), e.getBoundingBox()},
+                            new Shape[] {e, e, e},
                             true,
                             0);
                 }
