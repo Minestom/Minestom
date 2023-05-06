@@ -19,6 +19,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Set outputs
+        id: vars
+        run: |
+          echo "short_commit_hash=${GITHUB_SHA::10}" >> $GITHUB_OUTPUT
       - name: Publish to Sonatype
-        run: ./gradlew publishToSonatype
-        # closeAndReleaseSonatypeStagingRepository
+        env:
+          SHORT_COMMIT_HASH: ${{ steps.vars.outputs.short_commit_hash }}
+        run: |
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_SUMMARY

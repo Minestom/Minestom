@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.nexuspublish)
 }
 
-version = System.getenv("GIT_COMMIT_SHA") ?: "dev"
+version = System.getenv("SHORT_COMMIT_HASH") ?: "dev"
 
 allprojects {
     apply(plugin = "java")
