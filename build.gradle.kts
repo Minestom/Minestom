@@ -170,7 +170,7 @@ tasks {
     signing {
         isRequired = System.getenv("CI") != null
 
-        val privateKey = System.getenv("GPG_SECRET_KEY")
+        val privateKey = System.getenv("GPG_PRIVATE_KEY")
         val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
         useInMemoryPgpKeys(privateKey, keyPassphrase)
 
