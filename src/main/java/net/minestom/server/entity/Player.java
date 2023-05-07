@@ -55,6 +55,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -123,6 +124,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private DimensionType dimensionType;
     private GameMode gameMode;
+    private DeathLocation deathLocation;
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
      * in the range of {@link MinecraftServer#getChunkViewDistance()}
@@ -250,10 +252,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "minecraft:chat_type", Messenger.chatRegistry(),
                 "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
                 "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT()));
+
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
                 List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
-                false, true, false, levelFlat);
+                false, true, false, levelFlat, deathLocation);
         sendPacket(joinGamePacket);
 
         // Server brand name
@@ -428,6 +431,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             if (chatMessage != null) {
                 Audiences.players().sendMessage(chatMessage);
             }
+
+            // Set death location
+            if (getInstance() != null)
+                setDeathLocation(getInstance().getDimensionType(), getPosition());
         }
         super.kill();
     }
@@ -443,8 +450,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setFireForDuration(0);
         setOnFire(false);
         refreshHealth();
+
         sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+               0, gameMode, gameMode, false, levelFlat, true, deathLocation));
+
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
@@ -969,7 +978,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true);
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -989,6 +998,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         getInventory().update();
         teleport(getPosition());
+    }
+
+    public void setDeathLocation(@NotNull DimensionType type, @NotNull Pos position) {
+        this.deathLocation = new DeathLocation(type.getName().asString(), position);
+    }
+
+    public @Nullable DeathLocation getDeathLocation() {
+        return this.deathLocation;
     }
 
     /**
@@ -1342,7 +1359,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
         sendPacket(new RespawnPacket(dimensionType.toString(), getDimensionType().getName().asString(),
-                0, gameMode, gameMode, false, levelFlat, true));
+                0, gameMode, gameMode, false, levelFlat, true, deathLocation));
         refreshClientStateAfterRespawn();
     }
 

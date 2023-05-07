@@ -15,8 +15,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 17
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
     - name: Build javadoc
-      run: gradle javadoc
+      run: ./gradlew javadoc
       
     - name: Deploy javadoc to its assigned branch
       uses: s0/git-publish-subdir-action@develop
