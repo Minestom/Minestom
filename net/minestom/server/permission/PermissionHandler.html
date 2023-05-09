@@ -214,6 +214,8 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasPermission</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</span></div>
 <div class="block">Gets if this handler has the permission <code>permission</code>.
+ This method will also pattern match for wildcards. For example, if this handler has the permission <code>"*"</code>, this method will always return true.
+ However, if this handler has the permission <code>"foo.b*r.baz"</code>, this method will return true if <code>permission</code> is <code>"foo.baaar.baz"</code> or <code>"foo.br.baz</code>, but not <code>"foo.bar.bz"</code>.
  <p>
  Uses <a href="Permission.html#equals(java.lang.Object)"><code>Permission.equals(Object)</code></a> internally.</div>
 <dl class="notes">
