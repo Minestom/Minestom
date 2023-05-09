@@ -112,15 +112,17 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
-        final Permission permission = getPermission(permissionName);
+        Permission permission = getPermission(permissionName);
 
-        if (permission != null) {
-            // If no permission verifier, hand off to no-verifier hasPermission for wildcard support
-            if(permissionVerifier == null) { return hasPermission(permission); }
-            // Verify using the permission verifier
-            return permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
+        if (permission == null && permissionVerifier == null) {
+            permission = new Permission(permissionName, null);
+        } else if (permission == null) {
+            return false;
         }
-        return false;
+        // If no permission verifier, hand off to no-verifier hasPermission for wildcard support
+        if(permissionVerifier == null) { return hasPermission(permission); }
+        // Verify using the permission verifier
+        return permissionVerifier.isValid(permission.getNBTData());
     }
 
     /**
