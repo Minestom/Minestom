@@ -85,6 +85,8 @@ public class TestPermissions {
         Permission permission = new Permission("foo.b*r.baz");
         Permission match = new Permission("foo.baaar.baz");
         Permission match2 = new Permission("foo.br.baz");
+        String match3 = "foo.br.baz";
+        String match4 = "foo.baaar.baz";
         Permission nomatch = new Permission("foo.br.bz");
         Permission nomatch2 = new Permission("foo.b.baz");
         assertFalse(player.hasPermission(match));
@@ -96,6 +98,8 @@ public class TestPermissions {
 
         assertTrue(player.hasPermission(match));
         assertTrue(player.hasPermission(match2));
+        assertTrue(player.hasPermission(match3));
+        assertTrue(player.hasPermission(match4));
         assertFalse(player.hasPermission(nomatch));
         assertFalse(player.hasPermission(nomatch2));
     }
@@ -105,6 +109,8 @@ public class TestPermissions {
         Permission permission = new Permission("foo.b*");
         Permission match = new Permission("foo.baaar.baz");
         Permission match2 = new Permission("foo.b");
+        String match3 = "foo.b";
+        String match4 = "foo.baaar.baz";
         Permission nomatch = new Permission("foo.");
         Permission nomatch2 = new Permission("foo/b");
         assertFalse(player.hasPermission(match));
@@ -116,6 +122,8 @@ public class TestPermissions {
 
         assertTrue(player.hasPermission(match));
         assertTrue(player.hasPermission(match2));
+        assertTrue(player.hasPermission(match3));
+        assertTrue(player.hasPermission(match4));
         assertFalse(player.hasPermission(nomatch));
         assertFalse(player.hasPermission(nomatch2));
     }
