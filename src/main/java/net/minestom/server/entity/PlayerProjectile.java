@@ -27,6 +27,7 @@ public class PlayerProjectile extends LivingEntity {
     public PlayerProjectile(Entity shooter, EntityType type) {
         super(type);
         this.shooter = shooter;
+        this.hasCollision = false;
         setup();
     }
 

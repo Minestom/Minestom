@@ -26,7 +26,7 @@ final class EntityCollision {
             var pos = iterator.next();
 
             for (Entity e : entity.getInstance().getNearbyEntities(pos, extendRadius + maxDistance)) {
-                if (e == entity) continue;
+                if (e == entity || !e.hasCollision()) continue;
 
                 // Overlapping with entity, math can't be done we return the entity
                 if (e.getBoundingBox().intersectBox(point.sub(e.getPosition()), entity.getBoundingBox())) {

@@ -108,6 +108,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
+    protected boolean hasCollision = true;
 
     /**
      * The amount of drag applied on the Y axle.
@@ -1737,6 +1738,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Override
     public @NotNull Point relativeEnd() {
         return boundingBox.relativeEnd();
+    }
+
+    public boolean hasCollision() {
+        return hasCollision;
     }
 
     public enum Pose {
