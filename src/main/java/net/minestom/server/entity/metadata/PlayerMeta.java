@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 
+import java.util.Map;
+
 public class PlayerMeta extends LivingEntityMeta {
     public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
@@ -108,6 +110,8 @@ public class PlayerMeta extends LivingEntityMeta {
     }
 
     public void setLeftShoulderEntityData(@Nullable NBT value) {
+        if (value == null) value = NBT.Compound(Map.of());
+
         super.metadata.setIndex(OFFSET + 4, Metadata.NBT(value));
     }
 
@@ -117,6 +121,8 @@ public class PlayerMeta extends LivingEntityMeta {
     }
 
     public void setRightShoulderEntityData(@Nullable NBT value) {
+        if (value == null) value = NBT.Compound(Map.of());
+
         super.metadata.setIndex(OFFSET + 5, Metadata.NBT(value));
     }
 

@@ -1,13 +1,16 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
+import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
+import java.util.UUID;
 
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 
@@ -79,5 +82,24 @@ public class InstanceUnregisterIntegrationTest {
         //noinspection UnusedAssignment
         chunk = null;
         waitUntilCleared(ref);
+    }
+
+    @Test
+    public void testGCWithEventsLambda(Env env) {
+        var ref = new WeakReference<>(new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD));
+        env.process().instance().registerInstance(ref.get());
+
+        tmp(ref.get());
+
+        ref.get().tick(0);
+        env.process().instance().unregisterInstance(ref.get());
+
+        waitUntilCleared(ref);
+    }
+
+    private void tmp(InstanceContainer instanceContainer) {
+        instanceContainer.eventNode().addListener(InstanceTickEvent.class, (e) -> {
+            var uuid = instanceContainer.getUniqueId();
+        });
     }
 }
