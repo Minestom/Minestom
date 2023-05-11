@@ -624,9 +624,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Update velocity
-        if (hasVelocity || !newVelocity.isZero()) {
+        if (!noGravity && (hasVelocity || !newVelocity.isZero())) {
             updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
         }
+
         // Verify if velocity packet has to be sent
         if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
             if (!isPlayer && (hasVelocity || !lastVelocityWasZero)) {
