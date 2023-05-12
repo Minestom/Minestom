@@ -12,13 +12,28 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent {
     private final Player player;
-    private final Block block;
+    private @NotNull Block block;
     private final Point blockPosition;
 
     public PlayerFinishDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition) {
         this.player = player;
         this.block = block;
         this.blockPosition = blockPosition;
+    }
+
+    /**
+     * Changes which block was dug
+     * <p/>
+     * This has somewhat odd behavior;
+     * If you set it from a previously solid block to a non-solid block
+     * then cancel the respective {@link PlayerBlockBreakEvent}
+     * it will allow the player to phase through the block and into the floor
+     * (only if the player is standing on top of the block)
+     *
+     * @param block the block to set the result to
+     */
+    public void setBlock(@NotNull Block block) {
+        this.block = block;
     }
 
     /**

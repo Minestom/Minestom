@@ -96,7 +96,7 @@ public final class PlayerDiggingListener {
         PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, blockPosition);
         EventDispatcher.call(playerFinishDiggingEvent);
 
-        return breakBlock(instance, player, blockPosition, block, blockFace);
+        return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
     }
 
     private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
