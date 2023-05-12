@@ -23,7 +23,7 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
 
     /**
      * Changes which block was dug
-     * <p/>
+     * <p>
      * This has somewhat odd behavior;
      * If you set it from a previously solid block to a non-solid block
      * then cancel the respective {@link PlayerBlockBreakEvent}
