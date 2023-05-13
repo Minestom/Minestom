@@ -48,6 +48,11 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
         return blocksItemUse;
     }
 
+    /**
+     * Sets if the event should block the item use.
+     *
+     * @param blocks true if the item use should be blocked, false otherwise
+     */
     public void setBlockingItemUse(boolean blocks) {
         this.blocksItemUse = blocks;
     }
