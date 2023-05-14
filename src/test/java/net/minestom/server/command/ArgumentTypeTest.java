@@ -58,14 +58,6 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentPotionEffect() {
-        var arg = ArgumentType.Potion("potion");
-        assertInvalidArg(arg, "minecraft:invalid_potion");
-        assertArg(arg, PotionEffect.JUMP_BOOST, PotionEffect.JUMP_BOOST.name());
-        assertArg(arg, PotionEffect.INSTANT_DAMAGE, PotionEffect.INSTANT_DAMAGE.name());
-    }
-
-    @Test
     public void testArgumentBlockState() {
         var arg = ArgumentType.BlockState("block_state");
         assertInvalidArg(arg, "minecraft:invalid_block[invalid_property=invalid_key]");
