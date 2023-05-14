@@ -101,5 +101,4 @@ public record SoundEffectPacket(
     public int getId() {
         return ServerPacketIdentifier.SOUND_EFFECT;
     }
-
 }
