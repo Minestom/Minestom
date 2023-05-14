@@ -42,7 +42,6 @@ public class Main {
         commandManager.register(new TeleportCommand());
         commandManager.register(new PlayersCommand());
         commandManager.register(new FindCommand());
-        commandManager.register(new PotionCommand());
         commandManager.register(new TitleCommand());
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
@@ -97,27 +96,6 @@ public class Main {
             // on legacy versions, colors will be converted to the section format so it'll work there too
             responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
             //responseData.setPlayersHidden(true);
-        });
-
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerChatEvent.class, e -> {
-            var playPos = e.getPlayer().getPosition().add(5.0, 0.0, 0.0);
-
-            switch (e.getMessage()) {
-                case "a" -> {
-                    System.out.println("with position");
-                    e.getPlayer().playSound(Sound.sound(SoundEvent.AMBIENT_CRIMSON_FOREST_MOOD, Sound.Source.MASTER, 1f, 1f), playPos.x(), playPos.y(), playPos.z());
-                }
-                case "b" -> {
-                    System.out.println("without anything");
-                    e.getPlayer().playSound(Sound.sound(SoundEvent.AMBIENT_CRIMSON_FOREST_MOOD, Sound.Source.MASTER, 1f, 1f));
-                }
-                case "c" -> {
-                    System.out.println("with self emitter");
-                    e.getPlayer().playSound(Sound.sound(SoundEvent.AMBIENT_CRIMSON_FOREST_MOOD, Sound.Source.MASTER, 1f, 1f), Sound.Emitter.self());
-                }
-            }
-
-
         });
 
         PlayerInit.init();

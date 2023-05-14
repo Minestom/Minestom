@@ -7,6 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,13 @@ public record SoundEffectPacket(
         float pitch,
         long seed
 ) implements ServerPacket {
+
+    public SoundEffectPacket {
+        Check.argCondition(soundEvent == null && soundName == null, "soundEvent and soundName cannot both be null");
+        Check.argCondition(soundEvent != null && soundName != null, "soundEvent and soundName cannot both be present");
+        Check.argCondition(soundName == null && range != null, "range cannot be present if soundName is null");
+    }
+
     private static @NotNull SoundEffectPacket fromReader(@NotNull NetworkBuffer reader) {
         int soundId = reader.read(VAR_INT);
         SoundEvent soundEvent;

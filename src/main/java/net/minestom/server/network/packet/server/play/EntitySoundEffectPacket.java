@@ -28,6 +28,7 @@ public record EntitySoundEffectPacket(
     public EntitySoundEffectPacket {
         Check.argCondition(soundEvent == null && soundName == null, "soundEvent and soundName cannot both be null");
         Check.argCondition(soundEvent != null && soundName != null, "soundEvent and soundName cannot both be present");
+        Check.argCondition(soundName == null && range != null, "range cannot be present if soundName is null");
     }
 
     public EntitySoundEffectPacket(@NotNull SoundEvent soundEvent, @Nullable Float range, @NotNull Sound.Source source,
@@ -80,7 +81,7 @@ public record EntitySoundEffectPacket(
         } else {
             writer.write(VAR_INT, 0);
             writer.write(STRING, soundName);
-            writer.writeOptional(FLOAT, null);
+            writer.writeOptional(FLOAT, range);
         }
         writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(source));
         writer.write(VAR_INT, entityId);

@@ -1,5 +1,13 @@
 package net.minestom.server.network;
 
+import java.util.BitSet;
+import java.util.Collection;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import java.util.UUID;
+
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -16,7 +24,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
