@@ -8,14 +8,17 @@ import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record MessageSignature(byte @NotNull [] signature) implements NetworkBuffer.Writer {
+
+    static final int SIGNATURE_BYTE_LENGTH = 256;
+
     public MessageSignature {
-        if (signature.length != 256) {
+        if (signature.length != SIGNATURE_BYTE_LENGTH) {
             throw new IllegalArgumentException("Signature must be 256 bytes long");
         }
     }
 
     public MessageSignature(@NotNull NetworkBuffer reader) {
-        this(reader.readBytes(256));
+        this(reader.readBytes(SIGNATURE_BYTE_LENGTH));
     }
 
     @Override

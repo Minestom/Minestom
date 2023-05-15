@@ -10,7 +10,7 @@ public final class SignedMessageBody {
     public record Packed(@NotNull String content, @NotNull Instant timeStamp, long salt,
                          LastSeenMessages.@NotNull Packed lastSeen) implements NetworkBuffer.Writer {
         public Packed {
-            if (content.length() > 256) {
+            if (content.length() > MessageSignature.SIGNATURE_BYTE_LENGTH) {
                 throw new IllegalArgumentException("Message content too long");
             }
         }
