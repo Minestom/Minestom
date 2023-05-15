@@ -17,8 +17,6 @@ application {
 dependencies {
     implementation(rootProject)
     implementation(libs.jNoise)
-    implementation("ch.qos.logback:logback-core:1.4.5")
-    implementation("ch.qos.logback:logback-classic:1.4.5")
 }
 
 tasks.withType<ShadowJar> {
