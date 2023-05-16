@@ -36,6 +36,8 @@ public class PlayerVehicleListener {
 
     public static void boatSteerListener(ClientSteerBoatPacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
+        /* The packet may have been received after already exiting the vehicle. */
+        if (vehicle == null) return;
         if (!(vehicle.getEntityMeta() instanceof BoatMeta boat)) return;
         boat.setLeftPaddleTurning(packet.leftPaddleTurning());
         boat.setRightPaddleTurning(packet.rightPaddleTurning());
