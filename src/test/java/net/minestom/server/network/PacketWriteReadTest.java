@@ -1,8 +1,12 @@
 package net.minestom.server.network;
 
 import com.google.gson.JsonObject;
+
+import java.io.PrintStream;
+
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.ChatSession;
 import net.minestom.server.crypto.PlayerPublicKey;
@@ -52,6 +56,9 @@ public class PacketWriteReadTest {
 
     private static final Component COMPONENT = Component.text("Hey");
     private static final Vec VEC = new Vec(5, 5, 5);
+
+    private static final PrintStream originalOut = System.out;
+    private static final PrintStream originalErr = System.err;
 
     @BeforeAll
     public static void setupServer() {
@@ -125,6 +132,8 @@ public class PacketWriteReadTest {
 
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
                 new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "TheMode911", prop, false, 0, GameMode.SURVIVAL, null, null)));
+        SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, Component.text("NotTheMode911"), null)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
                 new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY,
@@ -154,9 +163,17 @@ public class PacketWriteReadTest {
             byte[] bytes = NetworkBuffer.makeArray(buffer -> buffer.write(writeable));
             var readerConstructor = writeable.getClass().getConstructor(NetworkBuffer.class);
 
+            System.setOut(originalOut);
+            System.setErr(originalErr);
+
+            MinecraftServer.LOGGER.info(writeable.toString());
+
             NetworkBuffer reader = new NetworkBuffer();
             reader.write(NetworkBuffer.RAW_BYTES, bytes);
             var createdPacket = readerConstructor.newInstance(reader);
+
+            MinecraftServer.LOGGER.info(createdPacket.toString());
+
             assertEquals(writeable, createdPacket);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
                  | IllegalAccessException e) {

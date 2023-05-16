@@ -51,7 +51,7 @@ public final class PlayerInfoUpdatePacket implements ServerPacket {
                     case UPDATE_GAME_MODE -> gameMode = reader.readEnum(GameMode.class);
                     case UPDATE_LISTED -> listed = reader.read(BOOLEAN);
                     case UPDATE_LATENCY -> latency = reader.read(VAR_INT);
-                    case UPDATE_DISPLAY_NAME -> displayName = reader.read(COMPONENT);
+                    case UPDATE_DISPLAY_NAME -> displayName = reader.readOptional(COMPONENT);
                 }
             }
             return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession);
