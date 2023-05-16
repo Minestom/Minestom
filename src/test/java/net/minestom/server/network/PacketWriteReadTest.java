@@ -57,9 +57,6 @@ public class PacketWriteReadTest {
     private static final Component COMPONENT = Component.text("Hey");
     private static final Vec VEC = new Vec(5, 5, 5);
 
-    private static final PrintStream originalOut = System.out;
-    private static final PrintStream originalErr = System.err;
-
     @BeforeAll
     public static void setupServer() {
         // Handshake
@@ -162,18 +159,9 @@ public class PacketWriteReadTest {
         try {
             byte[] bytes = NetworkBuffer.makeArray(buffer -> buffer.write(writeable));
             var readerConstructor = writeable.getClass().getConstructor(NetworkBuffer.class);
-
-            System.setOut(originalOut);
-            System.setErr(originalErr);
-
-            MinecraftServer.LOGGER.info(writeable.toString());
-
             NetworkBuffer reader = new NetworkBuffer();
             reader.write(NetworkBuffer.RAW_BYTES, bytes);
             var createdPacket = readerConstructor.newInstance(reader);
-
-            MinecraftServer.LOGGER.info(createdPacket.toString());
-
             assertEquals(writeable, createdPacket);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
                  | IllegalAccessException e) {
