@@ -19,12 +19,14 @@ import net.minestom.server.utils.TickUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Random;
 
 /**
  * Utility methods to convert adventure enums to their packet values.
  */
 public class AdventurePacketConvertor {
     private static final Object2IntMap<NamedTextColor> NAMED_TEXT_COLOR_ID_MAP = new Object2IntArrayMap<>(16);
+    private static final Random SOUND_SEED_RANDOM = new Random();
 
     static {
         NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.BLACK, 0);
@@ -112,10 +114,10 @@ public class AdventurePacketConvertor {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         if (minestomSound == null) {
             return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
-                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), 0);
+                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), SOUND_SEED_RANDOM.nextLong());
         } else {
             return new SoundEffectPacket(minestomSound.id(), sound.source(),
-                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), 0);
+                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), SOUND_SEED_RANDOM.nextLong());
         }
     }
 
@@ -135,11 +137,11 @@ public class AdventurePacketConvertor {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
 
         if (minestomSound != null) {
-            return new EntitySoundEffectPacket(minestomSound.id(), sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), 0);
+            return new EntitySoundEffectPacket(minestomSound.id(), sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), SOUND_SEED_RANDOM.nextLong());
         } else {
             final Pos pos = entity.getPosition();
             return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
-                    (int) pos.x(), (int) pos.y(), (int) pos.z(), sound.volume(), sound.pitch(), 0);
+                    (int) pos.x(), (int) pos.y(), (int) pos.z(), sound.volume(), sound.pitch(), SOUND_SEED_RANDOM.nextLong());
         }
     }
 
