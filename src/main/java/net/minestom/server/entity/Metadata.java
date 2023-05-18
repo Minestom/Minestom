@@ -2,6 +2,8 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
@@ -95,6 +97,14 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
+    public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, NetworkBuffer.CAT_VARIANT);
+    }
+
+    public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+    }
+
     public static final byte TYPE_BYTE = 0;
     public static final byte TYPE_VARINT = 1;
     public static final byte TYPE_FLOAT = 2;
@@ -114,6 +124,8 @@ public final class Metadata {
     public static final byte TYPE_VILLAGERDATA = 16;
     public static final byte TYPE_OPTVARINT = 17;
     public static final byte TYPE_POSE = 18;
+    public static final byte TYPE_CAT_VARIANT = 19;
+    public static final byte TYPE_FROG_VARIANT = 20;
 
     private static final VarHandle NOTIFIED_CHANGES;
 
