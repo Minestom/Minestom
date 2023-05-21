@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -548,6 +549,15 @@ final class NetworkBufferTypes {
             buffer -> {
                 final int ordinal = buffer.read(VAR_INT);
                 return FrogMeta.Variant.values()[ordinal];
+            });
+    static final TypeImpl<SnifferMeta.State> SNIFFER_STATE = new TypeImpl<>(SnifferMeta.State.class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.ordinal());
+                return -1;
+            },
+            buffer -> {
+                final int ordinal = buffer.read(VAR_INT);
+                return SnifferMeta.State.values()[ordinal];
             });
     static final TypeImpl<Point> VECTOR3 = new TypeImpl<>(Point.class,
             (buffer, value) -> {

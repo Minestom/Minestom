@@ -44,8 +44,8 @@ public final class MinecraftServer {
 
     public static final ComponentLogger LOGGER = ComponentLogger.logger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "23w06a";
-    public static final int PROTOCOL_VERSION = 0x40000000 + 118;
+    public static final String VERSION_NAME = "1.19.4";
+    public static final int PROTOCOL_VERSION = 762;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";

@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
@@ -62,6 +63,7 @@ public final class NetworkBuffer {
     public static final Type<DeathLocation> DEATH_LOCATION = NetworkBufferTypes.DEATH_LOCATION;
     public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypes.CAT_VARIANT;
     public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypes.FROG_VARIANT;
+    public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypes.SNIFFER_STATE;
     public static final Type<Point> VECTOR3 = NetworkBufferTypes.VECTOR3;
     public static final Type<float[]> QUATERNION = NetworkBufferTypes.QUATERNION;
 

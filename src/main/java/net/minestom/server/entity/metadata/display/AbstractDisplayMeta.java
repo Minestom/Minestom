@@ -16,12 +16,12 @@ public class AbstractDisplayMeta extends EntityMeta {
         super(entity, metadata);
     }
 
-    public long getInterpolationStartTicks() {
-        return super.metadata.getIndex(OFFSET, -1000L);
+    public long getInterpolationStartDelta() {
+        return super.metadata.getIndex(OFFSET, 0);
     }
 
-    public void setInterpolationStartTicks(long value) {
-        super.metadata.setIndex(OFFSET, Metadata.Long(value));
+    public void setInterpolationStartDelta(int value) {
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
     }
 
     public int getInterpolationDuration() {
@@ -48,21 +48,21 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 3, Metadata.Vector3(value));
     }
 
-    public float @NotNull[] getRightRotation() {
+    public float @NotNull[] getLeftRotation() {
         //todo replace with actual quaternion type
         return super.metadata.getIndex(OFFSET + 4, new float[] {0, 0, 0, 1});
     }
 
-    public void setRightRotation(float @NotNull[] value) {
+    public void setLeftRotation(float @NotNull[] value) {
         super.metadata.setIndex(OFFSET + 4, Metadata.Quaternion(value));
     }
 
-    public float @NotNull[] getLeftRotation() {
+    public float @NotNull[] getRightRotation() {
         //todo replace with actual quaternion type
         return super.metadata.getIndex(OFFSET + 5, new float[] {0, 0, 0, 1});
     }
 
-    public void setLeftRotation(float @NotNull[] value) {
+    public void setRightRotation(float @NotNull[] value) {
         super.metadata.setIndex(OFFSET + 5, Metadata.Quaternion(value));
     }
 
