@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LastSeenMessages</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="LastSeenMessages.Entry.html" title="class in net.minestom.server.crypto">LastSeenMessages.Entry</a>&gt;&nbsp;entries)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LastSeenMessages</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&gt;&nbsp;entries)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></span></div>
 </section>
@@ -98,7 +98,7 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="LastSeenMessages.Entry.html" class="type-name-link" title="class in net.minestom.server.crypto">LastSeenMessages.Entry</a></code></div>
+<div class="col-second even-row-color"><code><a href="LastSeenMessages.Packed.html" class="type-name-link" title="class in net.minestom.server.crypto">LastSeenMessages.Packed</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="LastSeenMessages.Update.html" class="type-name-link" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a></code></div>
@@ -114,7 +114,7 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">LastSeenMessages</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="LastSeenMessages.Entry.html" title="class in net.minestom.server.crypto">LastSeenMessages.Entry</a>&gt;&nbsp;entries)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">LastSeenMessages</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&gt;&nbsp;entries)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>LastSeenMessages</code> record class.</div>
 </div>
@@ -134,7 +134,7 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="LastSeenMessages.Entry.html" title="class in net.minestom.server.crypto">LastSeenMessages.Entry</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entries()" class="member-name-link">entries</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>entries</code> record component.</div>
@@ -178,7 +178,7 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <section class="detail" id="&lt;init&gt;(java.util.List)">
 <h3>LastSeenMessages</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LastSeenMessages</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="LastSeenMessages.Entry.html" title="class in net.minestom.server.crypto">LastSeenMessages.Entry</a>&gt;&nbsp;entries)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&gt;&nbsp;entries)</span></div>
 <div class="block">Creates an instance of a <code>LastSeenMessages</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -257,7 +257,7 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <section class="detail" id="entries()">
 <h3>entries</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="LastSeenMessages.Entry.html" title="class in net.minestom.server.crypto">LastSeenMessages.Entry</a>&gt;</span>&nbsp;<span class="element-name">entries</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&gt;</span>&nbsp;<span class="element-name">entries</span>()</div>
 <div class="block">Returns the value of the <code>entries</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

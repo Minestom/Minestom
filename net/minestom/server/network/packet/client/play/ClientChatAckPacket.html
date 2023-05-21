@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientChatAckPacket</span>(<a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;update)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientChatAckPacket</span>(int&nbsp;offset)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span></div>
 </section>
@@ -96,12 +96,12 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">ClientChatAckPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.crypto.LastSeenMessages.Update)" class="member-name-link">ClientChatAckPacket</a><wbr>(<a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;update)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int)" class="member-name-link">ClientChatAckPacket</a><wbr>(int&nbsp;offset)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientChatAckPacket</code> record class.</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">ClientChatAckPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -126,15 +126,15 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#offset()" class="member-name-link">offset</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a string representation of this record class.</div>
+<div class="block">Returns the value of the <code>offset</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>update</code> record component.</div>
+<div class="block">Returns a string representation of this record class.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
@@ -164,14 +164,13 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.crypto.LastSeenMessages.Update)">
+<section class="detail" id="&lt;init&gt;(int)">
 <h3>ClientChatAckPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientChatAckPacket</span><wbr><span class="parameters">(@NotNull
- <a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;update)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientChatAckPacket</span><wbr><span class="parameters">(int&nbsp;offset)</span></div>
 <div class="block">Creates an instance of a <code>ClientChatAckPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>update</code> - the value for the <code>update</code> record component</dd>
+<dd><code>offset</code> - the value for the <code>offset</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -224,7 +223,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with '=='.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -236,14 +235,13 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 </section>
 </li>
 <li>
-<section class="detail" id="update()">
-<h3>update</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a></span>&nbsp;<span class="element-name">update</span>()</div>
-<div class="block">Returns the value of the <code>update</code> record component.</div>
+<section class="detail" id="offset()">
+<h3>offset</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">offset</span>()</div>
+<div class="block">Returns the value of the <code>offset</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>update</code> record component</dd>
+<dd>the value of the <code>offset</code> record component</dd>
 </dl>
 </section>
 </li>

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;</code>, <code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">PlayerChatMessagePacket</span>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;signedContent, @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;unsignedContent, int&nbsp;type, @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, @NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName, @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;teamDisplayName, @NotNull <a href="../../../../crypto/MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&nbsp;signature)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">PlayerChatMessagePacket</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;sender, int&nbsp;index, byte @Nullable []&nbsp;signature, @NotNull <a href="../../../../crypto/SignedMessageBody.Packed.html" title="class in net.minestom.server.crypto">SignedMessageBody.Packed</a>&nbsp;messageBody, @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;unsignedContent, <a href="../../../../crypto/FilterMask.html" title="class in net.minestom.server.crypto">FilterMask</a>&nbsp;filterMask, int&nbsp;msgTypeId, <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;msgTypeName, @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;msgTypeTarget)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a></span></div>
 <div class="block">Represents an outgoing chat message packet.</div>
@@ -97,18 +97,20 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,int,java.util.UUID,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.crypto.MessageSignature)" class="member-name-link">PlayerChatMessagePacket</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;signedContent,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">PlayerChatMessagePacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,int,byte%5B%5D,net.minestom.server.crypto.SignedMessageBody.Packed,net.kyori.adventure.text.Component,net.minestom.server.crypto.FilterMask,int,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)" class="member-name-link">PlayerChatMessagePacket</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;sender,
+ int&nbsp;index,
+ byte @Nullable []&nbsp;signature,
+ @NotNull <a href="../../../../crypto/SignedMessageBody.Packed.html" title="class in net.minestom.server.crypto">SignedMessageBody.Packed</a>&nbsp;messageBody,
  @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;unsignedContent,
- int&nbsp;type,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
- @NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName,
- @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;teamDisplayName,
- @NotNull <a href="../../../../crypto/MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&nbsp;signature)</code></div>
-<div class="col-last even-row-color">
+ <a href="../../../../crypto/FilterMask.html" title="class in net.minestom.server.crypto">FilterMask</a>&nbsp;filterMask,
+ int&nbsp;msgTypeId,
+ <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;msgTypeName,
+ @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;msgTypeTarget)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>PlayerChatMessagePacket</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">PlayerChatMessagePacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -133,15 +135,15 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a copy of this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayName()" class="member-name-link">displayName</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>displayName</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../crypto/FilterMask.html" title="class in net.minestom.server.crypto">FilterMask</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#filterMask()" class="member-name-link">filterMask</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>filterMask</code> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getId()" class="member-name-link">getId</a>()</code></div>
@@ -153,40 +155,50 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../crypto/MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#index()" class="member-name-link">index</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>index</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../crypto/SignedMessageBody.Packed.html" title="class in net.minestom.server.crypto">SignedMessageBody.Packed</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageBody()" class="member-name-link">messageBody</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>messageBody</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#msgTypeId()" class="member-name-link">msgTypeId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>msgTypeId</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#msgTypeName()" class="member-name-link">msgTypeName</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>msgTypeName</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#msgTypeTarget()" class="member-name-link">msgTypeTarget</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>msgTypeTarget</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sender()" class="member-name-link">sender</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>sender</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @Nullable []</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#signature()" class="member-name-link">signature</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>signature</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#signedContent()" class="member-name-link">signedContent</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>signedContent</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#teamDisplayName()" class="member-name-link">teamDisplayName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>teamDisplayName</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsignedContent()" class="member-name-link">unsignedContent</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>type</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsignedContent()" class="member-name-link">unsignedContent</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>unsignedContent</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#uuid()" class="member-name-link">uuid</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>uuid</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
@@ -219,31 +231,31 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,int,java.util.UUID,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.crypto.MessageSignature)">
+<section class="detail" id="&lt;init&gt;(java.util.UUID,int,byte[],net.minestom.server.crypto.SignedMessageBody.Packed,net.kyori.adventure.text.Component,net.minestom.server.crypto.FilterMask,int,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)">
 <h3>PlayerChatMessagePacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerChatMessagePacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;signedContent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerChatMessagePacket</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;sender,
+ int&nbsp;index,
+ byte @Nullable []&nbsp;signature,
+ @NotNull <a href="../../../../crypto/SignedMessageBody.Packed.html" title="class in net.minestom.server.crypto">SignedMessageBody.Packed</a>&nbsp;messageBody,
  @Nullable
  @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;unsignedContent,
- int&nbsp;type,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
- @NotNull
- @NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName,
+ <a href="../../../../crypto/FilterMask.html" title="class in net.minestom.server.crypto">FilterMask</a>&nbsp;filterMask,
+ int&nbsp;msgTypeId,
+ <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;msgTypeName,
  @Nullable
- @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;teamDisplayName,
- @NotNull
- @NotNull <a href="../../../../crypto/MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a>&nbsp;signature)</span></div>
+ @Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;msgTypeTarget)</span></div>
 <div class="block">Creates an instance of a <code>PlayerChatMessagePacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>signedContent</code> - the value for the <code>signedContent</code> record component</dd>
-<dd><code>unsignedContent</code> - the value for the <code>unsignedContent</code> record component</dd>
-<dd><code>type</code> - the value for the <code>type</code> record component</dd>
-<dd><code>uuid</code> - the value for the <code>uuid</code> record component</dd>
-<dd><code>displayName</code> - the value for the <code>displayName</code> record component</dd>
-<dd><code>teamDisplayName</code> - the value for the <code>teamDisplayName</code> record component</dd>
+<dd><code>sender</code> - the value for the <code>sender</code> record component</dd>
+<dd><code>index</code> - the value for the <code>index</code> record component</dd>
 <dd><code>signature</code> - the value for the <code>signature</code> record component</dd>
+<dd><code>messageBody</code> - the value for the <code>messageBody</code> record component</dd>
+<dd><code>unsignedContent</code> - the value for the <code>unsignedContent</code> record component</dd>
+<dd><code>filterMask</code> - the value for the <code>filterMask</code> record component</dd>
+<dd><code>msgTypeId</code> - the value for the <code>msgTypeId</code> record component</dd>
+<dd><code>msgTypeName</code> - the value for the <code>msgTypeName</code> record component</dd>
+<dd><code>msgTypeTarget</code> - the value for the <code>msgTypeTarget</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -358,14 +370,46 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 </section>
 </li>
 <li>
-<section class="detail" id="signedContent()">
-<h3>signedContent</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">signedContent</span>()</div>
-<div class="block">Returns the value of the <code>signedContent</code> record component.</div>
+<section class="detail" id="sender()">
+<h3>sender</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></span>&nbsp;<span class="element-name">sender</span>()</div>
+<div class="block">Returns the value of the <code>sender</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>signedContent</code> record component</dd>
+<dd>the value of the <code>sender</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="index()">
+<h3>index</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">index</span>()</div>
+<div class="block">Returns the value of the <code>index</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>index</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="signature()">
+<h3>signature</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte @Nullable []</span>&nbsp;<span class="element-name">signature</span>()</div>
+<div class="block">Returns the value of the <code>signature</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>signature</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="messageBody()">
+<h3>messageBody</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../crypto/SignedMessageBody.Packed.html" title="class in net.minestom.server.crypto">SignedMessageBody.Packed</a></span>&nbsp;<span class="element-name">messageBody</span>()</div>
+<div class="block">Returns the value of the <code>messageBody</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>messageBody</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -382,61 +426,47 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 </section>
 </li>
 <li>
-<section class="detail" id="type()">
-<h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">type</span>()</div>
-<div class="block">Returns the value of the <code>type</code> record component.</div>
+<section class="detail" id="filterMask()">
+<h3>filterMask</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../crypto/FilterMask.html" title="class in net.minestom.server.crypto">FilterMask</a></span>&nbsp;<span class="element-name">filterMask</span>()</div>
+<div class="block">Returns the value of the <code>filterMask</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>type</code> record component</dd>
+<dd>the value of the <code>filterMask</code> record component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="uuid()">
-<h3>uuid</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></span>&nbsp;<span class="element-name">uuid</span>()</div>
-<div class="block">Returns the value of the <code>uuid</code> record component.</div>
+<section class="detail" id="msgTypeId()">
+<h3>msgTypeId</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">msgTypeId</span>()</div>
+<div class="block">Returns the value of the <code>msgTypeId</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>uuid</code> record component</dd>
+<dd>the value of the <code>msgTypeId</code> record component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="displayName()">
-<h3>displayName</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">displayName</span>()</div>
-<div class="block">Returns the value of the <code>displayName</code> record component.</div>
+<section class="detail" id="msgTypeName()">
+<h3>msgTypeName</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">msgTypeName</span>()</div>
+<div class="block">Returns the value of the <code>msgTypeName</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>displayName</code> record component</dd>
+<dd>the value of the <code>msgTypeName</code> record component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="teamDisplayName()">
-<h3>teamDisplayName</h3>
+<section class="detail" id="msgTypeTarget()">
+<h3>msgTypeTarget</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">teamDisplayName</span>()</div>
-<div class="block">Returns the value of the <code>teamDisplayName</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.adventure.kyori.net/api/4.12.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">msgTypeTarget</span>()</div>
+<div class="block">Returns the value of the <code>msgTypeTarget</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>teamDisplayName</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="signature()">
-<h3>signature</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../crypto/MessageSignature.html" title="class in net.minestom.server.crypto">MessageSignature</a></span>&nbsp;<span class="element-name">signature</span>()</div>
-<div class="block">Returns the value of the <code>signature</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>signature</code> record component</dd>
+<dd>the value of the <code>msgTypeTarget</code> record component</dd>
 </dl>
 </section>
 </li>

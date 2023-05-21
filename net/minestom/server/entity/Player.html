@@ -250,7 +250,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player additional hearts.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="../network/packet/server/play/PlayerInfoUpdatePacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAddPlayerToList()" class="member-name-link">getAddPlayerToList</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the packet to add the player from the tab-list.</div>
@@ -402,7 +402,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player connection.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="../network/packet/server/play/PlayerInfoRemovePacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoRemovePacket</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRemovePlayerToList()" class="member-name-link">getRemovePlayerToList</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the packet to remove the player from the tab-list.</div>
@@ -2631,11 +2631,11 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <section class="detail" id="getAddPlayerToList()">
 <h3>getAddPlayerToList</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></span>&nbsp;<span class="element-name">getAddPlayerToList</span>()</div>
+</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/PlayerInfoUpdatePacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket</a></span>&nbsp;<span class="element-name">getAddPlayerToList</span>()</div>
 <div class="block">Gets the packet to add the player from the tab-list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>a <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>PlayerInfoPacket</code></a> to add the player</dd>
+<dd>a <a href="../network/packet/server/play/PlayerInfoUpdatePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>PlayerInfoUpdatePacket</code></a> to add the player</dd>
 </dl>
 </section>
 </li>
@@ -2643,11 +2643,11 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <section class="detail" id="getRemovePlayerToList()">
 <h3>getRemovePlayerToList</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></span>&nbsp;<span class="element-name">getRemovePlayerToList</span>()</div>
+</span><span class="modifiers">protected</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/PlayerInfoRemovePacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoRemovePacket</a></span>&nbsp;<span class="element-name">getRemovePlayerToList</span>()</div>
 <div class="block">Gets the packet to remove the player from the tab-list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>a <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>PlayerInfoPacket</code></a> to remove the player</dd>
+<dd>a <a href="../network/packet/server/play/PlayerInfoRemovePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>PlayerInfoRemovePacket</code></a> to remove the player</dd>
 </dl>
 </section>
 </li>

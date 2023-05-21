@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientCommandChatPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message, long&nbsp;timestamp, long&nbsp;salt, @NotNull <a href="../../../../crypto/ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&nbsp;signatures, boolean&nbsp;signedPreview, @NotNull <a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;lastSeenMessages)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientCommandChatPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message, long&nbsp;timestamp, long&nbsp;salt, @NotNull <a href="../../../../crypto/ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&nbsp;signatures, @NotNull <a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;lastSeenMessages)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></span></div>
 </section>
@@ -96,11 +96,10 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,long,long,net.minestom.server.crypto.ArgumentSignatures,boolean,net.minestom.server.crypto.LastSeenMessages.Update)" class="member-name-link">ClientCommandChatPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,long,long,net.minestom.server.crypto.ArgumentSignatures,net.minestom.server.crypto.LastSeenMessages.Update)" class="member-name-link">ClientCommandChatPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  long&nbsp;timestamp,
  long&nbsp;salt,
  @NotNull <a href="../../../../crypto/ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&nbsp;signatures,
- boolean&nbsp;signedPreview,
  @NotNull <a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;lastSeenMessages)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientCommandChatPacket</code> record class.</div>
@@ -151,24 +150,19 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>signatures</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#signedPreview()" class="member-name-link">signedPreview</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#timestamp()" class="member-name-link">timestamp</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>signedPreview</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#timestamp()" class="member-name-link">timestamp</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>timestamp</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -187,7 +181,7 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,long,long,net.minestom.server.crypto.ArgumentSignatures,boolean,net.minestom.server.crypto.LastSeenMessages.Update)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,long,long,net.minestom.server.crypto.ArgumentSignatures,net.minestom.server.crypto.LastSeenMessages.Update)">
 <h3>ClientCommandChatPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientCommandChatPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
@@ -195,7 +189,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
  long&nbsp;salt,
  @NotNull
  @NotNull <a href="../../../../crypto/ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&nbsp;signatures,
- boolean&nbsp;signedPreview,
  @NotNull <a href="../../../../crypto/LastSeenMessages.Update.html" title="class in net.minestom.server.crypto">LastSeenMessages.Update</a>&nbsp;lastSeenMessages)</span></div>
 <div class="block">Creates an instance of a <code>ClientCommandChatPacket</code> record class.</div>
 <dl class="notes">
@@ -204,7 +197,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <dd><code>timestamp</code> - the value for the <code>timestamp</code> record component</dd>
 <dd><code>salt</code> - the value for the <code>salt</code> record component</dd>
 <dd><code>signatures</code> - the value for the <code>signatures</code> record component</dd>
-<dd><code>signedPreview</code> - the value for the <code>signedPreview</code> record component</dd>
 <dd><code>lastSeenMessages</code> - the value for the <code>lastSeenMessages</code> record component</dd>
 </dl>
 </section>
@@ -319,17 +311,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>signatures</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="signedPreview()">
-<h3>signedPreview</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">signedPreview</span>()</div>
-<div class="block">Returns the value of the <code>signedPreview</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>signedPreview</code> record component</dd>
 </dl>
 </section>
 </li>
