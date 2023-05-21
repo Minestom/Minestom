@@ -144,8 +144,8 @@ public final class Metadata {
     public static final byte TYPE_VILLAGERDATA = 18;
     public static final byte TYPE_OPTVARINT = 19;
     public static final byte TYPE_POSE = 20;
-    public static final byte TYPE_CATVARIANT = 21;
-    public static final byte TYPE_FROGVARIANT = 22;
+    public static final byte TYPE_CAT_VARIANT = 21;
+    public static final byte TYPE_FROG_VARIANT = 22;
     public static final byte TYPE_OPTGLOBALPOS = 23;
     public static final byte TYPE_PAINTINGVARIANT = 24;
     public static final byte TYPE_SNIFFER_STATE = 25;

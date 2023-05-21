@@ -548,6 +548,7 @@ final class NetworkBufferTypes {
             buffer -> {
                 final int ordinal = buffer.read(VAR_INT);
                 return FrogMeta.Variant.values()[ordinal];
+            });
     static final TypeImpl<Point> VECTOR3 = new TypeImpl<>(Point.class,
             (buffer, value) -> {
                 buffer.write(FLOAT, (float) value.x());
