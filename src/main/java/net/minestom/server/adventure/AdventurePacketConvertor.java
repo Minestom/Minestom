@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -111,11 +112,11 @@ public class AdventurePacketConvertor {
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         if (minestomSound == null) {
-            return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
-                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), 0);
+            return new SoundEffectPacket(sound.name().asString(), null, sound.source(),
+                    new Vec(x, y, z), sound.volume(), sound.pitch(), 0);
         } else {
-            return new SoundEffectPacket(minestomSound.id(), sound.source(),
-                    (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), 0);
+            return new SoundEffectPacket(minestomSound, null, sound.source(),
+                    new Vec(x, y, z), sound.volume(), sound.pitch(), 0);
         }
     }
 
@@ -135,11 +136,9 @@ public class AdventurePacketConvertor {
         final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
 
         if (minestomSound != null) {
-            return new EntitySoundEffectPacket(minestomSound.id(), sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), 0);
+            return new EntitySoundEffectPacket(minestomSound, null, sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), 0);
         } else {
-            final Pos pos = entity.getPosition();
-            return new NamedSoundEffectPacket(sound.name().asString(), sound.source(),
-                    (int) pos.x(), (int) pos.y(), (int) pos.z(), sound.volume(), sound.pitch(), 0);
+            return new EntitySoundEffectPacket(sound.name().asString(), null, sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), 0);
         }
     }
 

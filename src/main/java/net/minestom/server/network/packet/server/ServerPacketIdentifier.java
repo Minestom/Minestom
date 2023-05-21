@@ -23,7 +23,6 @@ public final class ServerPacketIdentifier {
     public static final int BLOCK_CHANGE = nextPlayId();
     public static final int BOSS_BAR = nextPlayId();
     public static final int SERVER_DIFFICULTY = nextPlayId();
-    public static final int CHAT_PREVIEW = nextPlayId();
     public static final int CLEAR_TITLES = nextPlayId();
     public static final int TAB_COMPLETE = nextPlayId();
     public static final int DECLARE_COMMANDS = nextPlayId();
@@ -34,9 +33,9 @@ public final class ServerPacketIdentifier {
     public static final int SET_COOLDOWN = nextPlayId();
     public static final int CUSTOM_CHAT_COMPLETIONS = nextPlayId();
     public static final int PLUGIN_MESSAGE = nextPlayId();
-    public static final int NAMED_SOUND_EFFECT = nextPlayId();
     public static final int DELETE_CHAT_MESSAGE = nextPlayId();
     public static final int DISCONNECT = nextPlayId();
+    public static final int DISGUISED_CHAT = nextPlayId();
     public static final int ENTITY_STATUS = nextPlayId();
     public static final int EXPLOSION = nextPlayId();
     public static final int UNLOAD_CHUNK = nextPlayId();
@@ -61,12 +60,12 @@ public final class ServerPacketIdentifier {
     public static final int PING = nextPlayId();
     public static final int CRAFT_RECIPE_RESPONSE = nextPlayId();
     public static final int PLAYER_ABILITIES = nextPlayId();
-    public static final int PLAYER_CHAT_HEADER = nextPlayId();
     public static final int PLAYER_CHAT = nextPlayId();
     public static final int END_COMBAT_EVENT = nextPlayId();
     public static final int ENTER_COMBAT_EVENT = nextPlayId();
     public static final int DEATH_COMBAT_EVENT = nextPlayId();
-    public static final int PLAYER_INFO = nextPlayId();
+    public static final int PLAYER_INFO_REMOVE = nextPlayId();
+    public static final int PLAYER_INFO_UPDATE = nextPlayId();
     public static final int FACE_PLAYER = nextPlayId();
     public static final int PLAYER_POSITION_AND_LOOK = nextPlayId();
     public static final int UNLOCK_RECIPES = nextPlayId();
@@ -89,7 +88,6 @@ public final class ServerPacketIdentifier {
     public static final int UPDATE_VIEW_POSITION = nextPlayId();
     public static final int UPDATE_VIEW_DISTANCE = nextPlayId(); // Not used by the dedicated server
     public static final int SPAWN_POSITION = nextPlayId();
-    public static final int SET_DISPLAY_CHAT_PREVIEW = nextPlayId();
     public static final int DISPLAY_SCOREBOARD = nextPlayId();
     public static final int ENTITY_METADATA = nextPlayId();
     public static final int ATTACH_ENTITY = nextPlayId();
@@ -116,6 +114,7 @@ public final class ServerPacketIdentifier {
     public static final int ENTITY_TELEPORT = nextPlayId();
     public static final int ADVANCEMENTS = nextPlayId();
     public static final int ENTITY_PROPERTIES = nextPlayId();
+    public static final int UPDATE_ENABLED_FEATURES = nextPlayId();
     public static final int ENTITY_EFFECT = nextPlayId();
     public static final int DECLARE_RECIPES = nextPlayId();
     public static final int TAGS = nextPlayId();
