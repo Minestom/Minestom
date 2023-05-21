@@ -39,7 +39,7 @@ public class ArgumentResource extends Argument<String> {
     @Override
     public byte @Nullable [] nodeProperties() {
         return BinaryWriter.makeArray(packetWriter ->
-            packetWriter.writeSizedString(this.identifier)
+                packetWriter.writeSizedString(this.identifier)
         );
     }
 }
