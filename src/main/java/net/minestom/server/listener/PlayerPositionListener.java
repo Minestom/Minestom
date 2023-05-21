@@ -61,7 +61,7 @@ public class PlayerPositionListener {
         }
         if (playerMoveEvent.isCancelled()) {
             // Teleport to previous position
-            player.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId(), false));
+            player.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId()));
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();
