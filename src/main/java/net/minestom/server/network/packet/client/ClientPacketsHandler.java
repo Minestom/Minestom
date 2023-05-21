@@ -51,58 +51,64 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
     }
 
     public static final class Play extends ClientPacketsHandler {
+        private static int nextId = 0;
+
+        private static int nextPlayId() {
+            return nextId++;
+        }
+
         public Play() {
-            register(0x00, ClientTeleportConfirmPacket::new);
-            register(0x01, ClientQueryBlockNbtPacket::new);
-            // 0x02 difficulty packet
-            register(0x03, ClientChatAckPacket::new);
-            register(0x04, ClientCommandChatPacket::new);
-            register(0x05, ClientChatMessagePacket::new);
-            register(0x06, ClientStatusPacket::new);
-            register(0x07, ClientSettingsPacket::new);
-            register(0x08, ClientTabCompletePacket::new);
-            register(0x09, ClientClickWindowButtonPacket::new);
-            register(0x0A, ClientClickWindowPacket::new);
-            register(0x0B, ClientCloseWindowPacket::new);
-            register(0x0C, ClientPluginMessagePacket::new);
-            register(0x0D, ClientEditBookPacket::new);
-            register(0x0E, ClientQueryEntityNbtPacket::new);
-            register(0x0F, ClientInteractEntityPacket::new);
-            register(0x10, ClientGenerateStructurePacket::new);
-            register(0x11, ClientKeepAlivePacket::new);
-            // 0x12 packet not used server-side
-            register(0x13, ClientPlayerPositionPacket::new);
-            register(0x14, ClientPlayerPositionAndRotationPacket::new);
-            register(0x15, ClientPlayerRotationPacket::new);
-            register(0x16, ClientPlayerPacket::new);
-            register(0x17, ClientVehicleMovePacket::new);
-            register(0x18, ClientSteerBoatPacket::new);
-            register(0x19, ClientPickItemPacket::new);
-            register(0x1A, ClientCraftRecipeRequest::new);
-            register(0x1B, ClientPlayerAbilitiesPacket::new);
-            register(0x1C, ClientPlayerDiggingPacket::new);
-            register(0x1D, ClientEntityActionPacket::new);
-            register(0x1E, ClientSteerVehiclePacket::new);
-            register(0x1F, ClientPongPacket::new);
-            register(0x20, ClientChatSessionUpdatePacket::new);
-            register(0x21, ClientSetRecipeBookStatePacket::new);
-            register(0x22, ClientSetDisplayedRecipePacket::new);
-            register(0x23, ClientNameItemPacket::new);
-            register(0x24, ClientResourcePackStatusPacket::new);
-            register(0x25, ClientAdvancementTabPacket::new);
-            register(0x26, ClientSelectTradePacket::new);
-            register(0x27, ClientSetBeaconEffectPacket::new);
-            register(0x28, ClientHeldItemChangePacket::new);
-            register(0x29, ClientUpdateCommandBlockPacket::new);
-            register(0x2A, ClientUpdateCommandBlockMinecartPacket::new);
-            register(0x2B, ClientCreativeInventoryActionPacket::new);
-            // 0x2B Update Jigsaw Block
-            register(0x2D, ClientUpdateStructureBlockPacket::new);
-            register(0x2E, ClientUpdateSignPacket::new);
-            register(0x2F, ClientAnimationPacket::new);
-            register(0x30, ClientSpectatePacket::new);
-            register(0x31, ClientPlayerBlockPlacementPacket::new);
-            register(0x32, ClientUseItemPacket::new);
+            register(nextPlayId(), ClientTeleportConfirmPacket::new);
+            register(nextPlayId(), ClientQueryBlockNbtPacket::new);
+            nextPlayId(); // difficulty packet
+            register(nextPlayId(), ClientChatAckPacket::new);
+            register(nextPlayId(), ClientCommandChatPacket::new);
+            register(nextPlayId(), ClientChatMessagePacket::new);
+            register(nextPlayId(), ClientChatSessionUpdatePacket::new);
+            register(nextPlayId(), ClientStatusPacket::new);
+            register(nextPlayId(), ClientSettingsPacket::new);
+            register(nextPlayId(), ClientTabCompletePacket::new);
+            register(nextPlayId(), ClientClickWindowButtonPacket::new);
+            register(nextPlayId(), ClientClickWindowPacket::new);
+            register(nextPlayId(), ClientCloseWindowPacket::new);
+            register(nextPlayId(), ClientPluginMessagePacket::new);
+            register(nextPlayId(), ClientEditBookPacket::new);
+            register(nextPlayId(), ClientQueryEntityNbtPacket::new);
+            register(nextPlayId(), ClientInteractEntityPacket::new);
+            register(nextPlayId(), ClientGenerateStructurePacket::new);
+            register(nextPlayId(), ClientKeepAlivePacket::new);
+            nextPlayId(); // lock difficulty
+            register(nextPlayId(), ClientPlayerPositionPacket::new);
+            register(nextPlayId(), ClientPlayerPositionAndRotationPacket::new);
+            register(nextPlayId(), ClientPlayerRotationPacket::new);
+            register(nextPlayId(), ClientPlayerPacket::new);
+            register(nextPlayId(), ClientVehicleMovePacket::new);
+            register(nextPlayId(), ClientSteerBoatPacket::new);
+            register(nextPlayId(), ClientPickItemPacket::new);
+            register(nextPlayId(), ClientCraftRecipeRequest::new);
+            register(nextPlayId(), ClientPlayerAbilitiesPacket::new);
+            register(nextPlayId(), ClientPlayerDiggingPacket::new);
+            register(nextPlayId(), ClientEntityActionPacket::new);
+            register(nextPlayId(), ClientSteerVehiclePacket::new);
+            register(nextPlayId(), ClientPongPacket::new);
+            register(nextPlayId(), ClientSetRecipeBookStatePacket::new);
+            register(nextPlayId(), ClientSetDisplayedRecipePacket::new);
+            register(nextPlayId(), ClientNameItemPacket::new);
+            register(nextPlayId(), ClientResourcePackStatusPacket::new);
+            register(nextPlayId(), ClientAdvancementTabPacket::new);
+            register(nextPlayId(), ClientSelectTradePacket::new);
+            register(nextPlayId(), ClientSetBeaconEffectPacket::new);
+            register(nextPlayId(), ClientHeldItemChangePacket::new);
+            register(nextPlayId(), ClientUpdateCommandBlockPacket::new);
+            register(nextPlayId(), ClientUpdateCommandBlockMinecartPacket::new);
+            register(nextPlayId(), ClientCreativeInventoryActionPacket::new);
+            nextPlayId(); // Update Jigsaw Block
+            register(nextPlayId(), ClientUpdateStructureBlockPacket::new);
+            register(nextPlayId(), ClientUpdateSignPacket::new);
+            register(nextPlayId(), ClientAnimationPacket::new);
+            register(nextPlayId(), ClientSpectatePacket::new);
+            register(nextPlayId(), ClientPlayerBlockPlacementPacket::new);
+            register(nextPlayId(), ClientUseItemPacket::new);
         }
     }
 }

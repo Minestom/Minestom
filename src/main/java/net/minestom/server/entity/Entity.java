@@ -301,6 +301,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             this.position = position;
             refreshCoordinate(position);
             synchronizePosition(true);
+            setView(position.yaw(), position.pitch());
         };
 
         if (chunks != null && chunks.length > 0) {
@@ -666,6 +667,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     private void touchTick() {
+        if (!hasPhysics) return;
+
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
         final BoundingBox boundingBox = this.boundingBox;
