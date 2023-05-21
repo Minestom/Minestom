@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.utils.Quaternion;
 import org.jetbrains.annotations.NotNull;
 
 public class AbstractDisplayMeta extends EntityMeta {
@@ -48,21 +49,19 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 3, Metadata.Vector3(value));
     }
 
-    public float @NotNull[] getRightRotation() {
-        //todo replace with actual quaternion type
-        return super.metadata.getIndex(OFFSET + 4, new float[] {0, 0, 0, 1});
+    public @NotNull Quaternion getRightRotation() {
+        return super.metadata.getIndex(OFFSET + 4, new Quaternion(0, 0, 0, 1));
     }
 
-    public void setRightRotation(float @NotNull[] value) {
+    public void setRightRotation(@NotNull Quaternion value) {
         super.metadata.setIndex(OFFSET + 4, Metadata.Quaternion(value));
     }
 
-    public float @NotNull[] getLeftRotation() {
-        //todo replace with actual quaternion type
-        return super.metadata.getIndex(OFFSET + 5, new float[] {0, 0, 0, 1});
+    public @NotNull Quaternion getLeftRotation() {
+        return super.metadata.getIndex(OFFSET + 5, new Quaternion(0, 0, 0, 1));
     }
 
-    public void setLeftRotation(float @NotNull[] value) {
+    public void setLeftRotation(@NotNull Quaternion value) {
         super.metadata.setIndex(OFFSET + 5, Metadata.Quaternion(value));
     }
 

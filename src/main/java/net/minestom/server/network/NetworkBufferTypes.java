@@ -11,6 +11,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.Quaternion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -562,12 +563,12 @@ final class NetworkBufferTypes {
                 final float z = buffer.read(FLOAT);
                 return new Vec(x, y, z);
             });
-    static final TypeImpl<float[]> QUATERNION = new TypeImpl<>(float[].class,
+    static final TypeImpl<Quaternion> QUATERNION = new TypeImpl<>(Quaternion.class,
             (buffer, value) -> {
-                buffer.write(FLOAT, value[0]);
-                buffer.write(FLOAT, value[1]);
-                buffer.write(FLOAT, value[2]);
-                buffer.write(FLOAT, value[3]);
+                buffer.write(FLOAT, value.x());
+                buffer.write(FLOAT, value.y());
+                buffer.write(FLOAT, value.z());
+                buffer.write(FLOAT, value.w());
                 return -1;
             },
             buffer -> {
@@ -575,7 +576,7 @@ final class NetworkBufferTypes {
                 final float y = buffer.read(FLOAT);
                 final float z = buffer.read(FLOAT);
                 final float w = buffer.read(FLOAT);
-                return new float[]{x, y, z, w};
+                return new Quaternion(x, y, z, w);
             });
 
     record TypeImpl<T>(@NotNull Class<T> type,

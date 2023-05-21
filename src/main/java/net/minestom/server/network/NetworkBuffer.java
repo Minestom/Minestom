@@ -17,6 +17,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
+import net.minestom.server.utils.Quaternion;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +71,7 @@ public final class NetworkBuffer {
     public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypes.CAT_VARIANT;
     public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypes.FROG_VARIANT;
     public static final Type<Point> VECTOR3 = NetworkBufferTypes.VECTOR3;
-    public static final Type<float[]> QUATERNION = NetworkBufferTypes.QUATERNION;
+    public static final Type<Quaternion> QUATERNION = NetworkBufferTypes.QUATERNION;
 
     ByteBuffer nioBuffer;
     final boolean resizable;
