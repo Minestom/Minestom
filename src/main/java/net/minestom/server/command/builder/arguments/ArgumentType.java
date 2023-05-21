@@ -139,10 +139,24 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentResource
+     */
+    public static ArgumentResource Resource(@NotNull String id, @NotNull String identifier) {
+        return new ArgumentResource(id, identifier);
+    }
+
+    /**
      * @see ArgumentResourceLocation
      */
     public static ArgumentResourceLocation ResourceLocation(@NotNull String id) {
         return new ArgumentResourceLocation(id);
+    }
+
+    /**
+     * @see ArgumentResourceOrTag
+     */
+    public static ArgumentResourceOrTag ResourceOrTag(@NotNull String id, @NotNull String identifier) {
+        return new ArgumentResourceOrTag(id, identifier);
     }
 
     /**

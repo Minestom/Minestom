@@ -198,11 +198,25 @@ public class ArgumentTypeTest {
     }
 
     @Test
+    public void testArgumentResource() {
+        var arg = ArgumentType.Resource("resource", "minecraft:block");
+        assertArg(arg, "minecraft:resource_example", "minecraft:resource_example");
+        assertInvalidArg(arg, "minecraft:invalid resource");
+    }
+
+    @Test
     public void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
         assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
         assertInvalidArg(arg, "minecraft:invalid resource location");
         //assertInvalidArg(arg, "minecraft:");
+    }
+
+    @Test
+    public void testArgumentResourceOrTag() {
+        var arg = ArgumentType.ResourceOrTag("resource_or_tag", "data/minecraft/tags/blocks");
+        assertArg(arg, "minecraft:resource_or_tag_example", "minecraft:resource_or_tag_example");
+        assertInvalidArg(arg, "minecraft:invalid resource or tag");
     }
 
     @Test
