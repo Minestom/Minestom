@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata.display;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.ARGBColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
@@ -35,12 +36,12 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
-    public int getBackgroundColor() {
-        return super.metadata.getIndex(OFFSET + 2, 1073741824);
+    public ARGBColor getBackgroundColor() {
+        return super.metadata.getIndex(OFFSET + 2, new ARGBColor(1073741824));
     }
 
-    public void setBackgroundColor(int value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
+    public void setBackgroundColor(ARGBColor value) {
+        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value.asARGB()));
     }
 
     public int getTextOpacity() {
