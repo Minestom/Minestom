@@ -13,11 +13,11 @@ public class SnifferMeta extends AnimalMeta {
     }
 
     public @NotNull State getState() {
-        return State.VALUES[super.metadata.getIndex(OFFSET, (byte) 0)];
+        return super.metadata.getIndex(OFFSET, State.IDLING);
     }
 
     public void setState(@NotNull State value) {
-        super.metadata.setIndex(OFFSET, Metadata.Byte((byte) value.ordinal()));
+        super.metadata.setIndex(OFFSET, Metadata.SnifferState(value));
     }
 
     public int getFinishingDigTime() {
