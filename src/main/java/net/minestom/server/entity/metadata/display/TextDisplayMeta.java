@@ -76,19 +76,51 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         setMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND, value);
     }
 
-    public boolean alignLeft() {
+    private boolean alignLeft() {
         return getMaskBit(OFFSET + 4, ALIGN_LEFT);
     }
 
-    public void setAlignLeft(boolean value) {
+    private void setAlignLeft(boolean value) {
         setMaskBit(OFFSET + 4, ALIGN_LEFT, value);
     }
 
-    public boolean alignRight() {
+    private boolean alignRight() {
         return getMaskBit(OFFSET + 4, ALIGN_RIGHT);
     }
 
-    public void setAlignRight(boolean value) {
+    private void setAlignRight(boolean value) {
         setMaskBit(OFFSET + 4, ALIGN_RIGHT, value);
+    }
+
+
+    public TextAlignment alignment() {
+        // TODO get the bit mask directly
+        if (alignLeft() && !alignRight()) return TextAlignment.LEFT;
+        if (alignRight() && !alignLeft()) return TextAlignment.RIGHT;
+        return TextAlignment.CENTER;
+    }
+
+    public void setAlignment(TextAlignment value) {
+        // TODO set the bit mask directly
+        switch (value) {
+            case CENTER -> {
+                setAlignLeft(false);
+                setAlignRight(false);
+            }
+            case LEFT -> {
+                setAlignLeft(true);
+                setAlignRight(false);
+            }
+            case RIGHT -> {
+                setAlignLeft(false);
+                setAlignRight(true);
+            }
+        }
+    }
+
+    public enum TextAlignment{
+        CENTER,
+        LEFT,
+        RIGHT
     }
 }
