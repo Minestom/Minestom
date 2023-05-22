@@ -14,7 +14,7 @@ public class InteractionMeta extends EntityMeta {
         super(entity, metadata);
     }
 
-    public float getWidth() {
+    public float width() {
         return super.metadata.getIndex(OFFSET, 1f);
     }
 
@@ -22,7 +22,7 @@ public class InteractionMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET, Metadata.Float(value));
     }
 
-    public float getHeight() {
+    public float height() {
         return super.metadata.getIndex(OFFSET + 1, 1f);
     }
 
@@ -30,7 +30,7 @@ public class InteractionMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 1, Metadata.Float(value));
     }
 
-    public boolean getResponse() {
+    public boolean response() {
         return super.metadata.getIndex(OFFSET + 2, false);
     }
 

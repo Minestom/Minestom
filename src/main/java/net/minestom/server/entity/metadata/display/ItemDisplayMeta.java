@@ -13,7 +13,7 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
         super(entity, metadata);
     }
 
-    public @NotNull ItemStack getItemStack() {
+    public @NotNull ItemStack itemStack() {
         return super.metadata.getIndex(OFFSET, ItemStack.AIR);
     }
 
@@ -21,7 +21,7 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET, Metadata.Slot(value));
     }
 
-    public @NotNull DisplayContext getDisplayContext() {
+    public @NotNull DisplayContext displayContext() {
         return DisplayContext.VALUES[super.metadata.getIndex(OFFSET + 1, (byte) 0)];
     }
 

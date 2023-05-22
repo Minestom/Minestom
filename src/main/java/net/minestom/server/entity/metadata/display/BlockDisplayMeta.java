@@ -13,7 +13,7 @@ public class BlockDisplayMeta extends AbstractDisplayMeta {
         super(entity, metadata);
     }
 
-    public int getBlockStateId() {
+    public int blockStateId() {
         return super.metadata.getIndex(OFFSET, Block.AIR.stateId());
     }
 
