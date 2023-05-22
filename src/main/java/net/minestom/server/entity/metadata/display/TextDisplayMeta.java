@@ -76,46 +76,38 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         setMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND, value);
     }
 
-    private boolean alignLeft() {
-        return getMaskBit(OFFSET + 4, ALIGN_LEFT);
-    }
-
-    private void setAlignLeft(boolean value) {
-        setMaskBit(OFFSET + 4, ALIGN_LEFT, value);
-    }
-
-    private boolean alignRight() {
-        return getMaskBit(OFFSET + 4, ALIGN_RIGHT);
-    }
-
-    private void setAlignRight(boolean value) {
-        setMaskBit(OFFSET + 4, ALIGN_RIGHT, value);
-    }
-
-
     public TextAlignment alignment() {
-        // TODO get the bit mask directly
-        if (alignLeft()) return TextAlignment.LEFT;
-        if (alignRight()) return TextAlignment.RIGHT;
+        byte mask = getMask(OFFSET + 4);
+        boolean leftValue = (mask & ALIGN_LEFT) == ALIGN_LEFT;
+        boolean rightValue = (mask & ALIGN_RIGHT) == ALIGN_RIGHT;
+        if (leftValue) return TextAlignment.LEFT;
+        if (rightValue) return TextAlignment.RIGHT;
         return TextAlignment.CENTER;
     }
 
     public void setAlignment(TextAlignment value) {
-        // TODO set the bit mask directly
-        switch (value) {
-            case CENTER -> {
-                setAlignLeft(false);
-                setAlignRight(false);
-            }
-            case LEFT -> {
-                setAlignLeft(true);
-                setAlignRight(false);
-            }
-            case RIGHT -> {
-                setAlignLeft(false);
-                setAlignRight(true);
+        int index = OFFSET + 4;
+        byte mask = getMask(index);
+        boolean leftValue = value == TextAlignment.LEFT;
+        boolean rightValue = value == TextAlignment.RIGHT;
+        boolean currentLeftValue = (mask & ALIGN_LEFT) == ALIGN_LEFT;
+        boolean currentRightValue = (mask & ALIGN_RIGHT) == ALIGN_RIGHT;
+        if (currentLeftValue == leftValue && currentRightValue == rightValue) return;
+        if (currentLeftValue != leftValue) {
+            if (leftValue) {
+                mask |= ALIGN_LEFT;
+            } else {
+                mask &= ~ALIGN_LEFT;
             }
         }
+        if (currentRightValue != rightValue) {
+            if (rightValue) {
+                mask |= ALIGN_RIGHT;
+            } else {
+                mask &= ~ALIGN_RIGHT;
+            }
+        }
+        setMask(index, mask);
     }
 
     public enum TextAlignment{
