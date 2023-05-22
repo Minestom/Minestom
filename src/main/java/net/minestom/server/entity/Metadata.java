@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -112,6 +113,10 @@ public final class Metadata {
 
     public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+    }
+
+    public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, NetworkBuffer.SNIFFER_STATE);
     }
 
     public static Entry<Point> Vector3(@NotNull Point value) {
