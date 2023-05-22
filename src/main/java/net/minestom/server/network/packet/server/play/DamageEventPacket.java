@@ -27,9 +27,9 @@ public record DamageEventPacket(int targetEntityId, int damageTypeId, int source
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, targetEntityId);
-        writer.write(VAR_INT, targetEntityId);
-        writer.write(VAR_INT, targetEntityId);
-        writer.write(VAR_INT, targetEntityId);
+        writer.write(VAR_INT, damageTypeId);
+        writer.write(VAR_INT, sourceEntityId);
+        writer.write(VAR_INT, sourceDirectId);
         if (sourcePos != null) {
             writer.write(BOOLEAN, true);
             writer.write(DOUBLE, sourcePos.x());
