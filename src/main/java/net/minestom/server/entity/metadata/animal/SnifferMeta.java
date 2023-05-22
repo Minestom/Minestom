@@ -37,7 +37,5 @@ public class SnifferMeta extends AnimalMeta {
         SEARCHING,
         DIGGING,
         RISING;
-
-        private final static State[] VALUES = values();
     }
 }
