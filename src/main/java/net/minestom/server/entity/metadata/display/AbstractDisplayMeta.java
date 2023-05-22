@@ -17,7 +17,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super(entity, metadata);
     }
 
-    public long interpolationStartTicks() {
+    public long getInterpolationStartTicks() {
         return super.metadata.getIndex(OFFSET, -1000L);
     }
 
@@ -25,7 +25,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET, Metadata.VarLong(value));
     }
 
-    public int interpolationDuration() {
+    public int getInterpolationDuration() {
         return super.metadata.getIndex(OFFSET + 1, 0);
     }
 
@@ -33,7 +33,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
-    public @NotNull Point translation() {
+    public @NotNull Point getTranslation() {
         return super.metadata.getIndex(OFFSET + 2, Vec.ZERO);
     }
 
@@ -41,7 +41,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.Vector3(value));
     }
 
-    public @NotNull Vec scale() {
+    public @NotNull Vec getScale() {
         return super.metadata.getIndex(OFFSET + 3, Vec.ONE);
     }
 
@@ -49,7 +49,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 3, Metadata.Vector3(value));
     }
 
-    public @NotNull Quaternion rightRotation() {
+    public @NotNull Quaternion getRightRotation() {
         return super.metadata.getIndex(OFFSET + 4, new Quaternion(0, 0, 0, 1));
     }
 
@@ -57,7 +57,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 4, Metadata.Quaternion(value));
     }
 
-    public @NotNull Quaternion leftRotation() {
+    public @NotNull Quaternion getLeftRotation() {
         return super.metadata.getIndex(OFFSET + 5, new Quaternion(0, 0, 0, 1));
     }
 
@@ -65,7 +65,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 5, Metadata.Quaternion(value));
     }
 
-    public @NotNull BillboardConstraints billboardRenderConstraints() {
+    public @NotNull BillboardConstraints getBillboardRenderConstraints() {
         return BillboardConstraints.VALUES[super.metadata.getIndex(OFFSET + 6, (byte) 0)];
     }
 
@@ -73,7 +73,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 6, Metadata.Byte((byte) value.ordinal()));
     }
 
-    public int brightnessOverride() {
+    public int getBrightnessOverride() {
         return super.metadata.getIndex(OFFSET + 7, -1);
     }
 
@@ -81,7 +81,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 7, Metadata.VarInt(value));
     }
 
-    public float viewRange() {
+    public float getViewRange() {
         return super.metadata.getIndex(OFFSET + 8, 1.0F);
     }
 
@@ -89,7 +89,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 8, Metadata.Float(value));
     }
 
-    public float shadowRadius() {
+    public float getShadowRadius() {
         return super.metadata.getIndex(OFFSET + 9, 0.0F);
     }
 
@@ -97,7 +97,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 9, Metadata.Float(value));
     }
 
-    public float shadowStrength() {
+    public float getShadowStrength() {
         return super.metadata.getIndex(OFFSET + 10, 1.0F);
     }
 
@@ -105,7 +105,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 10, Metadata.Float(value));
     }
 
-    public float width() {
+    public float getWidth() {
         return super.metadata.getIndex(OFFSET + 11, 0.0F);
     }
 
@@ -113,7 +113,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 11, Metadata.Float(value));
     }
 
-    public float height() {
+    public float getHeight() {
         return super.metadata.getIndex(OFFSET + 12, 0.0F);
     }
 
@@ -121,7 +121,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 12, Metadata.Float(value));
     }
 
-    public int glowColorOverride() {
+    public int getGlowColorOverride() {
         return super.metadata.getIndex(OFFSET + 13, 0);
     }
 

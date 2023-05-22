@@ -20,7 +20,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super(entity, metadata);
     }
 
-    public @NotNull Component text() {
+    public @NotNull Component getText() {
         return super.metadata.getIndex(OFFSET, Component.empty());
     }
 
@@ -28,7 +28,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET, Metadata.Chat(value));
     }
 
-    public int lineWidth() {
+    public int getLineWidth() {
         return super.metadata.getIndex(OFFSET + 1, 200);
     }
 
@@ -36,7 +36,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
-    public ARGBColor backgroundColor() {
+    public ARGBColor getBackgroundColor() {
         return super.metadata.getIndex(OFFSET + 2, new ARGBColor(1073741824));
     }
 
@@ -44,7 +44,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value.asARGB()));
     }
 
-    public int textOpacity() {
+    public int getTextOpacity() {
         return super.metadata.getIndex(OFFSET + 3, -1);
     }
 
@@ -52,7 +52,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value));
     }
 
-    public boolean shadow() {
+    public boolean isShadow() {
         return getMaskBit(OFFSET + 4, SHADOW);
     }
 
@@ -60,7 +60,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         setMaskBit(OFFSET + 4, SHADOW, value);
     }
 
-    public boolean seeThrough() {
+    public boolean isSeeThrough() {
         return getMaskBit(OFFSET + 4, SEE_THROUGH);
     }
 
@@ -68,7 +68,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         setMaskBit(OFFSET + 4, SEE_THROUGH, value);
     }
 
-    public boolean useDefaultBackground() {
+    public boolean isUseDefaultBackground() {
         return getMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND);
     }
 
@@ -76,7 +76,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         setMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND, value);
     }
 
-    public TextAlignment alignment() {
+    public TextAlignment getAlignment() {
         byte mask = getMask(OFFSET + 4);
         boolean leftValue = (mask & ALIGN_LEFT) == ALIGN_LEFT;
         boolean rightValue = (mask & ALIGN_RIGHT) == ALIGN_RIGHT;
