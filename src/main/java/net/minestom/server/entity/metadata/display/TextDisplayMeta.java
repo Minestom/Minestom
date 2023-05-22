@@ -95,8 +95,8 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
 
     public TextAlignment alignment() {
         // TODO get the bit mask directly
-        if (alignLeft() && !alignRight()) return TextAlignment.LEFT;
-        if (alignRight() && !alignLeft()) return TextAlignment.RIGHT;
+        if (alignLeft()) return TextAlignment.LEFT;
+        if (alignRight()) return TextAlignment.RIGHT;
         return TextAlignment.CENTER;
     }
 
