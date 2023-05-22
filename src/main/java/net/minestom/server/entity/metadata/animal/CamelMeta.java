@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CamelMeta extends AbstractHorseMeta {
     public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     public CamelMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
