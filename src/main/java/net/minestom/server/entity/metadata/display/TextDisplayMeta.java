@@ -110,7 +110,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         setMask(index, mask);
     }
 
-    public enum TextAlignment{
+    public enum TextAlignment {
         CENTER,
         LEFT,
         RIGHT
