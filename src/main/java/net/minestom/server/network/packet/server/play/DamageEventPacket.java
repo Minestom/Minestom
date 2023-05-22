@@ -10,9 +10,15 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-// Notes
-// sourceEntityId - 0 indicates no source entity, otherwise it is entityId + 1
-// sourceDirectId - 0 indicates no direct source. Direct attacks (e.g. melee) will have this number me the same as sourceEntityId, indirect attacks (e.g. projectiles) will have this be be the projectile entity id + 1
+/**
+ * See <a href="https://wiki.vg/Protocol#Damage_Event">https://wiki.vg/Protocol#Damage_Event</a> for more info.
+ *
+ * @param targetEntityId ID of the entity being damaged
+ * @param damageTypeId   0 if there is no damage type, otherwise the damage type ID + 1
+ * @param sourceEntityId 0 if there is no source entity, otherwise it is entityId + 1
+ * @param sourceDirectId 0 if there is no direct source. For direct attacks (e.g. melee), this is the same as sourceEntityId. For indirect attacks (e.g. projectiles), this is the projectile entity id + 1
+ * @param sourcePos      null if there is no source position, otherwise the position of the source
+ */
 public record DamageEventPacket(int targetEntityId, int damageTypeId, int sourceEntityId, int sourceDirectId, @Nullable Point sourcePos) implements ServerPacket {
 
     public DamageEventPacket(@NotNull NetworkBuffer reader) {
