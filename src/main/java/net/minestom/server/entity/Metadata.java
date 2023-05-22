@@ -31,8 +31,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, NetworkBuffer.VAR_INT);
     }
 
-    public static Entry<Long> Long(long value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.VAR_LONG);
+    public static Entry<Long> VarLong(long value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VARLONG, value, NetworkBuffer.VAR_LONG);
     }
 
     public static Entry<Float> Float(float value) {
@@ -126,7 +126,7 @@ public final class Metadata {
 
     public static final byte TYPE_BYTE = 0;
     public static final byte TYPE_VARINT = 1;
-    public static final byte TYPE_LONG = 2;
+    public static final byte TYPE_VARLONG = 2;
     public static final byte TYPE_FLOAT = 3;
     public static final byte TYPE_STRING = 4;
     public static final byte TYPE_CHAT = 5;

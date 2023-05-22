@@ -25,6 +25,6 @@ public class CamelMeta extends AbstractHorseMeta {
     }
 
     public void setLastPoseChangeTick(long value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Long(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarLong(value));
     }
 }
