@@ -36,6 +36,6 @@ public class SnifferMeta extends AnimalMeta {
         SNIFFING,
         SEARCHING,
         DIGGING,
-        RISING;
+        RISING
     }
 }
