@@ -5,8 +5,10 @@ import it.unimi.dsi.fastutil.chars.CharList;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -23,8 +25,15 @@ public class ArgumentTime extends Argument<Duration> {
 
     private static final CharList SUFFIXES = new CharArrayList(new char[]{'d', 's', 't'});
 
+    private int min = 0;
+
     public ArgumentTime(String id) {
         super(id);
+    }
+
+    public @NotNull ArgumentTime min(int min) {
+        this.min = min;
+        return this;
     }
 
     @NotNull
@@ -57,7 +66,13 @@ public class ArgumentTime extends Argument<Duration> {
         } catch (NumberFormatException e) {
             throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
         }
+    }
 
+    @Override
+    public byte @Nullable [] nodeProperties() {
+        return BinaryWriter.makeArray(packetWriter -> {
+            packetWriter.writeInt(min);
+        });
     }
 
     @Override

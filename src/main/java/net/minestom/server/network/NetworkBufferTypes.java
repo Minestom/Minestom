@@ -572,6 +572,19 @@ final class NetworkBufferTypes {
                 final float z = buffer.read(FLOAT);
                 return new Vec(x, y, z);
             });
+    static final TypeImpl<Point> VECTOR3D = new TypeImpl<>(Point.class,
+            (buffer, value) -> {
+                buffer.write(DOUBLE, value.x());
+                buffer.write(DOUBLE, value.y());
+                buffer.write(DOUBLE, value.z());
+                return -1;
+            },
+            buffer -> {
+                final double x = buffer.read(DOUBLE);
+                final double y = buffer.read(DOUBLE);
+                final double z = buffer.read(DOUBLE);
+                return new Vec(x, y, z);
+            });
     static final TypeImpl<float[]> QUATERNION = new TypeImpl<>(float[].class,
             (buffer, value) -> {
                 buffer.write(FLOAT, value[0]);
