@@ -5,8 +5,11 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -504,6 +507,41 @@ final class NetworkBufferTypes {
             buffer -> {
                 final int ordinal = buffer.read(VAR_INT);
                 return Entity.Pose.values()[ordinal];
+            });
+    static final TypeImpl<DeathLocation> DEATH_LOCATION = new TypeImpl<>(DeathLocation.class,
+            (buffer, value) -> {
+                if (value == null) {
+                    buffer.write(BOOLEAN, false);
+                } else {
+                    buffer.write(BOOLEAN, true);
+                    buffer.write(STRING, value.dimension());
+                    buffer.write(BLOCK_POSITION, value.position());
+                }
+                return -1;
+            },
+            buffer -> {
+                if (buffer.read(BOOLEAN)) {
+                    return new DeathLocation(buffer.read(STRING), buffer.read(BLOCK_POSITION));
+                }
+                return null;
+            });
+    static final TypeImpl<CatMeta.Variant> CAT_VARIANT = new TypeImpl<>(CatMeta.Variant.class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.ordinal());
+                return -1;
+            },
+            buffer -> {
+                final int ordinal = buffer.read(VAR_INT);
+                return CatMeta.Variant.values()[ordinal];
+            });
+    static final TypeImpl<FrogMeta.Variant> FROG_VARIANT = new TypeImpl<>(FrogMeta.Variant.class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.ordinal());
+                return -1;
+            },
+            buffer -> {
+                final int ordinal = buffer.read(VAR_INT);
+                return FrogMeta.Variant.values()[ordinal];
             });
 
     record TypeImpl<T>(@NotNull Class<T> type,

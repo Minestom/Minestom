@@ -54,8 +54,10 @@ public final class BoundingBox implements Shape {
             finalResult.collidedShapePosition = shapePos;
             finalResult.collidedShape = this;
             finalResult.blockType = null;
+            return true;
         }
-        return true;
+
+        return false;
     }
 
     /**

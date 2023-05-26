@@ -39,7 +39,6 @@ public class Main {
         commandManager.register(new TeleportCommand());
         commandManager.register(new PlayersCommand());
         commandManager.register(new FindCommand());
-        commandManager.register(new PotionCommand());
         commandManager.register(new TitleCommand());
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
@@ -54,7 +53,7 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new ExecuteCommand());
         commandManager.register(new RedirectTestCommand());
-
+        commandManager.register(new DebugGridCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

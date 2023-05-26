@@ -374,8 +374,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory,
-                        getPosition(), 1.0f, 1.0f));
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, null, soundCategory,
+                        getPosition(), 1.0f, 1.0f, 0));
             }
         });
 

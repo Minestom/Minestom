@@ -18,7 +18,7 @@ public class TestPermissions {
 
     private Player player;
 
-    private Permission permission1, permission2;
+    private Permission permission1, permission2, permission3, wildcard;
 
     @BeforeEach
     public void init() {
@@ -42,6 +42,10 @@ public class TestPermissions {
         );
 
         permission2 = new Permission("perm.name2");
+
+        permission3 = new Permission("perm.name2.sub.sub2");
+
+        wildcard = new Permission("*");
     }
 
     @Test
@@ -74,6 +78,63 @@ public class TestPermissions {
 
         player.addPermission(permission2);
         assertFalse(player.hasPermission("perm.name2", Objects::nonNull));
+    }
+
+    @Test
+    public void hasPatternMatchingWildcard() {
+        Permission permission = new Permission("foo.b*r.baz");
+        Permission match = new Permission("foo.baaar.baz");
+        Permission match2 = new Permission("foo.br.baz");
+        String match3 = "foo.br.baz";
+        String match4 = "foo.baaar.baz";
+        Permission nomatch = new Permission("foo.br.bz");
+        Permission nomatch2 = new Permission("foo.b.baz");
+        assertFalse(player.hasPermission(match));
+        assertFalse(player.hasPermission(match2));
+        assertFalse(player.hasPermission(nomatch));
+        assertFalse(player.hasPermission(nomatch2));
+
+        player.addPermission(permission);
+
+        assertTrue(player.hasPermission(match));
+        assertTrue(player.hasPermission(match2));
+        assertTrue(player.hasPermission(match3));
+        assertTrue(player.hasPermission(match4));
+        assertFalse(player.hasPermission(nomatch));
+        assertFalse(player.hasPermission(nomatch2));
+    }
+
+    @Test
+    public void hasPermissionWildcard() {
+        Permission permission = new Permission("foo.b*");
+        Permission match = new Permission("foo.baaar.baz");
+        Permission match2 = new Permission("foo.b");
+        String match3 = "foo.b";
+        String match4 = "foo.baaar.baz";
+        Permission nomatch = new Permission("foo.");
+        Permission nomatch2 = new Permission("foo/b");
+        assertFalse(player.hasPermission(match));
+        assertFalse(player.hasPermission(match2));
+        assertFalse(player.hasPermission(nomatch));
+        assertFalse(player.hasPermission(nomatch2));
+
+        player.addPermission(permission);
+
+        assertTrue(player.hasPermission(match));
+        assertTrue(player.hasPermission(match2));
+        assertTrue(player.hasPermission(match3));
+        assertTrue(player.hasPermission(match4));
+        assertFalse(player.hasPermission(nomatch));
+        assertFalse(player.hasPermission(nomatch2));
+    }
+
+    @Test
+    public void hasAllPermissionsWithWildcard() {
+        assertFalse(player.hasPermission(permission2));
+        assertFalse(player.hasPermission(permission3));
+        player.addPermission(wildcard);
+        assertTrue(player.hasPermission(permission2));
+        assertTrue(player.hasPermission(permission3));
     }
 
     @AfterEach
