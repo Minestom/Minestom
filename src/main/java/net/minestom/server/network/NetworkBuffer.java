@@ -65,6 +65,7 @@ public final class NetworkBuffer {
     public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypes.FROG_VARIANT;
     public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypes.SNIFFER_STATE;
     public static final Type<Point> VECTOR3 = NetworkBufferTypes.VECTOR3;
+    public static final Type<Point> VECTOR3D = NetworkBufferTypes.VECTOR3D;
     public static final Type<float[]> QUATERNION = NetworkBufferTypes.QUATERNION;
 
     ByteBuffer nioBuffer;
