@@ -257,7 +257,7 @@ final class SkyLight implements Light {
     @Override
     public byte[] array() {
         if (content == null) return new byte[0];
-        if (contentPropagation == null) return new byte[0];
+        if (contentPropagation == null) return content;
         var res = bake(contentPropagation, content);
         if (res == emptyContent) return new byte[0];
         return res;
