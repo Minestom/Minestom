@@ -34,6 +34,7 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -277,6 +278,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
         setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
     }
+
+    public abstract void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier);
+
+    /**
+     * Gets the chunk supplier of the instance.
+     * @return the chunk supplier of the instance
+     */
+    public abstract ChunkSupplier getChunkSupplier();
 
     /**
      * Gets the generator associated with the instance

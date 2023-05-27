@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,6 +74,16 @@ public class SharedInstance extends Instance {
     @Override
     public @NotNull CompletableFuture<Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
+    }
+
+    @Override
+    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+        instanceContainer.setChunkSupplier(chunkSupplier);
+    }
+
+    @Override
+    public ChunkSupplier getChunkSupplier() {
+        return instanceContainer.getChunkSupplier();
     }
 
     @Override
