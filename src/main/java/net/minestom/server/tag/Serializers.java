@@ -59,18 +59,14 @@ final class Serializers {
     }
 
     private static int[] uuidToIntArray(UUID uuid) {
-        int[] array = new int[4];
-
         final long uuidMost = uuid.getMostSignificantBits();
         final long uuidLeast = uuid.getLeastSignificantBits();
-
-        array[0] = (int) (uuidMost >> 32);
-        array[1] = (int) uuidMost;
-
-        array[2] = (int) (uuidLeast >> 32);
-        array[3] = (int) uuidLeast;
-
-        return array;
+        return new int[]{
+                (int) (uuidMost >> 32),
+                (int) uuidMost,
+                (int) (uuidLeast >> 32),
+                (int) uuidLeast
+        };
     }
 
     private static UUID intArrayToUuid(int[] array) {
