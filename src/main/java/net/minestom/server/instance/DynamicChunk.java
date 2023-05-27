@@ -39,7 +39,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
  */
 public class DynamicChunk extends Chunk {
 
-    private List<Section> sections;
+    protected List<Section> sections;
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -47,7 +47,6 @@ public class DynamicChunk extends Chunk {
 
     private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -61,7 +60,7 @@ public class DynamicChunk extends Chunk {
         assertLock();
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
-        this.lightCache.invalidate();
+
         // Update pathfinder
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
@@ -183,7 +182,7 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
-    private synchronized @NotNull ChunkDataPacket createChunkPacket() {
+    private @NotNull ChunkDataPacket createChunkPacket() {
         final NBTCompound heightmapsNBT;
         // TODO: don't hardcode heightmaps
         // Heightmap
@@ -203,20 +202,25 @@ public class DynamicChunk extends Chunk {
                     "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurface, bitsForHeight))));
         }
         // Data
-        final byte[] data = ObjectPool.PACKET_POOL.use(buffer ->
-                NetworkBuffer.makeArray(networkBuffer -> {
-                    for (Section section : sections) networkBuffer.write(section);
-                }));
+
+        final byte[] data;
+        synchronized (this) {
+            data = ObjectPool.PACKET_POOL.use(buffer ->
+                    NetworkBuffer.makeArray(networkBuffer -> {
+                        for (Section section : sections) networkBuffer.write(section);
+                    }));
+        }
+
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, data, entries),
-                createLightData());
+                createLightData(true));
     }
 
-    private synchronized @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
+    @NotNull UpdateLightPacket createLightPacket() {
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
-    private LightData createLightData() {
+    protected LightData createLightData(boolean sendAll) {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();
@@ -227,8 +231,8 @@ public class DynamicChunk extends Chunk {
         int index = 0;
         for (Section section : sections) {
             index++;
-            final byte[] skyLight = section.getSkyLight();
-            final byte[] blockLight = section.getBlockLight();
+            final byte[] skyLight = section.skyLight().array();
+            final byte[] blockLight = section.blockLight().array();
             if (skyLight.length != 0) {
                 skyLights.add(skyLight);
                 skyMask.set(index);

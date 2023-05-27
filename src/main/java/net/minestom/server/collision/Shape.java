@@ -1,11 +1,14 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Experimental
 public interface Shape {
+    boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face);
+
     /**
      * Checks if two bounding boxes intersect.
      *
