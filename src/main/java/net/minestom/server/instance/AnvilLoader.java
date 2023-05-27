@@ -101,7 +101,7 @@ public class AnvilLoader implements IChunkLoader {
 
         final ChunkReader chunkReader = new ChunkReader(chunkData);
 
-        Chunk chunk = new DynamicChunk(instance, chunkX, chunkZ);
+        Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
         synchronized (chunk) {
             var yRange = chunkReader.getYRange();
             if (yRange.getStart() < instance.getDimensionType().getMinY()) {
@@ -375,8 +375,8 @@ public class AnvilLoader implements IChunkLoader {
             ChunkSectionWriter sectionWriter = new ChunkSectionWriter(SupportedVersion.Companion.getLatest(), (byte) sectionY);
 
             Section section = chunk.getSection(sectionY);
-            sectionWriter.setSkyLights(section.getSkyLight());
-            sectionWriter.setBlockLights(section.getBlockLight());
+            sectionWriter.setSkyLights(section.skyLight().array());
+            sectionWriter.setBlockLights(section.blockLight().array());
 
             BiomePalette biomePalette = new BiomePalette();
             BlockPalette blockPalette = new BlockPalette();
