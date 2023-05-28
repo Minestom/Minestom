@@ -11,9 +11,9 @@ import java.util.Collection;
 
 public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
     /**
-     * Returns the entity registry.
+     * Returns the damage type registry.
      *
-     * @return the entity registry
+     * @return the damage type registry
      */
     @Contract(pure = true)
     Registry.DamageTypeEntry registry();
