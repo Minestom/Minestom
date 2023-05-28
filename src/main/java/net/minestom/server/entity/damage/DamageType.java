@@ -36,6 +36,8 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
         return registry().scaling();
     }
 
+    NBTCompound asNBT();
+
     static @NotNull Collection<@NotNull DamageType> values() {
         return DamageTypeImpl.values();
     }
