@@ -250,10 +250,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        var registry = new HashMap<String, NBT>();
-        registry.put("minecraft:chat_type", Messenger.chatRegistry());
-        registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
-        registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
+        // TODO replace with something like MinecraftServer.getDamageTypeManager().toNBT()
 
         var damageTypeData = Registry.load(Registry.Resource.DAMAGE_TYPES);
         var damageTypes = new ArrayList<NBT>();
@@ -275,13 +272,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     "element", NBT.Compound(elem)
             )));
         }
-        registry.put("minecraft:damage_type", NBT.Compound(Map.of(
+        NBTCompound damageTypeCompound = NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:damage_type"),
                 "value", NBT.List(NBTType.TAG_Compound, damageTypes)
-        )));
+        ));
+
+        NBTCompound nbt = NBT.Compound(Map.of(
+                "minecraft:chat_type", Messenger.chatRegistry(),
+                "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
+                "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT(),
+                "minecraft:damage_type", damageTypeCompound));
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of(dimensionType.getName().asString()), NBT.Compound(registry), dimensionType.toString(), dimensionType.getName().asString(),
+                List.of(dimensionType.getName().asString()), nbt, dimensionType.toString(), dimensionType.getName().asString(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, levelFlat, deathLocation);
         sendPacket(joinGamePacket);
