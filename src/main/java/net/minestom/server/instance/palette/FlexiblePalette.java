@@ -240,7 +240,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
                     final int y = index >> shiftedDimensionBitCount;
                     final int z = index >> dimensionBitCount & dimensionMinus;
                     final int x = index & dimensionMinus;
-                    final int result = ids != null ? ids[paletteIndex] : paletteIndex;
+                    final int result = ids != null && paletteIndex < ids.length ? ids[paletteIndex] : paletteIndex;
                     consumer.accept(x, y, z, result);
                 }
             }
