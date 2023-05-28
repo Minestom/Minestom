@@ -9,7 +9,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -53,7 +53,7 @@ public class PlayerInit {
 
                 if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    target.damage(DamageType.fromEntity(source), 5);
+                    target.damage(Damage.fromEntity(source, 5));
                 }
 
                 if (source instanceof Player) {

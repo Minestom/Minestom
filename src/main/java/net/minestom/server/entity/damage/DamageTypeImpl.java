@@ -1,4 +1,4 @@
-package net.minestom.server.damage;
+package net.minestom.server.entity.damage;
 
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;

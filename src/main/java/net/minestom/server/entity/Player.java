@@ -25,6 +25,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -837,7 +838,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public boolean isImmune(@NotNull DamageType type) {
         if (!getGameMode().canTakeDamage()) {
-            return type != DamageType.VOID;
+            return type != DamageType.OUT_OF_WORLD;
         }
         return super.isImmune(type);
     }
