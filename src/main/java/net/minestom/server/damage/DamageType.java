@@ -27,8 +27,8 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
         return registry().exhaustion();
     }
 
-    default String message_id() {
-        return registry().message_id();
+    default String messageId() {
+        return registry().messageId();
     }
 
     default String scaling() {

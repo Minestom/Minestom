@@ -417,7 +417,7 @@ public final class Registry {
     }
 
     public record DamageTypeEntry(NamespaceID namespace, double exhaustion,
-                                   String message_id,
+                                   String messageId,
                                    String scaling,
                                    Properties custom) implements Entry {
         public DamageTypeEntry(String namespace, Properties main, Properties custom) {
