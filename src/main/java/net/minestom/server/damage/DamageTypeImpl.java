@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public record DamageTypeImpl(Registry.DamageTypeEntry registry) implements DamageType {
+record DamageTypeImpl(Registry.DamageTypeEntry registry) implements DamageType {
     private static final Registry.Container<DamageType> CONTAINER = Registry.createContainer(Registry.Resource.DAMAGE_TYPES,
             (namespace, properties) -> new DamageTypeImpl(Registry.damageType(namespace, properties)));
 
