@@ -16,7 +16,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      * @return the damage type registry
      */
     @Contract(pure = true)
-    Registry.DamageTypeEntry registry();
+    @NotNull Registry.DamageTypeEntry registry();
 
     @Override
     default @NotNull NamespaceID namespace() {
