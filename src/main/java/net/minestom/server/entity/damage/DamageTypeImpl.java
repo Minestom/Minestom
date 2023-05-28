@@ -12,10 +12,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-record DamageTypeImpl(Registry.DamageTypeEntry registry) implements DamageType {
-    private static final Registry.Container<DamageType> CONTAINER = Registry.createContainer(Registry.Resource.DAMAGE_TYPES,
-            (namespace, properties) -> new DamageTypeImpl(Registry.damageType(namespace, properties)));
+record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements DamageType {
+    private static final Registry.Container<DamageType> CONTAINER;
+
+    static {
+        AtomicInteger i = new AtomicInteger();
+        CONTAINER = Registry.createContainer(Registry.Resource.DAMAGE_TYPES,
+                (namespace, properties) -> new DamageTypeImpl(Registry.damageType(namespace, properties), i.getAndIncrement()));
+    }
 
     static DamageType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -40,7 +46,7 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry) implements DamageType {
 
     @Override
     public int id() {
-        return CONTAINER.toId(name());
+        return id;
     }
 
     private static NBTCompound lazyNbt = null;
@@ -67,16 +73,10 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry) implements DamageType {
                         "element", NBT.Compound(elem)
                 )));
             }
-            NBTCompound damageTypeCompound = NBT.Compound(Map.of(
+            lazyNbt = NBT.Compound(Map.of(
                     "type", NBT.String("minecraft:damage_type"),
                     "value", NBT.List(NBTType.TAG_Compound, damageTypes)
             ));
-
-            lazyNbt = NBT.Compound(Map.of(
-                    "minecraft:chat_type", Messenger.chatRegistry(),
-                    "minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT(),
-                    "minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT(),
-                    "minecraft:damage_type", damageTypeCompound));
         }
         return lazyNbt;
     }
