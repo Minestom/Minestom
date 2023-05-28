@@ -214,24 +214,24 @@ public class LightingChunk extends DynamicChunk {
             }
         }
 
-        if (sendingTask == null) {
-            sendingTask = MinecraftServer.getSchedulerManager().scheduleTask(() -> {
-                sendingTask = null;
+        if (sendingTask != null) sendingTask.cancel();
+        sendingTask = MinecraftServer.getSchedulerManager().scheduleTask(() -> {
+            sendingTask = null;
 
-                for (LightingChunk f : sendQueue) {
-                    if (f.isLoaded()) {
-                        f.sections.forEach(s -> {
-                            s.blockLight().invalidate();
-                            s.skyLight().invalidate();
-                        });
-                        f.sendLighting();
-                        sendQueue.remove(f);
-                    }
+            for (LightingChunk f : sendQueue) {
+                if (f.isLoaded()) {
+                    f.sections.forEach(s -> {
+                        s.blockLight().invalidate();
+                        s.skyLight().invalidate();
+                    });
+                    sendQueue.remove(f);
 
                     f.chunkCache.invalidate();
+                    f.lightCache.invalidate();
+                    f.sendLighting();
                 }
-            }, TaskSchedule.tick(5), TaskSchedule.stop(), ExecutionType.ASYNC);
-        }
+            }
+        }, TaskSchedule.tick(10), TaskSchedule.stop(), ExecutionType.ASYNC);
     }
 
     private static void flushQueue(Instance instance, Set<Point> queue, LightType type) {
@@ -338,7 +338,7 @@ public class LightingChunk extends DynamicChunk {
         if (c == null) return;
 
         Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
-        // System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size());
+        // System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size() + " | " + type);
 
         synchronized (instance) {
             relight(instance, collected, type);
