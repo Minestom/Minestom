@@ -13,10 +13,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record UpdateEnabledFeaturesPacket(Collection<NamespaceID> featureFlags) implements ServerPacket {
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, featureFlags.size());
-        for (var featureFlag : featureFlags) {
-            writer.write(STRING, featureFlag.asString());
-        }
+        writer.writeCollection(featureFlags, ((w, value) -> w.write(STRING, value.asString())));
     }
 
     @Override
