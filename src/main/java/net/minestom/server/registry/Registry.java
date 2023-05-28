@@ -54,6 +54,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static DamageTypeEntry damageType(String namespace, @NotNull Properties main) {
+        return new DamageTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -407,6 +412,19 @@ public final class Registry {
                     main.getBoolean("isDiscoverable", true),
                     main.getBoolean("isTradeable", true),
                     main.getBoolean("isTreasureOnly", false),
+                    custom);
+        }
+    }
+
+    public record DamageTypeEntry(NamespaceID namespace, double exhaustion,
+                                   String messageId,
+                                   String scaling,
+                                   Properties custom) implements Entry {
+        public DamageTypeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getDouble("exhaustion"),
+                    main.getString("message_id"),
+                    main.getString("scaling"),
                     custom);
         }
     }
