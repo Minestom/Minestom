@@ -6,6 +6,7 @@ import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 
@@ -49,5 +50,9 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
 
     static @Nullable DamageType fromId(int id) {
         return DamageTypeImpl.getId(id);
+    }
+
+    static NBTCompound getNBT() {
+        return DamageTypeImpl.getNBT();
     }
 }
