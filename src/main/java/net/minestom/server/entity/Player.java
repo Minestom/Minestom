@@ -123,11 +123,11 @@ public class Player extends LivingEntity
     protected final PlayerConnection playerConnection;
 
     private int latency;
-    private Component displayName;
-    private PlayerSkin skin;
+    protected Component displayName;
+    protected PlayerSkin skin;
 
     private DimensionType dimensionType;
-    private GameMode gameMode;
+    protected GameMode gameMode;
     private DeathLocation deathLocation;
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of
@@ -158,7 +158,7 @@ public class Player extends LivingEntity
     private int receivedTeleportId;
 
     private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
-    private final boolean levelFlat;
+    protected final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
     private int level;
@@ -194,9 +194,9 @@ public class Player extends LivingEntity
     private boolean reducedDebugScreenInformation;
 
     // Abilities
-    private boolean flying;
-    private boolean allowFlying;
-    private boolean instantBreak;
+    protected boolean flying;
+    protected boolean allowFlying;
+    protected boolean instantBreak;
     private float flyingSpeed = 0.05f;
     private float fieldViewModifier = 0.1f;
 
@@ -506,7 +506,7 @@ public class Player extends LivingEntity
      * Sends necessary packets to synchronize player data after a
      * {@link RespawnPacket}
      */
-    private void refreshClientStateAfterRespawn() {
+    protected void refreshClientStateAfterRespawn() {
         sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         sendPacket(new SetExperiencePacket(exp, level, 0));
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level

@@ -1,51 +1,57 @@
 package net.minestom.demo;
 
-import net.minestom.demo.commands.GamemodeCommand;
-import net.minestom.demo.commands.SaveCommand;
+import net.minestom.demo.commands.PerPlayerCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
-import net.minestom.server.instance.AnvilLoader;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.BiomeManager;
+import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
 
-public class MainDemo {
+public class MainPerPlayerDemo {
 
     public static void main(String[] args) {
         // Initialization
         MinecraftServer minecraftServer = MinecraftServer.init();
+        MojangAuth.init();
 
-        MinecraftServer.getCommandManager().register(new GamemodeCommand());
-        MinecraftServer.getCommandManager().register(new SaveCommand());
+        MinecraftServer.getCommandManager().register(new PerPlayerCommand());
+
+        MinecraftServer.getConnectionManager().setPlayerProvider(PerPlayer::new);
+        DimensionType dimension = DimensionType.builder(NamespaceID.from("freddi:fulllight")).ambientLight(2.0f).skylightEnabled(true).build();
+        MinecraftServer.getDimensionTypeManager().addDimension(dimension);
 
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        // Create the instance
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
-        // Set the ChunkGenerator
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
 
-        // Add an event callback to specify the spawning instance (and the spawn position)
+        // Create the instance
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(dimension);
+
+        // Set the ChunkGenerator
+        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.BLUE_WOOL));
+
+
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(PlayerLoginEvent.class, event -> {
-            final Player player = event.getPlayer();
+            final PerPlayer player = (PerPlayer) event.getPlayer();
             player.setPermissionLevel(2);
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Pos(0, 42, 0));
+
         });
 
-        // Start the server on a free Port
+        // Start the server a free Port
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
-        minecraftServer.start("0.0.0.0", 0);
+        minecraftServer.start("0.0.0.0", 25565);
+
     }
+
 }
