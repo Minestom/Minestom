@@ -3,18 +3,13 @@ package net.minestom.server.network.packet.client.login;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.crypto.SaltSignaturePair;
-import net.minestom.server.crypto.SignatureValidator;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.Either;
-import net.minestom.server.utils.InterfaceUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
@@ -28,14 +23,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
 
 public record EncryptionResponsePacket(byte[] sharedSecret,
-                                       Either<byte[], SaltSignaturePair> nonceOrSignature) implements ClientPreplayPacket {
+                                       byte[] encryptedVerifyToken) implements ClientPreplayPacket {
     private static final Gson GSON = new Gson();
 
     public EncryptionResponsePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BYTE_ARRAY), reader.readEither(networkBuffer -> networkBuffer.read(BYTE_ARRAY), SaltSignaturePair::new));
+        this(reader.read(BYTE_ARRAY), reader.read(BYTE_ARRAY));
     }
 
     @Override
@@ -50,15 +45,8 @@ public record EncryptionResponsePacket(byte[] sharedSecret,
             }
 
             final boolean hasPublicKey = connection.playerPublicKey() != null;
-            final boolean verificationFailed = nonceOrSignature.map(
-                    nonce -> hasPublicKey || !Arrays.equals(socketConnection.getNonce(),
-                            MojangCrypt.decryptUsingKey(MojangAuth.getKeyPair().getPrivate(), nonce)),
-                    signature -> !hasPublicKey || !SignatureValidator
-                            .from(connection.playerPublicKey().publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA)
-                            .validate(binaryWriter -> {
-                                binaryWriter.write(RAW_BYTES, socketConnection.getNonce());
-                                binaryWriter.write(LONG, signature.salt());
-                            }, signature.signature()));
+            final boolean verificationFailed = hasPublicKey || !Arrays.equals(socketConnection.getNonce(),
+                    MojangCrypt.decryptUsingKey(MojangAuth.getKeyPair().getPrivate(), encryptedVerifyToken));
 
             if (verificationFailed) {
                 MinecraftServer.LOGGER.error("Encryption failed for {}", loginUsername);
@@ -111,8 +99,7 @@ public record EncryptionResponsePacket(byte[] sharedSecret,
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(BYTE_ARRAY, sharedSecret);
-        writer.writeEither(nonceOrSignature, (networkBuffer, bytes) -> networkBuffer.write(BYTE_ARRAY, bytes),
-                InterfaceUtils.flipBiConsumer(SaltSignaturePair::write));
+        writer.write(BYTE_ARRAY, encryptedVerifyToken);
     }
 
     private SecretKey getSecretKey() {

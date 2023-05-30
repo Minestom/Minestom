@@ -1,5 +1,13 @@
 package net.minestom.server.network;
 
+import java.util.BitSet;
+import java.util.Collection;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import java.util.UUID;
+
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -18,9 +26,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -206,6 +211,43 @@ public final class NetworkBuffer {
 
     public <E extends Enum<?>> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
         return enumClass.getEnumConstants()[read(VAR_INT)];
+    }
+
+    public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> enumType) {
+        final E[] values = enumType.getEnumConstants();
+        BitSet bitSet = new BitSet(values.length);
+        for (int i = 0; i < values.length; ++i) {
+            bitSet.set(i, enumSet.contains(values[i]));
+        }
+        writeFixedBitSet(bitSet, values.length);
+    }
+
+    public <E extends Enum<E>> @NotNull EnumSet<E> readEnumSet(Class<E> enumType) {
+        final E[] values = enumType.getEnumConstants();
+        BitSet bitSet = readFixedBitSet(values.length);
+        EnumSet<E> enumSet = EnumSet.noneOf(enumType);
+        for (int i = 0; i < values.length; ++i) {
+            if (bitSet.get(i)) {
+                enumSet.add(values[i]);
+            }
+        }
+        return enumSet;
+    }
+
+    public void writeFixedBitSet(BitSet set, int length) {
+        final int setLength = set.length();
+        if (setLength > length) {
+            throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
+        } else {
+            final byte[] array = set.toByteArray();
+            write(RAW_BYTES, array);
+        }
+    }
+
+    @NotNull
+    public BitSet readFixedBitSet(int length) {
+        final byte[] array = readBytes((length + 7) / 8);
+        return BitSet.valueOf(array);
     }
 
     public byte[] readBytes(int length) {

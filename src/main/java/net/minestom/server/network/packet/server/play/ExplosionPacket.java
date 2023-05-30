@@ -7,19 +7,19 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ExplosionPacket(float x, float y, float z, float radius, byte @NotNull [] records,
+public record ExplosionPacket(double x, double y, double z, float radius, byte @NotNull [] records,
                               float playerMotionX, float playerMotionY, float playerMotionZ) implements ServerPacket {
     public ExplosionPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT),
+        this(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
                 reader.read(FLOAT), reader.readBytes(reader.read(VAR_INT) * 3),
                 reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(FLOAT, x);
-        writer.write(FLOAT, y);
-        writer.write(FLOAT, z);
+        writer.write(DOUBLE, x);
+        writer.write(DOUBLE, y);
+        writer.write(DOUBLE, z);
         writer.write(FLOAT, radius);
         writer.write(VAR_INT, records.length / 3); // each record is 3 bytes long
         writer.write(RAW_BYTES, records);
