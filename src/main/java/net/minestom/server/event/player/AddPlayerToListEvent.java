@@ -6,7 +6,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.trait.PlayerEvent;
-import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
+import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class AddPlayerToListEvent implements PlayerEvent {
     private final Player player;
     private UUID uuid;
     private String username;
-    private List<PlayerInfoPacket.AddPlayer.Property> properties;
+    private List<PlayerInfoUpdatePacket.Property> properties;
     private GameMode gameMode;
     private int ping;
     private Component displayName;
@@ -29,7 +29,7 @@ public class AddPlayerToListEvent implements PlayerEvent {
     private final Player receiver;
 
     public AddPlayerToListEvent(@NotNull Player player, UUID uuid, String username, List
-            <PlayerInfoPacket.AddPlayer.Property> properties, GameMode gameMode, int ping, Component displayName, PlayerPublicKey publicKey, @Nullable Player receiver) {
+            <PlayerInfoUpdatePacket.Property> properties, GameMode gameMode, int ping, Component displayName, PlayerPublicKey publicKey, @Nullable Player receiver) {
         this.player = player;
         this.uuid = uuid;
         this.username = username;
@@ -47,7 +47,7 @@ public class AddPlayerToListEvent implements PlayerEvent {
      * @param skin the new player skin
      */
     public void setSkin(@Nullable PlayerSkin skin) {
-        properties = List.of(new PlayerInfoPacket.AddPlayer.Property("textures", skin.textures(), skin.signature()));
+        properties = List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature()));
     }
 
     public UUID getUuid() {
@@ -66,11 +66,11 @@ public class AddPlayerToListEvent implements PlayerEvent {
         this.username = username;
     }
 
-    public void setProperties(List<PlayerInfoPacket.AddPlayer.Property> properties) {
+    public void setProperties(List<PlayerInfoUpdatePacket.Property> properties) {
         this.properties = properties;
     }
 
-    public List<PlayerInfoPacket.AddPlayer.Property> getProperties() {
+    public List<PlayerInfoUpdatePacket.Property> getProperties() {
         return properties;
     }
 
