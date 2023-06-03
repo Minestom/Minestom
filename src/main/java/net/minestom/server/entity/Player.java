@@ -2163,8 +2163,15 @@ public class Player extends LivingEntity
 
     @Override
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+        PlayerTeleportEvent playerTeleportEvent = new PlayerTeleportEvent(this, position, chunks);
+        EventDispatcher.call(playerTeleportEvent);
+        if (playerTeleportEvent.isCancelled()) {
+            return AsyncUtils.empty();
+        }
         chunkUpdateLimitChecker.clearHistory();
         return super.teleport(position, chunks);
+
+        return super.teleport(playerTeleportEvent.getPos(), playerTeleportEvent.getChunks());
     }
 
     /**
