@@ -2173,8 +2173,6 @@ public class Player extends LivingEntity
             return AsyncUtils.empty();
         }
         chunkUpdateLimitChecker.clearHistory();
-        return super.teleport(position, chunks);
-
         return super.teleport(playerTeleportEvent.getPos(), playerTeleportEvent.getChunks());
     }
 
