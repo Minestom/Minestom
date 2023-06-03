@@ -403,6 +403,19 @@ public class Player extends LivingEntity
             }
         }
 
+        // Unmount Player
+        if (getVehicle() != null)
+            if (getVehicleInformation().shouldUnmount()) {
+                PlayerUnmountVehicleEvent playerUnmountVehicleEvent = new PlayerUnmountVehicleEvent(this, getVehicle());
+                EventDispatcher.callCancellable(playerUnmountVehicleEvent, () -> {
+                    getVehicle().removePassenger(this);
+                    MinecraftServer.getSchedulerManager().buildTask(() -> {
+                        refreshPosition(getPosition());
+                        getVehicleInformation().refresh(0, 0, false, false);
+                    }).delay(1, TimeUnit.CLIENT_TICK).schedule();
+                });
+            }
+
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
     }
