@@ -2,7 +2,7 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.sound.SoundEvent;
@@ -10,22 +10,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Called with {@link LivingEntity#damage(DamageType, float)}.
+ * Called with {@link LivingEntity#damage(Damage)}.
  */
 public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
-    private final DamageType damageType;
-    private float damage;
+    private final Damage damage;
     private SoundEvent sound;
     private boolean animation = true;
 
     private boolean cancelled;
 
-    public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull DamageType damageType,
-                             float damage, @Nullable SoundEvent sound) {
+    public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull Damage damage, @Nullable SoundEvent sound) {
         this.entity = entity;
-        this.damageType = damageType;
         this.damage = damage;
         this.sound = sound;
     }
@@ -37,31 +34,13 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
     }
 
     /**
-     * Gets the damage type.
+     * Gets the damage.
      *
-     * @return the damage type
+     * @return the damage
      */
     @NotNull
-    public DamageType getDamageType() {
-        return damageType;
-    }
-
-    /**
-     * Gets the damage amount.
-     *
-     * @return the damage amount
-     */
-    public float getDamage() {
+    public Damage getDamage() {
         return damage;
-    }
-
-    /**
-     * Changes the damage amount.
-     *
-     * @param damage the new damage amount
-     */
-    public void setDamage(float damage) {
-        this.damage = damage;
     }
 
     /**

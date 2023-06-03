@@ -18,7 +18,7 @@ public class EndermanMeta extends MonsterMeta {
     }
 
     public void setCarriedBlockID(@Nullable Integer value) {
-        super.metadata.setIndex(OFFSET, Metadata.OptBlockID(value));
+        super.metadata.setIndex(OFFSET, Metadata.OptBlockState(value));
     }
 
     public boolean isScreaming() {
