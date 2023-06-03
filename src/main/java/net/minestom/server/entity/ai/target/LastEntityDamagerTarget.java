@@ -32,6 +32,6 @@ public class LastEntityDamagerTarget extends TargetSelector {
             return null;
         }
         // Check range
-        return entityCreature.getDistance(entity) < range ? entity : null;
+        return entityCreature.getDistanceSquared(entity) < range * range ? entity : null;
     }
 }

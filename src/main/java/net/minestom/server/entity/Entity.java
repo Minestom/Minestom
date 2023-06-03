@@ -1000,6 +1000,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return getDistance(entity.getPosition());
     }
 
+    public double getDistanceSquared(@NotNull Point point) {
+        return getPosition().distanceSquared(point);
+    }
+
     /**
      * Gets the distance squared between two entities.
      *
@@ -1716,7 +1720,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         Optional<Entity> nearby = instance.getNearbyEntities(position, range).stream()
                 .filter(finalPredicate)
-                .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
+                .min(Comparator.comparingDouble(e -> e.getDistanceSquared(this)));
 
         return nearby.orElse(null);
     }
