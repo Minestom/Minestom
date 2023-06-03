@@ -1959,10 +1959,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
         }
-        // Team
-        if (this.getTeam() != null) {
-            connection.sendPacket(this.getTeam().createTeamsCreationPacket());
-        }
         connection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
