@@ -1,6 +1,7 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.minestom.demo.commands.DisplayCommand;
 import net.minestom.demo.commands.PerPlayerCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -31,6 +32,7 @@ public class MainPerPlayerDemo {
         MojangAuth.init();
 
         MinecraftServer.getCommandManager().register(new PerPlayerCommand());
+        MinecraftServer.getCommandManager().register(new DisplayCommand());
 
         MinecraftServer.getConnectionManager().setPlayerProvider(PerPlayer::new);
         DimensionType dimension = DimensionType.builder(NamespaceID.from("freddi:fulllight")).ambientLight(2.0f).skylightEnabled(true).build();
@@ -59,9 +61,6 @@ public class MainPerPlayerDemo {
         globalEventHandler.addListener(PlayerChatEvent.class,event -> {
             PerPlayer player = (PerPlayer) event.getPlayer();
             LOGGER.info(event.getPlayer().getUsername() + "(" + event.getPlayer().getUuid() + "): " + event.getMessage());
-            Entity entity = new Entity(() -> {
-                return EntityType.ELDER_GUARDIAN
-            })
 
         });
 
