@@ -1,9 +1,14 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.demo.commands.PerPlayerCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
@@ -19,6 +24,7 @@ import java.time.Duration;
 
 public class MainPerPlayerDemo {
 
+    public static final ComponentLogger LOGGER = ComponentLogger.logger(MainPerPlayerDemo.class);
     public static void main(String[] args) {
         // Initialization
         MinecraftServer minecraftServer = MinecraftServer.init();
@@ -45,6 +51,17 @@ public class MainPerPlayerDemo {
             player.setPermissionLevel(2);
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Pos(0, 42, 0));
+        });
+
+        globalEventHandler.addListener(PlayerCommandEvent.class, event -> {
+            LOGGER.info(event.getPlayer().getUsername() + "(" + event.getPlayer().getUuid() + "): /" + event.getCommand());
+        });
+        globalEventHandler.addListener(PlayerChatEvent.class,event -> {
+            PerPlayer player = (PerPlayer) event.getPlayer();
+            LOGGER.info(event.getPlayer().getUsername() + "(" + event.getPlayer().getUuid() + "): " + event.getMessage());
+            Entity entity = new Entity(() -> {
+                return EntityType.ELDER_GUARDIAN
+            })
 
         });
 
