@@ -177,6 +177,7 @@ public class PlayerIntegrationTest {
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+
         player.setDisplayName(Component.text("Display Name!"));
 
         var connection2 = env.createConnection();
@@ -184,7 +185,7 @@ public class PlayerIntegrationTest {
         connection2.connect(instance, new Pos(0, 42, 0)).join();
 
         var displayNamePackets = tracker2.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((a) -> a == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(1, displayNamePackets);
 
@@ -193,12 +194,12 @@ public class PlayerIntegrationTest {
         player.setDisplayName(Component.text("Other Name!"));
 
         var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((a) -> a == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(1, displayNamePackets2);
 
         var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((a) -> a == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(2, displayNamePackets3);
     }
