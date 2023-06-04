@@ -300,6 +300,8 @@ public class Player extends LivingEntity
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             if (player != this)
                 sendPacket(player.getAddPlayerToList());
+            if (player != this)
+                sendPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player.infoEntry()));
         }
 
         // Teams
@@ -372,7 +374,7 @@ public class Player extends LivingEntity
                                     experienceOrb);
                             EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                                 short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to
-                                                                                                    // player
+                                // player
                                 experienceOrb.remove();
                             });
                         }
@@ -674,8 +676,8 @@ public class Player extends LivingEntity
      *
      * @param instance the new player instance
      * @return a {@link CompletableFuture} called once the entity's instance has
-     *         been set,
-     *         this is due to chunks needing to load for players
+     * been set,
+     * this is due to chunks needing to load for players
      * @see #setInstance(Instance, Pos)
      */
     @Override
@@ -698,7 +700,7 @@ public class Player extends LivingEntity
      *                      chunks
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
-            boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
+                             boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
@@ -978,7 +980,7 @@ public class Player extends LivingEntity
      * Gets the player display name in the tab-list.
      *
      * @return the player display name, null means that {@link #getUsername()} is
-     *         displayed
+     * displayed
      */
     public @Nullable Component getDisplayName() {
         return displayName;
@@ -1001,7 +1003,7 @@ public class Player extends LivingEntity
      * Gets the player skin.
      *
      * @return the player skin object,
-     *         null means that the player has his {@link #getUuid()} default skin
+     * null means that the player has his {@link #getUuid()} default skin
      */
     public @Nullable PlayerSkin getSkin() {
         return skin;
@@ -1120,7 +1122,7 @@ public class Player extends LivingEntity
      *
      * @param item the item to drop
      * @return true if player can drop the item (event not cancelled), false
-     *         otherwise
+     * otherwise
      */
     public boolean dropItem(@NotNull ItemStack item) {
         if (item.isAir())
@@ -1161,7 +1163,7 @@ public class Player extends LivingEntity
     }
 
     private void facePosition(@NotNull FacePoint facePoint, @NotNull Point targetPosition,
-            @Nullable Entity entity, @Nullable FacePoint targetPoint) {
+                              @Nullable Entity entity, @Nullable FacePoint targetPoint) {
         final int entityId = entity != null ? entity.getEntityId() : 0;
         sendPacket(new FacePlayerPacket(
                 facePoint == FacePoint.EYE ? FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET,
@@ -1497,7 +1499,7 @@ public class Player extends LivingEntity
      * Gets the player open inventory.
      *
      * @return the currently open inventory, null if there is not (player inventory
-     *         is not detected)
+     * is not detected)
      */
     public @Nullable Inventory getOpenInventory() {
         return openInventory;
@@ -1508,7 +1510,7 @@ public class Player extends LivingEntity
      *
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false
-     *         otherwise (cancelled by event)
+     * otherwise (cancelled by event)
      */
     public boolean openInventory(@NotNull Inventory inventory) {
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
@@ -1700,7 +1702,7 @@ public class Player extends LivingEntity
     @Override
     public void setSneaking(boolean sneaking) {
         if (isFlying()) { // If we are flying, don't set the players pose to sneaking as this can clip
-                          // them through blocks
+            // them through blocks
             this.entityMeta.setSneaking(sneaking);
         } else {
             super.setSneaking(sneaking);
@@ -1778,8 +1780,8 @@ public class Player extends LivingEntity
      *
      * @param instantBreak true to allow instant break
      * @see <a href=
-     *      "https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">player
-     *      abilities</a>
+     * "https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">player
+     * abilities</a>
      */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;
@@ -1949,7 +1951,7 @@ public class Player extends LivingEntity
      *
      * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
-     *         null if there is no item to update the state
+     * null if there is no item to update the state
      * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
     @Deprecated
@@ -1974,7 +1976,7 @@ public class Player extends LivingEntity
      * It does check which hand to get the item to update. Allows food.
      *
      * @return the called {@link ItemUpdateStateEvent},
-     *         null if there is no item to update the state
+     * null if there is no item to update the state
      */
     public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
         return callItemUpdateStateEvent(true, hand);
@@ -2298,7 +2300,7 @@ public class Player extends LivingEntity
          * @param mainHand           the player main hand
          */
         public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
-                byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
+                            byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
             // Clamp viewDistance to valid bounds
             this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
