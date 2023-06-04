@@ -203,4 +203,38 @@ public class PlayerIntegrationTest {
                 .count();
         assertEquals(2, displayNamePackets3);
     }
+
+    @Test
+    public void teamPacketTest(Env env) {
+        var team = env.process().team().createTeam("minestom");
+
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(TeamsPacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+
+        // Make sure team is sent to player on join
+        var createPackets = tracker.collect().stream().filter((packet) ->
+                        packet.action() instanceof TeamsPacket.CreateTeamAction)
+                .count();
+        assertEquals(1, createPackets);
+
+
+        var tracker2 = connection.trackIncoming(TeamsPacket.class);
+        var tracker3 = connection.trackIncoming(TeamsPacket.class);
+        player.setTeam(team);
+        player.setTeam(team);
+
+        // Check for repeated team creation
+        var createPackets2 = tracker2.collect().stream().filter((packet) ->
+                        packet.action() instanceof TeamsPacket.CreateTeamAction)
+                .count();
+        assertEquals(0, createPackets2);
+
+        // Check for repeated team member add
+        var addMemberPackets = tracker3.collect().stream().filter((packet) ->
+                        packet.action() instanceof TeamsPacket.AddEntitiesToTeamAction)
+                .count();
+        assertEquals(1, addMemberPackets);
+    }
 }
