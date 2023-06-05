@@ -8,13 +8,18 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerOption;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
+import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
@@ -24,6 +29,7 @@ import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -120,11 +126,36 @@ public class Main {
         MinecraftServer.getGlobalEventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
             event.setCancelled(true);
         });
+        new FakePlayer(UUID.randomUUID(), "Freddi 1", new FakePlayerOption().setInTabList(true).setRegistered(true), f -> {
+            f.setSkin(PlayerSkin.fromUsername("Freddiio"));
+            f.eventNode().addListener(PlayerEntityInteractEvent.class, event -> {
+                event.getPlayer().sendMessage("Eyy");
+            });
+        }){
+            @Override
+            public void interact(Player player, Hand hand, Point interactPosition) {
+                player.sendMessage("Yooo 1");
+            }
 
-       /* FakePlayer.initPlayer(UUID.randomUUID(), "TEST", new FakePlayerOption().setInTabList(false).setRegistered(false), fakePlayer -> {
-            fakePlayer.setSkin(PlayerSkin.fromUsername("ArizeFreddi"), null);
-        });
-*/
+            @Override
+            public void attack(Player player) {
+                player.sendMessage("Aua 1");
+            }
+        };
+        new FakePlayer(UUID.randomUUID(), "Freddi 2", new FakePlayerOption().setInTabList(true).setRegistered(true), f -> {
+            f.setSkin(PlayerSkin.fromUsername("Freddiio"));
+        }){
+            @Override
+            public void interact(Player player, Hand hand, Point interactPosition) {
+                player.sendMessage("Yooo 2");
+            }
+
+            @Override
+            public void attack(Player player) {
+                player.sendMessage("Aua 2");
+            }
+        };
+
         PlayerInit.init();
 
         OptifineSupport.enable();
@@ -137,7 +168,7 @@ public class Main {
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
 
-        minecraftServer.start("0.0.0.0", 0);
+        minecraftServer.start("0.0.0.0", 25565);
 //        minecraftServer.start(java.net.UnixDomainSocketAddress.of("minestom-demo.sock"));
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }

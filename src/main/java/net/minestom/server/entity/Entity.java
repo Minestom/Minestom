@@ -1721,6 +1721,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return nearby.orElse(null);
     }
 
+    public void attack(Player player) {
+        
+    }
+
+    public void interact(Player player, Player.Hand hand, Point interactPosition) {
+    }
+
     public enum Pose {
         STANDING,
         FALL_FLYING,
