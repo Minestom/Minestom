@@ -62,7 +62,7 @@ public final class MinecraftServer {
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
 
-    private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
+    private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 32);
     private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
     private static int compressionThreshold = 256;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;

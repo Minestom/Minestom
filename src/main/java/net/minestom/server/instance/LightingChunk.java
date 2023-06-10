@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static net.minestom.server.instance.light.LightCompute.emptyContent;
+
 public class LightingChunk extends DynamicChunk {
     private int[] heightmap;
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
@@ -169,7 +171,7 @@ public class LightingChunk extends DynamicChunk {
 
             // System.out.println("Relit sky: " + wasUpdatedSky + " block: " + wasUpdatedBlock + " for section " + (index + minSection) + " in chunk " + chunkX + " " + chunkZ);
 
-            if ((wasUpdatedSky || sendAll) && this.instance.getDimensionType().isSkylightEnabled()) {
+            if ((wasUpdatedSky || (sendAll && skyLight != emptyContent)) && this.instance.getDimensionType().isSkylightEnabled()) {
                 if (skyLight.length != 0) {
                     skyLights.add(skyLight);
                     skyMask.set(index);
@@ -178,7 +180,7 @@ public class LightingChunk extends DynamicChunk {
                 }
             }
 
-            if (wasUpdatedBlock || sendAll) {
+            if (wasUpdatedBlock || (sendAll && blockLight != emptyContent)) {
                 if (blockLight.length != 0) {
                     blockLights.add(blockLight);
                     blockMask.set(index);
