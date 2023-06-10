@@ -12,14 +12,14 @@ import java.util.Objects;
 
 import static net.minestom.server.instance.light.BlockLight.buildInternalQueue;
 
-final class LightCompute {
+public final class LightCompute {
     static final BlockFace[] FACES = BlockFace.values();
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SIDE_LENGTH = 16 * 16;
     static final int SECTION_SIZE = 16;
 
-    private static final byte[][] emptyBorders = new byte[FACES.length][SIDE_LENGTH];
-    static final byte[] emptyContent = new byte[LIGHT_LENGTH];
+    public static final byte[][] emptyBorders = new byte[FACES.length][SIDE_LENGTH];
+    public static final byte[] emptyContent = new byte[LIGHT_LENGTH];
 
     static @NotNull Result compute(Palette blockPalette) {
         Block[] blocks = new Block[4096];
