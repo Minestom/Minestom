@@ -1338,7 +1338,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * @return The height offset for passengers of this vehicle
      */
-    private double getPassengerHeightOffset() {
+    protected double getPassengerHeightOffset() {
         // TODO: Move this logic elsewhere
         if (entityType == EntityType.BOAT) {
             return -0.1;
