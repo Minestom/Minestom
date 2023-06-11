@@ -449,7 +449,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             for (Entity passenger : passengers) {
                 if (passenger != player) passenger.updateNewViewer(player);
             }
-            player.sendPacket(getPassengersPacket());
+            sendPacketToViewersAndSelf(getPassengersPacket());
         }
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
