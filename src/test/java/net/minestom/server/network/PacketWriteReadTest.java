@@ -28,6 +28,7 @@ import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingre
 import net.minestom.server.network.packet.server.status.PongPacket;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.apache.commons.net.util.Base64;
+import net.minestom.server.recipe.CraftingRecipeCategory;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,7 @@ public class PacketWriteReadTest {
                 List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
                                 "minecraft:sticks",
                                 "sticks",
+                                CraftingRecipeCategory.MISC,
                                 List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
                                 ItemStack.of(Material.STICK)
                         ),
@@ -103,6 +105,7 @@ public class PacketWriteReadTest {
                                 1,
                                 2,
                                 "",
+                                CraftingRecipeCategory.MISC,
                                 List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
                                         new Ingredient(List.of(ItemStack.of(Material.STICK)))),
                                 ItemStack.of(Material.TORCH)

@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class CampfireCookingRecipe extends Recipe {
     private String group;
+
+    private CookingRecipeCategory category;
     private DeclareRecipesPacket.Ingredient ingredient;
     private ItemStack result;
     private float experience;
@@ -14,12 +16,14 @@ public abstract class CampfireCookingRecipe extends Recipe {
     protected CampfireCookingRecipe(
             @NotNull String recipeId,
             @NotNull String group,
+            @NotNull CookingRecipeCategory category,
             @NotNull ItemStack result,
             float experience,
             int cookingTime
     ) {
         super(Type.CAMPFIRE_COOKING, recipeId);
         this.group = group;
+        this.category = category;
         this.result = result;
         this.experience = experience;
         this.cookingTime = cookingTime;
@@ -32,6 +36,15 @@ public abstract class CampfireCookingRecipe extends Recipe {
 
     public void setGroup(@NotNull String group) {
         this.group = group;
+    }
+
+    @NotNull
+    public CookingRecipeCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(@NotNull CookingRecipeCategory category) {
+        this.category = category;
     }
 
     @NotNull

@@ -50,6 +50,7 @@ public class RecipeManager {
                             new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
                                     shapelessRecipe.getRecipeId(),
                                     shapelessRecipe.getGroup(),
+                                    shapelessRecipe.getCategory(),
                                     shapelessRecipe.getIngredients(),
                                     shapelessRecipe.getResult()));
                 }
@@ -61,6 +62,7 @@ public class RecipeManager {
                                     shapedRecipe.getWidth(),
                                     shapedRecipe.getHeight(),
                                     shapedRecipe.getGroup(),
+                                    shapedRecipe.getCategory(),
                                     shapedRecipe.getIngredients(),
                                     shapedRecipe.getResult()));
                 }
@@ -70,6 +72,7 @@ public class RecipeManager {
                             new DeclareRecipesPacket.DeclaredSmeltingRecipe(
                                     smeltingRecipe.getRecipeId(),
                                     smeltingRecipe.getGroup(),
+                                    smeltingRecipe.getCategory(),
                                     smeltingRecipe.getIngredient(),
                                     smeltingRecipe.getResult(),
                                     smeltingRecipe.getExperience(),
@@ -81,6 +84,7 @@ public class RecipeManager {
                             new DeclareRecipesPacket.DeclaredBlastingRecipe(
                                     blastingRecipe.getRecipeId(),
                                     blastingRecipe.getGroup(),
+                                    blastingRecipe.getCategory(),
                                     blastingRecipe.getIngredient(),
                                     blastingRecipe.getResult(),
                                     blastingRecipe.getExperience(),
@@ -92,6 +96,7 @@ public class RecipeManager {
                             new DeclareRecipesPacket.DeclaredSmokingRecipe(
                                     smokingRecipe.getRecipeId(),
                                     smokingRecipe.getGroup(),
+                                    smokingRecipe.getCategory(),
                                     smokingRecipe.getIngredient(),
                                     smokingRecipe.getResult(),
                                     smokingRecipe.getExperience(),
@@ -103,6 +108,7 @@ public class RecipeManager {
                             new DeclareRecipesPacket.DeclaredCampfireCookingRecipe(
                                     campfireCookingRecipe.getRecipeId(),
                                     campfireCookingRecipe.getGroup(),
+                                    campfireCookingRecipe.getCategory(),
                                     campfireCookingRecipe.getIngredient(),
                                     campfireCookingRecipe.getResult(),
                                     campfireCookingRecipe.getExperience(),
