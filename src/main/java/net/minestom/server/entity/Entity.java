@@ -449,7 +449,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             for (Entity passenger : passengers) {
                 if (passenger != player) passenger.updateNewViewer(player);
             }
-            player.sendPacket(getPassengersPacket());
+            sendPacketToViewersAndSelf(getPassengersPacket());
         }
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
@@ -858,11 +858,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (Objects.equals(previousInstance, instance)) {
             return teleport(spawnPosition); // Already in the instance, teleport to spawn point
         }
+        if (previousInstance != null) removeFromInstance(previousInstance);
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
         EventDispatcher.call(event);
         if (event.isCancelled()) return null; // TODO what to return?
 
-        if (previousInstance != null) removeFromInstance(previousInstance);
 
         this.isActive = true;
         this.position = spawnPosition;
@@ -1338,7 +1338,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * @return The height offset for passengers of this vehicle
      */
-    private double getPassengerHeightOffset() {
+    protected double getPassengerHeightOffset() {
         // TODO: Move this logic elsewhere
         if (entityType == EntityType.BOAT) {
             return -0.1;
@@ -1719,6 +1719,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 .min(Comparator.comparingDouble(e -> e.getDistance(this.position)));
 
         return nearby.orElse(null);
+    }
+
+    public void attack(Player player) {
+        
+    }
+
+    public void interact(Player player, Player.Hand hand, Point interactPosition) {
     }
 
     public enum Pose {

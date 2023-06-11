@@ -10,6 +10,9 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.arrow.ArrowMeta;
 import net.minestom.server.entity.metadata.arrow.SpectralArrowMeta;
 import net.minestom.server.entity.metadata.arrow.ThrownTridentMeta;
+import net.minestom.server.entity.metadata.display.BlockDisplayMeta;
+import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
+import net.minestom.server.entity.metadata.display.TextDisplayMeta;
 import net.minestom.server.entity.metadata.flying.GhastMeta;
 import net.minestom.server.entity.metadata.flying.PhantomMeta;
 import net.minestom.server.entity.metadata.golem.IronGolemMeta;
@@ -83,8 +86,10 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:bat", BatMeta::new),
                 entry("minecraft:bee", BeeMeta::new),
                 entry("minecraft:blaze", BlazeMeta::new),
+                entry("minecraft:block_display", BlockDisplayMeta::new),
                 entry("minecraft:boat", BoatMeta::new),
                 entry("minecraft:chest_boat", EntityMeta::new), // TODO dedicated metadata
+                entry("minecraft:camel", CamelMeta::new),
                 entry("minecraft:cat", CatMeta::new),
                 entry("minecraft:cave_spider", CaveSpiderMeta::new),
                 entry("minecraft:chicken", ChickenMeta::new),
@@ -118,8 +123,10 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:horse", HorseMeta::new),
                 entry("minecraft:husk", HuskMeta::new),
                 entry("minecraft:illusioner", IllusionerMeta::new),
+                entry("minecraft:interaction", InteractionMeta::new),
                 entry("minecraft:iron_golem", IronGolemMeta::new),
                 entry("minecraft:item", ItemEntityMeta::new),
+                entry("minecraft:item_display", ItemDisplayMeta::new),
                 entry("minecraft:item_frame", ItemFrameMeta::new),
                 entry("minecraft:fireball", FireballMeta::new),
                 entry("minecraft:leash_knot", LeashKnotMeta::new),
@@ -134,6 +141,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:furnace_minecart", FurnaceMinecartMeta::new),
                 entry("minecraft:hopper_minecart", HopperMinecartMeta::new),
                 entry("minecraft:spawner_minecart", SpawnerMinecartMeta::new),
+                entry("minecraft:text_display", TextDisplayMeta::new),
                 entry("minecraft:tnt_minecart", TntMinecartMeta::new),
                 entry("minecraft:mule", MuleMeta::new),
                 entry("minecraft:mooshroom", MooshroomMeta::new),
@@ -160,6 +168,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:skeleton_horse", SkeletonHorseMeta::new),
                 entry("minecraft:slime", SlimeMeta::new),
                 entry("minecraft:small_fireball", SmallFireballMeta::new),
+                entry("minecraft:sniffer", SnifferMeta::new),
                 entry("minecraft:snow_golem", SnowGolemMeta::new),
                 entry("minecraft:snowball", SnowballMeta::new),
                 entry("minecraft:spectral_arrow", SpectralArrowMeta::new),

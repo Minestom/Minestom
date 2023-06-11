@@ -62,7 +62,11 @@ public class BlockPlacementListener {
             if (handler != null) {
                 blockUse |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockPosition, cursorPosition, player, hand));
             }
+        } else {
+            // FIXME: only update Block
+            refresh(player, interactedChunk);
         }
+
         if (blockUse) {
             refresh(player, interactedChunk);
             return;

@@ -21,10 +21,14 @@ public class UseEntityListener {
         if (type instanceof ClientInteractEntityPacket.Attack) {
             if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
                 return;
-            EventDispatcher.call(new EntityAttackEvent(player, entity));
+            EntityAttackEvent event = new EntityAttackEvent(player, entity);
+            EventDispatcher.call(event);
+            entity.attack(player);
         } else if (type instanceof ClientInteractEntityPacket.InteractAt interactAt) {
             Point interactPosition = new Vec(interactAt.targetX(), interactAt.targetY(), interactAt.targetZ());
-            EventDispatcher.call(new PlayerEntityInteractEvent(player, entity, interactAt.hand(), interactPosition));
+            PlayerEntityInteractEvent event = new PlayerEntityInteractEvent(player, entity, interactAt.hand(), interactPosition);
+            EventDispatcher.call(event);
+            entity.interact(player, interactAt.hand(), interactPosition);
         }
     }
 }

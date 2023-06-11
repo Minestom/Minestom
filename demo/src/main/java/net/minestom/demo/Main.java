@@ -8,7 +8,19 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.fakeplayer.FakePlayerOption;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.event.player.PlayerBlockInteractEvent;
+import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -17,13 +29,17 @@ import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public class Main {
 
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
+
+        MinecraftServer.getConnectionManager().setPlayerProvider(DemoPlayer::new);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
 
@@ -53,6 +69,8 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new ExecuteCommand());
         commandManager.register(new RedirectTestCommand());
+        commandManager.register(new PermissionsCommand());
+        commandManager.register(new RainbowCommand());
         commandManager.register(new DebugGridCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
@@ -95,6 +113,49 @@ public class Main {
             //responseData.setPlayersHidden(true);
         });
 
+        MinecraftServer.getGlobalEventHandler().addListener(InventoryPreClickEvent.class, event -> {
+            Player player = event.getPlayer();
+            player.sendMessage("Inventory: " + event.getInventory());
+            player.sendMessage("ClickedItem: " + event.getClickedItem());
+            player.sendMessage("Slot: " + event.getSlot());
+            player.sendMessage("ClickType: " + event.getClickType());
+            player.sendMessage("CursorItem: " + event.getCursorItem());
+        });
+
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerBlockInteractEvent.class, event -> {
+            event.setCancelled(true);
+        });
+        new FakePlayer(UUID.randomUUID(), "Freddi 1", new FakePlayerOption().setInTabList(true).setRegistered(true), f -> {
+            f.setSkin(PlayerSkin.fromUsername("Freddiio"));
+            f.eventNode().addListener(PlayerEntityInteractEvent.class, event -> {
+                event.getPlayer().sendMessage("Eyy");
+            });
+        }){
+            @Override
+            public void interact(Player player, Hand hand, Point interactPosition) {
+                player.sendMessage("Yooo 1");
+            }
+
+            @Override
+            public void attack(Player player) {
+                player.sendMessage("Aua 1");
+            }
+        };
+        new FakePlayer(UUID.randomUUID(), "Freddi 2", new FakePlayerOption().setInTabList(true).setRegistered(true), f -> {
+            f.setSkin(PlayerSkin.fromUsername("Freddiio"));
+        }){
+            @Override
+            public void interact(Player player, Hand hand, Point interactPosition) {
+                player.sendMessage("Yooo 2");
+            }
+
+            @Override
+            public void attack(Player player) {
+                player.sendMessage("Aua 2");
+            }
+        };
+
         PlayerInit.init();
 
         OptifineSupport.enable();
@@ -102,7 +163,7 @@ public class Main {
         //VelocityProxy.enable("rBeJJ79W4MVU");
         //BungeeCordProxy.enable();
 
-        //MojangAuth.init();
+        MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));

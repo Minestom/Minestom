@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMetaView;
@@ -92,6 +93,10 @@ public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<Writ
 
         public Builder pages(Component... pages) {
             return pages(Arrays.asList(pages));
+        }
+
+        public Builder pages(String... pages) {
+            return pages(Arrays.stream(pages).map(MiniMessage.miniMessage()::deserialize).toList());
         }
     }
 }

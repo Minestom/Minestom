@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.tag.Tag;
@@ -9,6 +10,7 @@ import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Arrays;
 import java.util.List;
 
 public record WritableBookMeta(TagReadable readable) implements ItemMetaView<WritableBookMeta.Builder> {
@@ -33,6 +35,11 @@ public record WritableBookMeta(TagReadable readable) implements ItemMetaView<Wri
 
         public Builder pages(@NotNull List<@NotNull Component> pages) {
             setTag(PAGES, pages);
+            return this;
+        }
+
+        public Builder pages(@NotNull String... pages) {
+            setTag(PAGES, Arrays.stream(pages).map(s -> MiniMessage.miniMessage().deserialize(s)).toList());
             return this;
         }
     }

@@ -21,17 +21,25 @@ interface EntityTypes {
 
     EntityType BLAZE = EntityTypeImpl.get("minecraft:blaze");
 
+    EntityType BLOCK_DISPLAY = EntityTypeImpl.get("minecraft:block_display");
+
     EntityType BOAT = EntityTypeImpl.get("minecraft:boat");
 
-    EntityType CHEST_BOAT = EntityTypeImpl.get("minecraft:chest_boat");
+    EntityType CAMEL = EntityTypeImpl.get("minecraft:camel");
 
     EntityType CAT = EntityTypeImpl.get("minecraft:cat");
 
     EntityType CAVE_SPIDER = EntityTypeImpl.get("minecraft:cave_spider");
 
+    EntityType CHEST_BOAT = EntityTypeImpl.get("minecraft:chest_boat");
+
+    EntityType CHEST_MINECART = EntityTypeImpl.get("minecraft:chest_minecart");
+
     EntityType CHICKEN = EntityTypeImpl.get("minecraft:chicken");
 
     EntityType COD = EntityTypeImpl.get("minecraft:cod");
+
+    EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get("minecraft:command_block_minecart");
 
     EntityType COW = EntityTypeImpl.get("minecraft:cow");
 
@@ -45,11 +53,15 @@ interface EntityTypes {
 
     EntityType DROWNED = EntityTypeImpl.get("minecraft:drowned");
 
+    EntityType EGG = EntityTypeImpl.get("minecraft:egg");
+
     EntityType ELDER_GUARDIAN = EntityTypeImpl.get("minecraft:elder_guardian");
 
     EntityType END_CRYSTAL = EntityTypeImpl.get("minecraft:end_crystal");
 
     EntityType ENDER_DRAGON = EntityTypeImpl.get("minecraft:ender_dragon");
+
+    EntityType ENDER_PEARL = EntityTypeImpl.get("minecraft:ender_pearl");
 
     EntityType ENDERMAN = EntityTypeImpl.get("minecraft:enderman");
 
@@ -58,6 +70,8 @@ interface EntityTypes {
     EntityType EVOKER = EntityTypeImpl.get("minecraft:evoker");
 
     EntityType EVOKER_FANGS = EntityTypeImpl.get("minecraft:evoker_fangs");
+
+    EntityType EXPERIENCE_BOTTLE = EntityTypeImpl.get("minecraft:experience_bottle");
 
     EntityType EXPERIENCE_ORB = EntityTypeImpl.get("minecraft:experience_orb");
 
@@ -70,6 +84,8 @@ interface EntityTypes {
     EntityType FOX = EntityTypeImpl.get("minecraft:fox");
 
     EntityType FROG = EntityTypeImpl.get("minecraft:frog");
+
+    EntityType FURNACE_MINECART = EntityTypeImpl.get("minecraft:furnace_minecart");
 
     EntityType GHAST = EntityTypeImpl.get("minecraft:ghast");
 
@@ -85,15 +101,21 @@ interface EntityTypes {
 
     EntityType HOGLIN = EntityTypeImpl.get("minecraft:hoglin");
 
+    EntityType HOPPER_MINECART = EntityTypeImpl.get("minecraft:hopper_minecart");
+
     EntityType HORSE = EntityTypeImpl.get("minecraft:horse");
 
     EntityType HUSK = EntityTypeImpl.get("minecraft:husk");
 
     EntityType ILLUSIONER = EntityTypeImpl.get("minecraft:illusioner");
 
+    EntityType INTERACTION = EntityTypeImpl.get("minecraft:interaction");
+
     EntityType IRON_GOLEM = EntityTypeImpl.get("minecraft:iron_golem");
 
     EntityType ITEM = EntityTypeImpl.get("minecraft:item");
+
+    EntityType ITEM_DISPLAY = EntityTypeImpl.get("minecraft:item_display");
 
     EntityType ITEM_FRAME = EntityTypeImpl.get("minecraft:item_frame");
 
@@ -113,21 +135,9 @@ interface EntityTypes {
 
     EntityType MINECART = EntityTypeImpl.get("minecraft:minecart");
 
-    EntityType CHEST_MINECART = EntityTypeImpl.get("minecraft:chest_minecart");
-
-    EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get("minecraft:command_block_minecart");
-
-    EntityType FURNACE_MINECART = EntityTypeImpl.get("minecraft:furnace_minecart");
-
-    EntityType HOPPER_MINECART = EntityTypeImpl.get("minecraft:hopper_minecart");
-
-    EntityType SPAWNER_MINECART = EntityTypeImpl.get("minecraft:spawner_minecart");
-
-    EntityType TNT_MINECART = EntityTypeImpl.get("minecraft:tnt_minecart");
+    EntityType MOOSHROOM = EntityTypeImpl.get("minecraft:mooshroom");
 
     EntityType MULE = EntityTypeImpl.get("minecraft:mule");
-
-    EntityType MOOSHROOM = EntityTypeImpl.get("minecraft:mooshroom");
 
     EntityType OCELOT = EntityTypeImpl.get("minecraft:ocelot");
 
@@ -149,7 +159,7 @@ interface EntityTypes {
 
     EntityType POLAR_BEAR = EntityTypeImpl.get("minecraft:polar_bear");
 
-    EntityType TNT = EntityTypeImpl.get("minecraft:tnt");
+    EntityType POTION = EntityTypeImpl.get("minecraft:potion");
 
     EntityType PUFFERFISH = EntityTypeImpl.get("minecraft:pufferfish");
 
@@ -175,9 +185,13 @@ interface EntityTypes {
 
     EntityType SMALL_FIREBALL = EntityTypeImpl.get("minecraft:small_fireball");
 
+    EntityType SNIFFER = EntityTypeImpl.get("minecraft:sniffer");
+
     EntityType SNOW_GOLEM = EntityTypeImpl.get("minecraft:snow_golem");
 
     EntityType SNOWBALL = EntityTypeImpl.get("minecraft:snowball");
+
+    EntityType SPAWNER_MINECART = EntityTypeImpl.get("minecraft:spawner_minecart");
 
     EntityType SPECTRAL_ARROW = EntityTypeImpl.get("minecraft:spectral_arrow");
 
@@ -191,17 +205,15 @@ interface EntityTypes {
 
     EntityType TADPOLE = EntityTypeImpl.get("minecraft:tadpole");
 
-    EntityType EGG = EntityTypeImpl.get("minecraft:egg");
+    EntityType TEXT_DISPLAY = EntityTypeImpl.get("minecraft:text_display");
 
-    EntityType ENDER_PEARL = EntityTypeImpl.get("minecraft:ender_pearl");
+    EntityType TNT = EntityTypeImpl.get("minecraft:tnt");
 
-    EntityType EXPERIENCE_BOTTLE = EntityTypeImpl.get("minecraft:experience_bottle");
-
-    EntityType POTION = EntityTypeImpl.get("minecraft:potion");
-
-    EntityType TRIDENT = EntityTypeImpl.get("minecraft:trident");
+    EntityType TNT_MINECART = EntityTypeImpl.get("minecraft:tnt_minecart");
 
     EntityType TRADER_LLAMA = EntityTypeImpl.get("minecraft:trader_llama");
+
+    EntityType TRIDENT = EntityTypeImpl.get("minecraft:trident");
 
     EntityType TROPICAL_FISH = EntityTypeImpl.get("minecraft:tropical_fish");
 

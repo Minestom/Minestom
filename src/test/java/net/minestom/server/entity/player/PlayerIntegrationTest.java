@@ -163,7 +163,7 @@ public class PlayerIntegrationTest {
         var player = connection.connect(instance, new Pos(5, 42, 2)).join();
 
         assertNull(player.getDeathLocation());
-        player.damage(DamageType.VOID, 30);
+        player.damage(DamageType.OUT_OF_WORLD, 30);
         
         assertNotNull(player.getDeathLocation());
         assertEquals(dimensionNamespace, player.getDeathLocation().dimension());

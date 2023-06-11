@@ -34,7 +34,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_OPTPOSITION, OptPosition(null));
         EMPTY_VALUES.set(TYPE_DIRECTION, Direction(Direction.DOWN));
         EMPTY_VALUES.set(TYPE_OPTUUID, OptUUID(null));
-        EMPTY_VALUES.set(TYPE_OPTBLOCKID, OptBlockID(null));
+        EMPTY_VALUES.set(TYPE_OPTBLOCKSTATE, OptBlockState(null));
         EMPTY_VALUES.set(TYPE_NBT, NBT(NBTEnd.INSTANCE));
         //EMPTY_VALUES.set(TYPE_PARTICLE -> throw new UnsupportedOperationException();
         EMPTY_VALUES.set(TYPE_VILLAGERDATA, VillagerData(0, 0, 0));

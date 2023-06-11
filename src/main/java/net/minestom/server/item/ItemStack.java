@@ -129,6 +129,11 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @NotNull ItemStack withMeta(@NotNull ItemMeta meta);
 
     @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withDisplayName(@Nullable String displayName) {
+        return withMeta(builder -> builder.displayName(displayName));
+    }
+
+    @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withDisplayName(@Nullable Component displayName) {
         return withMeta(builder -> builder.displayName(displayName));
     }
@@ -136,6 +141,17 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
         return withDisplayName(componentUnaryOperator.apply(getDisplayName()));
+    }
+
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withCustomModelData(Integer customModelData) {
+        return withMeta(builder -> builder.customModelData(customModelData));
+    }
+
+
+    @Contract(value = "_ -> this")
+    default @NotNull ItemStack withLore(@NotNull String... lore) {
+        return withMeta(builder -> builder.lore(lore));
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -230,8 +246,18 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         }
 
         @Contract(value = "_ -> this")
+        default @NotNull Builder displayName(@Nullable String displayName) {
+            return meta(builder -> builder.displayName(displayName));
+        }
+
+        @Contract(value = "_ -> this")
         default @NotNull Builder displayName(@Nullable Component displayName) {
             return meta(builder -> builder.displayName(displayName));
+        }
+
+        @Contract(value = "_ -> this")
+        default @NotNull Builder lore(@NotNull String... lore) {
+            return meta(builder -> builder.lore(lore));
         }
 
         @Contract(value = "_ -> this")

@@ -63,6 +63,12 @@ interface Particles {
 
     Particle FLAME = ParticleImpl.get("minecraft:flame");
 
+    Particle DRIPPING_CHERRY_LEAVES = ParticleImpl.get("minecraft:dripping_cherry_leaves");
+
+    Particle FALLING_CHERRY_LEAVES = ParticleImpl.get("minecraft:falling_cherry_leaves");
+
+    Particle LANDING_CHERRY_LEAVES = ParticleImpl.get("minecraft:landing_cherry_leaves");
+
     Particle SCULK_SOUL = ParticleImpl.get("minecraft:sculk_soul");
 
     Particle SCULK_CHARGE = ParticleImpl.get("minecraft:sculk_charge");

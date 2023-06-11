@@ -33,6 +33,7 @@ public class Generators {
         generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleImpl", "Particles");
         generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "SoundEventImpl", "SoundEvents");
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
+        generator.generate(resource("damage_types.json"), "net.minestom.server.entity.damage", "DamageType", "DamageTypeImpl", "DamageTypes");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();

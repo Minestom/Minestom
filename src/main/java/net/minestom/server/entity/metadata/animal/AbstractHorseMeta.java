@@ -4,11 +4,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 public class AbstractHorseMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     private final static byte TAMED_BIT = 0x02;
     private final static byte SADDLED_BIT = 0x04;
@@ -67,14 +65,6 @@ public class AbstractHorseMeta extends AnimalMeta {
 
     public void setMouthOpen(boolean value) {
         setMaskBit(OFFSET, MOUTH_OPEN_BIT, value);
-    }
-
-    public UUID getOwner() {
-        return super.metadata.getIndex(OFFSET + 1, null);
-    }
-
-    public void setOwner(UUID value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.OptUUID(value));
     }
 
 }
