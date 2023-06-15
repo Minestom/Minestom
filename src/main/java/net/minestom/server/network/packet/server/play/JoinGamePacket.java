@@ -17,7 +17,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
                              List<String> worlds, NBTCompound dimensionCodec, String dimensionType, String world,
                              long hashedSeed, int maxPlayers, int viewDistance, int simulationDistance,
                              boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug, boolean isFlat,
-                             DeathLocation deathLocation) implements ServerPacket {
+                             DeathLocation deathLocation, int portalCooldown) implements ServerPacket {
     public JoinGamePacket {
         worlds = List.copyOf(worlds);
     }
@@ -27,7 +27,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
                 reader.readCollection(STRING), (NBTCompound) reader.read(NBT), reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT),
                 reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN),
-                reader.read(DEATH_LOCATION));
+                reader.read(DEATH_LOCATION), reader.read(VAR_INT));
     }
 
     @Override
@@ -58,6 +58,8 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
         writer.write(BOOLEAN, isFlat);
 
         writer.write(DEATH_LOCATION, deathLocation);
+
+        writer.write(VAR_INT, portalCooldown);
     }
 
     @Override

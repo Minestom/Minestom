@@ -63,11 +63,7 @@ interface Particles {
 
     Particle FLAME = ParticleImpl.get("minecraft:flame");
 
-    Particle DRIPPING_CHERRY_LEAVES = ParticleImpl.get("minecraft:dripping_cherry_leaves");
-
-    Particle FALLING_CHERRY_LEAVES = ParticleImpl.get("minecraft:falling_cherry_leaves");
-
-    Particle LANDING_CHERRY_LEAVES = ParticleImpl.get("minecraft:landing_cherry_leaves");
+    Particle CHERRY_LEAVES = ParticleImpl.get("minecraft:cherry_leaves");
 
     Particle SCULK_SOUL = ParticleImpl.get("minecraft:sculk_soul");
 
@@ -196,4 +192,6 @@ interface Particles {
     Particle SCRAPE = ParticleImpl.get("minecraft:scrape");
 
     Particle SHRIEK = ParticleImpl.get("minecraft:shriek");
+
+    Particle EGG_CRACK = ParticleImpl.get("minecraft:egg_crack");
 }
