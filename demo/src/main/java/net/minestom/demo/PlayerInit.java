@@ -117,6 +117,23 @@ public class PlayerInit {
             })
             .addListener(PlayerPacketEvent.class, event -> {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(PlayerUseItemOnBlockEvent.class, event -> {
+                if (event.getHand() != Player.Hand.MAIN) return;
+
+                var itemStack = event.getItemStack();
+                var block = event.getInstance().getBlock(event.getPosition());
+
+                if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
+                    block = block.withProperty("waterlogged", "true");
+                    System.out.println("SET WATERLOGGER");
+                } else if ("true".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
+                    block = block.withProperty("waterlogged", "false");
+                    System.out.println("SET NOT WATERLOGGED");
+                } else return;
+
+                event.getInstance().setBlock(event.getPosition(), block);
+
             });
 
     static {
