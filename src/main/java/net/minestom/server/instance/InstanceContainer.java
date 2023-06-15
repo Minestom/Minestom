@@ -131,7 +131,7 @@ public class InstanceContainer extends Instance {
             // Change id based on neighbors
             final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
             if (blockPlacementRule != null) {
-                block = blockPlacementRule.blockUpdate(this, blockPosition, block);
+                block = blockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(this, blockPosition, block));
             }
 
             // Set the block
@@ -614,8 +614,8 @@ public class InstanceContainer extends Instance {
                     if (neighborBlockPlacementRule == null) continue;
 
                     final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-                    final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
-                            neighborPosition, neighborBlock);
+                    final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(this,
+                            neighborPosition, neighborBlock));
                     if (neighborBlock != newNeighborBlock) {
                         setBlock(neighborPosition, newNeighborBlock);
                     }

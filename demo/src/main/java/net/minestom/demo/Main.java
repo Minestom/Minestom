@@ -13,7 +13,6 @@ import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
@@ -26,8 +25,6 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
-
-        blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());

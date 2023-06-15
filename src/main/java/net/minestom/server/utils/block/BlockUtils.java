@@ -17,10 +17,10 @@ import java.util.Objects;
 
 public class BlockUtils {
 
-    private final Instance instance;
+    private final Block.Getter instance;
     private final Point position;
 
-    public BlockUtils(Instance instance, Point position) {
+    public BlockUtils(Block.Getter instance, Point position) {
         this.instance = instance;
         this.position = position;
     }
