@@ -73,6 +73,8 @@ interface SoundEvents {
 
     SoundEvent BLOCK_AMETHYST_BLOCK_PLACE = SoundEventImpl.get("minecraft:block.amethyst_block.place");
 
+    SoundEvent BLOCK_AMETHYST_BLOCK_RESONATE = SoundEventImpl.get("minecraft:block.amethyst_block.resonate");
+
     SoundEvent BLOCK_AMETHYST_BLOCK_STEP = SoundEventImpl.get("minecraft:block.amethyst_block.step");
 
     SoundEvent BLOCK_AMETHYST_CLUSTER_BREAK = SoundEventImpl.get("minecraft:block.amethyst_cluster.break");
@@ -337,9 +339,15 @@ interface SoundEvents {
 
     SoundEvent BLOCK_BREWING_STAND_BREW = SoundEventImpl.get("minecraft:block.brewing_stand.brew");
 
-    SoundEvent ITEM_BRUSH_BRUSHING = SoundEventImpl.get("minecraft:item.brush.brushing");
+    SoundEvent ITEM_BRUSH_BRUSHING_GENERIC = SoundEventImpl.get("minecraft:item.brush.brushing.generic");
 
-    SoundEvent ITEM_BRUSH_BRUSH_SAND_COMPLETED = SoundEventImpl.get("minecraft:item.brush.brush_sand_completed");
+    SoundEvent ITEM_BRUSH_BRUSHING_SAND = SoundEventImpl.get("minecraft:item.brush.brushing.sand");
+
+    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL = SoundEventImpl.get("minecraft:item.brush.brushing.gravel");
+
+    SoundEvent ITEM_BRUSH_BRUSHING_SAND_COMPLETE = SoundEventImpl.get("minecraft:item.brush.brushing.sand.complete");
+
+    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE = SoundEventImpl.get("minecraft:item.brush.brushing.gravel.complete");
 
     SoundEvent BLOCK_BUBBLE_COLUMN_BUBBLE_POP = SoundEventImpl.get("minecraft:block.bubble_column.bubble_pop");
 
@@ -960,6 +968,16 @@ interface SoundEvents {
     SoundEvent BLOCK_SUSPICIOUS_SAND_HIT = SoundEventImpl.get("minecraft:block.suspicious_sand.hit");
 
     SoundEvent BLOCK_SUSPICIOUS_SAND_FALL = SoundEventImpl.get("minecraft:block.suspicious_sand.fall");
+
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_BREAK = SoundEventImpl.get("minecraft:block.suspicious_gravel.break");
+
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_STEP = SoundEventImpl.get("minecraft:block.suspicious_gravel.step");
+
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_PLACE = SoundEventImpl.get("minecraft:block.suspicious_gravel.place");
+
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_HIT = SoundEventImpl.get("minecraft:block.suspicious_gravel.hit");
+
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_FALL = SoundEventImpl.get("minecraft:block.suspicious_gravel.fall");
 
     SoundEvent BLOCK_FROGLIGHT_BREAK = SoundEventImpl.get("minecraft:block.froglight.break");
 
@@ -1589,6 +1607,8 @@ interface SoundEvents {
 
     SoundEvent MUSIC_DISC_OTHERSIDE = SoundEventImpl.get("minecraft:music_disc.otherside");
 
+    SoundEvent MUSIC_DISC_RELIC = SoundEventImpl.get("minecraft:music_disc.relic");
+
     SoundEvent MUSIC_DRAGON = SoundEventImpl.get("minecraft:music.dragon");
 
     SoundEvent MUSIC_END = SoundEventImpl.get("minecraft:music.end");
@@ -1613,7 +1633,7 @@ interface SoundEvents {
 
     SoundEvent MUSIC_OVERWORLD_SWAMP = SoundEventImpl.get("minecraft:music.overworld.swamp");
 
-    SoundEvent MUSIC_OVERWORLD_JUNGLE_AND_FOREST = SoundEventImpl.get("minecraft:music.overworld.jungle_and_forest");
+    SoundEvent MUSIC_OVERWORLD_FOREST = SoundEventImpl.get("minecraft:music.overworld.forest");
 
     SoundEvent MUSIC_OVERWORLD_OLD_GROWTH_TAIGA = SoundEventImpl.get("minecraft:music.overworld.old_growth_taiga");
 
@@ -1632,6 +1652,18 @@ interface SoundEvents {
     SoundEvent MUSIC_OVERWORLD_STONY_PEAKS = SoundEventImpl.get("minecraft:music.overworld.stony_peaks");
 
     SoundEvent MUSIC_NETHER_WARPED_FOREST = SoundEventImpl.get("minecraft:music.nether.warped_forest");
+
+    SoundEvent MUSIC_OVERWORLD_FLOWER_FOREST = SoundEventImpl.get("minecraft:music.overworld.flower_forest");
+
+    SoundEvent MUSIC_OVERWORLD_DESERT = SoundEventImpl.get("minecraft:music.overworld.desert");
+
+    SoundEvent MUSIC_OVERWORLD_BADLANDS = SoundEventImpl.get("minecraft:music.overworld.badlands");
+
+    SoundEvent MUSIC_OVERWORLD_JUNGLE = SoundEventImpl.get("minecraft:music.overworld.jungle");
+
+    SoundEvent MUSIC_OVERWORLD_SPARSE_JUNGLE = SoundEventImpl.get("minecraft:music.overworld.sparse_jungle");
+
+    SoundEvent MUSIC_OVERWORLD_BAMBOO_JUNGLE = SoundEventImpl.get("minecraft:music.overworld.bamboo_jungle");
 
     SoundEvent MUSIC_UNDER_WATER = SoundEventImpl.get("minecraft:music.under_water");
 
@@ -2449,6 +2481,12 @@ interface SoundEvents {
 
     SoundEvent ENTITY_SNIFFER_HAPPY = SoundEventImpl.get("minecraft:entity.sniffer.happy");
 
+    SoundEvent BLOCK_SNIFFER_EGG_PLOP = SoundEventImpl.get("minecraft:block.sniffer_egg.plop");
+
+    SoundEvent BLOCK_SNIFFER_EGG_CRACK = SoundEventImpl.get("minecraft:block.sniffer_egg.crack");
+
+    SoundEvent BLOCK_SNIFFER_EGG_HATCH = SoundEventImpl.get("minecraft:block.sniffer_egg.hatch");
+
     SoundEvent ENTITY_SNOWBALL_THROW = SoundEventImpl.get("minecraft:entity.snowball.throw");
 
     SoundEvent BLOCK_SNOW_BREAK = SoundEventImpl.get("minecraft:block.snow.break");
@@ -2752,6 +2790,8 @@ interface SoundEvents {
     SoundEvent ENTITY_WARDEN_STEP = SoundEventImpl.get("minecraft:entity.warden.step");
 
     SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS = SoundEventImpl.get("minecraft:entity.warden.tendril_clicks");
+
+    SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = SoundEventImpl.get("minecraft:block.sign.waxed_interact_fail");
 
     SoundEvent BLOCK_WATER_AMBIENT = SoundEventImpl.get("minecraft:block.water.ambient");
 

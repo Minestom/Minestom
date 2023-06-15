@@ -90,7 +90,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new CloseWindowPacket((byte) 2));
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
         SERVER_PACKETS.add(new CraftRecipeResponse((byte) 2, "recipe"));
-        SERVER_PACKETS.add(new DeathCombatEventPacket(5, 5, COMPONENT));
+        SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
         SERVER_PACKETS.add(new DeclareRecipesPacket(
                 List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
                                 "minecraft:sticks",
@@ -112,7 +112,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
         SERVER_PACKETS.add(new DisplayScoreboardPacket((byte) 5, "scoreboard"));
         SERVER_PACKETS.add(new EffectPacket(5, VEC, 5, false));
-        SERVER_PACKETS.add(new EndCombatEventPacket(5, 5));
+        SERVER_PACKETS.add(new EndCombatEventPacket(5));
         SERVER_PACKETS.add(new EnterCombatEventPacket());
         SERVER_PACKETS.add(new EntityAnimationPacket(5, EntityAnimationPacket.Animation.TAKE_DAMAGE));
         SERVER_PACKETS.add(new EntityEquipmentPacket(6, Map.of(EquipmentSlot.MAIN_HAND, ItemStack.of(Material.DIAMOND_SWORD))));

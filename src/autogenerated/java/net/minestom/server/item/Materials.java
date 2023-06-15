@@ -97,6 +97,8 @@ interface Materials {
 
     Material SUSPICIOUS_SAND = MaterialImpl.get("minecraft:suspicious_sand");
 
+    Material SUSPICIOUS_GRAVEL = MaterialImpl.get("minecraft:suspicious_gravel");
+
     Material RED_SAND = MaterialImpl.get("minecraft:red_sand");
 
     Material GRAVEL = MaterialImpl.get("minecraft:gravel");
@@ -422,6 +424,8 @@ interface Materials {
     Material WITHER_ROSE = MaterialImpl.get("minecraft:wither_rose");
 
     Material TORCHFLOWER = MaterialImpl.get("minecraft:torchflower");
+
+    Material PITCHER_PLANT = MaterialImpl.get("minecraft:pitcher_plant");
 
     Material SPORE_BLOSSOM = MaterialImpl.get("minecraft:spore_blossom");
 
@@ -1133,6 +1137,8 @@ interface Materials {
 
     Material TURTLE_EGG = MaterialImpl.get("minecraft:turtle_egg");
 
+    Material SNIFFER_EGG = MaterialImpl.get("minecraft:sniffer_egg");
+
     Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_tube_coral_block");
 
     Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_brain_coral_block");
@@ -1306,6 +1312,8 @@ interface Materials {
     Material DAYLIGHT_DETECTOR = MaterialImpl.get("minecraft:daylight_detector");
 
     Material SCULK_SENSOR = MaterialImpl.get("minecraft:sculk_sensor");
+
+    Material CALIBRATED_SCULK_SENSOR = MaterialImpl.get("minecraft:calibrated_sculk_sensor");
 
     Material TRIPWIRE_HOOK = MaterialImpl.get("minecraft:tripwire_hook");
 
@@ -2211,6 +2219,8 @@ interface Materials {
 
     Material TORCHFLOWER_SEEDS = MaterialImpl.get("minecraft:torchflower_seeds");
 
+    Material PITCHER_POD = MaterialImpl.get("minecraft:pitcher_pod");
+
     Material BEETROOT = MaterialImpl.get("minecraft:beetroot");
 
     Material BEETROOT_SEEDS = MaterialImpl.get("minecraft:beetroot_seeds");
@@ -2264,6 +2274,8 @@ interface Materials {
     Material MUSIC_DISC_WAIT = MaterialImpl.get("minecraft:music_disc_wait");
 
     Material MUSIC_DISC_OTHERSIDE = MaterialImpl.get("minecraft:music_disc_otherside");
+
+    Material MUSIC_DISC_RELIC = MaterialImpl.get("minecraft:music_disc_relic");
 
     Material MUSIC_DISC_5 = MaterialImpl.get("minecraft:music_disc_5");
 
@@ -2453,11 +2465,53 @@ interface Materials {
 
     Material SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:spire_armor_trim_smithing_template");
 
-    Material POTTERY_SHARD_ARCHER = MaterialImpl.get("minecraft:pottery_shard_archer");
+    Material WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:wayfinder_armor_trim_smithing_template");
 
-    Material POTTERY_SHARD_PRIZE = MaterialImpl.get("minecraft:pottery_shard_prize");
+    Material SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:shaper_armor_trim_smithing_template");
 
-    Material POTTERY_SHARD_ARMS_UP = MaterialImpl.get("minecraft:pottery_shard_arms_up");
+    Material SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:silence_armor_trim_smithing_template");
 
-    Material POTTERY_SHARD_SKULL = MaterialImpl.get("minecraft:pottery_shard_skull");
+    Material RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:raiser_armor_trim_smithing_template");
+
+    Material HOST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:host_armor_trim_smithing_template");
+
+    Material ANGLER_POTTERY_SHERD = MaterialImpl.get("minecraft:angler_pottery_sherd");
+
+    Material ARCHER_POTTERY_SHERD = MaterialImpl.get("minecraft:archer_pottery_sherd");
+
+    Material ARMS_UP_POTTERY_SHERD = MaterialImpl.get("minecraft:arms_up_pottery_sherd");
+
+    Material BLADE_POTTERY_SHERD = MaterialImpl.get("minecraft:blade_pottery_sherd");
+
+    Material BREWER_POTTERY_SHERD = MaterialImpl.get("minecraft:brewer_pottery_sherd");
+
+    Material BURN_POTTERY_SHERD = MaterialImpl.get("minecraft:burn_pottery_sherd");
+
+    Material DANGER_POTTERY_SHERD = MaterialImpl.get("minecraft:danger_pottery_sherd");
+
+    Material EXPLORER_POTTERY_SHERD = MaterialImpl.get("minecraft:explorer_pottery_sherd");
+
+    Material FRIEND_POTTERY_SHERD = MaterialImpl.get("minecraft:friend_pottery_sherd");
+
+    Material HEART_POTTERY_SHERD = MaterialImpl.get("minecraft:heart_pottery_sherd");
+
+    Material HEARTBREAK_POTTERY_SHERD = MaterialImpl.get("minecraft:heartbreak_pottery_sherd");
+
+    Material HOWL_POTTERY_SHERD = MaterialImpl.get("minecraft:howl_pottery_sherd");
+
+    Material MINER_POTTERY_SHERD = MaterialImpl.get("minecraft:miner_pottery_sherd");
+
+    Material MOURNER_POTTERY_SHERD = MaterialImpl.get("minecraft:mourner_pottery_sherd");
+
+    Material PLENTY_POTTERY_SHERD = MaterialImpl.get("minecraft:plenty_pottery_sherd");
+
+    Material PRIZE_POTTERY_SHERD = MaterialImpl.get("minecraft:prize_pottery_sherd");
+
+    Material SHEAF_POTTERY_SHERD = MaterialImpl.get("minecraft:sheaf_pottery_sherd");
+
+    Material SHELTER_POTTERY_SHERD = MaterialImpl.get("minecraft:shelter_pottery_sherd");
+
+    Material SKULL_POTTERY_SHERD = MaterialImpl.get("minecraft:skull_pottery_sherd");
+
+    Material SNORT_POTTERY_SHERD = MaterialImpl.get("minecraft:snort_pottery_sherd");
 }
