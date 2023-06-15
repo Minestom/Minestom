@@ -246,10 +246,11 @@ public class DynamicChunk extends Chunk {
                 emptyBlockMask.set(index);
             }
         }
-        return new LightData(true,
+        return new LightData(
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
-                skyLights, blockLights);
+                skyLights, blockLights
+        );
     }
 
     @Override

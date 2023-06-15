@@ -195,10 +195,11 @@ public class LightingChunk extends DynamicChunk {
             sendNeighbours = false;
         }
 
-        return new LightData(true,
+        return new LightData(
                 skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
-                skyLights, blockLights);
+                skyLights, blockLights
+        );
     }
 
     private static final Set<LightingChunk> sendQueue = ConcurrentHashMap.newKeySet();

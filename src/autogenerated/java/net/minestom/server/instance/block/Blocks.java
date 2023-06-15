@@ -81,6 +81,8 @@ interface Blocks {
 
     Block GRAVEL = BlockImpl.get("minecraft:gravel");
 
+    Block SUSPICIOUS_GRAVEL = BlockImpl.get("minecraft:suspicious_gravel");
+
     Block GOLD_ORE = BlockImpl.get("minecraft:gold_ore");
 
     Block DEEPSLATE_GOLD_ORE = BlockImpl.get("minecraft:deepslate_gold_ore");
@@ -1201,6 +1203,10 @@ interface Blocks {
 
     Block TORCHFLOWER_CROP = BlockImpl.get("minecraft:torchflower_crop");
 
+    Block PITCHER_CROP = BlockImpl.get("minecraft:pitcher_crop");
+
+    Block PITCHER_PLANT = BlockImpl.get("minecraft:pitcher_plant");
+
     Block BEETROOTS = BlockImpl.get("minecraft:beetroots");
 
     Block DIRT_PATH = BlockImpl.get("minecraft:dirt_path");
@@ -1362,6 +1368,8 @@ interface Blocks {
     Block DRIED_KELP_BLOCK = BlockImpl.get("minecraft:dried_kelp_block");
 
     Block TURTLE_EGG = BlockImpl.get("minecraft:turtle_egg");
+
+    Block SNIFFER_EGG = BlockImpl.get("minecraft:sniffer_egg");
 
     Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get("minecraft:dead_tube_coral_block");
 
@@ -1824,6 +1832,8 @@ interface Blocks {
     Block POWDER_SNOW = BlockImpl.get("minecraft:powder_snow");
 
     Block SCULK_SENSOR = BlockImpl.get("minecraft:sculk_sensor");
+
+    Block CALIBRATED_SCULK_SENSOR = BlockImpl.get("minecraft:calibrated_sculk_sensor");
 
     Block SCULK = BlockImpl.get("minecraft:sculk");
 

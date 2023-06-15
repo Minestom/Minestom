@@ -7,15 +7,17 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record OpenSignEditorPacket(@NotNull Point position) implements ServerPacket {
+public record OpenSignEditorPacket(@NotNull Point position, boolean isFrontText) implements ServerPacket {
     public OpenSignEditorPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BLOCK_POSITION));
+        this(reader.read(BLOCK_POSITION), reader.read(BOOLEAN));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(BLOCK_POSITION, position);
+        writer.write(BOOLEAN, isFrontText);
     }
 
     @Override
