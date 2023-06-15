@@ -172,6 +172,7 @@ public final class Registry {
         private final boolean liquid;
         private final boolean occludes;
         private final int lightEmission;
+        private final boolean replaceable;
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
@@ -191,9 +192,10 @@ public final class Registry {
             this.jumpFactor = main.getDouble("jumpFactor", 1);
             this.air = main.getBoolean("air", false);
             this.solid = main.getBoolean("solid");
-            this.occludes = main.getBoolean("occludes", true);
             this.liquid = main.getBoolean("liquid", false);
+            this.occludes = main.getBoolean("occludes", true);
             this.lightEmission = main.getInt("lightEmission", 0);
+            this.replaceable = main.getBoolean("replaceable", false);
             {
                 Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
@@ -259,16 +261,20 @@ public final class Registry {
             return solid;
         }
 
-        public boolean occludes() {
-            return occludes;
-        }
-
         public boolean isLiquid() {
             return liquid;
         }
 
+        public boolean occludes() {
+            return occludes;
+        }
+
         public int lightEmission() {
             return lightEmission;
+        }
+
+        public boolean isReplaceable() {
+            return replaceable;
         }
 
         public boolean isBlockEntity() {
