@@ -28,8 +28,6 @@ public class LightParityIntegrationTest {
 
     @Test
     public void test(Env env) throws URISyntaxException, IOException, AnvilException {
-        assumeTrue(false);
-
         Map<Vec, SectionEntry> sections = retrieveSections();
         // Generate our own light
 
