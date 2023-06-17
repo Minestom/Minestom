@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -109,6 +110,12 @@ public class LightingChunk extends DynamicChunk {
     public void sendLighting() {
         if (!isLoaded()) return;
         sendPacketToViewers(lightCache);
+    }
+
+    @Override
+    protected void onLoad() {
+        // Prefetch the chunk packet so that lazy lighting is computed
+        chunkCache.body();
     }
 
     public int[] calculateHeightMap() {
@@ -203,6 +210,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static final Set<LightingChunk> sendQueue = ConcurrentHashMap.newKeySet();
+    private static final ReentrantLock sendQueueLock = new ReentrantLock();
     private static Task sendingTask = null;
 
     private static void updateAfterGeneration(LightingChunk chunk) {
@@ -217,6 +225,7 @@ public class LightingChunk extends DynamicChunk {
             }
         }
 
+        sendQueueLock.lock();
         if (sendingTask != null) sendingTask.cancel();
         sendingTask = MinecraftServer.getSchedulerManager().scheduleTask(() -> {
             sendingTask = null;
@@ -227,14 +236,15 @@ public class LightingChunk extends DynamicChunk {
                         s.blockLight().invalidate();
                         s.skyLight().invalidate();
                     });
-                    sendQueue.remove(f);
 
                     f.chunkCache.invalidate();
                     f.lightCache.invalidate();
                     f.sendLighting();
                 }
             }
+            sendQueue.clear();
         }, TaskSchedule.tick(10), TaskSchedule.stop(), ExecutionType.ASYNC);
+        sendQueueLock.unlock();
     }
 
     private static void flushQueue(Instance instance, Set<Point> queue, LightType type) {
