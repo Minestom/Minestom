@@ -277,6 +277,8 @@ public class InstanceContainer extends Instance {
                 .thenAccept(chunk -> {
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
+                    chunk.onLoad();
+
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
                     assert future == completableFuture : "Invalid future: " + future;
