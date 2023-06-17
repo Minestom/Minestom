@@ -262,6 +262,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         return loaded;
     }
 
+    /**
+     * Called when the chunk has been successfully loaded.
+     */
+    protected void onLoad() {}
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
