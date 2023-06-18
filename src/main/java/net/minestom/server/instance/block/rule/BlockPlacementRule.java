@@ -2,14 +2,12 @@ package net.minestom.server.instance.block.rule;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class BlockPlacementRule {
     protected final Block block;
@@ -38,7 +36,7 @@ public abstract class BlockPlacementRule {
      */
     public abstract @Nullable Block blockPlace(@NotNull PlacementState placementState);
 
-    public boolean isSelfReplaceable(@NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point cursorPosition) {
+    public boolean isSelfReplaceable(@NotNull Replacement replacement) {
         return false;
     }
 
@@ -55,9 +53,19 @@ public abstract class BlockPlacementRule {
             @NotNull Pos playerPosition,
             @NotNull ItemMeta usedItemMeta,
             boolean isPlayerShifting
-    ) {}
+    ) {
+    }
 
     public record UpdateState(@NotNull Block.Getter instance,
-                        @NotNull Point blockPosition,
-                        @NotNull Block currentBlock) {}
+                              @NotNull Point blockPosition,
+                              @NotNull Block currentBlock) {
+    }
+
+    public record Replacement(
+            @NotNull Block block,
+            @NotNull BlockFace blockFace,
+            @NotNull Point cursorPosition,
+            @NotNull Material material
+    ) {
+    }
 }
