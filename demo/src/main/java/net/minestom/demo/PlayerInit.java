@@ -120,6 +120,8 @@ public class PlayerInit {
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
 
+                event.getPlayer().sendMessage("MESSAGE " + ThreadLocalRandom.current().nextDouble());
+
                 if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
                     block = block.withProperty("waterlogged", "true");
                     System.out.println("SET WATERLOGGER");
@@ -139,14 +141,14 @@ public class PlayerInit {
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         instanceContainer.setChunkSupplier(LightingChunk::new);
 
-        System.out.println("start");
-        var chunks = new ArrayList<CompletableFuture<Chunk>>();
-        ChunkUtils.forChunksInRange(0, 0, 32, (x, z) -> chunks.add(instanceContainer.loadChunk(x, z)));
+        // System.out.println("start");
+        // var chunks = new ArrayList<CompletableFuture<Chunk>>();
+        // ChunkUtils.forChunksInRange(0, 0, 32, (x, z) -> chunks.add(instanceContainer.loadChunk(x, z)));
 
-        CompletableFuture.runAsync(() -> {
-            CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-            System.out.println("load end");
-        });
+        // CompletableFuture.runAsync(() -> {
+        //     CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
+        //     System.out.println("load end");
+        // });
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));

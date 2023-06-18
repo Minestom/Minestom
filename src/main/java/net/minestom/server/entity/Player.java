@@ -709,11 +709,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     for (int i = 0; i < 50; i++) {
                         if (!iter.hasNext()) return TaskSchedule.stop();
 
-                        var next = iter.next();
+                        var next = iter.nextLong();
                         chunkAdder.accept(ChunkUtils.getChunkCoordX(next), ChunkUtils.getChunkCoordZ(next));
                     }
 
-                    return TaskSchedule.nextTick();
+                    return TaskSchedule.tick(20);
                 };
                 scheduler().submitTask(taskRunnable);
             } else {
