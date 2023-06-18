@@ -211,16 +211,44 @@ public class DynamicChunk extends Chunk {
                     }));
         }
 
+        if (this instanceof LightingChunk light) {
+            if (light.lightCache.isValid()) {
+                return new ChunkDataPacket(chunkX, chunkZ,
+                        new ChunkData(heightmapsNBT, data, entries),
+                        createLightData(true));
+            } else {
+                // System.out.println("Regenerating light for chunk " + chunkX + " " + chunkZ);
+                LightingChunk.updateAfterGeneration(light);
+                return new ChunkDataPacket(chunkX, chunkZ,
+                        new ChunkData(heightmapsNBT, data, entries),
+                        createEmptyLight());
+            }
+        }
+
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, data, entries),
-                createLightData(true));
+                createLightData(true)
+        );
     }
 
     @NotNull UpdateLightPacket createLightPacket() {
         return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
-    protected LightData createLightData(boolean sendAll) {
+    private LightData createEmptyLight() {
+        BitSet skyMask = new BitSet();
+        BitSet blockMask = new BitSet();
+        BitSet emptySkyMask = new BitSet();
+        BitSet emptyBlockMask = new BitSet();
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
+
+        return new LightData(skyMask, blockMask,
+                emptySkyMask, emptyBlockMask,
+                skyLights, blockLights);
+    }
+
+    protected LightData createLightData(boolean sendLater) {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();

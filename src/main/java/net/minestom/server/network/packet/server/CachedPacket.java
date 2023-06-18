@@ -54,4 +54,8 @@ public final class CachedPacket implements SendablePacket {
         }
         return cache;
     }
+
+    public boolean isValid() {
+        return packet != null && packet.get() != null;
+    }
 }
