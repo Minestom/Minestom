@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
@@ -8,17 +9,19 @@ public class CatMeta extends TameableAnimalMeta {
     public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 4;
 
+    private static final DyeColor[] DYE_VALUES = DyeColor.values();
+
     public CatMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     @NotNull
-    public Color getColor() {
-        return Color.VALUES[super.metadata.getIndex(OFFSET, 1)];
+    public CatMeta.Variant getVariant() {
+        return super.metadata.getIndex(OFFSET, Variant.BLACK);
     }
 
-    public void setColor(@NotNull Color value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value.ordinal()));
+    public void setVariant(@NotNull CatMeta.Variant value) {
+        super.metadata.setIndex(OFFSET, Metadata.CatVariant(value));
     }
 
     public boolean isLying() {
@@ -37,15 +40,15 @@ public class CatMeta extends TameableAnimalMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
     }
 
-    public int getCollarColor() {
-        return super.metadata.getIndex(OFFSET + 3, 14);
+    public @NotNull DyeColor getCollarColor() {
+        return DYE_VALUES[super.metadata.getIndex(OFFSET + 3, DyeColor.RED.ordinal())];
     }
 
-    public void setCollarColor(int value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value));
+    public void setCollarColor(@NotNull DyeColor value) {
+        super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value.ordinal()));
     }
 
-    public enum Color {
+    public enum Variant {
         TABBY,
         BLACK,
         RED,
@@ -58,7 +61,7 @@ public class CatMeta extends TameableAnimalMeta {
         JELLIE,
         ALL_BLACK;
 
-        private final static Color[] VALUES = values();
+        private static final Variant[] VALUES = values();
     }
 
 }

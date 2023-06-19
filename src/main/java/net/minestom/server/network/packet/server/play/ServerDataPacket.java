@@ -10,17 +10,16 @@ import org.jetbrains.annotations.Nullable;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ServerDataPacket(@Nullable Component motd, @Nullable String iconBase64,
-                               boolean previewsChat, boolean enforcesSecureChat) implements ServerPacket {
+                               boolean enforcesSecureChat) implements ServerPacket {
     public ServerDataPacket(@NotNull NetworkBuffer reader) {
         this(reader.readOptional(COMPONENT), reader.readOptional(STRING),
-                reader.read(BOOLEAN), reader.read(BOOLEAN));
+                reader.read(BOOLEAN));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.writeOptional(COMPONENT, this.motd);
         writer.writeOptional(STRING, this.iconBase64);
-        writer.write(BOOLEAN, previewsChat);
         writer.write(BOOLEAN, enforcesSecureChat);
     }
 

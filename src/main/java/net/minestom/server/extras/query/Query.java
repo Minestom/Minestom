@@ -95,7 +95,7 @@ public class Query {
      *
      * @return {@code true} if the query system was stopped, {@code false} if it was not running
      */
-    public boolean stop() {
+    public static boolean stop() {
         if (!started) {
             return false;
         } else {
@@ -118,7 +118,7 @@ public class Query {
      *
      * @return {@code true} if it has been started, {@code false} otherwise
      */
-    public boolean isStarted() {
+    public static boolean isStarted() {
         return started;
     }
 

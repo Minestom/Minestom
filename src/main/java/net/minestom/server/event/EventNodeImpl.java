@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -442,14 +443,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var mappedNodeCache = node.registeredMappedNode;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
-            Map<Object, Handle<E>> handlers = new WeakHashMap<>(mappedNodeCache.size());
+            Map<Object, WeakReference<Handle<E>>> handlers = new WeakHashMap<>(mappedNodeCache.size());
+
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
                 final Handle<E> handle = (Handle<E>) mappedNode.getHandle(eventType);
                 if (!handle.hasListener()) continue; // Implicit update
                 filters.add(mappedNode.filter);
-                handlers.put(mappedEntry.getKey(), handle);
+                handlers.put(mappedEntry.getKey(), new WeakReference<>(handle));
             }
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
@@ -457,7 +459,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final EventFilter<E, ?>[] filterList = filters.toArray(EventFilter[]::new);
             final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                 final Object handler = filter.castHandler(event);
-                final Handle<E> handle = handlers.get(handler);
+                final WeakReference<Handle<E>> handleRef = handlers.get(handler);
+                final Handle<E> handle = handleRef != null ? handleRef.get() : null;
                 if (handle != null) handle.call(event);
             };
             // Specialize the consumer depending on the number of filters to avoid looping

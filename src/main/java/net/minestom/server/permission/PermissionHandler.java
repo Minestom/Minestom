@@ -6,6 +6,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Represents an object which can have permissions.
@@ -56,6 +57,8 @@ public interface PermissionHandler {
 
     /**
      * Gets if this handler has the permission {@code permission}.
+     * This method will also pattern match for wildcards. For example, if this handler has the permission {@code "*"}, this method will always return true.
+     * However, if this handler has the permission {@code "foo.b*r.baz"}, this method will return true if {@code permission} is {@code "foo.baaar.baz"} or {@code "foo.br.baz}, but not {@code "foo.bar.bz"}.
      * <p>
      * Uses {@link Permission#equals(Object)} internally.
      *
@@ -66,6 +69,15 @@ public interface PermissionHandler {
         for (Permission permissionLoop : getAllPermissions()) {
             if (permissionLoop.equals(permission)) {
                 return true;
+            }
+            String permissionLoopName = permissionLoop.getPermissionName();
+            if (permissionLoopName.contains("*")) {
+                // Sanitize permissionLoopName
+                String regexSanitized = Pattern.quote(permissionLoopName).replace("*", "\\E(.*)\\Q"); // Replace * with regex
+                // pattern matching for wildcards, where foo.b*r.baz matches foo.baaaar.baz or foo.bar.baz
+                if (permission.getPermissionName().matches(regexSanitized)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -100,13 +112,17 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
-        final Permission permission = getPermission(permissionName);
+        Permission permission = getPermission(permissionName);
 
-        if (permission != null) {
-            // Verify using the permission verifier
-            return permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
+        if (permission == null && permissionVerifier == null) {
+            permission = new Permission(permissionName, null);
+        } else if (permission == null) {
+            return false;
         }
-        return false;
+        // If no permission verifier, hand off to no-verifier hasPermission for wildcard support
+        if(permissionVerifier == null) { return hasPermission(permission); }
+        // Verify using the permission verifier
+        return permissionVerifier.isValid(permission.getNBTData());
     }
 
     /**

@@ -2,6 +2,8 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
@@ -26,6 +28,10 @@ public final class Metadata {
 
     public static Entry<Integer> VarInt(int value) {
         return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, NetworkBuffer.VAR_INT);
+    }
+
+    public static Entry<Long> Long(long value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.LONG);
     }
 
     public static Entry<Float> Float(float value) {
@@ -95,25 +101,36 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
+    public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, NetworkBuffer.CAT_VARIANT);
+    }
+
+    public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+    }
+
     public static final byte TYPE_BYTE = 0;
     public static final byte TYPE_VARINT = 1;
-    public static final byte TYPE_FLOAT = 2;
-    public static final byte TYPE_STRING = 3;
-    public static final byte TYPE_CHAT = 4;
-    public static final byte TYPE_OPTCHAT = 5;
-    public static final byte TYPE_SLOT = 6;
-    public static final byte TYPE_BOOLEAN = 7;
-    public static final byte TYPE_ROTATION = 8;
-    public static final byte TYPE_POSITION = 9;
-    public static final byte TYPE_OPTPOSITION = 10;
-    public static final byte TYPE_DIRECTION = 11;
-    public static final byte TYPE_OPTUUID = 12;
-    public static final byte TYPE_OPTBLOCKID = 13;
-    public static final byte TYPE_NBT = 14;
-    public static final byte TYPE_PARTICLE = 15;
-    public static final byte TYPE_VILLAGERDATA = 16;
-    public static final byte TYPE_OPTVARINT = 17;
-    public static final byte TYPE_POSE = 18;
+    public static final byte TYPE_LONG = 2;
+    public static final byte TYPE_FLOAT = 3;
+    public static final byte TYPE_STRING = 4;
+    public static final byte TYPE_CHAT = 5;
+    public static final byte TYPE_OPTCHAT = 6;
+    public static final byte TYPE_SLOT = 7;
+    public static final byte TYPE_BOOLEAN = 8;
+    public static final byte TYPE_ROTATION = 9;
+    public static final byte TYPE_POSITION = 10;
+    public static final byte TYPE_OPTPOSITION = 11;
+    public static final byte TYPE_DIRECTION = 12;
+    public static final byte TYPE_OPTUUID = 13;
+    public static final byte TYPE_OPTBLOCKID = 14;
+    public static final byte TYPE_NBT = 15;
+    public static final byte TYPE_PARTICLE = 16;
+    public static final byte TYPE_VILLAGERDATA = 17;
+    public static final byte TYPE_OPTVARINT = 18;
+    public static final byte TYPE_POSE = 19;
+    public static final byte TYPE_CAT_VARIANT = 20;
+    public static final byte TYPE_FROG_VARIANT = 21;
 
     private static final VarHandle NOTIFIED_CHANGES;
 

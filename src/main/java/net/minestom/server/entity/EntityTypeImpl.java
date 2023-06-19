@@ -107,7 +107,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:falling_block", FallingBlockMeta::new),
                 entry("minecraft:firework_rocket", FireworkRocketMeta::new),
                 entry("minecraft:fox", FoxMeta::new),
-                entry("minecraft:frog", EntityMeta::new), // TODO dedicated metadata
+                entry("minecraft:frog", FrogMeta::new),
                 entry("minecraft:ghast", GhastMeta::new),
                 entry("minecraft:giant", GiantMeta::new),
                 entry("minecraft:glow_item_frame", GlowItemFrameMeta::new),
