@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-final class ShapeImpl implements Shape {
+public final class ShapeImpl implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d{1,3}", Pattern.MULTILINE);
     private final BoundingBox[] collisionBoundingBoxes;
     private final Point relativeStart, relativeEnd;
@@ -165,16 +165,15 @@ final class ShapeImpl implements Shape {
         for (BoundingBox blockSection : collisionBoundingBoxes) {
             // Update final result if the temp result collision is sooner than the current final result
             if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
-                finalResult.collidedShapePosition = shapePos;
+                finalResult.collidedPosition = rayStart.add(rayDirection.mul(finalResult.res));
                 finalResult.collidedShape = this;
-                finalResult.blockType = block();
                 hitBlock = true;
             }
         }
         return hitBlock;
     }
 
-    private Block block() {
+    public Block block() {
         Block block = this.block;
         if (block == null) this.block = block = Block.fromStateId((short) blockEntry.stateId());
         return block;

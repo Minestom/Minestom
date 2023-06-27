@@ -410,12 +410,12 @@ public class EntityBlockPhysicsIntegrationTest {
 
         BoundingBox bb = new Entity(EntityType.ZOMBIE).getBoundingBox();
 
-        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, null);
 
         bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultFinal);
         bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultFinal);
 
-        assertEquals(new Pos(11, 0, 0), sweepResultFinal.collidedShapePosition);
+        assertEqualsPoint(new Pos(10.4, 0.52, 0), sweepResultFinal.collidedPosition);
         assertEquals(sweepResultFinal.collidedShape, bb);
     }
 
