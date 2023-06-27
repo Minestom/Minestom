@@ -9,6 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
+
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
@@ -51,9 +53,8 @@ public final class BoundingBox implements Shape {
     @ApiStatus.Experimental
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
-            finalResult.collidedShapePosition = shapePos;
+            finalResult.collidedPosition = rayStart.add(rayDirection.mul(finalResult.res));
             finalResult.collidedShape = this;
-            finalResult.blockType = null;
             return true;
         }
 
@@ -158,6 +159,52 @@ public final class BoundingBox implements Shape {
 
     public double maxZ() {
         return relativeEnd().z();
+    }
+
+    public Iterator<Point> getBlocks(Point point) {
+        return new PointIterator(this, point);
+    }
+
+    static class PointIterator implements Iterator<Point> {
+        int x = 0;
+        int y = 0;
+        int z = 0;
+
+        private final int minX, minY, minZ, maxX, maxY, maxZ;
+
+        public PointIterator(BoundingBox boundingBox, Point p) {
+            minX = (int) Math.floor(boundingBox.minX() + p.x());
+            minY = (int) Math.floor(boundingBox.minY() + p.y());
+            minZ = (int) Math.floor(boundingBox.minZ() + p.z());
+            maxX = (int) Math.floor(boundingBox.maxX() + p.x());
+            maxY = (int) Math.floor(boundingBox.maxY() + p.y());
+            maxZ = (int) Math.floor(boundingBox.maxZ() + p.z());
+            x = minX;
+            y = minY;
+            z = minZ;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return x <= maxX && y <= maxY && z <= maxZ;
+        }
+
+        @Override
+        public Point next() {
+            var res = new Vec(x, y, z);
+
+            x++;
+            if (x > maxX) {
+                x = minX;
+                y++;
+                if (y > maxY) {
+                    y = minY;
+                    z++;
+                }
+            }
+
+            return res;
+        }
     }
 
     @Override
