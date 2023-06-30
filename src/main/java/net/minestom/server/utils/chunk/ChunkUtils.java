@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 public final class ChunkUtils {
 
     public static final boolean USE_NEW_CHUNK_SENDING = Boolean.getBoolean("minestom.use-new-chunk-sending");
+    public static final int NEW_CHUNK_COUNT_PER_INTERVAL = Integer.getInteger("minestom.new-chunk-sending-count-per-interval", 50);
+    public static final int NEW_CHUNK_SEND_INTERVAL = Integer.getInteger("minestom.new-chunk-sending-send-interval", 20);
 
     private ChunkUtils() {
     }
