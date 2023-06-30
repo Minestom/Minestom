@@ -707,14 +707,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         (x, z) -> chunkQueue.add(ChunkUtils.getChunkIndex(x, z)));
                 var iter = chunkQueue.iterator();
                 Supplier<TaskSchedule> taskRunnable = () -> {
-                    for (int i = 0; i < 50; i++) {
+                    for (int i = 0; i < ChunkUtils.NEW_CHUNK_COUNT_PER_INTERVAL; i++) {
                         if (!iter.hasNext()) return TaskSchedule.stop();
 
                         var next = iter.nextLong();
                         chunkAdder.accept(ChunkUtils.getChunkCoordX(next), ChunkUtils.getChunkCoordZ(next));
                     }
 
-                    return TaskSchedule.tick(20);
+                    return TaskSchedule.tick(ChunkUtils.NEW_CHUNK_SEND_INTERVAL);
                 };
                 scheduler().submitTask(taskRunnable);
             } else {
