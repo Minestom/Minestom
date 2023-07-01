@@ -4,7 +4,6 @@ import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -140,6 +139,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentResource
+     */
+    public static ArgumentResource Resource(@NotNull String id, @NotNull String identifier) {
+        return new ArgumentResource(id, identifier);
+    }
+
+    /**
      * @see ArgumentResourceLocation
      */
     public static ArgumentResourceLocation ResourceLocation(@NotNull String id) {
@@ -147,10 +153,10 @@ public class ArgumentType {
     }
 
     /**
-     * @see ArgumentPotionEffect
+     * @see ArgumentResourceOrTag
      */
-    public static ArgumentPotionEffect Potion(@NotNull String id) {
-        return new ArgumentPotionEffect(id);
+    public static ArgumentResourceOrTag ResourceOrTag(@NotNull String id, @NotNull String identifier) {
+        return new ArgumentResourceOrTag(id, identifier);
     }
 
     /**

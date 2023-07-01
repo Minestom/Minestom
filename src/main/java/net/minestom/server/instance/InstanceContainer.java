@@ -11,6 +11,7 @@ import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
@@ -48,6 +49,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.*;
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
 public class InstanceContainer extends Instance {
+    private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -79,7 +81,7 @@ public class InstanceContainer extends Instance {
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
         super(uniqueId, dimensionType);
         setChunkSupplier(DynamicChunk::new);
-        setChunkLoader(Objects.requireNonNullElseGet(loader, () -> new AnvilLoader("world")));
+        setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
     }
 
@@ -174,7 +176,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
@@ -189,7 +191,7 @@ public class InstanceContainer extends Instance {
             chunk.sendChunk(player);
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition, blockFace);
         EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
@@ -228,7 +230,7 @@ public class InstanceContainer extends Instance {
         // Clear cache
         this.chunks.remove(getChunkIndex(chunkX, chunkZ));
         chunk.unload();
-        if(chunkLoader != null) {
+        if (chunkLoader != null) {
             chunkLoader.unloadChunk(chunk);
         }
         var dispatcher = MinecraftServer.process().dispatcher();

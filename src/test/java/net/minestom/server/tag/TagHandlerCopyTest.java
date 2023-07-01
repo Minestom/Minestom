@@ -2,7 +2,7 @@ package net.minestom.server.tag;
 
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.api.TestUtils.assertEqualsSNBT;
+import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 

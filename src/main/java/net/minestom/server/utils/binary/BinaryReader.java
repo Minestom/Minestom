@@ -2,21 +2,14 @@ package net.minestom.server.utils.binary;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Either;
-import net.minestom.server.utils.NBTUtils;
-import net.minestom.server.utils.SerializerUtils;
-import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.nbt.NBTReader;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -27,17 +20,22 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 /**
  * Class used to read from a byte array.
  * <p>
  * WARNING: not thread-safe.
  */
 public class BinaryReader extends InputStream {
-    private final ByteBuffer buffer;
-    private NBTReader nbtReader = null;
+    private final NetworkBuffer buffer;
+
+    public BinaryReader(@NotNull NetworkBuffer buffer) {
+        this.buffer = buffer;
+    }
 
     public BinaryReader(@NotNull ByteBuffer buffer) {
-        this.buffer = buffer;
+        this.buffer = new NetworkBuffer(buffer);
     }
 
     public BinaryReader(byte[] bytes) {
@@ -45,57 +43,53 @@ public class BinaryReader extends InputStream {
     }
 
     public int readVarInt() {
-        return Utils.readVarInt(buffer);
+        return buffer.read(VAR_INT);
     }
 
     public long readVarLong() {
-        return Utils.readVarLong(buffer);
+        return buffer.read(VAR_LONG);
     }
 
     public boolean readBoolean() {
-        return buffer.get() == 1;
+        return buffer.read(BOOLEAN);
     }
 
     public byte readByte() {
-        return buffer.get();
+        return buffer.read(BYTE);
     }
 
     public short readShort() {
-        return buffer.getShort();
-    }
-
-    public char readChar() {
-        return buffer.getChar();
+        return buffer.read(SHORT);
     }
 
     public int readUnsignedShort() {
-        return buffer.getShort() & 0xFFFF;
+        return buffer.read(SHORT) & 0xFFFF;
     }
 
     /**
      * Same as readInt
      */
     public int readInteger() {
-        return buffer.getInt();
+        return buffer.read(INT);
     }
 
     /**
      * Same as readInteger, created for parity with BinaryWriter
      */
     public int readInt() {
-        return buffer.getInt();
+        return buffer.read(INT);
     }
 
     public long readLong() {
-        return buffer.getLong();
+        return buffer.read(LONG);
     }
 
     public float readFloat() {
-        return buffer.getFloat();
+        return buffer.read(FLOAT);
     }
 
     public double readDouble() {
-        return buffer.getDouble();
+        return buffer.read(DOUBLE);
     }
 
     /**
@@ -112,9 +106,11 @@ public class BinaryReader extends InputStream {
         final int length = readVarInt();
         byte[] bytes = new byte[length];
         try {
-            this.buffer.get(bytes);
+            for (int i = 0; i < length; i++) {
+                bytes[i] = readByte();
+            }
         } catch (BufferUnderflowException e) {
-            throw new RuntimeException("Could not read " + length + ", " + buffer.remaining() + " remaining.");
+            throw new RuntimeException("Could not read " + length + ", " + buffer.readableBytes() + " remaining.");
         }
         final String str = new String(bytes, StandardCharsets.UTF_8);
         Check.stateCondition(str.length() > maxLength,
@@ -123,12 +119,14 @@ public class BinaryReader extends InputStream {
     }
 
     public String readSizedString() {
-        return readSizedString(Integer.MAX_VALUE);
+        return buffer.read(STRING);
     }
 
     public byte[] readBytes(int length) {
         byte[] bytes = new byte[length];
-        buffer.get(bytes);
+        for (int i = 0; i < length; i++) {
+            bytes[i] = readByte();
+        }
         return bytes;
     }
 
@@ -177,27 +175,19 @@ public class BinaryReader extends InputStream {
     }
 
     public byte[] readRemainingBytes() {
-        return readBytes(available());
+        return buffer.read(RAW_BYTES);
     }
 
     public Point readBlockPosition() {
-        return SerializerUtils.longToBlockPosition(buffer.getLong());
+        return buffer.read(BLOCK_POSITION);
     }
 
     public UUID readUuid() {
-        return new UUID(readLong(), readLong());
+        return buffer.read(UUID);
     }
 
-    /**
-     * Tries to read an {@link ItemStack}.
-     *
-     * @return the read item
-     * @throws NullPointerException if the item could not get read
-     */
     public ItemStack readItemStack() {
-        final ItemStack itemStack = NBTUtils.readItemStack(this);
-        Check.notNull(itemStack, "#readSlot returned null, probably because the buffer was corrupted");
-        return itemStack;
+        return buffer.read(ITEM);
     }
 
     public Component readComponent(int maxLength) {
@@ -206,7 +196,7 @@ public class BinaryReader extends InputStream {
     }
 
     public Component readComponent() {
-        return readComponent(Integer.MAX_VALUE);
+        return buffer.read(COMPONENT);
     }
 
     /**
@@ -263,10 +253,6 @@ public class BinaryReader extends InputStream {
         return list;
     }
 
-    public ByteBuffer getBuffer() {
-        return buffer;
-    }
-
     @Override
     public int read() {
         return readByte() & 0xFF;
@@ -274,21 +260,11 @@ public class BinaryReader extends InputStream {
 
     @Override
     public int available() {
-        return buffer.remaining();
+        return buffer.readableBytes();
     }
 
     public NBT readTag() {
-        NBTReader reader = this.nbtReader;
-        if (reader == null) {
-            reader = new NBTReader(this, CompressedProcesser.NONE);
-            this.nbtReader = reader;
-        }
-        try {
-            return reader.read();
-        } catch (IOException | NBTException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            throw new RuntimeException();
-        }
+        return buffer.read(NBT);
     }
 
     /**
@@ -299,11 +275,12 @@ public class BinaryReader extends InputStream {
      * @param extractor the extraction code, simply call the reader's read* methods here.
      */
     public byte[] extractBytes(Runnable extractor) {
-        int startingPosition = buffer.position();
+        int startingPosition = buffer.readIndex();
         extractor.run();
-        int endingPosition = getBuffer().position();
+        int endingPosition = buffer.readIndex();
         byte[] output = new byte[endingPosition - startingPosition];
-        buffer.get(startingPosition, output);
+        buffer.copyTo(buffer.readIndex(), output, 0, output.length);
+        //buffer.get(startingPosition, output);
         return output;
     }
 }

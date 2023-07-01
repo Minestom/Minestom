@@ -1,29 +1,30 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
                                     @Nullable NBTCompound data) implements ServerPacket {
-    public BlockEntityDataPacket(BinaryReader reader) {
-        this(reader.readBlockPosition(), reader.readVarInt(), (NBTCompound) reader.readTag());
+    public BlockEntityDataPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BLOCK_POSITION), reader.read(VAR_INT), (NBTCompound) reader.read(NBT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBlockPosition(blockPosition);
-        writer.writeVarInt(action);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BLOCK_POSITION, blockPosition);
+        writer.write(VAR_INT, action);
         if (data != null) {
-            writer.writeNBT("", data);
+            writer.write(NBT, data);
         } else {
             // TAG_End
-            writer.writeByte((byte) 0x00);
+            writer.write(BYTE, (byte) 0x00);
         }
     }
 

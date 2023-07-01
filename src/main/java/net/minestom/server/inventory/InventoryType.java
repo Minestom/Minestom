@@ -21,7 +21,7 @@ public enum InventoryType {
     FURNACE(3),
     GRINDSTONE(3),
     HOPPER(5),
-    LECTERN(0),
+    LECTERN(1),
     LOOM(4),
     MERCHANT(3),
     SHULKER_BOX(27),

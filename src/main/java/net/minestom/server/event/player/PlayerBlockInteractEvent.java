@@ -30,7 +30,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     private boolean cancelled;
 
     public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                    @NotNull Block block, @NotNull Point blockPosition,
+                                    @NotNull Block block, @NotNull Point blockPosition, @NotNull Point cursorPosition,
                                     @NotNull BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
@@ -48,6 +48,11 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
         return blocksItemUse;
     }
 
+    /**
+     * Sets if the event should block the item use.
+     *
+     * @param blocks true if the item use should be blocked, false otherwise
+     */
     public void setBlockingItemUse(boolean blocks) {
         this.blocksItemUse = blocks;
     }

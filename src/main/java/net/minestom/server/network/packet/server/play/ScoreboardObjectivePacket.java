@@ -1,23 +1,23 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode,
                                         @Nullable Component objectiveValue,
                                         @Nullable Type type) implements ComponentHoldingServerPacket {
-    public ScoreboardObjectivePacket(BinaryReader reader) {
+    public ScoreboardObjectivePacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
 
@@ -25,27 +25,27 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
         this(packet.objectiveName, packet.mode, packet.objectiveValue, packet.type);
     }
 
-    private static ScoreboardObjectivePacket read(BinaryReader reader) {
-        var objectiveName = reader.readSizedString();
-        var mode = reader.readByte();
+    private static ScoreboardObjectivePacket read(@NotNull NetworkBuffer reader) {
+        var objectiveName = reader.read(STRING);
+        var mode = reader.read(BYTE);
         Component objectiveValue = null;
         Type type = null;
         if (mode == 0 || mode == 2) {
-            objectiveValue = reader.readComponent();
-            type = Type.values()[reader.readVarInt()];
+            objectiveValue = reader.read(COMPONENT);
+            type = Type.values()[reader.read(VAR_INT)];
         }
         return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type);
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(objectiveName);
-        writer.writeByte(mode);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(STRING, objectiveName);
+        writer.write(BYTE, mode);
         if (mode == 0 || mode == 2) {
             assert objectiveValue != null;
-            writer.writeComponent(objectiveValue);
+            writer.write(COMPONENT, objectiveValue);
             assert type != null;
-            writer.writeVarInt(type.ordinal());
+            writer.write(VAR_INT, type.ordinal());
         }
     }
 

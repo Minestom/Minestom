@@ -2,32 +2,32 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
+
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SetSlotPacket(byte windowId, int stateId, short slot,
                             @NotNull ItemStack itemStack) implements ComponentHoldingServerPacket {
-    public SetSlotPacket(BinaryReader reader) {
-        this(reader.readByte(), reader.readVarInt(), reader.readShort(),
-                reader.readItemStack());
+    public SetSlotPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(BYTE), reader.read(VAR_INT), reader.read(SHORT),
+                reader.read(ITEM));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(windowId);
-        writer.writeVarInt(stateId);
-        writer.writeShort(slot);
-        writer.writeItemStack(itemStack);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, windowId);
+        writer.write(VAR_INT, stateId);
+        writer.write(SHORT, slot);
+        writer.write(ITEM, itemStack);
     }
 
     @Override

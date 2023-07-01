@@ -7,10 +7,13 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.event.player.PlayerCancelDiggingEvent;
+import net.minestom.server.event.player.PlayerFinishDiggingEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
@@ -29,13 +32,13 @@ public final class PlayerDiggingListener {
         DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = startDigging(player, instance, blockPosition);
+            diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = cancelDigging(instance, blockPosition);
+            diggingResult = cancelDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = finishDigging(player, instance, blockPosition);
+            diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
             dropStack(player);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
@@ -51,7 +54,7 @@ public final class PlayerDiggingListener {
         }
     }
 
-    private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition) {
+    private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
         final GameMode gameMode = player.getGameMode();
 
@@ -61,34 +64,39 @@ public final class PlayerDiggingListener {
         }
 
         if (gameMode == GameMode.CREATIVE) {
-            return breakBlock(instance, player, blockPosition, block);
+            return breakBlock(instance, player, blockPosition, block, blockFace);
         }
 
         // Survival digging
         // FIXME: verify mineable tag and enchantment
         final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition, blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
         // Client only send a single STARTED_DIGGING when insta-break is enabled
-        return breakBlock(instance, player, blockPosition, block);
+        return breakBlock(instance, player, blockPosition, block, blockFace);
     }
 
-    private static DiggingResult cancelDigging(Instance instance, Point blockPosition) {
+    private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, blockPosition);
+        EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
 
-    private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition) {
+    private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
 
         if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
         }
 
-        return breakBlock(instance, player, blockPosition, block);
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, blockPosition);
+        EventDispatcher.call(playerFinishDiggingEvent);
+
+        return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
     }
 
     private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
@@ -155,9 +163,9 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult breakBlock(Instance instance,
                                             Player player,
-                                            Point blockPosition, Block previousBlock) {
+                                            Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        final boolean success = instance.breakBlock(player, blockPosition);
+        final boolean success = instance.breakBlock(player, blockPosition, blockFace);
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {

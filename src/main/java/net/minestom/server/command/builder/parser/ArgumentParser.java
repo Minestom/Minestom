@@ -5,7 +5,6 @@ import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -45,7 +44,6 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("enchantment", ArgumentEnchantment::new);
         ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
         ARGUMENT_FUNCTION_MAP.put("resourcelocation", ArgumentResourceLocation::new);
-        ARGUMENT_FUNCTION_MAP.put("potion", ArgumentPotionEffect::new);
         ARGUMENT_FUNCTION_MAP.put("entitytype", ArgumentEntityType::new);
         ARGUMENT_FUNCTION_MAP.put("blockstate", ArgumentBlockState::new);
         ARGUMENT_FUNCTION_MAP.put("intrange", ArgumentIntRange::new);

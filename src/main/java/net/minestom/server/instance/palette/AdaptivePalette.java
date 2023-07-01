@@ -2,8 +2,8 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.IntUnaryOperator;
@@ -106,7 +106,7 @@ final class AdaptivePalette implements Palette, Cloneable {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
+    public void write(@NotNull NetworkBuffer writer) {
         final SpecializedPalette optimized = optimizedPalette();
         this.palette = optimized;
         optimized.write(writer);

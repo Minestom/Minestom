@@ -75,7 +75,16 @@ public final class AttributeInstance {
      * @param modifier the modifier to remove
      */
     public void removeModifier(@NotNull AttributeModifier modifier) {
-        if (modifiers.remove(modifier.getId()) != null) {
+        removeModifier(modifier.getId());
+    }
+
+    /**
+     * Remove a modifier from this instance.
+     *
+     * @param uuid The UUID of the modifier to remove
+     */
+    public void removeModifier(@NotNull UUID uuid) {
+        if (modifiers.remove(uuid) != null) {
             refreshCachedValue();
         }
     }

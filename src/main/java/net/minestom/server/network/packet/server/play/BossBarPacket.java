@@ -4,12 +4,10 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -17,9 +15,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ComponentHoldingServerPacket {
-    public BossBarPacket(BinaryReader reader) {
-        this(reader.readUuid(), switch (reader.readVarInt()) {
+    public BossBarPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(NetworkBuffer.UUID), switch (reader.read(VAR_INT)) {
             case 0 -> new AddAction(reader);
             case 1 -> new RemoveAction();
             case 2 -> new UpdateHealthAction(reader);
@@ -31,9 +31,9 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeUuid(uuid);
-        writer.writeVarInt(action.id());
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(NetworkBuffer.UUID, uuid);
+        writer.write(VAR_INT, action.id());
         writer.write(action);
     }
 
@@ -51,31 +51,32 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
                 : this;
     }
 
-    public sealed interface Action extends Writeable
+    public sealed interface Action extends NetworkBuffer.Writer
             permits AddAction, RemoveAction, UpdateHealthAction, UpdateTitleAction, UpdateStyleAction, UpdateFlagsAction {
         int id();
     }
 
     public record AddAction(@NotNull Component title, float health, @NotNull BossBar.Color color,
-                            @NotNull BossBar.Overlay overlay, byte flags) implements Action, ComponentHolder<AddAction> {
+                            @NotNull BossBar.Overlay overlay,
+                            byte flags) implements Action, ComponentHolder<AddAction> {
         public AddAction(@NotNull BossBar bar) {
             this(bar.name(), bar.progress(), bar.color(), bar.overlay(),
                     AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
-        public AddAction(BinaryReader reader) {
-            this(reader.readComponent(), reader.readFloat(),
-                    BossBar.Color.values()[reader.readVarInt()],
-                    BossBar.Overlay.values()[reader.readVarInt()], reader.readByte());
+        public AddAction(@NotNull NetworkBuffer reader) {
+            this(reader.read(COMPONENT), reader.read(FLOAT),
+                    BossBar.Color.values()[reader.read(VAR_INT)],
+                    BossBar.Overlay.values()[reader.read(VAR_INT)], reader.read(BYTE));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeComponent(title);
-            writer.writeFloat(health);
-            writer.writeVarInt(AdventurePacketConvertor.getBossBarColorValue(color));
-            writer.writeVarInt(AdventurePacketConvertor.getBossBarOverlayValue(overlay));
-            writer.writeByte(flags);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(COMPONENT, title);
+            writer.write(FLOAT, health);
+            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarColorValue(color));
+            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarOverlayValue(overlay));
+            writer.write(BYTE, flags);
         }
 
         @Override
@@ -96,7 +97,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
 
     public record RemoveAction() implements Action {
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull NetworkBuffer writer) {
         }
 
         @Override
@@ -110,13 +111,13 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(bar.progress());
         }
 
-        public UpdateHealthAction(BinaryReader reader) {
-            this(reader.readFloat());
+        public UpdateHealthAction(@NotNull NetworkBuffer reader) {
+            this(reader.read(FLOAT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeFloat(health);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(FLOAT, health);
         }
 
         @Override
@@ -130,13 +131,13 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(bar.name());
         }
 
-        public UpdateTitleAction(BinaryReader reader) {
-            this(reader.readComponent());
+        public UpdateTitleAction(@NotNull NetworkBuffer reader) {
+            this(reader.read(COMPONENT));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeComponent(title);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(COMPONENT, title);
         }
 
         @Override
@@ -161,14 +162,14 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(bar.color(), bar.overlay());
         }
 
-        public UpdateStyleAction(BinaryReader reader) {
-            this(BossBar.Color.values()[reader.readVarInt()], BossBar.Overlay.values()[reader.readVarInt()]);
+        public UpdateStyleAction(@NotNull NetworkBuffer reader) {
+            this(BossBar.Color.values()[reader.read(VAR_INT)], BossBar.Overlay.values()[reader.read(VAR_INT)]);
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarInt(AdventurePacketConvertor.getBossBarColorValue(color));
-            writer.writeVarInt(AdventurePacketConvertor.getBossBarOverlayValue(overlay));
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarColorValue(color));
+            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarOverlayValue(overlay));
         }
 
         @Override
@@ -182,13 +183,13 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
-        public UpdateFlagsAction(BinaryReader reader) {
-            this(reader.readByte());
+        public UpdateFlagsAction(@NotNull NetworkBuffer reader) {
+            this(reader.read(BYTE));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeByte(flags);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(BYTE, flags);
         }
 
         @Override

@@ -1,50 +1,48 @@
 package net.minestom.server.crypto;
 
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.BitSet;
 import java.util.List;
-import java.util.UUID;
 
-public record LastSeenMessages(@NotNull List<@NotNull Entry> entries) implements Writeable {
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+
+public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries) implements NetworkBuffer.Writer {
     public LastSeenMessages {
         entries = List.copyOf(entries);
     }
 
-    public LastSeenMessages(BinaryReader reader) {
-        this(reader.readVarIntList(Entry::new));
+    public LastSeenMessages(@NotNull NetworkBuffer reader) {
+        this(reader.readCollection(MessageSignature::new));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-
+    public void write(@NotNull NetworkBuffer writer) {
     }
 
-    public record Entry(UUID from, MessageSignature lastSignature) implements Writeable {
-        public Entry(BinaryReader reader) {
-            this(reader.readUuid(), new MessageSignature(reader));
+    public record Packed(@NotNull List<MessageSignature.@NotNull Packed> entries) implements NetworkBuffer.Writer {
+        public static final Packed EMPTY = new Packed(List.of());
+
+        public Packed(@NotNull NetworkBuffer reader) {
+            this(reader.readCollection(MessageSignature.Packed::new));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeUuid(from);
-            writer.write(lastSignature);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.writeCollection(entries);
         }
     }
 
-    public record Update(LastSeenMessages lastSeen, @Nullable Entry lastReceived) implements Writeable {
-        public Update(BinaryReader reader) {
-            this(new LastSeenMessages(reader), reader.readBoolean() ? new Entry(reader) : null);
+    public record Update(int offset, @NotNull BitSet acknowledged) implements NetworkBuffer.Writer {
+        public Update(@NotNull NetworkBuffer reader) {
+            this(reader.read(VAR_INT), reader.readFixedBitSet(20));
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.write(lastSeen);
-            writer.writeBoolean(lastReceived != null);
-            if (lastReceived != null) writer.write(lastReceived);
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(VAR_INT, offset);
+            writer.writeFixedBitSet(acknowledged, 20);
         }
     }
 }

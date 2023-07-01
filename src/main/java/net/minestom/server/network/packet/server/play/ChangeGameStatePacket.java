@@ -1,20 +1,22 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+
 public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket {
-    public ChangeGameStatePacket(BinaryReader reader) {
-        this(Reason.values()[reader.readByte()], reader.readFloat());
+    public ChangeGameStatePacket(@NotNull NetworkBuffer reader) {
+        this(Reason.values()[reader.read(BYTE)], reader.read(FLOAT));
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte((byte) reason.ordinal());
-        writer.writeFloat(value);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(BYTE, (byte) reason.ordinal());
+        writer.write(FLOAT, value);
     }
 
     @Override

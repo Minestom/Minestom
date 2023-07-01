@@ -2,6 +2,7 @@ plugins {
     `java-library`
     id("minestom.publishing-conventions")
     id("minestom.native-conventions")
+    alias(libs.plugins.blossom)
 }
 
 allprojects {
@@ -39,15 +40,26 @@ tasks {
     withType<Zip> {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
+
+    blossom {
+        val git = "src/main/java/net/minestom/server/Git.java"
+
+        val gitCommit = System.getenv("GIT_COMMIT")
+        val gitBranch = System.getenv("GIT_BRANCH")
+        val group = System.getenv("GROUP")
+        val artifact = System.getenv("ARTIFACT")
+
+        replaceToken("\"&COMMIT\"", if (gitCommit == null) "null" else "\"${gitCommit}\"", git)
+        replaceToken("\"&BRANCH\"", if (gitBranch == null) "null" else "\"${gitBranch}\"", git)
+        replaceToken("\"&GROUP\"", if (group == null) "null" else "\"${group}\"", git)
+        replaceToken("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"", git)
+    }
+
 }
 
 dependencies {
-    // Junit Testing Framework
-    testImplementation(libs.junit.api)
-    testImplementation(libs.junit.params)
-    testRuntimeOnly(libs.junit.engine)
-    testImplementation(libs.junit.suite.api)
-    testRuntimeOnly(libs.junit.suite.engine)
+    // Testing Framework
+    testImplementation(project(mapOf("path" to ":testing")))
     // Only here to ensure J9 module support for extensions and our classloaders
     testCompileOnly(libs.mockito.core)
 
@@ -84,3 +96,4 @@ dependencies {
     api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
     api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
 }
+

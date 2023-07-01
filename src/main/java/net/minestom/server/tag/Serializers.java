@@ -3,9 +3,9 @@ package net.minestom.server.tag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.Utils;
 import org.jglrxavpok.hephaistos.nbt.*;
 
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -22,8 +22,8 @@ final class Serializers {
     static final Entry<String, NBTString> STRING = new Entry<>(NBTType.TAG_String, NBTString::getValue, NBT::String);
     static final Entry<NBT, NBT> NBT_ENTRY = new Entry<>(null, Function.identity(), Function.identity());
 
-    static final Entry<java.util.UUID, NBTIntArray> UUID = new Entry<>(NBTType.TAG_Int_Array, intArray -> Utils.intArrayToUuid(intArray.getValue().copyArray()),
-            uuid -> NBT.IntArray(Utils.uuidToIntArray(uuid)));
+    static final Entry<java.util.UUID, NBTIntArray> UUID = new Entry<>(NBTType.TAG_Int_Array, intArray -> intArrayToUuid(intArray.getValue().copyArray()),
+            uuid -> NBT.IntArray(uuidToIntArray(uuid)));
     static final Entry<ItemStack, NBTCompound> ITEM = new Entry<>(NBTType.TAG_Compound, ItemStack::fromItemNBT, ItemStack::toItemNBT);
     static final Entry<Component, NBTString> COMPONENT = new Entry<>(NBTType.TAG_String, input -> GsonComponentSerializer.gson().deserialize(input.getValue()),
             component -> NBT.String(GsonComponentSerializer.gson().serialize(component)));
@@ -54,5 +54,23 @@ final class Serializers {
         N write(T value) {
             return writer.apply(value);
         }
+    }
+
+    private static int[] uuidToIntArray(UUID uuid) {
+        final long uuidMost = uuid.getMostSignificantBits();
+        final long uuidLeast = uuid.getLeastSignificantBits();
+        return new int[]{
+                (int) (uuidMost >> 32),
+                (int) uuidMost,
+                (int) (uuidLeast >> 32),
+                (int) uuidLeast
+        };
+    }
+
+    private static UUID intArrayToUuid(int[] array) {
+        final long uuidMost = (long) array[0] << 32 | array[1] & 0xFFFFFFFFL;
+        final long uuidLeast = (long) array[2] << 32 | array[3] & 0xFFFFFFFFL;
+
+        return new UUID(uuidMost, uuidLeast);
     }
 }

@@ -21,12 +21,6 @@ public final class PropertyUtils {
 
     @Contract("_, null -> null; _, !null -> !null")
     public static String getString(@NotNull String name, @Nullable String defaultValue) {
-        final String value = System.getProperty(name);
-
-        if (value == null) {
-            return defaultValue;
-        } else {
-            return value;
-        }
+        return System.getProperty(name, defaultValue);
     }
 }
