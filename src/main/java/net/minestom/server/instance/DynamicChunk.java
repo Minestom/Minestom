@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
@@ -56,7 +57,9 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, @NotNull Block block,
+                         @Nullable BlockHandler.Placement placement,
+                         @Nullable BlockHandler.Destroy destroy) {
         assertLock();
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
@@ -68,16 +71,21 @@ public class DynamicChunk extends Chunk {
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = getSectionAt(y);
-        section.blockPalette()
-                .set(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z), block.stateId());
+        section.blockPalette().set(
+                toSectionRelativeCoordinate(x),
+                toSectionRelativeCoordinate(y),
+                toSectionRelativeCoordinate(z),
+                block.stateId()
+        );
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
+        final Block lastCachedBlock;
         if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-            this.entries.put(index, block);
+            lastCachedBlock = this.entries.put(index, block);
         } else {
-            this.entries.remove(index);
+            lastCachedBlock = this.entries.remove(index);
         }
         // Block tick
         if (handler != null && handler.isTickable()) {
@@ -85,6 +93,21 @@ public class DynamicChunk extends Chunk {
         } else {
             this.tickableMap.remove(index);
         }
+
+        // Update block handlers
+        var blockPosition = new Vec(x, y, z);
+        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
+            // Previous destroy
+            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
+                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+        }
+        if (handler != null) {
+            // New placement
+            final Block finalBlock = block;
+            handler.onPlace(Objects.requireNonNullElseGet(placement,
+                    () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
+        }
+
     }
 
     @Override
