@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
@@ -17,6 +18,7 @@ import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -101,8 +103,10 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
-        super.setBlock(x, y, z, block);
+    public void setBlock(int x, int y, int z, @NotNull Block block,
+                         @Nullable BlockHandler.Placement placement,
+                         @Nullable BlockHandler.Destroy destroy) {
+        super.setBlock(x, y, z, block, placement, destroy);
         this.heightmap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change

@@ -125,9 +125,6 @@ public class InstanceContainer extends Instance {
             }
             this.currentlyChangingBlocks.put(blockPosition, block);
 
-            final Block previousBlock = chunk.getBlock(blockPosition);
-            final BlockHandler previousHandler = previousBlock.handler();
-
             // Change id based on neighbors
             final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
             if (blockPlacementRule != null) {
@@ -135,7 +132,7 @@ public class InstanceContainer extends Instance {
             }
 
             // Set the block
-            chunk.setBlock(x, y, z, block);
+            chunk.setBlock(x, y, z, block, placement, destroy);
 
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);
@@ -148,19 +145,6 @@ public class InstanceContainer extends Instance {
                     final NBTCompound data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
-            }
-
-            if (previousHandler != null) {
-                // Previous destroy
-                previousHandler.onDestroy(Objects.requireNonNullElseGet(destroy,
-                        () -> new BlockHandler.Destroy(previousBlock, this, blockPosition)));
-            }
-            final BlockHandler handler = block.handler();
-            if (handler != null) {
-                // New placement
-                final Block finalBlock = block;
-                handler.onPlace(Objects.requireNonNullElseGet(placement,
-                        () -> new BlockHandler.Placement(finalBlock, this, blockPosition)));
             }
         }
     }
