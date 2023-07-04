@@ -374,6 +374,20 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             // Set the final entity health
             setHealth(getHealth() - remainingDamage);
+
+            // play damage sound
+            final SoundEvent sound = entityDamageEvent.getSound();
+            if (sound != null) {
+                Source soundCategory;
+                if (this instanceof Player) {
+                    soundCategory = Source.PLAYER;
+                } else {
+                    // TODO: separate living entity categories
+                    soundCategory = Source.HOSTILE;
+                }
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, null, soundCategory,
+                        getPosition(), 1.0f, 1.0f, 0));
+            }
         });
 
         return !entityDamageEvent.isCancelled();
