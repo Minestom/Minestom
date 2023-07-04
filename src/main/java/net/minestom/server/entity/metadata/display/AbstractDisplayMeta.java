@@ -22,7 +22,7 @@ public class AbstractDisplayMeta extends EntityMeta {
     }
 
     public void setInterpolationStartTicks(long value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarLong(value));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
     }
 
     public int getInterpolationDuration() {
