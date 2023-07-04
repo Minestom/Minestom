@@ -6,15 +6,14 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record UpdateEnabledFeaturesPacket(Collection<NamespaceID> featureFlags) implements ServerPacket {
+public record UpdateEnabledFeaturesPacket(Set<NamespaceID> featureFlags) implements ServerPacket {
 
     public UpdateEnabledFeaturesPacket {
-        featureFlags = List.copyOf(featureFlags);
+        featureFlags = Set.copyOf(featureFlags);
     }
 
     @Override
