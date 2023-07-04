@@ -299,11 +299,11 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     }
 
     @Override
-    public boolean doubleClick(@NotNull Player player, int slot) {
+    public boolean doubleClick(@NotNull Player player, int slot, int button) {
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, button, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
             return false;

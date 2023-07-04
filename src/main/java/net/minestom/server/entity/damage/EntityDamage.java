@@ -2,17 +2,15 @@ package net.minestom.server.entity.damage;
 
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents damage inflicted by an {@link Entity}.
  */
 public class EntityDamage extends Damage {
 
-    private final Entity source;
-
     public EntityDamage(@NotNull Entity source, float amount) {
-        super(DamageType.MOB_ATTACK, amount);
-        this.source = source;
+        super(DamageType.MOB_ATTACK, source, source, null, amount);
     }
 
     /**
@@ -20,8 +18,13 @@ public class EntityDamage extends Damage {
      *
      * @return the source
      */
-    @NotNull
-    public Entity getSource() {
-        return source;
+    @Override
+    public @NotNull Entity getSource() {
+        return super.getSource();
+    }
+
+    @Override
+    public @NotNull Entity getAttacker() {
+        return getSource();
     }
 }

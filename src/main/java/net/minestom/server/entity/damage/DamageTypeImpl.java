@@ -35,7 +35,7 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements Dama
     @Override
     public NBTCompound asNBT() {
         var elem = new HashMap<String, NBT>();
-        elem.put("exhaustion", NBT.Double(registry.exhaustion()));
+        elem.put("exhaustion", NBT.Float(registry.exhaustion()));
         elem.put("message_id", NBT.String(registry.messageId()));
         elem.put("scaling", NBT.String(registry.scaling()));
         return NBT.Compound(elem);

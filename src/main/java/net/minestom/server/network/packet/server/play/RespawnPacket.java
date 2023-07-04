@@ -11,12 +11,12 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(String dimensionType, String worldName,
                             long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-                            boolean isDebug, boolean isFlat, boolean copyMeta,
+                            boolean isDebug, boolean isFlat, byte dataFlag,
                             DeathLocation deathLocation) implements ServerPacket {
     public RespawnPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), GameMode.fromId(reader.read(BYTE)), GameMode.fromId(reader.read(BYTE)),
-                reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(DEATH_LOCATION));
+                reader.read(BOOLEAN), reader.read(BOOLEAN), reader.read(BYTE), reader.read(DEATH_LOCATION));
     }
 
     @Override
@@ -28,7 +28,7 @@ public record RespawnPacket(String dimensionType, String worldName,
         writer.write(BYTE, previousGameMode.id());
         writer.write(BOOLEAN, isDebug);
         writer.write(BOOLEAN, isFlat);
-        writer.write(BOOLEAN, copyMeta);
+        writer.write(BYTE, dataFlag);
         writer.write(DEATH_LOCATION, deathLocation);
     }
 

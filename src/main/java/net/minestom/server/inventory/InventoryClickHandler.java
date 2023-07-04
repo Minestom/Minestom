@@ -74,7 +74,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean doubleClick(@NotNull Player player, int slot);
+    boolean doubleClick(@NotNull Player player, int slot, int button);
 
     default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {

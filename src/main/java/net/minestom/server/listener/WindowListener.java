@@ -63,7 +63,7 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_CRAFT) {
             successful = inventory.dragging(player, slot, button);
         } else if (clickType == ClientClickWindowPacket.ClickType.PICKUP_ALL) {
-            successful = inventory.doubleClick(player, slot);
+            successful = inventory.doubleClick(player, slot, button);
         }
 
         // Prevent ghost item when the click is cancelled

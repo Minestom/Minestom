@@ -21,7 +21,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         return super.metadata.getIndex(OFFSET, 0);
     }
 
-    public void setInterpolationStartTicks(long value) {
+    public void setInterpolationStartTicks(int value) {
         super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
     }
 

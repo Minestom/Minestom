@@ -79,13 +79,13 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     public record DeclaredShapedCraftingRecipe(@NotNull String recipeId, int width, int height,
                                                @NotNull String group, @NotNull List<Ingredient> ingredients,
-                                               @NotNull ItemStack result) implements DeclaredRecipe {
+                                               @NotNull ItemStack result, boolean showNotification) implements DeclaredRecipe {
         public DeclaredShapedCraftingRecipe {
             ingredients = List.copyOf(ingredients);
         }
 
         private DeclaredShapedCraftingRecipe(DeclaredShapedCraftingRecipe packet) {
-            this(packet.recipeId, packet.width, packet.height, packet.group, packet.ingredients, packet.result);
+            this(packet.recipeId, packet.width, packet.height, packet.group, packet.ingredients, packet.result, packet.showNotification);
         }
 
         public DeclaredShapedCraftingRecipe(@NotNull NetworkBuffer reader) {
@@ -103,7 +103,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                 ingredients.add(new Ingredient(reader));
             }
             ItemStack result = reader.read(ITEM);
-            return new DeclaredShapedCraftingRecipe(recipeId, width, height, group, ingredients, result);
+            boolean showNotification = reader.read(BOOLEAN);
+            return new DeclaredShapedCraftingRecipe(recipeId, width, height, group, ingredients, result, showNotification);
         }
 
         @Override
@@ -115,6 +116,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                 ingredient.write(writer);
             }
             writer.write(ITEM, result);
+            writer.write(BOOLEAN, showNotification);
         }
 
         @Override
