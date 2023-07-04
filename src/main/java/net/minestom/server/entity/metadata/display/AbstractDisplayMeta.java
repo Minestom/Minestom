@@ -122,7 +122,7 @@ public class AbstractDisplayMeta extends EntityMeta {
     }
 
     public int getGlowColorOverride() {
-        return super.metadata.getIndex(OFFSET + 13, 0);
+        return super.metadata.getIndex(OFFSET + 13, -1);
     }
 
     public void setGlowColorOverride(int value) {
