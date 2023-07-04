@@ -364,7 +364,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     @Override
-    public boolean doubleClick(@NotNull Player player, int slot) {
+    public boolean doubleClick(@NotNull Player player, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
@@ -373,7 +373,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 ItemStack.AIR;
         final ItemStack cursor = getCursorItem(player);
         final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
-                this, player, clickSlot, clicked, cursor);
+                this, player, clickSlot, button, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;

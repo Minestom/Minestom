@@ -1,6 +1,7 @@
 package net.minestom.server.entity.damage;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -19,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 public class Damage implements Taggable {
 
     private final DamageType type;
+    private final Entity source;
+    private final Entity attacker;
+    private final Point sourcePosition;
     private final float amount;
     private final TagHandler tagHandler = TagHandler.newHandler();
 
@@ -28,8 +32,11 @@ public class Damage implements Taggable {
      * @param type the type of this damage
      * @param amount amount of damage
      */
-    public Damage(@NotNull DamageType type, float amount) {
+    public Damage(@NotNull DamageType type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
         this.type = type;
+        this.source = source;
+        this.attacker = attacker;
+        this.sourcePosition = sourcePosition;
         this.amount = amount;
     }
 
@@ -42,6 +49,36 @@ public class Damage implements Taggable {
      */
     public @NotNull DamageType getType() {
         return type;
+    }
+
+    /**
+     * Gets the "attacker" of the damage.
+     * This is the indirect cause of the damage, like the shooter of a projectile, or null if there was none.
+     *
+     * @return the attacker
+     */
+    public @Nullable Entity getAttacker() {
+        return attacker;
+    }
+
+    /**
+     * Gets the direct source of the damage.
+     * This is the entity that directly causes the damage, like a projectile, or null if there was none.
+     *
+     * @return the source
+     */
+    public @Nullable Entity getSource() {
+        return source;
+    }
+
+    /**
+     * Gets the position of the source of the damage, or null if there is none.
+     * This may differ from the source entity's position.
+     *
+     * @return The source position
+     */
+    public @Nullable Point getSourcePosition() {
+        return sourcePosition;
     }
 
     /**
@@ -88,6 +125,10 @@ public class Damage implements Taggable {
      */
     public static @NotNull EntityDamage fromEntity(@NotNull Entity entity, float amount) {
         return new EntityDamage(entity, amount);
+    }
+
+    public static @NotNull PositionalDamage fromPosition(@NotNull DamageType type, @NotNull Point sourcePosition, float amount) {
+        return new PositionalDamage(type, sourcePosition, amount);
     }
 
     /**

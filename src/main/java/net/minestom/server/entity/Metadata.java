@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
@@ -119,8 +120,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, NetworkBuffer.SNIFFER_STATE);
     }
 
-    public static Entry<Point> Vector3(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
+    public static Entry<Vec> Vector3(@NotNull Point value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, Vec.fromPoint(value), NetworkBuffer.VECTOR3);
     }
 
     public static Entry<Quaternion> Quaternion(@NotNull Quaternion value) {

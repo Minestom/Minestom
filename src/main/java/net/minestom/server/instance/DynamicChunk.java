@@ -13,6 +13,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
+import net.minestom.server.network.packet.server.play.data.ChunkBiomeData;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.ChunkSnapshot;
@@ -214,6 +215,14 @@ public class DynamicChunk extends Chunk {
 
     private synchronized @NotNull UpdateLightPacket createLightPacket() {
         return new UpdateLightPacket(chunkX, chunkZ, createLightData());
+    }
+
+    public synchronized @NotNull ChunkBiomeData createBiomeData() {
+        final byte[] data = ObjectPool.PACKET_POOL.use(buffer ->
+                NetworkBuffer.makeArray(networkBuffer -> {
+                    for (Section section : sections) section.biomePalette().write(networkBuffer);
+                }));
+        return new ChunkBiomeData(chunkX, chunkZ, data);
     }
 
     private LightData createLightData() {

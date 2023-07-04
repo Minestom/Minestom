@@ -105,7 +105,8 @@ public class PacketWriteReadTest {
                                 "",
                                 List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
                                         new Ingredient(List.of(ItemStack.of(Material.STICK)))),
-                                ItemStack.of(Material.TORCH)
+                                ItemStack.of(Material.TORCH),
+                                true
                         ))));
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));

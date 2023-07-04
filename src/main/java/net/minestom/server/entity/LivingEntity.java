@@ -20,10 +20,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
-import net.minestom.server.network.packet.server.play.CollectItemPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
@@ -331,7 +328,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(@NotNull DamageType damageType, float value) {
-        return damage(new Damage(damageType, value));
+        return damage(new Damage(damageType, null, null, null, value));
     }
 
     public boolean damage(@NotNull Damage damage) {
@@ -349,11 +346,20 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
             if (entityDamageEvent.shouldAnimate()) {
-                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+                sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getType().id(),
+                        damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1,
+                        damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
             }
 
-            // Additional hearts support
             if (this instanceof Player player) {
+                if (damage.getAttacker() != null) {
+                    double dx = damage.getAttacker().getPosition().x() - position.x();
+                    double dz = damage.getAttacker().getPosition().z() - position.z();
+                    double dYaw = Math.toDegrees(Math.atan2(dz, dx)) - position.yaw();
+                    player.sendScreenTilt((float) dYaw);
+                }
+
+                // Additional hearts support
                 final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
                     if (remainingDamage > additionalHearts) {
@@ -368,20 +374,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             // Set the final entity health
             setHealth(getHealth() - remainingDamage);
-
-            // play damage sound
-            final SoundEvent sound = entityDamageEvent.getSound();
-            if (sound != null) {
-                Source soundCategory;
-                if (this instanceof Player) {
-                    soundCategory = Source.PLAYER;
-                } else {
-                    // TODO: separate living entity categories
-                    soundCategory = Source.HOSTILE;
-                }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, null, soundCategory,
-                        getPosition(), 1.0f, 1.0f, 0));
-            }
         });
 
         return !entityDamageEvent.isCancelled();

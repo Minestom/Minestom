@@ -289,7 +289,7 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
+    public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot, int button,
                                                      @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickResult clickResult = startCondition(player, clickedInventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
@@ -304,12 +304,15 @@ public final class InventoryClickProcessor {
             return clickResult;
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
+            int start = button == 0 ? 0 : inv.getInnerSize() - 1;
+            int end = button == 0 ? inv.getInnerSize() : -1;
+            int step = button == 0 ? 1 : -1;
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
                 if (index == slot) // Prevent item lose/duplication
                     return false;
                 final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
-            });
+            }, start, end, step);
             final ItemStack itemResult = pair.left();
             var itemChangesMap = pair.right();
             itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {

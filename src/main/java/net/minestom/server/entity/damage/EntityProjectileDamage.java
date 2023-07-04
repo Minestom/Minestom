@@ -9,13 +9,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EntityProjectileDamage extends Damage {
 
-    private final Entity shooter;
-    private final Entity projectile;
-
     public EntityProjectileDamage(@Nullable Entity shooter, @NotNull Entity projectile, float amount) {
-        super(DamageType.MOB_PROJECTILE, amount);
-        this.shooter = shooter;
-        this.projectile = projectile;
+        super(DamageType.MOB_PROJECTILE, projectile, shooter, null, amount);
     }
 
     /**
@@ -25,7 +20,7 @@ public class EntityProjectileDamage extends Damage {
      */
     @NotNull
     public Entity getProjectile() {
-        return projectile;
+        return getSource();
     }
 
     /**
@@ -35,6 +30,11 @@ public class EntityProjectileDamage extends Damage {
      */
     @Nullable
     public Entity getShooter() {
-        return shooter;
+        return getAttacker();
+    }
+
+    @Override
+    public @NotNull Entity getSource() {
+        return super.getSource();
     }
 }

@@ -560,7 +560,7 @@ final class NetworkBufferTypes {
                 final int ordinal = buffer.read(VAR_INT);
                 return SnifferMeta.State.values()[ordinal];
             });
-    static final TypeImpl<Point> VECTOR3 = new TypeImpl<>(Point.class,
+    static final TypeImpl<Vec> VECTOR3 = new TypeImpl<>(Vec.class,
             (buffer, value) -> {
                 buffer.write(FLOAT, (float) value.x());
                 buffer.write(FLOAT, (float) value.y());
