@@ -32,6 +32,7 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -68,6 +69,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private boolean registered;
 
     private final DimensionType dimensionType;
+    private final String dimensionName;
 
     private final WorldBorder worldBorder;
 
@@ -111,10 +113,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+        this(uniqueId, dimensionType, dimensionType.getName());
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param uniqueId      the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
+     */
+    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
         Check.argCondition(!dimensionType.isRegistered(),
                 "The dimension " + dimensionType.getName() + " is not registered! Please use DimensionTypeManager#addDimension");
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;
+        this.dimensionName = dimensionName.asString();
 
         this.worldBorder = new WorldBorder(this);
 
@@ -360,6 +373,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public DimensionType getDimensionType() {
         return dimensionType;
+    }
+
+    /**
+     * Gets the instance dimension name.
+     * @return the dimension name of the instance
+     */
+    public @NotNull String getDimensionName() {
+        return dimensionName;
     }
 
     /**

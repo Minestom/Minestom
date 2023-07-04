@@ -480,7 +480,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
+        sendPacket(new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, true, deathLocation, portalCooldown));
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -689,7 +689,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkRemover);
         }
 
-        if (dimensionChange) sendDimension(instance.getDimensionType());
+        if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
 
         super.setInstance(instance, spawnPosition);
 
@@ -1032,7 +1032,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), getDimensionType().getName().asString(),
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, true, deathLocation, portalCooldown);
 
         sendPacket(removePlayerPacket);
@@ -1416,11 +1416,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param dimensionType the new player dimension
      */
-    protected void sendDimension(@NotNull DimensionType dimensionType) {
+    protected void sendDimension(@NotNull DimensionType dimensionType, @NotNull String dimensionName) {
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType.toString(), getDimensionType().getName().asString(),
+        sendPacket(new RespawnPacket(dimensionType.toString(), dimensionName,
                 0, gameMode, gameMode, false, levelFlat, true, deathLocation, portalCooldown));
         refreshClientStateAfterRespawn();
     }
