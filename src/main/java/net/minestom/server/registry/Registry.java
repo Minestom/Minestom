@@ -417,14 +417,18 @@ public final class Registry {
     }
 
     public record DamageTypeEntry(NamespaceID namespace, double exhaustion,
-                                   String messageId,
-                                   String scaling,
-                                   Properties custom) implements Entry {
+                                  String messageId,
+                                  String scaling,
+                                  @Nullable String effects,
+                                  @Nullable String deathMessageType,
+                                  Properties custom) implements Entry {
         public DamageTypeEntry(String namespace, Properties main, Properties custom) {
             this(NamespaceID.from(namespace),
                     main.getDouble("exhaustion"),
                     main.getString("message_id"),
                     main.getString("scaling"),
+                    main.getString("effects"),
+                    main.getString("death_message_type"),
                     custom);
         }
     }
