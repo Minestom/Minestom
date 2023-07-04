@@ -723,9 +723,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         synchronizePosition(true); // So the player doesn't get stuck
-        sendPacket(new SpawnPositionPacket(spawnPosition, 0));
 
         if (dimensionChange) {
+            sendPacket(new SpawnPositionPacket(spawnPosition, 0));
             instance.getWorldBorder().init(this);
             sendPacket(new TimeUpdatePacket(instance.getWorldAge(), instance.getTime()));
         }
