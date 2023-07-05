@@ -283,7 +283,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 "value", NBT.List(NBTType.TAG_Compound, damageTypes)
         )));
         final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of(dimensionType.getName().asString()), NBT.Compound(registry), dimensionType.toString(), dimensionType.getName().asString(),
+                List.of(), NBT.Compound(registry), dimensionType.toString(), spawnInstance.getDimensionName(),
                 0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, levelFlat, deathLocation, portalCooldown);
         sendPacket(joinGamePacket);
@@ -607,7 +607,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         // Must update the player chunks
         chunkUpdateLimitChecker.clearHistory();
-        final boolean dimensionChange = !Objects.equals(dimensionType, instance.getDimensionType());
+        final boolean dimensionChange = currentInstance != null && !Objects.equals(currentInstance.getDimensionName(), instance.getDimensionName());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
 
@@ -1417,7 +1417,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param dimensionType the new player dimension
      */
     protected void sendDimension(@NotNull DimensionType dimensionType, @NotNull String dimensionName) {
-        Check.argCondition(dimensionType.equals(getDimensionType()),
+        Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
         sendPacket(new RespawnPacket(dimensionType.toString(), dimensionName,
