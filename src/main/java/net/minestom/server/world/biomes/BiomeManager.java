@@ -1,7 +1,5 @@
 package net.minestom.server.world.biomes;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.NamespaceID;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -10,6 +8,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -18,7 +17,7 @@ import java.util.Map;
  * Contains {@link Biome#PLAINS} by default but can be removed.
  */
 public final class BiomeManager {
-    private final Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
+    private final Map<Integer, Biome> biomes = new ConcurrentHashMap<>();
 
     public BiomeManager() {
         addBiome(Biome.PLAINS);
@@ -29,7 +28,7 @@ public final class BiomeManager {
      *
      * @param biome the biome to add
      */
-    public synchronized void addBiome(Biome biome) {
+    public void addBiome(Biome biome) {
         this.biomes.put(biome.id(), biome);
     }
 
@@ -38,7 +37,7 @@ public final class BiomeManager {
      *
      * @param biome the biome to remove
      */
-    public synchronized void removeBiome(Biome biome) {
+    public void removeBiome(Biome biome) {
         this.biomes.remove(biome.id());
     }
 
@@ -47,7 +46,7 @@ public final class BiomeManager {
      *
      * @return an immutable copy of the biomes already registered
      */
-    public synchronized Collection<Biome> unmodifiableCollection() {
+    public Collection<Biome> unmodifiableCollection() {
         return Collections.unmodifiableCollection(biomes.values());
     }
 
@@ -57,11 +56,11 @@ public final class BiomeManager {
      * @param id the id of the biome
      * @return the {@link Biome} linked to this id
      */
-    public synchronized Biome getById(int id) {
+    public Biome getById(int id) {
         return biomes.get(id);
     }
 
-    public synchronized Biome getByName(NamespaceID namespaceID) {
+    public Biome getByName(NamespaceID namespaceID) {
         Biome biome = null;
         for (final Biome biomeT : biomes.values()) {
             if (biomeT.name().equals(namespaceID)) {
@@ -72,7 +71,7 @@ public final class BiomeManager {
         return biome;
     }
 
-    public synchronized NBTCompound toNBT() {
+    public NBTCompound toNBT() {
         return NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:worldgen/biome"),
                 "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(Biome::toNbt).toList())));
