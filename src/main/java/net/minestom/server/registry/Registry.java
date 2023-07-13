@@ -422,10 +422,10 @@ public final class Registry {
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getDouble("maxLevel"),
-                    main.getBoolean("isCursed", false),
-                    main.getBoolean("isDiscoverable", true),
-                    main.getBoolean("isTradeable", true),
-                    main.getBoolean("isTreasureOnly", false),
+                    main.getBoolean("curse", false),
+                    main.getBoolean("discoverable", true),
+                    main.getBoolean("tradeable", true),
+                    main.getBoolean("treasureOnly", false),
                     custom);
         }
     }
