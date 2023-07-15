@@ -106,9 +106,10 @@ final class CommandParserImpl implements CommandParser {
             NodeResult lastNodeResult = chain.nodeResults.peekLast();
             Node lastNode = lastNodeResult.node;
 
-            return ValidCommand.executor(input, chain, lastNode.execution().executor());
+            CommandExecutor executor = nullSafeGetter(lastNode.execution(), Graph.Execution::executor);
+            if (executor != null) return ValidCommand.executor(input, chain, executor);
         }
-        // If here, then the command failed
+        // If here, then the command failed or didn't have an executor
 
         // Look for a default executor, or give up if we got nowhere
         NodeResult lastNode = chain.nodeResults.peekLast();
@@ -134,8 +135,7 @@ final class CommandParserImpl implements CommandParser {
             ArgumentResult<?> result = parseArgument(argument, reader);
             NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, argument.getSuggestionCallback());
             chain.append(nodeResult);
-            if (node.argument().getId().equals("")) {
-                // This is isn't *great*
+            if (chain.nodeResults.size() == 1) { // If this is the root node (usually "Literal<>")
                 reader.cursor(start);
             } else {
                 if (!(result instanceof ArgumentResult.Success<?>)) {
@@ -163,13 +163,22 @@ final class CommandParserImpl implements CommandParser {
         }
         // Successfully matched this node's argument
         start = reader.cursor();
+        if (!reader.hasRemaining()) start--; // This is needed otherwise the reader throws an AssertionError
 
+        int i = 0;
+        NodeResult error = null;
         for (Node child : node.next()) {
             NodeResult childResult = parseNode(child, chain, reader);
             if (childResult.argumentResult instanceof ArgumentResult.Success<Object>) {
                 // Assume that there is only one successful node for a given chain of arguments
                 return childResult;
             } else {
+                if (i == 0) {
+                    if (!(childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
+                        error = childResult;
+                        i++;
+                    }
+                }
                 reader.cursor(start);
             }
         }
@@ -178,13 +187,12 @@ final class CommandParserImpl implements CommandParser {
         // Try to execute this node
         CommandExecutor executor = nullSafeGetter(node.execution(), Graph.Execution::executor);
         if (executor == null) {
-            // Stuck here with no executor, return
-            return new NodeResult(
-                    node,
-                    chain,
-                    new ArgumentResult.SyntaxError<>("None of the arguments were compatible", "", -1),
-                    argument.getSuggestionCallback()
-            );
+            // Stuck here with no executor
+            if (error != null) {
+                return error;
+            } else {
+                return chain.nodeResults.peekLast();
+            }
         }
 
         if (reader.hasRemaining()) {
