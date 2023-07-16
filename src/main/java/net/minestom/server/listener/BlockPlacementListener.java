@@ -152,19 +152,19 @@ public class BlockPlacementListener {
 
         // BlockPlacementRule check
         Block resultBlock = playerBlockPlaceEvent.getBlock();
-        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-        if (blockPlacementRule != null && playerBlockPlaceEvent.shouldDoBlockUpdates()) {
+//        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
+//        if (blockPlacementRule != null && playerBlockPlaceEvent.shouldDoBlockUpdates()) {
             // Get id from block placement rule instead of the event
-            resultBlock = blockPlacementRule.blockPlace(new BlockPlacementRule.PlacementState(
-                    instance, resultBlock, blockFace,
-                    placementPosition, cursorPosition,
-                    player.getPosition(), usedItem.meta(), player.isSneaking())
-            );
-        }
-        if (resultBlock == null) {
-            refresh(player, chunk);
-            return;
-        }
+//            resultBlock = blockPlacementRule.blockPlace(new BlockPlacementRule.PlacementState(
+//                    instance, resultBlock, blockFace,
+//                    placementPosition, cursorPosition,
+//                    player.getPosition(), usedItem.meta(), player.isSneaking())
+//            );
+//        }
+//        if (resultBlock == null) {
+//            refresh(player, chunk);
+//            return;
+//        }
         // Place the block
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
