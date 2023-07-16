@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockPlacementRule {
+    public static final int DEFAULT_UPDATE_RANGE = 10;
+
     protected final Block block;
 
     protected BlockPlacementRule(@NotNull Block block) {
@@ -44,21 +46,30 @@ public abstract class BlockPlacementRule {
         return block;
     }
 
+    /**
+     * The max distance where a block update can be triggered. It is not based on block, so if the value is 3 and a completely
+     * different block updates 3 blocks away it could still trigger an update.
+     */
+    public int maxUpdateDistance() {
+        return DEFAULT_UPDATE_RANGE;
+    }
+
     public record PlacementState(
             @NotNull Block.Getter instance,
             @NotNull Block block,
-            @NotNull BlockFace blockFace,
+            @Nullable BlockFace blockFace,
             @NotNull Point placePosition,
-            @NotNull Point cursorPosition,
-            @NotNull Pos playerPosition,
-            @NotNull ItemMeta usedItemMeta,
+            @Nullable Point cursorPosition,
+            @Nullable Pos playerPosition,
+            @Nullable ItemMeta usedItemMeta,
             boolean isPlayerShifting
     ) {
     }
 
     public record UpdateState(@NotNull Block.Getter instance,
                               @NotNull Point blockPosition,
-                              @NotNull Block currentBlock) {
+                              @NotNull Block currentBlock,
+                              @NotNull BlockFace fromFace) {
     }
 
     public record Replacement(
