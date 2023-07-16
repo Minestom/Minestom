@@ -153,8 +153,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
+    @Override
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        setBlock(x, y, z, block, true);
+    }
+
+    public void setBlock(@NotNull Point blockPosition, @NotNull Block block, boolean doBlockUpdates) {
+        setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block, doBlockUpdates);
+    }
+
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
+
     @ApiStatus.Internal
-    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement);
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+        return placeBlock(placement, true);
+    }
+
+    @ApiStatus.Internal
+    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -165,7 +181,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace);
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
+        return breakBlock(player, blockPosition, blockFace, true);
+    }
+
+    /**
+     * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
+     * and send particle packets
+     *
+     * @param player        the {@link Player} who break the block
+     * @param blockPosition the position of the broken block
+     * @param doBlockUpdates true to do block updates, false otherwise
+     * @return true if the block has been broken, false if it has been cancelled
+     */
+    @ApiStatus.Internal
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
