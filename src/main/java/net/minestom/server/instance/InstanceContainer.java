@@ -100,14 +100,14 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
         Chunk chunk = getChunkAt(x, z);
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(getChunkCoordinate(x), getChunkCoordinate(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates);
     }
 
     /**
@@ -122,7 +122,8 @@ public class InstanceContainer extends Instance {
      * @param block the block to place
      */
     private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy) {
+                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
+                                              boolean doBlockUpdates) {
         if (chunk.isReadOnly()) return;
         synchronized (chunk) {
             // Refresh the last block change time
@@ -137,7 +138,7 @@ public class InstanceContainer extends Instance {
 
             // Change id based on neighbors
             final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
-            if (blockPlacementRule != null) {
+            if (blockPlacementRule != null && doBlockUpdates) {
                 block = blockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(this, blockPosition, block));
             }
 
@@ -145,7 +146,9 @@ public class InstanceContainer extends Instance {
             chunk.setBlock(x, y, z, block, placement, destroy);
 
             // Refresh neighbors since a new block has been placed
-            executeNeighboursBlockPlacementRule(blockPosition);
+            if (doBlockUpdates) {
+                executeNeighboursBlockPlacementRule(blockPosition);
+            }
 
             // Refresh player chunk block
             {
@@ -160,17 +163,17 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
         final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!isLoaded(chunk)) return false;
         UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
-                placement.getBlock(), placement, null);
+                placement.getBlock(), placement, null, doBlockUpdates);
         return true;
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
@@ -192,7 +195,7 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player));
+                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates);
             // Send the block break effect packet
             PacketUtils.sendGroupedPacket(chunk.getViewers(),
                     new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),

@@ -153,7 +153,7 @@ public class BlockPlacementListener {
         // BlockPlacementRule check
         Block resultBlock = playerBlockPlaceEvent.getBlock();
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-        if (blockPlacementRule != null) {
+        if (blockPlacementRule != null && playerBlockPlaceEvent.shouldDoBlockUpdates()) {
             // Get id from block placement rule instead of the event
             resultBlock = blockPlacementRule.blockPlace(new BlockPlacementRule.PlacementState(
                     instance, resultBlock, blockFace,
@@ -168,7 +168,7 @@ public class BlockPlacementListener {
         // Place the block
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()));
+                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), playerBlockPlaceEvent.shouldDoBlockUpdates());
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
