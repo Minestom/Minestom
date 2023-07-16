@@ -135,7 +135,7 @@ public class PlayerInit {
 
             })
             .addListener(PlayerBlockPlaceEvent.class, event -> {
-                event.setDoBlockUpdates(false);
+//                event.setDoBlockUpdates(false);
             });
 
     static {
