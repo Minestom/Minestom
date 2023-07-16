@@ -27,18 +27,18 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
-        this.instanceContainer.setBlock(x, y, z, block);
+    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
+        this.instanceContainer.setBlock(x, y, z, block, doBlockUpdates);
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
-        return instanceContainer.placeBlock(placement);
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
+        return instanceContainer.placeBlock(placement, doBlockUpdates);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
-        return instanceContainer.breakBlock(player, blockPosition, blockFace);
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+        return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
     }
 
     @Override

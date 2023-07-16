@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.block.TestBlockHandler;
+import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
@@ -28,6 +29,7 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
+        blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getNamespaceId(), () -> TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();

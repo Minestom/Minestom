@@ -133,6 +133,9 @@ public class PlayerInit {
 
                 event.getInstance().setBlock(event.getPosition(), block);
 
+            })
+            .addListener(PlayerBlockPlaceEvent.class, event -> {
+                event.setDoBlockUpdates(false);
             });
 
     static {

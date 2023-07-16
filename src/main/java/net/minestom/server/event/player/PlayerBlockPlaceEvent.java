@@ -21,6 +21,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     private final Player.Hand hand;
 
     private boolean consumeBlock;
+    private boolean doBlockUpdates;
 
     private boolean cancelled;
 
@@ -33,6 +34,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
         this.blockPosition = blockPosition;
         this.hand = hand;
         this.consumeBlock = true;
+        this.doBlockUpdates = true;
     }
 
     /**
@@ -92,6 +94,22 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      */
     public boolean doesConsumeBlock() {
         return consumeBlock;
+    }
+
+    /**
+     * Should the place trigger updates (on self and neighbors)
+     * @param doBlockUpdates true if this placement should do block updates
+     */
+    public void setDoBlockUpdates(boolean doBlockUpdates) {
+        this.doBlockUpdates = doBlockUpdates;
+    }
+
+    /**
+     * Should the place trigger updates (on self and neighbors)
+     * @return true if this placement should do block updates
+     */
+    public boolean shouldDoBlockUpdates() {
+        return doBlockUpdates;
     }
 
     @Override
