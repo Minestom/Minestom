@@ -30,9 +30,9 @@ final class CommandParserImpl implements CommandParser {
 
     static final class Chain {
         CommandExecutor defaultExecutor = null;
-        ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
-        List<CommandCondition> conditions = new ArrayList<>();
-        List<CommandExecutor> globalListeners = new ArrayList<>();
+        final ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
+        final List<CommandCondition> conditions = new ArrayList<>();
+        final List<CommandExecutor> globalListeners = new ArrayList<>();
 
         void append(NodeResult result) {
             this.nodeResults.add(result);
@@ -84,9 +84,9 @@ final class CommandParserImpl implements CommandParser {
               List<CommandCondition> conditions,
               List<CommandExecutor> globalListeners) {
             this.defaultExecutor = defaultExecutor;
-            this.nodeResults = nodeResults.clone();
-            this.conditions = new ArrayList<>(conditions);
-            this.globalListeners = new ArrayList<>(globalListeners);
+            this.nodeResults.addAll(nodeResults);
+            this.conditions.addAll(conditions);
+            this.globalListeners.addAll(globalListeners);
         }
 
         Chain fork() {
