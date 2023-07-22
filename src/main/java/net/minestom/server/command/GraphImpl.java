@@ -4,6 +4,8 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentCommand;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +64,12 @@ record GraphImpl(NodeImpl root) implements Graph {
     }
 
     record NodeImpl(Argument<?> argument, ExecutionImpl execution, List<Graph.Node> next) implements Graph.Node {
+        NodeImpl(Argument<?> argument, ExecutionImpl execution, List<Graph.Node> next) {
+            this.argument = argument;
+            this.execution = execution;
+            this.next = next.stream().sorted(nodePriority).toList();
+        }
+
         static NodeImpl fromBuilder(BuilderImpl builder) {
             final List<BuilderImpl> children = builder.children;
             Node[] nodes = new NodeImpl[children.size()];
@@ -75,6 +83,17 @@ record GraphImpl(NodeImpl root) implements Graph {
 
         static NodeImpl rootCommands(Collection<Command> commands) {
             return ConversionNode.rootConv(commands).toNode();
+        }
+
+        private static final java.util.Comparator<Node> nodePriority = (node1, node2) -> {
+            int node1Value = argumentValue(node1.argument());
+            int node2Value = argumentValue(node2.argument());
+            return Integer.compare(node1Value, node2Value);
+        };
+        private static int argumentValue(Argument<?> argument) {
+            if (argument.getClass() == ArgumentCommand.class) return -3000;
+            if (argument.getClass() == ArgumentLiteral.class) return -2000;
+            return -1000;
         }
     }
 
