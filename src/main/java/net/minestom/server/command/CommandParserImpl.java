@@ -69,7 +69,7 @@ final class CommandParserImpl implements CommandParser {
 
         Map<String, ArgumentResult<Object>> collectArguments() {
             return nodeResults.stream()
-                    .skip(1) // skip root
+                    .skip(2) // skip root node and command
                     .collect(Collectors.toUnmodifiableMap(NodeResult::name, NodeResult::argumentResult));
         }
 
