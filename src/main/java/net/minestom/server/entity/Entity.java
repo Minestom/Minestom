@@ -1774,6 +1774,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         DYING,
         CROAKING,
         USING_TONGUE,
+        SITTING,
         ROARING,
         SNIFFING,
         EMERGING,
