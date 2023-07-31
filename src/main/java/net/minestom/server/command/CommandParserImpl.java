@@ -30,6 +30,7 @@ final class CommandParserImpl implements CommandParser {
 
     static final class Chain {
         CommandExecutor defaultExecutor = null;
+        SuggestionCallback suggestionCallback = null;
         final ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
         final List<CommandCondition> conditions = new ArrayList<>();
         final List<CommandExecutor> globalListeners = new ArrayList<>();
@@ -63,10 +64,6 @@ final class CommandParserImpl implements CommandParser {
             return (sender, context) -> globalListeners.forEach(x -> x.apply(sender, context));
         }
 
-        SuggestionCallback extractSuggestionCallback() {
-            return nodeResults.peekLast().callback;
-        }
-
         Map<String, ArgumentResult<Object>> collectArguments() {
             return nodeResults.stream()
                     .skip(2) // skip root node and command
@@ -80,17 +77,19 @@ final class CommandParserImpl implements CommandParser {
         Chain() {}
 
         Chain(CommandExecutor defaultExecutor,
+              SuggestionCallback suggestionCallback,
               ArrayDeque<NodeResult> nodeResults,
               List<CommandCondition> conditions,
               List<CommandExecutor> globalListeners) {
             this.defaultExecutor = defaultExecutor;
+            this.suggestionCallback = suggestionCallback;
             this.nodeResults.addAll(nodeResults);
             this.conditions.addAll(conditions);
             this.globalListeners.addAll(globalListeners);
         }
 
         Chain fork() {
-            return new Chain(defaultExecutor, nodeResults, conditions, globalListeners);
+            return new Chain(defaultExecutor, suggestionCallback, nodeResults, conditions, globalListeners);
         }
     }
 
@@ -133,8 +132,10 @@ final class CommandParserImpl implements CommandParser {
 
         if (reader.hasRemaining()) {
             ArgumentResult<?> result = parseArgument(argument, reader);
-            NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, argument.getSuggestionCallback());
+            SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
+            NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, suggestionCallback);
             chain.append(nodeResult);
+            if (suggestionCallback != null) chain.suggestionCallback = suggestionCallback;
             if (chain.nodeResults.size() == 1) { // If this is the root node (usually "Literal<>")
                 reader.cursor(start);
             } else {
@@ -262,7 +263,7 @@ final class CommandParserImpl implements CommandParser {
             return new InvalidCommand(input, chain.mergedConditions(),
                     null/*todo command syntax callback*/,
                     new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
-                    chain.collectArguments(), chain.mergedGlobalExecutors(), chain.extractSuggestionCallback(), chain.getArgs());
+                    chain.collectArguments(), chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }
 
         @Override
@@ -278,12 +279,12 @@ final class CommandParserImpl implements CommandParser {
 
         static ValidCommand defaultExecutor(String input, Chain chain) {
             return new ValidCommand(input, chain.mergedConditions(), chain.defaultExecutor, chain.collectArguments(),
-                    chain.mergedGlobalExecutors(), chain.extractSuggestionCallback(), chain.getArgs());
+                    chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }
 
         static ValidCommand executor(String input, Chain chain, CommandExecutor executor) {
             return new ValidCommand(input, chain.mergedConditions(), executor, chain.collectArguments(), chain.mergedGlobalExecutors(),
-                    chain.extractSuggestionCallback(), chain.getArgs());
+                    chain.suggestionCallback, chain.getArgs());
         }
 
         @Override
