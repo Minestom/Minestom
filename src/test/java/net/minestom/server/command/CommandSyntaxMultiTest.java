@@ -28,6 +28,14 @@ public class CommandSyntaxMultiTest {
         assertSyntax(args, "float 5.5", ExpectedExecution.SECOND_SYNTAX, Map.of("float", "float", "number", 5.5f));
     }
 
+    @Test
+    public void argPriority() {
+        List<List<Argument<?>>> args = List.of(
+                List.of(Word("word")),
+                List.of(Literal("literal"))
+        );
+        assertSyntax(args, "literal", ExpectedExecution.SECOND_SYNTAX);
+    }
 
     @Test
     public void similarArgs() {
