@@ -127,6 +127,9 @@ public class AnvilLoader implements IChunkLoader {
 
             // Block entities
             loadBlockEntities(chunk, chunkReader);
+
+            // Heightmaps
+            loadHeightmaps(chunk, mcaFile.getChunk(chunkX, chunkZ));
         }
         synchronized (perRegionLoadedChunks) {
             int regionX = CoordinatesKt.chunkToRegion(chunkX);
@@ -298,6 +301,18 @@ public class AnvilLoader implements IChunkLoader {
             final var finalBlock = mutableCopy.getSize() > 0 ?
                     block.withNbt(mutableCopy.toCompound()) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
+        }
+    }
+
+    private void loadHeightmaps(Chunk loadedChunk, ChunkColumn chunkColumn) {
+        final var motionBlocking = chunkColumn.getMotionBlockingHeightMap();
+        final var worldSurface = chunkColumn.getWorldSurfaceHeightMap();
+
+        for (int z = 0; z < 16; z++) {
+            for (int x = 0; x < 16; x++) {
+                loadedChunk.getMotionBlockingHeightmap().set(x, z, motionBlocking.get(x, z));
+                loadedChunk.getWorldSurfaceHeightmap().set(x, z, worldSurface.get(x, z));
+            }
         }
     }
 
