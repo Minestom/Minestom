@@ -11,6 +11,7 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
 import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.mca.readers.ChunkReader;
 import org.jglrxavpok.hephaistos.mca.readers.ChunkSectionReader;
@@ -129,7 +130,7 @@ public class AnvilLoader implements IChunkLoader {
             loadBlockEntities(chunk, chunkReader);
 
             // Heightmaps
-            loadHeightmaps(chunk, mcaFile.getChunk(chunkX, chunkZ));
+            loadHeightmaps(chunk, chunkReader);
         }
         synchronized (perRegionLoadedChunks) {
             int regionX = CoordinatesKt.chunkToRegion(chunkX);
@@ -304,14 +305,47 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void loadHeightmaps(Chunk loadedChunk, ChunkColumn chunkColumn) {
-        final var motionBlocking = chunkColumn.getMotionBlockingHeightMap();
-        final var worldSurface = chunkColumn.getWorldSurfaceHeightMap();
+    private void loadHeightmaps(Chunk loadedChunk, ChunkReader chunkReader) {
+        if (!chunkReader.hasHeightmaps()) {
+            return;
+        }
 
-        for (int z = 0; z < 16; z++) {
-            for (int x = 0; x < 16; x++) {
-                loadedChunk.getMotionBlockingHeightmap().set(x, z, motionBlocking.get(x, z));
-                loadedChunk.getWorldSurfaceHeightmap().set(x, z, worldSurface.get(x, z));
+        // Motion blocking
+        {
+            ImmutableLongArray data = chunkReader.getMotionBlockingHeightmap();
+            if (data == null) {
+                for (int z = 0; z < 16; z++) {
+                    for (int x = 0; x < 16; x++) {
+                        loadedChunk.getMotionBlockingHeightmap().set(x, z, 0);
+                    }
+                }
+            } else {
+                var heightmap = new org.jglrxavpok.hephaistos.mca.Heightmap(data, chunkReader.getMinecraftVersion());
+                for (int z = 0; z < 16; z++) {
+                    for (int x = 0; x < 16; x++) {
+                        loadedChunk.getMotionBlockingHeightmap().set(x, z, heightmap.get(x, z));
+                    }
+                }
+            }
+        }
+
+        // World surface
+        {
+            ImmutableLongArray data = chunkReader.getWorldSurfaceHeightmap();
+            if (data == null) {
+                int dimensionHeight = loadedChunk.instance.getDimensionType().getHeight();
+                for (int z = 0; z < 16; z++) {
+                    for (int x = 0; x < 16; x++) {
+                        loadedChunk.getWorldSurfaceHeightmap().set(x, z, dimensionHeight - 1);
+                    }
+                }
+            } else {
+                var heightmap = new org.jglrxavpok.hephaistos.mca.Heightmap(data, chunkReader.getMinecraftVersion());
+                for (int z = 0; z < 16; z++) {
+                    for (int x = 0; x < 16; x++) {
+                        loadedChunk.getWorldSurfaceHeightmap().set(x, z, heightmap.get(x, z));
+                    }
+                }
             }
         }
     }
