@@ -1,6 +1,6 @@
 package net.minestom.server.instance.light;
 
-import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.instance.light.LightCompute.*;
 
@@ -26,23 +27,17 @@ final class SkyLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private byte[][] borders;
-    private byte[][] bordersPropagation;
-    private byte[][] bordersPropagationSwap;
     private boolean isValidBorders = true;
     private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
+    private final Section[] neighborSections = new Section[BlockFace.values().length];
 
     private boolean fullyLit = false;
-    private static final byte[][] bordersFullyLit = new byte[6][SIDE_LENGTH];
     private static final byte[] contentFullyLit = new byte[LIGHT_LENGTH];
 
     static {
         Arrays.fill(contentFullyLit, (byte) -1);
-        for (byte[] border : bordersFullyLit) {
-            Arrays.fill(border, (byte) 14);
-        }
     }
 
     SkyLight(Palette blockPalette) {
@@ -51,21 +46,17 @@ final class SkyLight implements Light {
 
     @Override
     public Set<Point> flip() {
-        if (this.bordersPropagationSwap != null)
-            this.bordersPropagation = this.bordersPropagationSwap;
-
         if (this.contentPropagationSwap != null)
             this.contentPropagation = this.contentPropagationSwap;
 
-        this.bordersPropagationSwap = null;
         this.contentPropagationSwap = null;
 
         if (toUpdateSet == null) return Set.of();
         return toUpdateSet;
     }
 
-    static IntArrayFIFOQueue buildInternalQueue(Chunk c, int sectionY) {
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+    static ShortArrayFIFOQueue buildInternalQueue(Chunk c, int sectionY) {
+        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         if (c instanceof LightingChunk lc) {
             int[] heightmap = lc.calculateHeightMap();
@@ -79,7 +70,7 @@ final class SkyLight implements Light {
 
                     for (int y = Math.min(sectionMaxY, maxY); y >= Math.max(height, sectionMinY); y--) {
                         int index = x | (z << 4) | ((y % 16) << 8);
-                        lightSources.enqueue(index | (15 << 12));
+                        lightSources.enqueue((short) (index | (15 << 12)));
                     }
                 }
             }
@@ -92,37 +83,38 @@ final class SkyLight implements Light {
         return Block.fromStateId((short)palette.get(x, y, z));
     }
 
-    private static IntArrayFIFOQueue buildExternalQueue(Instance instance, Block[] blocks, Map<BlockFace, Point> neighbors, byte[][] borders) {
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+    private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
+        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
-        for (BlockFace face : BlockFace.values()) {
-            Point neighborSection = neighbors.get(face);
+        for (int i = 0; i < neighbors.length; i++) {
+            var face = BlockFace.values()[i];
+            Point neighborSection = neighbors[i];
             if (neighborSection == null) continue;
 
-            Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
-            if (chunk == null) continue;
+            Section otherSection = neighborSections[face.ordinal()];
 
-            byte[] neighborFace = chunk.getSection(neighborSection.blockY()).skyLight().getBorderPropagation(face.getOppositeFace());
-            if (neighborFace == null) continue;
+            if (otherSection == null) {
+                Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
+                if (chunk == null) continue;
+
+                otherSection = chunk.getSection(neighborSection.blockY());
+                neighborSections[face.ordinal()] = otherSection;
+            }
+
+            var otherLight = otherSection.skyLight();
 
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {
-                    final int borderIndex = bx * SECTION_SIZE + by;
-                    byte lightEmission = neighborFace[borderIndex];
-
-                    if (borders != null && borders[face.ordinal()] != null) {
-                        final int internalEmission = borders[face.ordinal()][borderIndex];
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
-                    if (borders != null && borders[face.ordinal()] != null) {
-                        final int internalEmission = borders[face.ordinal()][borderIndex];
-                        if (lightEmission <= internalEmission) continue;
-                    }
                     final int k = switch (face) {
                         case WEST, BOTTOM, NORTH -> 0;
                         case EAST, TOP, SOUTH -> 15;
                     };
+
+                    final byte lightEmission = (byte) Math.max(switch (face) {
+                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
+                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
+                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
+                    } - 1, 0);
 
                     final int posTo = switch (face) {
                         case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
@@ -130,16 +122,22 @@ final class SkyLight implements Light {
                         default -> bx | (by << 4) | (k << 8);
                     };
 
-                    Section otherSection = chunk.getSection(neighborSection.blockY());
+                    if (content != null) {
+                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
+                        if (lightEmission <= internalEmission) continue;
+                    }
+
+                    final Block blockTo = switch (face) {
+                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
+                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
+                        default -> getBlock(blockPalette, bx, k, by);
+                    };
 
                     final Block blockFrom = (switch (face) {
                         case NORTH, SOUTH -> getBlock(otherSection.blockPalette(), bx, by, 15 - k);
                         case WEST, EAST -> getBlock(otherSection.blockPalette(), 15 - k, bx, by);
                         default -> getBlock(otherSection.blockPalette(), bx, 15 - k, by);
                     });
-
-                    if (blocks == null) continue;
-                    Block blockTo = blocks[posTo];
 
                     if (blockTo == null && blockFrom != null) {
                         if (blockFrom.registry().collisionShape().isOccluded(Block.AIR.registry().collisionShape(), face.getOppositeFace()))
@@ -155,7 +153,7 @@ final class SkyLight implements Light {
                     final int index = posTo | (lightEmission << 12);
 
                     if (lightEmission > 0) {
-                        lightSources.enqueue(index);
+                        lightSources.enqueue((short) index);
                     }
                 }
             }
@@ -173,13 +171,15 @@ final class SkyLight implements Light {
     @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        if (chunk == null) {
+            this.toUpdateSet = Set.of();
+            return this;
+        }
         this.isValidBorders = true;
 
         // Update single section with base lighting changes
-        Block[] blocks = blocks();
-
         int queueSize = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE;
-        IntArrayFIFOQueue queue = new IntArrayFIFOQueue(0);
+        ShortArrayFIFOQueue queue = new ShortArrayFIFOQueue(0);
         if (!fullyLit) {
             queue = buildInternalQueue(chunk, sectionY);
             queueSize = queue.size();
@@ -188,11 +188,9 @@ final class SkyLight implements Light {
         if (queueSize == SECTION_SIZE * SECTION_SIZE * SECTION_SIZE) {
             this.fullyLit = true;
             this.content = contentFullyLit;
-            this.borders = bordersFullyLit;
         } else {
-            Result result = LightCompute.compute(blocks, queue);
+            Result result = LightCompute.compute(blockPalette, queue);
             this.content = result.light();
-            this.borders = result.borders();
         }
 
         Set<Point> toUpdate = new HashSet<>();
@@ -244,7 +242,6 @@ final class SkyLight implements Light {
 
     private void clearCache() {
         this.contentPropagation = null;
-        this.bordersPropagation = null;
         isValidBorders = true;
         needsSend = true;
         fullyLit = false;
@@ -259,80 +256,41 @@ final class SkyLight implements Light {
         return res;
     }
 
-    private boolean compareBorders(byte[] a, byte[] b) {
-        if (b == null && a == null) return true;
-        if (b == null || a == null) return false;
-
-        if (a.length != b.length) return false;
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] > b[i]) return false;
-        }
-        return true;
-    }
-
-    private Block[] blocks() {
-        Block[] blocks = new Block[SECTION_SIZE * SECTION_SIZE * SECTION_SIZE];
-
-        blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId((short) stateId);
-            assert block != null;
-            final int index = x | (z << 4) | (y << 8);
-            blocks[index] = block;
-        });
-
-        return blocks;
-    }
-
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
         if (!isValidBorders) clearCache();
 
-        Map<BlockFace, Point> neighbors = Light.getNeighbors(chunk, sectionY);
+        Point[] neighbors = Light.getNeighbors(chunk, sectionY);
         Set<Point> toUpdate = new HashSet<>();
 
-        Block[] blocks = blocks();
-        IntArrayFIFOQueue queue;
+        ShortArrayFIFOQueue queue;
 
-        byte[][] borderTemp = bordersFullyLit;
+        byte[] contentPropagationTemp = contentFullyLit;
+
         if (!fullyLit) {
-            queue = buildExternalQueue(instance, blocks, neighbors, borders);
-            LightCompute.Result result = LightCompute.compute(blocks, queue);
+            queue = buildExternalQueue(instance, blockPalette, neighbors, content);
+            LightCompute.Result result = LightCompute.compute(blockPalette, queue);
 
-            byte[] contentPropagationTemp = result.light();
-            borderTemp = result.borders();
+            contentPropagationTemp = result.light();
             this.contentPropagationSwap = bake(contentPropagationSwap, contentPropagationTemp);
-            this.bordersPropagationSwap = combineBorders(bordersPropagation, borderTemp);
         } else {
             this.contentPropagationSwap = null;
-            this.bordersPropagationSwap = null;
         }
 
         // Propagate changes to neighbors and self
-        for (var entry : neighbors.entrySet()) {
-            var neighbor = entry.getValue();
-            var face = entry.getKey();
+        for (int i = 0; i < neighbors.length; i++) {
+            var neighbor = neighbors[i];
+            if (neighbor == null) continue;
 
-            byte[] next = borderTemp[face.ordinal()];
-            byte[] current = getBorderPropagation(face);
+            var face = BlockFace.values()[i];
 
-            if (!compareBorders(next, current)) {
+            if (!Light.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }
         }
 
         this.toUpdateSet = toUpdate;
         return this;
-    }
-
-    private byte[][] combineBorders(byte[][] b1, byte[][] b2) {
-        if (b1 == null) return b2;
-
-        byte[][] newBorder = new byte[FACES.length][];
-        Arrays.setAll(newBorder, i -> new byte[SIDE_LENGTH]);
-        for (int i = 0; i < FACES.length; i++) {
-            newBorder[i] = combineBorders(b1[i], b2[i]);
-        }
-        return newBorder;
     }
 
     private byte[] bake(byte[] content1, byte[] content2) {
@@ -361,38 +319,17 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public byte[] getBorderPropagation(BlockFace face) {
-        if (!isValidBorders) clearCache();
-
-        if (borders == null && bordersPropagation == null) return new byte[SIDE_LENGTH];
-        if (borders == null) return bordersPropagation[face.ordinal()];
-        if (bordersPropagation == null) return borders[face.ordinal()];
-
-        return combineBorders(bordersPropagation[face.ordinal()], borders[face.ordinal()]);
-    }
-
-    @Override
     public void invalidatePropagation() {
         this.isValidBorders = false;
         this.needsSend = false;
-        this.bordersPropagation = null;
         this.contentPropagation = null;
     }
 
     @Override
     public int getLevel(int x, int y, int z) {
-        var array = array();
+        if (content == null) return 0;
         int index = x | (z << 4) | (y << 8);
-        return LightCompute.getLight(array, index);
-    }
-
-    private byte[] combineBorders(byte[] b1, byte[] b2) {
-        byte[] newBorder = new byte[SIDE_LENGTH];
-        for (int i = 0; i < newBorder.length; i++) {
-            var previous = b2[i];
-            var current = b1[i];
-            newBorder[i] = (byte) Math.max(previous, current);
-        }
-        return newBorder;
+        if (contentPropagation == null) return LightCompute.getLight(content, index);
+        return Math.max(LightCompute.getLight(contentPropagation, index), LightCompute.getLight(content, index));
     }
 }

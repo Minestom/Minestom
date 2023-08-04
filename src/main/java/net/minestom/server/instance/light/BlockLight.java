@@ -1,6 +1,6 @@
 package net.minestom.server.instance.light;
 
-import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
+import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.instance.light.LightCompute.*;
 
@@ -25,12 +26,11 @@ final class BlockLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private byte[][] borders;
-    private byte[][] bordersPropagation;
-    private byte[][] bordersPropagationSwap;
     private boolean isValidBorders = true;
     private boolean needsSend = true;
+
     private Set<Point> toUpdateSet = new HashSet<>();
+    private final Section[] neighborSections = new Section[BlockFace.values().length];
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -38,21 +38,17 @@ final class BlockLight implements Light {
 
     @Override
     public Set<Point> flip() {
-        if (this.bordersPropagationSwap != null)
-            this.bordersPropagation = this.bordersPropagationSwap;
-
         if (this.contentPropagationSwap != null)
             this.contentPropagation = this.contentPropagationSwap;
 
-        this.bordersPropagationSwap = null;
         this.contentPropagationSwap = null;
 
         if (toUpdateSet == null) return Set.of();
         return toUpdateSet;
     }
 
-    static IntArrayFIFOQueue buildInternalQueue(Palette blockPalette, Block[] blocks) {
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+    static ShortArrayFIFOQueue buildInternalQueue(Palette blockPalette) {
+        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
             final Block block = Block.fromStateId((short) stateId);
@@ -60,9 +56,8 @@ final class BlockLight implements Light {
             final byte lightEmission = (byte) block.registry().lightEmission();
 
             final int index = x | (z << 4) | (y << 8);
-            blocks[index] = block;
             if (lightEmission > 0) {
-                lightSources.enqueue(index | (lightEmission << 12));
+                lightSources.enqueue((short) (index | (lightEmission << 12)));
             }
         });
         return lightSources;
@@ -72,33 +67,38 @@ final class BlockLight implements Light {
         return Block.fromStateId((short)palette.get(x, y, z));
     }
 
-    private static IntArrayFIFOQueue buildExternalQueue(Instance instance, Block[] blocks, Map<BlockFace, Point> neighbors, byte[][] borders) {
-        IntArrayFIFOQueue lightSources = new IntArrayFIFOQueue();
+    private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
+        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
-        for (BlockFace face : BlockFace.values()) {
-            Point neighborSection = neighbors.get(face);
+        for (int i = 0; i < neighbors.length; i++) {
+            var face = BlockFace.values()[i];
+            Point neighborSection = neighbors[i];
             if (neighborSection == null) continue;
 
-            Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
-            if (chunk == null) continue;
+            Section otherSection = neighborSections[face.ordinal()];
 
-            byte[] neighborFace = chunk.getSection(neighborSection.blockY()).blockLight().getBorderPropagation(face.getOppositeFace());
-            if (neighborFace == null) continue;
+            if (otherSection == null) {
+                Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
+                if (chunk == null) continue;
+
+                otherSection = chunk.getSection(neighborSection.blockY());
+                neighborSections[face.ordinal()] = otherSection;
+            }
+
+            var otherLight = otherSection.blockLight();
 
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {
-                    final int borderIndex = bx * SECTION_SIZE + by;
-                    byte lightEmission = neighborFace[borderIndex];
-
-                    if (borders != null && borders[face.ordinal()] != null) {
-                        final int internalEmission = borders[face.ordinal()][borderIndex];
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
                     final int k = switch (face) {
                         case WEST, BOTTOM, NORTH -> 0;
                         case EAST, TOP, SOUTH -> 15;
                     };
+
+                    final byte lightEmission = (byte) Math.max(switch (face) {
+                            case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
+                            case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
+                            default -> (byte) otherLight.getLevel(bx, 15 - k, by);
+                        } - 1, 0);
 
                     final int posTo = switch (face) {
                         case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
@@ -106,16 +106,22 @@ final class BlockLight implements Light {
                         default -> bx | (by << 4) | (k << 8);
                     };
 
-                    Section otherSection = chunk.getSection(neighborSection.blockY());
+                    if (content != null) {
+                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
+                        if (lightEmission <= internalEmission) continue;
+                    }
+
+                    final Block blockTo = switch(face) {
+                        case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
+                        case WEST, EAST -> getBlock(blockPalette, k, bx, by);
+                        default -> getBlock(blockPalette, bx, k, by);
+                    };
 
                     final Block blockFrom = (switch (face) {
                         case NORTH, SOUTH -> getBlock(otherSection.blockPalette(), bx, by, 15 - k);
                         case WEST, EAST -> getBlock(otherSection.blockPalette(), 15 - k, bx, by);
                         default -> getBlock(otherSection.blockPalette(), bx, 15 - k, by);
                     });
-
-                    if (blocks == null) continue;
-                    Block blockTo = blocks[posTo];
 
                     if (blockTo == null && blockFrom != null) {
                         if (blockFrom.registry().collisionShape().isOccluded(Block.AIR.registry().collisionShape(), face.getOppositeFace()))
@@ -130,7 +136,7 @@ final class BlockLight implements Light {
 
                     if (lightEmission > 0) {
                         final int index = posTo | (lightEmission << 12);
-                        lightSources.enqueue(index);
+                        lightSources.enqueue((short) index);
                     }
                 }
             }
@@ -158,12 +164,10 @@ final class BlockLight implements Light {
         Set<Point> toUpdate = new HashSet<>();
 
         // Update single section with base lighting changes
-        Block[] blocks = new Block[SECTION_SIZE * SECTION_SIZE * SECTION_SIZE];
-        IntArrayFIFOQueue queue = buildInternalQueue(blockPalette, blocks);
+        ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
 
-        Result result = LightCompute.compute(blocks, queue);
+        Result result = LightCompute.compute(blockPalette, queue);
         this.content = result.light();
-        this.borders = result.borders();
 
         // Propagate changes to neighbors and self
         for (int i = -1; i <= 1; i++) {
@@ -212,7 +216,6 @@ final class BlockLight implements Light {
 
     private void clearCache() {
         this.contentPropagation = null;
-        this.bordersPropagation = null;
         isValidBorders = true;
         needsSend = true;
     }
@@ -226,74 +229,34 @@ final class BlockLight implements Light {
         return res;
     }
 
-    private boolean compareBorders(byte[] a, byte[] b) {
-        if (b == null && a == null) return true;
-        if (b == null || a == null) return false;
-
-        if (a.length != b.length) return false;
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] > b[i]) return false;
-        }
-        return true;
-    }
-
-    private Block[] blocks() {
-        Block[] blocks = new Block[SECTION_SIZE * SECTION_SIZE * SECTION_SIZE];
-
-        blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId((short) stateId);
-            assert block != null;
-            final int index = x | (z << 4) | (y << 8);
-            blocks[index] = block;
-        });
-
-        return blocks;
-    }
-
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
         if (!isValidBorders) clearCache();
 
-        Map<BlockFace, Point> neighbors = Light.getNeighbors(chunk, sectionY);
+        Point[] neighbors = Light.getNeighbors(chunk, sectionY);
 
-        Block[] blocks = blocks();
-        IntArrayFIFOQueue queue = buildExternalQueue(instance, blocks, neighbors, borders);
-        LightCompute.Result result = LightCompute.compute(blocks, queue);
+        ShortArrayFIFOQueue queue = buildExternalQueue(instance, blockPalette, neighbors, content);
+        LightCompute.Result result = LightCompute.compute(blockPalette, queue);
 
         byte[] contentPropagationTemp = result.light();
-        byte[][] borderTemp = result.borders();
 
         this.contentPropagationSwap = bake(contentPropagationSwap, contentPropagationTemp);
-        this.bordersPropagationSwap = combineBorders(bordersPropagation, borderTemp);
 
         Set<Point> toUpdate = new HashSet<>();
 
         // Propagate changes to neighbors and self
-        for (var entry : neighbors.entrySet()) {
-            var neighbor = entry.getValue();
-            var face = entry.getKey();
+        for (int i = 0; i < neighbors.length; i++) {
+            var neighbor = neighbors[i];
+            if (neighbor == null) continue;
+            var face = BlockFace.values()[i];
 
-            byte[] next = borderTemp[face.ordinal()];
-            byte[] current = getBorderPropagation(face);
-
-            if (!compareBorders(next, current)) {
+            if (!Light.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }
         }
 
         this.toUpdateSet = toUpdate;
         return this;
-    }
-
-    private byte[][] combineBorders(byte[][] b1, byte[][] b2) {
-        if (b1 == null) return b2;
-
-        byte[][] newBorder = new byte[FACES.length][];
-        Arrays.setAll(newBorder, i -> new byte[SIDE_LENGTH]);
-        for (int i = 0; i < FACES.length; i++) {
-            newBorder[i] = combineBorders(b1[i], b2[i]);
-        }
-        return newBorder;
     }
 
     private byte[] bake(byte[] content1, byte[] content2) {
@@ -322,38 +285,17 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public byte[] getBorderPropagation(BlockFace face) {
-        if (!isValidBorders) clearCache();
-
-        if (borders == null && bordersPropagation == null) return new byte[SIDE_LENGTH];
-        if (borders == null) return bordersPropagation[face.ordinal()];
-        if (bordersPropagation == null) return borders[face.ordinal()];
-
-        return combineBorders(bordersPropagation[face.ordinal()], borders[face.ordinal()]);
-    }
-
-    @Override
     public void invalidatePropagation() {
         this.isValidBorders = false;
         this.needsSend = false;
-        this.bordersPropagation = null;
         this.contentPropagation = null;
     }
 
     @Override
     public int getLevel(int x, int y, int z) {
-        var array = array();
+        if (content == null) return 0;
         int index = x | (z << 4) | (y << 8);
-        return LightCompute.getLight(array, index);
-    }
-
-    private byte[] combineBorders(byte[] b1, byte[] b2) {
-        byte[] newBorder = new byte[SIDE_LENGTH];
-        for (int i = 0; i < newBorder.length; i++) {
-            var previous = b2[i];
-            var current = b1[i];
-            newBorder[i] = (byte) Math.max(previous, current);
-        }
-        return newBorder;
+        if (contentPropagation == null) return LightCompute.getLight(content, index);
+        return Math.max(LightCompute.getLight(contentPropagation, index), LightCompute.getLight(content, index));
     }
 }
