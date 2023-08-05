@@ -33,6 +33,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
@@ -50,6 +52,8 @@ import static net.minestom.server.utils.chunk.ChunkUtils.*;
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
 public class InstanceContainer extends Instance {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
+
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
 
     private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
@@ -129,6 +133,11 @@ public class InstanceContainer extends Instance {
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
+        if(y >= getDimensionType().getMaxY() || y < getDimensionType().getMinY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", getDimensionType().getMinY(), getDimensionType().getMaxY(), y);
+            return;
+        }
+
         synchronized (chunk) {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.currentTimeMillis();
