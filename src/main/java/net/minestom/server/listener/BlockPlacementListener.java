@@ -90,6 +90,7 @@ public class BlockPlacementListener {
             canPlaceBlock = usedItem.meta().canPlaceOn(interactedBlock);
         }
 
+
         // Get the newly placed block position
         //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
@@ -110,6 +111,9 @@ public class BlockPlacementListener {
                 canPlaceBlock = false;
             }
         }
+
+        if(placementPosition.y() >= instance.getDimensionType().getMaxY()
+                || placementPosition.y() <= instance.getDimensionType().getMinY()) return;
 
         if (!canPlaceBlock) {
             // Send a block change with the real block in the instance to keep the client in sync,
@@ -150,22 +154,8 @@ public class BlockPlacementListener {
             return;
         }
 
-        // BlockPlacementRule check
-        Block resultBlock = playerBlockPlaceEvent.getBlock();
-//        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-//        if (blockPlacementRule != null && playerBlockPlaceEvent.shouldDoBlockUpdates()) {
-            // Get id from block placement rule instead of the event
-//            resultBlock = blockPlacementRule.blockPlace(new BlockPlacementRule.PlacementState(
-//                    instance, resultBlock, blockFace,
-//                    placementPosition, cursorPosition,
-//                    player.getPosition(), usedItem.meta(), player.isSneaking())
-//            );
-//        }
-//        if (resultBlock == null) {
-//            refresh(player, chunk);
-//            return;
-//        }
         // Place the block
+        Block resultBlock = playerBlockPlaceEvent.getBlock();
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
                 packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), playerBlockPlaceEvent.shouldDoBlockUpdates());

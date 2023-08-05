@@ -23,11 +23,14 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -39,6 +42,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordi
  * WARNING: not thread-safe.
  */
 public class DynamicChunk extends Chunk {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
 
@@ -60,7 +64,13 @@ public class DynamicChunk extends Chunk {
     public void setBlock(int x, int y, int z, @NotNull Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
+        if(y >= instance.getDimensionType().getMaxY() || y < instance.getDimensionType().getMinY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
+                    instance.getDimensionType().getMinY(), instance.getDimensionType().getMaxY(), y);
+            return;
+        }
         assertLock();
+
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
 
