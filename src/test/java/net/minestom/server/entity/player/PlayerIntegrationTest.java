@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.play.ClientSettingsPacket;
@@ -168,5 +169,38 @@ public class PlayerIntegrationTest {
         assertNotNull(player.getDeathLocation());
         assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
         assertEquals(5, player.getDeathLocation().position().x());
+    }
+
+    @Test
+    public void displayNameTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+
+        player.setDisplayName(Component.text("Display Name!"));
+
+        var connection2 = env.createConnection();
+        var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
+        connection2.connect(instance, new Pos(0, 42, 0)).join();
+
+        var displayNamePackets = tracker2.collect().stream().filter((packet) ->
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                .count();
+        assertEquals(1, displayNamePackets);
+
+        var tracker3 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
+
+        player.setDisplayName(Component.text("Other Name!"));
+
+        var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                .count();
+        assertEquals(1, displayNamePackets2);
+
+        var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                .count();
+        assertEquals(2, displayNamePackets3);
     }
 }

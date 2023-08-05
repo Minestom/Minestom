@@ -518,7 +518,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         super.updateNewViewer(player);
         player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
         player.sendPacket(new LazyPacket(this::getPropertiesPacket));
-        if (getTeam() != null) player.sendPacket(getTeam().createTeamsCreationPacket());
     }
 
     @Override
