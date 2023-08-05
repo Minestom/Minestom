@@ -313,8 +313,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
         PacketUtils.broadcastPacket(getAddPlayerToList());
+        
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            if (player != this) sendPacket(player.getAddPlayerToList());
+            if (player != this) {
+                sendPacket(player.getAddPlayerToList());
+                if (player.displayName != null) {
+                    sendPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player.infoEntry()));
+                }
+            }
         }
 
         //Teams
@@ -1479,13 +1485,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return heldSlot;
     }
 
-    public void setTeam(Team team) {
-        super.setTeam(team);
-        if (team != null) {
-            PacketUtils.broadcastPacket(team.createTeamsCreationPacket());
-        }
-    }
-
     /**
      * Changes the tag below the name.
      *
@@ -2036,10 +2035,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         connection.sendPacket(getEquipmentsPacket());
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
-        }
-        // Team
-        if (this.getTeam() != null) {
-            connection.sendPacket(this.getTeam().createTeamsCreationPacket());
         }
         connection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
