@@ -20,11 +20,12 @@ jobs:
     - name: Build javadoc
       run: ./gradlew javadoc
       
-    - name: Deploy javadoc to its assigned branch
+    - name: Deploy javadocs
       uses: s0/git-publish-subdir-action@develop
       env:
-        REPO: self
-        BRANCH: javadoc
+        REPO: git@github.com:hollow-cube/javadocs.git
+        BRANCH: main
         FOLDER: build/docs/javadoc
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TARGET_DIR: minestom-ce
+        SSH_PRIVATE_KEY: ${{ secrets.JAVADOC_DEPLOY_PRIVATE_KEY }}
         CLEAR_GLOBS_FILE: ".github/javadoc-publish-clear"
