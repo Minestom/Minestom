@@ -1,12 +1,15 @@
 package net.minestom.server.network.packet.client.login;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -20,7 +23,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
@@ -72,14 +77,22 @@ public record EncryptionResponsePacket(byte[] sharedSecret,
             client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).whenComplete((response, throwable) -> {
                 if (throwable != null) {
                     MinecraftServer.getExceptionManager().handleException(throwable);
-                    //todo disconnect with reason
+                    if (socketConnection.getPlayer() != null) {
+                        socketConnection.getPlayer().kick(Component.text("Failed to contact Mojang's Session Servers (Are they down?)"));
+                    } else {
+                        socketConnection.disconnect();
+                    }
                     return;
                 }
                 try {
                     final JsonObject gameProfile = GSON.fromJson(response.body(), JsonObject.class);
                     if (gameProfile == null) {
                         // Invalid response
-                        //todo disconnect with reason
+                        if (socketConnection.getPlayer() != null) {
+                            socketConnection.getPlayer().kick(Component.text("Failed to get data from Mojang's Session Servers (Are they down?)"));
+                        } else {
+                            socketConnection.disconnect();
+                        }
                         return;
                     }
                     socketConnection.setEncryptionKey(getSecretKey());
@@ -89,6 +102,12 @@ public record EncryptionResponsePacket(byte[] sharedSecret,
 
                     MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, profileUUID);
                     CONNECTION_MANAGER.startPlayState(connection, profileUUID, profileName, true);
+                    List<GameProfile.Property> propertyList = new ArrayList<>();
+                    for (JsonElement element : gameProfile.get("properties").getAsJsonArray()) {
+                        JsonObject object = element.getAsJsonObject();
+                        propertyList.add(new GameProfile.Property(object.get("name").getAsString(), object.get("value").getAsString(), object.get("signature").getAsString()));
+                    }
+                    socketConnection.UNSAFE_setProfile(new GameProfile(profileUUID, profileName, propertyList));
                 } catch (Exception e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
