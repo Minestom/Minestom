@@ -41,7 +41,6 @@ public class UseItemListener {
         }
 
         PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;
-        boolean riptideSpinAttack = false;
 
         boolean cancelAnimation = false;
 
@@ -68,7 +67,7 @@ public class UseItemListener {
         if (!cancelAnimation && itemAnimationType != null) {
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
-                player.refreshActiveHand(true, hand == Player.Hand.OFF, riptideSpinAttack);
+                player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
         }
