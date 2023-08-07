@@ -88,7 +88,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:blaze", BlazeMeta::new),
                 entry("minecraft:block_display", BlockDisplayMeta::new),
                 entry("minecraft:boat", BoatMeta::new),
-                entry("minecraft:chest_boat", EntityMeta::new), // TODO dedicated metadata
+                entry("minecraft:chest_boat", BoatMeta::new),
                 entry("minecraft:camel", CamelMeta::new),
                 entry("minecraft:cat", CatMeta::new),
                 entry("minecraft:cave_spider", CaveSpiderMeta::new),
@@ -189,7 +189,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:villager", VillagerMeta::new),
                 entry("minecraft:vindicator", VindicatorMeta::new),
                 entry("minecraft:wandering_trader", WanderingTraderMeta::new),
-                entry("minecraft:warden", EntityMeta::new), // TODO dedicated metadata
+                entry("minecraft:warden", WardenMeta::new),
                 entry("minecraft:witch", WitchMeta::new),
                 entry("minecraft:wither", WitherMeta::new),
                 entry("minecraft:wither_skeleton", WitherSkeletonMeta::new),
