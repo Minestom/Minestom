@@ -1,35 +1,24 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 
-import java.util.Objects;
-
 public final class CreativeInventoryActionListener {
     public static void listener(ClientCreativeInventoryActionPacket packet, Player player) {
         if (!player.isCreative()) return;
-        short slot = packet.slot();
-        final ItemStack item = packet.item();
-        if (slot == -1) {
-            // Drop item
-            player.dropItem(item);
-            return;
+
+        ItemStack item = packet.item();
+
+        if (packet.slot() == -1) { // -1 here indicates a drop
+            player.getInventory().handleClick(player, new Click.Info.CreativeDropItem(item));
         }
-        // Bounds check
-        // 0 is crafting result inventory slot, ignore attempts to place into it
-        if (slot < 1 || slot > PlayerInventoryUtils.OFFHAND_SLOT) {
-            return;
-        }
-        // Set item
-        slot = (short) PlayerInventoryUtils.convertPlayerInventorySlot(slot, PlayerInventoryUtils.OFFSET);
-        PlayerInventory inventory = player.getInventory();
-        if (Objects.equals(inventory.getItemStack(slot), item)) {
-            // Item is already present, ignore
-            return;
-        }
-        inventory.setItemStack(slot, item);
+
+        int slot = PlayerInventoryUtils.protocolToMinestom(packet.slot());
+        if (slot == -1) return; // -1 after conversion indicates an invalid slot
+
+        player.getInventory().handleClick(player, new Click.Info.CreativeSetItem(slot, item));
     }
 }

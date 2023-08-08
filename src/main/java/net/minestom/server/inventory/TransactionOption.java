@@ -1,32 +1,30 @@
 package net.minestom.server.inventory;
 
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 @FunctionalInterface
 public interface TransactionOption<T> {
 
     /**
-     * Place as much as the item as possible.
-     * <p>
-     * The remaining, can be air.
+     * Performs as much of the operation as is possible.
+     * Returns the remaining item in the operation (can be air).
      */
     TransactionOption<ItemStack> ALL = (inventory, result, itemChangesMap) -> {
-        itemChangesMap.forEach(inventory::safeItemInsert);
+        itemChangesMap.forEach(inventory::setItemStack);
         return result;
     };
 
     /**
-     * Only place the item if can be fully added.
-     * <p>
-     * Returns true if the item has been added, false if nothing changed.
+     * Performs the operation atomically (only if the operation resulted in air), returning whether or not the operation
+     * was performed.
      */
     TransactionOption<Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
         if (result.isAir()) {
             // Item can be fully placed inside the inventory, do so
-            itemChangesMap.forEach(inventory::safeItemInsert);
+            itemChangesMap.forEach(inventory::setItemStack);
             return true;
         } else {
             // Inventory cannot accept the item fully
@@ -35,20 +33,14 @@ public interface TransactionOption<T> {
     };
 
     /**
-     * Loop through the inventory items without changing anything.
-     * <p>
-     * Returns true if the item can be fully added, false otherwise.
+     * Discards the result of the operation, returning whether or not the operation could have finished.
      */
     TransactionOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
 
-    @NotNull T fill(@NotNull AbstractInventory inventory,
-                    @NotNull ItemStack result,
-                    @NotNull Map<@NotNull Integer, @NotNull ItemStack> itemChangesMap);
+    @NotNull T fill(@NotNull Inventory inventory, @NotNull ItemStack result, @NotNull Int2ObjectMap<ItemStack> itemChangesMap);
 
-    default @NotNull T fill(@NotNull TransactionType type,
-                            @NotNull AbstractInventory inventory,
-                            @NotNull ItemStack itemStack) {
-        var pair = type.process(inventory, itemStack);
-        return fill(inventory, pair.left(), pair.right());
+    default @NotNull T fill(@NotNull TransactionType type, @NotNull Inventory inventory, @NotNull ItemStack itemStack) {
+        Pair<ItemStack, Int2ObjectMap<ItemStack>> result = type.process(itemStack, inventory::getItemStack);
+        return fill(inventory, result.left(), result.right());
     }
 }

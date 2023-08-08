@@ -1,89 +1,93 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.item.ItemStack;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.Click;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
- * are already moved.
+ * Called after {@link InventoryPreClickEvent} and before {@link InventoryPostClickEvent}.
  */
-public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent {
+public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
+    private final PlayerInventory playerInventory;
     private final Inventory inventory;
     private final Player player;
-    private final int slot;
-    private final ClickType clickType;
-    private final ItemStack clickedItem;
-    private final ItemStack cursorItem;
+    private final Click.Info info;
+    private Click.Result changes;
 
-    public InventoryClickEvent(@Nullable Inventory inventory, @NotNull Player player,
-                               int slot, @NotNull ClickType clickType,
-                               @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    private boolean cancelled;
+
+    public InventoryClickEvent(@NotNull PlayerInventory playerInventory, @NotNull Inventory inventory,
+                               @NotNull Player player, @NotNull Click.Info info, @NotNull Click.Result changes) {
+        this.playerInventory = playerInventory;
         this.inventory = inventory;
         this.player = player;
-        this.slot = slot;
-        this.clickType = clickType;
-        this.clickedItem = clicked;
-        this.cursorItem = cursor;
+        this.info = info;
+        this.changes = changes;
     }
 
     /**
-     * Gets the player who clicked in the inventory.
+     * Gets the player who is trying to click on the inventory.
      *
-     * @return the player who clicked in the inventory
+     * @return the player who clicked
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return player;
     }
 
     /**
-     * Gets the clicked slot number.
+     * Gets the info about the click that occurred. This is enough to fully describe the click.
      *
-     * @return the clicked slot number
+     * @return the click info
      */
-    public int getSlot() {
-        return slot;
+    public @NotNull Click.Info getClickInfo() {
+        return info;
     }
 
     /**
-     * Gets the click type.
+     * Gets the changes that will occur as a result of this click.
      *
-     * @return the click type
+     * @return the changes
      */
-    @NotNull
-    public ClickType getClickType() {
-        return clickType;
+    public @NotNull Click.Result getChanges() {
+        return changes;
     }
 
     /**
-     * Gets the clicked item.
+     * Updates the changes that will occur as a result of this click.
      *
-     * @return the clicked item
+     * @param changes the new results
      */
-    @NotNull
-    public ItemStack getClickedItem() {
-        return clickedItem;
+    public void setChanges(@NotNull Click.Result changes) {
+        this.changes = changes;
     }
 
     /**
-     * Gets the item in the player cursor.
+     * Gets the player inventory that was involved with the click.
      *
-     * @return the cursor item
+     * @return the player inventory
      */
-    @NotNull
-    public ItemStack getCursorItem() {
-        return cursorItem;
+    public @NotNull PlayerInventory getPlayerInventory() {
+        return playerInventory;
     }
 
     @Override
-    public @Nullable Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return inventory;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }
