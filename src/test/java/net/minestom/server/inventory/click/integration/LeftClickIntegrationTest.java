@@ -36,7 +36,7 @@ public class LeftClickIntegrationTest {
                 assertNull(event.getInventory()); // Player inventory
                 assertEquals(0, event.getSlot());
                 assertEquals(ClickType.LEFT_CLICK, event.getClickType());
-                assertEquals(ItemStack.AIR, inventory.getCursorItem());
+                assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             });
             leftClick(player, 0);
         }
@@ -44,29 +44,29 @@ public class LeftClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(1, event.getSlot());
-                assertEquals(ItemStack.AIR, inventory.getCursorItem());
+                assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
                 assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
             });
             leftClick(player, 1);
-            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem(player));
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
         }
         // Place it back
         {
             listener.followup(event -> {
                 assertEquals(1, event.getSlot());
-                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem(player));
                 assertEquals(ItemStack.AIR, inventory.getItemStack(1));
             });
             leftClick(player, 1);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem());
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
         }
         // Cancel event
         {
             listener.followup(event -> event.setCancelled(true));
             leftClick(player, 1);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem(), "Left click cancellation did not work");
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player), "Left click cancellation did not work");
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
         }
         // Change items
@@ -76,7 +76,7 @@ public class LeftClickIntegrationTest {
                 event.setCursorItem(ItemStack.of(Material.DIAMOND));
             });
             leftClick(player, 1);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem());
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.DIAMOND, 6), inventory.getItemStack(1));
         }
     }

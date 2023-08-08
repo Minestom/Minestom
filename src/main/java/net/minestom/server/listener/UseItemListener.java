@@ -14,9 +14,8 @@ import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand();
-        ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        ItemStack itemStack = player.getItemInHand(hand);
         //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         EventDispatcher.call(useItemEvent);
@@ -33,10 +32,10 @@ public class UseItemListener {
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
         if (equipmentSlot != null) {
-            final ItemStack currentlyEquipped = playerInventory.getEquipment(equipmentSlot);
+            final ItemStack currentlyEquipped = player.getEquipment(equipmentSlot);
             if (currentlyEquipped.isAir()) {
-                playerInventory.setEquipment(equipmentSlot, itemStack);
-                playerInventory.setItemInHand(hand, currentlyEquipped);
+                player.setEquipment(equipmentSlot, itemStack);
+                player.setItemInHand(hand, currentlyEquipped);
             }
         }
 

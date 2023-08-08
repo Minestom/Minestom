@@ -3,7 +3,6 @@ package net.minestom.server.event.inventory;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,18 +10,16 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called when {@link AbstractInventory#safeItemInsert(int, ItemStack)} is being invoked.
  * This event cannot be cancelled and items related to the change are already moved.
- *
- * @see PlayerInventoryItemChangeEvent
  */
 @SuppressWarnings("JavadocReference")
 public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
 
-    private final Inventory inventory;
+    private final AbstractInventory inventory;
     private final int slot;
     private final ItemStack previousItem;
     private final ItemStack newItem;
 
-    public InventoryItemChangeEvent(@Nullable Inventory inventory, int slot,
+    public InventoryItemChangeEvent(@Nullable AbstractInventory inventory, int slot,
                                     @NotNull ItemStack previousItem, @NotNull ItemStack newItem) {
         this.inventory = inventory;
         this.slot = slot;
@@ -58,7 +55,7 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
     }
 
     @Override
-    public @Nullable Inventory getInventory() {
+    public @Nullable AbstractInventory getInventory() {
         return inventory;
     }
 }

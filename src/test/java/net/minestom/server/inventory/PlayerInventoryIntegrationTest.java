@@ -48,15 +48,15 @@ public class PlayerInventoryIntegrationTest {
         assertEquals(instance, player.getInstance());
 
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.getInventory().setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(player, MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.getInventory().setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(player, MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.getInventory().setCursorItem(ItemStack.AIR);
+        player.getInventory().setCursorItem(player, ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
 
@@ -73,7 +73,7 @@ public class PlayerInventoryIntegrationTest {
         player.getInventory().setItemStack(3, MAGIC_STACK);
         player.getInventory().setItemStack(19, MAGIC_STACK);
         player.getInventory().setItemStack(40, MAGIC_STACK);
-        player.getInventory().setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(player, MAGIC_STACK);
 
         setSlotTracker.assertCount(5);
 
@@ -118,19 +118,19 @@ public class PlayerInventoryIntegrationTest {
         var equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
 
         // Setting to an item should send EntityEquipmentPacket to viewer
-        playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
+        playerArmored.setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
             assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
         });
 
         // Setting to the same item shouldn't send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
-        playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
+        playerArmored.setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
         equipmentTracker.assertEmpty();
 
         // Setting to air should send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
-        playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
+        playerArmored.setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
             assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
         });

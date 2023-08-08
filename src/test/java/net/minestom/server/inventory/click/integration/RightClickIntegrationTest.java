@@ -36,7 +36,7 @@ public class RightClickIntegrationTest {
                 assertNull(event.getInventory()); // Player inventory
                 assertEquals(0, event.getSlot());
                 assertEquals(ClickType.RIGHT_CLICK, event.getClickType());
-                assertEquals(ItemStack.AIR, inventory.getCursorItem());
+                assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             });
             rightClick(player, 0);
         }
@@ -44,51 +44,51 @@ public class RightClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(1, event.getSlot());
-                assertEquals(ItemStack.AIR, inventory.getCursorItem());
+                assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
                 assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
             });
             rightClick(player, 1);
-            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem(player));
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
         }
         // Place it back
         {
             listener.followup(event -> {
                 assertEquals(1, event.getSlot());
-                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem(player));
                 assertEquals(ItemStack.AIR, inventory.getItemStack(1));
             });
             rightClick(player, 1);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem());
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
         }
         // Pickup diamond
         {
             listener.followup(event -> {
                 assertEquals(1, event.getSlot());
-                assertEquals(ItemStack.AIR, inventory.getCursorItem());
+                assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
                 assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
             });
             rightClick(player, 1);
-            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem(player));
             assertEquals(ItemStack.AIR, inventory.getItemStack(1));
         }
         // Stack diamond
         {
             listener.followup(event -> {
                 assertEquals(2, event.getSlot());
-                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem());
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getCursorItem(player));
                 assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(2));
             });
             rightClick(player, 2);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem());
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.DIAMOND, 2), inventory.getItemStack(2));
         }
         // Cancel event
         {
             listener.followup(event -> event.setCancelled(true));
             rightClick(player, 2);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem(), "Left click cancellation did not work");
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player), "Left click cancellation did not work");
             assertEquals(ItemStack.of(Material.DIAMOND, 2), inventory.getItemStack(2));
         }
         // Change items
@@ -98,7 +98,7 @@ public class RightClickIntegrationTest {
                 event.setCursorItem(ItemStack.of(Material.DIAMOND));
             });
             rightClick(player, 1);
-            assertEquals(ItemStack.AIR, inventory.getCursorItem());
+            assertEquals(ItemStack.AIR, inventory.getCursorItem(player));
             assertEquals(ItemStack.of(Material.DIAMOND, 6), inventory.getItemStack(1));
         }
     }

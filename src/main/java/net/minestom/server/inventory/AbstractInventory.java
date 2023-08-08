@@ -1,11 +1,14 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.Viewable;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
-import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
@@ -14,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable
+public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable
         permits Inventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
@@ -37,6 +40,12 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     private final TagHandler tagHandler = TagHandler.newHandler();
+
+    // the players currently viewing this inventory
+    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    // (player -> cursor item) map, used by the click listeners
+    protected final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
     protected AbstractInventory(int size) {
         this.size = size;
@@ -78,11 +87,8 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
             UNSAFE_itemInsert(slot, itemStack, sendPacket);
         }
-        if (this instanceof PlayerInventory inv) {
-            EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
-        } else if (this instanceof Inventory inv) {
-            EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
-        }
+
+        EventDispatcher.call(new InventoryItemChangeEvent(this, slot, previous, itemStack));
     }
 
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
@@ -161,10 +167,14 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         setItemStack(slot, operator.apply(currentItem));
     }
 
+    public abstract byte getWindowId();
+
     /**
      * Clears the inventory and send relevant update to the viewer(s).
      */
     public synchronized void clear() {
+        this.cursorPlayersItem.clear();
+
         // Clear the item array
         for (int i = 0; i < size; i++) {
             safeItemInsert(i, ItemStack.AIR, false);
@@ -173,7 +183,82 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         update();
     }
 
-    public abstract void update();
+    /**
+     * Refreshes the inventory for a specific viewer.
+     * <p>
+     * The player needs to be a viewer, otherwise nothing is sent.
+     *
+     * @param player the player to update the inventory
+     */
+    public void update(@NotNull Player player) {
+        if (!isViewer(player)) return;
+        player.sendPacket(createNewWindowItemsPacket(player));
+    }
+
+    public void update() {
+        this.viewers.forEach(this::update);
+    }
+
+    @Override
+    public @NotNull Set<Player> getViewers() {
+        return unmodifiableViewers;
+    }
+
+    /**
+     * This will not open the inventory for {@code player}, use {@link Player#openInventory(Inventory)}.
+     *
+     * @param player the viewer to add
+     * @return true if the player has successfully been added
+     */
+    @Override
+    public boolean addViewer(@NotNull Player player) {
+        final boolean result = this.viewers.add(player);
+        update(player);
+        return result;
+    }
+
+    /**
+     * This will not close the inventory for {@code player}, use {@link Player#closeInventory()}.
+     *
+     * @param player the viewer to remove
+     * @return true if the player has successfully been removed
+     */
+    @Override
+    public boolean removeViewer(@NotNull Player player) {
+        final boolean result = this.viewers.remove(player);
+        setCursorItem(player, ItemStack.AIR);
+        this.clickProcessor.clearCache(player);
+        return result;
+    }
+
+    /**
+     * Gets the cursor item of a viewer.
+     *
+     * @param player the player to get the cursor item from
+     * @return the player cursor item, air item if the player is not a viewer
+     */
+    public @NotNull ItemStack getCursorItem(@NotNull Player player) {
+        return cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
+    }
+
+    /**
+     * Changes the cursor item of a viewer,
+     * does nothing if <code>player</code> is not a viewer.
+     *
+     * @param player     the player to change the cursor item
+     * @param cursorItem the new player cursor item
+     */
+    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
+        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
+        if (!currentCursorItem.equals(cursorItem)) {
+            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
+        }
+        if (!cursorItem.isAir()) {
+            this.cursorPlayersItem.put(player, cursorItem);
+        } else {
+            this.cursorPlayersItem.remove(player);
+        }
+    }
 
     /**
      * Gets the {@link ItemStack} at the specified slot.
@@ -254,5 +339,9 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
+    }
+
+    private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
+        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
     }
 }

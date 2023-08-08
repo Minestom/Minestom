@@ -143,6 +143,7 @@ public class InventoryIntegrationTest {
         final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         listener.followup(event -> event.getPlayer().openInventory(secondInventory));
         player.closeInventory();
+        System.out.println(player.getOpenInventory());
         assertSame(secondInventory, player.getOpenInventory());
     }
 

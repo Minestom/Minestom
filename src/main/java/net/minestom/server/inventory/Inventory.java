@@ -1,23 +1,16 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
-import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -26,23 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public non-sealed class Inventory extends AbstractInventory implements Viewable {
+public non-sealed class Inventory extends AbstractInventory {
     private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
-    // the id of this inventory
     private final byte id;
-    // the type of this inventory
     private final InventoryType inventoryType;
-    // the title of this inventory
     private Component title;
 
     private final int offset;
-
-    // the players currently viewing this inventory
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    // (player -> cursor item) map, used by the click listeners
-    private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
     public Inventory(@NotNull InventoryType inventoryType, @NotNull Component title) {
         super(inventoryType.getSize());
@@ -99,105 +83,15 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      *
      * @return the window id
      */
+    @Override
     public byte getWindowId() {
         return id;
-    }
-
-    @Override
-    public synchronized void clear() {
-        this.cursorPlayersItem.clear();
-        super.clear();
-    }
-
-    /**
-     * Refreshes the inventory for all viewers.
-     */
-    @Override
-    public void update() {
-        this.viewers.forEach(p -> p.sendPacket(createNewWindowItemsPacket(p)));
-    }
-
-    /**
-     * Refreshes the inventory for a specific viewer.
-     * <p>
-     * The player needs to be a viewer, otherwise nothing is sent.
-     *
-     * @param player the player to update the inventory
-     */
-    public void update(@NotNull Player player) {
-        if (!isViewer(player)) return;
-        player.sendPacket(createNewWindowItemsPacket(player));
-    }
-
-    @Override
-    public @NotNull Set<Player> getViewers() {
-        return unmodifiableViewers;
-    }
-
-    /**
-     * This will not open the inventory for {@code player}, use {@link Player#openInventory(Inventory)}.
-     *
-     * @param player the viewer to add
-     * @return true if the player has successfully been added
-     */
-    @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
-        update(player);
-        return result;
-    }
-
-    /**
-     * This will not close the inventory for {@code player}, use {@link Player#closeInventory()}.
-     *
-     * @param player the viewer to remove
-     * @return true if the player has successfully been removed
-     */
-    @Override
-    public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
-        setCursorItem(player, ItemStack.AIR);
-        this.clickProcessor.clearCache(player);
-        return result;
-    }
-
-    /**
-     * Gets the cursor item of a viewer.
-     *
-     * @param player the player to get the cursor item from
-     * @return the player cursor item, air item if the player is not a viewer
-     */
-    public @NotNull ItemStack getCursorItem(@NotNull Player player) {
-        return cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-    }
-
-    /**
-     * Changes the cursor item of a viewer,
-     * does nothing if <code>player</code> is not a viewer.
-     *
-     * @param player     the player to change the cursor item
-     * @param cursorItem the new player cursor item
-     */
-    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        if (!currentCursorItem.equals(cursorItem)) {
-            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
-        }
-        if (!cursorItem.isAir()) {
-            this.cursorPlayersItem.put(player, cursorItem);
-        } else {
-            this.cursorPlayersItem.remove(player);
-        }
     }
 
     @Override
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         itemStacks[slot] = itemStack;
         if (sendPacket) sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
-    }
-
-    private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
-        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
     }
 
     /**
