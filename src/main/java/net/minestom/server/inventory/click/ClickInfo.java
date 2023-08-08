@@ -14,7 +14,7 @@ public sealed interface ClickInfo {
     record ShiftClick(int clickedSlot) implements ClickInfo {}
     record DropCursor(boolean all) implements ClickInfo {}
     record DropSlot(int clickedSlot, boolean all) implements ClickInfo {}
-    record DistributeCursor(@NotNull IntList includedSlots, boolean evenlyDistribute) implements ClickInfo {}
+    record DragClick(@NotNull IntList includedSlots, boolean evenlyDistribute) implements ClickInfo {}
     record HotbarSwap(int hotbarSlot, int clickedSlot) implements ClickInfo {}
     record OffhandSwap(int clickedSlot) implements ClickInfo {}
     record DoubleClick(int clickedSlot) implements ClickInfo {}

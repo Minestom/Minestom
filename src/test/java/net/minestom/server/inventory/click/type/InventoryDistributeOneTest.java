@@ -17,14 +17,14 @@ public class InventoryDistributeOneTest {
 
     @Test
     public void testNoCursor() {
-        assertClick(builder -> builder, new ClickInfo.DistributeCursor(IntList.of(0), false), builder -> builder);
+        assertClick(builder -> builder, new ClickInfo.DragClick(IntList.of(0), false), builder -> builder);
     }
 
     @Test
     public void testDistributeNone() {
         assertClick(
                 builder -> builder.cursor(ItemStack.of(Material.DIRT, 32)),
-                new ClickInfo.DistributeCursor(IntList.of(), false),
+                new ClickInfo.DragClick(IntList.of(), false),
                 builder -> builder
         );
     }
@@ -33,7 +33,7 @@ public class InventoryDistributeOneTest {
     public void testDistributeOne() {
         assertClick(
                 builder -> builder.cursor(ItemStack.of(Material.DIRT, 32)),
-                new ClickInfo.DistributeCursor(IntList.of(0), false),
+                new ClickInfo.DragClick(IntList.of(0), false),
                 builder -> builder.change(0, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.DIRT, 31))
         );
     }
@@ -42,7 +42,7 @@ public class InventoryDistributeOneTest {
     public void testDistributeExactlyEnough() {
         assertClick(
                 builder -> builder.cursor(ItemStack.of(Material.DIRT, 2)),
-                new ClickInfo.DistributeCursor(IntList.of(0, 1), false),
+                new ClickInfo.DragClick(IntList.of(0, 1), false),
                 builder -> builder.change(0, ItemStack.of(Material.DIRT)).change(1, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.AIR))
         );
     }
@@ -51,7 +51,7 @@ public class InventoryDistributeOneTest {
     public void testTooManySlots() {
         assertClick(
                 builder -> builder.cursor(ItemStack.of(Material.DIRT, 2)),
-                new ClickInfo.DistributeCursor(IntList.of(0, 1, 2), false),
+                new ClickInfo.DragClick(IntList.of(0, 1, 2), false),
                 builder -> builder.change(0, ItemStack.of(Material.DIRT)).change(1, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.AIR))
         );
     }
@@ -60,7 +60,7 @@ public class InventoryDistributeOneTest {
     public void testDistributeOverExisting() {
         assertClick(
                 builder -> builder.change(0, ItemStack.of(Material.DIRT, 16)).cursor(ItemStack.of(Material.DIRT, 32)),
-                new ClickInfo.DistributeCursor(IntList.of(0), false),
+                new ClickInfo.DragClick(IntList.of(0), false),
                 builder -> builder.change(0, ItemStack.of(Material.DIRT, 17)).cursor(ItemStack.of(Material.DIRT, 31))
         );
     }
@@ -69,7 +69,7 @@ public class InventoryDistributeOneTest {
     public void testDistributeOverFull() {
         assertClick(
                 builder -> builder.change(0, ItemStack.of(Material.DIRT, 64)).cursor(ItemStack.of(Material.DIRT, 32)),
-                new ClickInfo.DistributeCursor(IntList.of(0), false),
+                new ClickInfo.DragClick(IntList.of(0), false),
                 builder -> builder
         );
     }

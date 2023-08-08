@@ -78,12 +78,12 @@ public class ClickPreprocessorTest {
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 0, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 1, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 1, 1));
-        assertProcessed(processor, player, new ClickInfo.DistributeCursor(IntList.of(0, 1), true), clickPacket(QUICK_CRAFT, 1, 2, 0));
+        assertProcessed(processor, player, new ClickInfo.DragClick(IntList.of(0, 1), true), clickPacket(QUICK_CRAFT, 1, 2, 0));
 
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 4, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 5, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 5, 1));
-        assertProcessed(processor, player, new ClickInfo.DistributeCursor(IntList.of(0, 1), false), clickPacket(QUICK_CRAFT, 1, 6, 0));
+        assertProcessed(processor, player, new ClickInfo.DragClick(IntList.of(0, 1), false), clickPacket(QUICK_CRAFT, 1, 6, 0));
 
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 8, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 0));

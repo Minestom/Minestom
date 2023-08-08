@@ -88,10 +88,10 @@ public class ClickPreprocessor {
                 // Handle drag finishes
                 if (button == 2) {
                     var list = leftDraggingMap.remove(player);
-                    yield new ClickInfo.DistributeCursor(list != null ? list : IntLists.emptyList(), true);
+                    yield new ClickInfo.DragClick(list != null ? list : IntLists.emptyList(), true);
                 } else if (button == 6) {
                     var list = rightDraggingMap.remove(player);
-                    yield new ClickInfo.DistributeCursor(list != null ? list : IntLists.emptyList(), false);
+                    yield new ClickInfo.DragClick(list != null ? list : IntLists.emptyList(), false);
                 } else if (button == 10) {
                     var list = creativeDragMap.remove(player);
                     yield new ClickInfo.CopyCursor(list != null ? list : IntLists.emptyList());

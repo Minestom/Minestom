@@ -81,8 +81,8 @@ public interface ClickHandler {
             copyItem(copy, builder);
         } else if (info instanceof ClickInfo.CopyCursor copy) {
             copyCursor(copy, builder);
-        } else if (info instanceof ClickInfo.DistributeCursor distributeCursor) {
-            distributeCursor(distributeCursor, builder);
+        } else if (info instanceof ClickInfo.DragClick dragClick) {
+            distributeCursor(dragClick, builder);
         } else if (info instanceof ClickInfo.ShiftClick shift) {
             shiftClick(shift, builder);
         } else if (info instanceof ClickInfo.DoubleClick doubleClick) {
@@ -108,7 +108,7 @@ public interface ClickHandler {
 
     void copyCursor(@NotNull ClickInfo.CopyCursor info, @NotNull ClickResult.Builder builder);
 
-    void distributeCursor(@NotNull ClickInfo.DistributeCursor info, @NotNull ClickResult.Builder builder);
+    void distributeCursor(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder);
 
     void shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull ClickResult.Builder builder);
 
