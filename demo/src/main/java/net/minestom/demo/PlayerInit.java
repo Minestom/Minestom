@@ -26,7 +26,7 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInit {
 
-    private static final Inventory inventory;
+    private static final ContainerInventory inventory;
 
     private static final EventNode<Event> DEMO_NODE = EventNode.all("demo")
             .addListener(EntityAttackEvent.class, event -> {
@@ -187,7 +187,7 @@ public class PlayerInit {
         //     System.out.println("light end");
         // });
 
-        inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
+        inventory = new ContainerInventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
     }
 
