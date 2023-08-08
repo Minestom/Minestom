@@ -2,7 +2,7 @@ package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.TradeListPacket;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VillagerInventory extends Inventory {
+public class VillagerInventory extends ContainerInventory {
     private final CachedPacket tradeCache = new CachedPacket(this::createTradePacket);
     private final List<TradeListPacket.Trade> trades = new ArrayList<>();
     private int villagerLevel;
@@ -82,14 +82,12 @@ public class VillagerInventory extends Inventory {
     public void update() {
         super.update();
         this.tradeCache.invalidate();
-        sendPacketToViewers(tradeCache);
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
-        if (result) player.sendPacket(tradeCache);
-        return result;
+    public void update(@NotNull Player player) {
+        super.update(player);
+        player.sendPacket(tradeCache);
     }
 
     private TradeListPacket createTradePacket() {

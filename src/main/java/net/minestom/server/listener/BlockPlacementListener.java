@@ -170,7 +170,7 @@ public class BlockPlacementListener {
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
             final ItemStack newUsedItem = usedItem.consume(1);
-            playerInventory.setItemInHand(hand, newUsedItem);
+            player.setItemInHand(hand, newUsedItem);
         } else {
             // Prevent invisible item on client
             playerInventory.update();   

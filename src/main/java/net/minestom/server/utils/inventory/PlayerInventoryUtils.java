@@ -1,8 +1,19 @@
 package net.minestom.server.utils.inventory;
 
+
+/**
+ * Minestom uses different slot IDs for player inventories as the Minecraft protocol uses a strange system (e.g. the
+ * crafting result is the first slot).<br>
+ * These can be mapped 1:1 to and from protocol slots using {@link #minestomToProtocol(int)} and {@link #protocolToMinestom(int)}.<br>
+ *
+ * Read about protocol slot IDs <a href="https://wiki.vg/Inventory">here</a>.
+ */
 public final class PlayerInventoryUtils {
 
-    public static final int OFFSET = 9;
+    public static final int INVENTORY_SIZE = 46;
+    public static final int INNER_SIZE = 36;
+
+    public static final int PROTOCOL_OFFSET = 9;
 
     public static final int CRAFT_RESULT = 36;
     public static final int CRAFT_SLOT_1 = 37;
@@ -14,21 +25,49 @@ public final class PlayerInventoryUtils {
     public static final int CHESTPLATE_SLOT = 42;
     public static final int LEGGINGS_SLOT = 43;
     public static final int BOOTS_SLOT = 44;
-    public static final int OFFHAND_SLOT = 45;
+    public static final int OFF_HAND_SLOT = 45;
 
     private PlayerInventoryUtils() {
 
     }
 
     /**
-     * Converts a packet slot to an internal one.
-     *
-     * @param slot   the packet slot
-     * @param offset the slot count separating the up part of the inventory to the bottom part (armor/craft in PlayerInventory, inventory slots in others)
-     *               the offset for the player inventory is {@link #OFFSET}
-     * @return a packet which can be use internally with Minestom
+     * Converts a Minestom slot ID to a Minecraft protocol slot ID.<br>
+     * This is the inverse of {@link #protocolToMinestom(int)}.
+     * @param slot the internal slot ID to convert
+     * @return the protocol slot ID, or -1 if the given slot could not be converted
      */
-    public static int convertPlayerInventorySlot(int slot, int offset) {
+    public static int minestomToProtocol(int slot) {
+        return switch (slot) {
+            case CRAFT_RESULT -> 0;
+            case CRAFT_SLOT_1 -> 1;
+            case CRAFT_SLOT_2 -> 2;
+            case CRAFT_SLOT_3 -> 3;
+            case CRAFT_SLOT_4 -> 4;
+            case HELMET_SLOT -> 5;
+            case CHESTPLATE_SLOT -> 6;
+            case LEGGINGS_SLOT -> 7;
+            case BOOTS_SLOT -> 8;
+            case OFF_HAND_SLOT -> OFF_HAND_SLOT;
+            default -> {
+                if (slot >= 0 && slot <= 8) {
+                    yield slot + 36;
+                } else if (slot >= 9 && slot <= 35) {
+                    yield slot;
+                } else {
+                    yield -1; // Unknown slot ID
+                }
+            }
+        };
+    }
+
+    /**
+     * Converts a Minecraft protocol slot ID to a Minestom slot ID.<br>
+     * This is the inverse of {@link #minestomToProtocol(int)}.
+     * @param slot the protocol slot ID to convert
+     * @return the Minestom slot ID, or -1 if the given slot could not be converted
+     */
+    public static int protocolToMinestom(int slot) {
         return switch (slot) {
             case 0 -> CRAFT_RESULT;
             case 1 -> CRAFT_SLOT_1;
@@ -39,57 +78,47 @@ public final class PlayerInventoryUtils {
             case 6 -> CHESTPLATE_SLOT;
             case 7 -> LEGGINGS_SLOT;
             case 8 -> BOOTS_SLOT;
-            default -> convertSlot(slot, offset);
+            case OFF_HAND_SLOT -> OFF_HAND_SLOT;
+            default -> {
+                if (slot >= 36 && slot <= 44) {
+                    yield slot - 36;
+                } else if (slot >= 9 && slot <= 35) {
+                    yield slot;
+                } else {
+                    yield -1; // Unknown slot ID
+                }
+            }
         };
-
-    }
-
-    public static int convertSlot(int slot, int offset) {
-        final int rowSize = 9;
-        slot -= offset;
-        if (slot >= rowSize * 3 && slot < rowSize * 4) {
-            slot = slot % 9;
-        } else {
-            slot = slot + rowSize;
-        }
-        return slot;
-    }
-
-
-    /**
-     * Used to convert internal slot to one used in packets
-     *
-     * @param slot the internal slot
-     * @return a slot id which can be used for packets
-     */
-    public static int convertToPacketSlot(int slot) {
-        if (slot > -1 && slot < 9) { // Held bar 0-8
-            slot = slot + 36;
-        } else if (slot > 8 && slot < 36) { // Inventory 9-35
-            slot = slot;
-        } else if (slot >= CRAFT_RESULT && slot <= CRAFT_SLOT_4) { // Crafting 36-40
-            slot = slot - 36;
-        } else if (slot >= HELMET_SLOT && slot <= BOOTS_SLOT) { // Armor 41-44
-            slot = slot - 36;
-        } else if (slot == OFFHAND_SLOT) { // Off hand
-            slot = 45;
-        }
-        return slot;
     }
 
     /**
-     * Used to convert the clients inventory slot to a Minestom slot.
-     * The client's inventory does not count the crafting slots.
+     * Converts the given slot into a protocol ID directly after the provided inventory.
+     * This is intended for when a player's inner inventory is interacted with while a player has another inventory
+     * open.<br>
+     * This is the inverse of {@link #protocolToMinestom(int, int)}.
      *
-     * @param slot the client slot
-     * @return a slot which can be used internally with Minestom
+     * @param slot the player slot that was interacted with
+     * @param openInventorySize the size of the inventory opened by the player (not the player's inventory)
+     * @return the protocol slot ID
      */
-    public static int convertClientInventorySlot(int slot) {
-        if (slot == 36) return BOOTS_SLOT;
-        if (slot == 37) return LEGGINGS_SLOT;
-        if (slot == 38) return CHESTPLATE_SLOT;
-        if (slot == 39) return HELMET_SLOT;
-        if (slot == 40) return OFFHAND_SLOT;
-        return slot;
+    public static int minestomToProtocol(int slot, int openInventorySize) {
+        return PlayerInventoryUtils.minestomToProtocol(slot) + openInventorySize - PROTOCOL_OFFSET;
     }
+
+    /**
+     * Converts the given protocol ID that is directly after the provided inventory's slots into a player inventory slot
+     * ID. This is intended for when a player's inner inventory is interacted with while a player has another inventory
+     * open.<br>
+     * This is the inverse of {@link #minestomToProtocol(int, int)}.
+     *
+     * @param slot the protocol slot ID, situated directly after the slot IDs for the open inventory
+     * @param openInventorySize the size of the inventory opened by the player (not the player's inventory)
+     * @return the player slot ID
+     */
+    public static int protocolToMinestom(int slot, int openInventorySize) {
+        if (slot < openInventorySize) return -1;
+
+        return PlayerInventoryUtils.protocolToMinestom(slot - openInventorySize + PROTOCOL_OFFSET);
+    }
+
 }

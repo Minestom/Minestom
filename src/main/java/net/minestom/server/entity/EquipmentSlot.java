@@ -1,19 +1,18 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.item.attribute.AttributeSlot;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
-
 public enum EquipmentSlot {
     MAIN_HAND(false, -1),
     OFF_HAND(false, -1),
-    BOOTS(true, BOOTS_SLOT),
-    LEGGINGS(true, LEGGINGS_SLOT),
-    CHESTPLATE(true, CHESTPLATE_SLOT),
-    HELMET(true, HELMET_SLOT);
+    BOOTS(true, PlayerInventoryUtils.BOOTS_SLOT),
+    LEGGINGS(true, PlayerInventoryUtils.LEGGINGS_SLOT),
+    CHESTPLATE(true, PlayerInventoryUtils.CHESTPLATE_SLOT),
+    HELMET(true, PlayerInventoryUtils.HELMET_SLOT);
 
     private static final List<EquipmentSlot> ARMORS = List.of(BOOTS, LEGGINGS, CHESTPLATE, HELMET);
 
