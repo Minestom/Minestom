@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
@@ -20,7 +21,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * Represents an immutable item to be placed inside {@link net.minestom.server.inventory.PlayerInventory},
- * {@link net.minestom.server.inventory.Inventory} or even on the ground {@link net.minestom.server.entity.ItemEntity}.
+ * {@link ContainerInventory} or even on the ground {@link net.minestom.server.entity.ItemEntity}.
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */

@@ -14,9 +14,9 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
 
     private final Inventory inventory;
     private final Player player;
-    private Inventory newInventory;
+    private @Nullable Inventory newInventory;
 
-    public InventoryCloseEvent(@Nullable Inventory inventory, @NotNull Player player) {
+    public InventoryCloseEvent(@NotNull Inventory inventory, @NotNull Player player) {
         this.inventory = inventory;
         this.player = player;
     }
@@ -36,8 +36,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the new inventory to open, null if there isn't any
      */
-    @Nullable
-    public Inventory getNewInventory() {
+    public @Nullable Inventory getNewInventory() {
         return newInventory;
     }
 
@@ -51,7 +50,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     }
 
     @Override
-    public @Nullable Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return inventory;
     }
 }
