@@ -341,7 +341,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         return tagHandler;
     }
 
-    private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
-        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
+    public @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
+        return new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
     }
 }

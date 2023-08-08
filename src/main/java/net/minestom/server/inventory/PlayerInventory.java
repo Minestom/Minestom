@@ -46,16 +46,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     public int getInnerSize() {
         return INNER_INVENTORY_SIZE;
     }
-    /**
-     * Refreshes the player inventory by sending a {@link WindowItemsPacket} containing all.
-     * the inventory items
-     */
-    @Override
-    public void update() {
-        for (var player : viewers) {
-            player.sendPacket(createWindowItemsPacket(player));
-        }
-    }
 
     @Override
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
@@ -130,15 +120,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
                 this.player.sendPacket(defaultPacket);
             }
         }
-    }
-
-    /**
-     * Gets a {@link WindowItemsPacket} with all the items in the inventory.
-     *
-     * @return a {@link WindowItemsPacket} with inventory items
-     */
-    private WindowItemsPacket createWindowItemsPacket(@NotNull Player player) {
-        return new WindowItemsPacket((byte) 0, 0, List.of(itemStacks), getCursorItem(player));
     }
 
     @Override
