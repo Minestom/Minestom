@@ -4,327 +4,230 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickResult;
+import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.ClickProcessors;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public non-sealed class PlayerInventory extends AbstractInventory implements EquipmentHandler {
-    public static final int INVENTORY_SIZE = 46;
-    public static final int INNER_INVENTORY_SIZE = 36;
+public non-sealed class PlayerInventory extends InventoryImpl {
 
-    protected final Player player;
+    public static @NotNull IntStream getInnerShiftClickSlots(int size) {
+        return IntStream.range(0, 36).map(i -> i + size);
+    }
+
+    public static @NotNull IntStream getInnerDoubleClickSlots(int size) {
+        return IntStream.range(0, 36).map(i -> i + size);
+    }
+
+    private static int getSlotIndex(@NotNull EquipmentSlot slot, int heldSlot) {
+        return switch (slot) {
+            case HELMET, CHESTPLATE, LEGGINGS, BOOTS -> slot.armorSlot();
+            case OFF_HAND -> OFF_HAND_SLOT;
+            case MAIN_HAND -> heldSlot;
+        };
+    }
+
+    private static @Nullable EquipmentSlot fromSlotIndex(int slot, int heldSlot) {
+        return switch (slot) {
+            case HELMET_SLOT -> EquipmentSlot.HELMET;
+            case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
+            case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
+            case BOOTS_SLOT -> EquipmentSlot.BOOTS;
+            case OFF_HAND_SLOT -> EquipmentSlot.OFF_HAND;
+            default -> slot == heldSlot ? EquipmentSlot.MAIN_HAND : null;
+        };
+    }
+
+    private static final List<Integer> FILL_ADD_SLOTS = IntStream.concat(
+            IntStream.of(OFF_HAND_SLOT),
+            IntStream.range(0, 36)
+    ).boxed().toList();
+
+    private static final List<Integer> AIR_ADD_SLOTS = IntStream.range(0, 36).boxed().toList();
+
+    private static final List<Integer> TAKE_SLOTS = Stream.of(
+            IntStream.range(0, 36),
+            IntStream.of(OFF_HAND_SLOT),
+            IntStream.range(36, 45)
+    ).flatMapToInt(i -> i).boxed().toList();
+
     private ItemStack cursorItem = ItemStack.AIR;
 
-    public PlayerInventory(@NotNull Player player) {
+    public PlayerInventory() {
         super(INVENTORY_SIZE);
-        this.player = player;
     }
 
     @Override
-    public synchronized void clear() {
-        cursorItem = ItemStack.AIR;
-        super.clear();
-        // Update equipments
-        this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
-    }
-
-    @Override
-    public int getInnerSize() {
-        return INNER_INVENTORY_SIZE;
-    }
-
-    @Override
-    public @NotNull ItemStack getItemInMainHand() {
-        return getItemStack(player.getHeldSlot());
-    }
-
-    @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        safeItemInsert(player.getHeldSlot(), itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getItemInOffHand() {
-        return getItemStack(OFFHAND_SLOT);
-    }
-
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        safeItemInsert(OFFHAND_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getHelmet() {
-        return getItemStack(HELMET_SLOT);
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        safeItemInsert(HELMET_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getChestplate() {
-        return getItemStack(CHESTPLATE_SLOT);
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        safeItemInsert(CHESTPLATE_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getLeggings() {
-        return getItemStack(LEGGINGS_SLOT);
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        safeItemInsert(LEGGINGS_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getBoots() {
-        return getItemStack(BOOTS_SLOT);
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        safeItemInsert(BOOTS_SLOT, itemStack);
+    public byte getWindowId() {
+        return 0;
     }
 
     /**
-     * Refreshes the player inventory by sending a {@link WindowItemsPacket} containing all.
-     * the inventory items
-     */
-    @Override
-    public void update() {
-        this.player.sendPacket(createWindowItemsPacket());
-    }
-
-    /**
-     * Gets the item in player cursor.
-     *
-     * @return the cursor item
+     * Gets the cursor item of this inventory
+     * @return the cursor item that is shared between all viewers
      */
     public @NotNull ItemStack getCursorItem() {
         return cursorItem;
     }
 
     /**
-     * Changes the player cursor item.
-     *
-     * @param cursorItem the new cursor item
+     * Sets the cursor item for all viewers of this inventory.
+     * @param cursorItem the new item (will not update if same as current)
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
+        setCursorItem(cursorItem, true);
+    }
+
+    /**
+     * Sets the cursor item for all viewers of this inventory.
+     * @param cursorItem the new item (will not update if same as current)
+     * @param sendPacket whether or not to send a packet
+     */
+    public void setCursorItem(@NotNull ItemStack cursorItem, boolean sendPacket) {
         if (this.cursorItem.equals(cursorItem)) return;
-        this.cursorItem = cursorItem;
-        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-        this.player.sendPacket(setSlotPacket);
+
+        lock.lock();
+        try {
+            this.cursorItem = cursorItem;
+        } finally {
+            lock.unlock();
+        }
+
+        if (!sendPacket) return;
+        sendPacketToViewers(SetSlotPacket.createCursorPacket(cursorItem));
     }
 
     @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        final EquipmentSlot equipmentSlot = switch (slot) {
-            case HELMET_SLOT -> EquipmentSlot.HELMET;
-            case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
-            case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
-            case BOOTS_SLOT -> EquipmentSlot.BOOTS;
-            case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
-            default -> slot == player.getHeldSlot() ? EquipmentSlot.MAIN_HAND : null;
-        };
-        if (equipmentSlot != null) {
+    public void updateSlot(int slot, @NotNull ItemStack itemStack) {
+        SetSlotPacket defaultPacket = new SetSlotPacket(getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot), itemStack);
+
+        for (Player player : getViewers()) {
+            Inventory open = player.getOpenInventory();
+            if (open != null && slot >= 0 && slot < INNER_SIZE) {
+                player.sendPacket(new SetSlotPacket(open.getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot, open.getSize()), itemStack));
+            } else if (open == null || slot == OFF_HAND_SLOT) {
+                player.sendPacket(defaultPacket);
+            }
+
+            var equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
+            if (equipmentSlot == null) continue;
+
+            player.syncEquipment(equipmentSlot, itemStack);
+        }
+    }
+
+    @Override
+    public void update(@NotNull Player player) {
+        ItemStack[] local = getItemStacks();
+        ItemStack[] mapped = new ItemStack[getSize()];
+
+        for (int slot = 0; slot < getSize(); slot++) {
+            mapped[PlayerInventoryUtils.minestomToProtocol(slot)] = local[slot];
+        }
+
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), getCursorItem()));
+    }
+
+    @Override
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
+        for (var player : getViewers()) {
+            final EquipmentSlot equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
+            if (equipmentSlot == null) continue;
+
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
         }
-        this.itemStacks[slot] = itemStack;
 
-        if (sendPacket) {
-            // Sync equipment
-            if (equipmentSlot != null) this.player.syncEquipment(equipmentSlot);
-            // Refresh slot
-            sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
-        }
-    }
-
-    /**
-     * Refreshes an inventory slot.
-     *
-     * @param slot      the packet slot,
-     *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
-     * @param itemStack the item stack in the slot
-     */
-    protected void sendSlotRefresh(short slot, ItemStack itemStack) {
-        var openInventory = player.getOpenInventory();
-        if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
-            this.player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
-        } else if (openInventory == null || slot == OFFHAND_SLOT) {
-            this.player.sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
-        }
-    }
-
-    /**
-     * Gets a {@link WindowItemsPacket} with all the items in the inventory.
-     *
-     * @return a {@link WindowItemsPacket} with inventory items
-     */
-    private WindowItemsPacket createWindowItemsPacket() {
-        ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
-        for (int i = 0; i < itemStacks.length; i++) {
-            final int slot = convertToPacketSlot(i);
-            convertedSlots[slot] = itemStacks[i];
-        }
-        return new WindowItemsPacket((byte) 0, 0, List.of(convertedSlots), cursorItem);
+        super.UNSAFE_itemInsert(slot, itemStack);
     }
 
     @Override
-    public boolean leftClick(@NotNull Player player, int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
+    public void clear() {
+        lock.lock();
+        try {
+            super.clear();
+
+            for (var player : getViewers()) {
+                player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
+            }
+        } finally {
+            lock.unlock();
         }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setCursorItem(clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
-        return true;
     }
 
     @Override
-    public boolean rightClick(@NotNull Player player, int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setCursorItem(clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
-        return true;
+    public @Nullable Click.Result handleClick(@NotNull Player player, @NotNull Click.Info info) {
+        var processor = ClickProcessors.standard(
+                (getter, item, slot) -> {
+                    List<Integer> slots = new ArrayList<>();
+
+                    var equipmentSlot = item.material().registry().equipmentSlot();
+                    if (equipmentSlot != null && slot != equipmentSlot.armorSlot()) {
+                        slots.add(equipmentSlot.armorSlot());
+                    }
+
+                    if (item.material() == Material.SHIELD && slot != OFF_HAND_SLOT) {
+                        slots.add(OFF_HAND_SLOT);
+                    }
+
+                    if (slot < 9 || slot > 35) {
+                        IntStream.range(9, 36).forEach(slots::add);
+                    }
+
+                    if (slot < 0 || slot > 8) {
+                        IntStream.range(0, 9).forEach(slots::add);
+                    }
+
+                    if (slot == CRAFT_RESULT) {
+                        Collections.reverse(slots);
+                    }
+
+                    return slots.stream().mapToInt(i -> i);
+                },
+                (getter, item, slot) -> Stream.of(
+                        IntStream.range(CRAFT_SLOT_1, CRAFT_SLOT_4 + 1), // 1-4
+                        IntStream.range(HELMET_SLOT, BOOTS_SLOT + 1), // 5-8
+                        IntStream.range(9, 36), // 9-35
+                        IntStream.range(0, 9), // 36-44
+                        IntStream.of(OFF_HAND_SLOT) // 45
+                ).flatMapToInt(i -> i)
+        );
+        return ContainerInventory.handleClick(this, player, info, processor);
+    }
+
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot, int heldSlot) {
+        return getItemStack(getSlotIndex(slot, heldSlot));
+    }
+
+    public void setEquipment(@NotNull EquipmentSlot slot, int heldSlot, @NotNull ItemStack newValue) {
+        setItemStack(getSlotIndex(slot, heldSlot), newValue);
     }
 
     @Override
-    public boolean middleClick(@NotNull Player player, int slot) {
-        // TODO
-        update();
-        return false;
+    public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+        return processItemStack(itemStack, TransactionType.add(FILL_ADD_SLOTS, AIR_ADD_SLOTS), option);
     }
 
     @Override
-    public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final boolean outsideDrop = slot == -999;
-        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.drop(player, this,
-                all, convertedSlot, button, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        final ItemStack resultClicked = clickResult.getClicked();
-        if (resultClicked != null && !outsideDrop) {
-            setItemStack(convertedSlot, resultClicked);
-        }
-        setCursorItem(clickResult.getCursor());
-        return true;
+    public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+        return processItemStack(itemStack, TransactionType.take(TAKE_SLOTS), option);
     }
 
-    @Override
-    public boolean shiftClick(@NotNull Player player, int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
-        final int start = hotBarClick ? 9 : 0;
-        final int end = hotBarClick ? getSize() - 9 : 8;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(
-                this, this,
-                start, end, 1,
-                player, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setCursorItem(clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
-    }
-
-    @Override
-    public boolean changeHeld(@NotNull Player player, int slot, int key) {
-        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
-        final ItemStack cursorItem = getCursorItem();
-        if (!cursorItem.isAir()) return false;
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack heldItem = getItemStack(convertedKey);
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, convertedSlot, convertedKey, clicked, heldItem);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(convertedSlot, clickResult.getClicked());
-        setItemStack(convertedKey, clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
-        return true;
-    }
-
-    @Override
-    public boolean dragging(@NotNull Player player, int slot, int button) {
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
-        final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                convertPlayerInventorySlot(slot, OFFSET), button, clicked, cursor);
-        if (clickResult == null || clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setCursorItem(clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
-    }
-
-    @Override
-    public boolean doubleClick(@NotNull Player player, int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setCursorItem(clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
-    }
-
-    private void setItemStackFromPacketSlot(int slot, @NotNull ItemStack itemStack) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        setItemStack(convertedSlot, itemStack);
-    }
-
-    private ItemStack getItemStackFromPacketSlot(int slot) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
-        return itemStacks[convertedSlot];
-    }
 }
