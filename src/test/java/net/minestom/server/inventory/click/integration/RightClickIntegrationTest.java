@@ -181,10 +181,8 @@ public class RightClickIntegrationTest {
             assert openInventory != null;
             // Do not touch slot
         } else {
-            int offset = openInventory != null ? openInventory.getInnerSize() : 0;
-            slot = PlayerInventoryUtils.convertToPacketSlot(slot);
             if (openInventory != null) {
-                slot = slot - 9 + offset;
+                slot += openInventory.getInnerSize();
             }
         }
         player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 1,
