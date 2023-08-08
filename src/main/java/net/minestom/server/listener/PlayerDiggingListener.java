@@ -10,13 +10,11 @@ import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerCancelDiggingEvent;
 import net.minestom.server.event.player.PlayerFinishDiggingEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
-import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -43,13 +41,13 @@ public final class PlayerDiggingListener {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
-            dropStack(player);
+            player.getInventory().handleClick(player, new Click.Info.DropSlot(player.getHeldSlot(), true));
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
-            dropSingle(player);
+            player.getInventory().handleClick(player, new Click.Info.DropSlot(player.getHeldSlot(), false));
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
             updateItemState(player);
         } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
-            swapItemHand(player);
+            player.getInventory().handleClick(player, new Click.Info.OffhandSwap(player.getHeldSlot()));
         }
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
@@ -124,26 +122,6 @@ public final class PlayerDiggingListener {
         return false;
     }
 
-    private static void dropStack(Player player) {
-        final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
-        dropItem(player, droppedItemStack, ItemStack.AIR);
-    }
-
-    private static void dropSingle(Player player) {
-        final ItemStack handItem = player.getInventory().getItemInMainHand();
-        final StackingRule stackingRule = StackingRule.get();
-        final int handAmount = stackingRule.getAmount(handItem);
-        if (handAmount <= 1) {
-            // Drop the whole item without copy
-            dropItem(player, handItem, ItemStack.AIR);
-        } else {
-            // Drop a single item
-            dropItem(player,
-                    stackingRule.apply(handItem, 1), // Single dropped item
-                    stackingRule.apply(handItem, handAmount - 1)); // Updated hand
-        }
-    }
-
     private static void updateItemState(Player player) {
         LivingEntityMeta meta = player.getLivingEntityMeta();
         if (meta == null || !meta.isHandActive()) return;
@@ -162,17 +140,6 @@ public final class PlayerDiggingListener {
         }
     }
 
-    private static void swapItemHand(Player player) {
-        final PlayerInventory inventory = player.getInventory();
-        final ItemStack mainHand = inventory.getItemInMainHand();
-        final ItemStack offHand = inventory.getItemInOffHand();
-        PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
-        EventDispatcher.callCancellable(swapItemEvent, () -> {
-            inventory.setItemInMainHand(swapItemEvent.getMainHandItem());
-            inventory.setItemInOffHand(swapItemEvent.getOffHandItem());
-        });
-    }
-
     private static DiggingResult breakBlock(Instance instance,
                                             Player player,
                                             Point blockPosition, Block previousBlock, BlockFace blockFace) {
@@ -189,16 +156,6 @@ public final class PlayerDiggingListener {
             }
         }
         return new DiggingResult(updatedBlock, success);
-    }
-
-    private static void dropItem(@NotNull Player player,
-                                 @NotNull ItemStack droppedItem, @NotNull ItemStack handItem) {
-        final PlayerInventory playerInventory = player.getInventory();
-        if (player.dropItem(droppedItem)) {
-            playerInventory.setItemInMainHand(handItem);
-        } else {
-            playerInventory.update();
-        }
     }
 
     private record DiggingResult(Block block, boolean success) {
