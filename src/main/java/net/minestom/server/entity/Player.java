@@ -236,7 +236,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory();
-        inventory.addViewer(this);
 
         setCanPickupItem(true); // By default
 
@@ -366,6 +365,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         triggerStatus((byte) (24 + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
+
+        inventory.addViewer(this);
 
         return setInstance(spawnInstance);
     }
