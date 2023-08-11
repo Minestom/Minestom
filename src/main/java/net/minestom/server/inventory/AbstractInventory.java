@@ -254,14 +254,18 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param cursorItem the new player cursor item
      */
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        if (!currentCursorItem.equals(cursorItem)) {
-            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
-        }
+        refreshCursor(player, cursorItem);
         if (!cursorItem.isAir()) {
             this.cursorPlayersItem.put(player, cursorItem);
         } else {
             this.cursorPlayersItem.remove(player);
+        }
+    }
+
+    public void refreshCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
+        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
+        if (!currentCursorItem.equals(cursorItem)) {
+            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
         }
     }
 
