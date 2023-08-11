@@ -6,7 +6,6 @@ import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
-import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,12 +84,6 @@ public non-sealed class Inventory extends AbstractInventory {
     @Override
     public byte getWindowId() {
         return id;
-    }
-
-    @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        itemStacks[slot] = itemStack;
-        if (sendPacket) sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     /**

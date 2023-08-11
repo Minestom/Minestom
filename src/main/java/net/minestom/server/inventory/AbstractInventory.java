@@ -65,6 +65,10 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         safeItemInsert(slot, itemStack);
     }
 
+    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+        safeItemInsert(slot, itemStack, true);
+    }
+
     /**
      * Inserts safely an item into the inventory.
      * <p>
@@ -78,24 +82,23 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         ItemStack previous;
         synchronized (this) {
-            Check.argCondition(
-                    !MathUtils.isBetween(slot, 0, getSize()),
-                    "The slot {0} does not exist in this inventory",
-                    slot
-            );
             previous = itemStacks[slot];
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
-            UNSAFE_itemInsert(slot, itemStack, sendPacket);
+
+            UNSAFE_itemInsert(slot, itemStack);
+            if (sendPacket) refreshSlot(slot, itemStack);
         }
 
         EventDispatcher.call(new InventoryItemChangeEvent(this, slot, previous, itemStack));
     }
 
-    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        safeItemInsert(slot, itemStack, true);
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
+        itemStacks[slot] = itemStack;
     }
 
-    protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket);
+    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
+        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
+    }
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
