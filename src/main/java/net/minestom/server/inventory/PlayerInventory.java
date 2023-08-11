@@ -47,12 +47,11 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack) {
         for (var player : getViewers()) {
             final EquipmentSlot equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
+            if (equipmentSlot == null) continue;
 
-            if (equipmentSlot != null) {
-                EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
-                EventDispatcher.call(entityEquipEvent);
-                itemStack = entityEquipEvent.getEquippedItem();
-            }
+            EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
+            EventDispatcher.call(entityEquipEvent);
+            itemStack = entityEquipEvent.getEquippedItem();
         }
 
         super.UNSAFE_itemInsert(slot, itemStack);
@@ -219,7 +218,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     @Override
     public boolean dragging(@NotNull Player player, int slot, int button) {
         final ItemStack cursor = getCursorItem(player);
-        final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
+        final ItemStack clicked = slot != -999 ? itemStacks[slot] : ItemStack.AIR;
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
                 slot, button, clicked, cursor);
         if (clickResult == null || clickResult.isCancel()) {
@@ -245,11 +244,4 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         return true;
     }
 
-    private void setItemStackFromPacketSlot(int slot, @NotNull ItemStack itemStack) {
-        setItemStack(slot, itemStack);
-    }
-
-    private ItemStack getItemStackFromPacketSlot(int slot) {
-        return itemStacks[slot];
-    }
 }

@@ -97,6 +97,15 @@ public non-sealed class Inventory extends AbstractInventory {
         sendPacketToViewers(new WindowPropertyPacket(getWindowId(), property.getProperty(), value));
     }
 
+    private boolean isClickInWindow(int slot) {
+        return slot < getSize();
+    }
+
+    private void updateAll(Player player) {
+        player.getInventory().update();
+        update(player);
+    }
+
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
@@ -269,12 +278,4 @@ public non-sealed class Inventory extends AbstractInventory {
         return true;
     }
 
-    private boolean isClickInWindow(int slot) {
-        return slot < getSize();
-    }
-
-    private void updateAll(Player player) {
-        player.getInventory().update();
-        update(player);
-    }
 }

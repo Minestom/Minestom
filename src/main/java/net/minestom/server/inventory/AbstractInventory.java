@@ -215,9 +215,10 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
+        if (!this.viewers.add(player)) return false;
+
         update(player);
-        return result;
+        return true;
     }
 
     /**
@@ -228,10 +229,11 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
+        if (!this.viewers.remove(player)) return false;
+
         setCursorItem(player, ItemStack.AIR);
         this.clickProcessor.clearCache(player);
-        return result;
+        return true;
     }
 
     /**
