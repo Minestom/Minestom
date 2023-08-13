@@ -4,36 +4,30 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.item.ItemStack;
+import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.ClickInfo;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
  */
 public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
-    private final Inventory inventory;
+    private final PlayerInventory playerInventory;
+    private final AbstractInventory inventory;
     private final Player player;
-    private final int slot;
-    private final ClickType clickType;
-    private ItemStack clickedItem;
-    private ItemStack cursorItem;
+    private ClickInfo clickInfo;
+    private boolean shouldUpdate;
 
     private boolean cancelled;
 
-    public InventoryPreClickEvent(@Nullable Inventory inventory,
-                                  @NotNull Player player,
-                                  int slot, @NotNull ClickType clickType,
-                                  @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public InventoryPreClickEvent(@NotNull PlayerInventory playerInventory, @NotNull AbstractInventory inventory,
+                                  @NotNull Player player, @NotNull ClickInfo clickInfo) {
+        this.playerInventory = playerInventory;
         this.inventory = inventory;
         this.player = player;
-        this.slot = slot;
-        this.clickType = clickType;
-        this.clickedItem = clicked;
-        this.cursorItem = cursor;
+        this.clickInfo = clickInfo;
     }
 
     /**
@@ -41,66 +35,60 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
      *
      * @return the player who clicked
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return player;
     }
 
     /**
-     * Gets the clicked slot number.
+     * Gets the info about the click that occurred. This is enough to fully describe the click.
      *
-     * @return the clicked slot number
+     * @return the click info
      */
-    public int getSlot() {
-        return slot;
+    public @NotNull ClickInfo getClickInfo() {
+        return clickInfo;
     }
 
     /**
-     * Gets the click type.
+     * Updates the information about the click that occurred. This completely overrides the previous click, but it may
+     * require the inventory to be updated.
      *
-     * @return the click type
+     * @param info the new click info
      */
-    @NotNull
-    public ClickType getClickType() {
-        return clickType;
+    public void setClickInfo(@NotNull ClickInfo info) {
+        this.clickInfo = info;
     }
 
     /**
-     * Gets the item who have been clicked.
+     * Gets whether or not the inventory should be forced to update after this click.
      *
-     * @return the clicked item
+     * @return whether or not the inventory should update
      */
-    @NotNull
-    public ItemStack getClickedItem() {
-        return clickedItem;
+    public boolean shouldUpdate() {
+        return shouldUpdate;
     }
 
     /**
-     * Changes the clicked item.
+     * Sets whether or not the inventory should be forced to update after this click. This should be used when changing
+     * the click info of this event, as the client doesn't know that it has been changed.
      *
-     * @param clickedItem the clicked item
+     * @param shouldUpdate whether or not the inventory should update
      */
-    public void setClickedItem(@NotNull ItemStack clickedItem) {
-        this.clickedItem = clickedItem;
+    public void setShouldUpdate(boolean shouldUpdate) {
+        this.shouldUpdate = shouldUpdate;
     }
 
     /**
-     * Gets the item who was in the player cursor.
+     * Gets the player inventory that was involved with the click.
      *
-     * @return the cursor item
+     * @return the player inventory
      */
-    @NotNull
-    public ItemStack getCursorItem() {
-        return cursorItem;
+    public @NotNull PlayerInventory getPlayerInventory() {
+        return playerInventory;
     }
 
-    /**
-     * Changes the cursor item.
-     *
-     * @param cursorItem the cursor item
-     */
-    public void setCursorItem(@NotNull ItemStack cursorItem) {
-        this.cursorItem = cursorItem;
+    @Override
+    public @NotNull AbstractInventory getInventory() {
+        return inventory;
     }
 
     @Override
@@ -111,10 +99,5 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
-    }
-
-    @Override
-    public @Nullable Inventory getInventory() {
-        return inventory;
     }
 }

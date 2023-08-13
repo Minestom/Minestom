@@ -175,7 +175,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private int portalCooldown = 0;
 
     protected PlayerInventory inventory;
-    private Inventory openInventory;
+    private AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
@@ -579,7 +579,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.remove(permanent);
 
-        final Inventory currentInventory = getOpenInventory();
+        final AbstractInventory currentInventory = getOpenInventory();
         if (currentInventory != null) currentInventory.removeViewer(this);
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
         // Advancement tabs cache
@@ -1708,8 +1708,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
-    public @Nullable Inventory getOpenInventory() {
+    public @Nullable AbstractInventory getOpenInventory() {
         return openInventory;
+    }
+
+    private void tryCloseInventory() {
+        var closedInventory = getOpenInventory();
+        if (closedInventory != null) {
+            closedInventory.removeViewer(this);
+            this.openInventory = null;
+        } else {
+            // Don't remove it as a viewer, but pretend that it was
+            inventory.handleClose(this);
+        }
     }
 
     /**
@@ -1718,23 +1729,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
      */
-    public boolean openInventory(@NotNull Inventory inventory) {
+    public boolean openInventory(@NotNull AbstractInventory inventory) {
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            Inventory openInventory = getOpenInventory();
-            if (openInventory != null) {
-                openInventory.removeViewer(this);
-            }
+            tryCloseInventory();
 
-            Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory == null) {
-                // just close the inventory
-                return;
-            }
-
-            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
-                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
+            AbstractInventory newInventory = inventoryOpenEvent.getInventory();
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
@@ -1751,30 +1752,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
-        AbstractInventory openInventory = getOpenInventory();
-
-        // Drop cursor item when closing inventory
-        var openOrPlayer = openInventory != null ? openInventory : inventory;
-        ItemStack cursorItem = openOrPlayer.getCursorItem(this);
-        openOrPlayer.setCursorItem(this, ItemStack.AIR);
-
-        if (!cursorItem.isAir()) {
-            // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
-                getInventory().addItemStack(cursorItem);
-            }
-        }
-
-        if (openInventory == getOpenInventory()) {
-            CloseWindowPacket closeWindowPacket = new CloseWindowPacket(openOrPlayer.getWindowId());
-            if (openInventory != null) {
-                openInventory.removeViewer(this); // Clear cache
-                this.openInventory = null;
-            }
-            if (!fromClient) sendPacket(closeWindowPacket);
-            inventory.update();
-            this.didCloseInventory = true;
-        }
+        tryCloseInventory();
+        inventory.update();
+        this.didCloseInventory = true;
     }
 
     /**

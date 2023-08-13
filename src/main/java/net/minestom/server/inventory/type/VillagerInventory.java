@@ -86,10 +86,9 @@ public class VillagerInventory extends Inventory {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
-        if (result) player.sendPacket(tradeCache);
-        return result;
+    public void handleOpen(@NotNull Player player) {
+        super.handleOpen(player);
+        player.sendPacket(tradeCache);
     }
 
     private TradeListPacket createTradePacket() {

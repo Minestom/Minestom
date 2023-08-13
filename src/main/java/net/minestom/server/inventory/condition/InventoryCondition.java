@@ -2,7 +2,7 @@ package net.minestom.server.inventory.condition;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.click.ClickType;
+import net.minestom.server.inventory.click.ClickInfo;
 
 /**
  * Can be added to any {@link AbstractInventory}
@@ -17,9 +17,8 @@ public interface InventoryCondition {
      * Called when a {@link Player} clicks in the inventory where this {@link InventoryCondition} has been added to.
      *
      * @param player                   the player who clicked in the inventory
-     * @param slot                     the slot clicked, can be -999 if the click is out of the inventory
-     * @param clickType                the click type
+     * @param clickInfo                the click info
      * @param inventoryConditionResult the result of this callback
      */
-    void accept(Player player, int slot, ClickType clickType, InventoryConditionResult inventoryConditionResult);
+    void accept(Player player, ClickInfo clickInfo, InventoryConditionResult inventoryConditionResult);
 }

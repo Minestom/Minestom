@@ -3,10 +3,16 @@ package net.minestom.server.inventory;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
-import net.minestom.server.inventory.click.InventoryClickProcessor;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.inventory.click.ClickHandler;
+import net.minestom.server.inventory.click.ClickInfo;
+import net.minestom.server.inventory.click.ClickPreprocessor;
+import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.tag.TagHandler;
@@ -14,6 +20,7 @@ import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -26,8 +33,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable
-        permits Inventory, PlayerInventory {
+public sealed abstract class AbstractInventory implements Taggable, Viewable permits Inventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 
@@ -36,8 +42,6 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
 
     // list of conditions/callbacks assigned to this inventory
     protected final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
-    // the click processor which process all the clicks in the inventory
-    protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     private final TagHandler tagHandler = TagHandler.newHandler();
 
@@ -187,6 +191,36 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     /**
+     * Handles when a player opens this inventory, without actually dealing with viewers.
+     *
+     * @param player the player opening this inventory
+     */
+    public void handleOpen(@NotNull Player player) {
+        update(player);
+    }
+
+    /**
+     * Handles when a player closes this inventory, without actually dealing with viewers.
+     *
+     * @param player the player closing this inventory
+     */
+    public void handleClose(@NotNull Player player) {
+        ItemStack cursorItem = getCursorItem(player);
+
+        if (!cursorItem.isAir()) {
+            // Drop the item if it can not be added back to the inventory
+            if (!player.getInventory().addItemStack(cursorItem)) {
+                player.dropItem(cursorItem);
+            }
+        }
+
+        setCursorItem(player, ItemStack.AIR);
+        getClickPreprocessor().clearCache(player);
+
+        player.sendPacket(new CloseWindowPacket(getWindowId()));
+    }
+
+    /**
      * Refreshes the inventory for a specific viewer.
      * <p>
      * The player needs to be a viewer, otherwise nothing is sent.
@@ -195,7 +229,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      */
     public void update(@NotNull Player player) {
         if (!isViewer(player)) return;
-        player.sendPacket(createNewWindowItemsPacket(player));
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
     }
 
     public void update() {
@@ -208,7 +242,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     /**
-     * This will not open the inventory for {@code player}, use {@link Player#openInventory(Inventory)}.
+     * This will not open the inventory for {@code player}, use {@link Player#openInventory(AbstractInventory)}.
      *
      * @param player the viewer to add
      * @return true if the player has successfully been added
@@ -217,7 +251,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public boolean addViewer(@NotNull Player player) {
         if (!this.viewers.add(player)) return false;
 
-        update(player);
+        handleOpen(player);
         return true;
     }
 
@@ -231,8 +265,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public boolean removeViewer(@NotNull Player player) {
         if (!this.viewers.remove(player)) return false;
 
-        setCursorItem(player, ItemStack.AIR);
-        this.clickProcessor.clearCache(player);
+        handleClose(player);
         return true;
     }
 
@@ -301,12 +334,52 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     /**
-     * Gets the size of the "inner inventory" (which includes only "usable" slots).
+     * Gets the click preprocessor for this inventory.
      *
-     * @return inner inventory's size
+     * @return the click preprocessor
      */
-    public int getInnerSize() {
-        return getSize();
+    public abstract @NotNull ClickPreprocessor getClickPreprocessor();
+
+    /**
+     * Gets the click handler for this inventory.
+     *
+     * @return the click handler
+     */
+    public abstract @NotNull ClickHandler getClickHandler();
+
+    /**
+     * Handles the provided click from the given player, returning the results after it is applied. If the results are
+     * null, this indicates that the click was cancelled or was otherwise not processed.
+     *
+     * @param player the player that clicked
+     * @param clickInfo the information about the player's click
+     * @return the results of the click, or null if the click was cancelled or otherwise was not handled
+     */
+    public @Nullable ClickResult handleClick(@NotNull Player player, @NotNull ClickInfo clickInfo) {
+        var preClickEvent = new InventoryPreClickEvent(player.getInventory(), this, player, clickInfo);
+        EventDispatcher.call(preClickEvent);
+
+        clickInfo = preClickEvent.getClickInfo();
+        boolean shouldUpdate = preClickEvent.isCancelled() || preClickEvent.shouldUpdate();
+
+        ClickResult changes = null;
+        if (!preClickEvent.isCancelled()) {
+            changes = getClickHandler().tryHandle(clickInfo, player, this);
+
+            if (changes != null) {
+                changes.applyChanges(player, this);
+
+                var clickEvent = new InventoryClickEvent(player, this, clickInfo, changes);
+                EventDispatcher.call(clickEvent);
+            }
+        }
+
+        if (shouldUpdate) {
+            preClickEvent.getPlayerInventory().update(player);
+            preClickEvent.getInventory().update(player);
+        }
+
+        return changes;
     }
 
     /**
@@ -350,7 +423,4 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         return tagHandler;
     }
 
-    public @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
-        return new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
-    }
 }

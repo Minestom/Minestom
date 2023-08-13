@@ -3,20 +3,20 @@ package net.minestom.server.event.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.AbstractInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Called when an {@link Inventory} is closed by a player.
+ * Called when an {@link AbstractInventory} is closed by a player.
  */
 public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent {
 
-    private final Inventory inventory;
+    private final AbstractInventory inventory;
     private final Player player;
-    private Inventory newInventory;
+    private @Nullable AbstractInventory newInventory;
 
-    public InventoryCloseEvent(@Nullable Inventory inventory, @NotNull Player player) {
+    public InventoryCloseEvent(@NotNull AbstractInventory inventory, @NotNull Player player) {
         this.inventory = inventory;
         this.player = player;
     }
@@ -34,10 +34,9 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     /**
      * Gets the new inventory to open.
      *
-     * @return the new inventory to open, null if there isn't any
+     * @return the new inventory to open
      */
-    @Nullable
-    public Inventory getNewInventory() {
+    public @Nullable AbstractInventory getNewInventory() {
         return newInventory;
     }
 
@@ -46,12 +45,12 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @param newInventory the inventory to open, null to do not open any
      */
-    public void setNewInventory(@Nullable Inventory newInventory) {
+    public void setNewInventory(@Nullable AbstractInventory newInventory) {
         this.newInventory = newInventory;
     }
 
     @Override
-    public @Nullable Inventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 }

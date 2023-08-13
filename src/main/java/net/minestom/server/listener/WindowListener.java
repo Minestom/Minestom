@@ -15,60 +15,14 @@ public class WindowListener {
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
         final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
-        if (inventory == null) {
-            // Invalid packet
-            return;
+
+        // Prevent some invalid packets
+        if (inventory == null || packet.slot() == -1) return;
+
+        var info = inventory.getClickPreprocessor().process(player, packet);
+        if (info != null) {
+            inventory.handleClick(player, info);
         }
-
-        final short slot = packet.slot();
-        final byte button = packet.button();
-        final ClientClickWindowPacket.ClickType clickType = packet.clickType();
-
-        boolean successful = false;
-
-        // prevent click in a non-interactive slot (why does it exist?)
-        if (slot == -1) {
-            return;
-        }
-        if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
-            if (button == 0) {
-                if (slot != -999) {
-                    successful = inventory.leftClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, true, slot, button);
-                }
-            } else if (button == 1) {
-                if (slot != -999) {
-                    successful = inventory.rightClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, false, slot, button);
-                }
-            }
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
-            successful = inventory.shiftClick(player, slot);
-        } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
-            successful = inventory.changeHeld(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
-            successful = player.isCreative();
-            if (successful) {
-                inventory.setCursorItem(player, packet.clickedItem());
-            }
-        } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
-            successful = inventory.drop(player, false, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_CRAFT) {
-            successful = inventory.dragging(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.PICKUP_ALL) {
-            successful = inventory.doubleClick(player, slot);
-        }
-
-        // Prevent ghost item when the click is cancelled
-        if (!successful) {
-            player.getInventory().update();
-            inventory.update(player);
-        }
-
-        // Prevent the player from picking a ghost item in cursor
-        inventory.refreshCursor(player, inventory.getCursorItem(player));
 
         // (Why is the ping packet necessary?)
         player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
@@ -80,12 +34,15 @@ public class WindowListener {
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
-        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
+        var openInventory = player.getOpenInventory();
+        if (openInventory == null) openInventory = player.getInventory();
+
+        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, player);
         EventDispatcher.call(inventoryCloseEvent);
 
         player.closeInventory(true);
 
-        Inventory newInventory = inventoryCloseEvent.getNewInventory();
+        AbstractInventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
             player.openInventory(newInventory);
     }

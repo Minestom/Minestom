@@ -3,11 +3,10 @@ package net.minestom.server.event.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.item.ItemStack;
+import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.click.ClickInfo;
+import net.minestom.server.inventory.click.ClickResult;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
@@ -15,22 +14,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent {
 
-    private final Inventory inventory;
     private final Player player;
-    private final int slot;
-    private final ClickType clickType;
-    private final ItemStack clickedItem;
-    private final ItemStack cursorItem;
+    private final AbstractInventory inventory;
+    private final ClickInfo info;
+    private final ClickResult changes;
 
-    public InventoryClickEvent(@Nullable Inventory inventory, @NotNull Player player,
-                               int slot, @NotNull ClickType clickType,
-                               @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        this.inventory = inventory;
+    public InventoryClickEvent(@NotNull Player player, @NotNull AbstractInventory inventory, @NotNull ClickInfo info, @NotNull ClickResult changes) {
         this.player = player;
-        this.slot = slot;
-        this.clickType = clickType;
-        this.clickedItem = clicked;
-        this.cursorItem = cursor;
+        this.inventory = inventory;
+        this.info = info;
+        this.changes = changes;
     }
 
     /**
@@ -44,46 +37,25 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
     }
 
     /**
-     * Gets the clicked slot number.
+     * Gets the info about the click that was already processed.
      *
-     * @return the clicked slot number
+     * @return the click info
      */
-    public int getSlot() {
-        return slot;
+    public @NotNull ClickInfo getClickInfo() {
+        return info;
     }
 
     /**
-     * Gets the click type.
+     * Gets the changes that occurred as a result of this click.
      *
-     * @return the click type
+     * @return the changes
      */
-    @NotNull
-    public ClickType getClickType() {
-        return clickType;
-    }
-
-    /**
-     * Gets the clicked item.
-     *
-     * @return the clicked item
-     */
-    @NotNull
-    public ItemStack getClickedItem() {
-        return clickedItem;
-    }
-
-    /**
-     * Gets the item in the player cursor.
-     *
-     * @return the cursor item
-     */
-    @NotNull
-    public ItemStack getCursorItem() {
-        return cursorItem;
+    public @NotNull ClickResult getChanges() {
+        return changes;
     }
 
     @Override
-    public @Nullable Inventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 }

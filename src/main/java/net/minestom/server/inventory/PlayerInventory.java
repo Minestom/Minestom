@@ -1,12 +1,17 @@
 package net.minestom.server.inventory;
 
+import it.unimi.dsi.fastutil.ints.IntArrays;
+import it.unimi.dsi.fastutil.ints.IntIterator;
+import it.unimi.dsi.fastutil.ints.IntIterators;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickResult;
+import net.minestom.server.inventory.click.ClickHandler;
+import net.minestom.server.inventory.click.ClickPreprocessor;
+import net.minestom.server.inventory.click.StandardClickHandler;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,13 +21,48 @@ import org.jetbrains.annotations.Nullable;
 public non-sealed class PlayerInventory extends AbstractInventory {
 
     public static final int INVENTORY_SIZE = 46;
-    public static final int INNER_INVENTORY_SIZE = 36;
 
     public static final int HELMET_SLOT = 5;
     public static final int CHESTPLATE_SLOT = 6;
     public static final int LEGGINGS_SLOT = 7;
     public static final int BOOTS_SLOT = 8;
     public static final int OFFHAND_SLOT = 45;
+
+    public static final int HOTBAR_START = 36;
+
+    public static final @NotNull ClickHandler clickHandler = new StandardClickHandler(
+            (player, inventory, item, slot) -> {
+                slot = Math.abs(slot);
+
+                IntIterator base = IntIterators.EMPTY_ITERATOR;
+
+                var equipmentSlot = item.material().registry().equipmentSlot();
+                if (equipmentSlot != null && slot != equipmentSlot.armorSlot()) {
+                    base = IntIterators.concat(base, IntIterators.singleton(equipmentSlot.armorSlot()));
+                }
+
+                if (item.material() == Material.SHIELD && slot != OFFHAND_SLOT) {
+                    base = IntIterators.concat(base, IntIterators.singleton(OFFHAND_SLOT));
+                }
+
+                if (slot < 9 || slot > 35) {
+                    base = IntIterators.concat(base, IntIterators.fromTo(9, 36));
+                }
+
+                if (slot < 36 || slot > 44) {
+                    base = IntIterators.concat(base, IntIterators.fromTo(36, 45));
+                }
+
+                if (slot == 0) {
+                    base = IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(base)));
+                }
+
+                return base;
+            },
+            (player, inventory, item, slot) -> IntIterators.fromTo(1, inventory.getSize())
+    );
+
+    protected final ClickPreprocessor clickPreprocessor = new ClickPreprocessor(this);
 
     public PlayerInventory() {
         super(INVENTORY_SIZE);
@@ -36,11 +76,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         for (var player : getViewers()) {
             player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
         }
-    }
-
-    @Override
-    public int getInnerSize() {
-        return INNER_INVENTORY_SIZE;
     }
 
     @Override
@@ -73,7 +108,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         return switch (slot) {
             case HELMET, CHESTPLATE, LEGGINGS, BOOTS -> slot.armorSlot();
             case OFF_HAND -> OFFHAND_SLOT;
-            case MAIN_HAND -> heldSlot;
+            case MAIN_HAND -> HOTBAR_START + heldSlot;
         };
     }
 
@@ -84,7 +119,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
             case BOOTS_SLOT -> EquipmentSlot.BOOTS;
             case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
-            default -> slot == heldSlot ? EquipmentSlot.MAIN_HAND : null;
+            default -> slot == (HOTBAR_START + heldSlot) ? EquipmentSlot.MAIN_HAND : null;
         };
     }
 
@@ -121,127 +156,20 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public boolean leftClick(@NotNull Player player, int slot) {
-        final ItemStack cursor = getCursorItem(player);
-        final ItemStack clicked = getItemStack(slot);
-        final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, slot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(slot, clickResult.getClicked());
-        setCursorItem(player, clickResult.getCursor());
-        callClickEvent(player, null, slot, ClickType.LEFT_CLICK, clicked, cursor);
-        return true;
+    public @NotNull ClickPreprocessor getClickPreprocessor() {
+        return clickPreprocessor;
     }
 
     @Override
-    public boolean rightClick(@NotNull Player player, int slot) {
-        final ItemStack cursor = getCursorItem(player);
-        final ItemStack clicked = getItemStack(slot);
-        final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, slot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(slot, clickResult.getClicked());
-        setCursorItem(player, clickResult.getCursor());
-        callClickEvent(player, null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
-        return true;
+    public @NotNull ClickHandler getClickHandler() {
+        return clickHandler;
     }
 
-    @Override
-    public boolean middleClick(@NotNull Player player, int slot) {
-        // TODO
-        update();
-        return false;
+    public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull Player player, @NotNull ItemStack item, int slot) {
+        return IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(IntIterators.fromTo(-44, -10))));
     }
 
-    @Override
-    public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
-        final ItemStack cursor = getCursorItem(player);
-        final boolean outsideDrop = slot == -999;
-        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot);
-        final InventoryClickResult clickResult = clickProcessor.drop(player, this,
-                all, slot, button, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        final ItemStack resultClicked = clickResult.getClicked();
-        if (resultClicked != null && !outsideDrop) {
-            setItemStack(slot, resultClicked);
-        }
-        setCursorItem(player, clickResult.getCursor());
-        return true;
+    public static @NotNull IntIterator getInnerDoubleClickSlots(@NotNull Player player, @NotNull ItemStack item, int slot) {
+        return IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(IntIterators.fromTo(-44, -10))));
     }
-
-    @Override
-    public boolean shiftClick(@NotNull Player player, int slot) {
-        final ItemStack cursor = getCursorItem(player);
-        final ItemStack clicked = getItemStack(slot);
-        final boolean hotBarClick = slot >= 36 && slot <= 44;
-        final int start = hotBarClick ? 9 : 0;
-        final int end = hotBarClick ? getSize() - 9 : 8;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(
-                this, this,
-                start, end, 1,
-                player, slot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(slot, clickResult.getClicked());
-        setCursorItem(player, clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
-    }
-
-    @Override
-    public boolean changeHeld(@NotNull Player player, int slot, int key) {
-        final int convertedKey = key == 40 ? OFFHAND_SLOT : key;
-        final ItemStack cursorItem = getCursorItem(player);
-        if (!cursorItem.isAir()) return false;
-        final ItemStack heldItem = getItemStack(convertedKey);
-        final ItemStack clicked = getItemStack(slot);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, convertedKey, clicked, heldItem);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setItemStack(slot, clickResult.getClicked());
-        setItemStack(convertedKey, clickResult.getCursor());
-        callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, cursorItem);
-        return true;
-    }
-
-    @Override
-    public boolean dragging(@NotNull Player player, int slot, int button) {
-        final ItemStack cursor = getCursorItem(player);
-        final ItemStack clicked = slot != -999 ? itemStacks[slot] : ItemStack.AIR;
-        final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                slot, button, clicked, cursor);
-        if (clickResult == null || clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setCursorItem(player, clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
-    }
-
-    @Override
-    public boolean doubleClick(@NotNull Player player, int slot) {
-        final ItemStack cursor = getCursorItem(player);
-        final ItemStack clicked = getItemStack(slot);
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, clicked, cursor);
-        if (clickResult.isCancel()) {
-            update();
-            return false;
-        }
-        setCursorItem(player, clickResult.getCursor());
-        update(); // FIXME: currently not properly client-predicted
-        return true;
-    }
-
 }

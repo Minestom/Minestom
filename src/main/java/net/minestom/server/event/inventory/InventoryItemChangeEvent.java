@@ -5,7 +5,6 @@ import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when {@link AbstractInventory#safeItemInsert(int, ItemStack)} is being invoked.
@@ -19,7 +18,7 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
     private final ItemStack previousItem;
     private final ItemStack newItem;
 
-    public InventoryItemChangeEvent(@Nullable AbstractInventory inventory, int slot,
+    public InventoryItemChangeEvent(@NotNull AbstractInventory inventory, int slot,
                                     @NotNull ItemStack previousItem, @NotNull ItemStack newItem) {
         this.inventory = inventory;
         this.slot = slot;
@@ -55,7 +54,7 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
     }
 
     @Override
-    public @Nullable AbstractInventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 }

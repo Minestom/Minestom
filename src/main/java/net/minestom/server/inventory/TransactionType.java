@@ -109,7 +109,7 @@ public interface TransactionType {
     default @NotNull Pair<ItemStack, Map<Integer, ItemStack>> process(@NotNull AbstractInventory inventory,
                                                                       @NotNull ItemStack itemStack,
                                                                       @NotNull SlotPredicate slotPredicate) {
-        return process(inventory, itemStack, slotPredicate, 0, inventory.getInnerSize(), 1);
+        return process(inventory, itemStack, slotPredicate, 0, inventory.getSize(), 1);
     }
 
     default @NotNull Pair<ItemStack, Map<Integer, ItemStack>> process(@NotNull AbstractInventory inventory,
