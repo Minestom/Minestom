@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.ints.IntSets;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +35,10 @@ public class ClickPreprocessor {
         creativeDragMap.remove(player);
     }
 
+    private static boolean validateSlot(@NotNull AbstractInventory inventory, int slot) {
+        return slot >= 0 && slot < inventory.getSize() + (inventory.getWindowId() != 0 ? PlayerInventory.INNER_SIZE : 0);
+    }
+
     private static int convertSlot(@NotNull AbstractInventory inventory, int slot) {
         if (slot < inventory.getSize()) {
             return slot;
@@ -58,21 +63,23 @@ public class ClickPreprocessor {
                 if (button == 0) {
                     if (slot == -999) {
                         yield new ClickInfo.DropCursor(true);
-                    } else {
+                    } else if (validateSlot(inventory, slot)) {
                         yield new ClickInfo.LeftClick(convertSlot(inventory, slot));
                     }
                 } else if (button == 1) {
                     if (slot == -999) {
                         yield new ClickInfo.DropCursor(false);
-                    } else {
+                    } else if (validateSlot(inventory, slot)) {
                         yield new ClickInfo.RightClick(convertSlot(inventory, slot));
                     }
                 }
                 yield null;
             }
-            case QUICK_MOVE -> new ClickInfo.ShiftClick(convertSlot(inventory, slot));
+            case QUICK_MOVE -> validateSlot(inventory, slot) ? new ClickInfo.ShiftClick(convertSlot(inventory, slot)) : null;
             case SWAP -> {
-                if (button >= 0 && button < 9) {
+                if (!validateSlot(inventory, slot)) {
+                    yield null;
+                } else if (button >= 0 && button < 9) {
                     yield new ClickInfo.HotbarSwap(button, convertSlot(inventory, slot));
                 } else if (button == 40) {
                     yield new ClickInfo.OffhandSwap(convertSlot(inventory, slot));
@@ -80,8 +87,8 @@ public class ClickPreprocessor {
                     yield null;
                 }
             }
-            case CLONE -> player.isCreative() ? new ClickInfo.CopyItem(convertSlot(inventory, slot)) : null;
-            case THROW -> new ClickInfo.DropSlot(convertSlot(inventory, slot), button == 1);
+            case CLONE -> (player.isCreative() && validateSlot(inventory, slot)) ? new ClickInfo.CopyItem(convertSlot(inventory, slot)) : null;
+            case THROW -> validateSlot(inventory, slot) ? new ClickInfo.DropSlot(convertSlot(inventory, slot), button == 1) : null;
             case QUICK_CRAFT -> {
                 // Prevent invalid creative actions
                 if (!player.isCreative() && (button == 8 || button == 9 || button == 10)) yield null;
@@ -101,7 +108,9 @@ public class ClickPreprocessor {
                 // Handle intermediate state
                 BiFunction<Player, IntSet, IntSet> addItem = (k, v) -> {
                     var v2 = v != null ? v : new IntArraySet();
-                    v2.add(convertSlot(inventory, slot));
+                    if (validateSlot(inventory, slot)) {
+                        v2.add(convertSlot(inventory, slot));
+                    }
                     return v2;
                 };
 
@@ -117,7 +126,7 @@ public class ClickPreprocessor {
 
                 yield null;
             }
-            case PICKUP_ALL -> new ClickInfo.DoubleClick(convertSlot(inventory, slot));
+            case PICKUP_ALL -> validateSlot(inventory, slot) ? new ClickInfo.DoubleClick(convertSlot(inventory, slot)) : null;
         };
     }
 

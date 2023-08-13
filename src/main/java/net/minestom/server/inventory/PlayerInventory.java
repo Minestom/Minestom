@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public non-sealed class PlayerInventory extends AbstractInventory {
 
     public static final int INVENTORY_SIZE = 46;
+    public static final int INNER_SIZE = 36;
 
     public static final int HELMET_SLOT = 5;
     public static final int CHESTPLATE_SLOT = 6;
