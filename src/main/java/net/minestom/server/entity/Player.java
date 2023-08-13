@@ -1712,15 +1712,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return openInventory;
     }
 
-    private void tryCloseInventory() {
+    private boolean tryCloseInventory() {
         var closedInventory = getOpenInventory();
         if (closedInventory != null) {
-            closedInventory.removeViewer(this);
-            this.openInventory = null;
+            if (closedInventory.removeViewer(this)) {
+                this.openInventory = null;
+                return true;
+            }
         } else {
             // Don't remove it as a viewer, but pretend that it was
             inventory.handleClose(this);
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -1736,8 +1741,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             tryCloseInventory();
 
             AbstractInventory newInventory = inventoryOpenEvent.getInventory();
-            newInventory.addViewer(this);
-            this.openInventory = newInventory;
+            if (newInventory.addViewer(this)) {
+                this.openInventory = newInventory;
+            }
         });
         return !inventoryOpenEvent.isCancelled();
     }
@@ -1752,9 +1758,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
-        tryCloseInventory();
+        boolean result = tryCloseInventory();
         inventory.update();
-        this.didCloseInventory = true;
+        this.didCloseInventory = result;
     }
 
     /**
