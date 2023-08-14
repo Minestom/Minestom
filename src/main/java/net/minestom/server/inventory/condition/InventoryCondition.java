@@ -3,6 +3,8 @@ package net.minestom.server.inventory.condition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.ClickInfo;
+import net.minestom.server.inventory.click.ClickResult;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Can be added to any {@link AbstractInventory}
@@ -18,7 +20,8 @@ public interface InventoryCondition {
      *
      * @param player                   the player who clicked in the inventory
      * @param clickInfo                the click info
-     * @param inventoryConditionResult the result of this callback
+     * @param result                   the result of the click
+     * @return                         the new result of this click, null to cancel
      */
-    void accept(Player player, ClickInfo clickInfo, InventoryConditionResult inventoryConditionResult);
+    @Nullable ClickResult accept(Player player, ClickInfo clickInfo, @Nullable ClickResult result);
 }

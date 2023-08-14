@@ -356,25 +356,33 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @return the results of the click, or null if the click was cancelled or otherwise was not handled
      */
     public @Nullable ClickResult handleClick(@NotNull Player player, @NotNull ClickInfo clickInfo) {
+        // Call a pre-click event with the base click info
         var preClickEvent = new InventoryPreClickEvent(player.getInventory(), this, player, clickInfo);
         EventDispatcher.call(preClickEvent);
-
         clickInfo = preClickEvent.getClickInfo();
-        boolean shouldUpdate = preClickEvent.isCancelled() || preClickEvent.shouldUpdate();
 
         ClickResult changes = null;
+
+        // Apply the click handler if the click will still occur
         if (!preClickEvent.isCancelled()) {
             changes = getClickHandler().tryHandle(clickInfo, player, this);
-
-            if (changes != null) {
-                changes.applyChanges(player, this);
-
-                var clickEvent = new InventoryClickEvent(player, this, clickInfo, changes);
-                EventDispatcher.call(clickEvent);
-            }
         }
 
-        if (shouldUpdate) {
+        // Apply each of the conditions to the changes, updating it as we go along
+        for (var condition : inventoryConditions) {
+            changes = condition.accept(player, clickInfo, changes);
+        }
+
+        // Apply the changes and send out an event if there are actually any changes
+        if (changes != null) {
+            changes.applyChanges(player, this);
+
+            var clickEvent = new InventoryClickEvent(player, this, clickInfo, changes);
+            EventDispatcher.call(clickEvent);
+        }
+
+        // Make sure to update the inventory if indicated
+        if (preClickEvent.shouldUpdate() || changes == null) {
             preClickEvent.getPlayerInventory().update(player);
             preClickEvent.getInventory().update(player);
         }
