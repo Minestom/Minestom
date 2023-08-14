@@ -1,5 +1,6 @@
 package net.minestom.server.inventory;
 
+import it.unimi.dsi.fastutil.ints.IntIterators;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -129,7 +130,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @return true if the item has been successfully added, false otherwise
      */
     public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
-        return processItemStack(itemStack, TransactionType.ADD, option);
+        return processItemStack(itemStack, TransactionType.add(() -> IntIterators.fromTo(0, getSize()), () -> IntIterators.fromTo(0, getSize())), option);
     }
 
     public boolean addItemStack(@NotNull ItemStack itemStack) {
@@ -143,9 +144,8 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @param option     the transaction option
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
-                                                       @NotNull TransactionOption<T> option) {
-        return processItemStacks(itemStacks, TransactionType.ADD, option);
+    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
+        return processItemStacks(itemStacks, TransactionType.add(() -> IntIterators.fromTo(0, getSize()), () -> IntIterators.fromTo(0, getSize())), option);
     }
 
     /**
@@ -155,7 +155,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @return true if the item has been successfully fully taken, false otherwise
      */
     public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
-        return processItemStack(itemStack, TransactionType.TAKE, option);
+        return processItemStack(itemStack, TransactionType.take(() -> IntIterators.fromTo(0, getSize())), option);
     }
 
     /**
@@ -166,7 +166,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      */
     public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                         @NotNull TransactionOption<T> option) {
-        return processItemStacks(itemStacks, TransactionType.TAKE, option);
+        return processItemStacks(itemStacks, TransactionType.take(() -> IntIterators.fromTo(0, getSize())), option);
     }
 
     public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {

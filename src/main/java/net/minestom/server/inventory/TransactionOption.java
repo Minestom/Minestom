@@ -1,9 +1,8 @@
 package net.minestom.server.inventory;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 @FunctionalInterface
 public interface TransactionOption<T> {
@@ -41,13 +40,9 @@ public interface TransactionOption<T> {
      */
     TransactionOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
 
-    @NotNull T fill(@NotNull AbstractInventory inventory,
-                    @NotNull ItemStack result,
-                    @NotNull Map<@NotNull Integer, @NotNull ItemStack> itemChangesMap);
+    @NotNull T fill(@NotNull AbstractInventory inventory, @NotNull ItemStack result, @NotNull Int2ObjectMap<ItemStack> itemChangesMap);
 
-    default @NotNull T fill(@NotNull TransactionType type,
-                            @NotNull AbstractInventory inventory,
-                            @NotNull ItemStack itemStack) {
+    default @NotNull T fill(@NotNull TransactionType type, @NotNull AbstractInventory inventory, @NotNull ItemStack itemStack) {
         var pair = type.process(inventory, itemStack);
         return fill(inventory, pair.left(), pair.right());
     }
