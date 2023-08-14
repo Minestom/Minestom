@@ -11,14 +11,16 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Stores changes that occurred or will occur as the result of a click.
- * @param changes the map of changes that will occur
+ * @param changes the map of changes that will occur to the inventory
+ * @param playerInventoryChanges the map of changes that will occur to the player inventory
  * @param newCursorItem the player's cursor item after this click. Null indicates no change
  * @param sideEffects the side effects of this click
  */
-public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @Nullable ItemStack newCursorItem, @Nullable SideEffects sideEffects) {
+public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @NotNull Int2ObjectMap<ItemStack> playerInventoryChanges,
+                          @Nullable ItemStack newCursorItem, @Nullable SideEffects sideEffects) {
 
     public static @NotNull ClickResult empty() {
-        return new ClickResult(Int2ObjectMaps.emptyMap(), null, null);
+        return new ClickResult(Int2ObjectMaps.emptyMap(), Int2ObjectMaps.emptyMap(), null, null);
     }
 
     public static @NotNull Builder builder() {
@@ -27,11 +29,17 @@ public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @Nullable I
 
     public static class Builder {
         private final Int2ObjectMap<ItemStack> changes = new Int2ObjectArrayMap<>();
+        private final Int2ObjectMap<ItemStack> playerInventoryChanges = new Int2ObjectArrayMap<>();
         private @Nullable ItemStack newCursorItem;
         private @Nullable SideEffects sideEffects;
 
         public @NotNull Builder change(int slot, @NotNull ItemStack item) {
-            changes.put(slot, item);
+            change(Math.abs(slot), item, slot < 0);
+            return this;
+        }
+
+        public @NotNull Builder change(int slot, @NotNull ItemStack item, boolean playerInventory) {
+            (playerInventory ? playerInventoryChanges : changes).put(slot, item);
             return this;
         }
 
@@ -46,7 +54,11 @@ public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @Nullable I
         }
 
         public @NotNull ClickResult build() {
-            return new ClickResult(Int2ObjectMaps.unmodifiable(new Int2ObjectArrayMap<>(changes)), newCursorItem, sideEffects);
+            return new ClickResult(
+                    Int2ObjectMaps.unmodifiable(new Int2ObjectArrayMap<>(changes)),
+                    Int2ObjectMaps.unmodifiable(new Int2ObjectArrayMap<>(playerInventoryChanges)),
+                    newCursorItem, sideEffects
+            );
         }
 
     }
@@ -58,14 +70,11 @@ public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @Nullable I
      */
     public void applyChanges(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
         for (var entry : changes.int2ObjectEntrySet()) {
-            var slot = entry.getIntKey();
-            var item = entry.getValue();
+            clickedInventory.setItemStack(entry.getIntKey(), entry.getValue());
+        }
 
-            if (slot < 0) {
-                player.getInventory().setItemStack(-slot, item);
-            } else {
-                clickedInventory.setItemStack(slot, item);
-            }
+        for (var entry : playerInventoryChanges.int2ObjectEntrySet()) {
+            player.getInventory().setItemStack(entry.getIntKey(), entry.getValue());
         }
 
         if (newCursorItem != null) {

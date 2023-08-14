@@ -130,14 +130,14 @@ public class StandardClickHandler implements ClickHandler {
     public @NotNull ClickResult hotbarSwap(@NotNull ClickInfo.HotbarSwap info, @NotNull Player player, @NotNull AbstractInventory clickedInventory) {
         var hotbarSlot = PlayerInventory.HOTBAR_START + info.hotbarSlot();
 
-        var hotbarItem = get(-hotbarSlot, player, clickedInventory);
+        var hotbarItem = player.getInventory().getItemStack(hotbarSlot);
         var selectedItem = get(info.clickedSlot(), player, clickedInventory);
 
         if (hotbarItem.isAir() && selectedItem.isAir()) {
             return ClickResult.empty();
         } else {
             return ClickResult.builder()
-                    .change(-hotbarSlot, selectedItem)
+                    .change(hotbarSlot, selectedItem, true)
                     .change(info.clickedSlot(), hotbarItem)
                     .build();
         }
@@ -146,14 +146,14 @@ public class StandardClickHandler implements ClickHandler {
     public @NotNull ClickResult offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull Player player, @NotNull AbstractInventory clickedInventory) {
         var offhandSlot = PlayerInventory.OFFHAND_SLOT;
 
-        var offhandItem = get(-offhandSlot, player, clickedInventory);
+        var offhandItem = player.getInventory().getItemStack(offhandSlot);
         var selectedItem = get(info.clickedSlot(), player, clickedInventory);
 
         if (offhandItem.isAir() && selectedItem.isAir()) {
             return ClickResult.empty();
         } else {
             return ClickResult.builder()
-                    .change(-offhandSlot, selectedItem)
+                    .change(offhandSlot, selectedItem, true)
                     .change(info.clickedSlot(), offhandItem)
                     .build();
         }
@@ -293,7 +293,7 @@ public class StandardClickHandler implements ClickHandler {
         }
 
         // Final remaining item check
-        builder.change(slot, itemAmount == 0 ? ItemStack.AIR : RULE.apply(clickedItem, itemAmount));
+        builder.change(slot, RULE.apply(clickedItem, itemAmount));
 
         return builder.build();
     }
@@ -320,7 +320,7 @@ public class StandardClickHandler implements ClickHandler {
 
             if (sum <= maxSize) {
                 cursorAmount = sum;
-                builder.change(next, ItemStack.AIR);
+                builder.change(next, RULE.apply(slotItem, 0));
             } else {
                 cursorAmount = maxSize;
                 builder.change(next, RULE.apply(slotItem, sum - maxSize));
