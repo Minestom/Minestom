@@ -1,8 +1,6 @@
 package net.minestom.server.inventory;
 
-import it.unimi.dsi.fastutil.ints.IntArrays;
-import it.unimi.dsi.fastutil.ints.IntIterator;
-import it.unimi.dsi.fastutil.ints.IntIterators;
+import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -14,6 +12,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.stream.IntStream;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
@@ -31,7 +31,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     public static final int HOTBAR_START = 36;
 
-    public static final @NotNull ClickHandler clickHandler = new StandardClickHandler(
+    public static final @NotNull ClickHandler CLICK_HANDLER = new StandardClickHandler(
             (player, inventory, item, slot) -> {
                 slot = Math.abs(slot);
 
@@ -132,6 +132,37 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         setItemStack(getSlotIndex(slot, heldSlot), newValue);
     }
 
+    private static final int[] EXISTING_ADD_SLOTS = IntStream.concat(
+            IntStream.concat(
+                    IntStream.rangeClosed(36, 44),
+                    IntStream.of(OFFHAND_SLOT)
+            ),
+            IntStream.rangeClosed(9, 35)
+    ).toArray();
+
+    private static final int[] AIR_ADD_SLOTS = IntStream.concat(
+            IntStream.rangeClosed(36, 44),
+            IntStream.rangeClosed(9, 35)
+    ).toArray();
+
+    private static final int[] TAKE_SLOTS = IntStream.concat(
+            IntStream.rangeClosed(36, 45),
+            IntStream.concat(
+                    IntStream.rangeClosed(9, 35),
+                    IntStream.rangeClosed(0, 8)
+            )
+    ).toArray();
+
+    @Override
+    public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+        return processItemStack(itemStack, TransactionType.add(() -> IntIterators.wrap(EXISTING_ADD_SLOTS), () -> IntIterators.wrap(AIR_ADD_SLOTS)), option);
+    }
+
+    @Override
+    public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+        return processItemStack(itemStack, TransactionType.take(() -> IntIterators.wrap(TAKE_SLOTS)), option);
+    }
+
     @Override
     public byte getWindowId() {
         return 0;
@@ -163,7 +194,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     @Override
     public @NotNull ClickHandler getClickHandler() {
-        return clickHandler;
+        return CLICK_HANDLER;
     }
 
     public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull Player player, @NotNull ItemStack item, int slot) {

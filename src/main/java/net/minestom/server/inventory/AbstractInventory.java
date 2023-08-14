@@ -115,10 +115,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
                                                                         @NotNull TransactionType type,
                                                                         @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
-        itemStacks.forEach(itemStack -> {
-            T transactionResult = processItemStack(itemStack, type, option);
-            result.add(transactionResult);
-        });
+        itemStacks.forEach(item -> result.add(processItemStack(item, type, option)));
         return result;
     }
 
@@ -145,7 +142,9 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @return the operation results
      */
     public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
-        return processItemStacks(itemStacks, TransactionType.add(() -> IntIterators.fromTo(0, getSize()), () -> IntIterators.fromTo(0, getSize())), option);
+        List<T> result = new ArrayList<>(itemStacks.size());
+        itemStacks.forEach(item -> result.add(addItemStack(item, option)));
+        return result;
     }
 
     /**
@@ -166,7 +165,9 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      */
     public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                         @NotNull TransactionOption<T> option) {
-        return processItemStacks(itemStacks, TransactionType.take(() -> IntIterators.fromTo(0, getSize())), option);
+        List<T> result = new ArrayList<>(itemStacks.size());
+        itemStacks.forEach(item -> result.add(takeItemStack(item, option)));
+        return result;
     }
 
     public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
