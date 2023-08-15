@@ -24,9 +24,9 @@ public non-sealed class Inventory extends AbstractInventory {
     public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
             (player, inventory, item, slot) -> {
                 if (slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET) {
-                    return PlayerInventory.getInnerShiftClickSlots(player, inventory, item, slot);
-                } else {
                     return IntIterators.fromTo(0, inventory.getSize());
+                } else {
+                    return PlayerInventory.getInnerShiftClickSlots(player, inventory, item, slot);
                 }
             },
             (player, inventory, item, slot) -> IntIterators.concat(

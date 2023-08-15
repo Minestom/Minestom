@@ -188,7 +188,11 @@ public class StandardClickHandler implements ClickHandler {
         var slots = info.includedSlots();
         var cursor = clickedInventory.getCursorItem(player);
 
-        int cursorAmount = RULE.getAmount(cursor);
+        if (cursor.isAir()) return ClickResult.empty();
+
+        final var originalCursorAmount = RULE.getAmount(cursor);
+        var cursorAmount = originalCursorAmount;
+
         ClickResult.Builder builder = ClickResult.builder();
 
         if (info.evenlyDistribute()) {
@@ -240,7 +244,7 @@ public class StandardClickHandler implements ClickHandler {
 
         }
 
-        if (RULE.getAmount(cursor) != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
+        if (originalCursorAmount != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
             builder.cursor(RULE.apply(cursor, cursorAmount));
         }
 
@@ -255,7 +259,8 @@ public class StandardClickHandler implements ClickHandler {
             return ClickResult.empty();
         }
 
-        var itemAmount = RULE.getAmount(clickedItem);
+        final var originalItemAmount = RULE.getAmount(clickedItem);
+        var itemAmount = originalItemAmount;
 
         var slots = shiftClickSlots.get(player, clickedInventory, clickedItem, info.clickedSlot());
         ClickResult.Builder builder = ClickResult.builder();
@@ -267,7 +272,10 @@ public class StandardClickHandler implements ClickHandler {
             if (slot == next || !RULE.canBeStacked(clickedItem, slotItem)) continue;
 
             var maxSize = RULE.getMaxSize(slotItem);
-            var sum = itemAmount + RULE.getAmount(slotItem);
+            var slotSize = RULE.getAmount(slotItem);
+            if (slotSize >= maxSize) continue;
+
+            var sum = itemAmount + slotSize;
 
             if (sum <= maxSize) {
                 builder.change(next, RULE.apply(slotItem, sum));
@@ -295,7 +303,9 @@ public class StandardClickHandler implements ClickHandler {
         }
 
         // Final remaining item check
-        builder.change(slot, RULE.apply(clickedItem, itemAmount));
+        if (originalItemAmount != itemAmount && RULE.canApply(clickedItem, itemAmount)) {
+            builder.change(slot, RULE.apply(clickedItem, itemAmount));
+        }
 
         return builder.build();
     }
@@ -307,7 +317,8 @@ public class StandardClickHandler implements ClickHandler {
         }
 
         final var maxSize = RULE.getMaxSize(cursor);
-        var cursorAmount = RULE.getAmount(cursor);
+        final var originalCursorAmount = RULE.getAmount(cursor);
+        var cursorAmount = originalCursorAmount;
 
         var slots = doubleClickSlots.get(player, clickedInventory, cursor, info.clickedSlot());
         ClickResult.Builder builder = ClickResult.builder();
@@ -329,7 +340,7 @@ public class StandardClickHandler implements ClickHandler {
             }
         }
 
-        if (RULE.getAmount(cursor) != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
+        if (originalCursorAmount != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
             builder.cursor(RULE.apply(cursor, cursorAmount));
         }
 
