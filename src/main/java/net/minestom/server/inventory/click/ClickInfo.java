@@ -1,6 +1,6 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.ints.IntList;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,11 +17,11 @@ public sealed interface ClickInfo {
     record ShiftClick(int clickedSlot) implements ClickInfo {}
     record DropCursor(boolean all) implements ClickInfo {}
     record DropSlot(int clickedSlot, boolean all) implements ClickInfo {}
-    record DistributeCursor(@NotNull IntSet includedSlots, boolean evenlyDistribute) implements ClickInfo {}
+    record DistributeCursor(@NotNull IntList includedSlots, boolean evenlyDistribute) implements ClickInfo {}
     record HotbarSwap(int hotbarSlot, int clickedSlot) implements ClickInfo {}
     record OffhandSwap(int clickedSlot) implements ClickInfo {}
     record DoubleClick(int clickedSlot) implements ClickInfo {}
     record CopyItem(int clickedSlot) implements ClickInfo {}
-    record CopyCursor(@NotNull IntSet includedSlots) implements ClickInfo {}
+    record CopyCursor(@NotNull IntList includedSlots) implements ClickInfo {}
 
 }

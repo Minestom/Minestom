@@ -1,8 +1,6 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.ints.IntSets;
+import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -26,9 +24,9 @@ public class ClickPreprocessor {
 
     private final @NotNull AbstractInventory inventory;
 
-    private final Map<Player, IntSet> leftDraggingMap = new ConcurrentHashMap<>();
-    private final Map<Player, IntSet> rightDraggingMap = new ConcurrentHashMap<>();
-    private final Map<Player, IntSet> creativeDragMap = new ConcurrentHashMap<>();
+    private final Map<Player, IntList> leftDraggingMap = new ConcurrentHashMap<>();
+    private final Map<Player, IntList> rightDraggingMap = new ConcurrentHashMap<>();
+    private final Map<Player, IntList> creativeDragMap = new ConcurrentHashMap<>();
 
     public ClickPreprocessor(@NotNull AbstractInventory inventory) {
         this.inventory = inventory;
@@ -100,21 +98,24 @@ public class ClickPreprocessor {
 
                 // Handle drag finishes
                 if (button == 2) {
-                    var set = leftDraggingMap.remove(player);
-                    yield new ClickInfo.DistributeCursor(set != null ? set : IntSets.emptySet(), true);
+                    var list = leftDraggingMap.remove(player);
+                    yield new ClickInfo.DistributeCursor(list != null ? list : IntLists.emptyList(), true);
                 } else if (button == 6) {
-                    var set = rightDraggingMap.remove(player);
-                    yield new ClickInfo.DistributeCursor(set != null ? set : IntSets.emptySet(), false);
+                    var list = rightDraggingMap.remove(player);
+                    yield new ClickInfo.DistributeCursor(list != null ? list : IntLists.emptyList(), false);
                 } else if (button == 10) {
-                    var set = creativeDragMap.remove(player);
-                    yield new ClickInfo.CopyCursor(set != null ? set : IntSets.emptySet());
+                    var list = creativeDragMap.remove(player);
+                    yield new ClickInfo.CopyCursor(list != null ? list : IntLists.emptyList());
                 }
 
                 // Handle intermediate state
-                BiFunction<Player, IntSet, IntSet> addItem = (k, v) -> {
-                    var v2 = v != null ? v : new IntArraySet();
+                BiFunction<Player, IntList, IntList> addItem = (k, v) -> {
+                    var v2 = v != null ? v : new IntArrayList();
                     if (validateSlot(inventory, slot)) {
-                        v2.add(convertSlot(inventory, slot));
+                        var convert = convertSlot(inventory, slot);
+                        if (!v2.contains(convert)) {
+                            v2.add(convert);
+                        }
                     }
                     return v2;
                 };
