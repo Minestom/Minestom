@@ -176,7 +176,7 @@ public class StandardClickHandler implements ClickHandler {
 
         ClickResult.Builder builder = ClickResult.builder();
         for (int slot : info.includedSlots()) {
-            if (!get(slot, player, clickedInventory).isAir()) {
+            if (get(slot, player, clickedInventory).isAir()) {
                 builder.change(slot, cursor);
             }
         }
