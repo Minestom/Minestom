@@ -197,11 +197,11 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         return CLICK_HANDLER;
     }
 
-    public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull Player player, @NotNull ItemStack item, int slot) {
-        return IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(IntIterators.fromTo(-44, -10))));
+    public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull Player player, @NotNull AbstractInventory inventory, @NotNull ItemStack item, int slot) {
+        return IntIterators.fromTo(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9, ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 45);
     }
 
-    public static @NotNull IntIterator getInnerDoubleClickSlots(@NotNull Player player, @NotNull ItemStack item, int slot) {
-        return IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(IntIterators.fromTo(-44, -10))));
+    public static @NotNull IntIterator getInnerDoubleClickSlots(@NotNull Player player, @NotNull AbstractInventory inventory, @NotNull ItemStack item, int slot) {
+        return IntIterators.fromTo(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9, ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 45);
     }
 }

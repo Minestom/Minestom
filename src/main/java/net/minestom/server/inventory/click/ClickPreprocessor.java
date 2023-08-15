@@ -19,6 +19,11 @@ import java.util.function.BiFunction;
  */
 public class ClickPreprocessor {
 
+    /**
+     * Player inventory slots start at this value when the player inventory is not the main one.
+     */
+    public static final int PLAYER_INVENTORY_OFFSET = 1000;
+
     private final @NotNull AbstractInventory inventory;
 
     private final Map<Player, IntSet> leftDraggingMap = new ConcurrentHashMap<>();
@@ -43,7 +48,7 @@ public class ClickPreprocessor {
         if (slot < inventory.getSize()) {
             return slot;
         } else {
-            return -(slot - inventory.getSize() + 9); // Convert it to a player inventory slot
+            return (slot - inventory.getSize() + 9) + PLAYER_INVENTORY_OFFSET; // Convert it to a player inventory slot
         }
     }
 

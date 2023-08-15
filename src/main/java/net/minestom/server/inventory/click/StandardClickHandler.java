@@ -45,7 +45,9 @@ public class StandardClickHandler implements ClickHandler {
     }
 
     private @NotNull ItemStack get(int slot, @NotNull Player player, @NotNull AbstractInventory clickedInventory) {
-        return slot < 0 ? player.getInventory().getItemStack(-slot) : clickedInventory.getItemStack(slot);
+        return slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET ?
+                player.getInventory().getItemStack(slot - ClickPreprocessor.PLAYER_INVENTORY_OFFSET) :
+                clickedInventory.getItemStack(slot);
     }
 
     public @NotNull ClickResult leftClick(@NotNull ClickInfo.LeftClick info, @NotNull Player player, @NotNull AbstractInventory clickedInventory) {

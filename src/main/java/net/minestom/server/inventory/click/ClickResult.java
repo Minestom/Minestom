@@ -34,7 +34,11 @@ public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @NotNull In
         private @Nullable SideEffects sideEffects;
 
         public @NotNull Builder change(int slot, @NotNull ItemStack item) {
-            change(Math.abs(slot), item, slot < 0);
+            if (slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET) {
+                change(slot - ClickPreprocessor.PLAYER_INVENTORY_OFFSET, item, true);
+            } else {
+                change(slot, item, false);
+            }
             return this;
         }
 

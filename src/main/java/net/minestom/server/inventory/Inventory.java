@@ -23,19 +23,16 @@ public non-sealed class Inventory extends AbstractInventory {
 
     public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
             (player, inventory, item, slot) -> {
-                if (slot > 0) {
-                    return PlayerInventory.getInnerShiftClickSlots(player, item, slot);
+                if (slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET) {
+                    return PlayerInventory.getInnerShiftClickSlots(player, inventory, item, slot);
                 } else {
                     return IntIterators.fromTo(0, inventory.getSize());
                 }
             },
-            (player, inventory, item, slot) -> {
-                if (slot > 0) {
-                    return PlayerInventory.getInnerDoubleClickSlots(player, item, slot);
-                } else {
-                    return IntIterators.fromTo(0, inventory.getSize());
-                }
-            });
+            (player, inventory, item, slot) -> IntIterators.concat(
+                    IntIterators.fromTo(0, inventory.getSize()),
+                    PlayerInventory.getInnerDoubleClickSlots(player, inventory, item, slot)
+            ));
 
     private final byte id;
     private final InventoryType inventoryType;
