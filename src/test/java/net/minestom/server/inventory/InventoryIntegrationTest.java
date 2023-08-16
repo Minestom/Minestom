@@ -126,7 +126,7 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void detectItemAddFromInventoryClosingTest(Env env) {
+    public void openInventoryOnItemAddFromInventoryClosingTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -142,12 +142,10 @@ public class InventoryIntegrationTest {
 
         player.openInventory(firstInventory);
         firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
-
-        AtomicBoolean triggered = new AtomicBoolean(false);
-        listener.followup(event -> triggered.set(true));
+        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        listener.followup(event -> player.openInventory(secondInventory));
         player.closeInventory();
-
-        assertTrue(triggered.get());
+        assertSame(secondInventory, player.getOpenInventory());
     }
 
     @Test
