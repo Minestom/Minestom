@@ -5,13 +5,15 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -124,11 +126,11 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void openInventoryOnItemDropFromInventoryClosingTest(Env env) {
+    public void detectItemAddFromInventoryClosingTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
-        var listener = env.listen(ItemDropEvent.class);
+        var listener = env.listen(InventoryItemChangeEvent.class);
         final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
@@ -140,10 +142,12 @@ public class InventoryIntegrationTest {
 
         player.openInventory(firstInventory);
         firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
-        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
-        listener.followup(event -> event.getPlayer().openInventory(secondInventory));
+
+        AtomicBoolean triggered = new AtomicBoolean(false);
+        listener.followup(event -> triggered.set(true));
         player.closeInventory();
-        assertSame(secondInventory, player.getOpenInventory());
+
+        assertTrue(triggered.get());
     }
 
     @Test
