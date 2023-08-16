@@ -79,27 +79,26 @@ public interface TransactionType {
 
             Int2ObjectMap<ItemStack> changes = new Int2ObjectArrayMap<>();
 
-            final var maxSize = RULE.getMaxSize(itemStack);
-            var itemAmount = RULE.getAmount(itemStack);
+            var remainingAmount = RULE.getAmount(itemStack);
 
-            while (slots.hasNext() && itemAmount < maxSize) {
+            while (slots.hasNext() && remainingAmount > 0) {
                 var next = slots.nextInt();
                 var slotItem = inventory.getItemStack(next);
 
                 if (slotItem.isAir() || !RULE.canBeStacked(itemStack, slotItem)) continue;
 
-                var sum = itemAmount + RULE.getAmount(slotItem);
+                var slotAmount = RULE.getAmount(slotItem);
 
-                if (sum <= maxSize) {
-                    itemAmount = sum;
+                if (slotAmount < remainingAmount) {
+                    remainingAmount -= slotAmount;
                     changes.put(next, ItemStack.AIR);
                 } else {
-                    itemAmount = maxSize;
-                    changes.put(next, RULE.apply(slotItem, sum - maxSize));
+                    remainingAmount = 0;
+                    changes.put(next, RULE.apply(slotItem, count -> count - slotAmount));
                 }
             }
 
-            return Pair.of(RULE.apply(itemStack, itemAmount), changes);
+            return Pair.of(RULE.apply(itemStack, remainingAmount), changes);
         };
     }
 
