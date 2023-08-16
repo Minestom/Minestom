@@ -1,24 +1,28 @@
 package net.minestom.server.inventory;
 
-import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.ints.IntArrays;
+import it.unimi.dsi.fastutil.ints.IntIterator;
+import it.unimi.dsi.fastutil.ints.IntIterators;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
-import net.minestom.server.inventory.click.ClickHandler;
-import net.minestom.server.inventory.click.ClickPreprocessor;
-import net.minestom.server.inventory.click.StandardClickHandler;
+import net.minestom.server.inventory.click.*;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.CloseWindowPacket;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public non-sealed class PlayerInventory extends AbstractInventory {
+public class PlayerInventory extends AbstractInventory {
 
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_SIZE = 36;
@@ -96,6 +100,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     @Override
     public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
         super.refreshSlot(slot, itemStack);
+        sendPacketToViewers(new SetSlotPacket((byte) 0, 0, (short) slot, itemStack));
 
         for (var player : getViewers()) {
             var equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
@@ -103,6 +108,18 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
             player.syncEquipment(equipmentSlot, itemStack);
         }
+    }
+
+    @Override
+    public void handleClose(@NotNull Player player) {
+        super.handleClose(player);
+        player.sendPacket(new CloseWindowPacket((byte) 0));
+    }
+
+    @Override
+    public void update(@NotNull Player player) {
+        super.update(player);
+        player.sendPacket(new WindowItemsPacket((byte) 0, 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
     }
 
     private int getSlotIndex(@NotNull EquipmentSlot slot, int heldSlot) {
@@ -164,37 +181,8 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public byte getWindowId() {
-        return 0;
-    }
-
-    /**
-     * Refreshes an inventory slot.
-     *
-     * @param slot      the packet slot
-     * @param itemStack the item stack in the slot
-     */
-    protected void sendSlotRefresh(short slot, ItemStack itemStack) {
-        SetSlotPacket defaultPacket = new SetSlotPacket((byte) 0, 0, slot, itemStack);
-
-        for (Player viewer : getViewers()) {
-            var openInventory = player.getOpenInventory();
-            if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
-                this.player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
-            } else if (openInventory == null || slot == OFFHAND_SLOT) {
-                this.player.sendPacket(defaultPacket);
-            }
-        }
-    }
-
-    @Override
-    public @NotNull ClickPreprocessor getClickPreprocessor() {
-        return clickPreprocessor;
-    }
-
-    @Override
-    public @NotNull ClickHandler getClickHandler() {
-        return CLICK_HANDLER;
+    public @Nullable ClickResult handleClick(@NotNull Player player, @NotNull ClickInfo clickInfo) {
+        return handleClick(this, CLICK_HANDLER, player, clickInfo);
     }
 
     public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull Player player, @NotNull AbstractInventory inventory, @NotNull ItemStack item, int slot) {

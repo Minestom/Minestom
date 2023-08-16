@@ -7,15 +7,10 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.click.ClickHandler;
-import net.minestom.server.inventory.click.ClickInfo;
-import net.minestom.server.inventory.click.ClickPreprocessor;
-import net.minestom.server.inventory.click.ClickResult;
+import net.minestom.server.inventory.click.*;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
-import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
@@ -34,7 +29,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements Taggable, Viewable permits Inventory, PlayerInventory {
+public class AbstractInventory implements Taggable, Viewable {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 
@@ -44,6 +39,8 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
     // list of conditions/callbacks assigned to this inventory
     protected final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
 
+    protected final ClickPreprocessor clickPreprocessor = new ClickPreprocessor(this);
+
     private final TagHandler tagHandler = TagHandler.newHandler();
 
     // the players currently viewing this inventory
@@ -51,6 +48,64 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
     protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     // (player -> cursor item) map, used by the click listeners
     protected final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
+
+    /**
+     * Handles the provided click from the given player, returning the results after it is applied. If the results are
+     * null, this indicates that the click was cancelled or was otherwise not processed.
+     *
+     * @param inventory the clicked inventory
+     * @param handler the click handler
+     * @param player the player that clicked
+     * @param clickInfo the information about the player's click
+     * @return the results of the click, or null if the click was cancelled or otherwise was not handled
+     */
+    public static @Nullable ClickResult handleClick(@NotNull AbstractInventory inventory, @NotNull ClickHandler handler, @NotNull Player player, @NotNull ClickInfo clickInfo) {
+        // Call a pre-click event with the base click info
+        var preClickEvent = new InventoryPreClickEvent(player.getInventory(), inventory, player, clickInfo);
+        EventDispatcher.call(preClickEvent);
+        clickInfo = preClickEvent.getClickInfo();
+
+        ClickResult changes = null;
+
+        // Apply the click handler if the click will still occur
+        if (!preClickEvent.isCancelled()) {
+            changes = handler.tryHandle(clickInfo, player, inventory);
+        }
+
+        // Apply each of the conditions to the changes, updating it as we go along
+        for (var condition : inventory.getInventoryConditions()) {
+            changes = condition.accept(player, clickInfo, changes);
+        }
+
+        // Apply the changes and send out an event if there are actually any changes
+        if (changes != null) {
+            changes.applyChanges(player, inventory);
+
+            var clickEvent = new InventoryClickEvent(player, inventory, clickInfo, changes);
+            EventDispatcher.call(clickEvent);
+        }
+
+        // Make sure to update the inventory if indicated
+        if (preClickEvent.shouldUpdate() || changes == null) {
+            preClickEvent.getPlayerInventory().update(player);
+            preClickEvent.getInventory().update(player);
+        }
+
+        return changes;
+    }
+
+    public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
+            (player, inventory, item, slot) -> {
+                if (slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET) {
+                    return IntIterators.fromTo(0, inventory.getSize());
+                } else {
+                    return PlayerInventory.getInnerShiftClickSlots(player, inventory, item, slot);
+                }
+            },
+            (player, inventory, item, slot) -> IntIterators.concat(
+                    IntIterators.fromTo(0, inventory.getSize()),
+                    PlayerInventory.getInnerDoubleClickSlots(player, inventory, item, slot)
+            ));
 
     protected AbstractInventory(int size) {
         this.size = size;
@@ -101,9 +156,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
         itemStacks[slot] = itemStack;
     }
 
-    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
-        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
-    }
+    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {}
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
@@ -176,8 +229,6 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
         setItemStack(slot, operator.apply(currentItem));
     }
 
-    public abstract byte getWindowId();
-
     /**
      * Clears the inventory and send relevant update to the viewer(s).
      */
@@ -218,8 +269,6 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
 
         setCursorItem(player, ItemStack.AIR);
         getClickPreprocessor().clearCache(player);
-
-        player.sendPacket(new CloseWindowPacket(getWindowId()));
     }
 
     /**
@@ -229,10 +278,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      *
      * @param player the player to update the inventory
      */
-    public void update(@NotNull Player player) {
-        if (!isViewer(player)) return;
-        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
-    }
+    public void update(@NotNull Player player) {}
 
     public void update() {
         this.viewers.forEach(this::update);
@@ -244,7 +290,8 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
     }
 
     /**
-     * This will not open the inventory for {@code player}, use {@link Player#openInventory(AbstractInventory)}.
+     * This will not perform all of the operations required to open the inventory for the player - use
+     * {@link Player#openInventory(AbstractInventory)}.
      *
      * @param player the viewer to add
      * @return true if the player has successfully been added
@@ -258,7 +305,8 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
     }
 
     /**
-     * This will not close the inventory for {@code player}, use {@link Player#closeInventory()}.
+     * This will not perform all of the operations required to close the inventory for the player - use
+     * {@link Player#closeInventory()}.
      *
      * @param player the viewer to remove
      * @return true if the player has successfully been removed
@@ -340,14 +388,9 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      *
      * @return the click preprocessor
      */
-    public abstract @NotNull ClickPreprocessor getClickPreprocessor();
-
-    /**
-     * Gets the click handler for this inventory.
-     *
-     * @return the click handler
-     */
-    public abstract @NotNull ClickHandler getClickHandler();
+    public @NotNull ClickPreprocessor getClickPreprocessor() {
+        return clickPreprocessor;
+    }
 
     /**
      * Handles the provided click from the given player, returning the results after it is applied. If the results are
@@ -358,38 +401,7 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @return the results of the click, or null if the click was cancelled or otherwise was not handled
      */
     public @Nullable ClickResult handleClick(@NotNull Player player, @NotNull ClickInfo clickInfo) {
-        // Call a pre-click event with the base click info
-        var preClickEvent = new InventoryPreClickEvent(player.getInventory(), this, player, clickInfo);
-        EventDispatcher.call(preClickEvent);
-        clickInfo = preClickEvent.getClickInfo();
-
-        ClickResult changes = null;
-
-        // Apply the click handler if the click will still occur
-        if (!preClickEvent.isCancelled()) {
-            changes = getClickHandler().tryHandle(clickInfo, player, this);
-        }
-
-        // Apply each of the conditions to the changes, updating it as we go along
-        for (var condition : inventoryConditions) {
-            changes = condition.accept(player, clickInfo, changes);
-        }
-
-        // Apply the changes and send out an event if there are actually any changes
-        if (changes != null) {
-            changes.applyChanges(player, this);
-
-            var clickEvent = new InventoryClickEvent(player, this, clickInfo, changes);
-            EventDispatcher.call(clickEvent);
-        }
-
-        // Make sure to update the inventory if indicated
-        if (preClickEvent.shouldUpdate() || changes == null) {
-            preClickEvent.getPlayerInventory().update(player);
-            preClickEvent.getInventory().update(player);
-        }
-
-        return changes;
+        return handleClick(this, DEFAULT_HANDLER, player, clickInfo);
     }
 
     /**

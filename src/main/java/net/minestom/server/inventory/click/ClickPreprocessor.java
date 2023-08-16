@@ -1,6 +1,8 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -39,7 +41,7 @@ public class ClickPreprocessor {
     }
 
     private static boolean validateSlot(@NotNull AbstractInventory inventory, int slot) {
-        return slot >= 0 && slot < inventory.getSize() + (inventory.getWindowId() != 0 ? PlayerInventory.INNER_SIZE : 0);
+        return slot >= 0 && slot < inventory.getSize() + (inventory instanceof PlayerInventory ? 0 : PlayerInventory.INNER_SIZE);
     }
 
     private static int convertSlot(@NotNull AbstractInventory inventory, int slot) {

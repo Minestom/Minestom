@@ -1,15 +1,12 @@
 package net.minestom.server.inventory;
 
-import it.unimi.dsi.fastutil.ints.IntIterators;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.click.ClickHandler;
-import net.minestom.server.inventory.click.ClickPreprocessor;
-import net.minestom.server.inventory.click.StandardClickHandler;
-import net.minestom.server.network.packet.server.play.OpenWindowPacket;
-import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,27 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(AbstractInventory)}.
  */
-public non-sealed class Inventory extends AbstractInventory {
+public class Inventory extends AbstractInventory {
     private static final AtomicInteger ID_COUNTER = new AtomicInteger();
-
-    public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
-            (player, inventory, item, slot) -> {
-                if (slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET) {
-                    return IntIterators.fromTo(0, inventory.getSize());
-                } else {
-                    return PlayerInventory.getInnerShiftClickSlots(player, inventory, item, slot);
-                }
-            },
-            (player, inventory, item, slot) -> IntIterators.concat(
-                    IntIterators.fromTo(0, inventory.getSize()),
-                    PlayerInventory.getInnerDoubleClickSlots(player, inventory, item, slot)
-            ));
 
     private final byte id;
     private final InventoryType inventoryType;
     private Component title;
-
-    protected final ClickPreprocessor clickPreprocessor = new ClickPreprocessor(this);
 
     public Inventory(@NotNull InventoryType inventoryType, @NotNull Component title) {
         super(inventoryType.getSize());
@@ -93,9 +75,14 @@ public non-sealed class Inventory extends AbstractInventory {
      *
      * @return the window id
      */
-    @Override
     public byte getWindowId() {
         return id;
+    }
+
+    @Override
+    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
+        super.refreshSlot(slot, itemStack);
+        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     @Override
@@ -105,13 +92,15 @@ public non-sealed class Inventory extends AbstractInventory {
     }
 
     @Override
-    public @NotNull ClickPreprocessor getClickPreprocessor() {
-        return clickPreprocessor;
+    public void handleClose(@NotNull Player player) {
+        super.handleClose(player);
+        player.sendPacket(new CloseWindowPacket(getWindowId()));
     }
 
     @Override
-    public @NotNull ClickHandler getClickHandler() {
-        return DEFAULT_HANDLER;
+    public void update(@NotNull Player player) {
+        super.update(player);
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
     }
 
     /**
