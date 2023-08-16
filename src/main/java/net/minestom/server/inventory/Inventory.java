@@ -2,11 +2,10 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.OpenWindowPacket;
+import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -68,39 +67,15 @@ public class Inventory extends AbstractInventory {
         update();
     }
 
-    /**
-     * Gets this window id.
-     * <p>
-     * This is the id that the client will send to identify the affected inventory, mostly used by packets.
-     *
-     * @return the window id
-     */
+    @Override
     public byte getWindowId() {
         return id;
-    }
-
-    @Override
-    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
-        super.refreshSlot(slot, itemStack);
-        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     @Override
     public void handleOpen(@NotNull Player player) {
         player.sendPacket(new OpenWindowPacket(getWindowId(), inventoryType.getWindowType(), getTitle()));
         super.handleOpen(player);
-    }
-
-    @Override
-    public void handleClose(@NotNull Player player) {
-        super.handleClose(player);
-        player.sendPacket(new CloseWindowPacket(getWindowId()));
-    }
-
-    @Override
-    public void update(@NotNull Player player) {
-        super.update(player);
-        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
     }
 
     /**
