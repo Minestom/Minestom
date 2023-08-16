@@ -141,7 +141,8 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @param option     the transaction option
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
+    public synchronized <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+                                                                    @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(item -> result.add(addItemStack(item, option)));
         return result;
@@ -163,8 +164,8 @@ public sealed abstract class AbstractInventory implements Taggable, Viewable per
      * @param itemStacks items to take
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
-                                                        @NotNull TransactionOption<T> option) {
+    public synchronized <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+                                                                     @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(item -> result.add(takeItemStack(item, option)));
         return result;
