@@ -56,7 +56,7 @@ public interface ClickHandler {
         // Make sure to update the inventory if indicated
         if (preClickEvent.shouldUpdate() || changes == null) {
             preClickEvent.getPlayerInventory().update(player);
-            preClickEvent.getInventory().update(player);
+            preClickEvent.getEventInventory().update(player);
         }
 
         return changes;

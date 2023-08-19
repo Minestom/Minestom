@@ -55,7 +55,7 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public @NotNull Inventory getEventInventory() {
         return inventory;
     }
 }

@@ -87,7 +87,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public @NotNull Inventory getEventInventory() {
         return inventory;
     }
 

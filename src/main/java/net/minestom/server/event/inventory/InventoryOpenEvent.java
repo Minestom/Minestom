@@ -40,7 +40,7 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
      * @return the inventory to open
      */
     @Override
-    public @NotNull Inventory getInventory() {
+    public @NotNull Inventory getEventInventory() {
         return inventory;
     }
 

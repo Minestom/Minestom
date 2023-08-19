@@ -50,7 +50,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public @NotNull Inventory getEventInventory() {
         return inventory;
     }
 }

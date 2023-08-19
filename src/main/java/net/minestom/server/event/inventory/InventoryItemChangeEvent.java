@@ -53,7 +53,7 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public @NotNull Inventory getEventInventory() {
         return inventory;
     }
 }
