@@ -4,11 +4,8 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Contains information about a click.<br>
- * For clicked slot IDs, a value above {@link ClickPreprocessor#PLAYER_INVENTORY_OFFSET} indicates a slot in the
- * player's inventory while another inventory may be open, while otherwise it just represents a slot in the opened
- * inventory. This means that, when the player has just their inventory opened, slot IDs should not be using this
- * offset.
+ * Contains information about a click. These are equal to the packet slot IDs from <a href="https://wiki.vg/Inventory">the Minecraft protocol.</a>.
+ * The inventory used should be known from context.
  */
 public sealed interface ClickInfo {
 

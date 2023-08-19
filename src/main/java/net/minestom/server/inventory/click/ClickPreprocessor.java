@@ -19,11 +19,6 @@ import java.util.function.BiFunction;
  */
 public class ClickPreprocessor {
 
-    /**
-     * Player inventory slots start at this value when the player inventory is not the main one.
-     */
-    public static final int PLAYER_INVENTORY_OFFSET = 1000;
-
     private final @NotNull AbstractInventory inventory;
 
     private final Map<Player, IntList> leftDraggingMap = new ConcurrentHashMap<>();
@@ -44,14 +39,6 @@ public class ClickPreprocessor {
         return slot >= 0 && slot < inventory.getSize() + (inventory instanceof PlayerInventory ? 0 : PlayerInventory.INNER_SIZE);
     }
 
-    private static int convertSlot(@NotNull AbstractInventory inventory, int slot) {
-        if (slot < inventory.getSize()) {
-            return slot;
-        } else {
-            return (slot - inventory.getSize() + 9) + PLAYER_INVENTORY_OFFSET; // Convert it to a player inventory slot
-        }
-    }
-
     /**
      * Processes the provided click packet, turning it into a {@link ClickInfo}.
      * @param player the player clicking
@@ -69,31 +56,31 @@ public class ClickPreprocessor {
                     if (slot == -999) {
                         yield new ClickInfo.DropCursor(true);
                     } else if (validateSlot(inventory, slot)) {
-                        yield new ClickInfo.LeftClick(convertSlot(inventory, slot));
+                        yield new ClickInfo.LeftClick(slot);
                     }
                 } else if (button == 1) {
                     if (slot == -999) {
                         yield new ClickInfo.DropCursor(false);
                     } else if (validateSlot(inventory, slot)) {
-                        yield new ClickInfo.RightClick(convertSlot(inventory, slot));
+                        yield new ClickInfo.RightClick(slot);
                     }
                 }
                 yield null;
             }
-            case QUICK_MOVE -> validateSlot(inventory, slot) ? new ClickInfo.ShiftClick(convertSlot(inventory, slot)) : null;
+            case QUICK_MOVE -> validateSlot(inventory, slot) ? new ClickInfo.ShiftClick(slot) : null;
             case SWAP -> {
                 if (!validateSlot(inventory, slot)) {
                     yield null;
                 } else if (button >= 0 && button < 9) {
-                    yield new ClickInfo.HotbarSwap(button, convertSlot(inventory, slot));
+                    yield new ClickInfo.HotbarSwap(button, slot);
                 } else if (button == 40) {
-                    yield new ClickInfo.OffhandSwap(convertSlot(inventory, slot));
+                    yield new ClickInfo.OffhandSwap(slot);
                 } else {
                     yield null;
                 }
             }
-            case CLONE -> (player.isCreative() && validateSlot(inventory, slot)) ? new ClickInfo.CopyItem(convertSlot(inventory, slot)) : null;
-            case THROW -> validateSlot(inventory, slot) ? new ClickInfo.DropSlot(convertSlot(inventory, slot), button == 1) : null;
+            case CLONE -> (player.isCreative() && validateSlot(inventory, slot)) ? new ClickInfo.CopyItem(slot) : null;
+            case THROW -> validateSlot(inventory, slot) ? new ClickInfo.DropSlot(slot, button == 1) : null;
             case QUICK_CRAFT -> {
                 // Prevent invalid creative actions
                 if (!player.isCreative() && (button == 8 || button == 9 || button == 10)) yield null;
@@ -114,9 +101,8 @@ public class ClickPreprocessor {
                 BiFunction<Player, IntList, IntList> addItem = (k, v) -> {
                     var v2 = v != null ? v : new IntArrayList();
                     if (validateSlot(inventory, slot)) {
-                        var convert = convertSlot(inventory, slot);
-                        if (!v2.contains(convert)) {
-                            v2.add(convert);
+                        if (!v2.contains(slot)) {
+                            v2.add(slot);
                         }
                     }
                     return v2;
@@ -134,7 +120,7 @@ public class ClickPreprocessor {
 
                 yield null;
             }
-            case PICKUP_ALL -> validateSlot(inventory, slot) ? new ClickInfo.DoubleClick(convertSlot(inventory, slot)) : null;
+            case PICKUP_ALL -> validateSlot(inventory, slot) ? new ClickInfo.DoubleClick(slot) : null;
         };
     }
 

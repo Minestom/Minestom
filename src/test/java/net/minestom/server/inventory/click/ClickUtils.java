@@ -14,27 +14,55 @@ import org.jetbrains.annotations.Nullable;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClickUtils {
 
-    public static void assertClick(@NotNull ClickResult initialChanges, @NotNull ClickInfo info, @Nullable ClickResult expectedChanges) {
+    public static final @NotNull InventoryType TYPE = InventoryType.HOPPER;
+
+    public static final int SIZE = TYPE.getSize(); // Default hopper size
+
+    public static @NotNull AbstractInventory createInventory() {
+        return new Inventory(TYPE, "TestInventory");
+    }
+
+    public static @NotNull ClickPreprocessor createPreprocessor() {
+        return new ClickPreprocessor(createInventory());
+    }
+
+    public static @NotNull Player createPlayer() {
+        return new Player(UUID.randomUUID(), "TestPlayer", new PlayerConnection() {
+            @Override
+            public void sendPacket(@NotNull SendablePacket packet) {}
+
+            @Override
+            public @NotNull SocketAddress getRemoteAddress() {
+                return null;
+            }
+
+            @Override
+            public void disconnect() {}
+        });
+    }
+
+    public static void assertClick(@NotNull UnaryOperator<ClickResult.Builder> initialChanges, @NotNull ClickInfo info, @NotNull UnaryOperator<ClickResult.Builder> expectedChanges) {
         var player = createPlayer();
         var inventory = createInventory();
 
-        initialChanges.applyChanges(player, inventory);
+        initialChanges.apply(ClickResult.builder(player, inventory)).build().applyChanges(player, inventory);
         var changes = inventory.handleClick(player, info);
-        assertEquals(expectedChanges, changes);
+        assertEquals(expectedChanges.apply(ClickResult.builder(player, inventory)).build(), changes);
     }
 
-    public static void assertPlayerClick(@NotNull ClickResult initialChanges, @NotNull ClickInfo info, @Nullable ClickResult expectedChanges) {
+    public static void assertPlayerClick(@NotNull UnaryOperator<ClickResult.Builder> initialChanges, @NotNull ClickInfo info, @NotNull UnaryOperator<ClickResult.Builder> expectedChanges) {
         var player = createPlayer();
         var inventory = player.getInventory();
 
-        initialChanges.applyChanges(player, inventory);
+        initialChanges.apply(ClickResult.builder(player, inventory)).build().applyChanges(player, inventory);
         var changes = inventory.handleClick(player, info);
-        assertEquals(expectedChanges, changes);
+        assertEquals(expectedChanges.apply(ClickResult.builder(player, inventory)).build(), changes);
     }
 
     public static void assertProcessed(@NotNull ClickPreprocessor preprocessor, @NotNull Player player, @Nullable ClickInfo info, @NotNull ClientClickWindowPacket packet) {
@@ -51,29 +79,6 @@ public class ClickUtils {
 
     public static @NotNull ClientClickWindowPacket clickPacket(@NotNull ClientClickWindowPacket.ClickType type, int windowId, int button, int slot) {
         return new ClientClickWindowPacket((byte) windowId, 0, (short) slot, (byte) button, type, List.of(), ItemStack.AIR);
-    }
-
-    public static @NotNull ClickPreprocessor createPreprocessor() {
-        return new ClickPreprocessor(createInventory());
-    }
-
-    public static @NotNull AbstractInventory createInventory() {
-        return new Inventory(InventoryType.HOPPER, "TestInventory");
-    }
-
-    public static @NotNull Player createPlayer() {
-        return new Player(UUID.randomUUID(), "TestPlayer", new PlayerConnection() {
-            @Override
-            public void sendPacket(@NotNull SendablePacket packet) {}
-
-            @Override
-            public @NotNull SocketAddress getRemoteAddress() {
-                return null;
-            }
-
-            @Override
-            public void disconnect() {}
-        });
     }
 
 }

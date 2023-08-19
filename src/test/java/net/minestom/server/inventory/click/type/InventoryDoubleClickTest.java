@@ -2,7 +2,6 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.ClickInfo;
-import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -17,79 +16,75 @@ public class InventoryDoubleClickTest {
 
     @Test
     public void testNoChanges() {
-        assertClick(ClickResult.empty(), new ClickInfo.DoubleClick(0), ClickResult.empty());
+        assertClick(builder -> builder, new ClickInfo.DoubleClick(0), builder -> builder);
     }
 
     @Test
     public void testCannotTakeAny() {
         assertClick(
-                ClickResult.builder().cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.empty()
+                builder -> builder
         );
     }
 
     @Test
     public void testPartialTake() {
         assertClick(
-                ClickResult.builder().change(1, ItemStack.of(Material.STONE, 48)).cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(1, ItemStack.of(Material.STONE, 48)).cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.builder().change(1, ItemStack.of(Material.STONE, 16)).cursor(ItemStack.of(Material.STONE, 64)).build()
+                builder -> builder.change(1, ItemStack.of(Material.STONE, 16)).cursor(ItemStack.of(Material.STONE, 64))
         );
     }
 
     @Test
     public void testTakeAll() {
         assertClick(
-                ClickResult.builder().change(1, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(1, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.builder().change(1, ItemStack.AIR).cursor(ItemStack.of(Material.STONE, 64)).build()
+                builder -> builder.change(1, ItemStack.AIR).cursor(ItemStack.of(Material.STONE, 64))
         );
 
         assertClick(
-                ClickResult.builder().change(1, ItemStack.of(Material.STONE, 16)).cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(1, ItemStack.of(Material.STONE, 16)).cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.builder().change(1, ItemStack.AIR).cursor(ItemStack.of(Material.STONE, 48)).build()
+                builder -> builder.change(1, ItemStack.AIR).cursor(ItemStack.of(Material.STONE, 48))
         );
     }
 
     @Test
     public void testTakeSeparated() {
         assertClick(
-                ClickResult.builder()
+                builder -> builder
                         .change(1, ItemStack.of(Material.STONE, 16))
                         .change(2, ItemStack.of(Material.STONE, 16))
-                        .cursor(ItemStack.of(Material.STONE, 32))
-                        .build(),
+                        .cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.builder()
+                builder -> builder
                         .change(1, ItemStack.AIR)
                         .change(2, ItemStack.AIR)
                         .cursor(ItemStack.of(Material.STONE, 64))
-                        .build()
         );
 
         assertClick(
-                ClickResult.builder()
+                builder -> builder
                         .change(1, ItemStack.of(Material.STONE, 16))
                         .change(2, ItemStack.of(Material.STONE, 32))
-                        .cursor(ItemStack.of(Material.STONE, 32))
-                        .build(),
+                        .cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.builder()
+                builder -> builder
                         .change(1, ItemStack.AIR)
                         .change(2, ItemStack.of(Material.STONE, 16))
                         .cursor(ItemStack.of(Material.STONE, 64))
-                        .build()
         );
     }
 
     @Test
     public void testCursorFull() {
         assertClick(
-                ClickResult.builder().change(1, ItemStack.of(Material.STONE, 48)).cursor(ItemStack.of(Material.STONE, 64)).build(),
+                builder -> builder.change(1, ItemStack.of(Material.STONE, 48)).cursor(ItemStack.of(Material.STONE, 64)),
                 new ClickInfo.DoubleClick(0),
-                ClickResult.empty()
+                builder -> builder
         );
     }
 

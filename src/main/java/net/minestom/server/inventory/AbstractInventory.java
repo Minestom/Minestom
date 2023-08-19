@@ -50,12 +50,12 @@ public class AbstractInventory implements Taggable, Viewable {
     protected final Map<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
     public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
-            (player, inventory, item, slot) -> slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET ?
-                    IntIterators.fromTo(0, inventory.getSize()) :
-                    PlayerInventory.getInnerShiftClickSlots(),
-            (player, inventory, item, slot) -> IntIterators.concat(
-                    IntIterators.fromTo(0, inventory.getSize()),
-                    PlayerInventory.getInnerDoubleClickSlots()
+            (builder, item, slot) -> slot >= builder.clickedInventory().getSize() ?
+                    IntIterators.fromTo(0, builder.clickedInventory().getSize()) :
+                    PlayerInventory.getInnerShiftClickSlots(builder, item, slot),
+            (builder, item, slot) -> IntIterators.concat(
+                    IntIterators.fromTo(0, builder.clickedInventory().getSize()),
+                    PlayerInventory.getInnerDoubleClickSlots(builder, item, slot)
             ));
 
     protected AbstractInventory(int size) {

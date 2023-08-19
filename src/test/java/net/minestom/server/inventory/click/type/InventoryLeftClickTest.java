@@ -2,7 +2,6 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.ClickInfo;
-import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -17,33 +16,33 @@ public class InventoryLeftClickTest {
 
     @Test
     public void testNoChanges() {
-        assertClick(ClickResult.empty(), new ClickInfo.LeftClick(0), ClickResult.empty());
+        assertClick(builder -> builder, new ClickInfo.LeftClick(0), builder -> builder);
     }
 
     @Test
     public void testInsertEntireStack() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.LeftClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.AIR).build()
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.AIR)
         );
     }
 
     @Test
     public void testInsertPartialStack() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 48)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 48)),
                 new ClickInfo.LeftClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.of(Material.STONE, 16)).build()
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.of(Material.STONE, 16))
         );
     }
 
     @Test
     public void testSwitchItems() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE)).cursor(ItemStack.of(Material.DIRT)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE)).cursor(ItemStack.of(Material.DIRT)),
                 new ClickInfo.LeftClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.STONE)).build()
+                builder -> builder.change(0, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.STONE))
         );
     }
 

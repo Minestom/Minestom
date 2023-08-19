@@ -17,25 +17,25 @@ public class InventoryDropSlotTest {
 
     @Test
     public void testNoChanges() {
-        assertClick(ClickResult.empty(), new ClickInfo.DropSlot(0, false), ClickResult.empty());
-        assertClick(ClickResult.empty(), new ClickInfo.DropSlot(0, true), ClickResult.empty());
+        assertClick(builder -> builder, new ClickInfo.DropSlot(0, false), builder -> builder);
+        assertClick(builder -> builder, new ClickInfo.DropSlot(0, true), builder -> builder);
     }
 
     @Test
     public void testDropEntireStack() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DropSlot(0, true),
-                ClickResult.builder().change(0, ItemStack.AIR).sideEffects(new ClickResult.SideEffects.DropFromPlayer(ItemStack.of(Material.STONE, 32))).build()
+                builder -> builder.change(0, ItemStack.AIR).sideEffects(new ClickResult.SideEffects.DropFromPlayer(ItemStack.of(Material.STONE, 32)))
         );
     }
 
     @Test
     public void testDropSingleItem() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.DropSlot(0, false),
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 31)).sideEffects(new ClickResult.SideEffects.DropFromPlayer(ItemStack.of(Material.STONE, 1))).build()
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 31)).sideEffects(new ClickResult.SideEffects.DropFromPlayer(ItemStack.of(Material.STONE, 1)))
         );
     }
 

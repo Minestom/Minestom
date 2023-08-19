@@ -13,12 +13,12 @@ public class ClickPreprocessorTest {
     public void testPickupType() {
         assertProcessed(new ClickInfo.DropCursor(true), clickPacket(PICKUP, 1, 0, -999));
         assertProcessed(new ClickInfo.LeftClick(0), clickPacket(PICKUP, 1, 0, 0));
-        assertProcessed(new ClickInfo.LeftClick(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9), clickPacket(PICKUP, 1, 0, 5));
+        assertProcessed(new ClickInfo.LeftClick(SIZE), clickPacket(PICKUP, 1, 0, 5));
         assertProcessed(null, clickPacket(PICKUP, 1, 0, 99));
 
         assertProcessed(new ClickInfo.DropCursor(false), clickPacket(PICKUP, 1, 1, -999));
         assertProcessed(new ClickInfo.RightClick(0), clickPacket(PICKUP, 1, 1, 0));
-        assertProcessed(new ClickInfo.RightClick(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9), clickPacket(PICKUP, 1, 1, 5));
+        assertProcessed(new ClickInfo.RightClick(SIZE), clickPacket(PICKUP, 1, 1, 5));
         assertProcessed(null, clickPacket(PICKUP, 1, 1, 99));
 
         assertProcessed(null, clickPacket(PICKUP, 1, -1, 0));
@@ -28,7 +28,7 @@ public class ClickPreprocessorTest {
     @Test
     public void testQuickMoveType() {
         assertProcessed(new ClickInfo.ShiftClick(0), clickPacket(QUICK_MOVE, 1, 0, 0));
-        assertProcessed(new ClickInfo.ShiftClick(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9), clickPacket(QUICK_MOVE, 1, 0, 5));
+        assertProcessed(new ClickInfo.ShiftClick(SIZE), clickPacket(QUICK_MOVE, 1, 0, 5));
         assertProcessed(null, clickPacket(QUICK_MOVE, 1, 0, -1));
     }
 

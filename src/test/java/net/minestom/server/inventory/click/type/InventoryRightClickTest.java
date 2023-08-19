@@ -2,7 +2,6 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.ClickInfo;
-import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -17,51 +16,51 @@ public class InventoryRightClickTest {
 
     @Test
     public void testNoChanges() {
-        assertClick(ClickResult.empty(), new ClickInfo.RightClick(0), ClickResult.empty());
+        assertClick(builder -> builder, new ClickInfo.RightClick(0), builder -> builder);
     }
 
     @Test
     public void testAddOne() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.RightClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 33)).cursor(ItemStack.of(Material.STONE, 31)).build()
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 33)).cursor(ItemStack.of(Material.STONE, 31))
         );
     }
 
     @Test
     public void testClickedStackFull() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.RightClick(0),
-                ClickResult.empty()
+                builder -> builder
         );
     }
 
     @Test
     public void testTakeHalf() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.RightClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 16)).cursor(ItemStack.of(Material.STONE, 16)).build()
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 16)).cursor(ItemStack.of(Material.STONE, 16))
         );
     }
 
     @Test
     public void testLeaveOne() {
         assertClick(
-                ClickResult.builder().cursor(ItemStack.of(Material.STONE, 32)).build(),
+                builder -> builder.cursor(ItemStack.of(Material.STONE, 32)),
                 new ClickInfo.RightClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE, 1)).cursor(ItemStack.of(Material.STONE, 31)).build()
+                builder -> builder.change(0, ItemStack.of(Material.STONE, 1)).cursor(ItemStack.of(Material.STONE, 31))
         );
     }
 
     @Test
     public void testSwitchItems() {
         assertClick(
-                ClickResult.builder().change(0, ItemStack.of(Material.STONE)).cursor(ItemStack.of(Material.DIRT)).build(),
+                builder -> builder.change(0, ItemStack.of(Material.STONE)).cursor(ItemStack.of(Material.DIRT)),
                 new ClickInfo.RightClick(0),
-                ClickResult.builder().change(0, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.STONE)).build()
+                builder -> builder.change(0, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.STONE))
         );
     }
 

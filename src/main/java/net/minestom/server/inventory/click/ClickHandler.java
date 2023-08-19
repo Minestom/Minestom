@@ -34,7 +34,10 @@ public interface ClickHandler {
 
         // Apply the click handler if the click will still occur
         if (!preClickEvent.isCancelled()) {
-            changes = tryHandle(clickInfo, player, inventory);
+            var builder = tryHandle(clickInfo, ClickResult.builder(player, inventory));
+            if (builder != null) {
+                changes = builder.build();
+            }
         }
 
         // Apply each of the conditions to the changes, updating it as we go along
@@ -63,58 +66,59 @@ public interface ClickHandler {
      * Handles the provided click info without knowing its type, returning null changes if the type could not be
      * handled.
      * @param info the info, of unknown type
-     * @param player the player clicking
-     * @param clickedInventory the inventory clicked in
+     * @param builder the click result builder for this click
      * @return the changes, or null if the click info has an unknown type
      */
-    default @Nullable ClickResult tryHandle(@NotNull ClickInfo info, @NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+    default @Nullable ClickResult.Builder tryHandle(@NotNull ClickInfo info, @NotNull ClickResult.Builder builder) {
         if (info instanceof ClickInfo.LeftClick left) {
-            return leftClick(left, player, clickedInventory);
+            leftClick(left, builder);
         } else if (info instanceof ClickInfo.RightClick right) {
-            return rightClick(right, player, clickedInventory);
+            rightClick(right, builder);
         } else if (info instanceof ClickInfo.DropSlot drop) {
-            return dropSlot(drop, player, clickedInventory);
+            dropSlot(drop, builder);
         } else if (info instanceof ClickInfo.DropCursor drop) {
-            return dropCursor(drop, player, clickedInventory);
+            dropCursor(drop, builder);
         } else if (info instanceof ClickInfo.HotbarSwap swap) {
-            return hotbarSwap(swap, player, clickedInventory);
+            hotbarSwap(swap, builder);
         } else if (info instanceof ClickInfo.OffhandSwap swap) {
-            return offhandSwap(swap, player, clickedInventory);
+            offhandSwap(swap, builder);
         } else if (info instanceof ClickInfo.CopyItem copy) {
-            return copyItem(copy, player, clickedInventory);
+            copyItem(copy, builder);
         } else if (info instanceof ClickInfo.CopyCursor copy) {
-            return copyCursor(copy, player, clickedInventory);
+            copyCursor(copy, builder);
         } else if (info instanceof ClickInfo.DistributeCursor distributeCursor) {
-            return distributeCursor(distributeCursor, player, clickedInventory);
+            distributeCursor(distributeCursor, builder);
         } else if (info instanceof ClickInfo.ShiftClick shift) {
-            return shiftClick(shift, player, clickedInventory);
+            shiftClick(shift, builder);
         } else if (info instanceof ClickInfo.DoubleClick doubleClick) {
-            return doubleClick(doubleClick, player, clickedInventory);
+            doubleClick(doubleClick, builder);
         } else {
             return null;
         }
+
+        return builder;
     }
 
-    @NotNull ClickResult leftClick(@NotNull ClickInfo.LeftClick info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void leftClick(@NotNull ClickInfo.LeftClick info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult rightClick(@NotNull ClickInfo.RightClick info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void rightClick(@NotNull ClickInfo.RightClick info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult dropSlot(@NotNull ClickInfo.DropSlot info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void dropSlot(@NotNull ClickInfo.DropSlot info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult dropCursor(@NotNull ClickInfo.DropCursor info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void dropCursor(@NotNull ClickInfo.DropCursor info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult hotbarSwap(@NotNull ClickInfo.HotbarSwap info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void hotbarSwap(@NotNull ClickInfo.HotbarSwap info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult copyItem(@NotNull ClickInfo.CopyItem info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void copyItem(@NotNull ClickInfo.CopyItem info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult copyCursor(@NotNull ClickInfo.CopyCursor info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void copyCursor(@NotNull ClickInfo.CopyCursor info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult distributeCursor(@NotNull ClickInfo.DistributeCursor info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void distributeCursor(@NotNull ClickInfo.DistributeCursor info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull ClickResult.Builder builder);
 
-    @NotNull ClickResult doubleClick(@NotNull ClickInfo.DoubleClick info, @NotNull Player player, @NotNull AbstractInventory clickedInventory);
+    void doubleClick(@NotNull ClickInfo.DoubleClick info, @NotNull ClickResult.Builder builder);
 
 }

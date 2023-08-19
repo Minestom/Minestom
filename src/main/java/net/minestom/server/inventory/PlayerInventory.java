@@ -7,7 +7,10 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
-import net.minestom.server.inventory.click.*;
+import net.minestom.server.inventory.click.ClickHandler;
+import net.minestom.server.inventory.click.ClickInfo;
+import net.minestom.server.inventory.click.ClickResult;
+import net.minestom.server.inventory.click.StandardClickHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -32,9 +35,7 @@ public class PlayerInventory extends AbstractInventory {
     public static final int HOTBAR_START = 36;
 
     public static final @NotNull ClickHandler CLICK_HANDLER = new StandardClickHandler(
-            (player, inventory, item, slot) -> {
-                slot = Math.abs(slot);
-
+            (builder, item, slot) -> {
                 IntIterator base = IntIterators.EMPTY_ITERATOR;
 
                 var equipmentSlot = item.material().registry().equipmentSlot();
@@ -60,15 +61,15 @@ public class PlayerInventory extends AbstractInventory {
 
                 return base;
             },
-            (player, inventory, item, slot) -> IntIterators.fromTo(1, inventory.getSize())
+            (builder, item, slot) -> IntIterators.fromTo(1, builder.clickedInventory().getSize())
     );
 
-    public static @NotNull IntIterator getInnerShiftClickSlots() {
-        return IntIterators.fromTo(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9, ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 45);
+    public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
+        return IntIterators.fromTo(builder.clickedInventory().getSize(), builder.clickedInventory().getSize() + 36);
     }
 
-    public static @NotNull IntIterator getInnerDoubleClickSlots() {
-        return IntIterators.fromTo(ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 9, ClickPreprocessor.PLAYER_INVENTORY_OFFSET + 45);
+    public static @NotNull IntIterator getInnerDoubleClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
+        return IntIterators.fromTo(builder.clickedInventory().getSize(), builder.clickedInventory().getSize() + 36);
     }
 
     private static int getSlotIndex(@NotNull EquipmentSlot slot, int heldSlot) {

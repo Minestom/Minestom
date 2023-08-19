@@ -5,37 +5,69 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Stores changes that occurred or will occur as the result of a click.
+ * @param player the player who clicked in the inventory
+ * @param clickedInventory the clicked inventory. This may be the player's inventory
  * @param changes the map of changes that will occur to the inventory
  * @param playerInventoryChanges the map of changes that will occur to the player inventory
  * @param newCursorItem the player's cursor item after this click. Null indicates no change
  * @param sideEffects the side effects of this click
  */
-public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @NotNull Int2ObjectMap<ItemStack> playerInventoryChanges,
+public record ClickResult(@NotNull Player player, @NotNull AbstractInventory clickedInventory,
+                          @NotNull Int2ObjectMap<ItemStack> changes, @NotNull Int2ObjectMap<ItemStack> playerInventoryChanges,
                           @Nullable ItemStack newCursorItem, @Nullable SideEffects sideEffects) {
 
-    public static @NotNull ClickResult empty() {
-        return new ClickResult(Int2ObjectMaps.emptyMap(), Int2ObjectMaps.emptyMap(), null, null);
-    }
-
-    public static @NotNull Builder builder() {
-        return new Builder();
+    public static @NotNull Builder builder(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+        return new Builder(player, clickedInventory);
     }
 
     public static class Builder {
+        private final @NotNull Player player;
+        private final @NotNull AbstractInventory clickedInventory;
+
         private final Int2ObjectMap<ItemStack> changes = new Int2ObjectArrayMap<>();
         private final Int2ObjectMap<ItemStack> playerInventoryChanges = new Int2ObjectArrayMap<>();
         private @Nullable ItemStack newCursorItem;
         private @Nullable SideEffects sideEffects;
 
+        Builder(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+            this.player = player;
+            this.clickedInventory = clickedInventory;
+        }
+
+        public @NotNull Player player() {
+            return player;
+        }
+
+        public @NotNull AbstractInventory clickedInventory() {
+            return clickedInventory;
+        }
+
+        public @NotNull PlayerInventory playerInventory() {
+            return player().getInventory();
+        }
+
+        public @NotNull ItemStack getCursorItem() {
+            return clickedInventory.getCursorItem(player);
+        }
+
+        public @NotNull ItemStack get(int slot) {
+            if (slot >= clickedInventory.getSize()) {
+                return playerInventory().getItemStack(slot - clickedInventory.getSize() + 9);
+            } else {
+                return clickedInventory.getItemStack(slot);
+            }
+        }
+
         public @NotNull Builder change(int slot, @NotNull ItemStack item) {
-            if (slot >= ClickPreprocessor.PLAYER_INVENTORY_OFFSET) {
-                change(slot - ClickPreprocessor.PLAYER_INVENTORY_OFFSET, item, true);
+            if (slot >= clickedInventory.getSize()) {
+                change(slot - clickedInventory.getSize() + 9, item, true);
             } else {
                 change(slot, item, false);
             }
@@ -59,6 +91,7 @@ public record ClickResult(@NotNull Int2ObjectMap<ItemStack> changes, @NotNull In
 
         public @NotNull ClickResult build() {
             return new ClickResult(
+                    player, clickedInventory,
                     Int2ObjectMaps.unmodifiable(new Int2ObjectArrayMap<>(changes)),
                     Int2ObjectMaps.unmodifiable(new Int2ObjectArrayMap<>(playerInventoryChanges)),
                     newCursorItem, sideEffects
