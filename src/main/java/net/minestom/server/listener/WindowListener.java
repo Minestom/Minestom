@@ -3,7 +3,6 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
-import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
@@ -14,7 +13,7 @@ public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
-        final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
+        final Inventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
 
         // Prevent some invalid packets
         if (inventory == null || packet.slot() == -1) return;
@@ -42,7 +41,7 @@ public class WindowListener {
 
         player.closeInventory(true);
 
-        AbstractInventory newInventory = inventoryCloseEvent.getNewInventory();
+        Inventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
             player.openInventory(newInventory);
     }
