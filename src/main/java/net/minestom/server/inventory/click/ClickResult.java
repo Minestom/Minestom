@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -19,24 +19,24 @@ import org.jetbrains.annotations.Nullable;
  * @param newCursorItem the player's cursor item after this click. Null indicates no change
  * @param sideEffects the side effects of this click
  */
-public record ClickResult(@NotNull Player player, @NotNull AbstractInventory clickedInventory,
+public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInventory,
                           @NotNull Int2ObjectMap<ItemStack> changes, @NotNull Int2ObjectMap<ItemStack> playerInventoryChanges,
                           @Nullable ItemStack newCursorItem, @Nullable SideEffects sideEffects) {
 
-    public static @NotNull Builder builder(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+    public static @NotNull Builder builder(@NotNull Player player, @NotNull Inventory clickedInventory) {
         return new Builder(player, clickedInventory);
     }
 
     public static class Builder {
         private final @NotNull Player player;
-        private final @NotNull AbstractInventory clickedInventory;
+        private final @NotNull Inventory clickedInventory;
 
         private final Int2ObjectMap<ItemStack> changes = new Int2ObjectArrayMap<>();
         private final Int2ObjectMap<ItemStack> playerInventoryChanges = new Int2ObjectArrayMap<>();
         private @Nullable ItemStack newCursorItem;
         private @Nullable SideEffects sideEffects;
 
-        Builder(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+        Builder(@NotNull Player player, @NotNull Inventory clickedInventory) {
             this.player = player;
             this.clickedInventory = clickedInventory;
         }
@@ -45,7 +45,7 @@ public record ClickResult(@NotNull Player player, @NotNull AbstractInventory cli
             return player;
         }
 
-        public @NotNull AbstractInventory clickedInventory() {
+        public @NotNull Inventory clickedInventory() {
             return clickedInventory;
         }
 
@@ -105,7 +105,7 @@ public record ClickResult(@NotNull Player player, @NotNull AbstractInventory cli
      * @param player the player who clicked
      * @param clickedInventory the inventory that was clicked in
      */
-    public void applyChanges(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+    public void applyChanges(@NotNull Player player, @NotNull Inventory clickedInventory) {
         for (var entry : changes.int2ObjectEntrySet()) {
             clickedInventory.setItemStack(entry.getIntKey(), entry.getValue());
         }
@@ -134,7 +134,7 @@ public record ClickResult(@NotNull Player player, @NotNull AbstractInventory cli
          */
         record DropFromPlayer(@NotNull ItemStack item) implements SideEffects {
             @Override
-            public void apply(@NotNull Player player, @NotNull AbstractInventory clickedInventory) {
+            public void apply(@NotNull Player player, @NotNull Inventory clickedInventory) {
                 player.dropItem(item);
             }
         }
@@ -144,6 +144,6 @@ public record ClickResult(@NotNull Player player, @NotNull AbstractInventory cli
          * @param player the player who clicked
          * @param clickedInventory the clicked inventory
          */
-        void apply(@NotNull Player player, @NotNull AbstractInventory clickedInventory);
+        void apply(@NotNull Player player, @NotNull Inventory clickedInventory);
     }
 }

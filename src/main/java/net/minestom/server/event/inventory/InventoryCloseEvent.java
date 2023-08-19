@@ -3,20 +3,20 @@ package net.minestom.server.event.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Called when an {@link AbstractInventory} is closed by a player.
+ * Called when an {@link Inventory} is closed by a player.
  */
 public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent {
 
-    private final AbstractInventory inventory;
+    private final Inventory inventory;
     private final Player player;
-    private @Nullable AbstractInventory newInventory;
+    private @Nullable Inventory newInventory;
 
-    public InventoryCloseEvent(@NotNull AbstractInventory inventory, @NotNull Player player) {
+    public InventoryCloseEvent(@NotNull Inventory inventory, @NotNull Player player) {
         this.inventory = inventory;
         this.player = player;
     }
@@ -36,7 +36,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the new inventory to open
      */
-    public @Nullable AbstractInventory getNewInventory() {
+    public @Nullable Inventory getNewInventory() {
         return newInventory;
     }
 
@@ -45,12 +45,12 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @param newInventory the inventory to open, null to do not open any
      */
-    public void setNewInventory(@Nullable AbstractInventory newInventory) {
+    public void setNewInventory(@Nullable Inventory newInventory) {
         this.newInventory = newInventory;
     }
 
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return inventory;
     }
 }

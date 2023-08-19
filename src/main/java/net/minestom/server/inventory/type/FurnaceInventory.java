@@ -1,12 +1,12 @@
 package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
-public class FurnaceInventory extends Inventory {
+public class FurnaceInventory extends ContainerInventory {
 
     private short remainingFuelTick;
     private short maximumFuelBurnTime;

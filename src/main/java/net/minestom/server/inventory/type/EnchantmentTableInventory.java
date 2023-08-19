@@ -1,13 +1,13 @@
 package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
-public class EnchantmentTableInventory extends Inventory {
+public class EnchantmentTableInventory extends ContainerInventory {
 
     private final short[] levelRequirements = new short[EnchantmentSlot.values().length];
     private short seed;

@@ -1,12 +1,12 @@
 package net.minestom.server.event.trait;
 
 import net.minestom.server.event.Event;
-import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents any event inside an {@link Inventory}.
+ * Represents any event inside an {@link ContainerInventory}.
  */
 public interface InventoryEvent extends Event {
 
@@ -15,5 +15,5 @@ public interface InventoryEvent extends Event {
      *
      * @return the inventory (may be a player inventory)
      */
-    @NotNull AbstractInventory getInventory();
+    @NotNull Inventory getInventory();
 }

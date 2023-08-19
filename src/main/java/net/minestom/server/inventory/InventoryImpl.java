@@ -1,7 +1,6 @@
 package net.minestom.server.inventory;
 
 import it.unimi.dsi.fastutil.ints.IntIterators;
-import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
@@ -12,7 +11,6 @@ import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -26,10 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
 
-/**
- * Represents an inventory where items can be modified/retrieved.
- */
-public class AbstractInventory implements Taggable, Viewable {
+sealed class InventoryImpl implements Inventory permits ContainerInventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 
@@ -58,41 +53,28 @@ public class AbstractInventory implements Taggable, Viewable {
                     PlayerInventory.getInnerDoubleClickSlots(builder, item, slot)
             ));
 
-    protected AbstractInventory(int size) {
+    protected InventoryImpl(int size) {
         this.size = size;
         this.itemStacks = new ItemStack[getSize()];
         Arrays.fill(itemStacks, ItemStack.AIR);
     }
 
-    // Basic getters and setters
-
-    /**
-     * Gets the size of the inventory.
-     *
-     * @return the inventory's size
-     */
+    @Override
     public int getSize() {
         return size;
     }
 
+    @Override
     public byte getWindowId() {
         return 1;
     }
 
-    /**
-     * Gets all the {@link InventoryCondition} of this inventory.
-     *
-     * @return a modifiable {@link List} containing all the inventory conditions
-     */
+    @Override
     public @NotNull List<@NotNull InventoryCondition> getInventoryConditions() {
         return inventoryConditions;
     }
 
-    /**
-     * Adds a new {@link InventoryCondition} to this inventory.
-     *
-     * @param inventoryCondition the inventory condition to add
-     */
+    @Override
     public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
         this.inventoryConditions.add(inventoryCondition);
     }
@@ -102,32 +84,17 @@ public class AbstractInventory implements Taggable, Viewable {
         return tagHandler;
     }
 
-    /**
-     * Gets the click preprocessor for this inventory.
-     *
-     * @return the click preprocessor
-     */
+    @Override
     public @NotNull ClickPreprocessor getClickPreprocessor() {
         return clickPreprocessor;
     }
 
-    /**
-     * Gets the cursor item of a viewer.
-     *
-     * @param player the player to get the cursor item from
-     * @return the player cursor item, air item if the player is not a viewer
-     */
+    @Override
     public @NotNull ItemStack getCursorItem(@NotNull Player player) {
         return cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
     }
 
-    /**
-     * Changes the cursor item of a viewer,
-     * does nothing if <code>player</code> is not a viewer.
-     *
-     * @param player     the player to change the cursor item
-     * @param cursorItem the new player cursor item
-     */
+    @Override
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         refreshCursor(player, cursorItem);
         if (!cursorItem.isAir()) {
@@ -137,20 +104,11 @@ public class AbstractInventory implements Taggable, Viewable {
         }
     }
 
-    // Viewer management
-
     @Override
     public @NotNull Set<Player> getViewers() {
         return unmodifiableViewers;
     }
 
-    /**
-     * This will not perform all of the operations required to open the inventory for the player - use
-     * {@link Player#openInventory(AbstractInventory)}.
-     *
-     * @param player the viewer to add
-     * @return true if the player has successfully been added
-     */
     @Override
     public boolean addViewer(@NotNull Player player) {
         if (!this.viewers.add(player)) return false;
@@ -159,13 +117,6 @@ public class AbstractInventory implements Taggable, Viewable {
         return true;
     }
 
-    /**
-     * This will not perform all of the operations required to close the inventory for the player - use
-     * {@link Player#closeInventory()}.
-     *
-     * @param player the viewer to remove
-     * @return true if the player has successfully been removed
-     */
     @Override
     public boolean removeViewer(@NotNull Player player) {
         if (!this.viewers.remove(player)) return false;
@@ -174,22 +125,12 @@ public class AbstractInventory implements Taggable, Viewable {
         return true;
     }
 
-    // Various updating and refreshing code
-
-    /**
-     * Handles when a player opens this inventory, without actually dealing with viewers.
-     *
-     * @param player the player opening this inventory
-     */
+    @Override
     public void handleOpen(@NotNull Player player) {
         update(player);
     }
 
-    /**
-     * Handles when a player closes this inventory, without actually dealing with viewers.
-     *
-     * @param player the player closing this inventory
-     */
+    @Override
     public void handleClose(@NotNull Player player) {
         ItemStack cursorItem = getCursorItem(player);
 
@@ -205,10 +146,12 @@ public class AbstractInventory implements Taggable, Viewable {
         player.sendPacket(new CloseWindowPacket(getWindowId()));
     }
 
+    @Override
     public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
+    @Override
     public void refreshCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
         if (!currentCursorItem.equals(cursorItem)) {
@@ -216,64 +159,32 @@ public class AbstractInventory implements Taggable, Viewable {
         }
     }
 
+    @Override
     public void update() {
         this.viewers.forEach(this::update);
     }
 
-    /**
-     * Refreshes the inventory for a specific viewer. The player must be a viewer; make sure this is true.
-     *
-     * @param player the player to update the inventory
-     */
+    @Override
     public void update(@NotNull Player player) {
         player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
     }
 
-    // Click handling
-
-    /**
-     * Handles the provided click from the given player, returning the results after it is applied. If the results are
-     * null, this indicates that the click was cancelled or was otherwise not processed.
-     *
-     * @param player the player that clicked
-     * @param clickInfo the information about the player's click
-     * @return the results of the click, or null if the click was cancelled or otherwise was not handled
-     */
+    @Override
     public @Nullable ClickResult handleClick(@NotNull Player player, @NotNull ClickInfo clickInfo) {
         return DEFAULT_HANDLER.handleClick(this, player, clickInfo);
     }
 
-    // Item get methods
-
-    /**
-     * Gets the {@link ItemStack} at the specified slot.
-     *
-     * @param slot the slot to check
-     * @return the item in the slot {@code slot}
-     */
+    @Override
     public @NotNull ItemStack getItemStack(int slot) {
         return (ItemStack) ITEM_UPDATER.getVolatile(itemStacks, slot);
     }
 
-    /**
-     * Gets all the {@link ItemStack} in the inventory.
-     * <p>
-     * Be aware that the returned array does not need to be the original one,
-     * meaning that modifying it directly may not work.
-     *
-     * @return an array containing all the inventory's items
-     */
+    @Override
     public @NotNull ItemStack[] getItemStacks() {
         return itemStacks.clone();
     }
 
-    /**
-     * Places all the items of {@code itemStacks} into the internal array.
-     *
-     * @param itemStacks the array to copy the content from
-     * @throws IllegalArgumentException if the size of the array is not equal to {@link #getSize()}
-     * @throws NullPointerException     if {@code itemStacks} contains one null element or more
-     */
+    @Override
     public void copyContents(@NotNull ItemStack[] itemStacks) {
         Check.argCondition(itemStacks.length != getSize(),
                 "The size of the array has to be of the same size as the inventory: " + getSize());
@@ -285,14 +196,7 @@ public class AbstractInventory implements Taggable, Viewable {
         }
     }
 
-    // Inventory modification methods
-
-    /**
-     * Sets an {@link ItemStack} at the specified slot and send relevant update to the viewer(s).
-     *
-     * @param slot      the slot to set the item
-     * @param itemStack the item to set
-     */
+    @Override
     public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "Inventory does not have the slot " + slot);
@@ -330,14 +234,13 @@ public class AbstractInventory implements Taggable, Viewable {
         itemStacks[slot] = itemStack;
     }
 
+    @Override
     public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
         var currentItem = getItemStack(slot);
         setItemStack(slot, operator.apply(currentItem));
     }
 
-    /**
-     * Clears the inventory and send relevant update to the viewer(s).
-     */
+    @Override
     public synchronized void clear() {
         this.cursorPlayersItem.clear();
 
@@ -349,12 +252,14 @@ public class AbstractInventory implements Taggable, Viewable {
         update();
     }
 
+    @Override
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
                                                         @NotNull TransactionOption<T> option) {
         return option.fill(type, this, itemStack);
     }
 
+    @Override
     public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                         @NotNull TransactionType type,
                                                                         @NotNull TransactionOption<T> option) {
@@ -363,28 +268,17 @@ public class AbstractInventory implements Taggable, Viewable {
         return result;
     }
 
-    /**
-     * Adds an {@link ItemStack} to the inventory and sends relevant update to the viewer(s).
-     *
-     * @param itemStack the item to add
-     * @param option    the transaction option
-     * @return true if the item has been successfully added, false otherwise
-     */
+    @Override
     public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
         return processItemStack(itemStack, TransactionType.add(() -> IntIterators.fromTo(0, getSize()), () -> IntIterators.fromTo(0, getSize())), option);
     }
 
+    @Override
     public boolean addItemStack(@NotNull ItemStack itemStack) {
         return addItemStack(itemStack, TransactionOption.ALL_OR_NOTHING);
     }
 
-    /**
-     * Adds {@link ItemStack}s to the inventory and sends relevant updates to the viewer(s).
-     *
-     * @param itemStacks items to add
-     * @param option     the transaction option
-     * @return the operation results
-     */
+    @Override
     public synchronized <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                     @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
@@ -392,22 +286,12 @@ public class AbstractInventory implements Taggable, Viewable {
         return result;
     }
 
-    /**
-     * Takes an {@link ItemStack} from the inventory and sends relevant update to the viewer(s).
-     *
-     * @param itemStack the item to take
-     * @return true if the item has been successfully fully taken, false otherwise
-     */
+    @Override
     public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
         return processItemStack(itemStack, TransactionType.take(() -> IntIterators.fromTo(0, getSize())), option);
     }
 
-    /**
-     * Takes {@link ItemStack}s from the inventory and sends relevant updates to the viewer(s).
-     *
-     * @param itemStacks items to take
-     * @return the operation results
-     */
+    @Override
     public synchronized <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                      @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());

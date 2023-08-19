@@ -4,22 +4,22 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a player open an {@link AbstractInventory}.
+ * Called when a player open an {@link Inventory}.
  * <p>
- * Executed by {@link Player#openInventory(AbstractInventory)}.
+ * Executed by {@link Player#openInventory(Inventory)}.
  */
 public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
-    private AbstractInventory inventory;
+    private Inventory inventory;
 
     private boolean cancelled;
 
-    public InventoryOpenEvent(@NotNull AbstractInventory inventory, @NotNull Player player) {
+    public InventoryOpenEvent(@NotNull Inventory inventory, @NotNull Player player) {
         this.inventory = inventory;
         this.player = player;
     }
@@ -40,7 +40,7 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
      * @return the inventory to open
      */
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return inventory;
     }
 
@@ -51,7 +51,7 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
      *
      * @param inventory the inventory to open
      */
-    public void setInventory(@NotNull AbstractInventory inventory) {
+    public void setInventory(@NotNull Inventory inventory) {
         this.inventory = inventory;
     }
 

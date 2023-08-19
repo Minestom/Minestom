@@ -1,14 +1,15 @@
 package net.minestom.server.inventory.condition;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.click.ClickInfo;
 import net.minestom.server.inventory.click.ClickResult;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Can be added to any {@link AbstractInventory}
- * using {@link net.minestom.server.inventory.Inventory#addInventoryCondition(InventoryCondition)}
+ * Can be added to any {@link Inventory}
+ * using {@link ContainerInventory#addInventoryCondition(InventoryCondition)}
  * or {@link net.minestom.server.inventory.PlayerInventory#addInventoryCondition(InventoryCondition)}
  * in order to listen to any issued clicks.
  */

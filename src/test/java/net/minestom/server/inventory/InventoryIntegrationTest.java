@@ -13,8 +13,6 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -29,7 +27,7 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        ContainerInventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
@@ -53,7 +51,7 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        ContainerInventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
@@ -77,7 +75,7 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        ContainerInventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
@@ -118,7 +116,7 @@ public class InventoryIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
-        final var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var inventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(inventory);
         assertSame(inventory, player.getOpenInventory());
         player.closeInventory();
@@ -131,7 +129,7 @@ public class InventoryIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         var listener = env.listen(InventoryItemChangeEvent.class);
-        final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var firstInventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
         firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
@@ -142,7 +140,7 @@ public class InventoryIntegrationTest {
 
         player.openInventory(firstInventory);
         firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
-        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var secondInventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         listener.followup(event -> player.openInventory(secondInventory));
         player.closeInventory();
         assertSame(secondInventory, player.getOpenInventory());

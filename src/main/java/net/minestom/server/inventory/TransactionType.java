@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 /**
- * Represents a type of transaction that you can apply to an {@link AbstractInventory}.
+ * Represents a type of transaction that you can apply to an {@link Inventory}.
  */
 public interface TransactionType {
 
@@ -102,6 +102,6 @@ public interface TransactionType {
         };
     }
 
-    @NotNull Pair<ItemStack, Int2ObjectMap<ItemStack>> process(@NotNull AbstractInventory inventory, @NotNull ItemStack itemStack);
+    @NotNull Pair<ItemStack, Int2ObjectMap<ItemStack>> process(@NotNull Inventory inventory, @NotNull ItemStack itemStack);
 
 }

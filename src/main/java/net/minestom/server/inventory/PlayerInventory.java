@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public class PlayerInventory extends AbstractInventory {
+public non-sealed class PlayerInventory extends InventoryImpl {
 
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_SIZE = 36;

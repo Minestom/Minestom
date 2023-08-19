@@ -13,7 +13,7 @@ public interface TransactionOption<T> {
      * The remaining, can be air.
      */
     TransactionOption<ItemStack> ALL = (inventory, result, itemChangesMap) -> {
-        itemChangesMap.forEach(inventory::safeItemInsert);
+        itemChangesMap.forEach(inventory::setItemStack);
         return result;
     };
 
@@ -25,7 +25,7 @@ public interface TransactionOption<T> {
     TransactionOption<Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
         if (result.isAir()) {
             // Item can be fully placed inside the inventory, do so
-            itemChangesMap.forEach(inventory::safeItemInsert);
+            itemChangesMap.forEach(inventory::setItemStack);
             return true;
         } else {
             // Inventory cannot accept the item fully
@@ -40,9 +40,9 @@ public interface TransactionOption<T> {
      */
     TransactionOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
 
-    @NotNull T fill(@NotNull AbstractInventory inventory, @NotNull ItemStack result, @NotNull Int2ObjectMap<ItemStack> itemChangesMap);
+    @NotNull T fill(@NotNull Inventory inventory, @NotNull ItemStack result, @NotNull Int2ObjectMap<ItemStack> itemChangesMap);
 
-    default @NotNull T fill(@NotNull TransactionType type, @NotNull AbstractInventory inventory, @NotNull ItemStack itemStack) {
+    default @NotNull T fill(@NotNull TransactionType type, @NotNull Inventory inventory, @NotNull ItemStack itemStack) {
         var pair = type.process(inventory, itemStack);
         return fill(inventory, pair.left(), pair.right());
     }

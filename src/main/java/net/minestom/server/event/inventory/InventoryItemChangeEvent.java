@@ -2,23 +2,22 @@ package net.minestom.server.event.inventory;
 
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when {@link AbstractInventory#safeItemInsert(int, ItemStack)} is being invoked.
+ * Called when a slot was changed in an inventory.
  * This event cannot be cancelled and items related to the change are already moved.
  */
-@SuppressWarnings("JavadocReference")
 public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
 
-    private final AbstractInventory inventory;
+    private final Inventory inventory;
     private final int slot;
     private final ItemStack previousItem;
     private final ItemStack newItem;
 
-    public InventoryItemChangeEvent(@NotNull AbstractInventory inventory, int slot,
+    public InventoryItemChangeEvent(@NotNull Inventory inventory, int slot,
                                     @NotNull ItemStack previousItem, @NotNull ItemStack newItem) {
         this.inventory = inventory;
         this.slot = slot;
@@ -54,7 +53,7 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
     }
 
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return inventory;
     }
 }

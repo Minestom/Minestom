@@ -1,7 +1,7 @@
 package net.minestom.server.inventory;
 
 /**
- * Represents a type of {@link Inventory}
+ * Represents a type of {@link ContainerInventory}
  */
 public enum InventoryType {
 

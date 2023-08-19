@@ -1,7 +1,7 @@
 package net.minestom.server.inventory.click;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -24,8 +24,8 @@ public class ClickUtils {
 
     public static final int SIZE = TYPE.getSize(); // Default hopper size
 
-    public static @NotNull AbstractInventory createInventory() {
-        return new Inventory(TYPE, "TestInventory");
+    public static @NotNull Inventory createInventory() {
+        return new ContainerInventory(TYPE, "TestInventory");
     }
 
     public static @NotNull ClickPreprocessor createPreprocessor() {

@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import org.jetbrains.annotations.NotNull;
@@ -19,13 +19,13 @@ import java.util.function.BiFunction;
  */
 public class ClickPreprocessor {
 
-    private final @NotNull AbstractInventory inventory;
+    private final @NotNull Inventory inventory;
 
     private final Map<Player, IntList> leftDraggingMap = new ConcurrentHashMap<>();
     private final Map<Player, IntList> rightDraggingMap = new ConcurrentHashMap<>();
     private final Map<Player, IntList> creativeDragMap = new ConcurrentHashMap<>();
 
-    public ClickPreprocessor(@NotNull AbstractInventory inventory) {
+    public ClickPreprocessor(@NotNull Inventory inventory) {
         this.inventory = inventory;
     }
 
@@ -35,7 +35,7 @@ public class ClickPreprocessor {
         creativeDragMap.remove(player);
     }
 
-    private static boolean validateSlot(@NotNull AbstractInventory inventory, int slot) {
+    private static boolean validateSlot(@NotNull Inventory inventory, int slot) {
         return slot >= 0 && slot < inventory.getSize() + (inventory instanceof PlayerInventory ? 0 : PlayerInventory.INNER_SIZE);
     }
 

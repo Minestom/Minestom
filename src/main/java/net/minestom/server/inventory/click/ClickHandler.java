@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public interface ClickHandler {
      * @param clickInfo the information about the player's click
      * @return the results of the click, or null if the click was cancelled or otherwise was not handled
      */
-    default @Nullable ClickResult handleClick(@NotNull AbstractInventory inventory, @NotNull Player player, @NotNull ClickInfo clickInfo) {
+    default @Nullable ClickResult handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull ClickInfo clickInfo) {
         // Call a pre-click event with the base click info
         var preClickEvent = new InventoryPreClickEvent(player.getInventory(), inventory, player, clickInfo);
         EventDispatcher.call(preClickEvent);
