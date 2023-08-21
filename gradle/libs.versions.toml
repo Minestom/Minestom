@@ -7,7 +7,7 @@ data = "1.20-rv2"
 adventure = "4.12.0"
 kotlin = "1.7.22"
 hydrazine = "1.7.2"
-hephaistos = "2.6.0"
+hephaistos = "2.6.1"
 jetbrainsAnnotations = "23.0.0"
 slf4j = "2.0.7"
 
