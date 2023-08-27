@@ -754,13 +754,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the entity {@link UUID}.
      *
      * @return the entity unique id
+     * @Deprecated in favor of {@link getUniqueId}
      */
+    @Deprecated
     public @NotNull UUID getUuid() {
         return uuid;
     }
-
+    
     /**
-     * {@link getUuid()}
+     * Gets the entity {@link UUID}.
+     *
+     * @return the entity unique id
      */
     public @NotNull UUID getUniqueId() {
         return uuid;
