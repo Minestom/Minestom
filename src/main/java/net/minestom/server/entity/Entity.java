@@ -760,6 +760,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * {@link getUuid()}
+     */
+    public @NotNull UUID getUniqueId() {
+        return uuid;
+    }
+
+    /**
      * Changes the internal entity UUID, mostly unsafe.
      *
      * @param uuid the new entity uuid
