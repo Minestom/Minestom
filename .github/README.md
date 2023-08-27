@@ -18,7 +18,7 @@ This is a developer API not meant to be used by end-users. Replacing Bukkit/Forg
 
 > **Warning**
 > 
-> `minestom-ce` is a fork with breaking changes from `Minestom/Minestom`. The list of changes can be found [here](/CHANGELOG.md).
+> `minestom-ce` is a fork with breaking changes from `Minestom/Minestom`. The list of changes can be found [here](https://github.com/hollow-cube/minestom-ce/blob/main/CHANGELOG.md).
 
 # Table of contents
 - [Install](#install)
