@@ -12,6 +12,8 @@ import java.util.function.Function;
  * Basic serializers for {@link Tag tags}.
  */
 final class Serializers {
+    static final boolean SERIALIZE_EMPTY_COMPOUND = System.getProperty("minestom.serialization.serialize-nbt-compound", "false").equalsIgnoreCase("true");
+
     static final Entry<Byte, NBTByte> BYTE = new Entry<>(NBTType.TAG_Byte, NBTByte::getValue, NBT::Byte);
     static final Entry<Boolean, NBTByte> BOOLEAN = new Entry<>(NBTType.TAG_Byte, NBTByte::asBoolean, NBT::Boolean);
     static final Entry<Short, NBTShort> SHORT = new Entry<>(NBTType.TAG_Short, NBTShort::getValue, NBT::Short);
@@ -31,7 +33,7 @@ final class Serializers {
     static <T> Entry<T, NBTCompound> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(NBTType.TAG_Compound,
                 (NBTCompound compound) -> {
-                    if (compound.isEmpty()) return null;
+                    if ((!SERIALIZE_EMPTY_COMPOUND) && compound.isEmpty()) return null;
                     return serializer.read(TagHandler.fromCompound(compound));
                 },
                 (value) -> {
