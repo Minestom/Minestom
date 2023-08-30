@@ -132,8 +132,17 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    private record ConversionNode(Argument<?> argument, ExecutionImpl execution,
-                                  Map<Argument<?>, ConversionNode> nextMap) {
+    private static final class ConversionNode {
+        final Argument<?> argument;
+        ExecutionImpl execution;
+        final Map<Argument<?>, ConversionNode> nextMap;
+
+        public ConversionNode(Argument<?> argument, ExecutionImpl execution, Map<Argument<?>, ConversionNode> nextMap) {
+            this.argument = argument;
+            this.execution = execution;
+            this.nextMap = nextMap;
+        }
+
         ConversionNode(Argument<?> argument, ExecutionImpl execution) {
             this(argument, execution, new LinkedHashMap<>());
         }
@@ -152,10 +161,9 @@ record GraphImpl(NodeImpl root) implements Graph {
                 ConversionNode syntaxNode = root;
                 for (Argument<?> arg : syntax.getArguments()) {
                     boolean last = arg == syntax.getArguments()[syntax.getArguments().length - 1];
-                    syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> {
-                        var ex = last ? ExecutionImpl.fromSyntax(syntax) : null;
-                        return new ConversionNode(argument, ex);
-                    });
+                    var ex = last ? ExecutionImpl.fromSyntax(syntax) : null;
+                    syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> new ConversionNode(argument, ex));
+                    if (syntaxNode.execution == null) syntaxNode.execution = ex;
                 }
             }
             // Subcommands
@@ -173,6 +181,7 @@ record GraphImpl(NodeImpl root) implements Graph {
             }
             return new ConversionNode(Literal(""), null, next);
         }
+
     }
 
     static Argument<String> commandToArgument(Command command) {
