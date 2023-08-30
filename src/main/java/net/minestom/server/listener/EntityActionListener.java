@@ -21,7 +21,6 @@ public class EntityActionListener {
 
     private static void setSneaking(Player player, boolean sneaking) {
         boolean oldState = player.isSneaking();
-
         player.setSneaking(sneaking);
 
         if (oldState != sneaking) {
