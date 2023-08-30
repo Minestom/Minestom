@@ -59,6 +59,7 @@ public class Main {
         commandManager.register(new DebugGridCommand());
         commandManager.register(new DisplayCommand());
         commandManager.register(new NotificationCommand());
+        commandManager.register(new TestCommand2());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
