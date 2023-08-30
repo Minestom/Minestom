@@ -136,6 +136,14 @@ public class PlayerInit {
             })
             .addListener(PlayerBlockPlaceEvent.class, event -> {
 //                event.setDoBlockUpdates(false);
+            })
+            .addListener(PlayerBlockInteractEvent.class, event -> {
+                var block = event.getBlock();
+                var rawOpenProp = block.getProperty("open");
+                if (rawOpenProp == null) return;
+
+                block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
+                event.getInstance().setBlock(event.getBlockPosition(), block);
             });
 
     static {

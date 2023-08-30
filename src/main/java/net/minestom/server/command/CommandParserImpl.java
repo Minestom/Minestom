@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 final class CommandParserImpl implements CommandParser {
@@ -27,6 +26,7 @@ final class CommandParserImpl implements CommandParser {
 
     static final class Chain {
         CommandExecutor defaultExecutor = null;
+        SuggestionCallback suggestionCallback = null;
         final ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
         final List<CommandCondition> conditions = new ArrayList<>();
         final List<CommandExecutor> globalListeners = new ArrayList<>();
@@ -60,81 +60,60 @@ final class CommandParserImpl implements CommandParser {
             return (sender, context) -> globalListeners.forEach(x -> x.apply(sender, context));
         }
 
-        SuggestionCallback extractSuggestionCallback() {
-            return nodeResults.peekLast().callback;
-        }
-
         Map<String, ArgumentResult<Object>> collectArguments() {
             return nodeResults.stream()
-                    .skip(1) // skip root
+                    .skip(2) // skip root node and command
                     .collect(Collectors.toUnmodifiableMap(NodeResult::name, NodeResult::argumentResult));
         }
 
         List<Argument<?>> getArgs() {
             return nodeResults.stream().map(x -> x.node.argument()).collect(Collectors.toList());
         }
+
+        Chain() {}
+
+        Chain(CommandExecutor defaultExecutor,
+              SuggestionCallback suggestionCallback,
+              ArrayDeque<NodeResult> nodeResults,
+              List<CommandCondition> conditions,
+              List<CommandExecutor> globalListeners) {
+            this.defaultExecutor = defaultExecutor;
+            this.suggestionCallback = suggestionCallback;
+            this.nodeResults.addAll(nodeResults);
+            this.conditions.addAll(conditions);
+            this.globalListeners.addAll(globalListeners);
+        }
+
+        Chain fork() {
+            return new Chain(defaultExecutor, suggestionCallback, nodeResults, conditions, globalListeners);
+        }
     }
 
     @Override
     public @NotNull CommandParser.Result parse(@NotNull CommandSender sender, @NotNull Graph graph, @NotNull String input) {
         final CommandStringReader reader = new CommandStringReader(input);
-        final Chain chain = new Chain();
-        // Read from input
-        NodeResult result;
+        Chain chain = new Chain();
         Node parent = graph.root();
-        while ((result = parseChild(sender, parent, reader)) != null) {
-            chain.append(result);
-            if (result.argumentResult instanceof ArgumentResult.SyntaxError<?> e) {
-                // Syntax error stop at this arg
-                final ArgumentCallback argumentCallback = parent.argument().getCallback();
-                if (argumentCallback == null && chain.defaultExecutor != null) {
-                    return ValidCommand.defaultExecutor(input, chain);
-                } else {
-                    return new InvalidCommand(input, chain.mergedConditions(),
-                            argumentCallback, e, chain.collectArguments(), chain.mergedGlobalExecutors(),
-                            chain.extractSuggestionCallback(), chain.getArgs());
-                }
-            }
-            parent = result.node;
+
+        NodeResult result = parseNode(sender, parent, chain, reader);
+        chain = result.chain;
+        if (result.argumentResult instanceof ArgumentResult.Success<?>) {
+            NodeResult lastNodeResult = chain.nodeResults.peekLast();
+            Node lastNode = lastNodeResult.node;
+
+            CommandExecutor executor = nullSafeGetter(lastNode.execution(), Graph.Execution::executor);
+            if (executor != null) return ValidCommand.executor(input, chain, executor);
         }
-        // Check children for arguments with default values
-        do {
-            Node tmp = parent;
-            parent = null;
-            for (Node child : tmp.next()) {
-                final Argument<?> argument = child.argument();
-                final Function<CommandSender, ?> defaultSupplier = argument.getDefaultValue();
-                if (defaultSupplier != null) {
-                    final Object value = defaultSupplier.apply(sender);
-                    final ArgumentResult<Object> argumentResult = new ArgumentResult.Success<>(value, "");
-                    chain.append(new NodeResult(child, argumentResult, argument.getSuggestionCallback()));
-                    parent = child;
-                    break;
-                }
-            }
-        } while (parent != null);
-        // Check if any syntax has been found
-        final NodeResult lastNode = chain.nodeResults.peekLast();
-        if (lastNode == null) return UnknownCommandResult.INSTANCE;
-        // Verify syntax(s)
-        final CommandExecutor executor = nullSafeGetter(lastNode.node().execution(), Graph.Execution::executor);
-        if (executor == null) {
-            // Syntax error
-            if (chain.defaultExecutor != null) {
-                return ValidCommand.defaultExecutor(input, chain);
-            } else {
-                return InvalidCommand.invalid(input, chain);
-            }
+        // If here, then the command failed or didn't have an executor
+
+        // Look for a default executor, or give up if we got nowhere
+        NodeResult lastNode = chain.nodeResults.peekLast();
+        if (lastNode.node.equals(parent)) return UnknownCommandResult.INSTANCE;
+        if (chain.defaultExecutor != null) {
+            return ValidCommand.defaultExecutor(input, chain);
         }
-        if (reader.hasRemaining()) {
-            // Command had trailing data
-            if (chain.defaultExecutor != null) {
-                return ValidCommand.defaultExecutor(input, chain);
-            } else {
-                return InvalidCommand.invalid(input, chain);
-            }
-        }
-        return ValidCommand.executor(input, chain, executor);
+
+        return InvalidCommand.invalid(input, chain);
     }
 
     @Contract("null, _ -> null; !null, null -> fail; !null, !null -> _")
@@ -142,32 +121,90 @@ final class CommandParserImpl implements CommandParser {
         return obj == null ? null : getter.apply(obj);
     }
 
-    private static NodeResult parseChild(@NotNull CommandSender sender, Node parent, CommandStringReader reader) {
-        if (!reader.hasRemaining()) return null;
-        for (Node child : parent.next()) {
-            final Argument<?> argument = child.argument();
-            final int start = reader.cursor();
-            final ArgumentResult<?> parse = parse(sender, argument, reader);
-            if (parse instanceof ArgumentResult.Success<?> success) {
-                return new NodeResult(child, (ArgumentResult<Object>) success,
-                        argument.getSuggestionCallback());
-            } else if (parse instanceof ArgumentResult.SyntaxError<?> syntaxError) {
-                return new NodeResult(child, (ArgumentResult<Object>) syntaxError,
-                        argument.getSuggestionCallback());
+    private static NodeResult parseNode(@NotNull CommandSender sender, Node node, Chain chain, CommandStringReader reader) {
+        chain = chain.fork();
+        Argument<?> argument = node.argument();
+        int start = reader.cursor();
+
+        if (reader.hasRemaining()) {
+            ArgumentResult<?> result = parseArgument(sender, argument, reader);
+            SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
+            NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, suggestionCallback);
+            chain.append(nodeResult);
+            if (suggestionCallback != null) chain.suggestionCallback = suggestionCallback;
+            if (chain.nodeResults.size() == 1) { // If this is the root node (usually "Literal<>")
+                reader.cursor(start);
             } else {
-                // Reset cursor & try next
+                if (!(result instanceof ArgumentResult.Success<?>)) {
+                    reader.cursor(start);
+                    return nodeResult;
+                }
+            }
+        } else {
+            // Nothing left, yet we're still being asked to parse? There must be defaults then
+            Function<CommandSender, ?> defaultSupplier = node.argument().getDefaultValue();
+            if (defaultSupplier != null) {
+                Object value = defaultSupplier.apply(sender);
+                ArgumentResult<Object> argumentResult = new ArgumentResult.Success<>(value, "");
+                chain.append(new NodeResult(node, chain, argumentResult, argument.getSuggestionCallback()));
+                // Add the default to the chain, and then carry on dealing with this node
+            } else {
+                // Still being asked to parse yet there's nothing left, syntax error.
+                return new NodeResult(
+                        node,
+                        chain,
+                        new ArgumentResult.SyntaxError<>("Not enough arguments","",-1),
+                        argument.getSuggestionCallback()
+                );
+            }
+        }
+        // Successfully matched this node's argument
+        start = reader.cursor();
+        if (!reader.hasRemaining()) start--; // This is needed otherwise the reader throws an AssertionError
+
+        NodeResult error = null;
+        for (Node child : node.next()) {
+            NodeResult childResult = parseNode(sender, child, chain, reader);
+            if (childResult.argumentResult instanceof ArgumentResult.Success<Object>) {
+                // Assume that there is only one successful node for a given chain of arguments
+                return childResult;
+            } else {
+                if (error == null) {
+                    // If this is the base argument (e.g. "teleport" in /teleport) then
+                    // do not report an argument to be incompatible, since the more
+                    // correct thing would be to say that the command is unknown.
+                    if (!(childResult.chain.nodeResults.size() == 2 && childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
+                        error = childResult;
+                    }
+                }
                 reader.cursor(start);
             }
         }
-        for (Node node : parent.next()) {
-            final SuggestionCallback suggestionCallback = node.argument().getSuggestionCallback();
-            if (suggestionCallback != null) {
-                return new NodeResult(parent,
-                        new ArgumentResult.SyntaxError<>("None of the arguments were compatible, but a suggestion callback was found.", "", -1),
-                        suggestionCallback);
+        // None were successful. Either incompatible types, or syntax error. It doesn't matter to us, though
+
+        // Try to execute this node
+        CommandExecutor executor = nullSafeGetter(node.execution(), Graph.Execution::executor);
+        if (executor == null) {
+            // Stuck here with no executor
+            if (error != null) {
+                return error;
+            } else {
+                return chain.nodeResults.peekLast();
             }
         }
-        return null;
+
+        if (reader.hasRemaining()) {
+            // Trailing data is a syntax error
+            return new NodeResult(
+                    node,
+                    chain,
+                    new ArgumentResult.SyntaxError<>("Command has trailing data", "", -1),
+                    argument.getSuggestionCallback()
+            );
+        }
+
+        // Command was successful!
+        return chain.nodeResults.peekLast();
     }
 
     record UnknownCommandResult() implements Result.UnknownCommand {
@@ -222,7 +259,7 @@ final class CommandParserImpl implements CommandParser {
             return new InvalidCommand(input, chain.mergedConditions(),
                     null/*todo command syntax callback*/,
                     new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
-                    chain.collectArguments(), chain.mergedGlobalExecutors(), chain.extractSuggestionCallback(), chain.getArgs());
+                    chain.collectArguments(), chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }
 
         @Override
@@ -238,12 +275,12 @@ final class CommandParserImpl implements CommandParser {
 
         static ValidCommand defaultExecutor(String input, Chain chain) {
             return new ValidCommand(input, chain.mergedConditions(), chain.defaultExecutor, chain.collectArguments(),
-                    chain.mergedGlobalExecutors(), chain.extractSuggestionCallback(), chain.getArgs());
+                    chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }
 
         static ValidCommand executor(String input, Chain chain, CommandExecutor executor) {
             return new ValidCommand(input, chain.mergedConditions(), executor, chain.collectArguments(), chain.mergedGlobalExecutors(),
-                    chain.extractSuggestionCallback(), chain.getArgs());
+                    chain.suggestionCallback, chain.getArgs());
         }
 
         @Override
@@ -321,7 +358,7 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand.Result INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
     }
 
-    private record NodeResult(Node node, ArgumentResult<Object> argumentResult, SuggestionCallback callback) {
+    private record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult, SuggestionCallback callback) {
         public String name() {
             return node.argument().getId();
         }
@@ -372,7 +409,7 @@ final class CommandParserImpl implements CommandParser {
 
     // ARGUMENT
 
-    private static <T> ArgumentResult<T> parse(@NotNull CommandSender sender, Argument<T> argument, CommandStringReader reader) {
+    private static <T> ArgumentResult<T> parseArgument(@NotNull CommandSender sender, Argument<T> argument, CommandStringReader reader) {
         // Handle specific type without loop
         try {
             // Single word argument
