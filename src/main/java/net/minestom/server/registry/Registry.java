@@ -500,7 +500,7 @@ public final class Registry {
         }
 
         @Override
-        public double getFloat(String name, float defaultValue) {
+        public float getFloat(String name, float defaultValue) {
             var element = element(name);
             return element != null ? ((Number) element).floatValue() : defaultValue;
         }
@@ -563,7 +563,7 @@ public final class Registry {
 
         double getDouble(String name);
 
-        double getFloat(String name, float defaultValue);
+        float getFloat(String name, float defaultValue);
 
         float getFloat(String name);
 
