@@ -586,7 +586,7 @@ final class NetworkBufferTypes {
                 final float y = buffer.read(FLOAT);
                 final float z = buffer.read(FLOAT);
                 final float w = buffer.read(FLOAT);
-                return new Quaternion(x, y, z, w);
+                return new Quaternion(w, x, y, z);
             });
 
     record TypeImpl<T>(@NotNull Class<T> type,
