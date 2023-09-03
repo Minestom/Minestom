@@ -156,6 +156,10 @@ record GraphImpl(NodeImpl root) implements Graph {
 
         static ConversionNode fromCommand(Command command) {
             ConversionNode root = new ConversionNode(commandToArgument(command), ExecutionImpl.fromCommand(command));
+            // Subcommands
+            for (Command subcommand : command.getSubcommands()) {
+                root.nextMap.put(commandToArgument(subcommand), fromCommand(subcommand));
+            }
             // Syntaxes
             for (CommandSyntax syntax : command.getSyntaxes()) {
                 ConversionNode syntaxNode = root;
@@ -165,10 +169,6 @@ record GraphImpl(NodeImpl root) implements Graph {
                     syntaxNode = syntaxNode.nextMap.computeIfAbsent(arg, argument -> new ConversionNode(argument, ex));
                     if (syntaxNode.execution == null) syntaxNode.execution = ex;
                 }
-            }
-            // Subcommands
-            for (Command subcommand : command.getSubcommands()) {
-                root.nextMap.put(commandToArgument(subcommand), fromCommand(subcommand));
             }
             return root;
         }
