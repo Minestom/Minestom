@@ -75,4 +75,41 @@ public class CommandSuggestionIntegrationTest {
             assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches());
         });
     }
+
+    @Test
+    public void suggestionWithSubcommand(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+
+        var command = new Command("foo");
+
+        var subCommand = new Command("bar");
+
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> {
+            suggestion.addEntry(new SuggestionEntry("suggestionA"));
+        });
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> {
+                    suggestion.addEntry(new SuggestionEntry("suggestionB"));
+                });
+
+        subCommand.addSyntax((sender, context) -> {}, wordArg1, wordArg2);
+
+        command.addSyntax((sender,context)->{
+
+        }, Literal("literal"), wordArg2);
+
+        command.addSubcommand(subCommand);
+
+        env.process().command().register(command);
+
+        var listener = connection.trackIncoming(TabCompletePacket.class);
+        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo bar "));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(tabCompletePacket -> {
+            assertEquals(List.of(new TabCompletePacket.Match("suggestionA", null)), tabCompletePacket.matches());
+        });
+    }
+
 }
