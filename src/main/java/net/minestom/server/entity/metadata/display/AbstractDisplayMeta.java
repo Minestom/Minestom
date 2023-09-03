@@ -50,7 +50,7 @@ public class AbstractDisplayMeta extends EntityMeta {
     }
 
     public @NotNull Quaternion getRightRotation() {
-        return super.metadata.getIndex(OFFSET + 4, new Quaternion(0, 0, 0, 1));
+        return super.metadata.getIndex(OFFSET + 4, new Quaternion(1, 0, 0, 0));
     }
 
     public void setRightRotation(@NotNull Quaternion value) {
@@ -58,7 +58,7 @@ public class AbstractDisplayMeta extends EntityMeta {
     }
 
     public @NotNull Quaternion getLeftRotation() {
-        return super.metadata.getIndex(OFFSET + 5, new Quaternion(0, 0, 0, 1));
+        return super.metadata.getIndex(OFFSET + 5, new Quaternion(1, 0, 0, 0));
     }
 
     public void setLeftRotation(@NotNull Quaternion value) {
