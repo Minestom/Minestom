@@ -82,10 +82,10 @@ public record Quaternion(float w, float x, float y, float z) {
     public @NotNull Quaternion normalize() {
         final double norm = getNorm();
         return new Quaternion(
+                (float) (w / norm),
                 (float) (x / norm),
                 (float) (y / norm),
-                (float) (z / norm),
-                (float) (w / norm)
+                (float) (z / norm)
         );
     }
 
