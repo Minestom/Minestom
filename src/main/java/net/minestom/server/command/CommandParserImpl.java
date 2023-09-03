@@ -74,6 +74,10 @@ final class CommandParserImpl implements CommandParser {
             return nodeResults.stream().map(x -> x.node.argument()).collect(Collectors.toList());
         }
 
+        int size() {
+            return nodeResults.size();
+        }
+
         Chain() {}
 
         Chain(CommandExecutor defaultExecutor,
@@ -137,7 +141,7 @@ final class CommandParserImpl implements CommandParser {
             NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, suggestionCallback);
             chain.append(nodeResult);
             if (suggestionCallback != null) chain.suggestionCallback = suggestionCallback;
-            if (chain.nodeResults.size() == 1) { // If this is the root node (usually "Literal<>")
+            if (chain.size() == 1) { // If this is the root node (usually "Literal<>")
                 reader.cursor(start);
             } else {
                 if (!(result instanceof ArgumentResult.Success<?>)) {
@@ -174,11 +178,11 @@ final class CommandParserImpl implements CommandParser {
                 // Assume that there is only one successful node for a given chain of arguments
                 return childResult;
             } else {
-                if (error == null) {
+                if (error == null || error.chain.size() < childResult.chain.size()) {
                     // If this is the base argument (e.g. "teleport" in /teleport) then
                     // do not report an argument to be incompatible, since the more
                     // correct thing would be to say that the command is unknown.
-                    if (!(childResult.chain.nodeResults.size() == 2 && childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
+                    if (!(childResult.chain.size() == 2 && childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
                         error = childResult;
                     }
                 }
