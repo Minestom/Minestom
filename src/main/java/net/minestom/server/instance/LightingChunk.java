@@ -165,64 +165,66 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     protected LightData createLightData(boolean sendLater) {
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
+        synchronized (lightCache) {
+            BitSet skyMask = new BitSet();
+            BitSet blockMask = new BitSet();
+            BitSet emptySkyMask = new BitSet();
+            BitSet emptyBlockMask = new BitSet();
+            List<byte[]> skyLights = new ArrayList<>();
+            List<byte[]> blockLights = new ArrayList<>();
 
-        int index = 0;
-        for (Section section : sections) {
-            boolean wasUpdatedBlock = false;
-            boolean wasUpdatedSky = false;
+            int index = 0;
+            for (Section section : sections) {
+                boolean wasUpdatedBlock = false;
+                boolean wasUpdatedSky = false;
 
-            if (section.blockLight().requiresUpdate()) {
-                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
-                wasUpdatedBlock = true;
-            } else if (section.blockLight().requiresSend()) {
-                wasUpdatedBlock = true;
-            }
+                if (section.blockLight().requiresUpdate()) {
+                    relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
+                    wasUpdatedBlock = true;
+                } else if (section.blockLight().requiresSend()) {
+                    wasUpdatedBlock = true;
+                }
 
-            if (section.skyLight().requiresUpdate()) {
-                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
-                wasUpdatedSky = true;
-            } else if (section.skyLight().requiresSend()) {
-                wasUpdatedSky = true;
-            }
+                if (section.skyLight().requiresUpdate()) {
+                    relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
+                    wasUpdatedSky = true;
+                } else if (section.skyLight().requiresSend()) {
+                    wasUpdatedSky = true;
+                }
 
-            index++;
+                index++;
 
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
+                final byte[] skyLight = section.skyLight().array();
+                final byte[] blockLight = section.blockLight().array();
 
-            if ((wasUpdatedSky || sendLater) && this.instance.getDimensionType().isSkylightEnabled()) {
-                if (skyLight.length != 0 && skyLight != emptyContent) {
-                    skyLights.add(skyLight);
-                    skyMask.set(index);
-                } else {
-                    emptySkyMask.set(index);
+                if ((wasUpdatedSky || sendLater) && this.instance.getDimensionType().isSkylightEnabled()) {
+                    if (skyLight.length != 0 && skyLight != emptyContent) {
+                        skyLights.add(skyLight);
+                        skyMask.set(index);
+                    } else {
+                        emptySkyMask.set(index);
+                    }
+                }
+
+                if (wasUpdatedBlock || sendLater) {
+                    if (blockLight.length != 0 && blockLight != emptyContent) {
+                        blockLights.add(blockLight);
+                        blockMask.set(index);
+                    } else {
+                        emptyBlockMask.set(index);
+                    }
                 }
             }
 
-            if (wasUpdatedBlock || sendLater) {
-                if (blockLight.length != 0 && blockLight != emptyContent) {
-                    blockLights.add(blockLight);
-                    blockMask.set(index);
-                } else {
-                    emptyBlockMask.set(index);
-                }
+            if (sendNeighbours) {
+                updateAfterGeneration(this);
+                sendNeighbours = false;
             }
-        }
 
-        if (sendNeighbours) {
-            updateAfterGeneration(this);
-            sendNeighbours = false;
+            return new LightData(skyMask, blockMask,
+                    emptySkyMask, emptyBlockMask,
+                    skyLights, blockLights);
         }
-
-        return new LightData(skyMask, blockMask,
-                emptySkyMask, emptyBlockMask,
-                skyLights, blockLights);
     }
 
     private static final LongSet queuedChunks = new LongOpenHashSet();
@@ -412,10 +414,10 @@ public class LightingChunk extends DynamicChunk {
         Chunk c = instance.getChunk(chunkX, chunkZ);
         if (c == null) return;
 
-        Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
-        // System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size() + " | " + type);
-
         synchronized (instance) {
+            Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ));
+            // System.out.println("Calculating " + chunkX + " " + sectionY + " " + chunkZ + " | " + collected.size() + " | " + type);
+
             relight(instance, collected, type);
         }
     }
