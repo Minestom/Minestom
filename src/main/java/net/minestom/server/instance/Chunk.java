@@ -95,6 +95,10 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         return getSection(ChunkUtils.getChunkCoordinate(blockY));
     }
 
+    public abstract @NotNull Heightmap getMotionBlockingHeightmap();
+
+    public abstract @NotNull Heightmap getWorldSurfaceHeightmap();
+
     /**
      * Executes a chunk tick.
      * <p>

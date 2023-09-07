@@ -45,6 +45,9 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
+    private final Heightmap motionBlockingHeightmap = new Heightmap();
+    private final Heightmap worldSurfaceHeightmap = new Heightmap();
+
     private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
@@ -86,6 +89,8 @@ public class DynamicChunk extends Chunk {
         } else {
             this.tickableMap.remove(index);
         }
+
+        // TODO: update heightmap
     }
 
     @Override
@@ -107,6 +112,16 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Section getSection(int section) {
         return sections.get(section - minSection);
+    }
+
+    @Override
+    public @NotNull Heightmap getMotionBlockingHeightmap() {
+        return motionBlockingHeightmap;
+    }
+
+    @Override
+    public @NotNull Heightmap getWorldSurfaceHeightmap() {
+        return worldSurfaceHeightmap;
     }
 
     @Override
@@ -185,22 +200,13 @@ public class DynamicChunk extends Chunk {
 
     private synchronized @NotNull ChunkDataPacket createChunkPacket() {
         final NBTCompound heightmapsNBT;
-        // TODO: don't hardcode heightmaps
         // Heightmap
         {
             int dimensionHeight = getInstance().getDimensionType().getHeight();
-            int[] motionBlocking = new int[16 * 16];
-            int[] worldSurface = new int[16 * 16];
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    motionBlocking[x + z * 16] = 0;
-                    worldSurface[x + z * 16] = dimensionHeight - 1;
-                }
-            }
             final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
             heightmapsNBT = NBT.Compound(Map.of(
-                    "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(motionBlocking, bitsForHeight)),
-                    "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurface, bitsForHeight))));
+                    "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(motionBlockingHeightmap.getValues(), bitsForHeight)),
+                    "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurfaceHeightmap.getValues(), bitsForHeight))));
         }
         // Data
         final byte[] data = ObjectPool.PACKET_POOL.use(buffer ->
