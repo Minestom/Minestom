@@ -2,6 +2,7 @@ package net.minestom.server.terminal;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.PropertyUtils;
 
 import java.util.regex.Matcher;
@@ -14,8 +15,6 @@ import java.util.regex.Pattern;
  * @see <a href="https://github.com/PaperMC/Paper/blob/41647af74caed955c1fd5b38d458ee59298ae5d4/patches/server/0591-Add-support-for-hex-color-codes-in-console.patch">Paper</a>
  */
 final class TerminalColorConverter {
-    private static final boolean SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
-    private static final boolean SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
 
     private static final String RGB_ANSI = "\u001B[38;2;%d;%d;%dm";
     private static final String ANSI_RESET = "\u001B[m";
@@ -55,7 +54,7 @@ final class TerminalColorConverter {
     }
 
     private static String getAnsiColorFromHexColor(int color, String fallback) {
-        return SUPPORT_HEX_COLOR ? String.format(RGB_ANSI, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF) : fallback;
+        return ServerFlag.TERMINAL_SUPPORT_HEX_COLOR ? String.format(RGB_ANSI, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF) : fallback;
     }
 
     private static String getAnsiColorFromHexColor(int color) {
@@ -74,7 +73,7 @@ final class TerminalColorConverter {
         }
 
         string = RGB_PATTERN.matcher(string).replaceAll(match -> {
-            if (SUPPORT_COLOR) {
+            if (ServerFlag.TERMINAL_SUPPORT_COLOR) {
                 String hex = match.group(1);
                 return getAnsiColorFromHexColor(Integer.parseInt(hex, 16));
             } else {
@@ -87,14 +86,14 @@ final class TerminalColorConverter {
         while (matcher.find()) {
             int format = LOOKUP.indexOf(Character.toLowerCase(matcher.group().charAt(1)));
             if (format != -1) {
-                matcher.appendReplacement(builder, SUPPORT_COLOR ? ANSI_CODES[format] : "");
+                matcher.appendReplacement(builder, ServerFlag.TERMINAL_SUPPORT_COLOR ? ANSI_CODES[format] : "");
             } else {
                 matcher.appendReplacement(builder, matcher.group());
             }
         }
         matcher.appendTail(builder);
 
-        if (SUPPORT_COLOR) {
+        if (ServerFlag.TERMINAL_SUPPORT_COLOR) {
             builder.append(ANSI_RESET);
         }
         return builder.toString();

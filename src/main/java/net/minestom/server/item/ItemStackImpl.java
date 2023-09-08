@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
@@ -18,13 +19,12 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
     static final @NotNull StackingRule DEFAULT_STACKING_RULE;
 
     static {
-        final String stackingRuleProperty = System.getProperty("minestom.stacking-rule");
-        if (stackingRuleProperty == null) {
+        if (ServerFlag.STACKING_RULE == null) {
             DEFAULT_STACKING_RULE = new VanillaStackingRule();
         } else {
             try {
                 DEFAULT_STACKING_RULE = (StackingRule) ClassLoader.getSystemClassLoader()
-                        .loadClass(stackingRuleProperty).getConstructor().newInstance();
+                        .loadClass(ServerFlag.STACKING_RULE).getConstructor().newInstance();
             } catch (Exception e) {
                 throw new RuntimeException("Could not instantiate default stacking rule", e);
             }

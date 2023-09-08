@@ -63,6 +63,7 @@ dependencies {
     api(libs.bundles.kotlin)
     api(libs.bundles.hephaistos)
     implementation(libs.minestomData)
+    implementation(libs.dependencyGetter)
 
     // Libraries required for the terminal
     implementation(libs.bundles.terminal)

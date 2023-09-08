@@ -29,6 +29,7 @@ import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.IOException;
@@ -56,16 +57,14 @@ public final class MinecraftServer {
 
     // Config
     // Can be modified at performance cost when increased
-    public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
+    @Deprecated
+    public static final int TICK_PER_SECOND = ServerFlag.SERVER_TICKS_PER_SECOND;
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
 
-    private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
-    private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
     private static int compressionThreshold = 256;
-    private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
@@ -199,50 +198,26 @@ public final class MinecraftServer {
 
     /**
      * Gets the chunk view distance of the server.
+     * <p>
+     * Deprecated in favor of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
      *
      * @return the chunk view distance
      */
-    public static int getChunkViewDistance() {
-        return chunkViewDistance;
-    }
-
-    /**
-     * Changes the chunk view distance of the server.
-     *
-     * @param chunkViewDistance the new chunk view distance
-     * @throws IllegalArgumentException if {@code chunkViewDistance} is not between 2 and 32
-     * @deprecated should instead be defined with a java property
-     */
     @Deprecated
-    public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.stateCondition(serverProcess.isAlive(), "You cannot change the chunk view distance after the server has been started.");
-        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
-                "The chunk view distance must be between 2 and 32");
-        MinecraftServer.chunkViewDistance = chunkViewDistance;
+    public static int getChunkViewDistance() {
+        return ServerFlag.CHUNK_VIEW_DISTANCE;
     }
 
     /**
      * Gets the entity view distance of the server.
+     * <p>
+     * Deprecated in favor of {@link ServerFlag#ENTITY_VIEW_DISTANCE}
      *
      * @return the entity view distance
      */
-    public static int getEntityViewDistance() {
-        return entityViewDistance;
-    }
-
-    /**
-     * Changes the entity view distance of the server.
-     *
-     * @param entityViewDistance the new entity view distance
-     * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
-     * @deprecated should instead be defined with a java property
-     */
     @Deprecated
-    public static void setEntityViewDistance(int entityViewDistance) {
-        Check.stateCondition(serverProcess.isAlive(), "You cannot change the entity view distance after the server has been started.");
-        Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
-                "The entity view distance must be between 0 and 32");
-        MinecraftServer.entityViewDistance = entityViewDistance;
+    public static int getEntityViewDistance() {
+        return ServerFlag.ENTITY_VIEW_DISTANCE;
     }
 
     /**
@@ -267,25 +242,6 @@ public final class MinecraftServer {
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
-    /**
-     * Gets if the built in Minestom terminal is enabled.
-     *
-     * @return true if the terminal is enabled
-     */
-    public static boolean isTerminalEnabled() {
-        return terminalEnabled;
-    }
-
-    /**
-     * Enabled/disables the built in Minestom terminal.
-     *
-     * @param enabled true to enable, false to disable
-     */
-    public static void setTerminalEnabled(boolean enabled) {
-        Check.stateCondition(serverProcess.isAlive(), "Terminal settings may not be changed after starting the server.");
-        MinecraftServer.terminalEnabled = enabled;
-    }
-
     public static DimensionTypeManager getDimensionTypeManager() {
         return serverProcess.dimension();
     }
@@ -298,7 +254,7 @@ public final class MinecraftServer {
         return serverProcess.advancement();
     }
 
-    public static ExtensionManager getExtensionManager() {
+    public static @Nullable ExtensionManager getExtensionManager() {
         return serverProcess.extension();
     }
 

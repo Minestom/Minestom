@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -39,7 +40,7 @@ public class WorldBorder {
 
         this.speed = 0;
 
-        this.portalTeleportBoundary = Integer.getInteger("minestom.world-border-size", 29999984);
+        this.portalTeleportBoundary = ServerFlag.WORLD_BORDER_SIZE;
     }
 
     /**

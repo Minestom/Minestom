@@ -1,5 +1,6 @@
 package net.minestom.server.utils.chunk;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
@@ -15,10 +16,6 @@ import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public final class ChunkUtils {
-
-    public static final boolean USE_NEW_CHUNK_SENDING = Boolean.getBoolean("minestom.use-new-chunk-sending");
-    public static final int NEW_CHUNK_COUNT_PER_INTERVAL = Integer.getInteger("minestom.new-chunk-sending-count-per-interval", 50);
-    public static final int NEW_CHUNK_SEND_INTERVAL = Integer.getInteger("minestom.new-chunk-sending-send-interval", 20);
 
     private ChunkUtils() {
     }
@@ -178,7 +175,7 @@ public final class ChunkUtils {
      * which comes from kotlin port by <a href="https://github.com/Esophose">Esophose</a>, which comes from <a href="https://stackoverflow.com/questions/398299/looping-in-a-spiral">a stackoverflow answer</a>.
      */
     public static void forChunksInRange(int chunkX, int chunkZ, int range, IntegerBiConsumer consumer) {
-        if (!USE_NEW_CHUNK_SENDING) {
+        if (!ServerFlag.USE_NEW_CHUNK_SENDING) {
             for (int x = -range; x <= range; ++x) {
                 for (int z = -range; z <= range; ++z) {
                     consumer.accept(chunkX + x, chunkZ + z);

@@ -25,6 +25,7 @@ import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
 
@@ -99,7 +100,7 @@ public interface ServerProcess extends Snapshotable {
     /**
      * Loads and handle extensions.
      */
-    @NotNull ExtensionManager extension();
+    @Nullable ExtensionManager extension();
 
     /**
      * Handles registry tags.

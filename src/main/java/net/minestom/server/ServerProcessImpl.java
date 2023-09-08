@@ -33,6 +33,7 @@ import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
-        this.extension = new ExtensionManager(this);
+        this.extension = ServerFlag.EXTENSIONS_ENABLED ? new ExtensionManager(this) : null;
         this.connection = new ConnectionManager();
         this.packetProcessor = new PacketProcessor();
         this.packetListener = new PacketListenerManager(this);
@@ -163,7 +164,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ExtensionManager extension() {
+    public @Nullable ExtensionManager extension() {
         return extension;
     }
 
@@ -208,12 +209,16 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
-        extension.start();
-        extension.gotoPreInit();
+        if (ServerFlag.EXTENSIONS_ENABLED) {
+            extension.start();
+            extension.gotoPreInit();
+        }
 
         LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
 
-        extension.gotoInit();
+        if (ServerFlag.EXTENSIONS_ENABLED) {
+            extension.gotoInit();
+        }
 
         // Init server
         try {
@@ -226,11 +231,13 @@ final class ServerProcessImpl implements ServerProcess {
         // Start server
         server.start();
 
-        extension.gotoPostInit();
+        if (ServerFlag.EXTENSIONS_ENABLED) {
+            extension.gotoPostInit();
+        }
 
         LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
 
-        if (MinecraftServer.isTerminalEnabled()) {
+        if (ServerFlag.TERMINAL_ENABLED) {
             MinestomTerminal.start();
         }
         // Stop the server on SIGINT
@@ -242,8 +249,10 @@ final class ServerProcessImpl implements ServerProcess {
         if (!stopped.compareAndSet(false, true))
             return;
         LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
-        LOGGER.info("Unloading all extensions.");
-        extension.shutdown();
+        if (ServerFlag.EXTENSIONS_ENABLED) {
+            LOGGER.info("Unloading all extensions.");
+            extension.shutdown();
+        }
         scheduler.shutdown();
         connection.shutdown();
         server.stop();

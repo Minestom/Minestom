@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -30,9 +31,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
 public class LightingChunk extends DynamicChunk {
-
-    private static final int LIGHTING_CHUNKS_PER_SEND = Integer.getInteger("minestom.lighting.chunks-per-send", 10);
-    private static final int LIGHTING_CHUNKS_SEND_DELAY = Integer.getInteger("minestom.lighting.chunks-send-delay", 100);
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
@@ -291,10 +289,10 @@ public class LightingChunk extends DynamicChunk {
                 }
                 count++;
 
-                if (count % LIGHTING_CHUNKS_PER_SEND == 0) {
+                if (count % ServerFlag.LIGHTING_CHUNKS_PER_SEND == 0) {
                     // System.out.println("Sent " + count + " lighting chunks " + (count * 100 / copy.size()) + "%");
                     try {
-                        Thread.sleep(LIGHTING_CHUNKS_SEND_DELAY);
+                        Thread.sleep(ServerFlag.LIGHTING_CHUNKS_SEND_DELAY);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
