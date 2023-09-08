@@ -1,6 +1,7 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.ObjectPool;
@@ -112,8 +113,8 @@ public final class Worker extends MinestomThread {
         channel.register(selector, SelectionKey.OP_READ);
         if (channel.getLocalAddress() instanceof InetSocketAddress) {
             Socket socket = channel.socket();
-            socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
-            socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
+            socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);
+            socket.setReceiveBufferSize(ServerFlag.SOCKET_RECEIVE_BUFFER_SIZE);
             socket.setTcpNoDelay(Server.NO_DELAY);
             socket.setSoTimeout(30 * 1000); // 30 seconds
         }

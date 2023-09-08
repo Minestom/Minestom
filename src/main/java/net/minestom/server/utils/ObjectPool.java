@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
@@ -20,10 +21,9 @@ import java.util.function.UnaryOperator;
 @ApiStatus.Experimental
 public final class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
-    private static final int BUFFER_SIZE = Integer.getInteger("minestom.pooled-buffer-size", 262_143);
 
-    public static final ObjectPool<BinaryBuffer> BUFFER_POOL = new ObjectPool<>(() -> BinaryBuffer.ofSize(BUFFER_SIZE), BinaryBuffer::clear);
-    public static final ObjectPool<ByteBuffer> PACKET_POOL = new ObjectPool<>(() -> ByteBuffer.allocateDirect(Server.MAX_PACKET_SIZE), ByteBuffer::clear);
+    public static final ObjectPool<BinaryBuffer> BUFFER_POOL = new ObjectPool<>(() -> BinaryBuffer.ofSize(ServerFlag.POOLED_BUFFER_SIZE), BinaryBuffer::clear);
+    public static final ObjectPool<ByteBuffer> PACKET_POOL = new ObjectPool<>(() -> ByteBuffer.allocateDirect(ServerFlag.MAX_PACKET_SIZE), ByteBuffer::clear);
 
     private final Cleaner cleaner = Cleaner.create();
     private final MessagePassingQueue<SoftReference<T>> pool = new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE);

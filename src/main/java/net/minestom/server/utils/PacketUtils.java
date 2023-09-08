@@ -11,6 +11,7 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.Viewable;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -46,10 +47,6 @@ import java.util.zip.Inflater;
  */
 public final class PacketUtils {
     private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
-
-    public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);
-    public static final boolean CACHED_PACKET = PropertyUtils.getBoolean("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = PropertyUtils.getBoolean("minestom.viewable-packet", true);
 
     // Viewable packets
     private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
@@ -113,11 +110,10 @@ public final class PacketUtils {
      * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
      *
      * @see CachedPacket#body()
-     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
      */
     static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
-        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return GROUPED_PACKET;
-        if (!(packet instanceof ComponentHoldingServerPacket holder)) return GROUPED_PACKET;
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
+        if (!(packet instanceof ComponentHoldingServerPacket holder)) return ServerFlag.GROUPED_PACKET;
         return !containsTranslatableComponents(holder);
     }
 
@@ -164,7 +160,7 @@ public final class PacketUtils {
             entity.sendPacketToViewers(serverPacket);
             return;
         }
-        if (!VIEWABLE_PACKET) {
+        if (!ServerFlag.VIEWABLE_PACKET) {
             sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
             return;
         }
@@ -180,7 +176,7 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static void flush() {
-        if (VIEWABLE_PACKET) {
+        if (ServerFlag.VIEWABLE_PACKET) {
             VIEWABLE_STORAGE_MAP.asMap().entrySet().parallelStream().forEach(entry ->
                     entry.getValue().process(entry.getKey()));
         }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,8 +27,6 @@ public class ExtensionManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
-    public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
-    public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
 
     private final ServerProcess serverProcess;
@@ -36,7 +35,7 @@ public class ExtensionManager {
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
     private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
 
-    private final File extensionFolder = new File(System.getProperty("minestom.extension.folder", "extensions"));
+    private final File extensionFolder = new File(ServerFlag.EXTENSIONS_FOLDER);
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private Path extensionDataRoot = extensionFolder.toPath();
 
@@ -371,14 +370,13 @@ public class ExtensionManager {
         //TODO(mattw): Should show a warning if one is set and not the other. It is most likely a mistake.
 
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
-        if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
+        if (ServerFlag.EXTENSIONS_DEV_CLASSES != null && ServerFlag.EXTENSIONS_DEV_RESOURCES != null) {
             LOGGER.info("Found indev folders for extension. Adding to list of discovered extensions.");
-            final String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
-            final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
+            final File extensionJsonFile = new File(ServerFlag.EXTENSIONS_DEV_RESOURCES, "extension.json");
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(extensionJsonFile))) {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files.add(new File(extensionClasses).toURI().toURL());
-                extension.files.add(new File(extensionResources).toURI().toURL());
+                extension.files.add(new File(ServerFlag.EXTENSIONS_DEV_CLASSES).toURI().toURL());
+                extension.files.add(new File(ServerFlag.EXTENSIONS_DEV_RESOURCES).toURI().toURL());
                 extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
 
                 // Verify integrity and ensure defaults

@@ -16,6 +16,7 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
@@ -112,8 +113,6 @@ import java.util.function.UnaryOperator;
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
-    private static final int PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
-    private static final int PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -706,21 +705,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             chunkUpdateLimitChecker.addToHistory(getChunk());
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
-            if (ChunkUtils.USE_NEW_CHUNK_SENDING) {
+            if (ServerFlag.USE_NEW_CHUNK_SENDING) {
                 // FIXME: Improve this queueing. It is pretty scuffed
                 var chunkQueue = new LongArrayList();
                 ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(),
                         (x, z) -> chunkQueue.add(ChunkUtils.getChunkIndex(x, z)));
                 var iter = chunkQueue.iterator();
                 Supplier<TaskSchedule> taskRunnable = () -> {
-                    for (int i = 0; i < ChunkUtils.NEW_CHUNK_COUNT_PER_INTERVAL; i++) {
+                    for (int i = 0; i < ServerFlag.NEW_CHUNK_COUNT_PER_INTERVAL; i++) {
                         if (!iter.hasNext()) return TaskSchedule.stop();
 
                         var next = iter.nextLong();
                         chunkAdder.accept(ChunkUtils.getChunkCoordX(next), ChunkUtils.getChunkCoordZ(next));
                     }
 
-                    return TaskSchedule.tick(ChunkUtils.NEW_CHUNK_SEND_INTERVAL);
+                    return TaskSchedule.tick(ServerFlag.NEW_CHUNK_SEND_INTERVAL);
                 };
                 scheduler().submitTask(taskRunnable);
             } else {
@@ -1873,13 +1872,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     public void interpretPacketQueue() {
-        if (this.packets.size() >= PACKET_QUEUE_SIZE) {
+        if (this.packets.size() >= ServerFlag.PLAYER_PACKET_QUEUE_SIZE) {
             kick(Component.text("Too Many Packets", NamedTextColor.RED));
             return;
         }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet, this), PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(packet, this), ServerFlag.PLAYER_PACKET_PER_TICK);
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     private @Nullable FramedPacket updatedCache() {
-        if (!PacketUtils.CACHED_PACKET)
+        if (!ServerFlag.CACHED_PACKET)
             return null;
         SoftReference<FramedPacket> ref = packet;
         FramedPacket cache;
