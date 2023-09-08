@@ -18,6 +18,9 @@ flare = "2.0.1"
 gson = "2.10.1"
 jcTools = "4.0.1"
 
+# Terminal
+jline = "3.21.0"
+
 # Quality
 junit-jupiter = "5.9.3"
 junit-platform = "1.9.3"
@@ -65,6 +68,10 @@ flare-fastutil = { group = "space.vectrix.flare", name = "flare-fastutil", versi
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools" }
 
+# Terminal
+jline = { group = "org.jline", name = "jline", version.ref = "jline" }
+jline-jansi = { group = "org.jline", name = "jline-terminal-jansi", version.ref = "jline" }
+
 # Code quality
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
@@ -90,6 +97,7 @@ adventure = ["adventure-api", "adventure-serializer-gson", "adventure-serializer
 junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine"]
 hephaistos = ["hephaistos-common", "hephaistos-gson"]
 logback = ["logback-core", "logback-classic"]
+terminal = ["jline", "jline-jansi"]
 
 [plugins]
 

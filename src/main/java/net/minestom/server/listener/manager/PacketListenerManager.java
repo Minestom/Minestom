@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class PacketListenerManager {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
     private final ServerProcess serverProcess;
 
     private final Map<Class<? extends ClientPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
