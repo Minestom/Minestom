@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  */
 public class Command {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(Command.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(Command.class);
 
     private final String name;
     private final String[] aliases;

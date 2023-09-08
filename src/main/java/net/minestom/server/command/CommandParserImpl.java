@@ -148,9 +148,9 @@ final class CommandParserImpl implements CommandParser {
             }
         } else {
             // Nothing left, yet we're still being asked to parse? There must be defaults then
-            Supplier<?> defaultSupplier = node.argument().getDefaultValue();
+            Function<CommandSender, ?> defaultSupplier = node.argument().getDefaultValue();
             if (defaultSupplier != null) {
-                Object value = defaultSupplier.get();
+                Object value = defaultSupplier.apply(sender);
                 ArgumentResult<Object> argumentResult = new ArgumentResult.Success<>(value, "");
                 chain.append(new NodeResult(node, chain, argumentResult, argument.getSuggestionCallback()));
                 // Add the default to the chain, and then carry on dealing with this node
@@ -170,7 +170,7 @@ final class CommandParserImpl implements CommandParser {
 
         NodeResult error = null;
         for (Node child : node.next()) {
-            NodeResult childResult = parseNode(child, chain, reader);
+            NodeResult childResult = parseNode(sender, child, chain, reader);
             if (childResult.argumentResult instanceof ArgumentResult.Success<Object>) {
                 // Assume that there is only one successful node for a given chain of arguments
                 return childResult;

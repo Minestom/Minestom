@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public final class DebugUtils {
     public static boolean INSIDE_TEST = PropertyUtils.getBoolean("minestom.inside-test", false);
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(DebugUtils.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(DebugUtils.class);
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
