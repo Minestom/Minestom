@@ -106,7 +106,7 @@ tasks {
 
     nexusPublishing{
         useStaging.set(true)
-        this.packageGroup.set("dev.hollowcube")
+        this.packageGroup.set("net.minestom")
 
         repositories.sonatype {
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
@@ -120,21 +120,21 @@ tasks {
     }
 
     publishing.publications.create<MavenPublication>("maven") {
-        groupId = "dev.hollowcube"
-        artifactId = "minestom-ce"
+        groupId = "net.minestom"
+        artifactId = "minestom"
         version = project.version.toString()
 
         from(project.components["java"])
 
         pom {
-            name.set("minestom-ce")
-            description.set("Lightweight and multi-threaded 1.19.3 Minecraft server")
-            url.set("https://github.com/hollow-cube/minestom-ce")
+            name.set("minestom")
+            description.set(project.description)
+            url.set("https://github.com/minestom/minestom")
 
             licenses {
                 license {
                     name.set("Apache 2.0")
-                    url.set("https://github.com/hollow-cube/minestom-ce/blob/main/LICENSE")
+                    url.set("https://github.com/minestom/minestom/blob/main/LICENSE")
                 }
             }
 
@@ -151,19 +151,19 @@ tasks {
 
             issueManagement {
                 system.set("GitHub")
-                url.set("https://github.com/hollow-cube/minestom-ce/issues")
+                url.set("https://github.com/minestom/minestom/issues")
             }
 
             scm {
-                connection.set("scm:git:git://github.com/hollow-cube/minestom-ce.git")
-                developerConnection.set("scm:git:git@github.com:hollow-cube/minestom-ce.git")
-                url.set("https://github.com/hollow-cube/minestom-ce")
+                connection.set("scm:git:git://github.com/minestom/minestom.git")
+                developerConnection.set("scm:git:git@github.com:minestom/minestom.git")
+                url.set("https://github.com/minestom/minestom")
                 tag.set("HEAD")
             }
 
             ciManagement {
                 system.set("Github Actions")
-                url.set("https://github.com/hollow-cube/minestom-ce/actions")
+                url.set("https://github.com/minestom/minestom/actions")
             }
         }
     }
