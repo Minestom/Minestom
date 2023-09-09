@@ -21,24 +21,25 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @Override
     public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
-        return block;
+        Shape shape = this.getShape(instance, blockPosition, Facing.valueOf(block.getProperty("facing").toUpperCase()));
+        return block.withProperty("shape", shape.toString().toLowerCase());
     }
 
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace,
-                            @NotNull Point blockPosition, @NotNull Player player) {
+                            @NotNull Point blockPosition, @NotNull Player player, float cursorX, float cursorY, float cursorZ) {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
-        BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
-        String waterlogged = "false"; // waiting for water to be implemented
+        BlockFace half = (cursorY > 0.5 ? BlockFace.TOP : BlockFace.BOTTOM);
+        if(blockFace == BlockFace.BOTTOM || blockFace == BlockFace.TOP) half = blockFace.getOppositeFace();
+        String waterlogged = "false";
 
         return block.withProperties(Map.of(
-                "facing", facing.toString(),
-                "half", half.toString(),
-                "shape", shape.toString(),
+                "facing", facing.toString().toLowerCase(),
+                "half", half.toString().toLowerCase(),
+                "shape", shape.toString().toLowerCase(),
                 "waterlogged", waterlogged));
-
     }
 
     private enum Shape {
@@ -77,9 +78,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
         @NotNull
         public Pair<@Nullable Shape, @Nullable Facing> getFront(@NotNull Instance instance, @NotNull Point blockPosition) {
-            // TODO FIX
-            return null;
-            //return this.getProperties(instance, blockPosition.clone().add(this.front));
+            return this.getProperties(instance, blockPosition.add(this.front));
         }
 
         @NotNull
@@ -95,11 +94,9 @@ public class StairsPlacementRule extends BlockPlacementRule {
             }
             Block state = instance.getBlock(blockPosition);
             try {
-                // TODO: Get properties from state
-//                Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase());
-//                Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase());
-//                return Pair.of(shape, facing);
-                return Pair.of(null, null);
+                Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase());
+                Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase());
+                return Pair.of(shape, facing);
             } catch (Exception ex) {
                 return Pair.of(null, null);
             }
@@ -107,20 +104,19 @@ public class StairsPlacementRule extends BlockPlacementRule {
     }
 
     @NotNull
-    private Shape getShape(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Facing facing) {
-        // TODO FIX
-        return null;
-        /*Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
-        Pair<Shape, Facing> back = facing.getBack(instance, blockPosition);
-        Shape shape = this.getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
+    private static Shape getShape(@NotNull Instance instance, @NotNull Point point, @NotNull Facing facing) {
+        Pair<Shape, Facing> front = facing.getFront(instance, point);
+        Pair<Shape, Facing> back = facing.getBack(instance, point);
+
+        Shape shape = getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
         if (shape == null) {
-            shape = this.getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
+            shape = getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
         }
-        return shape == null ? Shape.STRAIGHT : shape;*/
+        return shape == null ? Shape.STRAIGHT : shape;
     }
 
     @Nullable
-    private Shape getShapeFromSide(@NotNull Pair<Shape, Facing> side, @NotNull Facing facing, @NotNull Shape right, @NotNull Shape left) {
+    private static Shape getShapeFromSide(@NotNull Pair<Shape, Facing> side, @NotNull Facing facing, @NotNull Shape right, @NotNull Shape left) {
         if (side.left() == null) {
             return null;
         }
@@ -153,6 +149,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
         return null;
     }
 
+    // TODO: wouldn't Player class benefit from a getFacing method globally?
     @NotNull
     private Facing getFacing(@NotNull Player player) {
         float degrees = (player.getPosition().yaw() - 90) % 360;
@@ -171,4 +168,5 @@ public class StairsPlacementRule extends BlockPlacementRule {
             return Facing.WEST;
         }
     }
+
 }
