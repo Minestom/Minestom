@@ -533,7 +533,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         final Block block = blockRetriever.getBlock(x, y, z, condition);
-        if (block == null) throw new NullPointerException("Unloaded chunk at " + x + "," + y + "," + z);
+        if (block == null) return Block.AIR;
         return block;
     }
 
