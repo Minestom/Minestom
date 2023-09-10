@@ -560,6 +560,18 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return blockRetriever.getBlock(x, y, z, condition);
     }
 
+    public @Nullable Block getVisibleBlock(@NotNull Point point, @NotNull Condition condition) {
+        return getVisibleBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
+    }
+
+    public @Nullable Block getVisibleBlock(int x, int y, int z) {
+        return getVisibleBlock(x, y, z, Condition.NONE);
+    }
+
+    public @Nullable Block getVisibleBlock(@NotNull Point point) {
+        return getVisibleBlock(point, Condition.NONE);
+    }
+
     /**
      * Sends a {@link BlockActionPacket} for all the viewers of the specific position.
      *
