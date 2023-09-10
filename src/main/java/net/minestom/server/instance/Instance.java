@@ -530,11 +530,34 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return result;
     }
 
+    /**
+     * Gets the block at the given position.
+     *
+     * @param x z position
+     * @param y y position
+     * @param z z position
+     * @param condition condition
+     * @return the block
+     * @throws ChunkNotLoadedException if the chunk containing the block is not loaded
+     */
     @Override
-    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-        final Block block = blockRetriever.getBlock(x, y, z, condition);
-        if (block == null) return Block.AIR;
+    public @NotNull Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final Block block = getVisibleBlock(x, y, z, condition);
+        if (block == null) throw new ChunkNotLoadedException(x, y, z);
         return block;
+    }
+
+    /**
+     * Gets the block at the given position, if it is in a loaded (visible) chunk.
+     *
+     * @param x the X position
+     * @param y the Y position
+     * @param z the Z position
+     * @param condition the condition
+     * @return the block, or null if the chunk is not loaded
+     */
+    public @Nullable Block getVisibleBlock(int x, int y, int z, @NotNull Condition condition) {
+        return blockRetriever.getBlock(x, y, z, condition);
     }
 
     /**
