@@ -25,9 +25,27 @@ public final class TickSchedulerThread extends MinestomThread {
             } catch (Exception e) {
                 serverProcess.exception().handleException(e);
             }
-            final long wait = tickStart + tickNs - System.nanoTime();
-            assert wait <= tickNs : "Wait time is too long: " + (wait / 1e6) + "ms";
-            LockSupport.parkNanos(wait);
+            fixTickRate(tickNs);
         }
+    }
+
+
+    private final long startTickNs = System.nanoTime();
+    private long tick = 1;
+
+    private void fixTickRate(long tickNs) {
+        long nextTickNs = startTickNs + (tickNs * tick);
+        if (System.nanoTime() < nextTickNs) {
+            while (true) {
+                // Checks in every 1/10 ms to see if the current time has reached the next scheduled time.
+                Thread.yield();
+                LockSupport.parkNanos(100000);
+                long currentNs = System.nanoTime();
+                if (currentNs >= nextTickNs) {
+                    break;
+                }
+            }
+        }
+        tick++;
     }
 }

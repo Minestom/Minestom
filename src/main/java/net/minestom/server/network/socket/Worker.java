@@ -39,6 +39,10 @@ public final class Worker extends MinestomThread {
         }
     }
 
+    public void tick() {
+        this.selector.wakeup();
+    }
+
     @Override
     public void run() {
         while (server.isOpen()) {
@@ -86,7 +90,7 @@ public final class Worker extends MinestomThread {
                         MinecraftServer.getExceptionManager().handleException(t);
                         connection.disconnect();
                     }
-                }, MinecraftServer.TICK_MS);
+                });
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -118,7 +122,6 @@ public final class Worker extends MinestomThread {
             socket.setTcpNoDelay(Server.NO_DELAY);
             socket.setSoTimeout(30 * 1000); // 30 seconds
         }
-        this.selector.wakeup();
     }
 
     public MessagePassingQueue<Runnable> queue() {
