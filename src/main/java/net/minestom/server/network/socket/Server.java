@@ -94,6 +94,10 @@ public final class Server {
         }, "Ms-entrypoint").start();
     }
 
+    public void tick() {
+        this.workers.forEach(Worker::tick);
+    }
+
     public boolean isOpen() {
         return !stop;
     }
