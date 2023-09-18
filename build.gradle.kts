@@ -125,7 +125,7 @@ tasks {
 
     publishing.publications.create<MavenPublication>("maven") {
         groupId = "net.minestom"
-        artifactId = "minestom"
+        artifactId = "minestom-snapshots"
         version = project.version.toString()
 
         from(project.components["java"])
