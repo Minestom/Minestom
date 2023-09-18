@@ -2,7 +2,7 @@ name: Gradle Publish to Maven Central
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
