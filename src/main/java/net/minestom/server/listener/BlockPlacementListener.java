@@ -118,7 +118,7 @@ public class BlockPlacementListener {
             // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
             if (collisionEntity != player)
                 refresh(player, chunk);
-            
+
             return;
         }
 
@@ -136,7 +136,7 @@ public class BlockPlacementListener {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
         if (blockPlacementRule != null) {
             // Get id from block placement rule instead of the event
-            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player, cursorPosition);
         }
         if (resultBlock == null) {
             refresh(player, chunk);
@@ -153,7 +153,7 @@ public class BlockPlacementListener {
             playerInventory.setItemInHand(hand, newUsedItem);
         } else {
             // Prevent invisible item on client
-            playerInventory.update();   
+            playerInventory.update();
         }
     }
 
