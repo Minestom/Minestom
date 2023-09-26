@@ -1,11 +1,13 @@
 package net.minestom.server.instance.block.rule.vanilla;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -29,19 +31,19 @@ public class WallPlacementRule extends BlockPlacementRule {
         String waterlogged = "false";
         String west = "none";
 
-        if (isBlock(instance, x + 1, y, z)) {
+        if (isConnectable(instance, x + 1, y, z)) {
             east = "low";
         }
 
-        if (isBlock(instance, x - 1, y, z)) {
+        if (isConnectable(instance, x - 1, y, z)) {
             west = "low";
         }
 
-        if (isBlock(instance, x, y, z + 1)) {
+        if (isConnectable(instance, x, y, z + 1)) {
             south = "low";
         }
 
-        if (isBlock(instance, x, y, z - 1)) {
+        if (isConnectable(instance, x, y, z - 1)) {
             north = "low";
         }
 
@@ -61,7 +63,14 @@ public class WallPlacementRule extends BlockPlacementRule {
         return block;
     }
 
-    private boolean isBlock(Instance instance, int x, int y, int z) {
-        return instance.getBlock(x, y, z).isSolid();
+    private boolean isConnectable(Instance instance, int x, int y, int z) {
+        Chunk chunk = instance.getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
+        if (chunk == null) {
+            return false;
+        }
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (chunk) {
+            return chunk.getBlock(x, y, z).isSolid();
+        }
     }
 }

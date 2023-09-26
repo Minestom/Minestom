@@ -5,6 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.rule.vanilla.WallPlacementRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,10 @@ public abstract class BlockPlacementRule {
 
     /**
      * Called when the block state id can be updated (for instance if a neighbour block changed).
+     *
+     * Can be called when chunks surrounding the one owning the block are not loaded yet,
+     * so if you're about to retrieve their blocks, you must do it with care.
+     * Look at {@link WallPlacementRule#blockUpdate(Instance, Point, Block)} for a tip.
      *
      * @param instance      the instance of the block
      * @param blockPosition the block position
