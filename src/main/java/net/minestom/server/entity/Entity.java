@@ -292,6 +292,21 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Do a batch edit of this entity's metadata.
+     */
+    public <TMeta extends EntityMeta> void editEntityMeta(Class<TMeta> metaClass, Consumer<TMeta> editor) {
+        entityMeta.setNotifyAboutChanges(false);
+        try {
+            TMeta casted = metaClass.cast(entityMeta);
+            editor.accept(casted);
+        } catch (Throwable t) {
+            throw new RuntimeException("Error editing entity " + id + " " + entityType.name() + " meta", t);
+        } finally {
+            entityMeta.setNotifyAboutChanges(true);
+        }
+    }
+
+    /**
      * Teleports the entity only if the chunk at {@code position} is loaded or if
      * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
      *
