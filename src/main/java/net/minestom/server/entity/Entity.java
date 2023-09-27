@@ -995,7 +995,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param gravityDragPerTick  the gravity drag per tick in block
      * @param gravityAcceleration the gravity acceleration in block
-     * @see <a href="https://minecraft.gamepedia.com/Entity#Motion_of_entities">Entities motion</a>
+     * @see <a href="https://minecraft.wiki/w/Entity#Motion_of_entities">Entities motion</a>
      */
     public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;

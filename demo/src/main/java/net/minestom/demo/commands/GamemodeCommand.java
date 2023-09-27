@@ -20,7 +20,7 @@ import java.util.Locale;
  * Command that make a player change gamemode, made in
  * the style of the vanilla /gamemode command.
  *
- * @see <a href="https://minecraft.fandom.com/wiki/Commands/gamemode">...</a>
+ * @see <a href="https://minecraft.wiki/w/Commands/gamemode">...</a>
  */
 public class GamemodeCommand extends Command {
 

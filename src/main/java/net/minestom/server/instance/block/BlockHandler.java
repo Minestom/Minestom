@@ -67,7 +67,7 @@ public interface BlockHandler {
      * Specifies which block entity tags should be sent to the player.
      *
      * @return The list of tags from this block's block entity that should be sent to the player
-     * @see <a href="https://minecraft.fandom.com/wiki/Block_entity">Block entity on Minecraft fandom wiki</a>
+     * @see <a href="https://minecraft.wiki/w/Block_entity">Block entity on the Minecraft wiki</a>
      */
     default @NotNull Collection<Tag<?>> getBlockEntityTags() {
         return List.of();

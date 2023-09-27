@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the target selector argument.
- * https://minecraft.gamepedia.com/Commands#Target_selectors
+ * https://minecraft.wiki/w/Target_selectors
  */
 public class ArgumentEntity extends Argument<EntityFinder> {
 

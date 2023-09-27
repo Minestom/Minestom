@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * https://minecraft.gamepedia.com/Custom_dimension
+ * https://minecraft.wiki/w/Custom_dimension
  */
 public class DimensionType {
 
