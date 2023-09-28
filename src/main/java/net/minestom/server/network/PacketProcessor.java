@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.ClientPacketsHandler;
@@ -44,7 +45,7 @@ public record PacketProcessor(@NotNull ClientPacketsHandler statusHandler,
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
         final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
         if (packet instanceof ClientPreplayPacket prePlayPacket) {
-            prePlayPacket.process(connection);
+            MinecraftServer.getPacketListenerManager().processClientPrePlayPacket(prePlayPacket, connection);
         } else {
             final Player player = connection.getPlayer();
             assert player != null;
