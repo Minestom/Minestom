@@ -3,6 +3,7 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.config.Config;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -137,6 +138,11 @@ public interface ServerProcess extends Snapshotable {
      * Handles the server ticks.
      */
     @NotNull Ticker ticker();
+
+    /**
+     * Configuration for (mostly) internal values
+     */
+    @NotNull Config config();
 
     void start(@NotNull SocketAddress socketAddress);
 

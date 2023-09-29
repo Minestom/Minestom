@@ -4,6 +4,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.config.Config;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.ExtensionManager;
@@ -64,21 +65,29 @@ public final class MinecraftServer {
 
     private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
     private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
-    private static int compressionThreshold = 256;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
-        updateProcess();
+        return init(Config.defaults());
+    }
+
+    public static MinecraftServer init(Config config) {
+        updateProcess(config);
         return new MinecraftServer();
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
+        return updateProcess(Config.defaults());
+    }
+
+    @ApiStatus.Internal
+    public static ServerProcess updateProcess(Config config) {
         ServerProcess process;
         try {
-            process = new ServerProcessImpl();
+            process = new ServerProcessImpl(config);
             serverProcess = process;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -189,6 +198,10 @@ public final class MinecraftServer {
         return serverProcess.packetProcessor();
     }
 
+    public static @NotNull Config getConfig() {
+        return serverProcess.config();
+    }
+
     public static boolean isStarted() {
         return serverProcess.isAlive();
     }
@@ -250,21 +263,9 @@ public final class MinecraftServer {
      *
      * @return the compression threshold, 0 means that compression is disabled
      */
+    @Deprecated
     public static int getCompressionThreshold() {
-        return compressionThreshold;
-    }
-
-    /**
-     * Changes the compression threshold of the server.
-     * <p>
-     * WARNING: this need to be called before {@link #start(SocketAddress)}.
-     *
-     * @param compressionThreshold the new compression threshold, 0 to disable compression
-     * @throws IllegalStateException if this is called after the server started
-     */
-    public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
-        MinecraftServer.compressionThreshold = compressionThreshold;
+        return getConfig().compressionThreshold();
     }
 
     /**
