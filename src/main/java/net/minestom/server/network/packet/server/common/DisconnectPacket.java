@@ -1,6 +1,7 @@
-package net.minestom.server.network.packet.server.play;
+package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -24,8 +25,8 @@ public record DisconnectPacket(@NotNull Component message) implements ComponentH
     }
 
     @Override
-    public int getId() {
-        return ServerPacketIdentifier.DISCONNECT;
+    public int getId(@NotNull ConnectionState state) {
+        return state == ConnectionState.PLAY ? ServerPacketIdentifier.DISCONNECT : ServerPacketIdentifier.CONFIGURATION_DISCONNECT;
     }
 
     @Override

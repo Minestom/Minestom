@@ -1,5 +1,6 @@
-package net.minestom.server.network.packet.server.play;
+package net.minestom.server.network.packet.server.common;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -18,7 +19,7 @@ public record KeepAlivePacket(long id) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
-        return ServerPacketIdentifier.KEEP_ALIVE;
+    public int getId(@NotNull ConnectionState state) {
+        return state == ConnectionState.PLAY ? ServerPacketIdentifier.KEEP_ALIVE : ServerPacketIdentifier.CONFIGURATION_KEEP_ALIVE;
     }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class StatusListener {
+public class PlayStatusListener {
 
     public static void listener(ClientStatusPacket packet, Player player) {
         switch (packet.action()) {

@@ -78,7 +78,6 @@ public class AnvilLoader implements IChunkLoader {
 
     @Override
     public @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
-        LOGGER.debug("Attempt loading at {} {}", chunkX, chunkZ);
         if (!Files.exists(path)) {
             // No world folder
             return CompletableFuture.completedFuture(null);

@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -63,7 +64,7 @@ public record JoinGamePacket(int entityId, boolean isHardcore, GameMode gameMode
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.JOIN_GAME;
     }
 

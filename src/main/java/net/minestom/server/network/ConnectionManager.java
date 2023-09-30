@@ -8,8 +8,9 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
-import net.minestom.server.network.packet.server.play.KeepAlivePacket;
+import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
@@ -135,7 +136,7 @@ public final class ConnectionManager {
 
     /**
      * Computes the UUID of the specified connection.
-     * Used in {@link net.minestom.server.network.packet.client.login.LoginStartPacket} in order
+     * Used in {@link ClientLoginStartPacket} in order
      * to give the player the right {@link UUID}.
      *
      * @param playerConnection the player connection
@@ -184,6 +185,47 @@ public final class ConnectionManager {
         this.players.remove(player);
     }
 
+    public @NotNull Player startConfigurationState(@NotNull PlayerConnection connection,
+                                             @NotNull UUID uuid, @NotNull String username,
+                                             boolean register) {
+        final Player player = playerProvider.createPlayer(uuid, username, connection);
+        startConfigurationState(player, register);
+        return player;
+    }
+
+    public CompletableFuture<Void> startConfigurationState(@NotNull Player player, boolean register) {
+        return AsyncUtils.runAsync(() -> {
+            final PlayerConnection playerConnection = player.getPlayerConnection();
+            // Compression
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                final int threshold = MinecraftServer.getCompressionThreshold();
+                if (threshold > 0) socketConnection.startCompression();
+            }
+            // Call pre login event
+            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
+            EventDispatcher.call(asyncPlayerPreLoginEvent);
+            if (!player.isOnline())
+                return; // Player has been kicked
+            // Change UUID/Username based on the event
+            {
+                final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
+                final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
+                if (!player.getUsername().equals(eventUsername)) {
+                    player.setUsernameField(eventUsername);
+                }
+                if (!player.getUuid().equals(eventUuid)) {
+                    player.setUuid(eventUuid);
+                }
+            }
+            // Send login success packet
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
+            playerConnection.sendPacket(loginSuccessPacket);
+//            playerConnection.setConnectionState(ConnectionState.CONFIGURATION);
+//            if (register) registerPlayer(player); // WHEN ENTERING CONFIGURATION THIS SHOULD BE SET
+//            this.waitingPlayers.relaxedOffer(player);
+        });
+    }
+
     /**
      * Calls the player initialization callbacks and the event {@link AsyncPlayerPreLoginEvent}.
      * <p>
@@ -193,7 +235,7 @@ public final class ConnectionManager {
      * @param player   the player
      * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
-    public CompletableFuture<Void> startPlayState(@NotNull Player player, boolean register) {
+    public CompletableFuture<Void> startPlayStateOLD(@NotNull Player player, boolean register) {
         return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             // Compression
@@ -233,11 +275,11 @@ public final class ConnectionManager {
      * @return the newly created player object
      * @see #startPlayState(Player, boolean)
      */
-    public @NotNull Player startPlayState(@NotNull PlayerConnection connection,
+    public @NotNull Player startPlayStateOLD(@NotNull PlayerConnection connection,
                                           @NotNull UUID uuid, @NotNull String username,
                                           boolean register) {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
-        startPlayState(player, register);
+        startPlayStateOLD(player, register);
         return player;
     }
 

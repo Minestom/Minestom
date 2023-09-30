@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -34,7 +35,7 @@ public record EntityVelocityPacket(int entityId, short velocityX, short velocity
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.ENTITY_VELOCITY;
     }
 }

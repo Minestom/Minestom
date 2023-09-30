@@ -11,6 +11,16 @@ public final class ServerPacketIdentifier {
     public static final int LOGIN_SET_COMPRESSION = 0x03;
     public static final int LOGIN_PLUGIN_REQUEST = 0x04;
 
+    public static final int CONFIGURATION_PLUGIN_MESSAGE = 0x00;
+    public static final int CONFIGURATION_DISCONNECT = 0x01;
+    public static final int CONFIGURATION_FINISH_CONFIGURATION = 0x02;
+    public static final int CONFIGURATION_KEEP_ALIVE = 0x03;
+    public static final int CONFIGURATION_PING = 0x04;
+    public static final int CONFIGURATION_REGISTRY_DATA = 0x05;
+    public static final int CONFIGURATION_RESOURCE_PACK_SEND = 0x06;
+    public static final int CONFIGURATION_UPDATE_ENABLED_FEATURES = 0x07;
+    public static final int CONFIGURATION_TAGS = 0x08;
+
     public static final int BUNDLE = nextPlayId();
     public static final int SPAWN_ENTITY = nextPlayId();
     public static final int SPAWN_EXPERIENCE_ORB = nextPlayId();
@@ -24,6 +34,8 @@ public final class ServerPacketIdentifier {
     public static final int BLOCK_CHANGE = nextPlayId();
     public static final int BOSS_BAR = nextPlayId();
     public static final int SERVER_DIFFICULTY = nextPlayId();
+    public static final int CHUNK_BATCH_FINISHED = nextPlayId();
+    public static final int CHUNK_BATCH_START = nextPlayId();
     public static final int CHUNK_BIOMES = nextPlayId();
     public static final int CLEAR_TITLES = nextPlayId();
     public static final int TAB_COMPLETE = nextPlayId();
@@ -62,6 +74,7 @@ public final class ServerPacketIdentifier {
     public static final int OPEN_WINDOW = nextPlayId();
     public static final int OPEN_SIGN_EDITOR = nextPlayId();
     public static final int PING = nextPlayId();
+    public static final int PONG_RESPONSE = nextPlayId();
     public static final int CRAFT_RECIPE_RESPONSE = nextPlayId();
     public static final int PLAYER_ABILITIES = nextPlayId();
     public static final int PLAYER_CHAT = nextPlayId();
@@ -110,6 +123,7 @@ public final class ServerPacketIdentifier {
     public static final int SET_TITLE_TIME = nextPlayId();
     public static final int ENTITY_SOUND_EFFECT = nextPlayId();
     public static final int SOUND_EFFECT = nextPlayId();
+    public static final int START_CONFIGURATION_PACKET = nextPlayId();
     public static final int STOP_SOUND = nextPlayId();
     public static final int SYSTEM_CHAT = nextPlayId();
     public static final int PLAYER_LIST_HEADER_AND_FOOTER = nextPlayId();
@@ -118,7 +132,6 @@ public final class ServerPacketIdentifier {
     public static final int ENTITY_TELEPORT = nextPlayId();
     public static final int ADVANCEMENTS = nextPlayId();
     public static final int ENTITY_PROPERTIES = nextPlayId();
-    public static final int UPDATE_ENABLED_FEATURES = nextPlayId();
     public static final int ENTITY_EFFECT = nextPlayId();
     public static final int DECLARE_RECIPES = nextPlayId();
     public static final int TAGS = nextPlayId();

@@ -26,7 +26,7 @@ public abstract class PlayerConnection {
 
     public PlayerConnection() {
         this.online = true;
-        this.connectionState = ConnectionState.UNKNOWN;
+        this.connectionState = ConnectionState.HANDSHAKE;
     }
 
     /**
