@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.ChatSession;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -70,7 +71,7 @@ public final class PlayerInfoUpdatePacket implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.PLAYER_INFO_UPDATE;
     }
 

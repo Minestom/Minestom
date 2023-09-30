@@ -1,7 +1,7 @@
 package net.minestom.server.network;
 
 import it.unimi.dsi.fastutil.Pair;
-import net.minestom.server.network.packet.client.play.ClientPluginMessagePacket;
+import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;

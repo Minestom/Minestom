@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -33,23 +34,23 @@ public final class CachedPacket implements SendablePacket {
         this.packet = null;
     }
 
-    public @NotNull ServerPacket packet() {
-        FramedPacket cache = updatedCache();
+    public @NotNull ServerPacket packet(@NotNull ConnectionState state) {
+        FramedPacket cache = updatedCache(state);
         return cache != null ? cache.packet() : packetSupplier.get();
     }
 
-    public @Nullable ByteBuffer body() {
-        FramedPacket cache = updatedCache();
+    public @Nullable ByteBuffer body(@NotNull ConnectionState state) {
+        FramedPacket cache = updatedCache(state);
         return cache != null ? cache.body() : null;
     }
 
-    private @Nullable FramedPacket updatedCache() {
+    private @Nullable FramedPacket updatedCache(@NotNull ConnectionState state) {
         if (!PacketUtils.CACHED_PACKET)
             return null;
         SoftReference<FramedPacket> ref = packet;
         FramedPacket cache;
         if (ref == null || (cache = ref.get()) == null) {
-            cache = PacketUtils.allocateTrimmedPacket(packetSupplier.get());
+            cache = PacketUtils.allocateTrimmedPacket(state, packetSupplier.get());
             this.packet = new SoftReference<>(cache);
         }
         return cache;

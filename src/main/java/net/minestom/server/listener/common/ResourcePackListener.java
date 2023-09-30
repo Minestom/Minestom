@@ -1,9 +1,9 @@
-package net.minestom.server.listener;
+package net.minestom.server.listener.common;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerResourcePackStatusEvent;
-import net.minestom.server.network.packet.client.play.ClientResourcePackStatusPacket;
+import net.minestom.server.network.packet.client.common.ClientResourcePackStatusPacket;
 
 public class ResourcePackListener {
 

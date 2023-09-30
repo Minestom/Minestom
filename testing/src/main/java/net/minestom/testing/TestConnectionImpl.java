@@ -41,7 +41,7 @@ final class TestConnectionImpl implements TestConnection {
             event.getPlayer().setRespawnPoint(pos);
         });
 
-        return process.connection().startPlayState(player, true)
+        return process.connection().startConfigurationState(player, true)
                 .thenApply(unused -> {
                     process.connection().updateWaitingPlayers();
                     return player;
@@ -65,7 +65,7 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         private ServerPacket extractPacket(final SendablePacket packet) {
-            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(packet);
+            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getConnectionState(), packet);
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;

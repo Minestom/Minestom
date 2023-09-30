@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -33,7 +34,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 

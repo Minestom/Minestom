@@ -4,8 +4,6 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.crypto.ChatSession;
-import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Metadata;
@@ -13,9 +11,10 @@ import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.client.handshake.HandshakePacket;
+import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.handshake.ResponsePacket;
+import net.minestom.server.network.packet.server.common.DisconnectPacket;
+import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
@@ -30,11 +29,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -167,7 +161,7 @@ public class PacketWriteReadTest {
 
     @BeforeAll
     public static void setupClient() {
-        CLIENT_PACKETS.add(new HandshakePacket(755, "localhost", 25565, 2));
+        CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, 2));
     }
 
     @Test

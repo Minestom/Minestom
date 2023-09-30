@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -25,7 +26,7 @@ public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.VEHICLE_MOVE;
     }
 }

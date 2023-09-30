@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -29,7 +30,7 @@ public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.BLOCK_ACTION;
     }
 }

@@ -1,7 +1,8 @@
-package net.minestom.server.network.packet.server.play;
+package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -47,8 +48,8 @@ public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) impleme
     }
 
     @Override
-    public int getId() {
-        return ServerPacketIdentifier.TAGS;
+    public int getId(@NotNull ConnectionState state) {
+        return state == ConnectionState.PLAY ? ServerPacketIdentifier.TAGS : ServerPacketIdentifier.CONFIGURATION_TAGS;
     }
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {

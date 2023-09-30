@@ -23,7 +23,7 @@ public class SocketWriteTest {
         }
 
         @Override
-        public int getId() {
+        public int getId(@NotNull ConnectionState state) {
             return 1;
         }
     }
@@ -35,7 +35,7 @@ public class SocketWriteTest {
         }
 
         @Override
-        public int getId() {
+        public int getId(@NotNull ConnectionState state) {
             return 1;
         }
     }

@@ -17,6 +17,7 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -243,10 +244,11 @@ public final class PacketUtils {
         return remaining;
     }
 
-    public static void writeFramedPacket(@NotNull ByteBuffer buffer,
+    public static void writeFramedPacket(@NotNull ConnectionState state,
+                                         @NotNull ByteBuffer buffer,
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
-        writeFramedPacket(buffer, packet.getId(), packet,
+        writeFramedPacket(buffer, packet.getId(state), packet,
                 compression ? MinecraftServer.getCompressionThreshold() : 0);
     }
 
@@ -295,20 +297,20 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer buffer, @NotNull ServerPacket packet, boolean compression) {
-        writeFramedPacket(buffer, packet, compression);
+    public static ByteBuffer createFramedPacket(@NotNull ConnectionState state, @NotNull ByteBuffer buffer, @NotNull ServerPacket packet, boolean compression) {
+        writeFramedPacket(state, buffer, packet, compression);
         return buffer.flip();
     }
 
     @ApiStatus.Internal
-    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer buffer, @NotNull ServerPacket packet) {
-        return createFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+    public static ByteBuffer createFramedPacket(@NotNull ConnectionState state, @NotNull ByteBuffer buffer, @NotNull ServerPacket packet) {
+        return createFramedPacket(state, buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
     }
 
     @ApiStatus.Internal
-    public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
+    public static FramedPacket allocateTrimmedPacket(@NotNull ConnectionState state, @NotNull ServerPacket packet) {
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
-            final ByteBuffer temp = PacketUtils.createFramedPacket(hold.get(), packet);
+            final ByteBuffer temp = PacketUtils.createFramedPacket(state, hold.get(), packet);
             final int size = temp.remaining();
             final ByteBuffer buffer = ByteBuffer.allocateDirect(size).put(0, temp, 0, size);
             return new FramedPacket(packet, buffer);
@@ -322,7 +324,7 @@ public final class PacketUtils {
 
         private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             try (var hold = ObjectPool.PACKET_POOL.hold()) {
-                final ByteBuffer framedPacket = createFramedPacket(hold.get(), serverPacket);
+                final ByteBuffer framedPacket = createFramedPacket(player.getPlayerConnection().getConnectionState(), hold.get(), serverPacket);
                 final int packetSize = framedPacket.limit();
                 if (packetSize >= buffer.capacity()) {
                     process(viewable);
