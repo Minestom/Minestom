@@ -2,10 +2,11 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a player send {@link net.minestom.server.network.packet.client.play.ClientPluginMessagePacket}.
+ * Called when a player send {@link ClientPluginMessagePacket}.
  */
 public class PlayerPluginMessageEvent implements PlayerInstanceEvent {
 

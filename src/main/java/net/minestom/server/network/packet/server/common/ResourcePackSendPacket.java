@@ -1,6 +1,7 @@
-package net.minestom.server.network.packet.server.play;
+package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -40,8 +41,8 @@ public record ResourcePackSendPacket(String url, String hash, boolean forced,
     }
 
     @Override
-    public int getId() {
-        return ServerPacketIdentifier.RESOURCE_PACK_SEND;
+    public int getId(@NotNull ConnectionState state) {
+        return state == ConnectionState.PLAY ? ServerPacketIdentifier.RESOURCE_PACK_SEND : ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
     }
 
     @Override

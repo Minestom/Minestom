@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -19,7 +20,7 @@ public record SelectAdvancementTabPacket(@Nullable String identifier) implements
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
     }
 }

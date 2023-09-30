@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -41,7 +42,7 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.STOP_SOUND;
     }
 }

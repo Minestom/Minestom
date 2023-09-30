@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -35,7 +36,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.TAB_COMPLETE;
     }
 

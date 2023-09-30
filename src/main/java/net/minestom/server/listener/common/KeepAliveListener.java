@@ -1,9 +1,9 @@
-package net.minestom.server.listener;
+package net.minestom.server.listener.common;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.client.play.ClientKeepAlivePacket;
+import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
 
 public final class KeepAliveListener {
     private static final Component KICK_MESSAGE = Component.text("Bad Keep Alive packet", NamedTextColor.RED);

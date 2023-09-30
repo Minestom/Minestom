@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -28,7 +29,7 @@ public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleport
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK;
     }
 }
