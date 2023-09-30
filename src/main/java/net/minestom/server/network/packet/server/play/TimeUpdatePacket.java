@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -19,7 +20,7 @@ public record TimeUpdatePacket(long worldAge, long timeOfDay) implements ServerP
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.TIME_UPDATE;
     }
 }

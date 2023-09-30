@@ -9,8 +9,8 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.client.play.ClientPongPacket;
-import net.minestom.server.network.packet.server.play.PingPacket;
+import net.minestom.server.network.packet.client.common.ClientPongPacket;
+import net.minestom.server.network.packet.server.common.PingPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 
 public class WindowListener {

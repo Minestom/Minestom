@@ -1,7 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.event.Event;
-import net.minestom.server.network.packet.server.play.TagsPacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import org.jetbrains.annotations.NotNull;
 
 @Deprecated

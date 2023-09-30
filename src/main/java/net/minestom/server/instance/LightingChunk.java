@@ -10,6 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.timer.ExecutionType;
@@ -279,7 +280,7 @@ public class LightingChunk extends DynamicChunk {
             // Load all the lighting
             for (LightingChunk f : copy) {
                 if (f.isLoaded()) {
-                    f.lightCache.body();
+                    f.lightCache.body(ConnectionState.PLAY);
                 }
             }
 

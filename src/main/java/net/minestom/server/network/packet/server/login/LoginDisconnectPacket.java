@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.login;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -23,7 +24,7 @@ public record LoginDisconnectPacket(@NotNull Component kickMessage) implements C
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.LOGIN_DISCONNECT;
     }
 

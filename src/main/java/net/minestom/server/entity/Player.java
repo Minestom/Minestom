@@ -54,6 +54,7 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
@@ -239,6 +240,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 .withDynamic(Identity.NAME, this::getUsername)
                 .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
                 .build();
+
+        // When in configuration state no metadata updates can be sent.
+        metadata.setNotifyAboutChanges(false);
     }
 
     /**
@@ -1873,7 +1877,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet, this), PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(playerConnection.getConnectionState(), packet, playerConnection), PACKET_PER_TICK);
     }
 
     /**
@@ -1883,7 +1887,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        PacketUtils.broadcastPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
+        if (getPlayerConnection().getConnectionState() == ConnectionState.PLAY) {
+            PacketUtils.broadcastPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
+        }
     }
 
     public void refreshOnGround(boolean onGround) {
@@ -2294,10 +2300,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.allowServerListings = allowServerListings;
 
             // TODO: Use the metadata object here
-            metadata.setNotifyAboutChanges(false);
+            boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
+            if (isInPlayState) metadata.setNotifyAboutChanges(false);
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
             metadata.setIndex((byte) 18, Metadata.Byte((byte) (this.mainHand == MainHand.RIGHT ? 1 : 0)));
-            metadata.setNotifyAboutChanges(true);
+            if (isInPlayState) metadata.setNotifyAboutChanges(true);
         }
 
     }

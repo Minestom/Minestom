@@ -1,4 +1,4 @@
-package net.minestom.server.network.packet.client.play;
+package net.minestom.server.network.packet.client.common;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;

@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
 import net.minestom.server.crypto.SignedMessageBody;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -48,7 +49,7 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.PLAYER_CHAT;
     }
 

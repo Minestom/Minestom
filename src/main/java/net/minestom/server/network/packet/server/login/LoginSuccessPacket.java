@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.login;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -23,7 +24,7 @@ public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, i
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.LOGIN_SUCCESS;
     }
 }

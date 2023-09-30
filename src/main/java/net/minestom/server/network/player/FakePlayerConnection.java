@@ -16,7 +16,7 @@ public class FakePlayerConnection extends PlayerConnection {
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
         FakePlayerController controller = getFakePlayer().getController();
-        final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
+        final ServerPacket serverPacket = SendablePacket.extractServerPacket(getConnectionState(), packet);
         controller.consumePacket(serverPacket);
     }
 

@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -24,7 +25,7 @@ public record SetTitleSubTitlePacket(@NotNull Component subtitle) implements Com
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.SET_TITLE_SUBTITLE;
     }
 

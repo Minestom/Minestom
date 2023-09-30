@@ -1,5 +1,6 @@
-package net.minestom.server.network.packet.server.handshake;
+package net.minestom.server.network.packet.server.status;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public record ResponsePacket(@NotNull String jsonResponse) implements ServerPack
     }
 
     @Override
-    public int getId() {
+    public int getId(@NotNull ConnectionState state) {
         return 0x00;
     }
 }

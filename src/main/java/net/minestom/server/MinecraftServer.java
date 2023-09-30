@@ -13,7 +13,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.packet.server.play.PluginMessagePacket;
+import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
@@ -44,8 +44,8 @@ public final class MinecraftServer {
 
     public static final ComponentLogger LOGGER = ComponentLogger.logger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.20.1";
-    public static final int PROTOCOL_VERSION = 763;
+    public static final String VERSION_NAME = "1.20.2";
+    public static final int PROTOCOL_VERSION = 764;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
