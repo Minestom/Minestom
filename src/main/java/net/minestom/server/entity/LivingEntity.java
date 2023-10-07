@@ -64,11 +64,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private long fireExtinguishTime;
 
     /**
-     * Last time the fire damage was applied
-     */
-    private long lastFireDamageTime;
-
-    /**
      * Period, in ms, between two fire damage applications
      */
     private long fireDamagePeriod = 1000L;
@@ -189,15 +184,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void update(long time) {
-        if (isOnFire()) {
-            if (time > fireExtinguishTime) {
-                setOnFire(false);
-            } else {
-                if (time - lastFireDamageTime > fireDamagePeriod) {
-                    damage(DamageType.ON_FIRE, 1.0f);
-                    lastFireDamageTime = time;
-                }
-            }
+        if (isOnFire() && time > fireExtinguishTime) {
+            setOnFire(false);
         }
 
         // Items picking
@@ -580,14 +568,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     protected @NotNull EntityPropertiesPacket getPropertiesPacket() {
         return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
-    }
-
-    @Override
-    protected void handleVoid() {
-        // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
-            damage(DamageType.VOID, 10f);
-        }
     }
 
     /**
