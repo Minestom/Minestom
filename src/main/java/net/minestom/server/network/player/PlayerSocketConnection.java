@@ -106,7 +106,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                             return; // Prevent packet corruption
                         ClientPacket packet = null;
                         try {
-                            System.out.println("PROCESS " + getConnectionState() + " " + Integer.toHexString(id));
                             packet = packetProcessor.process(this, id, payload);
                         } catch (Exception e) {
                             // Error while reading the packet
@@ -349,10 +348,14 @@ public class PlayerSocketConnection extends PlayerConnection {
             writeServerPacketSync(serverPacket, compressed);
         } else if (packet instanceof FramedPacket framedPacket) {
             var buffer = framedPacket.body();
+            System.out.println("SEND " + getConnectionState() + " " + "UNKNOWN FRAMED");
             writeBufferSync(buffer, 0, buffer.limit());
         } else if (packet instanceof CachedPacket cachedPacket) {
             var buffer = cachedPacket.body(getConnectionState());
-            if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
+            if (buffer != null) {
+                System.out.println("SEND " + getConnectionState() + " " + cachedPacket.packet(getConnectionState()).getClass().getSimpleName());
+                writeBufferSync(buffer, buffer.position(), buffer.remaining());
+            }
             else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
         } else if (packet instanceof LazyPacket lazyPacket) {
             writeServerPacketSync(lazyPacket.packet(), compressed);
@@ -362,7 +365,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     private void writeServerPacketSync(ServerPacket serverPacket, boolean compressed) {
-        System.out.println("SEND PACKET " + serverPacket.getClass());
         final Player player = getPlayer();
         if (player != null) {
             if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ComponentHoldingServerPacket) {
@@ -372,6 +374,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
             var buffer = PacketUtils.createFramedPacket(getConnectionState(), hold.get(), serverPacket, compressed);
+            System.out.println("SEND " + getConnectionState() + " " + serverPacket.getClass().getSimpleName() + " " + buffer.limit());
             writeBufferSync(buffer, 0, buffer.limit());
         }
     }

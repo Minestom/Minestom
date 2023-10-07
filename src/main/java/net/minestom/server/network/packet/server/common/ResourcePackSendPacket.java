@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.resourcepack.ResourcePack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,8 +16,12 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ResourcePackSendPacket(String url, String hash, boolean forced,
-                                     Component prompt) implements ComponentHoldingServerPacket {
+public record ResourcePackSendPacket(
+        @NotNull String url,
+        @NotNull String hash,
+        boolean forced,
+        @Nullable Component prompt
+) implements ComponentHoldingServerPacket {
     public ResourcePackSendPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.read(STRING), reader.read(BOOLEAN),
                 reader.read(BOOLEAN) ? reader.read(COMPONENT) : null);

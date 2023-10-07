@@ -37,6 +37,7 @@ public record ChangeGameStatePacket(@NotNull Reason reason, float value) impleme
         THUNDER_LEVEL_CHANGE,
         PLAY_PUFFERFISH_STING_SOUND,
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
-        ENABLE_RESPAWN_SCREEN
+        ENABLE_RESPAWN_SCREEN,
+        LIMITED_CRAFTING
     }
 }
