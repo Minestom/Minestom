@@ -558,8 +558,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // handle block contacts
             touchTick();
 
-            handleVoid();
-
             // Call the abstract update method
             update(time);
 
@@ -745,16 +743,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public long getAliveTicks() {
         return ticks;
-    }
-
-    /**
-     * How does this entity handle being in the void?
-     */
-    protected void handleVoid() {
-        // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
-            remove();
-        }
     }
 
     /**
