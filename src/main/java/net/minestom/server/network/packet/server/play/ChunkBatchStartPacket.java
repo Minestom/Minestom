@@ -1,4 +1,4 @@
-package net.minestom.server.network.packet.server.configuration;
+package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
@@ -6,9 +6,9 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-public record FinishConfigurationPacket() implements ServerPacket {
+public record ChunkBatchStartPacket() implements ServerPacket {
 
-    public FinishConfigurationPacket(@NotNull NetworkBuffer buffer) {
+    public ChunkBatchStartPacket(@NotNull NetworkBuffer buffer) {
         this();
     }
 
@@ -18,6 +18,6 @@ public record FinishConfigurationPacket() implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CONFIGURATION_FINISH_CONFIGURATION;
+        return ServerPacketIdentifier.CHUNK_BATCH_START;
     }
 }

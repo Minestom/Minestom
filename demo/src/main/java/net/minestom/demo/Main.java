@@ -27,6 +27,8 @@ public class Main {
         System.setProperty("minestom.use-new-chunk-sending", "true");
         System.setProperty("minestom.experiment.pose-updates", "true");
 
+        MinecraftServer.setCompressionThreshold(0);
+
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();

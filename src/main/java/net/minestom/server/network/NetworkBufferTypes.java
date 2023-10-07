@@ -240,7 +240,8 @@ final class NetworkBufferTypes {
                         // Kotlin - https://discord.com/channels/706185253441634317/706186227493109860/1163703658341478462
                         buffer.write(BYTE, (byte) NBTType.TAG_End.getOrdinal());
                     } else {
-                        nbtWriter.writeNamed("", value);
+                        buffer.write(BYTE, (byte) NBTType.TAG_Compound.getOrdinal());
+                        nbtWriter.writeRaw(value);
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
