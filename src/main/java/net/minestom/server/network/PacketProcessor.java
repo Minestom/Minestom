@@ -51,6 +51,7 @@ public class PacketProcessor {
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
         final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
+        System.out.println("PROCESS " + connection.getConnectionState() + " " + packet.getClass().getSimpleName());
 
         final ConnectionState state = connection.getConnectionState();
         switch (state) {

@@ -264,39 +264,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
-        var registry = new HashMap<String, NBT>();
-        registry.put("minecraft:chat_type", Messenger.chatRegistry());
-        registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
-        registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
-
-        var damageTypeData = Registry.load(Registry.Resource.DAMAGE_TYPES);
-        var damageTypes = new ArrayList<NBT>();
-        int i = 0;
-        for (var entry : damageTypeData.entrySet()) {
-            var elem = new HashMap<String, NBT>();
-            for (var e : entry.getValue().entrySet()) {
-                if (e.getValue() instanceof String s) {
-                    elem.put(e.getKey(), NBT.String(s));
-                } else if (e.getValue() instanceof Double f) {
-                    elem.put(e.getKey(), NBT.Float(f.floatValue()));
-                } else if (e.getValue() instanceof Integer integer) {
-                    elem.put(e.getKey(), NBT.Int(integer));
-                }
-            }
-            damageTypes.add(NBT.Compound(Map.of(
-                    "id", NBT.Int(i++),
-                    "name", NBT.String(entry.getKey()),
-                    "element", NBT.Compound(elem)
-            )));
-        }
-        registry.put("minecraft:damage_type", NBT.Compound(Map.of(
-                "type", NBT.String("minecraft:damage_type"),
-                "value", NBT.List(NBTType.TAG_Compound, damageTypes)
-        )));
-        final JoinGamePacket joinGamePacket = new JoinGamePacket(getEntityId(), false, gameMode, null,
-                List.of(), NBT.Compound(registry), dimensionType.toString(), spawnInstance.getDimensionName(),
-                0, 0, MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
-                false, true, false, levelFlat, deathLocation, portalCooldown);
+        final JoinGamePacket joinGamePacket = new JoinGamePacket(
+                getEntityId(), false, List.of(), 0,
+                MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
+                false, true, dimensionType.toString(), spawnInstance.getDimensionName(),
+                0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
         sendPacket(joinGamePacket);
 
         // Server brand name
@@ -364,9 +336,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
         // Recipes end
-
-        // Tags
-        sendPacket(TagsPacket.DEFAULT_TAGS);
 
         // Some client updates
         sendPacket(getPropertiesPacket()); // Send default properties

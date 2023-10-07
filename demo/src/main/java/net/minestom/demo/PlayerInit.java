@@ -194,6 +194,6 @@ public class PlayerInit {
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+        }).repeat(10, TimeUnit.SERVER_TICK);//.schedule();
     }
 }

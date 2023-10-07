@@ -262,7 +262,7 @@ public final class MinecraftServer {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
+        Check.stateCondition(serverProcess != null && serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
