@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.server.common.ResourcePackSendPacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
@@ -79,7 +80,6 @@ public final class LoginListener {
                 return;
             }
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
-            socketConnection.setConnectionState(ConnectionState.LOGIN);
 
             final byte[] publicKey = MojangAuth.getKeyPair().getPublic().getEncoded();
             byte[] nonce = new byte[4];
@@ -221,7 +221,7 @@ public final class LoginListener {
     }
 
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket packet, @NotNull PlayerConnection connection) {
-        connection.setConnectionState(ConnectionState.CONFIGURATION);
+        connection.setClientState(ConnectionState.CONFIGURATION);
 
         CONNECTION_MANAGER.registerPlayer(connection.getPlayer());
 
@@ -262,6 +262,7 @@ public final class LoginListener {
         AsyncUtils.runAsync(() -> {
             //todo event
 
+            connection.setServerState(ConnectionState.PLAY);
             connection.sendPacket(new FinishConfigurationPacket());
         });
     }

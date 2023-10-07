@@ -13,6 +13,9 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
+import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
@@ -112,7 +115,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
                             if (payload.position() != payload.limit()) {
-                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", getConnectionState(), Integer.toHexString(id), payload, packet);
+                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", getClientState(), Integer.toHexString(id), payload, packet);
                             }
                         }
                     });
@@ -290,14 +293,14 @@ public class PlayerSocketConnection extends PlayerConnection {
     /**
      * Adds an entry to the plugin request map.
      * <p>
-     * Only working if {@link #getConnectionState()} is {@link net.minestom.server.network.ConnectionState#LOGIN}.
+     * Only working if {@link #getServerState()} ()} is {@link net.minestom.server.network.ConnectionState#LOGIN}.
      *
      * @param messageId the message id
      * @param channel   the packet channel
      * @throws IllegalStateException if a messageId with the value {@code messageId} already exists for this connection
      */
     public void addPluginRequestEntry(int messageId, @NotNull String channel) {
-        if (!getConnectionState().equals(ConnectionState.LOGIN)) {
+        if (getServerState() != ConnectionState.LOGIN) {
             return;
         }
         Check.stateCondition(pluginRequestMap.containsKey(messageId), "You cannot have two messageId with the same value");
@@ -317,10 +320,10 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void setConnectionState(@NotNull ConnectionState connectionState) {
-        super.setConnectionState(connectionState);
+    public void setClientState(@NotNull ConnectionState state) {
+        super.setClientState(state);
         // Clear the plugin request map (since it is not used anymore)
-        if (connectionState.equals(ConnectionState.PLAY)) {
+        if (state == ConnectionState.PLAY) {
             this.pluginRequestMap.clear();
         }
     }
@@ -338,7 +341,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         final Player player = getPlayer();
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
-            final ServerPacket serverPacket = SendablePacket.extractServerPacket(getConnectionState(), packet);
+            final ServerPacket serverPacket = SendablePacket.extractServerPacket(getServerState(), packet);
             PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
             outgoing.call(event);
             if (event.isCancelled()) return;
@@ -348,15 +351,18 @@ public class PlayerSocketConnection extends PlayerConnection {
             writeServerPacketSync(serverPacket, compressed);
         } else if (packet instanceof FramedPacket framedPacket) {
             var buffer = framedPacket.body();
-            System.out.println("SEND " + getConnectionState() + " " + "UNKNOWN FRAMED");
+            System.out.println("SEND " + getServerState() + " " + "UNKNOWN FRAMED");
             writeBufferSync(buffer, 0, buffer.limit());
         } else if (packet instanceof CachedPacket cachedPacket) {
-            var buffer = cachedPacket.body(getConnectionState());
+            var buffer = cachedPacket.body(getServerState());
             if (buffer != null) {
-                System.out.println("SEND " + getConnectionState() + " " + cachedPacket.packet(getConnectionState()).getClass().getSimpleName());
+                var packetClass = cachedPacket.packet(getServerState()).getClass();
+                if (packetClass != TimeUpdatePacket.class && packetClass != UpdateLightPacket.class && packetClass != ChunkDataPacket.class) {
+                    System.out.println("SEND " + getServerState() + " " + cachedPacket.packet(getServerState()).getClass().getSimpleName());
+                }
                 writeBufferSync(buffer, buffer.position(), buffer.remaining());
             }
-            else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
+            else writeServerPacketSync(cachedPacket.packet(getServerState()), compressed);
         } else if (packet instanceof LazyPacket lazyPacket) {
             writeServerPacketSync(lazyPacket.packet(), compressed);
         } else {
@@ -373,8 +379,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
         }
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
-            var buffer = PacketUtils.createFramedPacket(getConnectionState(), hold.get(), serverPacket, compressed);
-            System.out.println("SEND " + getConnectionState() + " " + serverPacket.getClass().getSimpleName() + " " + buffer.limit());
+            var buffer = PacketUtils.createFramedPacket(getServerState(), hold.get(), serverPacket, compressed);
+            System.out.println("SEND " + getServerState() + " cls=" + serverPacket.getClass().getSimpleName() + " id=" + serverPacket.getId(getServerState()));
             writeBufferSync(buffer, 0, buffer.limit());
         }
     }

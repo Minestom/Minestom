@@ -32,6 +32,6 @@ public record SpawnPlayerPacket(int entityId, @NotNull UUID playerUuid,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SPAWN_PLAYER;
+        throw new UnsupportedOperationException("SpawnPlayerPacket is not supported in " + state);
     }
 }
