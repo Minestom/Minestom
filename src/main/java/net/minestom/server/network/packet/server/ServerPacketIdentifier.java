@@ -24,7 +24,6 @@ public final class ServerPacketIdentifier {
     public static final int BUNDLE = nextPlayId();
     public static final int SPAWN_ENTITY = nextPlayId();
     public static final int SPAWN_EXPERIENCE_ORB = nextPlayId();
-    public static final int SPAWN_PLAYER = nextPlayId();
     public static final int ENTITY_ANIMATION = nextPlayId();
     public static final int STATISTICS = nextPlayId();
     public static final int ACKNOWLEDGE_BLOCK_CHANGE = nextPlayId();
