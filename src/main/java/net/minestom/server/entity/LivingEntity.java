@@ -583,14 +583,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
     }
 
-    @Override
-    protected void handleVoid() {
-        // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
-            damage(DamageType.VOID, 10f);
-        }
-    }
-
     /**
      * Gets the time in ms between two fire damage applications.
      *
