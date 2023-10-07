@@ -26,6 +26,8 @@ public class Main {
     public static void main(String[] args) {
         System.setProperty("minestom.use-new-chunk-sending", "true");
 
+        MinecraftServer.setCompressionThreshold(0);
+
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();

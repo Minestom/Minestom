@@ -236,7 +236,8 @@ final class NetworkBufferTypes {
                     buffer.nbtWriter = nbtWriter;
                 }
                 try {
-                    nbtWriter.writeNamed("", value);
+                    buffer.write(BYTE, (byte) NBTType.TAG_Compound.getOrdinal());
+                    nbtWriter.writeRaw(value);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

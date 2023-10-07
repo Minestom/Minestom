@@ -10,6 +10,7 @@ import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
+import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
@@ -17,15 +18,20 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -35,10 +41,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
@@ -219,7 +223,47 @@ public final class LoginListener {
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket packet, @NotNull PlayerConnection connection) {
         connection.setConnectionState(ConnectionState.CONFIGURATION);
 
-        connection.sendPacket(new FinishConfigurationPacket());
+        CONNECTION_MANAGER.registerPlayer(connection.getPlayer());
+
+        // Registry data
+        var registry = new HashMap<String, NBT>();
+        registry.put("minecraft:chat_type", Messenger.chatRegistry());
+        registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
+        registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
+        var damageTypeData = Registry.load(Registry.Resource.DAMAGE_TYPES);
+        var damageTypes = new ArrayList<NBT>();
+        int i = 0;
+        for (var entry : damageTypeData.entrySet()) {
+            var elem = new HashMap<String, NBT>();
+            for (var e : entry.getValue().entrySet()) {
+                if (e.getValue() instanceof String s) {
+                    elem.put(e.getKey(), NBT.String(s));
+                } else if (e.getValue() instanceof Double f) {
+                    elem.put(e.getKey(), NBT.Float(f.floatValue()));
+                } else if (e.getValue() instanceof Integer integer) {
+                    elem.put(e.getKey(), NBT.Int(integer));
+                }
+            }
+            damageTypes.add(NBT.Compound(Map.of(
+                    "id", NBT.Int(i++),
+                    "name", NBT.String(entry.getKey()),
+                    "element", NBT.Compound(elem)
+            )));
+        }
+        registry.put("minecraft:damage_type", NBT.Compound(Map.of(
+                "type", NBT.String("minecraft:damage_type"),
+                "value", NBT.List(NBTType.TAG_Compound, damageTypes)
+        )));
+        connection.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
+
+        // Tags
+        connection.sendPacket(TagsPacket.DEFAULT_TAGS);
+
+        AsyncUtils.runAsync(() -> {
+            //todo event
+
+            connection.sendPacket(new FinishConfigurationPacket());
+        });
     }
 
 }
