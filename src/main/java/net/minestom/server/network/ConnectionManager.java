@@ -220,10 +220,12 @@ public final class ConnectionManager {
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
-//            playerConnection.setConnectionState(ConnectionState.CONFIGURATION);
-//            if (register) registerPlayer(player); // WHEN ENTERING CONFIGURATION THIS SHOULD BE SET
-//            this.waitingPlayers.relaxedOffer(player);
+            playerConnection.setServerState(ConnectionState.CONFIGURATION);
         });
+    }
+
+    public void startPlayState(@NotNull Player player) {
+        this.waitingPlayers.relaxedOffer(player);
     }
 
     /**
@@ -262,7 +264,7 @@ public final class ConnectionManager {
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
-            playerConnection.setConnectionState(ConnectionState.PLAY);
+//            playerConnection.setConnectionState(ConnectionState.PLAY);
             if (register) registerPlayer(player);
             this.waitingPlayers.relaxedOffer(player);
         });
@@ -300,13 +302,12 @@ public final class ConnectionManager {
             EventDispatcher.call(loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+
             // Spawn the player at Player#getRespawnPoint
-            if (DebugUtils.INSIDE_TEST) {
-                // Required to get the exact moment the player spawns
-                waitingPlayer.UNSAFE_init(spawningInstance).join();
-            } else {
-                waitingPlayer.UNSAFE_init(spawningInstance);
-            }
+            CompletableFuture<Void> spawnFuture = waitingPlayer.UNSAFE_init(spawningInstance);
+
+            // Required to get the exact moment the player spawns
+            if (DebugUtils.INSIDE_TEST) spawnFuture.join();
         });
     }
 

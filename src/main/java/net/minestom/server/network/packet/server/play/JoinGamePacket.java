@@ -17,6 +17,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record JoinGamePacket(
         int entityId, boolean isHardcore, List<String> worlds, int maxPlayers,
         int viewDistance, int simulationDistance, boolean reducedDebugInfo, boolean enableRespawnScreen,
+        boolean doLimitedCrafting,
         String dimensionType, String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, DeathLocation deathLocation, int portalCooldown
 ) implements ServerPacket {
@@ -32,6 +33,7 @@ public record JoinGamePacket(
                 reader.read(VAR_INT),
                 reader.read(VAR_INT),
                 reader.read(VAR_INT),
+                reader.read(BOOLEAN),
                 reader.read(BOOLEAN),
                 reader.read(BOOLEAN),
 
@@ -57,6 +59,7 @@ public record JoinGamePacket(
         writer.write(VAR_INT, simulationDistance);
         writer.write(BOOLEAN, reducedDebugInfo);
         writer.write(BOOLEAN, enableRespawnScreen);
+        writer.write(BOOLEAN, doLimitedCrafting);
 
         writer.write(STRING, dimensionType);
         writer.write(STRING, world);

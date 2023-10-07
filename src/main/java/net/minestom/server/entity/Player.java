@@ -267,7 +267,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), false, List.of(), 0,
                 MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
-                false, true, dimensionType.toString(), spawnInstance.getDimensionName(),
+                false, true, false, dimensionType.toString(), spawnInstance.getDimensionName(),
                 0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
         sendPacket(joinGamePacket);
 
@@ -1496,7 +1496,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param component the reason
      */
     public void kick(@NotNull Component component) {
-        final ConnectionState connectionState = playerConnection.getConnectionState();
+        final ConnectionState connectionState = playerConnection.getServerState();
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
@@ -1920,7 +1920,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(playerConnection.getConnectionState(), packet, playerConnection), PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(playerConnection.getClientState(), packet, playerConnection), PACKET_PER_TICK);
     }
 
     /**
@@ -1930,7 +1930,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        if (getPlayerConnection().getConnectionState() == ConnectionState.PLAY) {
+        if (getPlayerConnection().getServerState() == ConnectionState.PLAY) {
             PacketUtils.broadcastPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
         }
     }
@@ -2343,7 +2343,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.allowServerListings = allowServerListings;
 
             // TODO: Use the metadata object here
-            boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
+            boolean isInPlayState = getPlayerConnection().getServerState() == ConnectionState.PLAY;
             if (isInPlayState) metadata.setNotifyAboutChanges(false);
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
             metadata.setIndex((byte) 18, Metadata.Byte((byte) (this.mainHand == MainHand.RIGHT ? 1 : 0)));
