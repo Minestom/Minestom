@@ -320,7 +320,7 @@ public final class PacketUtils {
 
         private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
             try (var hold = ObjectPool.PACKET_POOL.hold()) {
-                final ByteBuffer framedPacket = createFramedPacket(player.getPlayerConnection().getConnectionState(), hold.get(), serverPacket);
+                final ByteBuffer framedPacket = createFramedPacket(player.getPlayerConnection().getServerState(), hold.get(), serverPacket);
                 final int packetSize = framedPacket.limit();
                 if (packetSize >= buffer.capacity()) {
                     process(viewable);

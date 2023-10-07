@@ -118,6 +118,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientVehicleMovePacket::new);
             register(nextId(), ClientSteerBoatPacket::new);
             register(nextId(), ClientPickItemPacket::new);
+            nextId(); // Ping request
             register(nextId(), ClientCraftRecipeRequest::new);
             register(nextId(), ClientPlayerAbilitiesPacket::new);
             register(nextId(), ClientPlayerDiggingPacket::new);
