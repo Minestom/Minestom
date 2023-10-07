@@ -367,9 +367,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean hasEnabledAutoChunkLoad();
 
     /**
-     * Determines whether a position in the void. If true, entities should take damage and die.
-     * <p>
-     * Always returning false allow entities to survive in the void.
+     * Determines whether a position in the void.
      *
      * @param point the point in the world
      * @return true if the point is inside the void
