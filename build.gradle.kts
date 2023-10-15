@@ -47,6 +47,10 @@ allprojects {
         jvmArgs("-Dminestom.viewable-packet=false")
         jvmArgs("-Dminestom.inside-test=true")
     }
+
+    tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
 }
 
 sourceSets {
