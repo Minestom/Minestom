@@ -236,7 +236,12 @@ final class NetworkBufferTypes {
                     buffer.nbtWriter = nbtWriter;
                 }
                 try {
-                    nbtWriter.writeNamed("", value);
+                    if (value == NBTEnd.INSTANCE) {
+                        // Kotlin - https://discord.com/channels/706185253441634317/706186227493109860/1163703658341478462
+                        buffer.write(BYTE, (byte) NBTType.TAG_End.getOrdinal());
+                    } else {
+                        nbtWriter.writeNamed("", value);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -312,7 +317,10 @@ final class NetworkBufferTypes {
                 buffer.write(BOOLEAN, true);
                 buffer.write(VAR_INT, value.material().id());
                 buffer.write(BYTE, (byte) value.amount());
-                buffer.write(NBT, value.meta().toNBT());
+
+                // Vanilla does not write an empty object, just an end tag.
+                NBTCompound nbt = value.meta().toNBT();
+                buffer.write(NBT, nbt.isEmpty() ? NBTEnd.INSTANCE : nbt);
                 return -1;
             },
             buffer -> {
