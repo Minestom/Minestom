@@ -236,7 +236,7 @@ final class NetworkBufferTypes {
                     buffer.nbtWriter = nbtWriter;
                 }
                 try {
-                    buffer.write(BYTE, (byte) NBTType.TAG_Compound.getOrdinal());
+                    buffer.write(BYTE, (byte) value.getID().getOrdinal());
                     nbtWriter.writeRaw(value);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -260,7 +260,10 @@ final class NetworkBufferTypes {
                     buffer.nbtReader = nbtReader;
                 }
                 try {
-                    return nbtReader.read();
+                    byte tagId = buffer.read(BYTE);
+                    if (tagId == NBTType.TAG_End.getOrdinal())
+                        return NBTEnd.INSTANCE;
+                    return nbtReader.readRaw(tagId);
                 } catch (IOException | NBTException e) {
                     throw new RuntimeException(e);
                 }

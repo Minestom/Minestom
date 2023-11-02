@@ -217,10 +217,10 @@ public final class ConnectionManager {
                     player.setUuid(eventUuid);
                 }
             }
-            // Send login success packet
+
+            // Send login success packet (and switch to configuration phase)
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
-            playerConnection.setServerState(ConnectionState.CONFIGURATION);
         });
     }
 

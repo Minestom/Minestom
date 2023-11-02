@@ -166,7 +166,7 @@ public abstract class PlayerConnection {
      * @return the server connection state
      */
     public @NotNull ConnectionState getServerState() {
-        return clientState;
+        return serverState;
     }
 
     public PlayerPublicKey playerPublicKey() {
