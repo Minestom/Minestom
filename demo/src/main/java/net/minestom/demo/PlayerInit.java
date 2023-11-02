@@ -10,7 +10,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -28,13 +28,11 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -51,7 +49,7 @@ public class PlayerInit {
 
                 if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    target.damage(DamageType.fromEntity(source), 5);
+                    target.damage(Damage.fromEntity(source, 5));
                 }
 
                 if (source instanceof Player) {
