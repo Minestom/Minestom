@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientHandshakePacket(int protocolVersion, @NotNull String serverAddress,
-                                    int serverPort, int nextState) implements ClientPacket {
+                                    int serverPort, int intent) implements ClientPacket {
 
     public ClientHandshakePacket {
         if (serverAddress.length() > getMaxHandshakeLength()) {
@@ -30,7 +30,7 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
         }
         writer.write(STRING, serverAddress);
         writer.write(UNSIGNED_SHORT, serverPort);
-        writer.write(VAR_INT, nextState);
+        writer.write(VAR_INT, intent);
     }
 
     private static int getMaxHandshakeLength() {

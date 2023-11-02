@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -26,5 +27,10 @@ public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, i
     @Override
     public int getId(@NotNull ConnectionState state) {
         return ServerPacketIdentifier.LOGIN_SUCCESS;
+    }
+
+    @Override
+    public @NotNull ConnectionState nextState() {
+        return ConnectionState.CONFIGURATION;
     }
 }

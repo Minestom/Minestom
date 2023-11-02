@@ -40,7 +40,7 @@ public final class HandshakeListener {
     public static void listener(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection) {
         String address = packet.serverAddress();
         // Bungee support (IP forwarding)
-        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection && packet.nextState() == 2) {
+        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection socketConnection && packet.intent() == 2) {
             final String[] split = address.split("\00");
 
             if (split.length == 3 || split.length == 4) {
@@ -110,7 +110,7 @@ public final class HandshakeListener {
             ((PlayerSocketConnection) connection).refreshServerInformation(address, packet.serverPort(), packet.protocolVersion());
         }
 
-        switch (packet.nextState()) {
+        switch (packet.intent()) {
             case 1 -> {
                 connection.setClientState(ConnectionState.STATUS);
                 connection.setServerState(ConnectionState.STATUS);
