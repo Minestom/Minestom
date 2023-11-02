@@ -240,7 +240,7 @@ final class NetworkBufferTypes {
                         // Kotlin - https://discord.com/channels/706185253441634317/706186227493109860/1163703658341478462
                         buffer.write(BYTE, (byte) NBTType.TAG_End.getOrdinal());
                     } else {
-                        buffer.write(BYTE, (byte) NBTType.TAG_Compound.getOrdinal());
+                        buffer.write(BYTE, (byte) value.getID().getOrdinal());
                         nbtWriter.writeRaw(value);
                     }
                 } catch (IOException e) {
@@ -265,7 +265,10 @@ final class NetworkBufferTypes {
                     buffer.nbtReader = nbtReader;
                 }
                 try {
-                    return nbtReader.read();
+                    byte tagId = buffer.read(BYTE);
+                    if (tagId == NBTType.TAG_End.getOrdinal())
+                        return NBTEnd.INSTANCE;
+                    return nbtReader.readRaw(tagId);
                 } catch (IOException | NBTException e) {
                     throw new RuntimeException(e);
                 }

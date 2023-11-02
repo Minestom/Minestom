@@ -220,9 +220,7 @@ public final class LoginListener {
         }
     }
 
-    public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket packet, @NotNull PlayerConnection connection) {
-        connection.setClientState(ConnectionState.CONFIGURATION);
-
+    public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
         CONNECTION_MANAGER.registerPlayer(connection.getPlayer());
 
         // Registry data
@@ -262,7 +260,6 @@ public final class LoginListener {
         AsyncUtils.runAsync(() -> {
             //todo event
 
-            connection.setServerState(ConnectionState.PLAY);
             connection.sendPacket(new FinishConfigurationPacket());
         });
     }
