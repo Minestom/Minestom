@@ -68,7 +68,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
@@ -97,8 +96,6 @@ import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -416,8 +413,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // get death screen text to the killed player
             {
-                if (lastDamageSource != null) {
-                    deathText = lastDamageSource.buildDeathScreenText(this);
+                if (lastDamage != null) {
+                    deathText = lastDamage.buildDeathScreenText(this);
                 } else { // may happen if killed by the server without applying damage
                     deathText = Component.text("Killed by poor programming.");
                 }
@@ -425,8 +422,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // get death message to chat
             {
-                if (lastDamageSource != null) {
-                    chatMessage = lastDamageSource.buildDeathMessage(this);
+                if (lastDamage != null) {
+                    chatMessage = lastDamage.buildDeathMessage(this);
                 } else { // may happen if killed by the server without applying damage
                     chatMessage = Component.text(getUsername() + " was killed by poor programming.");
                 }
@@ -915,7 +912,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public boolean isImmune(@NotNull DamageType type) {
         if (!getGameMode().canTakeDamage()) {
-            return type != DamageType.VOID;
+            return type != DamageType.OUT_OF_WORLD;
         }
         return super.isImmune(type);
     }
