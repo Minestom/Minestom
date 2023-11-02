@@ -379,9 +379,16 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
         }
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
-            var buffer = PacketUtils.createFramedPacket(getServerState(), hold.get(), serverPacket, compressed);
+            var state = getServerState();
+            var buffer = PacketUtils.createFramedPacket(state, hold.get(), serverPacket, compressed);
             System.out.println("SEND " + getServerState() + " cls=" + serverPacket.getClass().getSimpleName() + " id=" + serverPacket.getId(getServerState()));
             writeBufferSync(buffer, 0, buffer.limit());
+
+            var nextState = serverPacket.nextState();
+            if (nextState != null && state != nextState) {
+                System.out.println("CHANGE SERVER STATE TO " + nextState);
+                setServerState(nextState);
+            }
         }
     }
 
