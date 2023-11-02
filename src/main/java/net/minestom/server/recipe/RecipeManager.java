@@ -62,7 +62,8 @@ public class RecipeManager {
                                     shapedRecipe.getHeight(),
                                     shapedRecipe.getGroup(),
                                     shapedRecipe.getIngredients(),
-                                    shapedRecipe.getResult()));
+                                    shapedRecipe.getResult(),
+                                    shapedRecipe.shouldShowNotification()));
                 }
                 case SMELTING -> {
                     SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
