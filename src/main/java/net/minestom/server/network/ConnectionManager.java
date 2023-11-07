@@ -6,7 +6,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
-import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
@@ -36,7 +35,9 @@ public final class ConnectionManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
-    private final MessagePassingQueue<Player> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private record PendingPlayer(@NotNull Player player, @NotNull Instance instance) {}
+
+    private final MessagePassingQueue<PendingPlayer> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -186,14 +187,13 @@ public final class ConnectionManager {
     }
 
     public @NotNull Player startConfigurationState(@NotNull PlayerConnection connection,
-                                             @NotNull UUID uuid, @NotNull String username,
-                                             boolean register) {
+                                             @NotNull UUID uuid, @NotNull String username) {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
-        startConfigurationState(player, register);
+        startConfigurationState(player);
         return player;
     }
 
-    public CompletableFuture<Void> startConfigurationState(@NotNull Player player, boolean register) {
+    public CompletableFuture<Void> startConfigurationState(@NotNull Player player) {
         return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             // Compression
@@ -224,65 +224,8 @@ public final class ConnectionManager {
         });
     }
 
-    public void startPlayState(@NotNull Player player) {
-        this.waitingPlayers.relaxedOffer(player);
-    }
-
-    /**
-     * Calls the player initialization callbacks and the event {@link AsyncPlayerPreLoginEvent}.
-     * <p>
-     * Sends a {@link LoginSuccessPacket} if successful (not kicked)
-     * and change the connection state to {@link ConnectionState#PLAY}.
-     *
-     * @param player   the player
-     * @param register true to register the newly created player in {@link ConnectionManager} lists
-     */
-    public CompletableFuture<Void> startPlayStateOLD(@NotNull Player player, boolean register) {
-        return AsyncUtils.runAsync(() -> {
-            final PlayerConnection playerConnection = player.getPlayerConnection();
-            // Compression
-            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-                final int threshold = MinecraftServer.getCompressionThreshold();
-                if (threshold > 0) socketConnection.startCompression();
-            }
-            // Call pre login event
-            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
-            EventDispatcher.call(asyncPlayerPreLoginEvent);
-            if (!player.isOnline())
-                return; // Player has been kicked
-            // Change UUID/Username based on the event
-            {
-                final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
-                final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
-                if (!player.getUsername().equals(eventUsername)) {
-                    player.setUsernameField(eventUsername);
-                }
-                if (!player.getUuid().equals(eventUuid)) {
-                    player.setUuid(eventUuid);
-                }
-            }
-            // Send login success packet
-            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
-            playerConnection.sendPacket(loginSuccessPacket);
-//            playerConnection.setConnectionState(ConnectionState.PLAY);
-            if (register) registerPlayer(player);
-            this.waitingPlayers.relaxedOffer(player);
-        });
-    }
-
-    /**
-     * Creates a {@link Player} using the defined {@link PlayerProvider}
-     * and execute {@link #startPlayState(Player, boolean)}.
-     *
-     * @return the newly created player object
-     * @see #startPlayState(Player, boolean)
-     */
-    public @NotNull Player startPlayStateOLD(@NotNull PlayerConnection connection,
-                                          @NotNull UUID uuid, @NotNull String username,
-                                          boolean register) {
-        final Player player = playerProvider.createPlayer(uuid, username, connection);
-        startPlayStateOLD(player, register);
-        return player;
+    public void startPlayState(@NotNull Player player, @NotNull Instance instance) {
+        this.waitingPlayers.relaxedOffer(new PendingPlayer(player, instance));
     }
 
     /**
@@ -297,14 +240,10 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        this.waitingPlayers.drain(waitingPlayer -> {
-            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
-            EventDispatcher.call(loginEvent);
-            final Instance spawningInstance = loginEvent.getSpawningInstance();
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+        this.waitingPlayers.drain(pp -> {
 
             // Spawn the player at Player#getRespawnPoint
-            CompletableFuture<Void> spawnFuture = waitingPlayer.UNSAFE_init(spawningInstance);
+            CompletableFuture<Void> spawnFuture = pp.player.UNSAFE_init(pp.instance);
 
             // Required to get the exact moment the player spawns
             if (DebugUtils.INSIDE_TEST) spawnFuture.join();

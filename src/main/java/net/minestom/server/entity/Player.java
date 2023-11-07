@@ -60,6 +60,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
+import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
@@ -247,6 +248,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // When in configuration state no metadata updates can be sent.
         metadata.setNotifyAboutChanges(false);
+    }
+
+    public void UNSAFE_enterConfiguration(boolean isFirstConfig) {
+        AsyncUtils.runAsync(() -> {
+            var event = new AsyncPlayerConfigurationEvent(this, isFirstConfig);
+            EventDispatcher.call(event);
+
+            final Instance spawningInstance = event.getSpawningInstance();
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+
+            MinecraftServer.getConnectionManager().startPlayState(this, event.getSpawningInstance());
+            sendPacket(new FinishConfigurationPacket());
+        });
     }
 
     /**

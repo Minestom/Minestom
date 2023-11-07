@@ -6,10 +6,15 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -30,6 +35,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
@@ -92,7 +98,7 @@ public final class LoginListener {
             final UUID playerUuid = bungee && isSocketConnection ?
                     ((PlayerSocketConnection) connection).gameProfile().uuid() :
                     CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
-            CONNECTION_MANAGER.startConfigurationState(connection, playerUuid, packet.username(), true);
+            CONNECTION_MANAGER.startConfigurationState(connection, playerUuid, packet.username());
         }
     }
 
@@ -158,7 +164,7 @@ public final class LoginListener {
                     final String profileName = gameProfile.get("name").getAsString();
 
                     MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, profileUUID);
-                    CONNECTION_MANAGER.startConfigurationState(connection, profileUUID, profileName, true);
+                    CONNECTION_MANAGER.startConfigurationState(connection, profileUUID, profileName);
                     List<GameProfile.Property> propertyList = new ArrayList<>();
                     for (JsonElement element : gameProfile.get("properties").getAsJsonArray()) {
                         JsonObject object = element.getAsJsonObject();
@@ -211,7 +217,7 @@ public final class LoginListener {
                 if (success) {
                     socketConnection.setRemoteAddress(socketAddress);
                     socketConnection.UNSAFE_setProfile(gameProfile);
-                    CONNECTION_MANAGER.startConfigurationState(connection, gameProfile.uuid(), gameProfile.name(), true);
+                    CONNECTION_MANAGER.startConfigurationState(connection, gameProfile.uuid(), gameProfile.name());
                 } else {
                     LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
                     socketConnection.sendPacket(disconnectPacket);
@@ -221,47 +227,22 @@ public final class LoginListener {
     }
 
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
-        CONNECTION_MANAGER.registerPlayer(connection.getPlayer());
+        final Player player = Objects.requireNonNull(connection.getPlayer());
+        CONNECTION_MANAGER.registerPlayer(player);
 
         // Registry data
         var registry = new HashMap<String, NBT>();
         registry.put("minecraft:chat_type", Messenger.chatRegistry());
         registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
         registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
-        var damageTypeData = Registry.load(Registry.Resource.DAMAGE_TYPES);
-        var damageTypes = new ArrayList<NBT>();
-        int i = 0;
-        for (var entry : damageTypeData.entrySet()) {
-            var elem = new HashMap<String, NBT>();
-            for (var e : entry.getValue().entrySet()) {
-                if (e.getValue() instanceof String s) {
-                    elem.put(e.getKey(), NBT.String(s));
-                } else if (e.getValue() instanceof Double f) {
-                    elem.put(e.getKey(), NBT.Float(f.floatValue()));
-                } else if (e.getValue() instanceof Integer integer) {
-                    elem.put(e.getKey(), NBT.Int(integer));
-                }
-            }
-            damageTypes.add(NBT.Compound(Map.of(
-                    "id", NBT.Int(i++),
-                    "name", NBT.String(entry.getKey()),
-                    "element", NBT.Compound(elem)
-            )));
-        }
-        registry.put("minecraft:damage_type", NBT.Compound(Map.of(
-                "type", NBT.String("minecraft:damage_type"),
-                "value", NBT.List(NBTType.TAG_Compound, damageTypes)
-        )));
+        registry.put("minecraft:damage_type", DamageType.getNBT());
         connection.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
 
         // Tags
         connection.sendPacket(TagsPacket.DEFAULT_TAGS);
 
-        AsyncUtils.runAsync(() -> {
-            //todo event
-
-            connection.sendPacket(new FinishConfigurationPacket());
-        });
+        // Enter configuration phase (for the first time)
+        player.UNSAFE_enterConfiguration(true);
     }
 
 }

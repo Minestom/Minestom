@@ -77,7 +77,7 @@ public class PlayerInit {
                 itemEntity.setVelocity(velocity);
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
-            .addListener(PlayerLoginEvent.class, event -> {
+            .addListener(AsyncPlayerConfigurationEvent.class, event -> {
                 final Player player = event.getPlayer();
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
