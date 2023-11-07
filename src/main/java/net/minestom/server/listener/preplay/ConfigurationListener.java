@@ -12,10 +12,9 @@ public final class ConfigurationListener {
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     public static void finishListener(@NotNull ClientFinishConfigurationPacket packet, @NotNull Player player) {
-        player.getPlayerConnection().setClientState(ConnectionState.PLAY);
+//        player.getPlayerConnection().setClientState(ConnectionState.PLAY);
 
         System.out.println("Finished configuration for " + player.getUsername() );
-        CONNECTION_MANAGER.startPlayState(player);
 
         //todo move to play state
 
