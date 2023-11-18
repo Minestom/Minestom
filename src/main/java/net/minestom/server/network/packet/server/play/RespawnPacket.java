@@ -11,14 +11,19 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(String dimensionType, String worldName,
                             long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-                            boolean isDebug, boolean isFlat, boolean copyMeta,
+                            boolean isDebug, boolean isFlat, byte dataToCopy,
                             DeathLocation deathLocation, int portalCooldown) implements ServerPacket {
+
+    public static final byte COPY_ATTRIBUTES = 0x1;
+    public static final byte COPY_METADATA = 0x2;
+    public static final byte COPY_ALL = COPY_ATTRIBUTES | COPY_METADATA;
+
     public RespawnPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.read(STRING),
                 reader.read(LONG), GameMode.fromId(reader.read(BYTE)),
                 GameMode.fromId(reader.read(BYTE)),
                 reader.read(BOOLEAN), reader.read(BOOLEAN),
-                reader.read(BOOLEAN), reader.read(DEATH_LOCATION),
+                reader.read(BYTE), reader.read(DEATH_LOCATION),
                 reader.read(VAR_INT));
     }
 
@@ -31,7 +36,7 @@ public record RespawnPacket(String dimensionType, String worldName,
         writer.write(BYTE, previousGameMode.id());
         writer.write(BOOLEAN, isDebug);
         writer.write(BOOLEAN, isFlat);
-        writer.write(BOOLEAN, copyMeta);
+        writer.write(BYTE, dataToCopy);
         writer.write(DEATH_LOCATION, deathLocation);
         writer.write(VAR_INT, portalCooldown);
     }
