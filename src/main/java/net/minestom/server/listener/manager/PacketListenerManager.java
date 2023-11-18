@@ -132,7 +132,6 @@ public final class PacketListenerManager {
         // If the packet intends to switch state, do it now.
         var nextState = packet.nextState();
         if (nextState != null && state != nextState) {
-            System.out.println("CHANGE CLIENT STATE TO " + nextState);
             connection.setClientState(nextState);
         }
     }

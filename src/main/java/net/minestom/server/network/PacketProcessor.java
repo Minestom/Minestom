@@ -54,10 +54,6 @@ public class PacketProcessor {
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
         final ClientPacket packet = create(connection.getClientState(), packetId, body);
-        var packetClass = packet.getClass();
-        if (packetClass != ClientPlayerPositionPacket.class && packetClass != ClientPlayerPositionAndRotationPacket.class && packetClass != ClientPlayerRotationPacket.class)
-            System.out.println("PROCESS " + connection.getClientState() + " " + packet.getClass().getSimpleName());
-
         final ConnectionState state = connection.getClientState();
         switch (state) {
             case HANDSHAKE, STATUS, LOGIN, CONFIGURATION -> packetListenerManager.processClientPacket(connection.getClientState(), packet, connection);

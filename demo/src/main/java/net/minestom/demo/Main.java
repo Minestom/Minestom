@@ -14,6 +14,7 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -107,10 +108,10 @@ public class Main {
 
         OptifineSupport.enable();
 
-        //VelocityProxy.enable("rBeJJ79W4MVU");
+        VelocityProxy.enable("abc");
         //BungeeCordProxy.enable();
 
-        //MojangAuth.init();
+        //MojangAuth.init();c
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
