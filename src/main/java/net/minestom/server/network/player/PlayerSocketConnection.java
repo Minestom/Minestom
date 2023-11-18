@@ -347,21 +347,17 @@ public class PlayerSocketConnection extends PlayerConnection {
             if (event.isCancelled()) return;
         }
         // Write packet
+        // WARNING: A cached or framed packet will currently never go through writeServerPacketSync,
+        // so a state change inside one of them will never actually be triggered. Currently, cached
+        // packets are never used for packets that change state, so this is not a problem.
         if (packet instanceof ServerPacket serverPacket) {
             writeServerPacketSync(serverPacket, compressed);
         } else if (packet instanceof FramedPacket framedPacket) {
             var buffer = framedPacket.body();
-            System.out.println("SEND " + getServerState() + " " + "UNKNOWN FRAMED");
             writeBufferSync(buffer, 0, buffer.limit());
         } else if (packet instanceof CachedPacket cachedPacket) {
             var buffer = cachedPacket.body(getServerState());
-            if (buffer != null) {
-                var packetClass = cachedPacket.packet(getServerState()).getClass();
-                if (packetClass != TimeUpdatePacket.class && packetClass != UpdateLightPacket.class && packetClass != ChunkDataPacket.class) {
-                    System.out.println("SEND " + getServerState() + " " + cachedPacket.packet(getServerState()).getClass().getSimpleName());
-                }
-                writeBufferSync(buffer, buffer.position(), buffer.remaining());
-            }
+            if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
             else writeServerPacketSync(cachedPacket.packet(getServerState()), compressed);
         } else if (packet instanceof LazyPacket lazyPacket) {
             writeServerPacketSync(lazyPacket.packet(), compressed);
@@ -381,12 +377,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
             var state = getServerState();
             var buffer = PacketUtils.createFramedPacket(state, hold.get(), serverPacket, compressed);
-            System.out.println("SEND " + getServerState() + " cls=" + serverPacket.getClass().getSimpleName() + " id=" + serverPacket.getId(getServerState()));
             writeBufferSync(buffer, 0, buffer.limit());
 
+            // If this packet has a state change, apply it.
             var nextState = serverPacket.nextState();
             if (nextState != null && state != nextState) {
-                System.out.println("CHANGE SERVER STATE TO " + nextState);
                 setServerState(nextState);
             }
         }
