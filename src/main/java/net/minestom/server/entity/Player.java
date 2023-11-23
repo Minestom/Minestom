@@ -269,7 +269,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * WARNING: executed in the main update thread
      * UNSAFE: Only meant to be used when a socket player connects through the server.
      *
-     * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
+     * @param spawnInstance the player spawn instance (defined in {@link AsyncPlayerConfigurationEvent})
      */
     public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
