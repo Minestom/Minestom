@@ -18,6 +18,7 @@ import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -167,6 +168,14 @@ public final class ConnectionManager {
         return playerProvider;
     }
 
+    /**
+     * Adds a {@link Player} to the players list.
+     * <p>
+     * Used during connection, you shouldn't have to do it manually.
+     *
+     * @param player the player
+     */
+    @ApiStatus.Internal
     public synchronized void registerPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
@@ -180,12 +189,14 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
+    @ApiStatus.Internal
     public synchronized void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.remove(connection);
         if (player == null) return;
         this.players.remove(player);
     }
 
+    @ApiStatus.Internal
     public @NotNull Player startConfigurationState(@NotNull PlayerConnection connection,
                                              @NotNull UUID uuid, @NotNull String username) {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
@@ -193,6 +204,7 @@ public final class ConnectionManager {
         return player;
     }
 
+    @ApiStatus.Internal
     public CompletableFuture<Void> startConfigurationState(@NotNull Player player) {
         return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
@@ -224,6 +236,7 @@ public final class ConnectionManager {
         });
     }
 
+    @ApiStatus.Internal
     public void startPlayState(@NotNull Player player, @NotNull Instance instance) {
         this.waitingPlayers.relaxedOffer(new PendingPlayer(player, instance));
     }
