@@ -97,9 +97,10 @@ public final class PacketListenerManager {
     /**
      * Processes a packet by getting its {@link PacketPlayListenerConsumer} and calling all the packet listeners.
      *
-     * @param packet the received packet
-     * @param player the player who sent the packet
-     * @param <T>    the packet type
+     * @param state      the current connection state
+     * @param packet     the received packet
+     * @param connection the connection of the player who sent the packet
+     * @param <T>        the packet type
      */
     public <T extends ClientPacket> void processClientPacket(@NotNull ConnectionState state, @NotNull T packet, @NotNull PlayerConnection connection) {
 
