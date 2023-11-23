@@ -9,14 +9,16 @@ plugins {
 
 // Read env vars (used for publishing generally)
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
-var channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
+val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
+
+val shortDescription = "1.20.1 Lightweight Minecraft server"
 
 allprojects {
     apply(plugin = "java")
 
     group = "net.minestom"
     version = rootProject.version
-    description = "Lightweight and multi-threaded Minecraft server implementation"
+    description = shortDescription
 
     repositories {
         mavenCentral()
@@ -133,8 +135,8 @@ tasks {
         from(project.components["java"])
 
         pom {
-            name.set("minestom-ce")
-            description.set("Lightweight and multi-threaded 1.19.3 Minecraft server")
+            name.set(this@create.artifactId)
+            description.set(shortDescription)
             url.set("https://github.com/hollow-cube/minestom-ce")
 
             licenses {
