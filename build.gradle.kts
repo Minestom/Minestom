@@ -7,7 +7,9 @@ plugins {
     alias(libs.plugins.nexuspublish)
 }
 
-version = System.getenv("SHORT_COMMIT_HASH") ?: "dev"
+// Read env vars (used for publishing generally)
+version = System.getenv("MINESTOM_VERSION") ?: "dev"
+var channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
 
 allprojects {
     apply(plugin = "java")
@@ -121,7 +123,7 @@ tasks {
 
     publishing.publications.create<MavenPublication>("maven") {
         groupId = "dev.hollowcube"
-        artifactId = "minestom-ce"
+        artifactId = if (channel == "snapshot") "minestom-ce-snapshots" else "minestom-ce"
         version = project.version.toString()
 
         from(project.components["java"])
