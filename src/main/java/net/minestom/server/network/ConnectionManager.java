@@ -8,14 +8,13 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
-import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
+import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.debug.DebugUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -36,27 +35,20 @@ public final class ConnectionManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
-    private record PendingPlayer(@NotNull Player player, @NotNull Instance instance) {}
+    private record PendingPlayer(@NotNull Player player, @NotNull Instance instance) {
+    }
 
     private final MessagePassingQueue<PendingPlayer> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
+
+    // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
     // The uuid provider once a player login
     private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
     // The player provider to have your own Player implementation
     private volatile PlayerProvider playerProvider = Player::new;
-
-    /**
-     * Gets the {@link Player} linked to a {@link PlayerConnection}.
-     *
-     * @param connection the player connection
-     * @return the player linked to the connection
-     */
-    public Player getPlayer(@NotNull PlayerConnection connection) {
-        return connectionPlayerMap.get(connection);
-    }
 
     /**
      * Gets all online players.
@@ -68,25 +60,28 @@ public final class ConnectionManager {
     }
 
     /**
-     * Finds the closest player matching a given username.
+     * Gets online players filtered by state.
      *
-     * @param username the player username (can be partial)
-     * @return the closest match, null if no players are online
+     * <p>States before login are not considered online, and will result in nothing being returned.</p>
+     *
+     * @return An unmodifiable collection containing the filtered players.
+     * @apiNote The returned collection has no defined update behavior relative to the state of the server,
+     * so it should be refetched whenever used, rather than kept and reused.
      */
-    public @Nullable Player findPlayer(@NotNull String username) {
-        Player exact = getPlayer(username);
-        if (exact != null) return exact;
-        final String username1 = username.toLowerCase(Locale.ROOT);
+    public @NotNull Collection<@NotNull Player> getPlayers(@NotNull ConnectionState... state) {
+//        connectionPlayerMap.values().stream()
+//                .filter()
+        return List.of();
+    }
 
-        Function<Player, Double> distanceFunction = player -> {
-            final String username2 = player.getUsername().toLowerCase(Locale.ROOT);
-            return StringUtils.jaroWinklerScore(username1, username2);
-        };
-        return getOnlinePlayers()
-                .stream()
-                .min(Comparator.comparingDouble(distanceFunction::apply))
-                .filter(player -> distanceFunction.apply(player) > 0)
-                .orElse(null);
+    /**
+     * Gets the {@link Player} linked to a {@link PlayerConnection}.
+     *
+     * @param connection the player connection
+     * @return the player linked to the connection
+     */
+    public Player getPlayer(@NotNull PlayerConnection connection) {
+        return connectionPlayerMap.get(connection);
     }
 
     /**
@@ -119,6 +114,28 @@ public final class ConnectionManager {
                 return player;
         }
         return null;
+    }
+
+    /**
+     * Finds the closest player matching a given username.
+     *
+     * @param username the player username (can be partial)
+     * @return the closest match, null if no players are online
+     */
+    public @Nullable Player findPlayer(@NotNull String username) {
+        Player exact = getPlayer(username);
+        if (exact != null) return exact;
+        final String username1 = username.toLowerCase(Locale.ROOT);
+
+        Function<Player, Double> distanceFunction = player -> {
+            final String username2 = player.getUsername().toLowerCase(Locale.ROOT);
+            return StringUtils.jaroWinklerScore(username1, username2);
+        };
+        return getOnlinePlayers()
+                .stream()
+                .min(Comparator.comparingDouble(distanceFunction::apply))
+                .filter(player -> distanceFunction.apply(player) > 0)
+                .orElse(null);
     }
 
     /**
@@ -168,6 +185,23 @@ public final class ConnectionManager {
         return playerProvider;
     }
 
+    //todo REDONE TRANSITIONS
+
+    @ApiStatus.Internal
+    public void transitionLoginToConfig(@NotNull Player player) {
+
+    }
+
+    @ApiStatus.Internal
+    public void transitionConfigToPlay(@NotNull Player player) {
+
+    }
+
+    @ApiStatus.Internal
+    public void transitionPlayToConfig(@NotNull Player player) {
+
+    }
+
     /**
      * Adds a {@link Player} to the players list.
      * <p>
@@ -198,7 +232,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public @NotNull Player startConfigurationState(@NotNull PlayerConnection connection,
-                                             @NotNull UUID uuid, @NotNull String username) {
+                                                   @NotNull UUID uuid, @NotNull String username) {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
         startConfigurationState(player);
         return player;
@@ -254,6 +288,8 @@ public final class ConnectionManager {
      */
     public void updateWaitingPlayers() {
         this.waitingPlayers.drain(pp -> {
+
+            System.out.println("DRAIN PP " + pp);
 
             // Spawn the player at Player#getRespawnPoint
             CompletableFuture<Void> spawnFuture = pp.player.UNSAFE_init(pp.instance);

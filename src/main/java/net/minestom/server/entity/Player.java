@@ -59,6 +59,7 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
@@ -250,19 +251,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         metadata.setNotifyAboutChanges(false);
     }
 
-    public void UNSAFE_enterConfiguration(boolean isFirstConfig) {
-        AsyncUtils.runAsync(() -> {
-            var event = new AsyncPlayerConfigurationEvent(this, isFirstConfig);
-            EventDispatcher.call(event);
-
-            final Instance spawningInstance = event.getSpawningInstance();
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
-
-            MinecraftServer.getConnectionManager().startPlayState(this, event.getSpawningInstance());
-            sendPacket(new FinishConfigurationPacket());
-        });
-    }
-
     /**
      * Used when the player is created.
      * Init the player and spawn him.
@@ -272,8 +260,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param spawnInstance the player spawn instance (defined in {@link AsyncPlayerConfigurationEvent})
      */
+    @ApiStatus.Internal
     public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
+
+        System.out.println("INIT PLAYER");
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), false, List.of(), 0,
@@ -282,8 +273,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
         sendPacket(joinGamePacket);
 
-        // Server brand name
-        sendPacket(PluginMessagePacket.getBrandPacket());
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
 
@@ -355,6 +344,71 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshAbilities(); // Send abilities packet
 
         return setInstance(spawnInstance);
+    }
+
+    /**
+     * Moves the player immediately to the configuration state. The player is automatically moved
+     * to configuration upon finishing login, this method can be used to move them back to configuration
+     * after entering the play state.
+     *
+     * <p>This will result in them being removed from the current instance, player list, etc.</p>
+     */
+    public void startConfigurationPhase() {
+        boolean isFirstConfig = true;
+
+        // If the player is currently in the play state, we need to put them back in configuration.
+        if (playerConnection.getClientState() == ConnectionState.PLAY) {
+            remove(false);
+            sendPacket(new StartConfigurationPacket());
+        } else {
+            // Sanity check that they are already in configuration.
+            // On first join, they will already be in the config state when this is called.
+            assert playerConnection.getClientState() == ConnectionState.CONFIGURATION;
+        }
+
+        // Call the event and spawn the player.
+        AsyncUtils.runAsync(() -> {
+            System.out.println("CALL EVENT");
+            var event = new AsyncPlayerConfigurationEvent(this, isFirstConfig);
+            EventDispatcher.call(event);
+
+            System.out.println("FINISHED EVENT");
+            final Instance spawningInstance = event.getSpawningInstance();
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+
+            MinecraftServer.getConnectionManager().startPlayState(this, event.getSpawningInstance());
+            sendPacket(new FinishConfigurationPacket());
+            System.out.println("SENT CHANGE PACKET");
+        });
+    }
+
+    public void startConfigurationPhase2() {
+        boolean isFirstConfig = true;
+
+        // If the player is currently in the play state, we need to put them back in configuration.
+        if (playerConnection.getClientState() == ConnectionState.PLAY) {
+            remove(false);
+            sendPacket(new StartConfigurationPacket());
+        } else {
+            // Sanity check that they are already in configuration.
+            // On first join, they will already be in the config state when this is called.
+            assert playerConnection.getClientState() == ConnectionState.CONFIGURATION;
+        }
+
+        // Call the event and spawn the player.
+//        AsyncUtils.runAsync(() -> {
+//            System.out.println("CALL EVENT");
+//            var event = new AsyncPlayerConfigurationEvent(this, isFirstConfig);
+//            EventDispatcher.call(event);
+//
+//            System.out.println("FINISHED EVENT");
+//            final Instance spawningInstance = event.getSpawningInstance();
+//            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+//
+//            MinecraftServer.getConnectionManager().startPlayState(this, event.getSpawningInstance());
+//            sendPacket(new FinishConfigurationPacket());
+//            System.out.println("SENT CHANGE PACKET");
+//        });
     }
 
     /**
@@ -539,11 +593,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void remove() {
+    public void remove(boolean permanent) {
         if (isRemoved()) return;
-        EventDispatcher.call(new PlayerDisconnectEvent(this));
-        super.remove();
-        this.packets.clear();
+
+        if (permanent) {
+            this.packets.clear();
+            EventDispatcher.call(new PlayerDisconnectEvent(this));
+        }
+
+        super.remove(permanent);
+
         final Inventory currentInventory = getOpenInventory();
         if (currentInventory != null) currentInventory.removeViewer(this);
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
@@ -566,7 +625,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
-        if (playerConnection.isOnline()) kick(REMOVE_MESSAGE);
+        if (permanent && playerConnection.isOnline()) kick(REMOVE_MESSAGE);
     }
 
     @Override
