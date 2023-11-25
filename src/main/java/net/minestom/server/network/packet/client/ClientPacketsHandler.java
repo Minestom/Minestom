@@ -100,7 +100,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientStatusPacket::new);
             register(nextId(), ClientSettingsPacket::new);
             register(nextId(), ClientTabCompletePacket::new);
-            nextId(); // configuration acknowledged
+            register(nextId(), ClientConfigurationAckPacket::new);
             register(nextId(), ClientClickWindowButtonPacket::new);
             register(nextId(), ClientClickWindowPacket::new);
             register(nextId(), ClientCloseWindowPacket::new);

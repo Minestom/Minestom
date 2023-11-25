@@ -64,6 +64,7 @@ public class Main {
         commandManager.register(new DisplayCommand());
         commandManager.register(new NotificationCommand());
         commandManager.register(new TestCommand2());
+        commandManager.register(new ConfigCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
@@ -109,10 +110,10 @@ public class Main {
 
         OptifineSupport.enable();
 
-        VelocityProxy.enable("abc");
+//        VelocityProxy.enable("abc");
         //BungeeCordProxy.enable();
 
-        //MojangAuth.init();c
+        //MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
