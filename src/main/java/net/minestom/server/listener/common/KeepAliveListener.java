@@ -9,6 +9,7 @@ public final class KeepAliveListener {
     private static final Component KICK_MESSAGE = Component.text("Bad Keep Alive packet", NamedTextColor.RED);
 
     public static void listener(ClientKeepAlivePacket packet, Player player) {
+        System.out.println("KEEP ALIVE LISTENER");
         final long packetId = packet.id();
         if (packetId != player.getLastKeepAlive()) {
             player.kick(KICK_MESSAGE);
