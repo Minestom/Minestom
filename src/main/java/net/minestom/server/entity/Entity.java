@@ -160,7 +160,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
-    private boolean removed;
+    protected boolean removed;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
