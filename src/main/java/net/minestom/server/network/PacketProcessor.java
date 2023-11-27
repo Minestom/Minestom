@@ -53,8 +53,10 @@ public class PacketProcessor {
     }
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
+        System.out.println("READ: " + connection.getClientState() + " " + packetId);
         final ClientPacket packet = create(connection.getClientState(), packetId, body);
         final ConnectionState state = connection.getClientState();
+        System.out.println("READ2: " + state + " " + packet.getClass().getSimpleName());
         switch (state) {
             case HANDSHAKE, STATUS, LOGIN, CONFIGURATION -> packetListenerManager.processClientPacket(connection.getClientState(), packet, connection);
             case PLAY -> {

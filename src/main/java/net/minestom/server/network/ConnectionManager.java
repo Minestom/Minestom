@@ -39,6 +39,7 @@ public final class ConnectionManager {
     }
 
     private final MessagePassingQueue<PendingPlayer> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
 
@@ -189,7 +190,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void transitionLoginToConfig(@NotNull Player player) {
-
+        configurationPlayers.add(player);
     }
 
     @ApiStatus.Internal
@@ -199,7 +200,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void transitionPlayToConfig(@NotNull Player player) {
-
+        configurationPlayers.add(player);
     }
 
     /**
@@ -267,6 +268,7 @@ public final class ConnectionManager {
             // Send login success packet (and switch to configuration phase)
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
+            configurationPlayers.add(player);
         });
     }
 
@@ -283,13 +285,23 @@ public final class ConnectionManager {
         this.connectionPlayerMap.clear();
     }
 
+    public void tick(long tickStart) {
+        updateWaitingPlayers();
+        handleKeepAlive(tickStart);
+
+        // Interpret packets for configuration players
+        for (var player : configurationPlayers) {
+//            System.out.println("CONFIG INTERPRET: " + player.getUsername());
+            player.interpretPacketQueue();
+        }
+    }
+
     /**
      * Connects waiting players.
      */
-    public void updateWaitingPlayers() {
+    private void updateWaitingPlayers() {
         this.waitingPlayers.drain(pp -> {
-
-            System.out.println("DRAIN PP " + pp);
+            configurationPlayers.remove(pp.player);
 
             // Spawn the player at Player#getRespawnPoint
             CompletableFuture<Void> spawnFuture = pp.player.UNSAFE_init(pp.instance);
@@ -304,7 +316,8 @@ public final class ConnectionManager {
      *
      * @param tickStart the time of the update in milliseconds, forwarded to the packet
      */
-    public void handleKeepAlive(long tickStart) {
+    private void handleKeepAlive(long tickStart) {
+        //todo need to send keep alives for config players also!!
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : getOnlinePlayers()) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();

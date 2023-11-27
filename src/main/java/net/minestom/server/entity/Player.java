@@ -262,9 +262,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @ApiStatus.Internal
     public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
+        this.removed = false;
         this.dimensionType = spawnInstance.getDimensionType();
-
-        System.out.println("INIT PLAYER");
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), false, List.of(), 0,
@@ -388,6 +387,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // If the player is currently in the play state, we need to put them back in configuration.
         if (playerConnection.getClientState() == ConnectionState.PLAY) {
             remove(false);
+            System.out.println("SEND REENTER");
+            MinecraftServer.getConnectionManager().transitionPlayToConfig(this);
             sendPacket(new StartConfigurationPacket());
         } else {
             // Sanity check that they are already in configuration.
@@ -423,6 +424,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void update(long time) {
         // Process received packets
         interpretPacketQueue();
+        if (isRemoved()) return;
 
         super.update(time); // Super update (item pickup/fire management)
 
