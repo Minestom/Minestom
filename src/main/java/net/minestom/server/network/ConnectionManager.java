@@ -5,16 +5,20 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
+import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
+import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.debug.DebugUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -35,16 +39,16 @@ public final class ConnectionManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
-    private record PendingPlayer(@NotNull Player player, @NotNull Instance instance) {
-    }
-
-    private final MessagePassingQueue<PendingPlayer> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
-    private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
-    private final Set<Player> players = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
+    // Players waiting to be spawned (post configuration state)
+    private final MessagePassingQueue<Player> waitingPlayers = new MpscUnboundedArrayQueue<>(64);
+    // Players in configuration state
+    private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
+    // Players in play state
+    private final Set<Player> playPlayers = new CopyOnWriteArraySet<>();
+
 
     // The uuid provider once a player login
     private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
@@ -52,27 +56,44 @@ public final class ConnectionManager {
     private volatile PlayerProvider playerProvider = Player::new;
 
     /**
-     * Gets all online players.
+     * Gets the number of "online" players, eg for the query response.
      *
-     * @return an unmodifiable collection containing all the online players
+     * @apiNote Only includes players in the play state, not players in configuration.
      */
-    public @NotNull Collection<@NotNull Player> getOnlinePlayers() {
-        return unmodifiablePlayers;
+    public int getOnlinePlayerCount() {
+        return playPlayers.size();
     }
 
     /**
-     * Gets online players filtered by state.
+     * Gets players filtered by state.
      *
-     * <p>States before login are not considered online, and will result in nothing being returned.</p>
+     * @param states The state(s) to return players, if empty all players (play and config) are returned.
+     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      *
      * @return An unmodifiable collection containing the filtered players.
      * @apiNote The returned collection has no defined update behavior relative to the state of the server,
      * so it should be refetched whenever used, rather than kept and reused.
      */
-    public @NotNull Collection<@NotNull Player> getPlayers(@NotNull ConnectionState... state) {
-//        connectionPlayerMap.values().stream()
-//                .filter()
-        return List.of();
+    public @NotNull Collection<@NotNull Player> getPlayers(@NotNull ConnectionState... states) {
+        boolean play = false, config = false;
+        for (var state : states) {
+            switch (state) {
+                case PLAY -> play = true;
+                case CONFIGURATION -> config = true;
+                default -> throw new IllegalArgumentException("Cannot fetch players in " + state + "!");
+            }
+        }
+
+        if (config && !play) { // Only play
+            return Collections.unmodifiableCollection(configurationPlayers);
+        } else if (!config && play) { // Only configuration
+            return Collections.unmodifiableCollection(playPlayers);
+        } else { // Both or neither was specified
+            final var players = new ArrayList<Player>(playPlayers.size() + configurationPlayers.size());
+            players.addAll(configurationPlayers);
+            players.addAll(playPlayers);
+            return Collections.unmodifiableCollection(players);
+        }
     }
 
     /**
@@ -90,11 +111,13 @@ public final class ConnectionManager {
      * <p>
      * This can cause issue if two or more players have the same username.
      *
-     * @param username the player username (ignoreCase)
+     * @param username the player username (case-insensitive)
+     * @param states The state(s) to return players, if empty all players (play and config) are returned.
+     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      * @return the first player who validate the username condition, null if none was found
      */
-    public @Nullable Player getPlayer(@NotNull String username) {
-        for (Player player : getOnlinePlayers()) {
+    public @Nullable Player getPlayer(@NotNull String username, @NotNull ConnectionState... states) {
+        for (Player player : getPlayers(states)) {
             if (player.getUsername().equalsIgnoreCase(username))
                 return player;
         }
@@ -107,10 +130,12 @@ public final class ConnectionManager {
      * This can cause issue if two or more players have the same UUID.
      *
      * @param uuid the player UUID
+     * @param states The state(s) to return players, if empty all players (play and config) are returned.
+     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      * @return the first player who validate the UUID condition, null if none was found
      */
-    public @Nullable Player getPlayer(@NotNull UUID uuid) {
-        for (Player player : getOnlinePlayers()) {
+    public @Nullable Player getPlayer(@NotNull UUID uuid, @NotNull ConnectionState... states) {
+        for (Player player : getPlayers(states)) {
             if (player.getUuid().equals(uuid))
                 return player;
         }
@@ -121,9 +146,11 @@ public final class ConnectionManager {
      * Finds the closest player matching a given username.
      *
      * @param username the player username (can be partial)
+     * @param states The state(s) to return players, if empty all players (play and config) are returned.
+     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      * @return the closest match, null if no players are online
      */
-    public @Nullable Player findPlayer(@NotNull String username) {
+    public @Nullable Player findPlayer(@NotNull String username, @NotNull ConnectionState... states) {
         Player exact = getPlayer(username);
         if (exact != null) return exact;
         final String username1 = username.toLowerCase(Locale.ROOT);
@@ -132,8 +159,7 @@ public final class ConnectionManager {
             final String username2 = player.getUsername().toLowerCase(Locale.ROOT);
             return StringUtils.jaroWinklerScore(username1, username2);
         };
-        return getOnlinePlayers()
-                .stream()
+        return getPlayers(states).stream()
                 .min(Comparator.comparingDouble(distanceFunction::apply))
                 .filter(player -> distanceFunction.apply(player) > 0)
                 .orElse(null);
@@ -186,73 +212,35 @@ public final class ConnectionManager {
         return playerProvider;
     }
 
-    //todo REDONE TRANSITIONS
-
-    @ApiStatus.Internal
-    public void transitionLoginToConfig(@NotNull Player player) {
-        configurationPlayers.add(player);
-    }
-
-    @ApiStatus.Internal
-    public void transitionConfigToPlay(@NotNull Player player) {
-
-    }
-
-    @ApiStatus.Internal
-    public void transitionPlayToConfig(@NotNull Player player) {
-        configurationPlayers.add(player);
-    }
 
     /**
-     * Adds a {@link Player} to the players list.
-     * <p>
-     * Used during connection, you shouldn't have to do it manually.
-     *
-     * @param player the player
+     * Creates a player object and begins the transition from the login state to the config state.
      */
     @ApiStatus.Internal
-    public synchronized void registerPlayer(@NotNull Player player) {
-        this.players.add(player);
-        this.connectionPlayerMap.put(player.getPlayerConnection(), player);
-    }
-
-    /**
-     * Removes a {@link Player} from the players list.
-     * <p>
-     * Used during disconnection, you shouldn't have to do it manually.
-     *
-     * @param connection the player connection
-     * @see PlayerConnection#disconnect() to properly disconnect a player
-     */
-    @ApiStatus.Internal
-    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
-        final Player player = this.connectionPlayerMap.remove(connection);
-        if (player == null) return;
-        this.players.remove(player);
-    }
-
-    @ApiStatus.Internal
-    public @NotNull Player startConfigurationState(@NotNull PlayerConnection connection,
-                                                   @NotNull UUID uuid, @NotNull String username) {
+    public @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
-        startConfigurationState(player);
+        this.connectionPlayerMap.put(connection, player);
+        transitionLoginToConfig(player);
         return player;
     }
 
     @ApiStatus.Internal
-    public CompletableFuture<Void> startConfigurationState(@NotNull Player player) {
-        return AsyncUtils.runAsync(() -> {
+    public void transitionLoginToConfig(@NotNull Player player) {
+        AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
+
             // Compression
             if (playerConnection instanceof PlayerSocketConnection socketConnection) {
                 final int threshold = MinecraftServer.getCompressionThreshold();
                 if (threshold > 0) socketConnection.startCompression();
             }
+
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
             if (!player.isOnline())
                 return; // Player has been kicked
+
             // Change UUID/Username based on the event
             {
                 final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
@@ -273,42 +261,74 @@ public final class ConnectionManager {
     }
 
     @ApiStatus.Internal
-    public void startPlayState(@NotNull Player player, @NotNull Instance instance) {
-        this.waitingPlayers.relaxedOffer(new PendingPlayer(player, instance));
+    public void transitionPlayToConfig(@NotNull Player player) {
+        player.sendPacket(new StartConfigurationPacket());
+        configurationPlayers.add(player);
+    }
+
+    @ApiStatus.Internal
+    public void transitionConfigToPlay(@NotNull Player player, boolean isFirstConfig) {
+        // Call the event and spawn the player.
+        AsyncUtils.runAsync(() -> {
+            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
+            EventDispatcher.call(event);
+
+            final Instance spawningInstance = event.getSpawningInstance();
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+
+            player.setPendingInstance(spawningInstance);
+            this.waitingPlayers.relaxedOffer(player);
+            player.sendPacket(new FinishConfigurationPacket());
+        });
+    }
+
+    /**
+     * Removes a {@link Player} from the players list.
+     * <p>
+     * Used during disconnection, you shouldn't have to do it manually.
+     *
+     * @param connection the player connection
+     * @see PlayerConnection#disconnect() to properly disconnect a player
+     */
+    @ApiStatus.Internal
+    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
+        final Player player = this.connectionPlayerMap.remove(connection);
+        if (player == null) return;
+        this.configurationPlayers.remove(player);
+        this.playPlayers.remove(player);
     }
 
     /**
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public synchronized void shutdown() {
-        this.players.clear();
+        this.configurationPlayers.clear();
+        this.playPlayers.clear();
         this.connectionPlayerMap.clear();
     }
 
     public void tick(long tickStart) {
+        // Let waiting players into their instances
         updateWaitingPlayers();
-        handleKeepAlive(tickStart);
+
+        // Send keep alive packets
+        handleKeepAlive(configurationPlayers, tickStart);
+        handleKeepAlive(playPlayers, tickStart);
 
         // Interpret packets for configuration players
-        for (var player : configurationPlayers) {
-//            System.out.println("CONFIG INTERPRET: " + player.getUsername());
-
-            //todo we are required to do this because when we wait for the config ack packet we are not in an instance so not ticking.
-            // but then once we switch to config the packets must be eval-ed immediately because we are in an instance. What if we change
-            // the protocol state swap to happen immediately when the packet is read, not when its processed?
-            player.interpretPacketQueue();
-        }
+        configurationPlayers.forEach(Player::interpretPacketQueue);
     }
 
     /**
      * Connects waiting players.
      */
     private void updateWaitingPlayers() {
-        this.waitingPlayers.drain(pp -> {
-            configurationPlayers.remove(pp.player);
+        this.waitingPlayers.drain(player -> {
+            configurationPlayers.remove(player);
+            playPlayers.add(player);
 
             // Spawn the player at Player#getRespawnPoint
-            CompletableFuture<Void> spawnFuture = pp.player.UNSAFE_init(pp.instance);
+            CompletableFuture<Void> spawnFuture = player.UNSAFE_init();
 
             // Required to get the exact moment the player spawns
             if (DebugUtils.INSIDE_TEST) spawnFuture.join();
@@ -320,10 +340,9 @@ public final class ConnectionManager {
      *
      * @param tickStart the time of the update in milliseconds, forwarded to the packet
      */
-    private void handleKeepAlive(long tickStart) {
-        //todo need to send keep alives for config players also!!
+    private void handleKeepAlive(@NotNull Collection<Player> playerGroup, long tickStart) {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
-        for (Player player : getOnlinePlayers()) {
+        for (Player player : playerGroup) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
             if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
                 player.refreshKeepAlive(tickStart);

@@ -5,6 +5,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.ConnectionState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,12 +36,12 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
 
     @Override
     public @NotNull Iterable<? extends Audience> players() {
-        return MinecraftServer.getConnectionManager().getOnlinePlayers();
+        return MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY);
     }
 
     @Override
     public @NotNull Iterable<? extends Audience> players(@NotNull Predicate<Player> filter) {
-        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList();
+        return MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY).stream().filter(filter).toList();
     }
 
     @Override

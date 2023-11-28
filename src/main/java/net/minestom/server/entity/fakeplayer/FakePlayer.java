@@ -67,7 +67,8 @@ public class FakePlayer extends Player implements NavigableEntity {
                     }).build();
             MinecraftServer.getGlobalEventHandler().addListener(spawnListener);
         }
-        CONNECTION_MANAGER.startConfigurationState(this);
+
+        CONNECTION_MANAGER.transitionLoginToConfig(this);
     }
 
     /**

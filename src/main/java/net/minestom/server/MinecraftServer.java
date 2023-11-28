@@ -103,7 +103,7 @@ public final class MinecraftServer {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketUtils.broadcastPacket(PluginMessagePacket.getBrandPacket());
+        PacketUtils.broadcastPlayPacket(PluginMessagePacket.getBrandPacket());
     }
 
     /**
@@ -123,7 +123,7 @@ public final class MinecraftServer {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        PacketUtils.broadcastPacket(new ServerDifficultyPacket(difficulty, true));
+        PacketUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     @ApiStatus.Experimental

@@ -1,8 +1,10 @@
 package net.minestom.server.extras.query.response;
 
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.query.Query;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +15,7 @@ import java.util.*;
  * A full query response containing a dynamic set of responses.
  */
 public class FullQueryResponse implements Writeable {
-    private static final PlainComponentSerializer PLAIN = PlainComponentSerializer.plain();
+    private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
     private static final byte[] PADDING_10 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
             PADDING_11 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -31,7 +33,7 @@ public class FullQueryResponse implements Writeable {
             this.kv.put(key.getKey(), key.getValue());
         }
 
-        this.players = MinecraftServer.getConnectionManager().getOnlinePlayers()
+        this.players = MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY)
                 .stream()
                 .map(player -> PLAIN.serialize(player.getName()))
                 .toList();

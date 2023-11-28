@@ -53,10 +53,8 @@ public class PacketProcessor {
     }
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
-//        System.out.println("READ: " + connection.getClientState() + " " + packetId);
         final ClientPacket packet = create(connection.getClientState(), packetId, body);
         final ConnectionState state = connection.getClientState();
-//        System.out.println("READ2: " + state + " " + packet.getClass().getSimpleName());
 
         // If the packet intends to switch state, do it now.
         // Since packets are processed next tick for players, we have to switch immediately.
@@ -67,7 +65,9 @@ public class PacketProcessor {
         }
 
         switch (state) {
+            // Process all pre-config packets immediately
             case HANDSHAKE, STATUS, LOGIN -> packetListenerManager.processClientPacket(state, packet, connection);
+            // Process config and play packets on the next tick
             case CONFIGURATION, PLAY -> {
                 final Player player = connection.getPlayer();
                 assert player != null;
