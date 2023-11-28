@@ -21,7 +21,7 @@ public class BasicQueryResponse implements Writeable {
         this.motd = "A Minestom Server";
         this.gametype = "SMP";
         this.map = "world";
-        this.numPlayers = String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
+        this.numPlayers = String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayerCount());
         this.maxPlayers = String.valueOf(Integer.parseInt(this.numPlayers) + 1);
     }
 

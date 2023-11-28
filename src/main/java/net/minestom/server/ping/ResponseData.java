@@ -7,6 +7,8 @@ import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +39,7 @@ public class ResponseData {
         this.entries = new ArrayList<>();
         this.version = MinecraftServer.VERSION_NAME;
         this.protocol = MinecraftServer.PROTOCOL_VERSION;
-        this.online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
+        this.online = MinecraftServer.getConnectionManager().getOnlinePlayerCount();
         this.maxPlayer = this.online + 1;
         this.description = DEFAULT_DESCRIPTION;
         this.favicon = "";

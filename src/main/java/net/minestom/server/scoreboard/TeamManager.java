@@ -37,7 +37,7 @@ public final class TeamManager {
      */
     protected void registerNewTeam(@NotNull Team team) {
         this.teams.add(team);
-        PacketUtils.broadcastPacket(team.createTeamsCreationPacket());
+        PacketUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
     }
 
     /**
@@ -60,7 +60,7 @@ public final class TeamManager {
      */
     public boolean deleteTeam(@NotNull Team team) {
         // Sends to all online players a team destroy packet
-        PacketUtils.broadcastPacket(team.createTeamDestructionPacket());
+        PacketUtils.broadcastPlayPacket(team.createTeamDestructionPacket());
         return this.teams.remove(team);
     }
 

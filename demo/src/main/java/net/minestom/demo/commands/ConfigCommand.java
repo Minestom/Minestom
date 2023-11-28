@@ -9,7 +9,7 @@ public class ConfigCommand extends Command {
 
         setDefaultExecutor((sender, context) -> {
             if (!(sender instanceof Player player)) return;
-            player.startConfigurationPhase2();
+            player.startConfigurationPhase();
         });
     }
 }
