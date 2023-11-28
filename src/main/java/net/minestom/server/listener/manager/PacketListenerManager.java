@@ -130,12 +130,6 @@ public final class PacketListenerManager {
             // Packet is likely invalid
             MinecraftServer.getExceptionManager().handleException(e);
         }
-
-        // If the packet intends to switch state, do it now.
-        var nextState = packet.nextState();
-        if (nextState != null && state != nextState) {
-            connection.setClientState(nextState);
-        }
     }
 
     /**

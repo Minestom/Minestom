@@ -206,6 +206,7 @@ public class FakePlayerController {
      * @param clientPlayPacket The packet to add in the queue.
      */
     private void addToQueue(ClientPacket clientPlayPacket) {
-        this.fakePlayer.addPacketToQueue(clientPlayPacket);
+        //todo fix me
+//        this.fakePlayer.addPacketToQueue(clientPlayPacket);
     }
 }

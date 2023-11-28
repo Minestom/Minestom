@@ -53,16 +53,25 @@ public class PacketProcessor {
     }
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
-        System.out.println("READ: " + connection.getClientState() + " " + packetId);
+//        System.out.println("READ: " + connection.getClientState() + " " + packetId);
         final ClientPacket packet = create(connection.getClientState(), packetId, body);
         final ConnectionState state = connection.getClientState();
-        System.out.println("READ2: " + state + " " + packet.getClass().getSimpleName());
+//        System.out.println("READ2: " + state + " " + packet.getClass().getSimpleName());
+
+        // If the packet intends to switch state, do it now.
+        // Since packets are processed next tick for players, we have to switch immediately.
+        // TODO HOWEVER THIS WILL NOT ACTUALLY WORK BECAUSE WHEN WE QUEUE THE PACKET IT HAS THE WRONG LISTENER.
+        var nextState = packet.nextState();
+        if (nextState != null && state != nextState) {
+            connection.setClientState(nextState);
+        }
+
         switch (state) {
-            case HANDSHAKE, STATUS, LOGIN, CONFIGURATION -> packetListenerManager.processClientPacket(connection.getClientState(), packet, connection);
-            case PLAY -> {
+            case HANDSHAKE, STATUS, LOGIN -> packetListenerManager.processClientPacket(state, packet, connection);
+            case CONFIGURATION, PLAY -> {
                 final Player player = connection.getPlayer();
                 assert player != null;
-                player.addPacketToQueue(packet);
+                player.addPacketToQueue(state, packet);
             }
         }
         return packet;

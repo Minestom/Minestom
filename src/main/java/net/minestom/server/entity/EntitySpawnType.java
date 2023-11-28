@@ -6,7 +6,6 @@ import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
-import net.minestom.server.network.packet.server.play.SpawnPlayerPacket;
 
 public enum EntitySpawnType {
     BASE {
@@ -24,7 +23,7 @@ public enum EntitySpawnType {
     PLAYER {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            return new SpawnPlayerPacket(entity.getEntityId(), entity.getUuid(), entity.getPosition());
+            return EntitySpawnType.basicEntity(entity);
         }
     },
     EXPERIENCE_ORB {
