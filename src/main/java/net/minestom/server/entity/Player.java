@@ -58,12 +58,9 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.common.*;
-import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
@@ -133,6 +130,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Component displayName;
     private PlayerSkin skin;
 
+    private Instance pendingInstance = null;
     private DimensionType dimensionType;
     private GameMode gameMode;
     private DeathLocation deathLocation;
@@ -253,17 +251,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         metadata.setNotifyAboutChanges(false);
     }
 
+    @ApiStatus.Internal
+    public void setPendingInstance(@NotNull Instance pendingInstance) {
+        // I(mattw) am not a big fan of this function, but somehow we need to store
+        // the instance and i didn't like a record in ConnectionManager either.
+        this.pendingInstance = pendingInstance;
+    }
+
     /**
      * Used when the player is created.
      * Init the player and spawn him.
      * <p>
      * WARNING: executed in the main update thread
      * UNSAFE: Only meant to be used when a socket player connects through the server.
-     *
-     * @param spawnInstance the player spawn instance (defined in {@link AsyncPlayerConfigurationEvent})
      */
     @ApiStatus.Internal
-    public CompletableFuture<Void> UNSAFE_init(@NotNull Instance spawnInstance) {
+    public CompletableFuture<Void> UNSAFE_init() {
+        final Instance spawnInstance = this.pendingInstance;
+        this.pendingInstance = null;
+
         this.removed = false;
         this.dimensionType = spawnInstance.getDimensionType();
 
@@ -296,9 +302,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        PacketUtils.broadcastPacket(getAddPlayerToList());
+        PacketUtils.broadcastPlayPacket(getAddPlayerToList());
 
-        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+        var connectionManager = MinecraftServer.getConnectionManager();
+        for (var player : connectionManager.getPlayers(ConnectionState.PLAY)) {
             if (player != this) {
                 sendPacket(player.getAddPlayerToList());
                 if (player.displayName != null) {
@@ -355,63 +362,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>This will result in them being removed from the current instance, player list, etc.</p>
      */
     public void startConfigurationPhase() {
-        boolean isFirstConfig = true;
+        Check.stateCondition(playerConnection.getClientState() != ConnectionState.PLAY,
+                "Player must be in the play state for reconfiguration.");
 
-        // If the player is currently in the play state, we need to put them back in configuration.
-        if (playerConnection.getClientState() == ConnectionState.PLAY) {
-            remove(false);
-            sendPacket(new StartConfigurationPacket());
-        } else {
-            // Sanity check that they are already in configuration.
-            // On first join, they will already be in the config state when this is called.
-            assert playerConnection.getClientState() == ConnectionState.CONFIGURATION;
-        }
+        // Remove the player, then send them back to configuration
+        remove(false);
 
-        // Call the event and spawn the player.
-        AsyncUtils.runAsync(() -> {
-            System.out.println("CALL EVENT");
-            var event = new AsyncPlayerConfigurationEvent(this, isFirstConfig);
-            EventDispatcher.call(event);
+        var connectionManager = MinecraftServer.getConnectionManager();
+        connectionManager.transitionPlayToConfig(this);
 
-            System.out.println("FINISHED EVENT");
-            final Instance spawningInstance = event.getSpawningInstance();
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
-
-            MinecraftServer.getConnectionManager().startPlayState(this, event.getSpawningInstance());
-            sendPacket(new FinishConfigurationPacket());
-            System.out.println("SENT CHANGE PACKET");
-        });
-    }
-
-    public void startConfigurationPhase2() {
-        boolean isFirstConfig = true;
-
-        // If the player is currently in the play state, we need to put them back in configuration.
-        if (playerConnection.getClientState() == ConnectionState.PLAY) {
-            remove(false);
-            System.out.println("SEND REENTER");
-            MinecraftServer.getConnectionManager().transitionPlayToConfig(this);
-            sendPacket(new StartConfigurationPacket());
-        } else {
-            // Sanity check that they are already in configuration.
-            // On first join, they will already be in the config state when this is called.
-            assert playerConnection.getClientState() == ConnectionState.CONFIGURATION;
-        }
-
-        // Call the event and spawn the player.
-//        AsyncUtils.runAsync(() -> {
-//            System.out.println("CALL EVENT");
-//            var event = new AsyncPlayerConfigurationEvent(this, isFirstConfig);
-//            EventDispatcher.call(event);
-//
-//            System.out.println("FINISHED EVENT");
-//            final Instance spawningInstance = event.getSpawningInstance();
-//            Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
-//
-//            MinecraftServer.getConnectionManager().startPlayState(this, event.getSpawningInstance());
-//            sendPacket(new FinishConfigurationPacket());
-//            System.out.println("SENT CHANGE PACKET");
-//        });
     }
 
     /**
@@ -426,6 +385,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void update(long time) {
         // Process received packets
         interpretPacketQueue();
+        // It is possible to be removed during packet processing, if thats the case exit immediately.
         if (isRemoved()) return;
 
         super.update(time); // Super update (item pickup/fire management)
@@ -625,7 +585,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Clear all viewable chunks
         ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(), chunkRemover);
         // Remove from the tab-list
-        PacketUtils.broadcastPacket(getRemovePlayerToList());
+        PacketUtils.broadcastPlayPacket(getRemovePlayerToList());
 
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
@@ -1131,7 +1091,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        PacketUtils.broadcastPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+        PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
     }
 
     /**
@@ -1173,11 +1133,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         {
             // Remove player
-            PacketUtils.broadcastPacket(removePlayerPacket);
+            PacketUtils.broadcastPlayPacket(removePlayerPacket);
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            PacketUtils.broadcastPacket(addPlayerPacket);
+            PacketUtils.broadcastPlayPacket(addPlayerPacket);
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1512,7 +1472,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.id()));
-            PacketUtils.broadcastPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
+            PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
         }
 
         // The client updates their abilities based on the GameMode as follows
@@ -2009,7 +1969,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshLatency(int latency) {
         this.latency = latency;
         if (getPlayerConnection().getServerState() == ConnectionState.PLAY) {
-            PacketUtils.broadcastPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
+            PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
         }
     }
 

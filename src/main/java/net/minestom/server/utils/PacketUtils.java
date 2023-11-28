@@ -110,7 +110,8 @@ public final class PacketUtils {
      * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
      * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
      *
-     * @see CachedPacket#body()
+     * @see CachedPacket#body(ConnectionState)
+     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
      */
     static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
         if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
@@ -149,8 +150,8 @@ public final class PacketUtils {
         sendGroupedPacket(players, packet, player -> true);
     }
 
-    public static void broadcastPacket(@NotNull ServerPacket packet) {
-        sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
+    public static void broadcastPlayPacket(@NotNull ServerPacket packet) {
+        sendGroupedPacket(MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY), packet);
     }
 
     @ApiStatus.Experimental

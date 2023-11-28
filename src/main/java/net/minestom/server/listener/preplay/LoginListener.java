@@ -89,7 +89,7 @@ public final class LoginListener {
             final UUID playerUuid = bungee && isSocketConnection ?
                     ((PlayerSocketConnection) connection).gameProfile().uuid() :
                     CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
-            CONNECTION_MANAGER.startConfigurationState(connection, playerUuid, packet.username());
+            CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
         }
     }
 
@@ -155,7 +155,7 @@ public final class LoginListener {
                     final String profileName = gameProfile.get("name").getAsString();
 
                     MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, profileUUID);
-                    CONNECTION_MANAGER.startConfigurationState(connection, profileUUID, profileName);
+                    CONNECTION_MANAGER.createPlayer(connection, profileUUID, profileName);
                     List<GameProfile.Property> propertyList = new ArrayList<>();
                     for (JsonElement element : gameProfile.get("properties").getAsJsonArray()) {
                         JsonObject object = element.getAsJsonObject();
@@ -208,7 +208,7 @@ public final class LoginListener {
                 if (success) {
                     socketConnection.setRemoteAddress(socketAddress);
                     socketConnection.UNSAFE_setProfile(gameProfile);
-                    CONNECTION_MANAGER.startConfigurationState(connection, gameProfile.uuid(), gameProfile.name());
+                    CONNECTION_MANAGER.createPlayer(connection, gameProfile.uuid(), gameProfile.name());
                 } else {
                     LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
                     socketConnection.sendPacket(disconnectPacket);
@@ -219,7 +219,6 @@ public final class LoginListener {
 
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
         final Player player = Objects.requireNonNull(connection.getPlayer());
-        CONNECTION_MANAGER.registerPlayer(player);
 
         // Registry data
         var registry = new HashMap<String, NBT>();
@@ -236,7 +235,7 @@ public final class LoginListener {
         connection.sendPacket(PluginMessagePacket.getBrandPacket());
 
         // Enter configuration phase (for the first time)
-        player.startConfigurationPhase();
+        CONNECTION_MANAGER.transitionConfigToPlay(player, true);
     }
 
 }
