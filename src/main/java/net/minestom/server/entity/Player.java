@@ -58,6 +58,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -162,7 +163,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
+    private record PacketInState(ConnectionState state, ClientPacket packet) {}
+
+    private final MessagePassingQueue<PacketInState> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
@@ -1982,8 +1985,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param packet the packet to add in the queue
      */
-    public void addPacketToQueue(@NotNull ClientPacket packet) {
-        this.packets.offer(packet);
+    public void addPacketToQueue(@NotNull ConnectionState state, @NotNull ClientPacket packet) {
+        this.packets.offer(new PacketInState(state, packet));
     }
 
     @ApiStatus.Internal
@@ -1995,7 +1998,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(playerConnection.getClientState(), packet, playerConnection), ServerFlag.PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(packet.state, packet.packet, playerConnection), ServerFlag.PACKET_PER_TICK);
     }
 
     /**

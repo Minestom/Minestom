@@ -292,6 +292,10 @@ public final class ConnectionManager {
         // Interpret packets for configuration players
         for (var player : configurationPlayers) {
 //            System.out.println("CONFIG INTERPRET: " + player.getUsername());
+
+            //todo we are required to do this because when we wait for the config ack packet we are not in an instance so not ticking.
+            // but then once we switch to config the packets must be eval-ed immediately because we are in an instance. What if we change
+            // the protocol state swap to happen immediately when the packet is read, not when its processed?
             player.interpretPacketQueue();
         }
     }
