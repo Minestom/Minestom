@@ -58,7 +58,7 @@ public final class ConnectionManager {
     /**
      * Gets the number of "online" players, eg for the query response.
      *
-     * @apiNote Only includes players in the play state, not players in configuration.
+     * <p>Only includes players in the play state, not players in configuration.</p>
      */
     public int getOnlinePlayerCount() {
         return playPlayers.size();
@@ -67,12 +67,13 @@ public final class ConnectionManager {
     /**
      * Gets players filtered by state.
      *
+     * <p>The returned collection has no defined update behavior relative to the state of the server,
+     * so it should be refetched whenever used, rather than kept and reused.</p>
+     *
      * @param states The state(s) to return players, if empty all players (play and config) are returned.
      *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      *
      * @return An unmodifiable collection containing the filtered players.
-     * @apiNote The returned collection has no defined update behavior relative to the state of the server,
-     * so it should be refetched whenever used, rather than kept and reused.
      */
     public @NotNull Collection<@NotNull Player> getPlayers(@NotNull ConnectionState... states) {
         boolean play = false, config = false;
