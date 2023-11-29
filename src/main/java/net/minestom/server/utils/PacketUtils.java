@@ -322,14 +322,15 @@ public final class PacketUtils {
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
         private final BinaryBuffer buffer = ObjectPool.BUFFER_POOL.getAndRegister(this);
 
-        private synchronized void append(Viewable viewable, ServerPacket serverPacket, Player player) {
+        private synchronized void append(Viewable viewable, ServerPacket serverPacket, @Nullable Player exception) {
             try (var hold = ObjectPool.PACKET_POOL.hold()) {
-                final ByteBuffer framedPacket = createFramedPacket(player.getPlayerConnection().getServerState(), hold.get(), serverPacket);
+                // Viewable storage is only used for play packets, so fine to assume this.
+                final ByteBuffer framedPacket = createFramedPacket(ConnectionState.PLAY, hold.get(), serverPacket);
                 final int packetSize = framedPacket.limit();
                 if (packetSize >= buffer.capacity()) {
                     process(viewable);
                     for (Player viewer : viewable.getViewers()) {
-                        if (!Objects.equals(player, viewer)) {
+                        if (!Objects.equals(exception, viewer)) {
                             writeTo(viewer.getPlayerConnection(), framedPacket, 0, packetSize);
                         }
                     }
@@ -339,9 +340,9 @@ public final class PacketUtils {
                 final int start = buffer.writerOffset();
                 this.buffer.write(framedPacket);
                 final int end = buffer.writerOffset();
-                if (player != null) {
+                if (exception != null) {
                     final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
-                    LongList list = entityIdMap.computeIfAbsent(player.getEntityId(), id -> new LongArrayList());
+                    LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), id -> new LongArrayList());
                     list.add(offsets);
                 }
             }
