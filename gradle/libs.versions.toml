@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.20-rv1"
+data = "1.20.2-rv1"
 adventure = "4.12.0"
 kotlin = "1.7.22"
 dependencyGetter = "v1.0.1"
