@@ -1,3 +1,5 @@
+import java.time.Duration
+
 plugins {
     `java-library`
     alias(libs.plugins.blossom)
@@ -115,6 +117,11 @@ tasks {
     nexusPublishing{
         useStaging.set(true)
         this.packageGroup.set("dev.hollowcube")
+
+        transitionCheckOptions {
+            maxRetries.set(360) // 1 hour
+            delayBetween.set(Duration.ofSeconds(10))
+        }
 
         repositories.sonatype {
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
