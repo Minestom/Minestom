@@ -6,6 +6,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -41,6 +42,7 @@ public class DisplayCommand extends Command {
 
         var entity = new Entity(EntityType.ITEM_DISPLAY);
         var meta = (ItemDisplayMeta) entity.getEntityMeta();
+        meta.setTransformationInterpolationDuration(20);
         meta.setItemStack(ItemStack.of(Material.STICK));
         entity.setInstance(player.getInstance(), player.getPosition());
 
@@ -55,8 +57,9 @@ public class DisplayCommand extends Command {
 
         var entity = new Entity(EntityType.BLOCK_DISPLAY);
         var meta = (BlockDisplayMeta) entity.getEntityMeta();
-        meta.setBlockState(Block.STONE_STAIRS.stateId());
-        entity.setInstance(player.getInstance(), player.getPosition());
+        meta.setTransformationInterpolationDuration(20);
+        meta.setBlockState(Block.ORANGE_CANDLE_CAKE.stateId());
+        entity.setInstance(player.getInstance(), player.getPosition()).join();
 
         if (context.has("follow")) {
             startSmoothFollow(entity, player);
@@ -69,6 +72,7 @@ public class DisplayCommand extends Command {
 
         var entity = new Entity(EntityType.TEXT_DISPLAY);
         var meta = (TextDisplayMeta) entity.getEntityMeta();
+        meta.setTransformationInterpolationDuration(20);
         meta.setBillboardRenderConstraints(AbstractDisplayMeta.BillboardConstraints.CENTER);
         meta.setText(Component.text("Hello, world!"));
         entity.setInstance(player.getInstance(), player.getPosition());
@@ -79,11 +83,16 @@ public class DisplayCommand extends Command {
     }
 
     private void startSmoothFollow(@NotNull Entity entity, @NotNull Player player) {
+//        entity.setCustomName(Component.text("MY CUSTOM NAME"));
+//        entity.setCustomNameVisible(true);
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             var meta = (AbstractDisplayMeta) entity.getEntityMeta();
             meta.setNotifyAboutChanges(false);
-            meta.setInterpolationStartDelta(1);
-            meta.setInterpolationDuration(20);
+            meta.setTransformationInterpolationStartDelta(1);
+            meta.setTransformationInterpolationDuration(20);
+//            meta.setPosRotInterpolationDuration(20);
+//            entity.teleport(player.getPosition());
+//            meta.setScale(new Vec(5, 5, 5));
             meta.setTranslation(player.getPosition().sub(entity.getPosition()));
             meta.setNotifyAboutChanges(true);
         }).delay(20, TimeUnit.SERVER_TICK).repeat(20, TimeUnit.SERVER_TICK).schedule();
