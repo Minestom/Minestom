@@ -101,7 +101,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
-    private BoundingBox boundingBox;
+    protected BoundingBox boundingBox;
     private PhysicsResult lastPhysicsResult = null;
 
     protected Entity vehicle;
