@@ -21,6 +21,9 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -28,6 +31,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
@@ -39,6 +43,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -114,6 +119,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final int PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     private static final int PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
+
+    public static final boolean EXPERIMENT_PERFORM_POSE_UPDATES = Boolean.getBoolean("minestom.experiment.pose-updates");
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -313,7 +320,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
         PacketUtils.broadcastPacket(getAddPlayerToList());
-        
+
         for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             if (player != this) {
                 sendPacket(player.getAddPlayerToList());
@@ -420,6 +427,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshEating(null);
             }
         }
+
+        if (EXPERIMENT_PERFORM_POSE_UPDATES) updatePose();
 
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
@@ -743,6 +752,63 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
+    }
+
+    @Override
+    protected void updatePose() {
+        Pose oldPose = getPose();
+        Pose newPose;
+
+        // Figure out their expected state
+        var meta = Objects.requireNonNull(getLivingEntityMeta());
+        if (meta.isFlyingWithElytra()) {
+            newPose = Pose.FALL_FLYING;
+        } else if (false) { // When should they be sleeping? We don't have any in-bed state...
+            newPose = Pose.SLEEPING;
+        } else if (meta.isSwimming()) {
+            newPose = Pose.SWIMMING;
+        } else if (meta.isInRiptideSpinAttack()) {
+            newPose = Pose.SPIN_ATTACK;
+        } else if (isSneaking() && !isFlying()) {
+            newPose = Pose.SNEAKING;
+        } else {
+            newPose = Pose.STANDING;
+        }
+
+        // Try to put them in their expected state, or the closest if they don't fit.
+        if (canFitWithBoundingBox(newPose)) {
+            // Use expected state
+        } else if (canFitWithBoundingBox(Pose.SNEAKING)) {
+            newPose = Pose.SNEAKING;
+        } else if (canFitWithBoundingBox(Pose.SWIMMING)) {
+            newPose = Pose.SWIMMING;
+        } else {
+            // If they can't fit anywhere, just use standing
+            newPose = Pose.STANDING;
+        }
+
+        if (newPose != oldPose) setPose(newPose);
+    }
+
+    /**
+     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.Entity.Pose}, false otherwise.
+     * @param pose The pose to check
+     */
+    private boolean canFitWithBoundingBox(@NotNull Pose pose) {
+        BoundingBox bb = pose == Pose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
+        if (bb == null) return false;
+
+        var position = getPosition();
+        var iter = bb.getBlocks(getPosition());
+        while (iter.hasNext()) {
+            var pos = iter.next();
+            var hit = instance.getBlock(pos, Block.Getter.Condition.TYPE)
+                    .registry().collisionShape()
+                    .intersectBox(position.sub(pos), bb);
+            if (hit) return false;
+        }
+
+        return true;
     }
 
     /**
