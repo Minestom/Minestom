@@ -161,27 +161,55 @@ public final class BoundingBox implements Shape {
         return relativeEnd().z();
     }
 
+    public enum AxisMask {
+        X,
+        Y,
+        Z,
+        NONE
+    }
+
     public Iterator<Point> getBlocks(Point point) {
-        return new PointIterator(this, point);
+        return new PointIterator(this, point, AxisMask.NONE, 0);
+    }
+
+    public Iterator<Point> getBlocks(Point point, AxisMask axisMask, double axis) {
+        return new PointIterator(this, point, axisMask, axis);
     }
 
     static class PointIterator implements Iterator<Point> {
-        int x = 0;
-        int y = 0;
-        int z = 0;
+        private final double sx, sy, sz;
+        double x, y, z;
+        private double minX, minY, minZ, maxX, maxY, maxZ;
 
-        private final int minX, minY, minZ, maxX, maxY, maxZ;
-
-        public PointIterator(BoundingBox boundingBox, Point p) {
+        public PointIterator(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
             minX = (int) Math.floor(boundingBox.minX() + p.x());
             minY = (int) Math.floor(boundingBox.minY() + p.y());
             minZ = (int) Math.floor(boundingBox.minZ() + p.z());
             maxX = (int) Math.floor(boundingBox.maxX() + p.x());
             maxY = (int) Math.floor(boundingBox.maxY() + p.y());
             maxZ = (int) Math.floor(boundingBox.maxZ() + p.z());
+
             x = minX;
             y = minY;
             z = minZ;
+
+            sx = boundingBox.minX() + p.x() - minX;
+            sy = boundingBox.minY() + p.y() - minY;
+            sz = boundingBox.minZ() + p.z() - minZ;
+
+            if (axisMask == AxisMask.X) {
+                x = axis + p.x();
+                minX = x;
+                maxX = x;
+            } else if (axisMask == AxisMask.Y) {
+                y = axis + p.y();
+                minY = y;
+                maxY = y;
+            } else if (axisMask == AxisMask.Z) {
+                z = axis + p.z();
+                minZ = z;
+                maxZ = z;
+            }
         }
 
         @Override
@@ -191,7 +219,7 @@ public final class BoundingBox implements Shape {
 
         @Override
         public Point next() {
-            var res = new Vec(x, y, z);
+            var res = new Vec(x + sx, y + sy, z + sz);
 
             x++;
             if (x > maxX) {
@@ -202,7 +230,6 @@ public final class BoundingBox implements Shape {
                     z++;
                 }
             }
-
             return res;
         }
     }

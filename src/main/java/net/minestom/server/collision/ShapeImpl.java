@@ -61,7 +61,7 @@ public final class ShapeImpl implements Shape {
         this.blockOcclusion = fullFaces;
     }
 
-    static private BoundingBox[] parseRegistryBoundingBoxString(String str) {
+    private static BoundingBox[] parseRegistryBoundingBoxString(String str) {
         final Matcher matcher = PATTERN.matcher(str);
         DoubleList vals = new DoubleArrayList();
         while (matcher.find()) {

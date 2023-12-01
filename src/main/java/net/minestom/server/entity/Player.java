@@ -804,7 +804,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             var pos = iter.next();
             var hit = instance.getBlock(pos, Block.Getter.Condition.TYPE)
                     .registry().collisionShape()
-                    .intersectBox(position.sub(pos), bb);
+                    .intersectBox(position.sub(pos.blockX(), pos.blockY(), pos.blockZ()), bb);
             if (hit) return false;
         }
 
