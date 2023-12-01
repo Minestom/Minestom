@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class ShapeImpl implements Shape {
-    private static final Pattern PATTERN = Pattern.compile("\\d.\\d{1,3}", Pattern.MULTILINE);
+    private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
     private final BoundingBox[] collisionBoundingBoxes;
     private final Point relativeStart, relativeEnd;
 
