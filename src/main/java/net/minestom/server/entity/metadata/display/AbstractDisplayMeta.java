@@ -16,7 +16,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super(entity, metadata);
     }
 
-    public long getTransformationInterpolationStartDelta() {
+    public int getTransformationInterpolationStartDelta() {
         return super.metadata.getIndex(OFFSET, 0);
     }
 
@@ -32,7 +32,7 @@ public class AbstractDisplayMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
-    public long getPosRotInterpolationDuration() {
+    public int getPosRotInterpolationDuration() {
         return super.metadata.getIndex(OFFSET + 2, 0);
     }
 
