@@ -66,7 +66,9 @@ public class BlockPlacementListener {
             }
         }
         if (blockUse) {
-            refresh(player, interactedChunk);
+            // If the usage was blocked then the world is already up-to-date (from the prior handlers),
+            // So ack the change with the current world state.
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             return;
         }
 
