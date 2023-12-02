@@ -112,8 +112,13 @@ public class BlockPlacementListener {
             }
         }
 
-        if(placementPosition.y() >= instance.getDimensionType().getMaxY()
+        if (placementPosition.y() >= instance.getDimensionType().getMaxY()
                 || placementPosition.y() <= instance.getDimensionType().getMinY()) return;
+
+        // Ensure that the final placement position is inside the world border.
+        if (!instance.getWorldBorder().isInside(placementPosition)) {
+            canPlaceBlock = false;
+        }
 
         if (!canPlaceBlock) {
             // Send a block change with the real block in the instance to keep the client in sync,
