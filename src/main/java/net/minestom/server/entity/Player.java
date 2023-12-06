@@ -525,7 +525,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, Math.min(MinecraftServer.getChunkViewDistance(), settings.getViewDistance()),
                 EntityTracker.Target.ENTITIES, entity -> {
                     // Skip refreshing self with a new viewer
-                    if (!entity.getUuid().equals(uuid)) {
+                    if (!entity.getUuid().equals(uuid) && entity.isViewer(this)) {
                         entity.updateNewViewer(this);
                     }
                 });
