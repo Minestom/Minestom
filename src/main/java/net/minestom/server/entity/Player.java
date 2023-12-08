@@ -802,8 +802,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         var iter = bb.getBlocks(getPosition());
         while (iter.hasNext()) {
             var pos = iter.next();
-            var hit = instance.getBlock(pos, Block.Getter.Condition.TYPE)
-                    .registry().collisionShape()
+            var block = instance.getBlock(pos, Block.Getter.Condition.TYPE);
+
+            // For now just ignore scaffolding. It seems to have a dynamic bounding box, or is just parsed
+            // incorrectly in MinestomDataGenerator.
+            if (block.id() == Block.SCAFFOLDING.id()) continue;
+
+            var hit = block.registry().collisionShape()
                     .intersectBox(position.sub(pos.blockX(), pos.blockY(), pos.blockZ()), bb);
             if (hit) return false;
         }
