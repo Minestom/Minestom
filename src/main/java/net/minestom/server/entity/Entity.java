@@ -1478,6 +1478,36 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * If the entity has the specified effect.
+     *
+     * @param effect the effect to check
+     */
+    public boolean hasEffect(@NotNull PotionEffect effect) {
+        return this.effects.stream().anyMatch(timedPotion -> timedPotion.getPotion().effect() == effect);
+    }
+
+    /**
+     * Gets the TimedPotion of the specified effect.
+     *
+     * @param effect the effect type
+     * @return the effect, null if not found
+     */
+    public @Nullable TimedPotion getEffect(@NotNull PotionEffect effect) {
+        return this.effects.stream().filter(timedPotion -> timedPotion.getPotion().effect() == effect).findFirst().orElse(null);
+    }
+
+    /**
+     * Gets the level of the specified effect.
+     *
+     * @param effect the effect type
+     * @return the effect level, 0 if not found
+     */
+    public int getEffectLevel(@NotNull PotionEffect effect) {
+        TimedPotion timedPotion = getEffect(effect);
+        return timedPotion == null ? 0 : timedPotion.getPotion().amplifier();
+    }
+
+    /**
      * Removes all the effects currently applied to the entity.
      */
     public void clearEffects() {
