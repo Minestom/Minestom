@@ -21,6 +21,9 @@ public record WorldBorderCenterPacket(double x, double z) implements ServerPacke
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WORLD_BORDER_CENTER;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WORLD_BORDER_CENTER;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

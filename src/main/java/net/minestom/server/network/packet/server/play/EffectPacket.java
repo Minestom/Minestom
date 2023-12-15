@@ -25,6 +25,9 @@ public record EffectPacket(int effectId, Point position, int data,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.EFFECT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.EFFECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

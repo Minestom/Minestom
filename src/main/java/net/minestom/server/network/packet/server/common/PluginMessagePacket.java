@@ -23,7 +23,11 @@ public record PluginMessagePacket(String channel, byte[] data) implements Server
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return state == ConnectionState.PLAY ? ServerPacketIdentifier.PLUGIN_MESSAGE : ServerPacketIdentifier.CONFIGURATION_PLUGIN_MESSAGE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLUGIN_MESSAGE;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_PLUGIN_MESSAGE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**

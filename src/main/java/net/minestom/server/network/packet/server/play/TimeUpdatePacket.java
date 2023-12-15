@@ -21,6 +21,9 @@ public record TimeUpdatePacket(long worldAge, long timeOfDay) implements ServerP
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.TIME_UPDATE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.TIME_UPDATE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

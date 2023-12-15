@@ -29,6 +29,9 @@ public record ChunkDataPacket(int chunkX, int chunkZ,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CHUNK_DATA;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CHUNK_DATA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -35,7 +35,10 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DECLARE_COMMANDS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DECLARE_COMMANDS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public static final class Node implements NetworkBuffer.Writer {

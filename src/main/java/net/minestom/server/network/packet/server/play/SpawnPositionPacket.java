@@ -23,6 +23,9 @@ public record SpawnPositionPacket(@NotNull Point position, float angle) implemen
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SPAWN_POSITION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SPAWN_POSITION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

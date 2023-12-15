@@ -20,6 +20,9 @@ public record CloseWindowPacket(byte windowId) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CLOSE_WINDOW;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CLOSE_WINDOW;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -51,7 +51,10 @@ public record EntityMetaDataPacket(int entityId,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_METADATA;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_METADATA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

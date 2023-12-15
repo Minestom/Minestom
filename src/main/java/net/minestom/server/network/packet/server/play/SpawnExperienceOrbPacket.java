@@ -27,6 +27,9 @@ public record SpawnExperienceOrbPacket(int entityId,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SPAWN_EXPERIENCE_ORB;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SPAWN_EXPERIENCE_ORB;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

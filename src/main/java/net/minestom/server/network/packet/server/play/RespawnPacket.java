@@ -46,6 +46,9 @@ public record RespawnPacket(
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.RESPAWN;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.RESPAWN;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

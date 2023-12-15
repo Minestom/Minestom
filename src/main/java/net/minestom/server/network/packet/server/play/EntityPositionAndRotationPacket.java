@@ -29,7 +29,10 @@ public record EntityPositionAndRotationPacket(int entityId, short deltaX, short 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_POSITION_AND_ROTATION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_POSITION_AND_ROTATION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public static EntityPositionAndRotationPacket getPacket(int entityId,

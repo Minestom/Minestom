@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class ServerPacketIdentifier {
     private static final AtomicInteger PLAY_ID = new AtomicInteger(0);
 
+    public static final int STATUS_RESPONSE = 0x00;
+    public static final int STATUS_PONG = 0x01;
+
     public static final int LOGIN_DISCONNECT = 0x00;
     public static final int LOGIN_ENCRYPTION_REQUEST = 0x01;
     public static final int LOGIN_SUCCESS = 0x02;

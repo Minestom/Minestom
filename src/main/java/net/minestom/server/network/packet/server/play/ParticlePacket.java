@@ -37,6 +37,9 @@ public record ParticlePacket(int particleId, boolean longDistance,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PARTICLE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PARTICLE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

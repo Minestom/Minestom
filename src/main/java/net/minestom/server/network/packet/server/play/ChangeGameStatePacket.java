@@ -22,7 +22,10 @@ public record ChangeGameStatePacket(@NotNull Reason reason, float value) impleme
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CHANGE_GAME_STATE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CHANGE_GAME_STATE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public enum Reason {

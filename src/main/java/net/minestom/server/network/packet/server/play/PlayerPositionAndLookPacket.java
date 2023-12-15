@@ -30,6 +30,9 @@ public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleport
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

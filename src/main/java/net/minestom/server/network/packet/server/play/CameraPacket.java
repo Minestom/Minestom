@@ -25,6 +25,9 @@ public record CameraPacket(int cameraId) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CAMERA;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CAMERA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

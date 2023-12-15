@@ -23,6 +23,9 @@ public record OpenSignEditorPacket(@NotNull Point position, boolean isFrontText)
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.OPEN_SIGN_EDITOR;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.OPEN_SIGN_EDITOR;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

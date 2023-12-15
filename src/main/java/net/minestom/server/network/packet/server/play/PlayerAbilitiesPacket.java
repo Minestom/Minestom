@@ -28,6 +28,9 @@ public record PlayerAbilitiesPacket(byte flags, float flyingSpeed, float walking
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PLAYER_ABILITIES;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLAYER_ABILITIES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

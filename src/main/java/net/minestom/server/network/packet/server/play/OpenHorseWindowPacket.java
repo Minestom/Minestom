@@ -22,6 +22,9 @@ public record OpenHorseWindowPacket(byte windowId, int slotCount, int entityId) 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.OPEN_HORSE_WINDOW;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.OPEN_HORSE_WINDOW;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -19,6 +19,9 @@ public record DeleteChatPacket(@NotNull MessageSignature signature) implements S
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DELETE_CHAT_MESSAGE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DELETE_CHAT_MESSAGE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

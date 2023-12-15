@@ -27,6 +27,9 @@ public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.VEHICLE_MOVE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.VEHICLE_MOVE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

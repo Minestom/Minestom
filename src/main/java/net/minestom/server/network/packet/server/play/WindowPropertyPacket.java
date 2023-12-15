@@ -23,6 +23,9 @@ public record WindowPropertyPacket(byte windowId, short property, short value) i
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WINDOW_PROPERTY;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WINDOW_PROPERTY;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

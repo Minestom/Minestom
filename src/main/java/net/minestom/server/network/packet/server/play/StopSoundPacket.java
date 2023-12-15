@@ -43,6 +43,9 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.STOP_SOUND;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.STOP_SOUND;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

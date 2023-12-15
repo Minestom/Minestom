@@ -38,6 +38,9 @@ public record PlayerListHeaderAndFooterPacket(@NotNull Component header,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PLAYER_LIST_HEADER_AND_FOOTER;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLAYER_LIST_HEADER_AND_FOOTER;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

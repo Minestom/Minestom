@@ -63,7 +63,10 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.MAP_DATA;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.MAP_DATA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public record Icon(int type, byte x, byte z, byte direction,

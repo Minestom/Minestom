@@ -26,7 +26,10 @@ public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, i
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.LOGIN_SUCCESS;
+        return switch (state) {
+            case LOGIN -> ServerPacketIdentifier.LOGIN_SUCCESS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

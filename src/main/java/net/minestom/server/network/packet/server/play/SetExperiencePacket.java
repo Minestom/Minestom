@@ -23,6 +23,9 @@ public record SetExperiencePacket(float percentage, int level, int totalExperien
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_EXPERIENCE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_EXPERIENCE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

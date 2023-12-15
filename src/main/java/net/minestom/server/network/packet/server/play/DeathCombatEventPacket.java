@@ -27,7 +27,10 @@ public record DeathCombatEventPacket(int playerId, @NotNull Component message) i
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DEATH_COMBAT_EVENT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DEATH_COMBAT_EVENT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

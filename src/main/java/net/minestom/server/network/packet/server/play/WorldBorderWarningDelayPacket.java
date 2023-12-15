@@ -20,6 +20,9 @@ public record WorldBorderWarningDelayPacket(int warningTime) implements ServerPa
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WORLD_BORDER_WARNING_DELAY;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WORLD_BORDER_WARNING_DELAY;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

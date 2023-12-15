@@ -33,7 +33,10 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_SLOT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_SLOT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

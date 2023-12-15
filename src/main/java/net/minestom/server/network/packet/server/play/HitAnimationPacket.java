@@ -23,6 +23,9 @@ public record HitAnimationPacket(int entityId, float yaw) implements ServerPacke
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.HIT_ANIMATION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.HIT_ANIMATION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

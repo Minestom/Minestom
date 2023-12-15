@@ -24,7 +24,10 @@ public record UpdateEnabledFeaturesPacket(@NotNull Set<NamespaceID> features) im
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CONFIGURATION_UPDATE_ENABLED_FEATURES;
+        return switch (state) {
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_UPDATE_ENABLED_FEATURES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
 }

@@ -78,7 +78,10 @@ public record JoinGamePacket(
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.JOIN_GAME;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.JOIN_GAME;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**

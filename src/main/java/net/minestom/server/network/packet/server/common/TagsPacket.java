@@ -49,7 +49,11 @@ public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) impleme
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return state == ConnectionState.PLAY ? ServerPacketIdentifier.TAGS : ServerPacketIdentifier.CONFIGURATION_TAGS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.TAGS;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_TAGS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {

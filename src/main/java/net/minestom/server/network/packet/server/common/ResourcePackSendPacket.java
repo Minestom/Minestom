@@ -47,7 +47,11 @@ public record ResourcePackSendPacket(
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return state == ConnectionState.PLAY ? ServerPacketIdentifier.RESOURCE_PACK_SEND : ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_SEND;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

@@ -29,6 +29,9 @@ public record EntityTeleportPacket(int entityId, Pos position, boolean onGround)
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_TELEPORT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_TELEPORT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

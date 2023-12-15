@@ -26,7 +26,10 @@ public record SetTitleTextPacket(@NotNull Component title) implements ComponentH
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_TITLE_TEXT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_TITLE_TEXT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

@@ -20,6 +20,9 @@ public record ClearTitlesPacket(boolean reset) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CLEAR_TITLES;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CLEAR_TITLES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

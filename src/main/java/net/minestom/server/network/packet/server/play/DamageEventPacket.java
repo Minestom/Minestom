@@ -27,7 +27,10 @@ public record DamageEventPacket(int targetEntityId, int damageTypeId, int source
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DAMAGE_EVENT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DAMAGE_EVENT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

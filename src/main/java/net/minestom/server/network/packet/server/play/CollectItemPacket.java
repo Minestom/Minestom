@@ -23,6 +23,9 @@ public record CollectItemPacket(int collectedEntityId, int collectorEntityId, in
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.COLLECT_ITEM;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.COLLECT_ITEM;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }
