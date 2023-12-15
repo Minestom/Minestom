@@ -201,6 +201,9 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.BOSS_BAR;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.BOSS_BAR;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

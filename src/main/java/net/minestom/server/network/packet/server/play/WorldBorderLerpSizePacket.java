@@ -23,6 +23,9 @@ public record WorldBorderLerpSizePacket(double oldDiameter, double newDiameter, 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WORLD_BORDER_LERP_SIZE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WORLD_BORDER_LERP_SIZE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

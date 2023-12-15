@@ -37,7 +37,10 @@ public record TabCompletePacket(int transactionId, int start, int length,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.TAB_COMPLETE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.TAB_COMPLETE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

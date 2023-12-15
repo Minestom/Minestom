@@ -46,7 +46,10 @@ public record EntityEquipmentPacket(int entityId,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_EQUIPMENT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_EQUIPMENT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

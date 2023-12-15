@@ -22,6 +22,9 @@ public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean loc
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SERVER_DIFFICULTY;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SERVER_DIFFICULTY;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

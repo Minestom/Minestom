@@ -26,7 +26,11 @@ public record DisconnectPacket(@NotNull Component message) implements ComponentH
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return state == ConnectionState.PLAY ? ServerPacketIdentifier.DISCONNECT : ServerPacketIdentifier.CONFIGURATION_DISCONNECT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DISCONNECT;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_DISCONNECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

@@ -20,6 +20,9 @@ public record AcknowledgeBlockChangePacket(int sequence) implements ServerPacket
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ACKNOWLEDGE_BLOCK_CHANGE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ACKNOWLEDGE_BLOCK_CHANGE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

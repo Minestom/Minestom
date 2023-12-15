@@ -26,7 +26,10 @@ public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UNLOAD_CHUNK;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UNLOAD_CHUNK;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     private static UnloadChunkPacket read(@NotNull NetworkBuffer reader) {

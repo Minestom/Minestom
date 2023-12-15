@@ -30,6 +30,9 @@ public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DESTROY_ENTITIES;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DESTROY_ENTITIES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

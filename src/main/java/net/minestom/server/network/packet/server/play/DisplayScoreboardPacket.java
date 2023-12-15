@@ -22,6 +22,9 @@ public record DisplayScoreboardPacket(byte position, String scoreName) implement
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DISPLAY_SCOREBOARD;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DISPLAY_SCOREBOARD;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

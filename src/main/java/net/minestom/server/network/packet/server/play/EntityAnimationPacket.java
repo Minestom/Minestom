@@ -22,7 +22,10 @@ public record EntityAnimationPacket(int entityId, @NotNull Animation animation) 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_ANIMATION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_ANIMATION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public enum Animation {

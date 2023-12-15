@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.status;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
@@ -19,6 +20,9 @@ public record ResponsePacket(@NotNull String jsonResponse) implements ServerPack
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return 0x00;
+        return switch (state) {
+            case STATUS -> ServerPacketIdentifier.STATUS_RESPONSE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

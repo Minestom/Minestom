@@ -15,7 +15,10 @@ public record StartConfigurationPacket() implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.START_CONFIGURATION_PACKET;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.START_CONFIGURATION_PACKET;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

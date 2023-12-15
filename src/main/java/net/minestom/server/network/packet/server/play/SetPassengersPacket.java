@@ -28,6 +28,9 @@ public record SetPassengersPacket(int vehicleEntityId,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_PASSENGERS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_PASSENGERS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

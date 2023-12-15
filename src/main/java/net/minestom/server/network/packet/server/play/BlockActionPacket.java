@@ -31,6 +31,9 @@ public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.BLOCK_ACTION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.BLOCK_ACTION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

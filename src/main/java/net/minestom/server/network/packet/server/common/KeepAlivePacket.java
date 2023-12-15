@@ -20,6 +20,10 @@ public record KeepAlivePacket(long id) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return state == ConnectionState.PLAY ? ServerPacketIdentifier.KEEP_ALIVE : ServerPacketIdentifier.CONFIGURATION_KEEP_ALIVE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.KEEP_ALIVE;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_KEEP_ALIVE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

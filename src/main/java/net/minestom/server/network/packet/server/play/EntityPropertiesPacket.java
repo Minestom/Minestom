@@ -59,6 +59,9 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_PROPERTIES;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_PROPERTIES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -26,6 +26,9 @@ public record ServerDataPacket(@Nullable Component motd, byte @Nullable [] iconB
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SERVER_DATA;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SERVER_DATA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

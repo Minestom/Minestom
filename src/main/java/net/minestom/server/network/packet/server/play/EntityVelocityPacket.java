@@ -36,6 +36,9 @@ public record EntityVelocityPacket(int entityId, short velocityX, short velocity
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_VELOCITY;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_VELOCITY;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

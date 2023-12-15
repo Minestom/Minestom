@@ -218,7 +218,10 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
      */
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.TEAMS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.TEAMS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     /**

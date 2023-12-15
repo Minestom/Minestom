@@ -19,7 +19,10 @@ public record FinishConfigurationPacket() implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CONFIGURATION_FINISH_CONFIGURATION;
+        return switch (state) {
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_FINISH_CONFIGURATION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

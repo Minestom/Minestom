@@ -23,6 +23,9 @@ public record EntityRotationPacket(int entityId, float yaw, float pitch, boolean
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_ROTATION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_ROTATION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

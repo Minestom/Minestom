@@ -26,6 +26,9 @@ public record MultiBlockChangePacket(long chunkSectionPosition, long[] blocks) i
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.MULTI_BLOCK_CHANGE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.MULTI_BLOCK_CHANGE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -27,7 +27,10 @@ public record StatisticsPacket(@NotNull List<Statistic> statistics) implements S
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.STATISTICS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.STATISTICS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public record Statistic(@NotNull StatisticCategory category,

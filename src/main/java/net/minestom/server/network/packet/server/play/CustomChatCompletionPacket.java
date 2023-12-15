@@ -28,7 +28,10 @@ public record CustomChatCompletionPacket(@NotNull Action action,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CUSTOM_CHAT_COMPLETIONS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CUSTOM_CHAT_COMPLETIONS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public enum Action {

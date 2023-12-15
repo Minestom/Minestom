@@ -22,6 +22,9 @@ public record CraftRecipeResponse(byte windowId, String recipe) implements Serve
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CRAFT_RECIPE_RESPONSE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CRAFT_RECIPE_RESPONSE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

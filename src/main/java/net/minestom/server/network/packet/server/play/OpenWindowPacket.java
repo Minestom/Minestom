@@ -30,7 +30,10 @@ public record OpenWindowPacket(int windowId, int windowType,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.OPEN_WINDOW;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.OPEN_WINDOW;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

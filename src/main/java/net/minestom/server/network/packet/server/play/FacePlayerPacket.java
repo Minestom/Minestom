@@ -35,7 +35,10 @@ public record FacePlayerPacket(FacePosition facePosition,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.FACE_PLAYER;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.FACE_PLAYER;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public enum FacePosition {

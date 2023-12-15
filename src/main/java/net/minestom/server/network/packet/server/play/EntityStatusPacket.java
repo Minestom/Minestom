@@ -22,6 +22,9 @@ public record EntityStatusPacket(int entityId, byte status) implements ServerPac
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_STATUS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_STATUS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

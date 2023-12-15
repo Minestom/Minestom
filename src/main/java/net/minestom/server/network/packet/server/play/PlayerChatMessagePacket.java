@@ -50,7 +50,10 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PLAYER_CHAT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLAYER_CHAT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

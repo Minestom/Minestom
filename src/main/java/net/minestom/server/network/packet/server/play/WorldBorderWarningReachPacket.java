@@ -20,6 +20,9 @@ public record WorldBorderWarningReachPacket(int warningBlocks) implements Server
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WORLD_BORDER_WARNING_REACH;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WORLD_BORDER_WARNING_REACH;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

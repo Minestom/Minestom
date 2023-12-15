@@ -26,7 +26,10 @@ public record ActionBarPacket(@NotNull Component text) implements ComponentHoldi
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ACTION_BAR;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ACTION_BAR;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

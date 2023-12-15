@@ -31,6 +31,9 @@ public record ExplosionPacket(double x, double y, double z, float radius, byte @
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.EXPLOSION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.EXPLOSION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

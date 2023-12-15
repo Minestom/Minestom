@@ -27,6 +27,9 @@ public record NbtQueryResponsePacket(int transactionId, NBTCompound data) implem
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.NBT_QUERY_RESPONSE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.NBT_QUERY_RESPONSE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

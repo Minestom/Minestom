@@ -27,7 +27,10 @@ public record EntityPositionPacket(int entityId, short deltaX, short deltaY, sho
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_POSITION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_POSITION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @NotNull

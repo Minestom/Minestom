@@ -20,6 +20,9 @@ public record WorldBorderSizePacket(double diameter) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WORLD_BORDER_SIZE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WORLD_BORDER_SIZE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -21,6 +21,9 @@ public record SelectAdvancementTabPacket(@Nullable String identifier) implements
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

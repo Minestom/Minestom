@@ -27,6 +27,9 @@ public record AttachEntityPacket(int attachedEntityId, int holdingEntityId) impl
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ATTACH_ENTITY;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ATTACH_ENTITY;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

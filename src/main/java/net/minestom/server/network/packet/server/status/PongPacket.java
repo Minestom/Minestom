@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.status;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.LONG;
@@ -19,6 +20,9 @@ public record PongPacket(long number) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return 0x01;
+        return switch (state) {
+            case STATUS -> ServerPacketIdentifier.STATUS_PONG;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }
