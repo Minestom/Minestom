@@ -24,6 +24,9 @@ public record UpdateLightPacket(int chunkX, int chunkZ,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UPDATE_LIGHT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UPDATE_LIGHT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

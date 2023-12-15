@@ -92,7 +92,10 @@ public record SoundEffectPacket(
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SOUND_EFFECT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SOUND_EFFECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
 }

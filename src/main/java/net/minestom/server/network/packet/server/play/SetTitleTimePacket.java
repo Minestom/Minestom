@@ -22,6 +22,9 @@ public record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements S
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_TITLE_TIME;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_TITLE_TIME;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

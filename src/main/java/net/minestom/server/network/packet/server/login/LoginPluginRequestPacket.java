@@ -27,6 +27,9 @@ public record LoginPluginRequestPacket(int messageId, @NotNull String channel,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.LOGIN_PLUGIN_REQUEST;
+        return switch (state) {
+            case LOGIN -> ServerPacketIdentifier.LOGIN_PLUGIN_REQUEST;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

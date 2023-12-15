@@ -20,6 +20,9 @@ public record EndCombatEventPacket(int duration) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.END_COMBAT_EVENT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.END_COMBAT_EVENT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

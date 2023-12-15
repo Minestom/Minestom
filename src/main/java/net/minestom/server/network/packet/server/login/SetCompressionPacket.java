@@ -20,6 +20,9 @@ public record SetCompressionPacket(int threshold) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.LOGIN_SET_COMPRESSION;
+        return switch (state) {
+            case LOGIN -> ServerPacketIdentifier.LOGIN_SET_COMPRESSION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

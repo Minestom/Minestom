@@ -21,6 +21,9 @@ public record SetCooldownPacket(int itemId, int cooldownTicks) implements Server
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_COOLDOWN;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_COOLDOWN;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

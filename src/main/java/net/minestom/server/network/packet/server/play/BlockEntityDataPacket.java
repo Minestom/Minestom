@@ -31,6 +31,9 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.BLOCK_ENTITY_DATA;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.BLOCK_ENTITY_DATA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

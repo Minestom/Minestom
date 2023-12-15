@@ -20,6 +20,9 @@ public record UpdateSimulationDistancePacket(int simulationDistance) implements 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_SIMULATION_DISTANCE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_SIMULATION_DISTANCE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

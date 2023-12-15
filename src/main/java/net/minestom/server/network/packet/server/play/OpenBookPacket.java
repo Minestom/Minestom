@@ -19,6 +19,9 @@ public record OpenBookPacket(@NotNull Player.Hand hand) implements ServerPacket 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.OPEN_BOOK;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.OPEN_BOOK;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

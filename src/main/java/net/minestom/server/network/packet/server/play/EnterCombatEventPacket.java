@@ -18,6 +18,9 @@ public record EnterCombatEventPacket() implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTER_COMBAT_EVENT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTER_COMBAT_EVENT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

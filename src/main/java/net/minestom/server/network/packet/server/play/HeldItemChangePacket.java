@@ -20,6 +20,9 @@ public record HeldItemChangePacket(byte slot) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.HELD_ITEM_CHANGE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.HELD_ITEM_CHANGE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

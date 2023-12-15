@@ -24,6 +24,9 @@ public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potio
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.REMOVE_ENTITY_EFFECT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.REMOVE_ENTITY_EFFECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

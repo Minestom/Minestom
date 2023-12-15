@@ -24,6 +24,9 @@ public record BlockBreakAnimationPacket(int entityId, @NotNull Point blockPositi
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.BLOCK_BREAK_ANIMATION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.BLOCK_BREAK_ANIMATION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

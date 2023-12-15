@@ -21,6 +21,9 @@ public record UpdateViewPositionPacket(int chunkX, int chunkZ) implements Server
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UPDATE_VIEW_POSITION;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UPDATE_VIEW_POSITION;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

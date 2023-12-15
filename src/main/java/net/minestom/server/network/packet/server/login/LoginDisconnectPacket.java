@@ -25,7 +25,10 @@ public record LoginDisconnectPacket(@NotNull Component kickMessage) implements C
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.LOGIN_DISCONNECT;
+        return switch (state) {
+            case LOGIN -> ServerPacketIdentifier.LOGIN_DISCONNECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

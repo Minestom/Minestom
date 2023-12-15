@@ -18,6 +18,9 @@ public record ChunkBatchStartPacket() implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CHUNK_BATCH_START;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CHUNK_BATCH_START;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

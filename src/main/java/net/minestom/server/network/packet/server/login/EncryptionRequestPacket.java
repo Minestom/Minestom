@@ -27,6 +27,9 @@ public record EncryptionRequestPacket(@NotNull String serverId,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.LOGIN_ENCRYPTION_REQUEST;
+        return switch (state) {
+            case LOGIN -> ServerPacketIdentifier.LOGIN_ENCRYPTION_REQUEST;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

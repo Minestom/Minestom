@@ -52,7 +52,10 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SCOREBOARD_OBJECTIVE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SCOREBOARD_OBJECTIVE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

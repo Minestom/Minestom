@@ -22,6 +22,9 @@ public record EntityHeadLookPacket(int entityId, float yaw) implements ServerPac
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_HEAD_LOOK;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_HEAD_LOOK;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

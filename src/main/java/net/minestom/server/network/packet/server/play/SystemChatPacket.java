@@ -28,7 +28,10 @@ public record SystemChatPacket(@NotNull Component message, boolean overlay) impl
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SYSTEM_CHAT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SYSTEM_CHAT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

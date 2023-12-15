@@ -91,6 +91,9 @@ public record EntitySoundEffectPacket(
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_SOUND_EFFECT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_SOUND_EFFECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

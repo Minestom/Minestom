@@ -36,7 +36,10 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.TRADE_LIST;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.TRADE_LIST;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public record Trade(ItemStack inputItem1, ItemStack result,

@@ -21,6 +21,9 @@ public record ChunkBatchFinishedPacket(int batchSize) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CHUNK_BATCH_FINISHED;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.CHUNK_BATCH_FINISHED;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

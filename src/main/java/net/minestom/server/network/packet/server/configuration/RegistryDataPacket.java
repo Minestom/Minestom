@@ -22,6 +22,9 @@ public record RegistryDataPacket(@NotNull NBTCompound data) implements ServerPac
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.CONFIGURATION_REGISTRY_DATA;
+        return switch (state) {
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_REGISTRY_DATA;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

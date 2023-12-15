@@ -72,7 +72,10 @@ public final class PlayerInfoUpdatePacket implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PLAYER_INFO_UPDATE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLAYER_INFO_UPDATE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public @NotNull EnumSet<Action> actions() {

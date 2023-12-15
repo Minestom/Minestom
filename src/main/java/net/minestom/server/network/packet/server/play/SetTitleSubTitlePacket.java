@@ -26,7 +26,10 @@ public record SetTitleSubTitlePacket(@NotNull Component subtitle) implements Com
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SET_TITLE_SUBTITLE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SET_TITLE_SUBTITLE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override

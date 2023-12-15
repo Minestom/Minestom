@@ -29,6 +29,9 @@ public record PlayerInfoRemovePacket(@NotNull List<@NotNull UUID> uuids) impleme
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.PLAYER_INFO_REMOVE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PLAYER_INFO_REMOVE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

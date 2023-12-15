@@ -45,7 +45,10 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ADVANCEMENTS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ADVANCEMENTS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     // TODO is the display-item needed to be updated?

@@ -20,6 +20,10 @@ public record PingPacket(int id) implements ServerPacket {
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return state == ConnectionState.PLAY ? ServerPacketIdentifier.PING : ServerPacketIdentifier.CONFIGURATION_PING;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.PING;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_PING;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

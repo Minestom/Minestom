@@ -32,6 +32,9 @@ public record InitializeWorldBorderPacket(double x, double z,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.INITIALIZE_WORLD_BORDER;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.INITIALIZE_WORLD_BORDER;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

@@ -28,6 +28,9 @@ public record BlockChangePacket(@NotNull Point blockPosition, int blockStateId) 
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.BLOCK_CHANGE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.BLOCK_CHANGE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

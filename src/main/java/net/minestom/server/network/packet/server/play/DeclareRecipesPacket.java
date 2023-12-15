@@ -48,7 +48,10 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.DECLARE_RECIPES;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.DECLARE_RECIPES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public sealed interface DeclaredRecipe extends NetworkBuffer.Writer

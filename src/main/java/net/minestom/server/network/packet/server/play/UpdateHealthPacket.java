@@ -23,6 +23,9 @@ public record UpdateHealthPacket(float health, int food, float foodSaturation) i
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UPDATE_HEALTH;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UPDATE_HEALTH;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

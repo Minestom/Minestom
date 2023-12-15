@@ -78,6 +78,9 @@ public record UnlockRecipesPacket(int mode,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UNLOCK_RECIPES;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UNLOCK_RECIPES;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

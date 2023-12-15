@@ -20,6 +20,9 @@ public record UpdateViewDistancePacket(int viewDistance) implements ServerPacket
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UPDATE_VIEW_DISTANCE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UPDATE_VIEW_DISTANCE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

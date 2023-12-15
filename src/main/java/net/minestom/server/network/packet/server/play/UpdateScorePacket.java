@@ -36,6 +36,9 @@ public record UpdateScorePacket(@NotNull String entityName, byte action,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.UPDATE_SCORE;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.UPDATE_SCORE;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

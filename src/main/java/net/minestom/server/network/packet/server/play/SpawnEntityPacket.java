@@ -44,6 +44,9 @@ public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.SPAWN_ENTITY;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.SPAWN_ENTITY;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

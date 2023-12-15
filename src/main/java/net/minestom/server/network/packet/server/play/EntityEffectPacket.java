@@ -27,6 +27,9 @@ public record EntityEffectPacket(int entityId, @NotNull Potion potion,
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.ENTITY_EFFECT;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.ENTITY_EFFECT;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

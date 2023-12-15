@@ -37,7 +37,10 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
 
     @Override
     public int getId(@NotNull ConnectionState state) {
-        return ServerPacketIdentifier.WINDOW_ITEMS;
+        return switch (state) {
+            case PLAY -> ServerPacketIdentifier.WINDOW_ITEMS;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     @Override
