@@ -7,6 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
             case PLAY -> ServerPacketIdentifier.WINDOW_ITEMS;
-            default -> throw new IllegalArgumentException();
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
 

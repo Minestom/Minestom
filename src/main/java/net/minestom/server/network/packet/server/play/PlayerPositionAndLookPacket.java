@@ -5,6 +5,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -32,7 +33,7 @@ public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleport
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
             case PLAY -> ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK;
-            default -> throw new IllegalArgumentException();
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
 }

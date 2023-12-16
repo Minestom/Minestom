@@ -4,6 +4,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -33,7 +34,7 @@ public record ExplosionPacket(double x, double y, double z, float radius, byte @
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
             case PLAY -> ServerPacketIdentifier.EXPLOSION;
-            default -> throw new IllegalArgumentException();
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
 }

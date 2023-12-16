@@ -386,4 +386,14 @@ public final class PacketUtils {
             // TODO for non-socket connection
         }
     }
+
+    @ApiStatus.Internal
+    public static int invalidPacketState(@NotNull Class<?> packetClass, @NotNull ConnectionState state, @NotNull ConnectionState... expected) {
+        StringBuilder expectedStr = new StringBuilder();
+        for (ConnectionState connectionState : expected) {
+            expectedStr.append(connectionState).append(", ");
+        }
+        expectedStr.delete(expectedStr.length() - 2, expectedStr.length());
+        throw new IllegalStateException(String.format("Packet %s is not valid in state %s (only %s)", packetClass.getSimpleName(), state, expectedStr));
+    }
 }

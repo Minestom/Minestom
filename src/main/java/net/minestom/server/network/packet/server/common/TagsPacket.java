@@ -7,6 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,9 +51,9 @@ public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) impleme
     @Override
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
-            case PLAY -> ServerPacketIdentifier.TAGS;
             case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_TAGS;
-            default -> throw new IllegalArgumentException();
+            case PLAY -> ServerPacketIdentifier.TAGS;
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
         };
     }
 

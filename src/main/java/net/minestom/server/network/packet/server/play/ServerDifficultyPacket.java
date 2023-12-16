@@ -4,6 +4,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.world.Difficulty;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean loc
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
             case PLAY -> ServerPacketIdentifier.SERVER_DIFFICULTY;
-            default -> throw new IllegalArgumentException();
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
 }
