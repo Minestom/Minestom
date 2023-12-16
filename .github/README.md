@@ -41,6 +41,7 @@ and can be installed like the following (Gradle/Groovy):
 ```groovy
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
