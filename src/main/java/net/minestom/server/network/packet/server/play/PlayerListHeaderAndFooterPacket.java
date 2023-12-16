@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -40,7 +41,7 @@ public record PlayerListHeaderAndFooterPacket(@NotNull Component header,
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
             case PLAY -> ServerPacketIdentifier.PLAYER_LIST_HEADER_AND_FOOTER;
-            default -> throw new IllegalArgumentException();
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
 }

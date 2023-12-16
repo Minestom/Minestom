@@ -7,6 +7,7 @@ import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.resourcepack.ResourcePack;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,9 +49,9 @@ public record ResourcePackSendPacket(
     @Override
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
-            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_SEND;
             case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
-            default -> throw new IllegalArgumentException();
+            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_SEND;
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
         };
     }
 

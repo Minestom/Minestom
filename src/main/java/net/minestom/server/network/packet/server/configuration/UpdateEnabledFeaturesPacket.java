@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -26,7 +27,7 @@ public record UpdateEnabledFeaturesPacket(@NotNull Set<NamespaceID> features) im
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
             case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_UPDATE_ENABLED_FEATURES;
-            default -> throw new IllegalArgumentException();
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION);
         };
     }
 
