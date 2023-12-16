@@ -5,6 +5,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
@@ -24,9 +25,9 @@ public record PluginMessagePacket(String channel, byte[] data) implements Server
     @Override
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
-            case PLAY -> ServerPacketIdentifier.PLUGIN_MESSAGE;
             case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_PLUGIN_MESSAGE;
-            default -> throw new IllegalArgumentException();
+            case PLAY -> ServerPacketIdentifier.PLUGIN_MESSAGE;
+            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
         };
     }
 
