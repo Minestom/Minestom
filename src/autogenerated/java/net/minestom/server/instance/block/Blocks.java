@@ -251,7 +251,7 @@ interface Blocks {
 
     Block COBWEB = BlockImpl.get("minecraft:cobweb");
 
-    Block GRASS = BlockImpl.get("minecraft:grass");
+    Block SHORT_GRASS = BlockImpl.get("minecraft:short_grass");
 
     Block FERN = BlockImpl.get("minecraft:fern");
 
@@ -515,8 +515,6 @@ interface Blocks {
 
     Block OAK_FENCE = BlockImpl.get("minecraft:oak_fence");
 
-    Block PUMPKIN = BlockImpl.get("minecraft:pumpkin");
-
     Block NETHERRACK = BlockImpl.get("minecraft:netherrack");
 
     Block SOUL_SAND = BlockImpl.get("minecraft:soul_sand");
@@ -628,6 +626,8 @@ interface Blocks {
     Block CHAIN = BlockImpl.get("minecraft:chain");
 
     Block GLASS_PANE = BlockImpl.get("minecraft:glass_pane");
+
+    Block PUMPKIN = BlockImpl.get("minecraft:pumpkin");
 
     Block MELON = BlockImpl.get("minecraft:melon");
 
@@ -1825,6 +1825,32 @@ interface Blocks {
 
     Block TUFF = BlockImpl.get("minecraft:tuff");
 
+    Block TUFF_SLAB = BlockImpl.get("minecraft:tuff_slab");
+
+    Block TUFF_STAIRS = BlockImpl.get("minecraft:tuff_stairs");
+
+    Block TUFF_WALL = BlockImpl.get("minecraft:tuff_wall");
+
+    Block POLISHED_TUFF = BlockImpl.get("minecraft:polished_tuff");
+
+    Block POLISHED_TUFF_SLAB = BlockImpl.get("minecraft:polished_tuff_slab");
+
+    Block POLISHED_TUFF_STAIRS = BlockImpl.get("minecraft:polished_tuff_stairs");
+
+    Block POLISHED_TUFF_WALL = BlockImpl.get("minecraft:polished_tuff_wall");
+
+    Block CHISELED_TUFF = BlockImpl.get("minecraft:chiseled_tuff");
+
+    Block TUFF_BRICKS = BlockImpl.get("minecraft:tuff_bricks");
+
+    Block TUFF_BRICK_SLAB = BlockImpl.get("minecraft:tuff_brick_slab");
+
+    Block TUFF_BRICK_STAIRS = BlockImpl.get("minecraft:tuff_brick_stairs");
+
+    Block TUFF_BRICK_WALL = BlockImpl.get("minecraft:tuff_brick_wall");
+
+    Block CHISELED_TUFF_BRICKS = BlockImpl.get("minecraft:chiseled_tuff_bricks");
+
     Block CALCITE = BlockImpl.get("minecraft:calcite");
 
     Block TINTED_GLASS = BlockImpl.get("minecraft:tinted_glass");
@@ -1843,13 +1869,13 @@ interface Blocks {
 
     Block SCULK_SHRIEKER = BlockImpl.get("minecraft:sculk_shrieker");
 
-    Block OXIDIZED_COPPER = BlockImpl.get("minecraft:oxidized_copper");
-
-    Block WEATHERED_COPPER = BlockImpl.get("minecraft:weathered_copper");
+    Block COPPER_BLOCK = BlockImpl.get("minecraft:copper_block");
 
     Block EXPOSED_COPPER = BlockImpl.get("minecraft:exposed_copper");
 
-    Block COPPER_BLOCK = BlockImpl.get("minecraft:copper_block");
+    Block WEATHERED_COPPER = BlockImpl.get("minecraft:weathered_copper");
+
+    Block OXIDIZED_COPPER = BlockImpl.get("minecraft:oxidized_copper");
 
     Block COPPER_ORE = BlockImpl.get("minecraft:copper_ore");
 
@@ -1862,6 +1888,22 @@ interface Blocks {
     Block EXPOSED_CUT_COPPER = BlockImpl.get("minecraft:exposed_cut_copper");
 
     Block CUT_COPPER = BlockImpl.get("minecraft:cut_copper");
+
+    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get("minecraft:oxidized_chiseled_copper");
+
+    Block WEATHERED_CHISELED_COPPER = BlockImpl.get("minecraft:weathered_chiseled_copper");
+
+    Block EXPOSED_CHISELED_COPPER = BlockImpl.get("minecraft:exposed_chiseled_copper");
+
+    Block CHISELED_COPPER = BlockImpl.get("minecraft:chiseled_copper");
+
+    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_oxidized_chiseled_copper");
+
+    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_weathered_chiseled_copper");
+
+    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_exposed_chiseled_copper");
+
+    Block WAXED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_chiseled_copper");
 
     Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:oxidized_cut_copper_stairs");
 
@@ -1910,6 +1952,70 @@ interface Blocks {
     Block WAXED_EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_exposed_cut_copper_slab");
 
     Block WAXED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_cut_copper_slab");
+
+    Block COPPER_DOOR = BlockImpl.get("minecraft:copper_door");
+
+    Block EXPOSED_COPPER_DOOR = BlockImpl.get("minecraft:exposed_copper_door");
+
+    Block OXIDIZED_COPPER_DOOR = BlockImpl.get("minecraft:oxidized_copper_door");
+
+    Block WEATHERED_COPPER_DOOR = BlockImpl.get("minecraft:weathered_copper_door");
+
+    Block WAXED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_copper_door");
+
+    Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_exposed_copper_door");
+
+    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_oxidized_copper_door");
+
+    Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_weathered_copper_door");
+
+    Block COPPER_TRAPDOOR = BlockImpl.get("minecraft:copper_trapdoor");
+
+    Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:exposed_copper_trapdoor");
+
+    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:oxidized_copper_trapdoor");
+
+    Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:weathered_copper_trapdoor");
+
+    Block WAXED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_copper_trapdoor");
+
+    Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_exposed_copper_trapdoor");
+
+    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_oxidized_copper_trapdoor");
+
+    Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_weathered_copper_trapdoor");
+
+    Block COPPER_GRATE = BlockImpl.get("minecraft:copper_grate");
+
+    Block EXPOSED_COPPER_GRATE = BlockImpl.get("minecraft:exposed_copper_grate");
+
+    Block WEATHERED_COPPER_GRATE = BlockImpl.get("minecraft:weathered_copper_grate");
+
+    Block OXIDIZED_COPPER_GRATE = BlockImpl.get("minecraft:oxidized_copper_grate");
+
+    Block WAXED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_copper_grate");
+
+    Block WAXED_EXPOSED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_exposed_copper_grate");
+
+    Block WAXED_WEATHERED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_weathered_copper_grate");
+
+    Block WAXED_OXIDIZED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_oxidized_copper_grate");
+
+    Block COPPER_BULB = BlockImpl.get("minecraft:copper_bulb");
+
+    Block EXPOSED_COPPER_BULB = BlockImpl.get("minecraft:exposed_copper_bulb");
+
+    Block WEATHERED_COPPER_BULB = BlockImpl.get("minecraft:weathered_copper_bulb");
+
+    Block OXIDIZED_COPPER_BULB = BlockImpl.get("minecraft:oxidized_copper_bulb");
+
+    Block WAXED_COPPER_BULB = BlockImpl.get("minecraft:waxed_copper_bulb");
+
+    Block WAXED_EXPOSED_COPPER_BULB = BlockImpl.get("minecraft:waxed_exposed_copper_bulb");
+
+    Block WAXED_WEATHERED_COPPER_BULB = BlockImpl.get("minecraft:waxed_weathered_copper_bulb");
+
+    Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get("minecraft:waxed_oxidized_copper_bulb");
 
     Block LIGHTNING_ROD = BlockImpl.get("minecraft:lightning_rod");
 
@@ -2010,4 +2116,8 @@ interface Blocks {
     Block REINFORCED_DEEPSLATE = BlockImpl.get("minecraft:reinforced_deepslate");
 
     Block DECORATED_POT = BlockImpl.get("minecraft:decorated_pot");
+
+    Block CRAFTER = BlockImpl.get("minecraft:crafter");
+
+    Block TRIAL_SPAWNER = BlockImpl.get("minecraft:trial_spawner");
 }

@@ -12,6 +12,7 @@ public enum InventoryType {
     CHEST_5_ROW(45),
     CHEST_6_ROW(54),
     WINDOW_3X3(9),
+    CRAFTER_3X3(9),
     ANVIL(3),
     BEACON(1),
     BLAST_FURNACE(3),

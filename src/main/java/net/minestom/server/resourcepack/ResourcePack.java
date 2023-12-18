@@ -5,17 +5,21 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 /**
  * Represents a resource pack which can be sent with {@link Player#setResourcePack(ResourcePack)}.
  */
 public class ResourcePack {
 
+    private final UUID id;
     private final String url;
     private final String hash;
     private final boolean forced;
     private final Component prompt;
 
-    private ResourcePack(@NotNull String url, @Nullable String hash, boolean forced, @Nullable Component prompt) {
+    private ResourcePack(@NotNull UUID id, @NotNull String url, @Nullable String hash, boolean forced, @Nullable Component prompt) {
+        this.id = id;
         this.url = url;
         // Optional, set to empty if null
         this.hash = hash == null ? "" : hash;
@@ -23,20 +27,24 @@ public class ResourcePack {
         this.prompt = prompt;
     }
 
-    public static ResourcePack optional(@NotNull String url, @Nullable String hash, @Nullable Component prompt) {
-        return new ResourcePack(url, hash, false, prompt);
+    public static ResourcePack optional(@NotNull UUID id, @NotNull String url, @Nullable String hash, @Nullable Component prompt) {
+        return new ResourcePack(id, url, hash, false, prompt);
     }
 
-    public static ResourcePack optional(@NotNull String url, @Nullable String hash) {
-        return optional(url, hash, null);
+    public static ResourcePack optional(@NotNull UUID id, @NotNull String url, @Nullable String hash) {
+        return optional(id, url, hash, null);
     }
 
-    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component prompt) {
-        return new ResourcePack(url, hash, true, prompt);
+    public static ResourcePack forced(@NotNull UUID id, @NotNull String url, @Nullable String hash, @Nullable Component prompt) {
+        return new ResourcePack(id, url, hash, true, prompt);
     }
 
-    public static ResourcePack forced(@NotNull String url, @Nullable String hash) {
-        return forced(url, hash, null);
+    public static ResourcePack forced(@NotNull UUID id, @NotNull String url, @Nullable String hash) {
+        return forced(id, url, hash, null);
+    }
+
+    public @NotNull UUID getId() {
+        return id;
     }
 
     /**
@@ -67,4 +75,5 @@ public class ResourcePack {
     public @Nullable Component getPrompt() {
         return prompt;
     }
+
 }

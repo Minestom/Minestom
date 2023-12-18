@@ -337,6 +337,24 @@ interface SoundEvents {
 
     SoundEvent ITEM_BOTTLE_FILL_DRAGONBREATH = SoundEventImpl.get("minecraft:item.bottle.fill_dragonbreath");
 
+    SoundEvent ENTITY_BREEZE_INHALE = SoundEventImpl.get("minecraft:entity.breeze.inhale");
+
+    SoundEvent ENTITY_BREEZE_IDLE_GROUND = SoundEventImpl.get("minecraft:entity.breeze.idle_ground");
+
+    SoundEvent ENTITY_BREEZE_IDLE_AIR = SoundEventImpl.get("minecraft:entity.breeze.idle_air");
+
+    SoundEvent ENTITY_BREEZE_SHOOT = SoundEventImpl.get("minecraft:entity.breeze.shoot");
+
+    SoundEvent ENTITY_BREEZE_JUMP = SoundEventImpl.get("minecraft:entity.breeze.jump");
+
+    SoundEvent ENTITY_BREEZE_LAND = SoundEventImpl.get("minecraft:entity.breeze.land");
+
+    SoundEvent ENTITY_BREEZE_SLIDE = SoundEventImpl.get("minecraft:entity.breeze.slide");
+
+    SoundEvent ENTITY_BREEZE_DEATH = SoundEventImpl.get("minecraft:entity.breeze.death");
+
+    SoundEvent ENTITY_BREEZE_HURT = SoundEventImpl.get("minecraft:entity.breeze.hurt");
+
     SoundEvent BLOCK_BREWING_STAND_BREW = SoundEventImpl.get("minecraft:block.brewing_stand.brew");
 
     SoundEvent ITEM_BRUSH_BRUSHING_GENERIC = SoundEventImpl.get("minecraft:item.brush.brushing.generic");
@@ -607,6 +625,20 @@ interface SoundEvents {
 
     SoundEvent BLOCK_CONDUIT_DEACTIVATE = SoundEventImpl.get("minecraft:block.conduit.deactivate");
 
+    SoundEvent BLOCK_COPPER_BULB_BREAK = SoundEventImpl.get("minecraft:block.copper_bulb.break");
+
+    SoundEvent BLOCK_COPPER_BULB_STEP = SoundEventImpl.get("minecraft:block.copper_bulb.step");
+
+    SoundEvent BLOCK_COPPER_BULB_PLACE = SoundEventImpl.get("minecraft:block.copper_bulb.place");
+
+    SoundEvent BLOCK_COPPER_BULB_HIT = SoundEventImpl.get("minecraft:block.copper_bulb.hit");
+
+    SoundEvent BLOCK_COPPER_BULB_FALL = SoundEventImpl.get("minecraft:block.copper_bulb.fall");
+
+    SoundEvent BLOCK_COPPER_BULB_TURN_ON = SoundEventImpl.get("minecraft:block.copper_bulb.turn_on");
+
+    SoundEvent BLOCK_COPPER_BULB_TURN_OFF = SoundEventImpl.get("minecraft:block.copper_bulb.turn_off");
+
     SoundEvent BLOCK_COPPER_BREAK = SoundEventImpl.get("minecraft:block.copper.break");
 
     SoundEvent BLOCK_COPPER_STEP = SoundEventImpl.get("minecraft:block.copper.step");
@@ -616,6 +648,24 @@ interface SoundEvents {
     SoundEvent BLOCK_COPPER_HIT = SoundEventImpl.get("minecraft:block.copper.hit");
 
     SoundEvent BLOCK_COPPER_FALL = SoundEventImpl.get("minecraft:block.copper.fall");
+
+    SoundEvent BLOCK_COPPER_DOOR_CLOSE = SoundEventImpl.get("minecraft:block.copper_door.close");
+
+    SoundEvent BLOCK_COPPER_DOOR_OPEN = SoundEventImpl.get("minecraft:block.copper_door.open");
+
+    SoundEvent BLOCK_COPPER_GRATE_BREAK = SoundEventImpl.get("minecraft:block.copper_grate.break");
+
+    SoundEvent BLOCK_COPPER_GRATE_STEP = SoundEventImpl.get("minecraft:block.copper_grate.step");
+
+    SoundEvent BLOCK_COPPER_GRATE_PLACE = SoundEventImpl.get("minecraft:block.copper_grate.place");
+
+    SoundEvent BLOCK_COPPER_GRATE_HIT = SoundEventImpl.get("minecraft:block.copper_grate.hit");
+
+    SoundEvent BLOCK_COPPER_GRATE_FALL = SoundEventImpl.get("minecraft:block.copper_grate.fall");
+
+    SoundEvent BLOCK_COPPER_TRAPDOOR_CLOSE = SoundEventImpl.get("minecraft:block.copper_trapdoor.close");
+
+    SoundEvent BLOCK_COPPER_TRAPDOOR_OPEN = SoundEventImpl.get("minecraft:block.copper_trapdoor.open");
 
     SoundEvent BLOCK_CORAL_BLOCK_BREAK = SoundEventImpl.get("minecraft:block.coral_block.break");
 
@@ -636,6 +686,10 @@ interface SoundEvents {
     SoundEvent ENTITY_COW_MILK = SoundEventImpl.get("minecraft:entity.cow.milk");
 
     SoundEvent ENTITY_COW_STEP = SoundEventImpl.get("minecraft:entity.cow.step");
+
+    SoundEvent BLOCK_CRAFTER_CRAFT = SoundEventImpl.get("minecraft:block.crafter.craft");
+
+    SoundEvent BLOCK_CRAFTER_FAIL = SoundEventImpl.get("minecraft:block.crafter.fail");
 
     SoundEvent ENTITY_CREEPER_DEATH = SoundEventImpl.get("minecraft:entity.creeper.death");
 
@@ -668,6 +722,10 @@ interface SoundEvents {
     SoundEvent BLOCK_DECORATED_POT_FALL = SoundEventImpl.get("minecraft:block.decorated_pot.fall");
 
     SoundEvent BLOCK_DECORATED_POT_HIT = SoundEventImpl.get("minecraft:block.decorated_pot.hit");
+
+    SoundEvent BLOCK_DECORATED_POT_INSERT = SoundEventImpl.get("minecraft:block.decorated_pot.insert");
+
+    SoundEvent BLOCK_DECORATED_POT_INSERT_FAIL = SoundEventImpl.get("minecraft:block.decorated_pot.insert_fail");
 
     SoundEvent BLOCK_DECORATED_POT_STEP = SoundEventImpl.get("minecraft:block.decorated_pot.step");
 
@@ -1222,6 +1280,28 @@ interface SoundEvents {
     SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT = SoundEventImpl.get("minecraft:block.bamboo_wood_hanging_sign.hit");
 
     SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE = SoundEventImpl.get("minecraft:block.bamboo_wood_hanging_sign.place");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_BREAK = SoundEventImpl.get("minecraft:block.trial_spawner.break");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_STEP = SoundEventImpl.get("minecraft:block.trial_spawner.step");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_PLACE = SoundEventImpl.get("minecraft:block.trial_spawner.place");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_HIT = SoundEventImpl.get("minecraft:block.trial_spawner.hit");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_FALL = SoundEventImpl.get("minecraft:block.trial_spawner.fall");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_MOB = SoundEventImpl.get("minecraft:block.trial_spawner.spawn_mob");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = SoundEventImpl.get("minecraft:block.trial_spawner.detect_player");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT = SoundEventImpl.get("minecraft:block.trial_spawner.ambient");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = SoundEventImpl.get("minecraft:block.trial_spawner.open_shutter");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = SoundEventImpl.get("minecraft:block.trial_spawner.close_shutter");
+
+    SoundEvent BLOCK_TRIAL_SPAWNER_EJECT_ITEM = SoundEventImpl.get("minecraft:block.trial_spawner.eject_item");
 
     SoundEvent ITEM_HOE_TILL = SoundEventImpl.get("minecraft:item.hoe.till");
 
@@ -1891,6 +1971,8 @@ interface SoundEvents {
 
     SoundEvent ENTITY_PARROT_IMITATE_BLAZE = SoundEventImpl.get("minecraft:entity.parrot.imitate.blaze");
 
+    SoundEvent ENTITY_PARROT_IMITATE_BREEZE = SoundEventImpl.get("minecraft:entity.parrot.imitate.breeze");
+
     SoundEvent ENTITY_PARROT_IMITATE_CREEPER = SoundEventImpl.get("minecraft:entity.parrot.imitate.creeper");
 
     SoundEvent ENTITY_PARROT_IMITATE_DROWNED = SoundEventImpl.get("minecraft:entity.parrot.imitate.drowned");
@@ -2062,6 +2144,8 @@ interface SoundEvents {
     SoundEvent ENTITY_PLAYER_SPLASH_HIGH_SPEED = SoundEventImpl.get("minecraft:entity.player.splash.high_speed");
 
     SoundEvent ENTITY_PLAYER_SWIM = SoundEventImpl.get("minecraft:entity.player.swim");
+
+    SoundEvent ENTITY_PLAYER_TELEPORT = SoundEventImpl.get("minecraft:entity.player.teleport");
 
     SoundEvent ENTITY_POLAR_BEAR_AMBIENT = SoundEventImpl.get("minecraft:entity.polar_bear.ambient");
 
@@ -2521,6 +2605,18 @@ interface SoundEvents {
 
     SoundEvent ENTITY_SPLASH_POTION_THROW = SoundEventImpl.get("minecraft:entity.splash_potion.throw");
 
+    SoundEvent BLOCK_SPONGE_BREAK = SoundEventImpl.get("minecraft:block.sponge.break");
+
+    SoundEvent BLOCK_SPONGE_FALL = SoundEventImpl.get("minecraft:block.sponge.fall");
+
+    SoundEvent BLOCK_SPONGE_HIT = SoundEventImpl.get("minecraft:block.sponge.hit");
+
+    SoundEvent BLOCK_SPONGE_PLACE = SoundEventImpl.get("minecraft:block.sponge.place");
+
+    SoundEvent BLOCK_SPONGE_STEP = SoundEventImpl.get("minecraft:block.sponge.step");
+
+    SoundEvent BLOCK_SPONGE_ABSORB = SoundEventImpl.get("minecraft:block.sponge.absorb");
+
     SoundEvent ITEM_SPYGLASS_USE = SoundEventImpl.get("minecraft:item.spyglass.use");
 
     SoundEvent ITEM_SPYGLASS_STOP_USING = SoundEventImpl.get("minecraft:item.spyglass.stop_using");
@@ -2620,6 +2716,26 @@ interface SoundEvents {
     SoundEvent BLOCK_TUFF_HIT = SoundEventImpl.get("minecraft:block.tuff.hit");
 
     SoundEvent BLOCK_TUFF_FALL = SoundEventImpl.get("minecraft:block.tuff.fall");
+
+    SoundEvent BLOCK_TUFF_BRICKS_BREAK = SoundEventImpl.get("minecraft:block.tuff_bricks.break");
+
+    SoundEvent BLOCK_TUFF_BRICKS_FALL = SoundEventImpl.get("minecraft:block.tuff_bricks.fall");
+
+    SoundEvent BLOCK_TUFF_BRICKS_HIT = SoundEventImpl.get("minecraft:block.tuff_bricks.hit");
+
+    SoundEvent BLOCK_TUFF_BRICKS_PLACE = SoundEventImpl.get("minecraft:block.tuff_bricks.place");
+
+    SoundEvent BLOCK_TUFF_BRICKS_STEP = SoundEventImpl.get("minecraft:block.tuff_bricks.step");
+
+    SoundEvent BLOCK_POLISHED_TUFF_BREAK = SoundEventImpl.get("minecraft:block.polished_tuff.break");
+
+    SoundEvent BLOCK_POLISHED_TUFF_FALL = SoundEventImpl.get("minecraft:block.polished_tuff.fall");
+
+    SoundEvent BLOCK_POLISHED_TUFF_HIT = SoundEventImpl.get("minecraft:block.polished_tuff.hit");
+
+    SoundEvent BLOCK_POLISHED_TUFF_PLACE = SoundEventImpl.get("minecraft:block.polished_tuff.place");
+
+    SoundEvent BLOCK_POLISHED_TUFF_STEP = SoundEventImpl.get("minecraft:block.polished_tuff.step");
 
     SoundEvent ENTITY_TURTLE_AMBIENT_LAND = SoundEventImpl.get("minecraft:entity.turtle.ambient_land");
 
@@ -2791,6 +2907,8 @@ interface SoundEvents {
 
     SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS = SoundEventImpl.get("minecraft:entity.warden.tendril_clicks");
 
+    SoundEvent BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL = SoundEventImpl.get("minecraft:block.hanging_sign.waxed_interact_fail");
+
     SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = SoundEventImpl.get("minecraft:block.sign.waxed_interact_fail");
 
     SoundEvent BLOCK_WATER_AMBIENT = SoundEventImpl.get("minecraft:block.water.ambient");
@@ -2808,6 +2926,18 @@ interface SoundEvents {
     SoundEvent BLOCK_WET_GRASS_PLACE = SoundEventImpl.get("minecraft:block.wet_grass.place");
 
     SoundEvent BLOCK_WET_GRASS_STEP = SoundEventImpl.get("minecraft:block.wet_grass.step");
+
+    SoundEvent BLOCK_WET_SPONGE_BREAK = SoundEventImpl.get("minecraft:block.wet_sponge.break");
+
+    SoundEvent BLOCK_WET_SPONGE_FALL = SoundEventImpl.get("minecraft:block.wet_sponge.fall");
+
+    SoundEvent BLOCK_WET_SPONGE_HIT = SoundEventImpl.get("minecraft:block.wet_sponge.hit");
+
+    SoundEvent BLOCK_WET_SPONGE_PLACE = SoundEventImpl.get("minecraft:block.wet_sponge.place");
+
+    SoundEvent BLOCK_WET_SPONGE_STEP = SoundEventImpl.get("minecraft:block.wet_sponge.step");
+
+    SoundEvent ENTITY_GENERIC_WIND_BURST = SoundEventImpl.get("minecraft:entity.generic.wind_burst");
 
     SoundEvent ENTITY_WITCH_AMBIENT = SoundEventImpl.get("minecraft:entity.witch.ambient");
 

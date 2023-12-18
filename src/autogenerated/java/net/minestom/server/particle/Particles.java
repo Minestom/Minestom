@@ -53,6 +53,10 @@ interface Particles {
 
     Particle EXPLOSION = ParticleImpl.get("minecraft:explosion");
 
+    Particle GUST = ParticleImpl.get("minecraft:gust");
+
+    Particle GUST_EMITTER = ParticleImpl.get("minecraft:gust_emitter");
+
     Particle SONIC_BOOM = ParticleImpl.get("minecraft:sonic_boom");
 
     Particle FALLING_DUST = ParticleImpl.get("minecraft:falling_dust");
@@ -108,6 +112,8 @@ interface Particles {
     Particle RAIN = ParticleImpl.get("minecraft:rain");
 
     Particle SMOKE = ParticleImpl.get("minecraft:smoke");
+
+    Particle WHITE_SMOKE = ParticleImpl.get("minecraft:white_smoke");
 
     Particle SNEEZE = ParticleImpl.get("minecraft:sneeze");
 
@@ -194,4 +200,10 @@ interface Particles {
     Particle SHRIEK = ParticleImpl.get("minecraft:shriek");
 
     Particle EGG_CRACK = ParticleImpl.get("minecraft:egg_crack");
+
+    Particle DUST_PLUME = ParticleImpl.get("minecraft:dust_plume");
+
+    Particle GUST_DUST = ParticleImpl.get("minecraft:gust_dust");
+
+    Particle TRIAL_SPAWNER_DETECTION = ParticleImpl.get("minecraft:trial_spawner_detection");
 }

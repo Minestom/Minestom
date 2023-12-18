@@ -31,6 +31,32 @@ interface Materials {
 
     Material TUFF = MaterialImpl.get("minecraft:tuff");
 
+    Material TUFF_SLAB = MaterialImpl.get("minecraft:tuff_slab");
+
+    Material TUFF_STAIRS = MaterialImpl.get("minecraft:tuff_stairs");
+
+    Material TUFF_WALL = MaterialImpl.get("minecraft:tuff_wall");
+
+    Material CHISELED_TUFF = MaterialImpl.get("minecraft:chiseled_tuff");
+
+    Material POLISHED_TUFF = MaterialImpl.get("minecraft:polished_tuff");
+
+    Material POLISHED_TUFF_SLAB = MaterialImpl.get("minecraft:polished_tuff_slab");
+
+    Material POLISHED_TUFF_STAIRS = MaterialImpl.get("minecraft:polished_tuff_stairs");
+
+    Material POLISHED_TUFF_WALL = MaterialImpl.get("minecraft:polished_tuff_wall");
+
+    Material TUFF_BRICKS = MaterialImpl.get("minecraft:tuff_bricks");
+
+    Material TUFF_BRICK_SLAB = MaterialImpl.get("minecraft:tuff_brick_slab");
+
+    Material TUFF_BRICK_STAIRS = MaterialImpl.get("minecraft:tuff_brick_stairs");
+
+    Material TUFF_BRICK_WALL = MaterialImpl.get("minecraft:tuff_brick_wall");
+
+    Material CHISELED_TUFF_BRICKS = MaterialImpl.get("minecraft:chiseled_tuff_bricks");
+
     Material DRIPSTONE_BLOCK = MaterialImpl.get("minecraft:dripstone_block");
 
     Material GRASS_BLOCK = MaterialImpl.get("minecraft:grass_block");
@@ -169,6 +195,14 @@ interface Materials {
 
     Material OXIDIZED_COPPER = MaterialImpl.get("minecraft:oxidized_copper");
 
+    Material CHISELED_COPPER = MaterialImpl.get("minecraft:chiseled_copper");
+
+    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("minecraft:exposed_chiseled_copper");
+
+    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("minecraft:weathered_chiseled_copper");
+
+    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("minecraft:oxidized_chiseled_copper");
+
     Material CUT_COPPER = MaterialImpl.get("minecraft:cut_copper");
 
     Material EXPOSED_CUT_COPPER = MaterialImpl.get("minecraft:exposed_cut_copper");
@@ -200,6 +234,14 @@ interface Materials {
     Material WAXED_WEATHERED_COPPER = MaterialImpl.get("minecraft:waxed_weathered_copper");
 
     Material WAXED_OXIDIZED_COPPER = MaterialImpl.get("minecraft:waxed_oxidized_copper");
+
+    Material WAXED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_chiseled_copper");
+
+    Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_exposed_chiseled_copper");
+
+    Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_weathered_chiseled_copper");
+
+    Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_oxidized_chiseled_copper");
 
     Material WAXED_CUT_COPPER = MaterialImpl.get("minecraft:waxed_cut_copper");
 
@@ -351,7 +393,7 @@ interface Materials {
 
     Material COBWEB = MaterialImpl.get("minecraft:cobweb");
 
-    Material GRASS = MaterialImpl.get("minecraft:grass");
+    Material SHORT_GRASS = MaterialImpl.get("minecraft:short_grass");
 
     Material FERN = MaterialImpl.get("minecraft:fern");
 
@@ -1405,6 +1447,22 @@ interface Materials {
 
     Material WARPED_DOOR = MaterialImpl.get("minecraft:warped_door");
 
+    Material COPPER_DOOR = MaterialImpl.get("minecraft:copper_door");
+
+    Material EXPOSED_COPPER_DOOR = MaterialImpl.get("minecraft:exposed_copper_door");
+
+    Material WEATHERED_COPPER_DOOR = MaterialImpl.get("minecraft:weathered_copper_door");
+
+    Material OXIDIZED_COPPER_DOOR = MaterialImpl.get("minecraft:oxidized_copper_door");
+
+    Material WAXED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_copper_door");
+
+    Material WAXED_EXPOSED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_exposed_copper_door");
+
+    Material WAXED_WEATHERED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_weathered_copper_door");
+
+    Material WAXED_OXIDIZED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_oxidized_copper_door");
+
     Material IRON_TRAPDOOR = MaterialImpl.get("minecraft:iron_trapdoor");
 
     Material OAK_TRAPDOOR = MaterialImpl.get("minecraft:oak_trapdoor");
@@ -1428,6 +1486,22 @@ interface Materials {
     Material CRIMSON_TRAPDOOR = MaterialImpl.get("minecraft:crimson_trapdoor");
 
     Material WARPED_TRAPDOOR = MaterialImpl.get("minecraft:warped_trapdoor");
+
+    Material COPPER_TRAPDOOR = MaterialImpl.get("minecraft:copper_trapdoor");
+
+    Material EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:exposed_copper_trapdoor");
+
+    Material WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:weathered_copper_trapdoor");
+
+    Material OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:oxidized_copper_trapdoor");
+
+    Material WAXED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_copper_trapdoor");
+
+    Material WAXED_EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_exposed_copper_trapdoor");
+
+    Material WAXED_WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_weathered_copper_trapdoor");
+
+    Material WAXED_OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_oxidized_copper_trapdoor");
 
     Material OAK_FENCE_GATE = MaterialImpl.get("minecraft:oak_fence_gate");
 
@@ -1887,6 +1961,8 @@ interface Materials {
 
     Material COOKIE = MaterialImpl.get("minecraft:cookie");
 
+    Material CRAFTER = MaterialImpl.get("minecraft:crafter");
+
     Material FILLED_MAP = MaterialImpl.get("minecraft:filled_map");
 
     Material SHEARS = MaterialImpl.get("minecraft:shears");
@@ -1948,6 +2024,8 @@ interface Materials {
     Material BEE_SPAWN_EGG = MaterialImpl.get("minecraft:bee_spawn_egg");
 
     Material BLAZE_SPAWN_EGG = MaterialImpl.get("minecraft:blaze_spawn_egg");
+
+    Material BREEZE_SPAWN_EGG = MaterialImpl.get("minecraft:breeze_spawn_egg");
 
     Material CAT_SPAWN_EGG = MaterialImpl.get("minecraft:cat_spawn_egg");
 
@@ -2514,4 +2592,40 @@ interface Materials {
     Material SKULL_POTTERY_SHERD = MaterialImpl.get("minecraft:skull_pottery_sherd");
 
     Material SNORT_POTTERY_SHERD = MaterialImpl.get("minecraft:snort_pottery_sherd");
+
+    Material COPPER_GRATE = MaterialImpl.get("minecraft:copper_grate");
+
+    Material EXPOSED_COPPER_GRATE = MaterialImpl.get("minecraft:exposed_copper_grate");
+
+    Material WEATHERED_COPPER_GRATE = MaterialImpl.get("minecraft:weathered_copper_grate");
+
+    Material OXIDIZED_COPPER_GRATE = MaterialImpl.get("minecraft:oxidized_copper_grate");
+
+    Material WAXED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_copper_grate");
+
+    Material WAXED_EXPOSED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_exposed_copper_grate");
+
+    Material WAXED_WEATHERED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_weathered_copper_grate");
+
+    Material WAXED_OXIDIZED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_oxidized_copper_grate");
+
+    Material COPPER_BULB = MaterialImpl.get("minecraft:copper_bulb");
+
+    Material EXPOSED_COPPER_BULB = MaterialImpl.get("minecraft:exposed_copper_bulb");
+
+    Material WEATHERED_COPPER_BULB = MaterialImpl.get("minecraft:weathered_copper_bulb");
+
+    Material OXIDIZED_COPPER_BULB = MaterialImpl.get("minecraft:oxidized_copper_bulb");
+
+    Material WAXED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_copper_bulb");
+
+    Material WAXED_EXPOSED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_exposed_copper_bulb");
+
+    Material WAXED_WEATHERED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_weathered_copper_bulb");
+
+    Material WAXED_OXIDIZED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_oxidized_copper_bulb");
+
+    Material TRIAL_SPAWNER = MaterialImpl.get("minecraft:trial_spawner");
+
+    Material TRIAL_KEY = MaterialImpl.get("minecraft:trial_key");
 }
