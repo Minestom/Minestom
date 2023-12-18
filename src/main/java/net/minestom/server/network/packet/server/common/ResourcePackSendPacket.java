@@ -49,8 +49,8 @@ public record ResourcePackSendPacket(
     @Override
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
-            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
-            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_SEND;
+//            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
+//            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_SEND;
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
         };
     }

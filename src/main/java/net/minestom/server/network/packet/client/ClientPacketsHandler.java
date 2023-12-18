@@ -104,6 +104,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientClickWindowButtonPacket::new);
             register(nextId(), ClientClickWindowPacket::new);
             register(nextId(), ClientCloseWindowPacket::new);
+            nextId(); // window slot state
             register(nextId(), ClientPluginMessagePacket::new);
             register(nextId(), ClientEditBookPacket::new);
             register(nextId(), ClientQueryEntityNbtPacket::new);
