@@ -42,6 +42,7 @@ public record ChangeGameStatePacket(@NotNull Reason reason, float value) impleme
         PLAY_PUFFERFISH_STING_SOUND,
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
         ENABLE_RESPAWN_SCREEN,
-        LIMITED_CRAFTING
+        LIMITED_CRAFTING,
+        LEVEL_CHUNKS_LOAD_START
     }
 }
