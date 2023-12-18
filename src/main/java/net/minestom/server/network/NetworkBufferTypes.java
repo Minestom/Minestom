@@ -1,7 +1,7 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -293,13 +293,13 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Component> COMPONENT = new TypeImpl<>(Component.class,
             (buffer, value) -> {
-                final String json = GsonComponentSerializer.gson().serialize(value);
-                buffer.write(STRING, json);
+                final NBT nbt = NbtComponentSerializer.nbt().serialize(value);
+                buffer.write(NBT, nbt);
                 return -1;
             },
             buffer -> {
-                final String json = buffer.read(STRING);
-                return GsonComponentSerializer.gson().deserialize(json);
+                final NBT nbt = buffer.read(NBT);
+                return NbtComponentSerializer.nbt().deserialize(nbt);
             });
     static final TypeImpl<UUID> UUID = new TypeImpl<>(UUID.class,
             (buffer, value) -> {
