@@ -48,7 +48,9 @@ jobs:
           distribution: 'temurin'
       - name: Set outputs
         id: vars
-        run: echo "short_commit_hash=${GITHUB_SHA::10}" >> $GITHUB_OUTPUT
+        run: |
+          export ACTUAL=${{ github.event.pull_request.head.sha }}
+          echo "short_commit_hash=${ACTUAL::10}" >> $GITHUB_OUTPUT
       - name: Publish to Sonatype
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
