@@ -335,7 +335,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreCreationPacket(String objectiveName) {
-            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, line);
+            //todo
+            throw new UnsupportedOperationException();
+//            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, line);
         }
 
         /**
@@ -345,7 +347,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreDestructionPacket(String objectiveName) {
-            return new UpdateScorePacket(entityName, (byte) 1, objectiveName, 0);
+            //todo
+            throw new UnsupportedOperationException();
+//            return new UpdateScorePacket(entityName, (byte) 1, objectiveName, 0);
         }
 
         /**
@@ -356,7 +360,9 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
-            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, score);
+            //todo
+            throw new UnsupportedOperationException();
+//            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, score);
         }
 
         /**

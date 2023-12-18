@@ -348,6 +348,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
+        // Start chunk load
+        sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0));
+
         return setInstance(spawnInstance);
     }
 

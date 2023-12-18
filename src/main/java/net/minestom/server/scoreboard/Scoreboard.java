@@ -67,7 +67,8 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param score  The new score
      */
     default void updateScore(Player player, int score) {
-        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), (byte) 0, getObjectiveName(), score));
+        //todo
+//        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), (byte) 0, getObjectiveName(), score));
     }
 
     /**
