@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -300,6 +301,16 @@ final class NetworkBufferTypes {
             buffer -> {
                 final NBT nbt = buffer.read(NBT);
                 return NbtComponentSerializer.nbt().deserialize(nbt);
+            });
+    static final TypeImpl<Component> JSON_COMPONENT = new TypeImpl<>(Component.class,
+            (buffer, value) -> {
+                final String json = GsonComponentSerializer.gson().serialize(value);
+                buffer.write(STRING, json);
+                return -1;
+            },
+            buffer -> {
+                final String json = buffer.read(STRING);
+                return GsonComponentSerializer.gson().deserialize(json);
             });
     static final TypeImpl<UUID> UUID = new TypeImpl<>(UUID.class,
             (buffer, value) -> {

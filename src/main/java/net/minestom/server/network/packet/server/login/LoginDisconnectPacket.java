@@ -12,16 +12,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.JSON_COMPONENT;
 
 public record LoginDisconnectPacket(@NotNull Component kickMessage) implements ComponentHoldingServerPacket {
     public LoginDisconnectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(COMPONENT));
+        this(reader.read(JSON_COMPONENT));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(COMPONENT, kickMessage);
+        writer.write(JSON_COMPONENT, kickMessage);
     }
 
     @Override
