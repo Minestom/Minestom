@@ -13,44 +13,42 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ResourcePackSendPacket(
+public record ResourcePackPushPacket(
+        @NotNull UUID id,
         @NotNull String url,
         @NotNull String hash,
         boolean forced,
         @Nullable Component prompt
 ) implements ComponentHoldingServerPacket {
-    public ResourcePackSendPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(STRING), reader.read(BOOLEAN),
-                reader.read(BOOLEAN) ? reader.read(COMPONENT) : null);
+    public ResourcePackPushPacket(@NotNull NetworkBuffer reader) {
+        this(reader.read(UUID), reader.read(STRING), reader.read(STRING),
+                reader.read(BOOLEAN), reader.readOptional(COMPONENT));
     }
 
-    public ResourcePackSendPacket(@NotNull ResourcePack resourcePack) {
-        this(resourcePack.getUrl(), resourcePack.getHash(), resourcePack.isForced(),
-                resourcePack.getPrompt());
+    public ResourcePackPushPacket(@NotNull ResourcePack resourcePack) {
+        this(resourcePack.getId(), resourcePack.getUrl(), resourcePack.getHash(),
+                resourcePack.isForced(), resourcePack.getPrompt());
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
+        writer.write(UUID, id);
         writer.write(STRING, url);
         writer.write(STRING, hash);
         writer.write(BOOLEAN, forced);
-        if (prompt != null) {
-            writer.write(BOOLEAN, true);
-            writer.write(COMPONENT, prompt);
-        } else {
-            writer.write(BOOLEAN, false);
-        }
+        writer.writeOptional(COMPONENT, prompt);
     }
 
     @Override
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
-//            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_SEND;
-//            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_SEND;
+            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_PUSH_PACKET;
+            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_PUSH;
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
         };
     }
@@ -62,6 +60,6 @@ public record ResourcePackSendPacket(
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new ResourcePackSendPacket(this.url, this.hash, this.forced, operator.apply(this.prompt));
+        return new ResourcePackPushPacket(this.id, this.url, this.hash, this.forced, operator.apply(this.prompt));
     }
 }

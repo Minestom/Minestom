@@ -23,8 +23,6 @@ import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -32,7 +30,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
@@ -1224,7 +1221,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param resourcePack the resource pack
      */
     public void setResourcePack(@NotNull ResourcePack resourcePack) {
-        sendPacket(new ResourcePackSendPacket(resourcePack));
+        sendPacket(new ResourcePackPushPacket(resourcePack));
     }
 
     /**

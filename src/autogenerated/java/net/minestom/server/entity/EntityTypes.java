@@ -25,6 +25,8 @@ interface EntityTypes {
 
     EntityType BOAT = EntityTypeImpl.get("minecraft:boat");
 
+    EntityType BREEZE = EntityTypeImpl.get("minecraft:breeze");
+
     EntityType CAMEL = EntityTypeImpl.get("minecraft:camel");
 
     EntityType CAT = EntityTypeImpl.get("minecraft:cat");
@@ -228,6 +230,8 @@ interface EntityTypes {
     EntityType WANDERING_TRADER = EntityTypeImpl.get("minecraft:wandering_trader");
 
     EntityType WARDEN = EntityTypeImpl.get("minecraft:warden");
+
+    EntityType WIND_CHARGE = EntityTypeImpl.get("minecraft:wind_charge");
 
     EntityType WITCH = EntityTypeImpl.get("minecraft:witch");
 
