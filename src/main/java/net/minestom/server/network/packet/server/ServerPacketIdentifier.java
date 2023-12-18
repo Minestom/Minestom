@@ -20,9 +20,10 @@ public final class ServerPacketIdentifier {
     public static final int CONFIGURATION_KEEP_ALIVE = 0x03;
     public static final int CONFIGURATION_PING = 0x04;
     public static final int CONFIGURATION_REGISTRY_DATA = 0x05;
-    public static final int CONFIGURATION_RESOURCE_PACK_SEND = 0x06;
-    public static final int CONFIGURATION_UPDATE_ENABLED_FEATURES = 0x07;
-    public static final int CONFIGURATION_TAGS = 0x08;
+    public static final int CONFIGURATION_RESOURCE_PACK_POP_PACKET = 0x06;
+    public static final int CONFIGURATION_RESOURCE_PACK_PUSH_PACKET = 0x07;
+    public static final int CONFIGURATION_UPDATE_ENABLED_FEATURES = 0x08;
+    public static final int CONFIGURATION_TAGS = 0x09;
 
     public static final int BUNDLE = nextPlayId();
     public static final int SPAWN_ENTITY = nextPlayId();
@@ -90,7 +91,9 @@ public final class ServerPacketIdentifier {
     public static final int UNLOCK_RECIPES = nextPlayId();
     public static final int DESTROY_ENTITIES = nextPlayId();
     public static final int REMOVE_ENTITY_EFFECT = nextPlayId();
-    public static final int RESOURCE_PACK_SEND = nextPlayId();
+    public static final int RESET_SCORE = nextPlayId();
+    public static final int RESOURCE_PACK_POP = nextPlayId();
+    public static final int RESOURCE_PACK_PUSH = nextPlayId();
     public static final int RESPAWN = nextPlayId();
     public static final int ENTITY_HEAD_LOOK = nextPlayId();
     public static final int MULTI_BLOCK_CHANGE = nextPlayId();
@@ -132,6 +135,8 @@ public final class ServerPacketIdentifier {
     public static final int NBT_QUERY_RESPONSE = nextPlayId();
     public static final int COLLECT_ITEM = nextPlayId();
     public static final int ENTITY_TELEPORT = nextPlayId();
+    public static final int TICK_STATE = nextPlayId();
+    public static final int TICK_STEP = nextPlayId();
     public static final int ADVANCEMENTS = nextPlayId();
     public static final int ENTITY_PROPERTIES = nextPlayId();
     public static final int ENTITY_EFFECT = nextPlayId();
