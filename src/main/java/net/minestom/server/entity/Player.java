@@ -348,9 +348,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
-        // Start chunk load
-        sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0));
-
         return setInstance(spawnInstance);
     }
 
@@ -761,6 +758,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (dimensionChange || firstSpawn) {
             this.inventory.update();
             sendPacket(new HeldItemChangePacket(heldSlot));
+
+            // Tell the client to leave the loading terrain screen
+            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0));
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
