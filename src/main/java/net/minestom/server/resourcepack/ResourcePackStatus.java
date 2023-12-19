@@ -7,5 +7,13 @@ import net.minestom.server.entity.Player;
  * {@link net.minestom.server.event.player.PlayerResourcePackStatusEvent}.
  */
 public enum ResourcePackStatus {
-    SUCCESS, DECLINED, FAILED_DOWNLOAD, ACCEPTED
+
+    SUCCESSFULLY_LOADED,
+    DECLINED,
+    FAILED_DOWNLOAD,
+    ACCEPTED,
+    DOWNLOADED,
+    INVALID_URL,
+    FAILED_RELOAD,
+    DISCARDED,
 }
