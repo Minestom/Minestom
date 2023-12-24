@@ -4,13 +4,18 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
+import net.minestom.server.network.packet.server.common.PluginMessagePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -24,6 +29,9 @@ import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -35,6 +43,8 @@ import java.util.function.Function;
  * Manages the connected clients.
  */
 public final class ConnectionManager {
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
+
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
@@ -268,19 +278,36 @@ public final class ConnectionManager {
     }
 
     @ApiStatus.Internal
-    public void transitionConfigToPlay(@NotNull Player player, boolean isFirstConfig) {
-        // Call the event and spawn the player.
+    public void doConfiguration(@NotNull Player player, boolean isFirstConfig) {
         AsyncUtils.runAsync(() -> {
+            player.sendPacket(PluginMessagePacket.getBrandPacket());
+
             var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
             EventDispatcher.call(event);
 
             final Instance spawningInstance = event.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
+            // Registry data (if it should be sent)
+            if (event.willSendRegistryData()) {
+                var registry = new HashMap<String, NBT>();
+                registry.put("minecraft:chat_type", Messenger.chatRegistry());
+                registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
+                registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
+                registry.put("minecraft:damage_type", DamageType.getNBT());
+                player.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
+
+                player.sendPacket(TagsPacket.DEFAULT_TAGS);
+            }
+
             player.setPendingInstance(spawningInstance);
-            this.waitingPlayers.relaxedOffer(player);
             player.sendPacket(new FinishConfigurationPacket());
         });
+    }
+
+    @ApiStatus.Internal
+    public void transitionConfigToPlay(@NotNull Player player) {
+        this.waitingPlayers.relaxedOffer(player);
     }
 
     /**

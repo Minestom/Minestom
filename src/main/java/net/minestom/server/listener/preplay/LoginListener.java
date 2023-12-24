@@ -219,23 +219,23 @@ public final class LoginListener {
 
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
         final Player player = Objects.requireNonNull(connection.getPlayer());
-
-        // Registry data
-        var registry = new HashMap<String, NBT>();
-        registry.put("minecraft:chat_type", Messenger.chatRegistry());
-        registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
-        registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
-        registry.put("minecraft:damage_type", DamageType.getNBT());
-        connection.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
-
-        // Tags
-        connection.sendPacket(TagsPacket.DEFAULT_TAGS);
-
-        // Server Brand
-        connection.sendPacket(PluginMessagePacket.getBrandPacket());
-
-        // Enter configuration phase (for the first time)
-        CONNECTION_MANAGER.transitionConfigToPlay(player, true);
+        CONNECTION_MANAGER.doConfiguration(player, true);
+//        // Registry data
+//        var registry = new HashMap<String, NBT>();
+//        registry.put("minecraft:chat_type", Messenger.chatRegistry());
+//        registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
+//        registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
+//        registry.put("minecraft:damage_type", DamageType.getNBT());
+//        connection.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
+//
+//        // Tags
+//        connection.sendPacket(TagsPacket.DEFAULT_TAGS);
+//
+//        // Server Brand
+//        connection.sendPacket(PluginMessagePacket.getBrandPacket());
+//
+//        // Enter configuration phase (for the first time)
+//        CONNECTION_MANAGER.transitionConfigToPlay(player, true);
     }
 
 }

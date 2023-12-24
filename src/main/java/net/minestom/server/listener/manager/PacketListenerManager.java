@@ -8,12 +8,14 @@ import net.minestom.server.listener.common.KeepAliveListener;
 import net.minestom.server.listener.common.PluginMessageListener;
 import net.minestom.server.listener.common.ResourcePackListener;
 import net.minestom.server.listener.common.SettingsListener;
+import net.minestom.server.listener.preplay.ConfigListener;
 import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
@@ -56,6 +58,7 @@ public final class PacketListenerManager {
         setConfigurationListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setConfigurationListener(ClientPongPacket.class, (packet, player) -> {/* empty */});
         setConfigurationListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
+        setConfigurationListener(ClientFinishConfigurationPacket.class, ConfigListener::finishConfigListener);
 
         setPlayListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setPlayListener(ClientCommandChatPacket.class, ChatMessageListener::commandChatListener);
@@ -90,6 +93,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
         setPlayListener(ClientSpectatePacket.class, SpectateListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
+        setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
     }
 
     /**
