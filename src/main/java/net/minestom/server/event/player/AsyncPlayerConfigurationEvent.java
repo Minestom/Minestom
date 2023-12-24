@@ -19,11 +19,15 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private final Player player;
     private final boolean isFirstConfig;
 
-    private Instance spawningInstance = null;
+    private boolean sendRegistryData;
+    private Instance spawningInstance;
 
     public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig) {
         this.player = player;
         this.isFirstConfig = isFirstConfig;
+
+        this.sendRegistryData = isFirstConfig;
+        this.spawningInstance = null;
     }
 
     @Override
@@ -36,6 +40,14 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      */
     public boolean isFirstConfig() {
         return isFirstConfig;
+    }
+
+    public boolean willSendRegistryData() {
+        return sendRegistryData;
+    }
+
+    public void setSendRegistryData(boolean sendRegistryData) {
+        this.sendRegistryData = sendRegistryData;
     }
 
     public @Nullable Instance getSpawningInstance() {
