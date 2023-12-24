@@ -472,7 +472,7 @@ public class Team implements PacketGroupingAudience {
             this.playerMembers.clear();
 
             for (String member : this.members) {
-                Player player = MinecraftServer.getConnectionManager().getPlayer(member);
+                Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(member);
 
                 if (player != null) {
                     this.playerMembers.add(player);
