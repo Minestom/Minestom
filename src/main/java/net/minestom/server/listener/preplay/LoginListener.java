@@ -7,21 +7,16 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
-import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
-import net.minestom.server.network.packet.server.common.PluginMessagePacket;
-import net.minestom.server.network.packet.server.common.TagsPacket;
-import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
@@ -30,7 +25,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -71,7 +65,7 @@ public final class LoginListener {
 
         if (MojangAuth.isEnabled() && isSocketConnection) {
             // Mojang auth
-            if (CONNECTION_MANAGER.getPlayer(packet.username()) != null) {
+            if (CONNECTION_MANAGER.getOnlinePlayerByUsername(packet.username()) != null) {
                 connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED));
                 connection.disconnect();
                 return;

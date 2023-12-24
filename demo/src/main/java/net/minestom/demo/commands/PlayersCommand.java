@@ -19,17 +19,14 @@ public class PlayersCommand extends Command {
     }
 
     private void usage(CommandSender sender, CommandContext context) {
-        final var players = List.copyOf(MinecraftServer.getConnectionManager().getPlayers());
+        final var players = List.copyOf(MinecraftServer.getConnectionManager().getOnlinePlayers());
         final int playerCount = players.size();
         sender.sendMessage(Component.text("Total players: " + playerCount));
 
         final int limit = 15;
         for (int i = 0; i < Math.min(limit, playerCount); i++) {
             final var player = players.get(i);
-            var msg = Component.text(player.getUsername());
-            if (player.getPlayerConnection().getServerState() == ConnectionState.CONFIGURATION)
-                msg = msg.append(Component.text(" (config)"));
-            sender.sendMessage(msg);
+            sender.sendMessage(Component.text(player.getUsername()));
         }
 
         if (playerCount > limit) sender.sendMessage(Component.text("..."));

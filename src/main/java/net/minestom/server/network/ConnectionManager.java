@@ -59,6 +59,9 @@ public final class ConnectionManager {
     // Players in play state
     private final Set<Player> playPlayers = new CopyOnWriteArraySet<>();
 
+    private final Set<Player> unmodifiableConfigurationPlayers = Collections.unmodifiableSet(configurationPlayers);
+    private final Set<Player> unmodifiablePlayPlayers = Collections.unmodifiableSet(playPlayers);
+
 
     // The uuid provider once a player login
     private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
@@ -75,40 +78,24 @@ public final class ConnectionManager {
     }
 
     /**
-     * Gets players filtered by state.
-     *
-     * <p>The returned collection has no defined update behavior relative to the state of the server,
-     * so it should be refetched whenever used, rather than kept and reused.</p>
-     *
-     * @param states The state(s) to return players, if empty all players (play and config) are returned.
-     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
-     *
-     * @return An unmodifiable collection containing the filtered players.
+     * Returns an unmodifiable set containing the players currently in the play state.
      */
-    public @NotNull Collection<@NotNull Player> getPlayers(@NotNull ConnectionState... states) {
-        boolean play = false, config = false;
-        for (var state : states) {
-            switch (state) {
-                case PLAY -> play = true;
-                case CONFIGURATION -> config = true;
-                default -> throw new IllegalArgumentException("Cannot fetch players in " + state + "!");
-            }
-        }
+    public @NotNull Collection<@NotNull Player> getOnlinePlayers() {
+        return unmodifiablePlayPlayers;
+    }
 
-        if (config && !play) { // Only play
-            return Collections.unmodifiableCollection(configurationPlayers);
-        } else if (!config && play) { // Only configuration
-            return Collections.unmodifiableCollection(playPlayers);
-        } else { // Both or neither was specified
-            final var players = new ArrayList<Player>(playPlayers.size() + configurationPlayers.size());
-            players.addAll(configurationPlayers);
-            players.addAll(playPlayers);
-            return Collections.unmodifiableCollection(players);
-        }
+    /**
+     * Returns an unmodifiable set containing the players currently in the configuration state.
+     */
+    public @NotNull Collection<@NotNull Player> getConfigPlayers() {
+        return unmodifiableConfigurationPlayers;
     }
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
+     *
+     * <p>The player will be returned whether they are in the play or config state,
+     * so be sure to check before sending packets to them.</p>
      *
      * @param connection the player connection
      * @return the player linked to the connection
@@ -118,17 +105,15 @@ public final class ConnectionManager {
     }
 
     /**
-     * Gets the first player which validate {@link String#equalsIgnoreCase(String)}.
+     * Gets the first player in the play state which validates {@link String#equalsIgnoreCase(String)}.
      * <p>
      * This can cause issue if two or more players have the same username.
      *
      * @param username the player username (case-insensitive)
-     * @param states The state(s) to return players, if empty all players (play and config) are returned.
-     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      * @return the first player who validate the username condition, null if none was found
      */
-    public @Nullable Player getPlayer(@NotNull String username, @NotNull ConnectionState... states) {
-        for (Player player : getPlayers(states)) {
+    public @Nullable Player getOnlinePlayerByUsername(@NotNull String username) {
+        for (Player player : getOnlinePlayers()) {
             if (player.getUsername().equalsIgnoreCase(username))
                 return player;
         }
@@ -136,17 +121,15 @@ public final class ConnectionManager {
     }
 
     /**
-     * Gets the first player which validate {@link UUID#equals(Object)}.
+     * Gets the first player in the play state which validates {@link UUID#equals(Object)}.
      * <p>
      * This can cause issue if two or more players have the same UUID.
      *
      * @param uuid the player UUID
-     * @param states The state(s) to return players, if empty all players (play and config) are returned.
-     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      * @return the first player who validate the UUID condition, null if none was found
      */
-    public @Nullable Player getPlayer(@NotNull UUID uuid, @NotNull ConnectionState... states) {
-        for (Player player : getPlayers(states)) {
+    public @Nullable Player getOnlinePlayerByUuid(@NotNull UUID uuid) {
+        for (Player player : getOnlinePlayers()) {
             if (player.getUuid().equals(uuid))
                 return player;
         }
@@ -154,15 +137,13 @@ public final class ConnectionManager {
     }
 
     /**
-     * Finds the closest player matching a given username.
+     * Finds the closest player in the play state matching a given username.
      *
      * @param username the player username (can be partial)
-     * @param states The state(s) to return players, if empty all players (play and config) are returned.
-     *               <b>Only</b> {@link ConnectionState#CONFIGURATION} and {@link ConnectionState#PLAY} are valid.
      * @return the closest match, null if no players are online
      */
-    public @Nullable Player findPlayer(@NotNull String username, @NotNull ConnectionState... states) {
-        Player exact = getPlayer(username);
+    public @Nullable Player findOnlinePlayer(@NotNull String username) {
+        Player exact = getOnlinePlayerByUsername(username);
         if (exact != null) return exact;
         final String username1 = username.toLowerCase(Locale.ROOT);
 
@@ -170,7 +151,7 @@ public final class ConnectionManager {
             final String username2 = player.getUsername().toLowerCase(Locale.ROOT);
             return StringUtils.jaroWinklerScore(username1, username2);
         };
-        return getPlayers(states).stream()
+        return getOnlinePlayers().stream()
                 .min(Comparator.comparingDouble(distanceFunction::apply))
                 .filter(player -> distanceFunction.apply(player) > 0)
                 .orElse(null);
@@ -213,16 +194,6 @@ public final class ConnectionManager {
     public void setPlayerProvider(@Nullable PlayerProvider playerProvider) {
         this.playerProvider = playerProvider != null ? playerProvider : Player::new;
     }
-
-    /**
-     * Retrieves the current {@link PlayerProvider}, can be the default one if none is defined.
-     *
-     * @return the current {@link PlayerProvider}
-     */
-    public @NotNull PlayerProvider getPlayerProvider() {
-        return playerProvider;
-    }
-
 
     /**
      * Creates a player object and begins the transition from the login state to the config state.

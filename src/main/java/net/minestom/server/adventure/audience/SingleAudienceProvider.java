@@ -4,7 +4,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -16,6 +15,8 @@ import java.util.function.Predicate;
 class SingleAudienceProvider implements AudienceProvider<Audience> {
 
     protected final IterableAudienceProvider collection = new IterableAudienceProvider();
+    protected final Audience players = PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers());
+    protected final Audience server = Audience.audience(this.players, MinecraftServer.getCommandManager().getConsoleSender());
 
     protected SingleAudienceProvider() {
     }
@@ -31,18 +32,17 @@ class SingleAudienceProvider implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience all() {
-        return Audience.audience(this.server(), this.customs());
+        return Audience.audience(this.server, this.customs());
     }
 
     @Override
     public @NotNull Audience players() {
-        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY));
+        return this.players;
     }
 
     @Override
     public @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY)
-                .stream().filter(filter).toList());
+        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList());
     }
 
     @Override
@@ -52,7 +52,7 @@ class SingleAudienceProvider implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience server() {
-        return Audience.audience(players(), MinecraftServer.getCommandManager().getConsoleSender());
+        return this.server;
     }
 
     @Override

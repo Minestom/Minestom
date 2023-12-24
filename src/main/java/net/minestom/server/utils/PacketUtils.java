@@ -151,7 +151,7 @@ public final class PacketUtils {
     }
 
     public static void broadcastPlayPacket(@NotNull ServerPacket packet) {
-        sendGroupedPacket(MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY), packet);
+        sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
     }
 
     @ApiStatus.Experimental

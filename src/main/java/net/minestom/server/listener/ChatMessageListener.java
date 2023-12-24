@@ -39,7 +39,7 @@ public class ChatMessageListener {
             return;
         }
 
-        final Collection<Player> players = CONNECTION_MANAGER.getPlayers(ConnectionState.PLAY);
+        final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
         PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, message), message);
 
         // Call the event
