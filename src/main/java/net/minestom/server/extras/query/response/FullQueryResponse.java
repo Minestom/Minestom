@@ -33,7 +33,7 @@ public class FullQueryResponse implements Writeable {
             this.kv.put(key.getKey(), key.getValue());
         }
 
-        this.players = MinecraftServer.getConnectionManager().getPlayers(ConnectionState.PLAY)
+        this.players = MinecraftServer.getConnectionManager().getOnlinePlayers()
                 .stream()
                 .map(player -> PLAIN.serialize(player.getName()))
                 .toList();
