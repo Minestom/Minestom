@@ -32,7 +32,8 @@ public abstract class Recipe {
         SMOKING,
         CAMPFIRE_COOKING,
         STONECUTTING,
-        SMITHING
+        SMITHING_TRANSFORM,
+        SMITHING_TRIM
     }
 
 }

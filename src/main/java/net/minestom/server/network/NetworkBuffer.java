@@ -42,7 +42,7 @@ public final class NetworkBuffer {
     public static final Type<Point> BLOCK_POSITION = NetworkBufferTypes.BLOCK_POSITION;
     public static final Type<Component> COMPONENT = NetworkBufferTypes.COMPONENT;
     public static final Type<UUID> UUID = NetworkBufferTypes.UUID;
-    public static final Type<ItemStack> ITEM = NetworkBufferTypes.ITEM;
+    public static final Type<@Nullable ItemStack> ITEM = NetworkBufferTypes.ITEM;
 
     public static final Type<byte[]> BYTE_ARRAY = NetworkBufferTypes.BYTE_ARRAY;
     public static final Type<long[]> LONG_ARRAY = NetworkBufferTypes.LONG_ARRAY;
