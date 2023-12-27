@@ -4,21 +4,33 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class SmithingRecipe extends Recipe {
+public abstract class SmithingTransformRecipe extends Recipe {
+    private DeclareRecipesPacket.Ingredient template;
     private DeclareRecipesPacket.Ingredient baseIngredient;
     private DeclareRecipesPacket.Ingredient additionIngredient;
     private ItemStack result;
 
-    protected SmithingRecipe(
+    protected SmithingTransformRecipe(
             @NotNull String recipeId,
+            @NotNull DeclareRecipesPacket.Ingredient template,
             @NotNull DeclareRecipesPacket.Ingredient baseIngredient,
             @NotNull DeclareRecipesPacket.Ingredient additionIngredient,
             @NotNull ItemStack result
     ) {
-        super(Type.SMITHING, recipeId);
+        super(Type.SMITHING_TRANSFORM, recipeId);
+        this.template = template;
         this.baseIngredient = baseIngredient;
         this.additionIngredient = additionIngredient;
         this.result = result;
+    }
+
+    @NotNull
+    public DeclareRecipesPacket.Ingredient getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(@NotNull DeclareRecipesPacket.Ingredient template) {
+        this.template = template;
     }
 
     @NotNull
