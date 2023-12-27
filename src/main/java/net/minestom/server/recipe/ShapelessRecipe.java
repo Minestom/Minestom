@@ -11,17 +11,20 @@ import java.util.Objects;
 
 public abstract class ShapelessRecipe extends Recipe {
     private String group;
+    private RecipeCategory.Crafting category;
     private final List<DeclareRecipesPacket.Ingredient> ingredients;
     private ItemStack result;
 
     protected ShapelessRecipe(
             @NotNull String recipeId,
             @NotNull String group,
+            @NotNull RecipeCategory.Crafting category,
             @Nullable List<DeclareRecipesPacket.Ingredient> ingredients,
             @NotNull ItemStack result
     ) {
         super(Type.SHAPELESS, recipeId);
         this.group = group;
+        this.category = category;
         this.ingredients = Objects.requireNonNullElseGet(ingredients, LinkedList::new);
         this.result = result;
     }
@@ -33,6 +36,15 @@ public abstract class ShapelessRecipe extends Recipe {
 
     public void setGroup(@NotNull String group) {
         this.group = group;
+    }
+
+    @NotNull
+    public RecipeCategory.Crafting getCategory() {
+        return category;
+    }
+
+    public void setCategory(@NotNull RecipeCategory.Crafting category) {
+        this.category = category;
     }
 
     public void addIngredient(DeclareRecipesPacket.Ingredient ingredient) {

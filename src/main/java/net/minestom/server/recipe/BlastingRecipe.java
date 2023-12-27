@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class BlastingRecipe extends Recipe {
     private String group;
+    private RecipeCategory.Cooking category;
     private DeclareRecipesPacket.Ingredient ingredient;
     private ItemStack result;
     private float experience;
@@ -14,12 +15,14 @@ public abstract class BlastingRecipe extends Recipe {
     protected BlastingRecipe(
             @NotNull String recipeId,
             @NotNull String group,
+            @NotNull RecipeCategory.Cooking category,
             @NotNull ItemStack result,
             float experience,
             int cookingTime
     ) {
         super(Type.BLASTING, recipeId);
         this.group = group;
+        this.category = category;
         this.result = result;
         this.experience = experience;
         this.cookingTime = cookingTime;
@@ -34,8 +37,15 @@ public abstract class BlastingRecipe extends Recipe {
         this.group = group;
     }
 
-    @NotNull
-    public DeclareRecipesPacket.Ingredient getIngredient() {
+    public @NotNull RecipeCategory.Cooking getCategory() {
+        return category;
+    }
+
+    public void setCategory(@NotNull RecipeCategory.Cooking category) {
+        this.category = category;
+    }
+
+    public @NotNull DeclareRecipesPacket.Ingredient getIngredient() {
         return ingredient;
     }
 
