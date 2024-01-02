@@ -4,6 +4,7 @@ import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
@@ -84,7 +85,7 @@ public class PlayerIntegrationTest {
         env.tick();
         env.tick();
 
-        player.addPacketToQueue(packet);
+        player.addPacketToQueue(ConnectionState.PLAY, packet);
         var collector = connection.trackIncoming();
         env.tick();
         env.tick();
@@ -188,7 +189,7 @@ public class PlayerIntegrationTest {
         var player = connection.connect(instance, new Pos(5, 42, 2)).join();
 
         assertNull(player.getDeathLocation());
-        player.damage(DamageType.VOID, 30);
+        player.damage(DamageType.OUT_OF_WORLD, 30);
 
         assertNotNull(player.getDeathLocation());
         assertEquals(dimensionNamespace, player.getDeathLocation().dimension());

@@ -1,5 +1,6 @@
 package net.minestom.server.inventory.click.integration;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -187,7 +188,7 @@ public class RightClickIntegrationTest {
                 slot = slot - 9 + offset;
             }
         }
-        player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 1,
+        player.addPacketToQueue(ConnectionState.PLAY, new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 1,
                 ClientClickWindowPacket.ClickType.PICKUP, List.of(), ItemStack.AIR));
         player.interpretPacketQueue();
     }
