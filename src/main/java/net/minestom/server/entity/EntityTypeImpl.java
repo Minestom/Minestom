@@ -7,9 +7,7 @@ import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.animal.tameable.ParrotMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.arrow.ArrowMeta;
-import net.minestom.server.entity.metadata.arrow.SpectralArrowMeta;
-import net.minestom.server.entity.metadata.arrow.ThrownTridentMeta;
+import net.minestom.server.entity.metadata.projectile.*;
 import net.minestom.server.entity.metadata.display.BlockDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
@@ -33,10 +31,7 @@ import net.minestom.server.entity.metadata.water.AxolotlMeta;
 import net.minestom.server.entity.metadata.water.DolphinMeta;
 import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
-import net.minestom.server.entity.metadata.water.fish.CodMeta;
-import net.minestom.server.entity.metadata.water.fish.PufferfishMeta;
-import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
-import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
+import net.minestom.server.entity.metadata.water.fish.*;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,7 +73,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
 
     private static Map<String, BiFunction<Entity, Metadata, EntityMeta>> createMetaMap() {
         return Map.<String, BiFunction<Entity, Metadata, EntityMeta>>ofEntries(
-                entry("minecraft:allay", EntityMeta::new), // TODO dedicated metadata
+                entry("minecraft:allay", AllayMeta::new),
                 entry("minecraft:area_effect_cloud", AreaEffectCloudMeta::new),
                 entry("minecraft:armor_stand", ArmorStandMeta::new),
                 entry("minecraft:arrow", ArrowMeta::new),
@@ -88,6 +83,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:blaze", BlazeMeta::new),
                 entry("minecraft:block_display", BlockDisplayMeta::new),
                 entry("minecraft:boat", BoatMeta::new),
+                entry("minecraft:breeze", BreezeMeta::new),
                 entry("minecraft:chest_boat", BoatMeta::new),
                 entry("minecraft:camel", CamelMeta::new),
                 entry("minecraft:cat", CatMeta::new),
@@ -176,7 +172,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:squid", SquidMeta::new),
                 entry("minecraft:stray", StrayMeta::new),
                 entry("minecraft:strider", StriderMeta::new),
-                entry("minecraft:tadpole", EntityMeta::new), // TODO dedicated metadata
+                entry("minecraft:tadpole", TadpoleMeta::new),
                 entry("minecraft:egg", ThrownEggMeta::new),
                 entry("minecraft:ender_pearl", ThrownEnderPearlMeta::new),
                 entry("minecraft:experience_bottle", ThrownExperienceBottleMeta::new),
@@ -190,6 +186,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
                 entry("minecraft:vindicator", VindicatorMeta::new),
                 entry("minecraft:wandering_trader", WanderingTraderMeta::new),
                 entry("minecraft:warden", WardenMeta::new),
+                entry("minecraft:wind_charge", WindChargeMeta::new),
                 entry("minecraft:witch", WitchMeta::new),
                 entry("minecraft:wither", WitherMeta::new),
                 entry("minecraft:wither_skeleton", WitherSkeletonMeta::new),

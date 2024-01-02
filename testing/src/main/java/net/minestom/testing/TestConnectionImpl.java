@@ -5,7 +5,9 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -34,17 +36,20 @@ final class TestConnectionImpl implements TestConnection {
 
     @Override
     public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
-        Player player = new Player(UUID.randomUUID(), "RandName", playerConnection);
-        player.eventNode().addListener(PlayerLoginEvent.class, event -> {
+        playerConnection.setServerState(ConnectionState.LOGIN);
+        var player = process.connection().createPlayer(playerConnection, UUID.randomUUID(), "RandName");
+        player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(instance);
             event.getPlayer().setRespawnPoint(pos);
         });
 
-        return process.connection().createPlayer(player, true)
-                .thenApply(unused -> {
-                    process.connection().updateWaitingPlayers();
-                    return player;
-                });
+        // Force the player through the entirety of the login process manually
+        playerConnection.setServerState(ConnectionState.CONFIGURATION);
+        process.connection().doConfiguration(player, true);
+        process.connection().transitionConfigToPlay(player);
+        playerConnection.setServerState(ConnectionState.PLAY);
+        process.connection().updateWaitingPlayers();
+        return CompletableFuture.completedFuture(player);
     }
 
     @Override
@@ -64,7 +69,7 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         private ServerPacket extractPacket(final SendablePacket packet) {
-            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getConnectionState(), packet);
+            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getServerState(), packet);
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;

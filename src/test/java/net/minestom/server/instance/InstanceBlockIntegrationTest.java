@@ -22,8 +22,8 @@ public class InstanceBlockIntegrationTest {
         instance.loadChunk(0, 0).join();
         assertEquals(Block.AIR, instance.getBlock(0, 50, 0));
 
-        instance.setBlock(0, 50, 0, Block.GRASS);
-        assertEquals(Block.GRASS, instance.getBlock(0, 50, 0));
+        instance.setBlock(0, 50, 0, Block.GRASS_BLOCK);
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 50, 0));
 
         instance.setBlock(0, 50, 0, Block.STONE);
         assertEquals(Block.STONE, instance.getBlock(0, 50, 0));
@@ -39,8 +39,8 @@ public class InstanceBlockIntegrationTest {
         var instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
 
-        instance.setBlock(0, 50, 0, Block.GRASS);
-        assertEquals(Block.GRASS, instance.getBlock(0, 50, 0));
+        instance.setBlock(0, 50, 0, Block.GRASS_BLOCK);
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 50, 0));
 
         instance.unloadChunk(0, 0);
         assertThrows(NullPointerException.class, () -> instance.getBlock(0, 0, 0),
@@ -70,7 +70,7 @@ public class InstanceBlockIntegrationTest {
         assertEquals(7, instance.getBlock(point).getTag(tag));
 
         // Different block type
-        instance.setBlock(point, Block.GRASS.withTag(tag, 8));
+        instance.setBlock(point, Block.GRASS_BLOCK.withTag(tag, 8));
         assertEquals(8, instance.getBlock(point).getTag(tag));
     }
 }

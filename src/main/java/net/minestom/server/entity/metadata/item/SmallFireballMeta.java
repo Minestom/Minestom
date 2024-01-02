@@ -3,7 +3,7 @@ package net.minestom.server.entity.metadata.item;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.ProjectileMeta;
+import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

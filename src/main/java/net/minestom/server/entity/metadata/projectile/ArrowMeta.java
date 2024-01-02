@@ -1,9 +1,8 @@
-package net.minestom.server.entity.metadata.arrow;
+package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.ProjectileMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

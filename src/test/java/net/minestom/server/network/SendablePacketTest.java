@@ -30,15 +30,15 @@ public class SendablePacketTest {
     public void cached() {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);
         var cached = new CachedPacket(packet);
-        assertSame(packet, cached.packet());
+        assertSame(packet, cached.packet(ConnectionState.PLAY));
 
-        var buffer = PacketUtils.allocateTrimmedPacket(packet);
-        var cachedBuffer = cached.body();
+        var buffer = PacketUtils.allocateTrimmedPacket(ConnectionState.PLAY, packet);
+        var cachedBuffer = cached.body(ConnectionState.PLAY);
         assertEquals(buffer.body(), cachedBuffer);
         // May fail in the very unlikely case where soft references are cleared
         // Rare enough to make this test worth it
-        assertSame(cached.body(), cachedBuffer);
+        assertSame(cached.body(ConnectionState.PLAY), cachedBuffer);
 
-        assertSame(packet, cached.packet());
+        assertSame(packet, cached.packet(ConnectionState.PLAY));
     }
 }

@@ -1,26 +1,27 @@
-package net.minestom.server.entity.metadata.arrow;
+package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.ProjectileMeta;
+import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = AbstractArrowMeta.MAX_OFFSET;
+public class DragonFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 0;
 
     private Entity shooter;
 
-    public SpectralArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public DragonFireballMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     @Override
     @Nullable
     public Entity getShooter() {
-        return this.shooter;
+        return shooter;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataPr
 
     @Override
     public int getObjectData() {
-        return this.shooter == null ? 0 : this.shooter.getEntityId() + 1;
+        return this.shooter == null ? 0 : this.shooter.getEntityId();
     }
 
     @Override

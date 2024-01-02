@@ -208,7 +208,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void transitionLoginToConfig(@NotNull Player player) {
-        AsyncUtils.runAsync(() -> {
+        CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
 
             // Compression
@@ -240,6 +240,7 @@ public final class ConnectionManager {
             playerConnection.sendPacket(loginSuccessPacket);
             configurationPlayers.add(player);
         });
+        if (DebugUtils.INSIDE_TEST) configFuture.join();
     }
 
     @ApiStatus.Internal
@@ -250,7 +251,7 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void doConfiguration(@NotNull Player player, boolean isFirstConfig) {
-        AsyncUtils.runAsync(() -> {
+        CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
             player.sendPacket(PluginMessagePacket.getBrandPacket());
 
             var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
@@ -274,6 +275,7 @@ public final class ConnectionManager {
             player.setPendingInstance(spawningInstance);
             player.sendPacket(new FinishConfigurationPacket());
         });
+        if (DebugUtils.INSIDE_TEST) configFuture.join();
     }
 
     @ApiStatus.Internal
@@ -321,7 +323,8 @@ public final class ConnectionManager {
     /**
      * Connects waiting players.
      */
-    private void updateWaitingPlayers() {
+    @ApiStatus.Internal
+    public void updateWaitingPlayers() {
         this.waitingPlayers.drain(player -> {
             configurationPlayers.remove(player);
             playPlayers.add(player);
