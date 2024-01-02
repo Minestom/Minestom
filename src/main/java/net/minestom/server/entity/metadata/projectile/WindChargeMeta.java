@@ -1,21 +1,20 @@
-package net.minestom.server.entity.metadata.item;
+package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
-import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FireballMeta extends ItemContainingMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
+public class WindChargeMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 0;
 
     private Entity shooter;
 
-    public FireballMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
-        super(entity, metadata, Material.AIR);
+    public WindChargeMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @Override
@@ -38,5 +37,4 @@ public class FireballMeta extends ItemContainingMeta implements ObjectDataProvid
     public boolean requiresVelocityPacketAtSpawn() {
         return true;
     }
-
 }

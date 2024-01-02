@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.command.builder.Command;
@@ -40,7 +41,7 @@ public class CommandSuggestionIntegrationTest {
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(new ClientTabCompletePacket(3, "test te"));
+        player.addPacketToQueue(ConnectionState.PLAY, new ClientTabCompletePacket(3, "test te"));
         player.interpretPacketQueue();
 
         listener.assertSingle(tabCompletePacket -> {
@@ -68,7 +69,7 @@ public class CommandSuggestionIntegrationTest {
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo 1"));
+        player.addPacketToQueue(ConnectionState.PLAY, new ClientTabCompletePacket(1, "foo 1"));
         player.interpretPacketQueue();
 
         listener.assertSingle(tabCompletePacket -> {

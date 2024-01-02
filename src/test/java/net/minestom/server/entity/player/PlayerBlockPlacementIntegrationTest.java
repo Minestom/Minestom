@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -38,7 +39,7 @@ public class PlayerBlockPlacementIntegrationTest {
                 1f, 1f, 1f,
                 false, 0
         );
-        player.addPacketToQueue(packet);
+        player.addPacketToQueue(ConnectionState.PLAY, packet);
         player.interpretPacketQueue();
 
         var placedBlock = instance.getBlock(1, 41, 0);

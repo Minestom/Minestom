@@ -22,7 +22,7 @@ public class BlockClientNbtTest {
     @Test
     public void basic() {
         assertNull(BlockUtils.extractClientNbt(Block.STONE));
-        assertNull(BlockUtils.extractClientNbt(Block.GRASS));
+        assertNull(BlockUtils.extractClientNbt(Block.GRASS_BLOCK));
         assertEquals(NBTCompound.EMPTY, BlockUtils.extractClientNbt(Block.CHEST));
 
         var nbt = NBT.Compound(Map.of("test", NBT.String("test")));
