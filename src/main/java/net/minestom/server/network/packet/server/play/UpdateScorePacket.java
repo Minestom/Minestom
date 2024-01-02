@@ -5,6 +5,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,11 +21,11 @@ public record UpdateScorePacket(
         @NotNull String objectiveName,
         int score,
         @Nullable Component displayName,
-        @Nullable NumberFormat numberFormat
+        @Nullable Sidebar.NumberFormat numberFormat
 ) implements ServerPacket {
     public UpdateScorePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
-                reader.readOptional(COMPONENT), new NumberFormat(reader));
+                reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
     }
 
     @Override
@@ -42,18 +43,5 @@ public record UpdateScorePacket(
             case PLAY -> ServerPacketIdentifier.UPDATE_SCORE;
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
-    }
-
-    public record NumberFormat() implements Writer {
-
-        public NumberFormat(@NotNull NetworkBuffer reader) {
-            this();
-            throw new UnsupportedOperationException("TODO");
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            throw new UnsupportedOperationException("TODO");
-        }
     }
 }
