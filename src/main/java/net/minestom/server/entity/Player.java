@@ -283,6 +283,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         sendPacket(new SpawnPositionPacket(respawnPoint, 0));
 
+        sendPacket(getMetadataPacket());
+
         // Add player to list with spawning skin
         PlayerSkin profileSkin = null;
         if (playerConnection instanceof PlayerSocketConnection socketConnection) {
