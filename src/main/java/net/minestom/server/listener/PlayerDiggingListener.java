@@ -19,7 +19,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
+import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public final class PlayerDiggingListener {
 
@@ -51,6 +54,14 @@ public final class PlayerDiggingListener {
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
+            if (!diggingResult.success()) {
+                // Refresh block on player screen in case it had special data (like a sign)
+                var registry = diggingResult.block().registry();
+                if (registry.isBlockEntity()) {
+                    final NBTCompound data = BlockUtils.extractClientNbt(diggingResult.block());
+                    player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                }
+            }
         }
     }
 
