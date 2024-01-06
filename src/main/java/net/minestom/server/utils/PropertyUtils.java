@@ -23,4 +23,14 @@ public final class PropertyUtils {
     public static String getString(@NotNull String name, @Nullable String defaultValue) {
         return System.getProperty(name, defaultValue);
     }
+
+    public static Float getFloat(String name, Float defaultValue) {
+        Float result = defaultValue;
+        try {
+            final String value = System.getProperty(name);
+            if (value != null) result = Float.parseFloat(value);
+        } catch (IllegalArgumentException | NullPointerException ignored) {
+        }
+        return result;
+    }
 }
