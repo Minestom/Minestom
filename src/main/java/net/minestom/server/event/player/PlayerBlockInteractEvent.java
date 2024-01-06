@@ -19,6 +19,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     private final Player.Hand hand;
     private final Block block;
     private final Point blockPosition;
+    private final Point cursorPosition;
     private final BlockFace blockFace;
 
     /**
@@ -36,6 +37,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
         this.hand = hand;
         this.block = block;
         this.blockPosition = blockPosition;
+        this.cursorPosition = cursorPosition;
         this.blockFace = blockFace;
     }
 
@@ -49,9 +51,9 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     }
 
     /**
-     * Sets if the event should block the item use.
-     *
-     * @param blocks true if the item use should be blocked, false otherwise
+     * Sets the blocking item use state of this event
+     * Note: If this is true, then no {@link PlayerUseItemOnBlockEvent} will be fired.
+     * @param blocks - true to block item interactions, false to not block
      */
     public void setBlockingItemUse(boolean blocks) {
         this.blocksItemUse = blocks;
@@ -70,6 +72,12 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     public @NotNull Point getBlockPosition() {
         return blockPosition;
     }
+
+    /**
+     * Gets the cursor position of the interacted block
+     * @return the cursor position of the interaction
+     */
+    public @NotNull Point getCursorPosition() { return cursorPosition; }
 
     /**
      * Gets the hand used for the interaction.
