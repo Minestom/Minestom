@@ -175,16 +175,10 @@ public final class ChunkUtils {
      * which comes from kotlin port by <a href="https://github.com/Esophose">Esophose</a>, which comes from <a href="https://stackoverflow.com/questions/398299/looping-in-a-spiral">a stackoverflow answer</a>.
      */
     public static void forChunksInRange(int chunkX, int chunkZ, int range, IntegerBiConsumer consumer) {
-        if (!ServerFlag.USE_NEW_CHUNK_SENDING) {
-            for (int x = -range; x <= range; ++x) {
-                for (int z = -range; z <= range; ++z) {
-                    consumer.accept(chunkX + x, chunkZ + z);
-                }
-            }
-            return;
-        }
-
         // Send in spiral around the center chunk
+        // Note: its not really required to start at the center anymore since the chunk queue is sorted by distance,
+        //       however we still should send a circle so this method is still fine, and good for any other case a
+        //       spiral might be needed.
         consumer.accept(chunkX, chunkZ);
         for (int id = 1; id < (range * 2 + 1) * (range * 2 + 1); id++) {
             var index = id - 1;

@@ -94,6 +94,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientSpectatePacket.class, SpectateListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
+        setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
     }
 
     /**
