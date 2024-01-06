@@ -1,12 +1,12 @@
 package net.minestom.server.network.packet.server.common;
 
+import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,9 +30,8 @@ public record ResourcePackPushPacket(
                 reader.read(BOOLEAN), reader.readOptional(COMPONENT));
     }
 
-    public ResourcePackPushPacket(@NotNull ResourcePack resourcePack) {
-        this(resourcePack.getId(), resourcePack.getUrl(), resourcePack.getHash(),
-                resourcePack.isForced(), resourcePack.getPrompt());
+    public ResourcePackPushPacket(@NotNull ResourcePackInfo resourcePackInfo, boolean required, @Nullable Component prompt) {
+        this(resourcePackInfo.id(), resourcePackInfo.uri().toString(), resourcePackInfo.hash(), required, prompt);
     }
 
     @Override

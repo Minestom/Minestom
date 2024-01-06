@@ -8,6 +8,9 @@ import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.resource.ResourcePackCallback;
+import net.kyori.adventure.resource.ResourcePackRequest;
+import net.kyori.adventure.resource.ResourcePackStatus;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -57,10 +60,7 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.common.DisconnectPacket;
-import net.minestom.server.network.packet.server.common.KeepAlivePacket;
-import net.minestom.server.network.packet.server.common.PluginMessagePacket;
-import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
+import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
@@ -69,7 +69,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
@@ -233,6 +232,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Adventure
     private Identity identity;
     private final Pointers pointers;
+
+    // Resource packs
+    private final Map<UUID, ResourcePackCallback> resourcePackCallbacks = new HashMap<>();
+    // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
+    private CompletableFuture<Void> resourcePackFuture = null;
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
@@ -1269,13 +1273,56 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return !itemDropEvent.isCancelled();
     }
 
+    @Override
+    public void sendResourcePacks(@NotNull ResourcePackRequest request) {
+        if (request.replace()) clearResourcePacks();
+
+        for (var pack : request.packs()) {
+            sendPacket(new ResourcePackPushPacket(pack, request.required(), request.prompt()));
+            resourcePackCallbacks.put(pack.id(), request.callback());
+            if (resourcePackFuture == null) {
+                resourcePackFuture = new CompletableFuture<>();
+            }
+        }
+    }
+
+    @Override
+    public void removeResourcePacks(@NotNull UUID id, @NotNull UUID @NotNull ... others) {
+        sendPacket(new ResourcePackPopPacket(id));
+        for (var other : others) {
+            sendPacket(new ResourcePackPopPacket(other));
+        }
+    }
+
+    @Override
+    public void clearResourcePacks() {
+        sendPacket(new ResourcePackPopPacket((UUID) null));
+    }
+
     /**
-     * Sets the player resource pack.
-     *
-     * @param resourcePack the resource pack
+     * If there are resource packs in-flight, a future is returned which will be completed when
+     * all resource packs have been responded to by the client. Otherwise null is returned.
      */
-    public void setResourcePack(@NotNull ResourcePack resourcePack) {
-        sendPacket(new ResourcePackPushPacket(resourcePack));
+    @ApiStatus.Internal
+    public @Nullable CompletableFuture<Void> getResourcePackFuture() {
+        return resourcePackFuture;
+    }
+
+    @ApiStatus.Internal
+    public void onResourcePackStatus(@NotNull UUID id, @NotNull ResourcePackStatus status) {
+        var callback = resourcePackCallbacks.get(id);
+        if (callback == null) return;
+
+        callback.packEventReceived(id, status, this);
+        if (!status.intermediate()) {
+            // Remove the callback and finish the future if relevant
+            resourcePackCallbacks.remove(id);
+
+            if (resourcePackCallbacks.isEmpty() && resourcePackFuture != null) {
+                resourcePackFuture.complete(null);
+                resourcePackFuture = null;
+            }
+        }
     }
 
     /**
@@ -2133,7 +2180,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
-        return HoverEvent.showEntity(ShowEntity.of(EntityType.PLAYER, this.uuid, this.displayName));
+        return HoverEvent.showEntity(ShowEntity.showEntity(EntityType.PLAYER, this.uuid, this.displayName));
     }
 
     /**
