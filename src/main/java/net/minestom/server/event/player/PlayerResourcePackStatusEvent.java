@@ -1,8 +1,8 @@
 package net.minestom.server.event.player;
 
+import net.kyori.adventure.resource.ResourcePackStatus;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
-import net.minestom.server.resourcepack.ResourcePackStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
