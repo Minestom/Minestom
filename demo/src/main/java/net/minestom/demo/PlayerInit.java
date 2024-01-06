@@ -1,5 +1,7 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.resource.ResourcePackInfo;
+import net.kyori.adventure.resource.ResourcePackRequest;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -18,7 +20,10 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
-import net.minestom.server.instance.*;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -32,8 +37,11 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
+import java.net.URI;
 import java.time.Duration;
-import java.util.*;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -120,9 +128,9 @@ public class PlayerInit {
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
 
-                if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
+                if ("false" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
                     block = block.withProperty("waterlogged", "true");
-                } else if ("true".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
+                } else if ("true" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
                     block = block.withProperty("waterlogged", "false");
                 } else return;
 

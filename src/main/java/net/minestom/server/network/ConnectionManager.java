@@ -272,6 +272,10 @@ public final class ConnectionManager {
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }
 
+            // Wait for pending resource packs if any
+            var packFuture = player.getResourcePackFuture();
+            if (packFuture != null) packFuture.join();
+
             player.setPendingInstance(spawningInstance);
             player.sendPacket(new FinishConfigurationPacket());
         });
