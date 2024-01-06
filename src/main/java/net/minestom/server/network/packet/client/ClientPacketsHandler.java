@@ -96,7 +96,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientCommandChatPacket::new);
             register(nextId(), ClientChatMessagePacket::new);
             register(nextId(), ClientChatSessionUpdatePacket::new);
-            nextId(); // chunk batch received
+            register(nextId(), ClientChunkBatchReceivedPacket::new);
             register(nextId(), ClientStatusPacket::new);
             register(nextId(), ClientSettingsPacket::new);
             register(nextId(), ClientTabCompletePacket::new);

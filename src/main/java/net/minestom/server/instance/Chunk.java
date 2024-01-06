@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
@@ -15,6 +16,7 @@ import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -131,9 +133,16 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @param player the player
      */
-    public abstract void sendChunk(@NotNull Player player);
+    public void sendChunk(@NotNull Player player) {
+        player.sendChunk(this);
+    }
 
-    public abstract void sendChunk();
+    public void sendChunk() {
+        getViewers().forEach(this::sendChunk);
+    }
+
+    @ApiStatus.Internal
+    public abstract @NotNull SendablePacket getFullDataPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
