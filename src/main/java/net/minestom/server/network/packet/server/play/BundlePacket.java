@@ -7,24 +7,19 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
-import static net.minestom.server.network.NetworkBuffer.*;
-
-public record TickStatePacket(float tickRate, boolean isFrozen) implements ServerPacket {
-
-    public TickStatePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(FLOAT), reader.read(BOOLEAN));
+public record BundlePacket() implements ServerPacket {
+    public BundlePacket(@NotNull NetworkBuffer reader) {
+        this();
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(FLOAT, tickRate);
-        writer.write(BOOLEAN, isFrozen);
     }
 
     @Override
     public int getId(@NotNull ConnectionState state) {
         return switch (state) {
-            case PLAY -> ServerPacketIdentifier.TICK_STATE;
+            case PLAY -> ServerPacketIdentifier.BUNDLE;
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
