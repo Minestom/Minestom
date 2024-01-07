@@ -309,6 +309,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         sendPacket(new SpawnPositionPacket(respawnPoint, 0));
 
+        // Reenable metadata notifications as we leave the configuration state
+        metadata.setNotifyAboutChanges(true);
         sendPacket(getMetadataPacket());
 
         // Add player to list with spawning skin
