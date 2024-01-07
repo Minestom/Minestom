@@ -65,7 +65,6 @@ public final class NotificationCenter {
                 new AdvancementsPacket.CriterionProgress(System.currentTimeMillis()));
 
         final var advancement = new AdvancementsPacket.Advancement(null, displayData,
-                List.of(criteria.criterionIdentifier()),
                 List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))),
                 false);
 
