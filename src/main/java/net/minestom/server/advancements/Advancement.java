@@ -308,7 +308,6 @@ public class Advancement {
         final Advancement parent = getParent();
         final String parentIdentifier = parent != null ? parent.getIdentifier() : null;
         AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement(parentIdentifier, toDisplayData(),
-                List.of(criteria.criterionIdentifier()),
                 List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))),
                 sendTelemetryData);
         return new AdvancementsPacket.AdvancementMapping(getIdentifier(), adv);
