@@ -26,7 +26,7 @@ public enum InventoryType {
     LOOM(4),
     MERCHANT(3),
     SHULKER_BOX(27),
-    SMITHING(3),
+    SMITHING(4),
     SMOKER(3),
     CARTOGRAPHY(3),
     STONE_CUTTER(2);
