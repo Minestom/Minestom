@@ -1759,6 +1759,39 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * Updates the player's inventory state, given a window id to compare against.
+     * Note: This should only be used when receiving a {@link net.minestom.server.network.packet.client.play.ClientCloseWindowPacket}.
+     * Use {@link #closeInventory()} instead for more general use.
+     * @param windowId The window id to compare against.
+     */
+    public void updateCloseInventoryState(byte windowId) {
+        if (windowId == 0) {
+            // Put cursor item back in inventory if possible
+            ItemStack stack = getInventory().getCursorItem();
+            boolean success = getInventory().addItemStack(stack);
+            // Drop if inventory is full
+            if (!success) {
+                dropItem(stack);
+            }
+            getInventory().setCursorItem(ItemStack.AIR);
+        } else {
+            if (getOpenInventory() != null && windowId == getOpenInventory().getWindowId()) {
+                ItemStack stack = getOpenInventory().getCursorItem(this);
+                // Try to put item into our inventory
+                boolean success = getInventory().addItemStack(stack);
+                // Drop if inventory is full
+                if (!success) {
+                    dropItem(stack);
+                }
+                getOpenInventory().setCursorItem(this, ItemStack.AIR);
+            } else {
+                // Something has gone wrong
+                logger.warn("Tried to update inventory state with invalid window id!");
+            }
+        }
+    }
+
+    /**
      * Used internally to prevent an inventory click to be processed
      * when the inventory listeners closed the inventory.
      * <p>
