@@ -30,7 +30,13 @@ public enum InventoryProperty {
     ANVIL_REPAIR_COST((short) 0),
 
     BREWING_STAND_BREW_TIME((short) 0),
-    BREWING_STAND_FUEL_TIME((short) 1);
+    BREWING_STAND_FUEL_TIME((short) 1),
+
+    STONECUTTER_SELECTED_RECIPE((short) 0),
+
+    LOOM_SELECTED_PATTERN((short) 0),
+
+    LECTERN_PAGE_NUMBER((short) 0);
 
 
     private final short property;
