@@ -20,7 +20,7 @@ public class Conditions {
 
     public static boolean consoleOnly(CommandSender sender, String commandString) {
         if (!(sender instanceof ConsoleSender)) {
-            sender.sendMessage(Component.text("The command is only available form the console"));
+            sender.sendMessage(Component.text("The command is only available from the console"));
             return false;
         }
         return true;
