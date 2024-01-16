@@ -208,13 +208,14 @@ public final class ConnectionManager {
     public @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
         this.connectionPlayerMap.put(connection, player);
-        transitionLoginToConfig(player);
+        var future = transitionLoginToConfig(player);
+        if (DebugUtils.INSIDE_TEST) future.join();
         return player;
     }
 
     @ApiStatus.Internal
-    public void transitionLoginToConfig(@NotNull Player player) {
-        CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
+    public @NotNull CompletableFuture<Void> transitionLoginToConfig(@NotNull Player player) {
+        return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
 
             // Compression
@@ -245,7 +246,6 @@ public final class ConnectionManager {
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
         });
-        if (DebugUtils.INSIDE_TEST) configFuture.join();
     }
 
     @ApiStatus.Internal
