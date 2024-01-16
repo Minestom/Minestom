@@ -3,7 +3,7 @@ package net.minestom.server.inventory;
 /**
  * List of inventory property and their ID
  * <p>
- * See https://wiki.vg/Protocol#Window_Property for more information
+ * See https://wiki.vg/Protocol#Set_Container_Property for more information
  */
 public enum InventoryProperty {
 
