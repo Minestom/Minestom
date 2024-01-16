@@ -39,7 +39,7 @@ final class TestConnectionImpl implements TestConnection {
         // Use player provider to disable queued chunk sending
         process.connection().setPlayerProvider(TestPlayerImpl::new);
 
-        playerConnection.setServerState(ConnectionState.LOGIN);
+        playerConnection.setConnectionState(ConnectionState.LOGIN);
         var player = process.connection().createPlayer(playerConnection, UUID.randomUUID(), "RandName");
         player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(instance);
@@ -47,10 +47,8 @@ final class TestConnectionImpl implements TestConnection {
         });
 
         // Force the player through the entirety of the login process manually
-        playerConnection.setServerState(ConnectionState.CONFIGURATION);
         process.connection().doConfiguration(player, true);
         process.connection().transitionConfigToPlay(player);
-        playerConnection.setServerState(ConnectionState.PLAY);
         process.connection().updateWaitingPlayers();
         return CompletableFuture.completedFuture(player);
     }
@@ -72,7 +70,7 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         private ServerPacket extractPacket(final SendablePacket packet) {
-            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getServerState(), packet);
+            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getConnectionState(), packet);
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;

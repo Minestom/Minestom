@@ -1,8 +1,5 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.network.ConnectionState;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
@@ -11,6 +8,8 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -39,7 +38,7 @@ public class PlayerBlockPlacementIntegrationTest {
                 1f, 1f, 1f,
                 false, 0
         );
-        player.addPacketToQueue(ConnectionState.PLAY, packet);
+        player.addPacketToQueue(packet);
         player.interpretPacketQueue();
 
         var placedBlock = instance.getBlock(1, 41, 0);

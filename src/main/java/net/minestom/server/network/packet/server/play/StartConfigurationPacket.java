@@ -22,8 +22,4 @@ public record StartConfigurationPacket() implements ServerPacket {
         };
     }
 
-    @Override
-    public @NotNull ConnectionState nextState() {
-        return ConnectionState.CONFIGURATION;
-    }
 }

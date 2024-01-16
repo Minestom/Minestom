@@ -1,9 +1,6 @@
 package net.minestom.server.inventory.click.integration;
 
 
-import net.minestom.server.network.ConnectionState;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -14,6 +11,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -167,7 +166,7 @@ public class LeftClickIntegrationTest {
                 slot = slot - 9 + offset;
             }
         }
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 0,
+        player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 0,
                 ClientClickWindowPacket.ClickType.PICKUP, List.of(), ItemStack.AIR));
         player.interpretPacketQueue();
     }

@@ -20,15 +20,13 @@ import java.util.List;
  */
 public abstract class PlayerConnection {
     private Player player;
-    private volatile ConnectionState clientState;
-    private volatile ConnectionState serverState;
+    private volatile ConnectionState connectionState;
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
 
     public PlayerConnection() {
         this.online = true;
-        this.clientState = ConnectionState.HANDSHAKE;
-        this.serverState = ConnectionState.HANDSHAKE;
+        this.connectionState = ConnectionState.HANDSHAKE;
     }
 
     /**
@@ -141,14 +139,8 @@ public abstract class PlayerConnection {
         return online;
     }
 
-    @ApiStatus.Internal
-    public void setClientState(@NotNull ConnectionState state) {
-        this.clientState = state;
-    }
-
-    @ApiStatus.Internal
-    public void setServerState(@NotNull ConnectionState state) {
-        this.serverState = state;
+    public void setConnectionState(@NotNull ConnectionState connectionState) {
+        this.connectionState = connectionState;
     }
 
     /**
@@ -156,17 +148,8 @@ public abstract class PlayerConnection {
      *
      * @return the client connection state
      */
-    public @NotNull ConnectionState getClientState() {
-        return clientState;
-    }
-
-    /**
-     * Gets the server connection state.
-     *
-     * @return the server connection state
-     */
-    public @NotNull ConnectionState getServerState() {
-        return serverState;
+    public @NotNull ConnectionState getConnectionState() {
+        return connectionState;
     }
 
     public PlayerPublicKey playerPublicKey() {
@@ -180,8 +163,7 @@ public abstract class PlayerConnection {
     @Override
     public String toString() {
         return "PlayerConnection{" +
-                "clientState=" + clientState +
-                ", serverState=" + serverState +
+                "connectionState=" + connectionState +
                 ", identifier=" + getIdentifier() +
                 '}';
     }

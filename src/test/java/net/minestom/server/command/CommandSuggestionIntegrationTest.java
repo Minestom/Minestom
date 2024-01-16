@@ -1,20 +1,17 @@
 package net.minestom.server.command;
 
-import net.minestom.server.network.ConnectionState;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -41,7 +38,7 @@ public class CommandSuggestionIntegrationTest {
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientTabCompletePacket(3, "test te"));
+        player.addPacketToQueue(new ClientTabCompletePacket(3, "test te"));
         player.interpretPacketQueue();
 
         listener.assertSingle(tabCompletePacket -> {
@@ -69,7 +66,7 @@ public class CommandSuggestionIntegrationTest {
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientTabCompletePacket(1, "foo 1"));
+        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo 1"));
         player.interpretPacketQueue();
 
         listener.assertSingle(tabCompletePacket -> {

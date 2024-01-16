@@ -40,13 +40,9 @@ public final class HandshakeListener {
     public static void listener(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection) {
         String address = packet.serverAddress();
         switch (packet.intent()) {
-            case 1 -> {
-                connection.setClientState(ConnectionState.STATUS);
-                connection.setServerState(ConnectionState.STATUS);
-            }
+            case 1 -> connection.setConnectionState(ConnectionState.STATUS);
             case 2 -> {
-                connection.setClientState(ConnectionState.LOGIN);
-                connection.setServerState(ConnectionState.LOGIN);
+                connection.setConnectionState(ConnectionState.LOGIN);
                 if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
                     // Incorrect client version
                     disconnect(connection, INVALID_VERSION_TEXT);
