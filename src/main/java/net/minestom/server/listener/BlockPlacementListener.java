@@ -107,7 +107,7 @@ public class BlockPlacementListener {
 
             var placementBlock = instance.getBlock(placementPosition);
             var placementRule = BLOCK_MANAGER.getBlockPlacementRule(placementBlock);
-            if (!placementBlock.registry().isReplaceable() && (placementRule == null || !placementRule.isSelfReplaceable(
+            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isSelfReplaceable(
                     new BlockPlacementRule.Replacement(placementBlock, blockFace, cursorPosition, useMaterial)))) {
                 // If the block is still not replaceable, cancel the placement
                 canPlaceBlock = false;

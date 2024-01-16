@@ -158,8 +158,10 @@ public class LightParityIntegrationTest {
             for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
                 for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                     final BlockState blockState = section.get(x, y, z);
-                    final String blockName = blockState.getName();
-                    Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName))
+                    String blockName = blockState.getName();
+                    if (blockName.equals("minecraft:grass"))
+                        blockName = "minecraft:short_grass";
+                    Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName), blockName)
                             .withProperties(blockState.getProperties());
                     palette.set(x, y, z, block.stateId());
                 }
