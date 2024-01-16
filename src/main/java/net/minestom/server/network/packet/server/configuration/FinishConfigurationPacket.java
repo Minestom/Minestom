@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public record FinishConfigurationPacket() implements ServerPacket {
 
@@ -24,10 +23,5 @@ public record FinishConfigurationPacket() implements ServerPacket {
             case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_FINISH_CONFIGURATION;
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION);
         };
-    }
-
-    @Override
-    public @NotNull ConnectionState nextState() {
-        return ConnectionState.PLAY;
     }
 }

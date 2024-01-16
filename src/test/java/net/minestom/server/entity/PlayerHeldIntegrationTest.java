@@ -1,13 +1,12 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.network.ConnectionState;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +24,7 @@ public class PlayerHeldIntegrationTest {
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(0, player.getHeldSlot());
 
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientHeldItemChangePacket((short) 1));
+        player.addPacketToQueue(new ClientHeldItemChangePacket((short) 1));
         player.interpretPacketQueue();
 
         assertEquals(ItemStack.of(Material.STONE), player.getItemInMainHand());
@@ -42,7 +41,7 @@ public class PlayerHeldIntegrationTest {
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(0, player.getHeldSlot());
 
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientHeldItemChangePacket((short) 1));
+        player.addPacketToQueue(new ClientHeldItemChangePacket((short) 1));
         var listener = env.listen(PlayerChangeHeldSlotEvent.class);
         listener.followup(event -> {
             assertEquals(player, event.getPlayer());

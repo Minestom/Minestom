@@ -5,9 +5,6 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.ClientPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,25 +50,16 @@ public class PacketProcessor {
     }
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
-        final ClientPacket packet = create(connection.getClientState(), packetId, body);
-        final ConnectionState state = connection.getClientState();
+        final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
 
-        // If the packet intends to switch state, do it now.
-        // Since packets are processed next tick for players, we have to switch immediately.
-        // TODO HOWEVER THIS WILL NOT ACTUALLY WORK BECAUSE WHEN WE QUEUE THE PACKET IT HAS THE WRONG LISTENER.
-        var nextState = packet.nextState();
-        if (nextState != null && state != nextState) {
-            connection.setClientState(nextState);
-        }
-
-        switch (state) {
+        switch (connection.getConnectionState()) {
             // Process all pre-config packets immediately
-            case HANDSHAKE, STATUS, LOGIN -> packetListenerManager.processClientPacket(state, packet, connection);
+            case HANDSHAKE, STATUS, LOGIN -> packetListenerManager.processClientPacket(packet, connection);
             // Process config and play packets on the next tick
             case CONFIGURATION, PLAY -> {
                 final Player player = connection.getPlayer();
                 assert player != null;
-                player.addPacketToQueue(state, packet);
+                player.addPacketToQueue(packet);
             }
         }
         return packet;

@@ -3,7 +3,6 @@ package net.minestom.server.entity.player;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -16,7 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @EnvTest
@@ -58,7 +58,7 @@ public class PlayerRespawnChunkIntegrationTest {
 
         var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientStatusPacket(ClientStatusPacket.Action.PERFORM_RESPAWN));
+        player.addPacketToQueue(new ClientStatusPacket(ClientStatusPacket.Action.PERFORM_RESPAWN));
         player.interpretPacketQueue();
         List<ChunkDataPacket> dataPacketList = loadChunkTracker.collect();
         Set<ChunkDataPacket> duplicateCheck = new HashSet<>();
