@@ -49,6 +49,11 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     public static final byte ICON_FLAG = 0x04;
 
     /**
+     * A duration constant which sets a Potion duration to infinite.
+     */
+    public static final int INFINITE_DURATION = -1;
+
+    /**
      * Creates a new Potion with no flags.
      *
      * @see #Potion(PotionEffect, byte, int, byte)
