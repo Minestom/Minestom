@@ -40,6 +40,9 @@ public class WorldBorder {
         this.speed = 0;
 
         this.portalTeleportBoundary = Integer.getInteger("minestom.world-border-size", 29999984);
+
+        // Update immediately so the current size is present on init
+        update();
     }
 
     /**

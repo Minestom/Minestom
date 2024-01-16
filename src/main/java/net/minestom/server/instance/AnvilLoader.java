@@ -221,10 +221,13 @@ public class AnvilLoader implements IChunkLoader {
                 Block[] convertedPalette = new Block[blockPalette.getSize()];
                 for (int i = 0; i < convertedPalette.length; i++) {
                     final NBTCompound paletteEntry = blockPalette.get(i);
-                    final String blockName = Objects.requireNonNull(paletteEntry.getString("Name"));
+                    String blockName = Objects.requireNonNull(paletteEntry.getString("Name"));
                     if (blockName.equals("minecraft:air")) {
                         convertedPalette[i] = Block.AIR;
                     } else {
+                        if (blockName.equals("minecraft:grass")) {
+                            blockName = "minecraft:short_grass";
+                        }
                         Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName));
                         // Properties
                         final Map<String, String> properties = new HashMap<>();

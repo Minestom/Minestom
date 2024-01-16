@@ -158,17 +158,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
-            if (chunk == null) return;
-            chunkQueueLock.lock();
-            try {
-                chunkQueue.enqueue(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-            } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            } finally {
-                chunkQueueLock.unlock();
-            }
-        });
+        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
     };
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
