@@ -41,6 +41,9 @@ public class WorldBorder {
         this.speed = 0;
 
         this.portalTeleportBoundary = ServerFlag.WORLD_BORDER_SIZE;
+
+        // Update immediately so the current size is present on init
+        update();
     }
 
     /**
