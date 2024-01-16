@@ -10,6 +10,9 @@ import java.util.concurrent.locks.LockSupport;
 public final class TickSchedulerThread extends MinestomThread {
     private final ServerProcess serverProcess;
 
+    private final long startTickNs = System.nanoTime();
+    private long tick = 1;
+
     public TickSchedulerThread(ServerProcess serverProcess) {
         super(MinecraftServer.THREAD_NAME_TICK_SCHEDULER);
         this.serverProcess = serverProcess;
@@ -28,10 +31,6 @@ public final class TickSchedulerThread extends MinestomThread {
             fixTickRate(tickNs);
         }
     }
-
-
-    private final long startTickNs = System.nanoTime();
-    private long tick = 1;
 
     private void fixTickRate(long tickNs) {
         long nextTickNs = startTickNs + (tickNs * tick);
