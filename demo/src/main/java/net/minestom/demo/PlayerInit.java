@@ -1,7 +1,5 @@
 package net.minestom.demo;
 
-import net.kyori.adventure.resource.ResourcePackInfo;
-import net.kyori.adventure.resource.ResourcePackRequest;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
@@ -40,7 +38,6 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
-import java.net.URI;
 import java.time.Duration;
 import java.util.Random;
 import java.util.Set;
@@ -91,6 +88,12 @@ public class PlayerInit {
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
                 final Player player = event.getPlayer();
+
+                try {
+                    Thread.sleep(60 * 1000);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);

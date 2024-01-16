@@ -457,7 +457,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (this instanceof Player player) {
             PlayerConnection playerConnection = player.playerConnection;
             // connection null during Player initialization (due to #super call)
-            self = playerConnection != null && playerConnection.getServerState() == ConnectionState.PLAY;
+            self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
         }
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket(getEntityId(), List.of(attributeInstance));
         if (self) {

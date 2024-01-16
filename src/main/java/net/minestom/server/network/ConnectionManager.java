@@ -59,6 +59,12 @@ public final class ConnectionManager {
     // Players in play state
     private final Set<Player> playPlayers = new CopyOnWriteArraySet<>();
 
+    // The players who need keep alive ticks. This was added because we may not send a keep alive in
+    // the time after sending finish configuration but before receiving configuration end (to swap to play).
+    // I(mattw) could not come up with a better way to express this besides completely splitting client/server
+    // states. Perhaps there will be an improvement in the future.
+    private final Set<Player> keepAlivePlayers = new CopyOnWriteArraySet<>();
+
     private final Set<Player> unmodifiableConfigurationPlayers = Collections.unmodifiableSet(configurationPlayers);
     private final Set<Player> unmodifiablePlayPlayers = Collections.unmodifiableSet(playPlayers);
 
@@ -238,7 +244,6 @@ public final class ConnectionManager {
             // Send login success packet (and switch to configuration phase)
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
             playerConnection.sendPacket(loginSuccessPacket);
-            configurationPlayers.add(player);
         });
         if (DebugUtils.INSIDE_TEST) configFuture.join();
     }
@@ -251,6 +256,12 @@ public final class ConnectionManager {
 
     @ApiStatus.Internal
     public void doConfiguration(@NotNull Player player, boolean isFirstConfig) {
+        if (isFirstConfig) {
+            configurationPlayers.add(player);
+            keepAlivePlayers.add(player);
+        }
+
+        player.getPlayerConnection().setConnectionState(ConnectionState.CONFIGURATION);
         CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
             player.sendPacket(PluginMessagePacket.getBrandPacket());
 
@@ -276,6 +287,7 @@ public final class ConnectionManager {
             var packFuture = player.getResourcePackFuture();
             if (packFuture != null) packFuture.join();
 
+            keepAlivePlayers.remove(player);
             player.setPendingInstance(spawningInstance);
             player.sendPacket(new FinishConfigurationPacket());
         });
@@ -301,6 +313,7 @@ public final class ConnectionManager {
         if (player == null) return;
         this.configurationPlayers.remove(player);
         this.playPlayers.remove(player);
+        this.keepAlivePlayers.remove(player);
     }
 
     /**
@@ -309,6 +322,7 @@ public final class ConnectionManager {
     public synchronized void shutdown() {
         this.configurationPlayers.clear();
         this.playPlayers.clear();
+        this.keepAlivePlayers.clear();
         this.connectionPlayerMap.clear();
     }
 
@@ -317,8 +331,7 @@ public final class ConnectionManager {
         updateWaitingPlayers();
 
         // Send keep alive packets
-        handleKeepAlive(configurationPlayers, tickStart);
-        handleKeepAlive(playPlayers, tickStart);
+        handleKeepAlive(keepAlivePlayers, tickStart);
 
         // Interpret packets for configuration players
         configurationPlayers.forEach(Player::interpretPacketQueue);
@@ -330,8 +343,9 @@ public final class ConnectionManager {
     @ApiStatus.Internal
     public void updateWaitingPlayers() {
         this.waitingPlayers.drain(player -> {
-            configurationPlayers.remove(player);
+            player.getPlayerConnection().setConnectionState(ConnectionState.PLAY);
             playPlayers.add(player);
+            keepAlivePlayers.add(player);
 
             // Spawn the player at Player#getRespawnPoint
             CompletableFuture<Void> spawnFuture = player.UNSAFE_init();

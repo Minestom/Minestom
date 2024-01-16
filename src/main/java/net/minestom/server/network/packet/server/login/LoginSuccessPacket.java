@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -31,10 +30,5 @@ public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, i
             case LOGIN -> ServerPacketIdentifier.LOGIN_SUCCESS;
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.LOGIN);
         };
-    }
-
-    @Override
-    public @NotNull ConnectionState nextState() {
-        return ConnectionState.CONFIGURATION;
     }
 }

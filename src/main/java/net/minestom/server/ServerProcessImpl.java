@@ -27,6 +27,7 @@ import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -42,7 +43,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
+    private static final Boolean SHUTDOWN_ON_SIGNAL = PropertyUtils.getBoolean("minestom.shutdown-on-signal", true);
 
     private final ExceptionManager exception;
     private final ConnectionManager connection;
@@ -215,7 +217,7 @@ final class ServerProcessImpl implements ServerProcess {
         LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
 
         // Stop the server on SIGINT
-        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
+        if (SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
     @Override

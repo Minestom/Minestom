@@ -169,10 +169,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private record PacketInState(ConnectionState state, ClientPacket packet) {
-    }
-
-    private final MessagePassingQueue<PacketInState> packets = new MpscUnboundedXaddArrayQueue<>(32);
+    private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
@@ -380,7 +377,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>This will result in them being removed from the current instance, player list, etc.</p>
      */
     public void startConfigurationPhase() {
-        Check.stateCondition(playerConnection.getClientState() != ConnectionState.PLAY,
+        Check.stateCondition(playerConnection.getConnectionState() != ConnectionState.PLAY,
                 "Player must be in the play state for reconfiguration.");
 
         // Remove the player, then send them back to configuration
@@ -1626,10 +1623,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param component the reason
      */
     public void kick(@NotNull Component component) {
-        final ConnectionState connectionState = playerConnection.getServerState();
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
-        if (connectionState == ConnectionState.LOGIN) {
+        if (playerConnection.getConnectionState() == ConnectionState.LOGIN) {
             disconnectPacket = new LoginDisconnectPacket(component);
         } else {
             disconnectPacket = new DisconnectPacket(component);
@@ -2037,8 +2033,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param packet the packet to add in the queue
      */
-    public void addPacketToQueue(@NotNull ConnectionState state, @NotNull ClientPacket packet) {
-        this.packets.offer(new PacketInState(state, packet));
+    public void addPacketToQueue(@NotNull ClientPacket packet) {
+        this.packets.offer(packet);
     }
 
     @ApiStatus.Internal
@@ -2050,7 +2046,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet.state, packet.packet, playerConnection), PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), PACKET_PER_TICK);
     }
 
     /**
@@ -2060,7 +2056,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        if (getPlayerConnection().getServerState() == ConnectionState.PLAY) {
+        if (getPlayerConnection().getConnectionState() == ConnectionState.PLAY) {
             PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
         }
     }
@@ -2477,7 +2473,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.allowServerListings = allowServerListings;
 
             // TODO: Use the metadata object here
-            boolean isInPlayState = getPlayerConnection().getServerState() == ConnectionState.PLAY;
+            boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
             if (isInPlayState) metadata.setNotifyAboutChanges(false);
             metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
             metadata.setIndex((byte) 18, Metadata.Byte((byte) (this.mainHand == MainHand.RIGHT ? 1 : 0)));

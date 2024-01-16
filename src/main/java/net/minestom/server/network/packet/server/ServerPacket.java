@@ -22,15 +22,4 @@ public non-sealed interface ServerPacket extends NetworkBuffer.Writer, SendableP
      */
     int getId(@NotNull ConnectionState state);
 
-    /**
-     * If not null, the server will switch state immediately after sending this packet
-     *
-     * <p>WARNING: A cached or framed packet will currently never go through writeServerPacketSync,
-     * so a state change inside one of them will never actually be triggered. Currently, cached
-     * packets are never used for packets that change state, so this is not a problem.</p>
-     */
-    default @Nullable ConnectionState nextState() {
-        return null;
-    }
-
 }

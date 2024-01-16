@@ -13,8 +13,6 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
-import net.minestom.server.extras.optifine.OptifineSupport;
-import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -107,9 +105,7 @@ public class Main {
 
         PlayerInit.init();
 
-        OptifineSupport.enable();
-
-//        VelocityProxy.enable("abc");
+//        VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
         //MojangAuth.init();

@@ -1,21 +1,20 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
-import net.minestom.testing.Collector;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.player.PlayerGameModeChangeEvent;
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
+import net.minestom.testing.Collector;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -85,7 +84,7 @@ public class PlayerIntegrationTest {
         env.tick();
         env.tick();
 
-        player.addPacketToQueue(ConnectionState.PLAY, packet);
+        player.addPacketToQueue(packet);
         var collector = connection.trackIncoming();
         env.tick();
         env.tick();

@@ -112,7 +112,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
                             if (payload.position() != payload.limit()) {
-                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", getClientState(), Integer.toHexString(id), payload, packet);
+                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", getConnectionState(), Integer.toHexString(id), payload, packet);
                             }
                         }
                     });
@@ -290,14 +290,14 @@ public class PlayerSocketConnection extends PlayerConnection {
     /**
      * Adds an entry to the plugin request map.
      * <p>
-     * Only working if {@link #getServerState()} ()} is {@link net.minestom.server.network.ConnectionState#LOGIN}.
+     * Only working if {@link #getConnectionState()} is {@link net.minestom.server.network.ConnectionState#LOGIN}.
      *
      * @param messageId the message id
      * @param channel   the packet channel
      * @throws IllegalStateException if a messageId with the value {@code messageId} already exists for this connection
      */
     public void addPluginRequestEntry(int messageId, @NotNull String channel) {
-        if (getServerState() != ConnectionState.LOGIN) {
+        if (!getConnectionState().equals(ConnectionState.LOGIN)) {
             return;
         }
         Check.stateCondition(pluginRequestMap.containsKey(messageId), "You cannot have two messageId with the same value");
@@ -317,10 +317,10 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void setClientState(@NotNull ConnectionState state) {
-        super.setClientState(state);
+    public void setConnectionState(@NotNull ConnectionState connectionState) {
+        super.setConnectionState(connectionState);
         // Clear the plugin request map (since it is not used anymore)
-        if (state == ConnectionState.PLAY) {
+        if (connectionState.equals(ConnectionState.PLAY)) {
             this.pluginRequestMap.clear();
         }
     }
@@ -338,24 +338,21 @@ public class PlayerSocketConnection extends PlayerConnection {
         final Player player = getPlayer();
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
-            final ServerPacket serverPacket = SendablePacket.extractServerPacket(getServerState(), packet);
+            final ServerPacket serverPacket = SendablePacket.extractServerPacket(getConnectionState(), packet);
             PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
             outgoing.call(event);
             if (event.isCancelled()) return;
         }
         // Write packet
-        // WARNING: A cached or framed packet will currently never go through writeServerPacketSync,
-        // so a state change inside one of them will never actually be triggered. Currently, cached
-        // packets are never used for packets that change state, so this is not a problem.
         if (packet instanceof ServerPacket serverPacket) {
             writeServerPacketSync(serverPacket, compressed);
         } else if (packet instanceof FramedPacket framedPacket) {
             var buffer = framedPacket.body();
             writeBufferSync(buffer, 0, buffer.limit());
         } else if (packet instanceof CachedPacket cachedPacket) {
-            var buffer = cachedPacket.body(getServerState());
+            var buffer = cachedPacket.body(getConnectionState());
             if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
-            else writeServerPacketSync(cachedPacket.packet(getServerState()), compressed);
+            else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
         } else if (packet instanceof LazyPacket lazyPacket) {
             writeServerPacketSync(lazyPacket.packet(), compressed);
         } else {
@@ -372,15 +369,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
         }
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
-            var state = getServerState();
-            var buffer = PacketUtils.createFramedPacket(state, hold.get(), serverPacket, compressed);
+            var buffer = PacketUtils.createFramedPacket(getConnectionState(), hold.get(), serverPacket, compressed);
             writeBufferSync(buffer, 0, buffer.limit());
-
-            // If this packet has a state change, apply it.
-            var nextState = serverPacket.nextState();
-            if (nextState != null && state != nextState) {
-                setServerState(nextState);
-            }
         }
     }
 
