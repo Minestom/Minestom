@@ -516,7 +516,8 @@ public class InstanceContainer extends Instance {
     public synchronized InstanceContainer copy() {
         InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
         copiedInstance.srcInstance = this;
-        copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
+        copiedInstance.tagHandler = this.tagHandler.copy();
+        copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
         for (Chunk chunk : chunks.values()) {
             final int chunkX = chunk.getChunkX();
             final int chunkZ = chunk.getChunkZ();

@@ -29,4 +29,25 @@ public class TagTransientTest {
         assertEquals("abcdef", result);
     }
 
+    @Test
+    public void tagHandlerCopyPreservesTransient() {
+        var tagHandler = TagHandler.newHandler();
+        Tag<String> tag = Tag.Transient("a");
+        tagHandler.setTag(tag, "abcdef");
+
+        var copyHandler = tagHandler.copy();
+        var result = copyHandler.getTag(tag);
+        assertEquals("abcdef", result);
+    }
+
+    @Test
+    public void asCompoundDoesNotPreserveTransient() {
+        var tagHandler = TagHandler.newHandler();
+        Tag<String> tag = Tag.Transient("a");
+        tagHandler.setTag(tag, "abcdef");
+
+        var compound = tagHandler.asCompound();
+        assertNull(compound.get("a"));
+    }
+
 }
