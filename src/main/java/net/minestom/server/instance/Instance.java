@@ -93,7 +93,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     protected UUID uniqueId;
 
     // instance custom data
-    private final TagHandler tagHandler = TagHandler.newHandler();
+    protected TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<InstanceEvent> eventNode;
 
