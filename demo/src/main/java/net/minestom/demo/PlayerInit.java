@@ -14,6 +14,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.Damage;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -34,7 +35,6 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -84,16 +84,14 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
+
+                FakePlayer.initPlayer(UUID.randomUUID(), "fake123", fp -> {
+                    System.out.println("fp = " + fp);
+                });
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
                 final Player player = event.getPlayer();
-
-                try {
-                    Thread.sleep(60 * 1000);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
@@ -175,10 +173,10 @@ public class PlayerInit {
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
         instanceContainer.setChunkSupplier(LightingChunk::new);
 
-        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
-        instanceManager.registerInstance(i2);
-        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
-        i2.setChunkSupplier(LightingChunk::new);
+//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
+//        instanceManager.registerInstance(i2);
+//        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+//        i2.setChunkSupplier(LightingChunk::new);
 
         // System.out.println("start");
         // var chunks = new ArrayList<CompletableFuture<Chunk>>();
