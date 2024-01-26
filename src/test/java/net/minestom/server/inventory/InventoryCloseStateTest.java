@@ -2,7 +2,6 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.testing.Env;
@@ -28,7 +27,7 @@ public class InventoryCloseStateTest {
         player.closeInventory(); // Closes the inventory server-side, should send a CloseWindowPacket
         player.openInventory(inventory);
         // Send the close window packet
-        player.addPacketToQueue(ConnectionState.PLAY, new ClientCloseWindowPacket(inventory.getWindowId()));
+        player.addPacketToQueue(new ClientCloseWindowPacket(inventory.getWindowId()));
         player.interpretPacketQueue();
         packetTracker.assertSingle(closeWindowPacket -> assertEquals(inventory.getWindowId(), closeWindowPacket.windowId()));
         packetTracker.assertCount(1); // Assert we only get 1 close window packet from the closeInventory(); call
