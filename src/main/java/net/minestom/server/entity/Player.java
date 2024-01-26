@@ -203,6 +203,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private int permissionLevel;
 
     private boolean reducedDebugScreenInformation;
+    private boolean hardcore;
 
     // Abilities
     private boolean flying;
@@ -262,10 +263,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @ApiStatus.Internal
-    public void setPendingInstance(@NotNull Instance pendingInstance) {
+    public void setPendingOptions(@NotNull Instance pendingInstance, boolean hardcore) {
         // I(mattw) am not a big fan of this function, but somehow we need to store
         // the instance and i didn't like a record in ConnectionManager either.
         this.pendingInstance = pendingInstance;
+        this.hardcore = hardcore;
     }
 
     /**
@@ -284,7 +286,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionType = spawnInstance.getDimensionType();
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
-                getEntityId(), false, List.of(), 0,
+                getEntityId(), this.hardcore, List.of(), 0,
                 MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
                 false, true, false, dimensionType.toString(), spawnInstance.getDimensionName(),
                 0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
