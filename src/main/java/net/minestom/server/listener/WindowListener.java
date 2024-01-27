@@ -7,9 +7,9 @@ import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.server.common.PingPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 
@@ -88,7 +88,7 @@ public class WindowListener {
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
         EventDispatcher.call(inventoryCloseEvent);
 
-        player.updateCloseInventoryState(packet.windowId());
+        player.closeInventory(true);
 
         Inventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
