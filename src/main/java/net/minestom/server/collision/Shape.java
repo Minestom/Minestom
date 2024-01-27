@@ -10,6 +10,14 @@ public interface Shape {
     boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face);
 
     /**
+     * Returns true if the given block face is completely covered by this shape, false otherwise.
+     * @param face The face to test
+     */
+    default boolean isFaceFull(@NotNull BlockFace face) {
+        return false;
+    }
+
+    /**
      * Checks if two bounding boxes intersect.
      *
      * @param positionRelative Relative position of bounding box to check with

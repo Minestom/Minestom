@@ -151,6 +151,11 @@ public final class ShapeImpl implements Shape {
     }
 
     @Override
+    public boolean isFaceFull(@NotNull BlockFace face) {
+        return (((blockOcclusion >> face.ordinal()) & 1) == 1);
+    }
+
+    @Override
     public boolean intersectBox(@NotNull Point position, @NotNull BoundingBox boundingBox) {
         for (BoundingBox blockSection : collisionBoundingBoxes) {
             if (boundingBox.intersectBox(position, blockSection)) return true;
