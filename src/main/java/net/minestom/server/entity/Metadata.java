@@ -155,6 +155,8 @@ public final class Metadata {
     public static final byte TYPE_VECTOR3 = 26;
     public static final byte TYPE_QUATERNION = 27;
 
+    // Impl Note: Adding an entry here requires that a default value entry is added in MetadataImpl.EMPTY_VALUES
+
     private static final VarHandle NOTIFIED_CHANGES;
 
     static {
