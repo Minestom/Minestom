@@ -123,8 +123,13 @@ public final class LoginListener {
             final HttpClient client = HttpClient.newHttpClient();
             final HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
             client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).whenComplete((response, throwable) -> {
-                if (throwable != null) {
-                    MinecraftServer.getExceptionManager().handleException(throwable);
+                final boolean ok = throwable == null && response.statusCode() == 200 && response.body() != null && !response.body().isEmpty();
+
+                if (!ok) {
+                    if (throwable != null) {
+                        MinecraftServer.getExceptionManager().handleException(throwable);
+                    }
+
                     if (socketConnection.getPlayer() != null) {
                         socketConnection.getPlayer().kick(Component.text("Failed to contact Mojang's Session Servers (Are they down?)"));
                     } else {
@@ -134,15 +139,6 @@ public final class LoginListener {
                 }
                 try {
                     final JsonObject gameProfile = GSON.fromJson(response.body(), JsonObject.class);
-                    if (gameProfile == null) {
-                        // Invalid response
-                        if (socketConnection.getPlayer() != null) {
-                            socketConnection.getPlayer().kick(Component.text("Failed to get data from Mojang's Session Servers (Are they down?)"));
-                        } else {
-                            socketConnection.disconnect();
-                        }
-                        return;
-                    }
                     socketConnection.setEncryptionKey(getSecretKey(packet.sharedSecret()));
                     UUID profileUUID = java.util.UUID.fromString(gameProfile.get("id").getAsString()
                             .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
