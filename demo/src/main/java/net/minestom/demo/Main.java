@@ -62,6 +62,7 @@ public class Main {
         commandManager.register(new TestCommand2());
         commandManager.register(new ConfigCommand());
         commandManager.register(new SidebarCommand());
+        commandManager.register(new SetEntityType());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
