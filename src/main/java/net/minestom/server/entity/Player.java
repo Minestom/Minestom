@@ -819,6 +819,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pose oldPose = getPose();
         Pose newPose;
 
+        // If they are not a player, do nothing
+        if (!getEntityType().equals(EntityType.PLAYER)) return;
+
         // Figure out their expected state
         var meta = Objects.requireNonNull(getLivingEntityMeta());
         if (meta.isFlyingWithElytra()) {
@@ -1014,27 +1017,39 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacket(new UpdateHealthPacket(health, food, foodSaturation));
     }
 
-    @Override
-    public @NotNull PlayerMeta getEntityMeta() {
+    /**
+     * Gets the entity meta for the player.
+     *
+     * <p>Note that this method will throw an exception if the player's entity type has
+     * been changed with {@link #switchEntityType(EntityType)}. It is wise to check
+     * {@link #getEntityType()} first.</p>
+     */
+    public @NotNull PlayerMeta getPlayerMeta() {
         return (PlayerMeta) super.getEntityMeta();
     }
 
     /**
      * Gets the player additional hearts.
      *
+     * <p>Note that this function is uncallable if the player has their entity type switched
+     * with {@link #switchEntityType(EntityType)}.</p>
+     *
      * @return the player additional hearts
      */
     public float getAdditionalHearts() {
-        return getEntityMeta().getAdditionalHearts();
+        return getPlayerMeta().getAdditionalHearts();
     }
 
     /**
      * Changes the amount of additional hearts shown.
      *
+     * <p>Note that this function is uncallable if the player has their entity type switched
+     * with {@link #switchEntityType(EntityType)}.</p>
+     *
      * @param additionalHearts the count of additional hearts
      */
     public void setAdditionalHearts(float additionalHearts) {
-        getEntityMeta().setAdditionalHearts(additionalHearts);
+        getPlayerMeta().setAdditionalHearts(additionalHearts);
     }
 
     /**
