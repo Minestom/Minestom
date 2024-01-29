@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.PlayerMeta;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerCancelDiggingEvent;
@@ -145,8 +145,8 @@ public final class PlayerDiggingListener {
     }
 
     private static void updateItemState(Player player) {
-        PlayerMeta meta = player.getEntityMeta();
-        if (!meta.isHandActive()) return;
+        LivingEntityMeta meta = player.getLivingEntityMeta();
+        if (meta == null || !meta.isHandActive()) return;
         Player.Hand hand = meta.getActiveHand();
 
         player.refreshEating(null);
