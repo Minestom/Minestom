@@ -33,6 +33,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
@@ -820,18 +821,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pose oldPose = getPose();
         Pose newPose;
 
-        // If they are not a player, do nothing
-        if (!getEntityType().equals(EntityType.PLAYER)) return;
-
         // Figure out their expected state
-        var meta = Objects.requireNonNull(getLivingEntityMeta());
+        var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
             newPose = Pose.FALL_FLYING;
         } else if (false) { // When should they be sleeping? We don't have any in-bed state...
             newPose = Pose.SLEEPING;
         } else if (meta.isSwimming()) {
             newPose = Pose.SWIMMING;
-        } else if (meta.isInRiptideSpinAttack()) {
+        } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
             newPose = Pose.SPIN_ATTACK;
         } else if (isSneaking() && !isFlying()) {
             newPose = Pose.SNEAKING;
