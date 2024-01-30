@@ -59,10 +59,10 @@ public class RecipeManager {
                     recipesCache.add(
                             new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
                                     shapedRecipe.getRecipeId(),
-                                    shapedRecipe.getWidth(),
-                                    shapedRecipe.getHeight(),
                                     shapedRecipe.getGroup(),
                                     shapedRecipe.getCategory(),
+                                    shapedRecipe.getWidth(),
+                                    shapedRecipe.getHeight(),
                                     shapedRecipe.getIngredients(),
                                     shapedRecipe.getResult(),
                                     shapedRecipe.getShowNotification()));
