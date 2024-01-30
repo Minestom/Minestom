@@ -14,16 +14,14 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
-import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.PongPacket;
+import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.recipe.RecipeCategory;
-import net.minestom.server.utils.crypto.KeyUtils;
-import org.apache.commons.net.util.Base64;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -92,10 +90,10 @@ public class PacketWriteReadTest {
                         ),
                         new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
                                 "minecraft:torch",
-                                1,
-                                2,
                                 "",
                                 RecipeCategory.Crafting.MISC,
+                                1,
+                                2,
                                 List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
                                         new Ingredient(List.of(ItemStack.of(Material.STICK)))),
                                 ItemStack.of(Material.TORCH),

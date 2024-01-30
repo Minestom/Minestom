@@ -89,16 +89,16 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
     }
 
-    public record DeclaredShapedCraftingRecipe(@NotNull String recipeId, int width, int height,
+    public record DeclaredShapedCraftingRecipe(@NotNull String recipeId,
                                                @NotNull String group, @NotNull RecipeCategory.Crafting category,
-                                               @NotNull List<Ingredient> ingredients,
+                                               int width, int height, @NotNull List<Ingredient> ingredients,
                                                @NotNull ItemStack result, boolean showNotification) implements DeclaredRecipe {
         public DeclaredShapedCraftingRecipe {
             ingredients = List.copyOf(ingredients);
         }
 
         private DeclaredShapedCraftingRecipe(DeclaredShapedCraftingRecipe packet) {
-            this(packet.recipeId, packet.width, packet.height, packet.group, packet.category, packet.ingredients, packet.result, packet.showNotification);
+            this(packet.recipeId, packet.group, packet.category, packet.width, packet.height, packet.ingredients, packet.result, packet.showNotification);
         }
 
         public DeclaredShapedCraftingRecipe(@NotNull NetworkBuffer reader) {
@@ -108,25 +108,25 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         private static DeclaredShapedCraftingRecipe read(@NotNull NetworkBuffer reader) {
 
             String recipeId = reader.read(STRING);
-            int width = reader.read(VAR_INT);
-            int height = reader.read(VAR_INT);
             String group = reader.read(STRING);
             RecipeCategory.Crafting category = reader.readEnum(RecipeCategory.Crafting.class);
+            int width = reader.read(VAR_INT);
+            int height = reader.read(VAR_INT);
             List<Ingredient> ingredients = new ArrayList<>();
             for (int slot = 0; slot < width * height; slot++) {
                 ingredients.add(new Ingredient(reader));
             }
             ItemStack result = reader.read(ITEM);
             boolean showNotification = reader.read(BOOLEAN);
-            return new DeclaredShapedCraftingRecipe(recipeId, width, height, group, category, ingredients, result, showNotification);
+            return new DeclaredShapedCraftingRecipe(recipeId, group, category, width, height, ingredients, result, showNotification);
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, width);
-            writer.write(VAR_INT, height);
             writer.write(STRING, group);
             writer.writeEnum(RecipeCategory.Crafting.class, category);
+            writer.write(VAR_INT, width);
+            writer.write(VAR_INT, height);
             for (Ingredient ingredient : ingredients) {
                 ingredient.write(writer);
             }
