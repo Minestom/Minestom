@@ -10,6 +10,7 @@ import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -260,6 +261,10 @@ public final class MinecraftServer {
 
     public static TagManager getTagManager() {
         return serverProcess.tag();
+    }
+
+    public static TrimManager getTrimManager() {
+        return serverProcess.trim();
     }
 
     public static Server getServer() {
