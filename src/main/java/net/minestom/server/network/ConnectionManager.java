@@ -278,6 +278,8 @@ public final class ConnectionManager {
                 registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
                 registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
                 registry.put("minecraft:damage_type", DamageType.getNBT());
+                registry.put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT());
+                registry.put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT());
                 player.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);

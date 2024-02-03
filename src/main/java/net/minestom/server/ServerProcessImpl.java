@@ -14,6 +14,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
@@ -63,6 +64,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
     private final TagManager tag;
+    private final TrimManager trim;
     private final Server server;
 
     private final ThreadDispatcher<Chunk> dispatcher;
@@ -89,6 +91,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
+        this.trim = new TrimManager();
         this.server = new Server(packetProcessor);
 
         this.dispatcher = ThreadDispatcher.singleThread();
@@ -163,6 +166,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull TagManager tag() {
         return tag;
+    }
+
+    @Override
+    public @NotNull TrimManager trim() {
+        return trim;
     }
 
     @Override

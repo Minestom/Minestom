@@ -2,6 +2,8 @@ package net.minestom.server.registry;
 
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
@@ -21,7 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Handles registry data, used by {@link ProtocolObject} implementations and is strictly internal.
@@ -56,6 +60,16 @@ public final class Registry {
     @ApiStatus.Internal
     public static DamageTypeEntry damageType(String namespace, @NotNull Properties main) {
         return new DamageTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static TrimMaterialEntry trimMaterial(String namespace, @NotNull Properties main) {
+        return new TrimMaterialEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static TrimPatternEntry trimPattern(String namespace, @NotNull Properties main) {
+        return new TrimPatternEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -148,7 +162,8 @@ public final class Registry {
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
         DAMAGE_TYPES("damage_types.json"),
-
+        TRIM_MATERIALS("trim_materials.json"),
+        TRIM_PATTERNS("trim_patterns.json"),
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
         FLUID_TAGS("tags/fluid_tags.json"),
@@ -430,6 +445,44 @@ public final class Registry {
                     custom);
         }
     }
+    public record TrimMaterialEntry(@NotNull NamespaceID namespace,
+                                    @NotNull String assetName,
+                                    @NotNull Material ingredient,
+                                    float itemModelIndex,
+                                    @NotNull Map<String,String> overrideArmorMaterials,
+                                    @NotNull Component description,
+                                    Properties custom) implements Entry {
+        public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
+            this(
+                    NamespaceID.from(namespace),
+                    main.getString("asset_name"),
+                    Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
+                    (float) main.getDouble("item_model_index"),
+                    Objects.requireNonNullElse(main.section("override_armor_materials"),new PropertiesMap(Map.of()))
+                            .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
+                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
+                    custom
+            );
+        }
+    }
+
+    public record TrimPatternEntry(@NotNull NamespaceID namespace,
+                                   @NotNull NamespaceID assetID,
+                                   @NotNull Material template,
+                                   @NotNull Component description,
+                                   boolean decal,
+                                   Properties custom) implements Entry {
+        public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
+            this(
+                    NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    Objects.requireNonNull(Material.fromNamespaceId(main.getString("template_item"))),
+                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
+                    main.getBoolean("decal"),
+                    custom
+            );
+        }
+    }
 
     public record EnchantmentEntry(NamespaceID namespace, int id,
                                    String translationKey,
@@ -556,6 +609,14 @@ public final class Registry {
             //noinspection unchecked
             return (T) map.get(name);
         }
+
+        @Override
+        public String toString() {
+            AtomicReference<String> string = new AtomicReference<>("{ ");
+            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
+            return string.updateAndGet(s -> s.replaceFirst(" , ","") + "}");
+        }
+
     }
 
     public interface Properties extends Iterable<Map.Entry<String, Object>> {

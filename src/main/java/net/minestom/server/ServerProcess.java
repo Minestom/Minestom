@@ -10,6 +10,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -99,6 +100,8 @@ public interface ServerProcess extends Snapshotable {
      * Handles registry tags.
      */
     @NotNull TagManager tag();
+
+    @NotNull TrimManager trim();
 
     /**
      * Handles all thrown exceptions from the server.
