@@ -143,7 +143,11 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
 
         setCursorItem(player, ItemStack.AIR);
         getClickPreprocessor().clearCache(player);
-        player.sendPacket(new CloseWindowPacket(getWindowId()));
+        if (player.didCloseInventory()) {
+            player.UNSAFE_changeDidCloseInventory(false);
+        } else {
+            player.sendPacket(new CloseWindowPacket(getWindowId()));
+        }
     }
 
     @Override

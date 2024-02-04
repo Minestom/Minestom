@@ -47,7 +47,6 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -1712,22 +1711,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return openInventory;
     }
 
-    private boolean tryCloseInventory() {
+    private void tryCloseInventory(boolean fromClient) {
         var closedInventory = getOpenInventory();
-        if (closedInventory != null) {
-            if (closedInventory.removeViewer(this)) {
-                if (closedInventory == getOpenInventory()) {
-                    this.openInventory = null;
-                }
-                return true;
-            }
-        } else {
-            // Don't remove it as a viewer, but pretend that it was
-            inventory.handleClose(this);
-            return true;
-        }
+        if (closedInventory == null) return;
 
-        return false;
+        didCloseInventory = fromClient;
+
+        if (closedInventory.removeViewer(this)) {
+            if (closedInventory == getOpenInventory()) {
+                this.openInventory = null;
+            }
+        }
     }
 
     /**
@@ -1740,7 +1734,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            tryCloseInventory();
+            tryCloseInventory(false);
 
             Inventory newInventory = inventoryOpenEvent.getEventInventory();
             if (newInventory.addViewer(this)) {
@@ -1760,9 +1754,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
-        boolean result = tryCloseInventory();
+        tryCloseInventory(fromClient);
         inventory.update();
-        this.didCloseInventory = result;
     }
 
     /**
