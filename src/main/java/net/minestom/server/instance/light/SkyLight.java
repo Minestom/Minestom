@@ -14,9 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.instance.light.LightCompute.*;
 
@@ -27,7 +25,7 @@ final class SkyLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private boolean isValidBorders = true;
+    private boolean isValidBorders = false;
     private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
@@ -59,7 +57,7 @@ final class SkyLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         if (c instanceof LightingChunk lc) {
-            int[] heightmap = lc.calculateHeightMap();
+            int[] heightmap = lc.getHeightmap();
             int maxY = c.getInstance().getDimensionType().getMinY() + c.getInstance().getDimensionType().getHeight();
             int sectionMaxY = (sectionY + 1) * 16 - 1;
             int sectionMinY = sectionY * 16;
@@ -238,6 +236,11 @@ final class SkyLight implements Light {
         boolean res = needsSend;
         needsSend = false;
         return res;
+    }
+
+    @Override
+    public void setRequiresSend(boolean b) {
+        this.needsSend = b;
     }
 
     private void clearCache() {

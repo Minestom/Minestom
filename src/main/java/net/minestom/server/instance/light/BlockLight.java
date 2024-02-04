@@ -26,7 +26,7 @@ final class BlockLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private boolean isValidBorders = true;
+    private boolean isValidBorders = false;
     private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
@@ -212,6 +212,11 @@ final class BlockLight implements Light {
         boolean res = needsSend;
         needsSend = false;
         return res;
+    }
+
+    @Override
+    public void setRequiresSend(boolean b) {
+        this.needsSend = b;
     }
 
     private void clearCache() {
