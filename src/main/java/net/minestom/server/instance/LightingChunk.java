@@ -140,7 +140,6 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     protected NBTCompound computeHeightmap() {
-        // TODO: don't hardcode heightmaps
         // Heightmap
         int[] heightmap = getHeightmap();
         int dimensionHeight = getInstance().getDimensionType().getHeight();
@@ -315,10 +314,12 @@ public class LightingChunk extends DynamicChunk {
         for (Chunk chunk : chunks) {
             if (chunk == null) continue;
             for (int section = chunk.minSection; section < chunk.maxSection; section++) {
-                chunk.getSection(section).blockLight().invalidate();
-                chunk.getSection(section).skyLight().invalidate();
+                if (chunk instanceof LightingChunk) {
+                    chunk.getSection(section).blockLight().invalidate();
+                    chunk.getSection(section).skyLight().invalidate();
 
-                sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
+                    sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
+                }
             }
         }
 
