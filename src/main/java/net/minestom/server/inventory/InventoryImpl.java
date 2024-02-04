@@ -125,13 +125,21 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
         return true;
     }
 
-    @Override
-    public void handleOpen(@NotNull Player player) {
+    /**
+     * Handles when a player opens this inventory, without actually updating viewers.
+     *
+     * @param player the player opening this inventory
+     */
+    protected void handleOpen(@NotNull Player player) {
         update(player);
     }
 
-    @Override
-    public void handleClose(@NotNull Player player) {
+    /**
+     * Handles when a player closes this inventory, without actually updating viewers.
+     *
+     * @param player the player closing this inventory
+     */
+    protected void handleClose(@NotNull Player player) {
         ItemStack cursorItem = getCursorItem(player);
 
         if (!cursorItem.isAir()) {
@@ -150,13 +158,23 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
         }
     }
 
-    @Override
-    public void updateSlot(int slot, @NotNull ItemStack itemStack) {
+    /**
+     * Updates the provided slot for this inventory's viewers.
+     *
+     * @param slot the slot to update
+     * @param itemStack the item treated as in the slot
+     */
+    protected void updateSlot(int slot, @NotNull ItemStack itemStack) {
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
-    @Override
-    public void updateCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
+    /**
+     * Updates the cursor item for the provided player.
+     *
+     * @param player the player to update
+     * @param cursorItem the cursor item to send to the player
+     */
+    protected void updateCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
         if (!currentCursorItem.equals(cursorItem)) {
             player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
