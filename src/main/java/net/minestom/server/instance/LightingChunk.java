@@ -13,10 +13,13 @@ import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -136,6 +139,18 @@ public class LightingChunk extends DynamicChunk {
         return initialLightingSent;
     }
 
+    @Override
+    protected NBTCompound computeHeightmap() {
+        // TODO: don't hardcode heightmaps
+        // Heightmap
+        int[] heightmap = calculateHeightMap();
+        int dimensionHeight = getInstance().getDimensionType().getHeight();
+        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
+        return NBT.Compound(Map.of(
+                "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight)),
+                "WORLD_SURFACE", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight))));
+    }
+
     public int[] calculateHeightMap() {
         if (this.heightmap != null) return this.heightmap;
         var heightmap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
@@ -233,6 +248,9 @@ public class LightingChunk extends DynamicChunk {
                         if (light.initialLightingSent) {
                             light.lightCache.invalidate();
                             light.chunkCache.invalidate();
+
+                            // Compute Lighting. This will ensure lighting is computed even with no players
+                            lightCache.body(ConnectionState.PLAY);
                             light.sendLighting();
 
                             light.sections.forEach(s -> {
