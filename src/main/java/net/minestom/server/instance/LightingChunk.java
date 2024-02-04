@@ -19,10 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
@@ -130,6 +130,10 @@ public class LightingChunk extends DynamicChunk {
     protected void onLoad() {
         // Prefetch the chunk packet so that lazy lighting is computed
         chunkLoaded = true;
+    }
+
+    public boolean isLightingCalculated() {
+        return initialLightingSent;
     }
 
     public int[] calculateHeightMap() {
@@ -250,26 +254,22 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Chunk> flushQueue(Instance instance, Set<Point> queue, LightType type, QueueType queueType) {
-        AtomicInteger count = new AtomicInteger(0);
         Set<Light> sections = ConcurrentHashMap.newKeySet();
         Set<Point> newQueue = ConcurrentHashMap.newKeySet();
 
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
+        List<CompletableFuture<Void>> tasks = new ArrayList<>();
 
         for (Point point : queue) {
             Chunk chunk = instance.getChunk(point.blockX(), point.blockZ());
-            if (chunk == null) {
-                count.getAndIncrement();
-                continue;
-            }
+            if (chunk == null) continue;
 
             var section = chunk.getSection(point.blockY());
-
             responseChunks.add(chunk);
 
             var light = type == LightType.BLOCK ? section.blockLight() : section.skyLight();
 
-            pool.submit(() -> {
+            CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
                 if (queueType == QueueType.INTERNAL) light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ());
                 else light.calculateExternal(instance, chunk, point.blockY());
 
@@ -277,14 +277,14 @@ public class LightingChunk extends DynamicChunk {
 
                 var toAdd = light.flip();
                 if (toAdd != null) newQueue.addAll(toAdd);
+            }, pool);
 
-                count.incrementAndGet();
-            });
+            tasks.add(task);
         }
 
-        while (count.get() < queue.size()) { }
+        tasks.forEach(CompletableFuture::join);
 
-        if (newQueue.size() > 0) {
+        if (!newQueue.isEmpty()) {
             var newResponse = flushQueue(instance, newQueue, type, QueueType.EXTERNAL);
             responseChunks.addAll(newResponse);
         }
