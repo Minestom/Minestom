@@ -34,10 +34,7 @@ public interface ClickHandler {
 
         // Apply the click handler if the click will still occur
         if (!preClickEvent.isCancelled()) {
-            var builder = tryHandle(clickInfo, ClickResult.builder(player, inventory));
-            if (builder != null) {
-                changes = builder.build();
-            }
+            changes = handle(clickInfo, ClickResult.builder(player, inventory)).build();
         }
 
         // Apply each of the conditions to the changes, updating it as we go along
@@ -63,13 +60,12 @@ public interface ClickHandler {
     }
 
     /**
-     * Handles the provided click info without knowing its type, returning null changes if the type could not be
-     * handled.
+     * Handles the provided click info that is of any type.
      * @param info the info, of unknown type
      * @param builder the click result builder for this click
-     * @return the changes, or null if the click info has an unknown type
+     * @return the changes that were calculated
      */
-    default @Nullable ClickResult.Builder tryHandle(@NotNull ClickInfo info, @NotNull ClickResult.Builder builder) {
+    default @NotNull ClickResult.Builder handle(@NotNull ClickInfo info, @NotNull ClickResult.Builder builder) {
         if (info instanceof ClickInfo.LeftClick left) {
             leftClick(left, builder);
         } else if (info instanceof ClickInfo.RightClick right) {
@@ -92,8 +88,6 @@ public interface ClickHandler {
             shiftClick(shift, builder);
         } else if (info instanceof ClickInfo.DoubleClick doubleClick) {
             doubleClick(doubleClick, builder);
-        } else {
-            return null;
         }
 
         return builder;
