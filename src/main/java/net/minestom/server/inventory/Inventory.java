@@ -161,28 +161,28 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
     void handleClose(@NotNull Player player);
 
     /**
-     * Refreshes the provided slot for this inventory's viewers.
+     * Updates the provided slot for this inventory's viewers.
      *
-     * @param slot the slot to refresh
+     * @param slot the slot to update
      * @param itemStack the item treated as in the slot
      */
-    void refreshSlot(int slot, @NotNull ItemStack itemStack);
+    void updateSlot(int slot, @NotNull ItemStack itemStack);
 
     /**
-     * Refreshes the cursor item for the provided player.
+     * Updates the cursor item for the provided player.
      *
-     * @param player the player to refresh
+     * @param player the player to update
      * @param cursorItem the cursor item to send to the player
      */
-    void refreshCursor(@NotNull Player player, @NotNull ItemStack cursorItem);
+    void updateCursor(@NotNull Player player, @NotNull ItemStack cursorItem);
 
     /**
-     * Refreshes the inventory for all viewers.
+     * Updates the inventory for all viewers.
      */
     void update();
 
     /**
-     * Refreshes the inventory for a specific viewer.
+     * Updates the inventory for a specific viewer.
      *
      * @param player the player to update the inventory for
      */

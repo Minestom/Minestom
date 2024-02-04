@@ -96,7 +96,7 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
 
     @Override
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        refreshCursor(player, cursorItem);
+        updateCursor(player, cursorItem);
         if (!cursorItem.isAir()) {
             this.cursorPlayersItem.put(player, cursorItem);
         } else {
@@ -151,12 +151,12 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
     }
 
     @Override
-    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
+    public void updateSlot(int slot, @NotNull ItemStack itemStack) {
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     @Override
-    public void refreshCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
+    public void updateCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
         if (!currentCursorItem.equals(cursorItem)) {
             player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
@@ -228,7 +228,7 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
 
             UNSAFE_itemInsert(slot, itemStack);
-            if (sendPacket) refreshSlot(slot, itemStack);
+            if (sendPacket) updateSlot(slot, itemStack);
         }
 
         EventDispatcher.call(new InventoryItemChangeEvent(this, slot, previous, itemStack));

@@ -122,8 +122,8 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     }
 
     @Override
-    public void refreshSlot(int slot, @NotNull ItemStack itemStack) {
-        super.refreshSlot(slot, itemStack);
+    public void updateSlot(int slot, @NotNull ItemStack itemStack) {
+        super.updateSlot(slot, itemStack);
 
         for (var player : getViewers()) {
             var equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
