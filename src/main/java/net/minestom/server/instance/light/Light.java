@@ -27,6 +27,7 @@ public interface Light {
     }
 
     boolean requiresSend();
+    void setRequiresSend(boolean b);
 
     @ApiStatus.Internal
     byte[] array();

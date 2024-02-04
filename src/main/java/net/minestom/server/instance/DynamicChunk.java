@@ -210,24 +210,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT;
-        // TODO: don't hardcode heightmaps
-        // Heightmap
-        {
-            int dimensionHeight = getInstance().getDimensionType().getHeight();
-            int[] motionBlocking = new int[16 * 16];
-            int[] worldSurface = new int[16 * 16];
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    motionBlocking[x + z * 16] = 0;
-                    worldSurface[x + z * 16] = dimensionHeight - 1;
-                }
-            }
-            final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-            heightmapsNBT = NBT.Compound(Map.of(
-                    "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(motionBlocking, bitsForHeight)),
-                    "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurface, bitsForHeight))));
-        }
+        final NBTCompound heightmapsNBT = computeHeightmap();
         // Data
 
         final byte[] data;
@@ -238,44 +221,35 @@ public class DynamicChunk extends Chunk {
                     }));
         }
 
-        if (this instanceof LightingChunk light) {
-            if (light.lightCache.isValid()) {
-                return new ChunkDataPacket(chunkX, chunkZ,
-                        new ChunkData(heightmapsNBT, data, entries),
-                        createLightData(true));
-            } else {
-                // System.out.println("Regenerating light for chunk " + chunkX + " " + chunkZ);
-                LightingChunk.updateAfterGeneration(light);
-                return new ChunkDataPacket(chunkX, chunkZ,
-                        new ChunkData(heightmapsNBT, data, entries),
-                        createEmptyLight());
-            }
-        }
-
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, data, entries),
-                createLightData(true)
+                createLightData()
         );
     }
 
+    protected NBTCompound computeHeightmap() {
+        // TODO: don't hardcode heightmaps
+        // Heightmap
+        int dimensionHeight = getInstance().getDimensionType().getHeight();
+        int[] motionBlocking = new int[16 * 16];
+        int[] worldSurface = new int[16 * 16];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                motionBlocking[x + z * 16] = 0;
+                worldSurface[x + z * 16] = dimensionHeight - 1;
+            }
+        }
+        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
+        return NBT.Compound(Map.of(
+                "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(motionBlocking, bitsForHeight)),
+                "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurface, bitsForHeight))));
+    }
+
     @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
     }
 
-    private LightData createEmptyLight() {
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
-
-        return new LightData(skyMask, blockMask,
-                emptySkyMask, emptyBlockMask,
-                skyLights, blockLights);
-    }
-
-    protected LightData createLightData(boolean sendLater) {
+    protected LightData createLightData() {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();
@@ -346,7 +320,7 @@ public class DynamicChunk extends Chunk {
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
 
-    private static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
+    static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
         final long maxEntryValue = (1L << bitsPerEntry) - 1;
         final char valuesPerLong = (char) (64 / bitsPerEntry);
         final int magicIndex = 3 * (valuesPerLong - 1);
