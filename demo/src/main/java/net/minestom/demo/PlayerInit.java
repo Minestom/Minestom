@@ -193,6 +193,8 @@ public class PlayerInit {
         // CompletableFuture.runAsync(() -> {
         //     CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         //     System.out.println("load end");
+        //     LightingChunk.relight(instanceContainer, instanceContainer.getChunks());
+        //     System.out.println("light end");
         // });
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
