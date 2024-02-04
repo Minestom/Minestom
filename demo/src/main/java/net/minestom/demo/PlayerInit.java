@@ -170,8 +170,16 @@ public class PlayerInit {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        instanceContainer.setGenerator(unit -> {
+            unit.modifier().fillHeight(0, 40, Block.STONE);
+
+            if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
+                unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
+            }
+        });
         instanceContainer.setChunkSupplier(LightingChunk::new);
+        instanceContainer.setTimeRate(0);
+        instanceContainer.setTime(18000);
 
 //        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
 //        instanceManager.registerInstance(i2);
