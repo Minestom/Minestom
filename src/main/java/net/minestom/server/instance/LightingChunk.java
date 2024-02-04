@@ -227,9 +227,8 @@ public class LightingChunk extends DynamicChunk {
                 }
             }
 
-            Set<Chunk> finalCombined = combined;
             MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-                for (Chunk chunk : finalCombined) {
+                for (Chunk chunk : combined) {
                     if (chunk instanceof LightingChunk light) {
                         if (light.initialLightingSent) {
                             light.lightCache.invalidate();
@@ -323,12 +322,10 @@ public class LightingChunk extends DynamicChunk {
                 if (chunkCheck == null) continue;
 
                 if (chunkCheck instanceof LightingChunk lighting) {
-                    if (x == 0 && z == 0) continue;
                     if (lighting.highestBlock > highestRegionPoint) highestRegionPoint = lighting.highestBlock;
                 }
             }
         }
-
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
