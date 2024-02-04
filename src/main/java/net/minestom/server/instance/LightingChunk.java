@@ -131,7 +131,6 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     protected void onLoad() {
-        // Prefetch the chunk packet so that lazy lighting is computed
         chunkLoaded = true;
     }
 
@@ -143,7 +142,7 @@ public class LightingChunk extends DynamicChunk {
     protected NBTCompound computeHeightmap() {
         // TODO: don't hardcode heightmaps
         // Heightmap
-        int[] heightmap = calculateHeightMap();
+        int[] heightmap = getHeightmap();
         int dimensionHeight = getInstance().getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
         return NBT.Compound(Map.of(
@@ -151,7 +150,8 @@ public class LightingChunk extends DynamicChunk {
                 "WORLD_SURFACE", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight))));
     }
 
-    public int[] calculateHeightMap() {
+    // Lazy compute heightmap
+    public int[] getHeightmap() {
         if (this.heightmap != null) return this.heightmap;
         var heightmap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
