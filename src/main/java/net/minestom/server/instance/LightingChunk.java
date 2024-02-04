@@ -25,9 +25,6 @@ import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
 public class LightingChunk extends DynamicChunk {
 
-    // private static final int LIGHTING_CHUNKS_PER_SEND = Integer.getInteger("minestom.lighting.chunks-per-send", 10);
-    // private static final int LIGHTING_CHUNKS_SEND_DELAY = Integer.getInteger("minestom.lighting.chunks-send-delay", 100);
-
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
     private int[] heightmap;
