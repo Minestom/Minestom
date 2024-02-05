@@ -3,6 +3,7 @@ package net.minestom.server.inventory.click;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
+import net.minestom.server.event.inventory.InventoryPostClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -25,38 +26,36 @@ public interface ClickHandler {
      * @return the results of the click, or null if the click was cancelled or otherwise was not handled
      */
     default @Nullable ClickResult handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull ClickInfo clickInfo) {
-        // Call a pre-click event with the base click info
-        var preClickEvent = new InventoryPreClickEvent(player.getInventory(), inventory, player, clickInfo);
+        InventoryPreClickEvent preClickEvent = new InventoryPreClickEvent(player.getInventory(), inventory, player, clickInfo);
         EventDispatcher.call(preClickEvent);
-        clickInfo = preClickEvent.getClickInfo();
 
-        ClickResult changes = null;
+        ClickInfo newInfo = preClickEvent.getClickInfo();
 
-        // Apply the click handler if the click will still occur
         if (!preClickEvent.isCancelled()) {
-            changes = handle(clickInfo, ClickResult.builder(player, inventory)).build();
-        }
+            ClickResult changes = handle(newInfo, ClickResult.builder(player, inventory)).build();
 
-        // Apply each of the conditions to the changes, updating it as we go along
-        for (var condition : inventory.getInventoryConditions()) {
-            changes = condition.accept(player, clickInfo, changes);
-        }
-
-        // Apply the changes and send out an event if there are actually any changes
-        if (changes != null) {
-            changes.applyChanges(player, inventory);
-
-            var clickEvent = new InventoryClickEvent(player, inventory, clickInfo, changes);
+            InventoryClickEvent clickEvent = new InventoryClickEvent(player.getInventory(), inventory, player, newInfo, changes);
             EventDispatcher.call(clickEvent);
+
+            if (!clickEvent.isCancelled()) {
+                ClickResult newChanges = clickEvent.getChanges();
+                newChanges.applyChanges(player, inventory);
+
+                var postClickEvent = new InventoryPostClickEvent(player, inventory, newInfo, newChanges);
+                EventDispatcher.call(postClickEvent);
+
+                if (!clickInfo.equals(newInfo) || !changes.equals(newChanges)) {
+                    preClickEvent.getPlayerInventory().update(player);
+                    preClickEvent.getEventInventory().update(player);
+                }
+
+                return newChanges;
+            }
         }
 
-        // Make sure to update the inventory if indicated
-        if (preClickEvent.shouldUpdate() || changes == null) {
-            preClickEvent.getPlayerInventory().update(player);
-            preClickEvent.getEventInventory().update(player);
-        }
-
-        return changes;
+        preClickEvent.getPlayerInventory().update(player);
+        preClickEvent.getEventInventory().update(player);
+        return null;
     }
 
     /**

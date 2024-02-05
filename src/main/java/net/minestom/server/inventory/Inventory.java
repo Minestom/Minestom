@@ -6,7 +6,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickInfo;
 import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.inventory.click.ClickResult;
-import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Taggable;
 import org.jetbrains.annotations.NotNull;
@@ -107,20 +106,6 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
      * @return the click preprocessor
      */
     @NotNull ClickPreprocessor getClickPreprocessor();
-
-    /**
-     * Gets all the {@link InventoryCondition} of this inventory.
-     *
-     * @return a modifiable {@link List} containing all the inventory conditions
-     */
-    @NotNull List<@NotNull InventoryCondition> getInventoryConditions();
-
-    /**
-     * Adds a new {@link InventoryCondition} to this inventory.
-     *
-     * @param inventoryCondition the inventory condition to add
-     */
-    void addInventoryCondition(@NotNull InventoryCondition inventoryCondition);
 
     /**
      * Gets all the {@link ItemStack} in the inventory.

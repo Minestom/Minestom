@@ -5,7 +5,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.inventory.click.*;
-import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
@@ -20,7 +19,6 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
 
@@ -30,9 +28,6 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
 
     private final int size;
     protected final ItemStack[] itemStacks;
-
-    // list of conditions/callbacks assigned to this inventory
-    protected final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
 
     protected final ClickPreprocessor clickPreprocessor = new ClickPreprocessor(this);
 
@@ -67,16 +62,6 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
     @Override
     public byte getWindowId() {
         return 1;
-    }
-
-    @Override
-    public @NotNull List<@NotNull InventoryCondition> getInventoryConditions() {
-        return inventoryConditions;
-    }
-
-    @Override
-    public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
-        this.inventoryConditions.add(inventoryCondition);
     }
 
     @Override

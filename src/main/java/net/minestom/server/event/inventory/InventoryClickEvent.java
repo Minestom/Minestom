@@ -1,52 +1,57 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.ClickInfo;
 import net.minestom.server.inventory.click.ClickResult;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
- * are already moved.
+ * Called after {@link InventoryPreClickEvent} and before {@link InventoryPostClickEvent}.
  */
-public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent {
+public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
-    private final Player player;
+    private final PlayerInventory playerInventory;
     private final Inventory inventory;
-    private final ClickInfo info;
-    private final ClickResult changes;
+    private final Player player;
+    private final ClickInfo clickInfo;
+    private ClickResult changes;
 
-    public InventoryClickEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull ClickInfo info, @NotNull ClickResult changes) {
-        this.player = player;
+    private boolean cancelled;
+
+    public InventoryClickEvent(@NotNull PlayerInventory playerInventory, @NotNull Inventory inventory,
+                               @NotNull Player player, @NotNull ClickInfo clickInfo, @NotNull ClickResult changes) {
+        this.playerInventory = playerInventory;
         this.inventory = inventory;
-        this.info = info;
+        this.player = player;
+        this.clickInfo = clickInfo;
         this.changes = changes;
     }
 
     /**
-     * Gets the player who clicked in the inventory.
+     * Gets the player who is trying to click on the inventory.
      *
-     * @return the player who clicked in the inventory
+     * @return the player who clicked
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return player;
     }
 
     /**
-     * Gets the info about the click that was already processed.
+     * Gets the info about the click that occurred. This is enough to fully describe the click.
      *
      * @return the click info
      */
     public @NotNull ClickInfo getClickInfo() {
-        return info;
+        return clickInfo;
     }
 
     /**
-     * Gets the changes that occurred as a result of this click.
+     * Gets the changes that will occur as a result of this click.
      *
      * @return the changes
      */
@@ -54,8 +59,36 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
         return changes;
     }
 
+    /**
+     * Updates the changes that will occur as a result of this click.
+     *
+     * @param changes the new results
+     */
+    public void setChanges(@NotNull ClickResult changes) {
+        this.changes = changes;
+    }
+
+    /**
+     * Gets the player inventory that was involved with the click.
+     *
+     * @return the player inventory
+     */
+    public @NotNull PlayerInventory getPlayerInventory() {
+        return playerInventory;
+    }
+
     @Override
     public @NotNull Inventory getEventInventory() {
         return inventory;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

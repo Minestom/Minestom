@@ -18,7 +18,6 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     private final Inventory inventory;
     private final Player player;
     private ClickInfo clickInfo;
-    private boolean shouldUpdate;
 
     private boolean cancelled;
 
@@ -56,25 +55,6 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
      */
     public void setClickInfo(@NotNull ClickInfo info) {
         this.clickInfo = info;
-    }
-
-    /**
-     * Gets whether or not the inventory should be forced to update after this click.
-     *
-     * @return whether or not the inventory should update
-     */
-    public boolean shouldUpdate() {
-        return shouldUpdate;
-    }
-
-    /**
-     * Sets whether or not the inventory should be forced to update after this click. This should be used when changing
-     * the click info of this event, as the client doesn't know that it has been changed.
-     *
-     * @param shouldUpdate whether or not the inventory should update
-     */
-    public void setShouldUpdate(boolean shouldUpdate) {
-        this.shouldUpdate = shouldUpdate;
     }
 
     /**
