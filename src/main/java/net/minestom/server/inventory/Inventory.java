@@ -1,6 +1,5 @@
 package net.minestom.server.inventory;
 
-import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickInfo;
@@ -18,31 +17,6 @@ import java.util.function.UnaryOperator;
  * Represents a generic inventory that can be interacted with.
  */
 public sealed interface Inventory extends Taggable, Viewable permits InventoryImpl {
-
-    interface Typed {
-
-        /**
-         * Gets the inventory type of this inventory.
-         *
-         * @return the inventory type
-         */
-        @NotNull InventoryType getInventoryType();
-
-        /**
-         * Gets the inventory title of this inventory.
-         *
-         * @return the inventory title
-         */
-        @NotNull Component getTitle();
-
-        /**
-         * Changes the inventory title of this inventory.
-         *
-         * @param title the new inventory title
-         */
-        void setTitle(@NotNull Component title);
-
-    }
 
     /**
      * Gets the size of this inventory. This should be a constant number.

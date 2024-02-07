@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link ContainerInventory#ContainerInventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public non-sealed class ContainerInventory extends InventoryImpl implements Inventory.Typed {
+public non-sealed class ContainerInventory extends InventoryImpl {
     private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
     private final byte id;
@@ -36,17 +36,29 @@ public non-sealed class ContainerInventory extends InventoryImpl implements Inve
         return (byte) ID_COUNTER.updateAndGet(i -> i + 1 >= 128 ? 1 : i + 1);
     }
 
-    @Override
+    /**
+     * Gets the inventory type of this inventory.
+     *
+     * @return the inventory type
+     */
     public @NotNull InventoryType getInventoryType() {
         return inventoryType;
     }
 
-    @Override
+    /**
+     * Gets the inventory title of this inventory.
+     *
+     * @return the inventory title
+     */
     public @NotNull Component getTitle() {
         return title;
     }
 
-    @Override
+    /**
+     * Changes the inventory title of this inventory.
+     *
+     * @param title the new inventory title
+     */
     public void setTitle(@NotNull Component title) {
         this.title = title;
 
