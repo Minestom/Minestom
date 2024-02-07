@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
 
-sealed class InventoryImpl implements Inventory permits ContainerInventory, PlayerInventory {
+sealed abstract class InventoryImpl implements Inventory permits ContainerInventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 
@@ -50,18 +50,13 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
 
     protected InventoryImpl(int size) {
         this.size = size;
-        this.itemStacks = new ItemStack[getSize()];
+        this.itemStacks = new ItemStack[size];
         Arrays.fill(itemStacks, ItemStack.AIR);
     }
 
     @Override
     public int getSize() {
         return size;
-    }
-
-    @Override
-    public byte getWindowId() {
-        return 1;
     }
 
     @Override

@@ -10,6 +10,8 @@ import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 /**
  * Stores changes that occurred or will occur as the result of a click.
  * @param player the player who clicked in the inventory
@@ -20,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * @param sideEffects the side effects of this click
  */
 public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInventory,
-                          @NotNull Int2ObjectMap<ItemStack> changes, @NotNull Int2ObjectMap<ItemStack> playerInventoryChanges,
+                          @NotNull Map<Integer, ItemStack> changes, @NotNull Map<Integer, ItemStack> playerInventoryChanges,
                           @Nullable ItemStack newCursorItem, @Nullable SideEffects sideEffects) {
 
     public static @NotNull Builder builder(@NotNull Player player, @NotNull Inventory clickedInventory) {
@@ -106,12 +108,12 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
      * @param clickedInventory the inventory that was clicked in
      */
     public void applyChanges(@NotNull Player player, @NotNull Inventory clickedInventory) {
-        for (var entry : changes.int2ObjectEntrySet()) {
-            clickedInventory.setItemStack(entry.getIntKey(), entry.getValue());
+        for (var entry : changes.entrySet()) {
+            clickedInventory.setItemStack(entry.getKey(), entry.getValue());
         }
 
-        for (var entry : playerInventoryChanges.int2ObjectEntrySet()) {
-            player.getInventory().setItemStack(entry.getIntKey(), entry.getValue());
+        for (var entry : playerInventoryChanges.entrySet()) {
+            player.getInventory().setItemStack(entry.getKey(), entry.getValue());
         }
 
         if (newCursorItem != null) {
