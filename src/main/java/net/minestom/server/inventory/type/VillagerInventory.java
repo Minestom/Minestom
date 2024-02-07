@@ -82,12 +82,11 @@ public class VillagerInventory extends ContainerInventory {
     public void update() {
         super.update();
         this.tradeCache.invalidate();
-        sendPacketToViewers(tradeCache);
     }
 
     @Override
-    public void handleOpen(@NotNull Player player) {
-        super.handleOpen(player);
+    public void update(@NotNull Player player) {
+        super.update(player);
         player.sendPacket(tradeCache);
     }
 

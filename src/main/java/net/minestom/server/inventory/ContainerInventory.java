@@ -61,9 +61,12 @@ public non-sealed class ContainerInventory extends InventoryImpl implements Inve
     }
 
     @Override
-    public void handleOpen(@NotNull Player player) {
+    public boolean addViewer(@NotNull Player player) {
+        if (!this.viewers.add(player)) return false;
+
         player.sendPacket(new OpenWindowPacket(getWindowId(), inventoryType.getWindowType(), getTitle()));
-        super.handleOpen(player);
+        update(player);
+        return true;
     }
 
     /**

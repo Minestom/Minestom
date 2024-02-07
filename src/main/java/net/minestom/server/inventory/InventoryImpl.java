@@ -98,7 +98,7 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
     public boolean addViewer(@NotNull Player player) {
         if (!this.viewers.add(player)) return false;
 
-        handleOpen(player);
+        update(player);
         return true;
     }
 
@@ -106,25 +106,6 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
     public boolean removeViewer(@NotNull Player player) {
         if (!this.viewers.remove(player)) return false;
 
-        handleClose(player);
-        return true;
-    }
-
-    /**
-     * Handles when a player opens this inventory, without actually updating viewers.
-     *
-     * @param player the player opening this inventory
-     */
-    protected void handleOpen(@NotNull Player player) {
-        update(player);
-    }
-
-    /**
-     * Handles when a player closes this inventory, without actually updating viewers.
-     *
-     * @param player the player closing this inventory
-     */
-    protected void handleClose(@NotNull Player player) {
         ItemStack cursorItem = getCursorItem(player);
 
         if (!cursorItem.isAir()) {
@@ -141,6 +122,7 @@ sealed class InventoryImpl implements Inventory permits ContainerInventory, Play
         } else {
             player.sendPacket(new CloseWindowPacket(getWindowId()));
         }
+        return true;
     }
 
     /**
