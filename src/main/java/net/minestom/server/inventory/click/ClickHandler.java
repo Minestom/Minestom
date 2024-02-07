@@ -46,7 +46,7 @@ public interface ClickHandler {
 
                 if (!clickInfo.equals(newInfo) || !changes.equals(newChanges)) {
                     preClickEvent.getPlayerInventory().update(player);
-                    preClickEvent.getEventInventory().update(player);
+                    preClickEvent.getInventory().update(player);
                 }
 
                 return newChanges;
@@ -54,7 +54,7 @@ public interface ClickHandler {
         }
 
         preClickEvent.getPlayerInventory().update(player);
-        preClickEvent.getEventInventory().update(player);
+        preClickEvent.getInventory().update(player);
         return null;
     }
 
