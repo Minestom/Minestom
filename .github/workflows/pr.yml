@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,14 +26,13 @@ jobs:
         # Ignore some of the paths when caching Maven Local repository
         maven-local-ignore-paths: |
           net/minestom/
-     # TODO: reenable
-#    - name: Build Minestom
-#      run: ./gradlew classes testClasses
-#    - name: Run Minestom tests
-#      run: ./gradlew test
+    - name: Build Minestom
+      run: ./gradlew classes testClasses
+    - name: Run Minestom tests
+      run: ./gradlew test
   publish:
-    needs: [ build ]
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'hollow-cube'
     env:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
