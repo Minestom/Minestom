@@ -33,6 +33,8 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
     private final TagHandler tagHandler = TagHandler.newHandler();
 
+    protected final Object lock = new Object();
+
     // the players currently viewing this inventory
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
     protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
@@ -181,7 +183,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
+    public void setItemStack(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "Inventory does not have the slot " + slot);
         safeItemInsert(slot, itemStack);
@@ -203,7 +205,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
      */
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         ItemStack previous;
-        synchronized (this) {
+        synchronized (lock) {
             previous = itemStacks[slot];
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
 
@@ -219,36 +221,46 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
-        var currentItem = getItemStack(slot);
-        setItemStack(slot, operator.apply(currentItem));
-    }
-
-    @Override
-    public synchronized void clear() {
-        this.cursorPlayersItem.clear();
-
-        // Clear the item array
-        for (int i = 0; i < size; i++) {
-            safeItemInsert(i, ItemStack.AIR, false);
+    public void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
+        synchronized (lock) {
+            var currentItem = getItemStack(slot);
+            setItemStack(slot, operator.apply(currentItem));
         }
-        // Send the cleared inventory to viewers
-        update();
     }
 
     @Override
-    public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
+    public void clear() {
+        synchronized (lock) {
+            this.cursorPlayersItem.clear();
+
+            // Clear the item array
+            for (int i = 0; i < size; i++) {
+                safeItemInsert(i, ItemStack.AIR, false);
+            }
+            // Send the cleared inventory to viewers
+            update();
+        }
+    }
+
+    @Override
+    public <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
                                                         @NotNull TransactionOption<T> option) {
-        return option.fill(type, this, itemStack);
+        synchronized (lock) {
+            return option.fill(type, this, itemStack);
+        }
     }
 
     @Override
-    public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+    public <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                         @NotNull TransactionType type,
                                                                         @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
-        itemStacks.forEach(item -> result.add(processItemStack(item, type, option)));
+        synchronized (lock) {
+            for (ItemStack item : itemStacks) {
+                result.add(processItemStack(item, type, option));
+            }
+        }
         return result;
     }
 
@@ -263,10 +275,14 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public synchronized <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                     @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
-        itemStacks.forEach(item -> result.add(addItemStack(item, option)));
+        synchronized (lock) {
+            for (ItemStack item : itemStacks) {
+                result.add(addItemStack(item, option));
+            }
+        }
         return result;
     }
 
@@ -276,10 +292,14 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public synchronized <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+    public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                      @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
-        itemStacks.forEach(item -> result.add(takeItemStack(item, option)));
+        synchronized (lock) {
+            for (ItemStack item : itemStacks) {
+                result.add(takeItemStack(item, option));
+            }
+        }
         return result;
     }
 
