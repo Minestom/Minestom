@@ -130,7 +130,7 @@ public class StandardClickHandler implements ClickHandler {
     }
 
     public void offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull ClickResult.Builder builder) {
-        var offhandSlot = PlayerInventory.OFFHAND_SLOT;
+        var offhandSlot = PlayerInventory.OFF_HAND_SLOT;
 
         var offhandItem = builder.playerInventory().getItemStack(offhandSlot);
         var selectedItem = builder.get(info.clickedSlot());

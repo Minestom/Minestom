@@ -135,13 +135,13 @@ public class InventoryShiftClickTest {
         assertPlayerClick(
                 builder -> builder.change(9, ItemStack.of(Material.SHIELD)),
                 new ClickInfo.ShiftClick(9),
-                builder -> builder.change(9, ItemStack.AIR).change(PlayerInventory.OFFHAND_SLOT, ItemStack.of(Material.SHIELD))
+                builder -> builder.change(9, ItemStack.AIR).change(PlayerInventory.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))
         );
 
         assertPlayerClick(
-                builder -> builder.change(PlayerInventory.OFFHAND_SLOT, ItemStack.of(Material.SHIELD)),
-                new ClickInfo.ShiftClick(PlayerInventory.OFFHAND_SLOT),
-                builder -> builder.change(PlayerInventory.OFFHAND_SLOT, ItemStack.AIR).change(9, ItemStack.of(Material.SHIELD))
+                builder -> builder.change(PlayerInventory.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)),
+                new ClickInfo.ShiftClick(PlayerInventory.OFF_HAND_SLOT),
+                builder -> builder.change(PlayerInventory.OFF_HAND_SLOT, ItemStack.AIR).change(9, ItemStack.of(Material.SHIELD))
         );
     }
 

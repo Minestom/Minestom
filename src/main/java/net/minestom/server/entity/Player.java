@@ -993,11 +993,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         .pages(book.pages()))
                 .build();
         // Set book in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventory.OFFHAND_SLOT, writtenBook));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventory.OFF_HAND_SLOT, writtenBook));
         // Open the book
         sendPacket(new OpenBookPacket(Hand.OFF));
         // Restore the item in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventory.OFFHAND_SLOT, getItemInOffHand()));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventory.OFF_HAND_SLOT, getItemInOffHand()));
     }
 
     @Override

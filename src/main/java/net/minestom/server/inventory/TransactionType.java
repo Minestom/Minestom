@@ -21,30 +21,30 @@ public interface TransactionType {
      */
     static @NotNull TransactionType add(@NotNull Supplier<IntIterator> fillSlots, @NotNull Supplier<IntIterator> airSlots) {
         return (inventory, itemStack) -> {
-            final var RULE = StackingRule.get();
+            final var rule = StackingRule.get();
 
             var slots = fillSlots.get();
             Int2ObjectMap<ItemStack> changes = new Int2ObjectArrayMap<>();
 
-            var itemAmount = RULE.getAmount(itemStack);
+            var itemAmount = rule.getAmount(itemStack);
 
             while (slots.hasNext() && itemAmount > 0) {
                 var next = slots.nextInt();
                 var slotItem = inventory.getItemStack(next);
 
-                if (slotItem.isAir() || !RULE.canBeStacked(itemStack, slotItem)) continue;
+                if (slotItem.isAir() || !rule.canBeStacked(itemStack, slotItem)) continue;
 
-                var maxSize = RULE.getMaxSize(slotItem);
+                var maxSize = rule.getMaxSize(slotItem);
                 if (itemAmount >= maxSize) continue;
 
-                var sum = itemAmount + RULE.getAmount(slotItem);
+                var sum = itemAmount + rule.getAmount(slotItem);
 
                 if (sum <= maxSize) {
-                    changes.put(next, RULE.apply(slotItem, sum));
+                    changes.put(next, rule.apply(slotItem, sum));
                     itemAmount = 0;
                     break;
                 } else {
-                    changes.put(next, RULE.apply(slotItem, maxSize));
+                    changes.put(next, rule.apply(slotItem, maxSize));
                     itemAmount = sum - maxSize;
                 }
             }
@@ -57,14 +57,14 @@ public interface TransactionType {
 
                     if (!slotItem.isAir()) continue;
 
-                    changes.put(next, RULE.apply(itemStack, itemAmount));
+                    changes.put(next, rule.apply(itemStack, itemAmount));
                     itemAmount = 0;
 
                     break;
                 }
             }
 
-            return Pair.of(RULE.apply(itemStack, itemAmount), changes);
+            return Pair.of(rule.apply(itemStack, itemAmount), changes);
         };
     }
 
@@ -74,31 +74,31 @@ public interface TransactionType {
      */
     static @NotNull TransactionType take(@NotNull Supplier<IntIterator> takeSlots) {
         return (inventory, itemStack) -> {
-            final var RULE = StackingRule.get();
+            final var rule = StackingRule.get();
             var slots = takeSlots.get();
 
             Int2ObjectMap<ItemStack> changes = new Int2ObjectArrayMap<>();
 
-            var remainingAmount = RULE.getAmount(itemStack);
+            var remainingAmount = rule.getAmount(itemStack);
 
             while (slots.hasNext() && remainingAmount > 0) {
                 var next = slots.nextInt();
                 var slotItem = inventory.getItemStack(next);
 
-                if (slotItem.isAir() || !RULE.canBeStacked(itemStack, slotItem)) continue;
+                if (slotItem.isAir() || !rule.canBeStacked(itemStack, slotItem)) continue;
 
-                var slotAmount = RULE.getAmount(slotItem);
+                var slotAmount = rule.getAmount(slotItem);
 
                 if (slotAmount < remainingAmount) {
                     remainingAmount -= slotAmount;
                     changes.put(next, ItemStack.AIR);
                 } else {
                     remainingAmount = 0;
-                    changes.put(next, RULE.apply(slotItem, count -> count - slotAmount));
+                    changes.put(next, rule.apply(slotItem, count -> count - slotAmount));
                 }
             }
 
-            return Pair.of(RULE.apply(itemStack, remainingAmount), changes);
+            return Pair.of(rule.apply(itemStack, remainingAmount), changes);
         };
     }
 

@@ -86,7 +86,7 @@ public non-sealed class ContainerInventory extends InventoryImpl {
      *
      * @param property the property to send
      * @param value    the value of the property
-     * @see <a href="https://wiki.vg/Protocol#Window_Property">https://wiki.vg/Protocol#Window_Property</a>
+     * @see <a href="https://wiki.vg/Protocol#Set_Container_Property">https://wiki.vg/Protocol#Set_Container_Property</a>
      */
     protected void sendProperty(@NotNull InventoryProperty property, short value) {
         sendPacketToViewers(new WindowPropertyPacket(getWindowId(), property.getProperty(), value));

@@ -23,9 +23,9 @@ public class InventoryOffhandSwapTest {
     @Test
     public void testSwappedItems() {
         assertClick(
-                builder -> builder.change(0, ItemStack.of(Material.DIRT)).change(PlayerInventory.OFFHAND_SLOT, ItemStack.of(Material.STONE), true),
+                builder -> builder.change(0, ItemStack.of(Material.DIRT)).change(PlayerInventory.OFF_HAND_SLOT, ItemStack.of(Material.STONE), true),
                 new ClickInfo.OffhandSwap(0),
-                builder -> builder.change(0, ItemStack.of(Material.STONE)).change(PlayerInventory.OFFHAND_SLOT, ItemStack.of(Material.DIRT), true)
+                builder -> builder.change(0, ItemStack.of(Material.STONE)).change(PlayerInventory.OFF_HAND_SLOT, ItemStack.of(Material.DIRT), true)
         );
     }
 

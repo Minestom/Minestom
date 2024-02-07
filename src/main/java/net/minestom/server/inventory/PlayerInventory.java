@@ -30,7 +30,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     public static final int CHESTPLATE_SLOT = 6;
     public static final int LEGGINGS_SLOT = 7;
     public static final int BOOTS_SLOT = 8;
-    public static final int OFFHAND_SLOT = 45;
+    public static final int OFF_HAND_SLOT = 45;
 
     public static final int HOTBAR_START = 36;
 
@@ -43,8 +43,8 @@ public non-sealed class PlayerInventory extends InventoryImpl {
                     base = IntIterators.concat(base, IntIterators.singleton(equipmentSlot.armorSlot()));
                 }
 
-                if (item.material() == Material.SHIELD && slot != OFFHAND_SLOT) {
-                    base = IntIterators.concat(base, IntIterators.singleton(OFFHAND_SLOT));
+                if (item.material() == Material.SHIELD && slot != OFF_HAND_SLOT) {
+                    base = IntIterators.concat(base, IntIterators.singleton(OFF_HAND_SLOT));
                 }
 
                 if (slot < 9 || slot > 35) {
@@ -75,7 +75,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     private static int getSlotIndex(@NotNull EquipmentSlot slot, int heldSlot) {
         return switch (slot) {
             case HELMET, CHESTPLATE, LEGGINGS, BOOTS -> slot.armorSlot();
-            case OFF_HAND -> OFFHAND_SLOT;
+            case OFF_HAND -> OFF_HAND_SLOT;
             case MAIN_HAND -> HOTBAR_START + heldSlot;
         };
     }
@@ -86,7 +86,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
             case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
             case BOOTS_SLOT -> EquipmentSlot.BOOTS;
-            case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
+            case OFF_HAND_SLOT -> EquipmentSlot.OFF_HAND;
             default -> slot == (HOTBAR_START + heldSlot) ? EquipmentSlot.MAIN_HAND : null;
         };
     }
@@ -94,7 +94,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     private static final int[] EXISTING_ADD_SLOTS = IntStream.concat(
             IntStream.concat(
                     IntStream.rangeClosed(36, 44),
-                    IntStream.of(OFFHAND_SLOT)
+                    IntStream.of(OFF_HAND_SLOT)
             ),
             IntStream.rangeClosed(9, 35)
     ).toArray();

@@ -7,6 +7,7 @@ import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Taggable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,6 +80,7 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
      *
      * @return the click preprocessor
      */
+    @ApiStatus.Internal
     @NotNull ClickPreprocessor getClickPreprocessor();
 
     /**

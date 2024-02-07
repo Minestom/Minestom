@@ -34,7 +34,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     /**
      * Gets the new inventory to open.
      *
-     * @return the new inventory to open
+     * @return the new inventory to open, null if there isn't any
      */
     public @Nullable Inventory getNewInventory() {
         return newInventory;
