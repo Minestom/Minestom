@@ -342,6 +342,8 @@ public class LightingChunk extends DynamicChunk {
                 if (chunkCheck == null) continue;
 
                 if (chunkCheck instanceof LightingChunk lighting) {
+                    // Ensure heightmap is calculated before taking values from it
+                    lighting.getHeightmap();
                     if (lighting.highestBlock > highestRegionPoint) highestRegionPoint = lighting.highestBlock;
                 }
             }
