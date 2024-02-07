@@ -22,7 +22,6 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.client.status.PingPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +45,7 @@ public final class PacketListenerManager {
         setListener(ConnectionState.HANDSHAKE, ClientHandshakePacket.class, HandshakeListener::listener);
 
         setListener(ConnectionState.STATUS, StatusRequestPacket.class, StatusListener::requestListener);
-        setListener(ConnectionState.STATUS, PingPacket.class, StatusListener::pingListener);
+        setListener(ConnectionState.STATUS, ClientPingRequestPacket.class, StatusListener::pingRequestListener);
 
         setListener(ConnectionState.LOGIN, ClientLoginStartPacket.class, LoginListener::loginStartListener);
         setListener(ConnectionState.LOGIN, ClientEncryptionResponsePacket.class, LoginListener::loginEncryptionResponseListener);
@@ -95,6 +94,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
+        setPlayListener(ClientPingRequestPacket.class, PlayPingListener::requestListener);
     }
 
     /**

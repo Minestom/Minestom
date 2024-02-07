@@ -6,7 +6,7 @@ public final class ServerPacketIdentifier {
     private static final AtomicInteger PLAY_ID = new AtomicInteger(0);
 
     public static final int STATUS_RESPONSE = 0x00;
-    public static final int STATUS_PONG = 0x01;
+    public static final int STATUS_PING_RESPONSE = 0x01;
 
     public static final int LOGIN_DISCONNECT = 0x00;
     public static final int LOGIN_ENCRYPTION_REQUEST = 0x01;
@@ -77,7 +77,7 @@ public final class ServerPacketIdentifier {
     public static final int OPEN_WINDOW = nextPlayId();
     public static final int OPEN_SIGN_EDITOR = nextPlayId();
     public static final int PING = nextPlayId();
-    public static final int PONG_RESPONSE = nextPlayId();
+    public static final int PING_RESPONSE = nextPlayId();
     public static final int CRAFT_RECIPE_RESPONSE = nextPlayId();
     public static final int PLAYER_ABILITIES = nextPlayId();
     public static final int PLAYER_CHAT = nextPlayId();

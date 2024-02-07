@@ -18,12 +18,12 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
+import net.minestom.server.network.packet.server.common.PingResponsePacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
-import net.minestom.server.network.packet.server.status.PongPacket;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.recipe.RecipeCategory;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -55,7 +55,7 @@ public class PacketWriteReadTest {
         // Handshake
         SERVER_PACKETS.add(new ResponsePacket(new JsonObject().toString()));
         // Status
-        SERVER_PACKETS.add(new PongPacket(5));
+        SERVER_PACKETS.add(new PingResponsePacket(5));
         // Login
         //SERVER_PACKETS.add(new EncryptionRequestPacket("server", generateByteArray(16), generateByteArray(16)));
         SERVER_PACKETS.add(new LoginDisconnectPacket(COMPONENT));

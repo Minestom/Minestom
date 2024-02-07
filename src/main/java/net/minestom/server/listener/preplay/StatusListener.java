@@ -4,9 +4,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ClientPingServerEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.network.packet.client.status.PingPacket;
+import net.minestom.server.network.packet.client.common.ClientPingRequestPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
-import net.minestom.server.network.packet.server.status.PongPacket;
+import net.minestom.server.network.packet.server.common.PingResponsePacket;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ServerListPingType;
@@ -21,7 +21,7 @@ public final class StatusListener {
                 connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getResponseData()))));
     }
 
-    public static void pingListener(@NotNull PingPacket packet, @NotNull PlayerConnection connection) {
+    public static void pingRequestListener(@NotNull ClientPingRequestPacket packet, @NotNull PlayerConnection connection) {
         final ClientPingServerEvent clientPingEvent = new ClientPingServerEvent(connection, packet.number());
         EventDispatcher.call(clientPingEvent);
 
@@ -29,11 +29,11 @@ public final class StatusListener {
             connection.disconnect();
         } else {
             if (clientPingEvent.getDelay().isZero()) {
-                connection.sendPacket(new PongPacket(clientPingEvent.getPayload()));
+                connection.sendPacket(new PingResponsePacket(clientPingEvent.getPayload()));
                 connection.disconnect();
             } else {
                 MinecraftServer.getSchedulerManager().buildTask(() -> {
-                    connection.sendPacket(new PongPacket(clientPingEvent.getPayload()));
+                    connection.sendPacket(new PingResponsePacket(clientPingEvent.getPayload()));
                     connection.disconnect();
                 }).delay(clientPingEvent.getDelay()).schedule();
             }
