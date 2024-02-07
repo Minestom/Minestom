@@ -139,7 +139,7 @@ public class BlockLightMergeIntegrationTest {
             expectedLights.put(new Vec(-2, 100 + y, 8), 0);
         }
 
-        LightingChunk.relightSection(instance, 0, 2, 0);
+        LightingChunk.relightSection(instance, 0, 6, 0);
 
         assertLightInstance(instance, expectedLights);
     }

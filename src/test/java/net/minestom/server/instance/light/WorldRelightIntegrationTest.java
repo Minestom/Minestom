@@ -30,6 +30,7 @@ public class WorldRelightIntegrationTest {
     @Test
     public void testBorderLava(Env env) {
         Instance instance = env.createFlatInstance();
+        instance.setChunkSupplier(LightingChunk::new);
         instance.loadChunk(6, 16).join();
         instance.loadChunk(6, 15).join();
 
@@ -47,6 +48,7 @@ public class WorldRelightIntegrationTest {
     @Test
     public void testBlockRemoval(Env env) {
         Instance instance = createLightingInstance(env.process());
+        instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 instance.loadChunk(x, z).join();
