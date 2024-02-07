@@ -8,7 +8,6 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.client.status.PingPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +45,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
 
         public Status() {
             register(nextId(), StatusRequestPacket::new);
-            register(nextId(), PingPacket::new);
+            register(nextId(), ClientPingRequestPacket::new);
         }
     }
 
@@ -119,7 +118,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientVehicleMovePacket::new);
             register(nextId(), ClientSteerBoatPacket::new);
             register(nextId(), ClientPickItemPacket::new);
-            nextId(); // Ping request
+            register(nextId(), ClientPingRequestPacket::new);
             register(nextId(), ClientCraftRecipeRequest::new);
             register(nextId(), ClientPlayerAbilitiesPacket::new);
             register(nextId(), ClientPlayerDiggingPacket::new);
