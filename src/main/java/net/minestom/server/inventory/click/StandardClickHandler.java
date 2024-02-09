@@ -12,7 +12,10 @@ import org.jetbrains.annotations.NotNull;
 public class StandardClickHandler implements ClickHandler {
 
     /**
-     * A generic interface for providing options for clicks like shift clicks and double clicks.
+     * A generic interface for providing options for clicks like shift clicks and double clicks.<br>
+     * This addresses the issue of certain click operations only being able to interact with certain slots: for example,
+     * shift clicking an item out of an inventory can only put it in the player's inner inventory slots, and will never
+     * put the item anywhere else in the inventory or the player's inventory.<br>
      */
     @FunctionalInterface
     public interface SlotSuggestor {
@@ -33,6 +36,11 @@ public class StandardClickHandler implements ClickHandler {
     private final @NotNull SlotSuggestor shiftClickSlots, doubleClickSlots;
 
     /**
+     * Handles clicks, given a shift click provider and a double click provider.<br>
+     * When shift clicks or double clicks need to be handled, the slots provided from the relevant handler will be
+     * checked in their given order.<br>
+     * For example, double clicking will collect items of the same type as the cursor; the slots provided by the double
+     * click slot provider will be checked sequentially and used if they have the same type as 
      * @param shiftClickSlots the shift click slot supplier
      * @param doubleClickSlots the double click slot supplier
      */
