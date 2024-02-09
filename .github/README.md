@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.minestom:minestom:<???>'
+    implementation 'net.minestom:minestom-snapshots:<???>'
 }
 ```
 
