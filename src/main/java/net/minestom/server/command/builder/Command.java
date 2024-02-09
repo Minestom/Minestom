@@ -356,13 +356,13 @@ public class Command {
             boolean branched = false;
             for (Argument<?> argument : syntax.getArguments()) {
                 if (!branched) {
-                    if (argument instanceof ArgumentLiteral) {
-                        final String literal = argument.getId();
+                    if (argument instanceof ArgumentLiteral argumentLiteral) {
+                        final Set<String> names = argumentLiteral.getNames();
 
                         addArguments.accept(node, arguments);
                         arguments = new ArrayList<>();
 
-                        node = findNode.apply(node, Set.of(literal));
+                        node = findNode.apply(node, names);
                         continue;
                     } else if (argument instanceof ArgumentWord argumentWord) {
                         if (argumentWord.hasRestrictions()) {
