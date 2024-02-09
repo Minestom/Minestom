@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains server settings/flags to be set with system properties.
- * <p/>
- * Some flags (labeled at the bottom) are experimental. They may be removed without notice, and may have issues.
+ *
+ * <p>Some flags (labeled at the bottom) are experimental. They may be removed without notice, and may have issues.</p>
  */
 public final class ServerFlag {
 
