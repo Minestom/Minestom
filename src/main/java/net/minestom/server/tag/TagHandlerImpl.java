@@ -1,7 +1,6 @@
 package net.minestom.server.tag;
 
 import net.minestom.server.ServerFlag;
-import net.minestom.server.utils.PropertyUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -281,7 +280,7 @@ final class TagHandlerImpl implements TagHandler {
                 this.entries.forValues(entry -> {
                     final Tag tag = entry.tag;
                     final NBT nbt = entry.updatedNbt();
-                    if (nbt != null && !tag.entry.isPath() || (!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && !((NBTCompound) nbt).isEmpty()) {
+                    if (nbt != null && (!tag.entry.isPath() || (!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && !((NBTCompound) nbt).isEmpty())) {
                         tmp.put(tag.getKey(), nbt);
                     }
                 });

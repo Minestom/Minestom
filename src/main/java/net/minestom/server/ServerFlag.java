@@ -55,13 +55,6 @@ public final class ServerFlag {
     public static final @Nullable String MAP_RGB_REDUCTION = System.getProperty("minestom.map.rgbreduction"); // Only used if rgb mapping is "approximate"
 
     // Experimental/Unstable
-    public static final boolean USE_NEW_CHUNK_SENDING = Boolean.getBoolean("minestom.use-new-chunk-sending");
-    public static final int NEW_CHUNK_COUNT_PER_INTERVAL = Integer.getInteger("minestom.new-chunk-sending-count-per-interval", 50);
-    public static final int NEW_CHUNK_SEND_INTERVAL = Integer.getInteger("minestom.new-chunk-sending-send-interval", 20);
-
-    public static final int LIGHTING_CHUNKS_PER_SEND = Integer.getInteger("minestom.lighting.chunks-per-send", 10);
-    public static final int LIGHTING_CHUNKS_SEND_DELAY = Integer.getInteger("minestom.lighting.chunks-send-delay", 100);
-
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = Boolean.getBoolean("minestom.event.multiple-parents");
 
     private ServerFlag() {}
