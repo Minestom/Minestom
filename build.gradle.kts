@@ -88,6 +88,11 @@ dependencies {
 }
 
 tasks {
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name" to "net.minestom.server")
+        }
+    }
     withType<Javadoc> {
         (options as? StandardJavadocDocletOptions)?.apply {
             encoding = "UTF-8"
