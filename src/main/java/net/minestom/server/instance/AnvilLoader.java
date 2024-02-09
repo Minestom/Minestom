@@ -188,7 +188,6 @@ public class AnvilLoader implements IChunkLoader {
                                     int finalZ = chunk.chunkZ * Chunk.CHUNK_SIZE_Z + z;
                                     int finalY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
                                     String biomeName = sectionBiomeInformation.getBaseBiome();
-
                                     Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
                                             Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
                                     chunk.setBiome(finalX, finalY, finalZ, biome);

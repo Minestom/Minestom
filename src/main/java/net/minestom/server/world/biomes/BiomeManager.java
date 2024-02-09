@@ -71,7 +71,6 @@ public final class BiomeManager {
      */
     public void addBiome(Biome biome) {
         this.biomes.put(biome.id(), biome);
-        System.out.println("Added biome " + biome.name() + " with id " + biome.id());
     }
 
     /**
