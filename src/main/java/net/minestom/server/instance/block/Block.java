@@ -3,6 +3,8 @@ package net.minestom.server.instance.block;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.instance.batch.BatchPlace;
+import net.minestom.server.instance.batch.BatchQuery;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
@@ -209,6 +211,17 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
         default void setBlock(@NotNull Point blockPosition, @NotNull Block block) {
             setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
         }
+
+        @ApiStatus.Experimental
+        default void setBlocks(int x, int y, int z, @NotNull BatchPlace batch) {
+            batch.forEachBlock(x, y, z, (block, position) ->
+                    setBlock(position.blockX(), position.blockY(), position.blockZ(), block));
+        }
+
+        @ApiStatus.Experimental
+        default void setBlocks(@NotNull Point blockPosition, @NotNull BatchPlace batch) {
+            setBlocks(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), batch);
+        }
     }
 
     interface Getter {
@@ -224,6 +237,28 @@ public sealed interface Block extends ProtocolObject, TagReadable, Blocks permit
 
         default @NotNull Block getBlock(@NotNull Point point) {
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
+        }
+
+        @ApiStatus.Experimental
+        default BatchQuery.@NotNull Result getBlocks(int x, int y, int z, @NotNull Condition condition,
+                                                     @NotNull BatchQuery query) {
+            return BatchQuery.fallback(this, x, y, z, condition, query);
+        }
+
+        @ApiStatus.Experimental
+        default BatchQuery.@NotNull Result getBlocks(@NotNull Point point, @NotNull Condition condition,
+                                                     @NotNull BatchQuery query) {
+            return getBlocks(point.blockX(), point.blockY(), point.blockZ(), condition, query);
+        }
+
+        @ApiStatus.Experimental
+        default BatchQuery.@NotNull Result getBlocks(int x, int y, int z, @NotNull BatchQuery query) {
+            return getBlocks(x, y, z, Condition.NONE, query);
+        }
+
+        @ApiStatus.Experimental
+        default BatchQuery.@NotNull Result getBlocks(@NotNull Point point, @NotNull BatchQuery query) {
+            return getBlocks(point, Condition.NONE, query);
         }
 
         /**
