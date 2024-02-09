@@ -1,6 +1,7 @@
 package net.minestom.server.world.biomes;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public final class Biome {
+public final class Biome implements ProtocolObject {
     public static final AtomicInteger ID_COUNTER = new AtomicInteger(0);
     private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
             .fogColor(0xC0D8FF)
@@ -85,7 +86,8 @@ public final class Biome {
         return this.id;
     }
 
-    public NamespaceID name() {
+    @Override
+    public @NotNull NamespaceID namespace() {
         return this.name;
     }
 

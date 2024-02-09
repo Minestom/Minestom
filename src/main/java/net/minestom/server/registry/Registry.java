@@ -168,7 +168,8 @@ public final class Registry {
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
         FLUID_TAGS("tags/fluid_tags.json"),
         GAMEPLAY_TAGS("tags/gameplay_tags.json"),
-        ITEM_TAGS("tags/item_tags.json");
+        ITEM_TAGS("tags/item_tags.json"),
+        BIOMES("biomes.json");
 
         private final String name;
 
@@ -601,6 +602,11 @@ public final class Registry {
         }
 
         @Override
+        public boolean containsKey(String name) {
+            return map.containsKey(name);
+        }
+
+        @Override
         public Map<String, Object> asMap() {
             return map;
         }
@@ -641,6 +647,8 @@ public final class Registry {
         boolean getBoolean(String name);
 
         Properties section(String name);
+
+        boolean containsKey(String name);
 
         Map<String, Object> asMap();
 
