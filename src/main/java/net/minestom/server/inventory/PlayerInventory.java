@@ -149,13 +149,14 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     @Override
     public void clear() {
-        synchronized (lock) {
+        lock.lock();
+        try {
             super.clear();
 
             for (var player : getViewers()) {
                 player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
             }
-        }
+        } finally { lock.unlock(); }
     }
 
     @Override
