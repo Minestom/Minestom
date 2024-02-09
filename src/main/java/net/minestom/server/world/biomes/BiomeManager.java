@@ -1,7 +1,7 @@
 package net.minestom.server.world.biomes;
 
-import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.validate.Check;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
@@ -10,57 +10,30 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
  * Allows servers to register custom dimensions. Also used during player joining to send the list of all existing dimensions.
  * <p>
- * Contains {@link Biome#PLAINS} by default but can be removed.
  */
 public final class BiomeManager {
     private final Map<Integer, Biome> biomes = new ConcurrentHashMap<>();
+    private final Map<NamespaceID, Biome> biomesByName = new ConcurrentHashMap<>();
+    private final Map<NamespaceID, Integer> idMappings = new ConcurrentHashMap<>();
 
-    // https://minecraft.fandom.com/wiki/Rain
-    private final static Double SNOW_TEMPERATURE = 0.15;
-    private static final boolean loadBiomes = Boolean.getBoolean("minestom.load-vanilla-biomes");
+    private final AtomicInteger ID_COUNTER = new AtomicInteger(0);
 
     public BiomeManager() {
-        addBiome(Biome.PLAINS);
+        // Need to register plains for the client to work properly
+        // Plains is always ID 0
+        addBiome(BiomeImpl.get("minecraft:plains"));
+    }
 
-        if (loadBiomes) {
-            Registry.createContainer(Registry.Resource.BIOMES,
-                (namespace, properties) -> {
-                    NamespaceID namespaceID = NamespaceID.from(namespace);
-                    var builder = Biome.builder().name(namespaceID);
-
-                    BiomeEffects.Builder effectsBuilder = BiomeEffects.builder();
-                    if (properties.containsKey("foliageColor")) effectsBuilder.foliageColor(properties.getInt("foliageColor"));
-                    if (properties.containsKey("grassColor")) effectsBuilder.grassColor(properties.getInt("grassColor"));
-                    if (properties.containsKey("skyColor")) effectsBuilder.skyColor(properties.getInt("skyColor"));
-                    if (properties.containsKey("waterColor")) effectsBuilder.waterColor(properties.getInt("waterColor"));
-                    if (properties.containsKey("waterFogColor")) effectsBuilder.waterFogColor(properties.getInt("waterFogColor"));
-                    if (properties.containsKey("fogColor")) effectsBuilder.fogColor(properties.getInt("fogColor"));
-                    builder.effects(effectsBuilder.build());
-
-                    double temperature = properties.getDouble("temperature", 0.5F);
-                    double downfall = properties.getDouble("downfall", 0.5F);
-                    boolean hasPrecipitation = properties.getBoolean("has_precipitation", true);
-
-                    builder.temperature((float) temperature)
-                            .downfall((float) downfall);
-
-                    Biome.Precipitation precipitationType = hasPrecipitation
-                            ? temperature < SNOW_TEMPERATURE
-                                ? Biome.Precipitation.SNOW
-                                : Biome.Precipitation.RAIN
-                            : Biome.Precipitation.NONE;
-                    builder.precipitation(precipitationType);
-
-                    return builder.build();
-                }).values().forEach((biome -> {
-                    if (biome.name().equals("minecraft:plains")) return;
-                    addBiome(biome);
-                }));
+    public void loadVanillaBiomes() {
+        for (BiomeImpl biome : BiomeImpl.values()) {
+            if (getByName(biome.namespace()) == null)
+                addBiome(biome);
         }
     }
 
@@ -70,7 +43,12 @@ public final class BiomeManager {
      * @param biome the biome to add
      */
     public void addBiome(Biome biome) {
-        this.biomes.put(biome.id(), biome);
+        Check.stateCondition(getByName(biome.namespace()) != null, "The biome " + biome.namespace() + " has already been registered");
+
+        var id = ID_COUNTER.getAndIncrement();
+        this.biomes.put(id, biome);
+        this.biomesByName.put(biome.namespace(), biome);
+        this.idMappings.put(biome.namespace(), id);
     }
 
     /**
@@ -79,7 +57,12 @@ public final class BiomeManager {
      * @param biome the biome to remove
      */
     public void removeBiome(Biome biome) {
-        this.biomes.remove(biome.id());
+        var id = idMappings.get(biome.namespace());
+        if (id != null) {
+            biomes.remove(id);
+            biomesByName.remove(biome.namespace());
+            idMappings.remove(biome.namespace());
+        }
     }
 
     /**
@@ -102,19 +85,22 @@ public final class BiomeManager {
     }
 
     public Biome getByName(NamespaceID namespaceID) {
-        Biome biome = null;
-        for (final Biome biomeT : biomes.values()) {
-            if (biomeT.namespace().equals(namespaceID)) {
-                biome = biomeT;
-                break;
-            }
-        }
-        return biome;
+        return biomesByName.get(namespaceID);
     }
 
     public NBTCompound toNBT() {
         return NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:worldgen/biome"),
-                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(Biome::toNbt).toList())));
+                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(biome -> {
+                    return NBT.Compound(Map.of(
+                            "id", NBT.Int(getId(biome)),
+                            "name", NBT.String(biome.namespace().toString()),
+                            "element", biome.toNbt()
+                    ));
+                }).toList())));
+    }
+
+    public int getId(Biome biome) {
+        return idMappings.getOrDefault(biome.namespace(), -1);
     }
 }

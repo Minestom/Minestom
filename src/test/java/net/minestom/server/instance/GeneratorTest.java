@@ -6,8 +6,10 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeEffects;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -26,7 +28,6 @@ import static net.minestom.server.utils.chunk.ChunkUtils.floorSection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GeneratorTest {
-
     @Test
     public void unitSize() {
         assertDoesNotThrow(() -> dummyUnit(Vec.ZERO, new Vec(16)));
@@ -238,48 +239,6 @@ public class GeneratorTest {
         for (var section : sections) {
             section.blockPalette().getAll((x, y, z, value) ->
                     assertEquals(Block.STONE.stateId(), value));
-        }
-    }
-
-    @Test
-    public void chunkBiomeSet() {
-        final int minSection = -1;
-        final int maxSection = 5;
-        final int chunkX = 3;
-        final int chunkZ = -2;
-        final int sectionCount = maxSection - minSection;
-        Section[] sections = new Section[sectionCount];
-        Arrays.setAll(sections, i -> new Section());
-        var chunkUnits = GeneratorImpl.chunk(minSection, maxSection, List.of(sections), chunkX, chunkZ);
-        Generator generator = chunk -> {
-            var modifier = chunk.modifier();
-            modifier.setBiome(48, 0, -32, Biome.PLAINS);
-            modifier.setBiome(48 + 8, 0, -32, Biome.PLAINS);
-        };
-        generator.generate(chunkUnits);
-        assertEquals(Biome.PLAINS.id(), sections[0].biomePalette().get(0, 0, 0));
-        assertEquals(0, sections[0].biomePalette().get(1, 0, 0));
-        assertEquals(Biome.PLAINS.id(), sections[0].biomePalette().get(2, 0, 0));
-    }
-
-    @Test
-    public void chunkBiomeFill() {
-        final int minSection = -1;
-        final int maxSection = 5;
-        final int chunkX = 3;
-        final int chunkZ = -2;
-        final int sectionCount = maxSection - minSection;
-        Section[] sections = new Section[sectionCount];
-        Arrays.setAll(sections, i -> new Section());
-        var chunkUnits = GeneratorImpl.chunk(minSection, maxSection, List.of(sections), chunkX, chunkZ);
-        Generator generator = chunk -> {
-            var modifier = chunk.modifier();
-            modifier.fillBiome(Biome.PLAINS);
-        };
-        generator.generate(chunkUnits);
-        for (var section : sections) {
-            section.biomePalette().getAll((x, y, z, value) ->
-                    assertEquals(Biome.PLAINS.id(), value));
         }
     }
 

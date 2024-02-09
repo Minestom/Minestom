@@ -32,11 +32,11 @@ public class Main {
 
     public static void main(String[] args) {
         System.setProperty("minestom.experiment.pose-updates", "true");
-        System.setProperty("minestom.load-vanilla-biomes", "true");
 
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer.getBiomeManager().loadVanillaBiomes();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());

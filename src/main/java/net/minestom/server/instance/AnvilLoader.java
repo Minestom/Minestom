@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
-    private static final Biome BIOME = Biome.PLAINS;
+    private final static Biome BIOME = MinecraftServer.getBiomeManager().getByName(NamespaceID.from("minecraft:plains"));
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
     private final Path path;

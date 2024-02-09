@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -217,10 +218,13 @@ final class GeneratorImpl {
         @Override
         public void setBiome(int x, int y, int z, @NotNull Biome biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
+            var id = MinecraftServer.getBiomeManager().getId(biome);
+            if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+
             this.biomePalette.set(
                     toSectionRelativeCoordinate(x) / 4,
                     toSectionRelativeCoordinate(y) / 4,
-                    toSectionRelativeCoordinate(z) / 4, biome.id());
+                    toSectionRelativeCoordinate(z) / 4, id);
         }
 
         @Override
@@ -264,7 +268,9 @@ final class GeneratorImpl {
         @Override
         public void fillBiome(@NotNull Biome biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
-            this.biomePalette.fill(biome.id());
+            var id = MinecraftServer.getBiomeManager().getId(biome);
+            if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+            this.biomePalette.fill(id);
         }
 
         private int retrieveBlockId(Block block) {

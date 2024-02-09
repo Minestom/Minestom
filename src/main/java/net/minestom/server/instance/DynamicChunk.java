@@ -124,10 +124,14 @@ public class DynamicChunk extends Chunk {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
+
+        var id = MinecraftServer.getBiomeManager().getId(biome);
+        if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+
         section.biomePalette().set(
                 toSectionRelativeCoordinate(x) / 4,
                 toSectionRelativeCoordinate(y) / 4,
-                toSectionRelativeCoordinate(z) / 4, biome.id());
+                toSectionRelativeCoordinate(z) / 4, id);
     }
 
     @Override
