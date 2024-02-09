@@ -156,7 +156,9 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             for (var player : getViewers()) {
                 player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
             }
-        } finally { lock.unlock(); }
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
