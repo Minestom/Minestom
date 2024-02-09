@@ -39,11 +39,6 @@ public final class ServerFlag {
     public static final @Nullable String STACKING_RULE = System.getProperty("minestom.stacking-rule");
     public static final int WORLD_BORDER_SIZE = Integer.getInteger("minestom.world-border-size", 29999984);
 
-    // Terminal
-    public static final boolean TERMINAL_ENABLED = System.getProperty("minestom.terminal.disabled") == null;
-    public static final boolean TERMINAL_SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
-    public static final boolean TERMINAL_SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
-
     // Extensions todo use enabled flag
     public static final boolean EXTENSIONS_ENABLED = PropertyUtils.getBoolean("minestom.extension.enabled", false);
     public static final @NotNull String EXTENSIONS_FOLDER = System.getProperty("minestom.extension.folder", "extensions");
