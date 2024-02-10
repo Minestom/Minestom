@@ -775,12 +775,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.blockLight();
+        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
 
         int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
         int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
         int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
 
-        if (light.requiresUpdate()) LightingChunk.relight(chunk.getInstance(), List.of(chunk));
+        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
 
@@ -789,12 +790,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.skyLight();
+        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
 
         int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
         int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
         int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
 
-        if (light.requiresUpdate()) LightingChunk.relight(chunk.getInstance(), List.of(chunk));
+        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
 }
