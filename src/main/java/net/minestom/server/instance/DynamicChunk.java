@@ -6,7 +6,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -24,7 +23,6 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -207,6 +205,11 @@ public class DynamicChunk extends Chunk {
     public void reset() {
         for (Section section : sections) section.clear();
         this.entries.clear();
+    }
+
+    @Override
+    public void invalidate() {
+        this.chunkCache.invalidate();
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
