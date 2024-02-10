@@ -86,6 +86,11 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">LightingChunk</span>
 <span class="extends-implements">extends <a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></span></div>
+<div class="block">A chunk which supports lighting computation.
+ <p>
+     This chunk is used to compute the light data for each block.
+     Lighting is only updated when a chunk is sent to the client. Updates can be forced using <a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)"><code>relight(net.minestom.server.instance.Instance, java.util.Collection&lt;net.minestom.server.instance.Chunk&gt;)</code></a>.
+ <p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -163,7 +168,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)" class="member-name-link">relight</a><wbr>(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Forces a relight of the specified chunks.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendLighting()" class="member-name-link">sendLighting</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -306,6 +313,16 @@ loadScripts(document, 'script');</script>
 <h3>relight</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">relight</span><wbr><span class="parameters">(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</span></div>
+<div class="block">Forces a relight of the specified chunks.
+ <p>
+ This method is used to force a relight of the specified chunks.
+ <p>
+ This method is thread-safe and can be called from any thread.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>instance</code> - the instance</dd>
+<dd><code>chunks</code> - the chunks to relight</dd>
+</dl>
 </section>
 </li>
 <li>
