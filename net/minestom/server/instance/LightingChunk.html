@@ -89,7 +89,6 @@ loadScripts(document, 'script');</script>
 <div class="block">A chunk which supports lighting computation.
  <p>
      This chunk is used to compute the light data for each block.
-     Lighting is only updated when a chunk is sent to the client. Updates can be forced using <a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)"><code>relight(net.minestom.server.instance.Instance, java.util.Collection&lt;net.minestom.server.instance.Chunk&gt;)</code></a>.
  <p></div>
 </section>
 <section class="summary">
@@ -157,31 +156,36 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeightmap()" class="member-name-link">getHeightmap</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLightingCalculated()" class="member-name-link">isLightingCalculated</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onLoad()" class="member-name-link">onLoad</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Invalidate the chunk caches</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isLightingCalculated()" class="member-name-link">isLightingCalculated</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onLoad()" class="member-name-link">onLoad</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when the chunk has been successfully loaded.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)" class="member-name-link">relight</a><wbr>(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)" class="member-name-link">relight</a><wbr>(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Forces a relight of the specified chunks.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendLighting()" class="member-name-link">sendLighting</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)" class="member-name-link">setBlock</a><wbr>(int&nbsp;x,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendLighting()" class="member-name-link">sendLighting</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)" class="member-name-link">setBlock</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  @NotNull <a href="block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  <a href="block/BlockHandler.Placement.html" title="class in net.minestom.server.instance.block">BlockHandler.Placement</a>&nbsp;placement,
  <a href="block/BlockHandler.Destroy.html" title="class in net.minestom.server.instance.block">BlockHandler.Destroy</a>&nbsp;destroy)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -240,6 +244,18 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="invalidate()">
+<h3>invalidate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">invalidate</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Chunk.html#invalidate()">Chunk</a></code></span></div>
+<div class="block">Invalidate the chunk caches</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="DynamicChunk.html#invalidate()">invalidate</a></code>&nbsp;in class&nbsp;<code><a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></code></dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)">
 <h3>setBlock</h3>
@@ -311,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="relight(net.minestom.server.instance.Instance,java.util.Collection)">
 <h3>relight</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">relight</span><wbr><span class="parameters">(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</span>&nbsp;<span class="element-name">relight</span><wbr><span class="parameters">(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</span></div>
 <div class="block">Forces a relight of the specified chunks.
  <p>
@@ -322,6 +338,8 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>instance</code> - the instance</dd>
 <dd><code>chunks</code> - the chunks to relight</dd>
+<dt>Returns:</dt>
+<dd>the chunks which have been relighted</dd>
 </dl>
 </section>
 </li>
