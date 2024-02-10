@@ -1,13 +1,11 @@
 package net.minestom.server.instance;
 
-import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
@@ -75,12 +73,6 @@ public class DynamicChunk extends Chunk {
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
 
-        // Update pathfinder
-        if (columnarSpace != null) {
-            final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-            final var blockDescription = PFBlock.get(block);
-            columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
-        }
         Section section = getSectionAt(y);
         section.blockPalette().set(
                 toSectionRelativeCoordinate(x),

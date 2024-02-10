@@ -9,7 +9,6 @@ public final class SweepResult {
     double res;
     double normalX, normalY, normalZ;
     Point collidedPosition;
-    Point collidedPos;
     Shape collidedShape;
 
     /**
@@ -26,6 +25,6 @@ public final class SweepResult {
         this.normalY = normalY;
         this.normalZ = normalZ;
         this.collidedShape = collidedShape;
-        this.collidedPos = collidedPos;
+        this.collidedPosition = collidedPos;
     }
 }

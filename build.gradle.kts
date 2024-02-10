@@ -69,7 +69,6 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
-    api(libs.hydrazine)
     api(libs.bundles.kotlin)
     api(libs.bundles.hephaistos)
     implementation(libs.minestomData)
