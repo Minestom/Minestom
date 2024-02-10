@@ -443,6 +443,7 @@ public class LightingChunk extends DynamicChunk {
     private static Set<Chunk> relightSection(Instance instance, int chunkX, int sectionY, int chunkZ, LightType type) {
         Chunk c = instance.getChunk(chunkX, chunkZ);
         if (c == null) return Set.of();
+        if (!(c instanceof LightingChunk)) return Set.of();
 
         synchronized (instance) {
             Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ), type);
