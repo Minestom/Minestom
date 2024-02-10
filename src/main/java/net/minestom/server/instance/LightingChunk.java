@@ -323,16 +323,15 @@ public class LightingChunk extends DynamicChunk {
      *
      * @param instance the instance
      * @param chunks   the chunks to relight
+     * @return the chunks which have been relighted
      */
-    public static void relight(Instance instance, Collection<Chunk> chunks) {
+    public static List<Chunk> relight(Instance instance, Collection<Chunk> chunks) {
         Set<Point> sections = new HashSet<>();
 
         synchronized (instance) {
             for (Chunk chunk : chunks) {
                 if (chunk == null) continue;
                 if (chunk instanceof LightingChunk lighting) {
-                    if (!lighting.isLightingCalculated()) return;
-
                     for (int section = chunk.minSection; section < chunk.maxSection; section++) {
                         chunk.getSection(section).blockLight().invalidate();
                         chunk.getSection(section).skyLight().invalidate();
@@ -358,6 +357,17 @@ public class LightingChunk extends DynamicChunk {
 
             relight(instance, blockSections, LightType.BLOCK);
             relight(instance, skySections, LightType.SKY);
+
+            var chunksToRelight = new HashSet<Chunk>();
+            for (Point point : blockSections) {
+                chunksToRelight.add(instance.getChunk(point.blockX(), point.blockZ()));
+            }
+
+            for (Point point : skySections) {
+                chunksToRelight.add(instance.getChunk(point.blockX(), point.blockZ()));
+            }
+
+            return new ArrayList<>(chunksToRelight);
         }
     }
 
