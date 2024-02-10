@@ -23,6 +23,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.*;
@@ -767,5 +768,33 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    public int getBlockLight(int blockX, int blockY, int blockZ) {
+        var chunk = getChunkAt(blockX, blockZ);
+        if (chunk == null) return 0;
+        Section section = chunk.getSectionAt(blockY);
+        Light light = section.blockLight();
+
+        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
+        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
+        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+
+        if (light.requiresUpdate()) LightingChunk.relight(chunk.getInstance(), List.of(chunk));
+        return light.getLevel(coordX, coordY, coordZ);
+    }
+
+    public int getSkyLight(int blockX, int blockY, int blockZ) {
+        var chunk = getChunkAt(blockX, blockZ);
+        if (chunk == null) return 0;
+        Section section = chunk.getSectionAt(blockY);
+        Light light = section.skyLight();
+
+        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
+        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
+        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+
+        if (light.requiresUpdate()) LightingChunk.relight(chunk.getInstance(), List.of(chunk));
+        return light.getLevel(coordX, coordY, coordZ);
     }
 }
