@@ -33,7 +33,6 @@ import static net.minestom.server.instance.light.LightCompute.emptyContent;
  * A chunk which supports lighting computation.
  * <p>
  *     This chunk is used to compute the light data for each block.
- *     Lighting is only updated when a chunk is sent to the client. Updates can be forced using {@link LightingChunk#relight}.
  * <p>
  */
 public class LightingChunk extends DynamicChunk {
@@ -328,21 +327,37 @@ public class LightingChunk extends DynamicChunk {
     public static void relight(Instance instance, Collection<Chunk> chunks) {
         Set<Point> sections = new HashSet<>();
 
-        for (Chunk chunk : chunks) {
-            if (chunk == null) continue;
-            for (int section = chunk.minSection; section < chunk.maxSection; section++) {
-                if (chunk instanceof LightingChunk) {
-                    chunk.getSection(section).blockLight().invalidate();
-                    chunk.getSection(section).skyLight().invalidate();
+        synchronized (instance) {
+            for (Chunk chunk : chunks) {
+                if (chunk == null) continue;
+                if (chunk instanceof LightingChunk lighting) {
+                    if (!lighting.isLightingCalculated()) return;
 
-                    sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
+                    for (int section = chunk.minSection; section < chunk.maxSection; section++) {
+                        chunk.getSection(section).blockLight().invalidate();
+                        chunk.getSection(section).skyLight().invalidate();
+
+                        sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
+                    }
+
+                    lighting.lightCache.invalidate();
+                    lighting.chunkCache.invalidate();
                 }
             }
-        }
 
-        synchronized (instance) {
-            relight(instance, sections, LightType.BLOCK);
-            relight(instance, sections, LightType.SKY);
+            // Expand the sections to include nearby sections
+            var blockSections = new HashSet<Point>();
+            for (Point point : sections) {
+                blockSections.addAll(getNearbyRequired(instance, point, LightType.BLOCK));
+            }
+
+            var skySections = new HashSet<Point>();
+            for (Point point : sections) {
+                skySections.addAll(getNearbyRequired(instance, point, LightType.SKY));
+            }
+
+            relight(instance, blockSections, LightType.BLOCK);
+            relight(instance, skySections, LightType.SKY);
         }
     }
 
