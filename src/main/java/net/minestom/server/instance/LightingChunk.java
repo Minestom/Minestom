@@ -80,6 +80,11 @@ public class LightingChunk extends DynamicChunk {
             Block.LAVA.namespace()
     );
 
+    public void invalidate() {
+        this.lightCache.invalidate();
+        this.chunkCache.invalidate();
+    }
+
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
     }
