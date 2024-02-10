@@ -378,6 +378,25 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
+    public void lightLookupTestCrossBorder(Env env) {
+        Instance instance = env.createFlatInstance();
+        instance.setChunkSupplier(LightingChunk::new);
+        for (int x = 4; x <= 7; x++) {
+            for (int z = 6; z <= 8; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(94, -35, 128, Block.GLOWSTONE);
+
+        var val = instance.getBlockLight(94, -35, 128);
+        assertEquals(15, val);
+
+        var val2 = instance.getBlockLight(97, -36, 135);
+        assertEquals(4, val2);
+    }
+
+    @Test
     public void skylight(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
