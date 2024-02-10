@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -30,6 +29,13 @@ import java.util.concurrent.Executors;
 
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
+/**
+ * A chunk which supports lighting computation.
+ * <p>
+ *     This chunk is used to compute the light data for each block.
+ *     Lighting is only updated when a chunk is sent to the client. Updates can be forced using {@link LightingChunk#relight}.
+ * <p>
+ */
 public class LightingChunk extends DynamicChunk {
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
@@ -309,6 +315,16 @@ public class LightingChunk extends DynamicChunk {
         return responseChunks;
     }
 
+    /**
+     * Forces a relight of the specified chunks.
+     * <p>
+     * This method is used to force a relight of the specified chunks.
+     * <p>
+     * This method is thread-safe and can be called from any thread.
+     *
+     * @param instance the instance
+     * @param chunks   the chunks to relight
+     */
     public static void relight(Instance instance, Collection<Chunk> chunks) {
         Set<Point> sections = new HashSet<>();
 
