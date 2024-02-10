@@ -11,9 +11,9 @@ public class RelightCommand extends Command {
             if (source instanceof Player player) {
                 long start = System.currentTimeMillis();
                 source.sendMessage("Relighting...");
-                LightingChunk.relight(player.getInstance(), player.getInstance().getChunks());
+                var relit = LightingChunk.relight(player.getInstance(), player.getInstance().getChunks());
                 source.sendMessage("Relighted " + player.getInstance().getChunks().size() + " chunks in " + (System.currentTimeMillis() - start) + "ms");
-                player.getInstance().getChunks().forEach(chunk -> chunk.sendChunk(player));
+                relit.forEach(chunk -> chunk.sendChunk(player));
                 source.sendMessage("Chunks Received");
             }
         });
