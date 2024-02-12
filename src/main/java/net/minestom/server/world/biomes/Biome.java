@@ -73,12 +73,12 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         });
     }
 
-    @NotNull static Builder builder() {
+    static @NotNull Builder builder() {
         return new Builder();
     }
 
     final class Builder {
-        BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
+        private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
                 .fogColor(0xC0D8FF)
                 .skyColor(0x78A7FF)
                 .waterColor(0x3F76E4)
