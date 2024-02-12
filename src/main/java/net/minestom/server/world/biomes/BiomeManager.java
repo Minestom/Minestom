@@ -91,6 +91,12 @@ public final class BiomeManager {
         return biomesByName.get(namespaceID);
     }
 
+    @Nullable
+    public Biome getByName(String namespaceID) {
+        NamespaceID namespace = NamespaceID.from(namespaceID);
+        return biomesByName.get(namespace);
+    }
+
     public NBTCompound toNBT() {
         return NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:worldgen/biome"),
