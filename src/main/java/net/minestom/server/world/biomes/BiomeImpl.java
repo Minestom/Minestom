@@ -109,15 +109,15 @@ final class BiomeImpl implements DynamicProtocolObject, Biome {
         return this.downfall;
     }
 
-    public BiomeEffects effects() {
+    public @NotNull BiomeEffects effects() {
         return this.effects;
     }
 
-    public Precipitation precipitation() {
+    public @NotNull Precipitation precipitation() {
         return this.precipitation;
     }
 
-    public TemperatureModifier temperatureModifier() {
+    public @NotNull TemperatureModifier temperatureModifier() {
         return this.temperatureModifier;
     }
 }

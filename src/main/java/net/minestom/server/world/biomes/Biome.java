@@ -28,9 +28,9 @@ sealed public interface Biome extends DynamicProtocolObject permits BiomeImpl {
     float temperature();
     float scale();
     float downfall();
-    BiomeEffects effects();
-    Precipitation precipitation();
-    TemperatureModifier temperatureModifier();
+    @NotNull BiomeEffects effects();
+    @NotNull Precipitation precipitation();
+    @NotNull TemperatureModifier temperatureModifier();
 
     enum Precipitation {
         NONE, RAIN, SNOW;
