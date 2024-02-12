@@ -10,6 +10,7 @@ import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.UnitModifier;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class GeneratorImpl {
     private static final Vec SECTION_SIZE = new Vec(16);
+    private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ,
                                   boolean fork) {
@@ -218,7 +220,7 @@ final class GeneratorImpl {
         @Override
         public void setBiome(int x, int y, int z, @NotNull Biome biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
-            var id = MinecraftServer.getBiomeManager().getId(biome);
+            var id = BIOME_MANAGER.getId(biome);
             if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
 
             this.biomePalette.set(

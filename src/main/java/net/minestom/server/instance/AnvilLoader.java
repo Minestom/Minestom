@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
-    private final static Biome BIOME = MinecraftServer.getBiomeManager().getByName(NamespaceID.from("minecraft:plains"));
+    private final static Biome PLAINS = MinecraftServer.getBiomeManager().getByName(NamespaceID.from("minecraft:plains"));
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
     private final Path path;
@@ -189,7 +189,7 @@ public class AnvilLoader implements IChunkLoader {
                                     int finalY = sectionY * Chunk.CHUNK_SECTION_SIZE + y;
                                     String biomeName = sectionBiomeInformation.getBaseBiome();
                                     Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
-                                            Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
+                                            Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), PLAINS));
                                     chunk.setBiome(finalX, finalY, finalZ, biome);
                                 }
                             }
@@ -205,7 +205,7 @@ public class AnvilLoader implements IChunkLoader {
                                     int index = x / 4 + (z / 4) * 4 + (y / 4) * 16;
                                     String biomeName = sectionBiomeInformation.getBiomes()[index];
                                     Biome biome = biomeCache.computeIfAbsent(biomeName, n ->
-                                            Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), BIOME));
+                                            Objects.requireNonNullElse(MinecraftServer.getBiomeManager().getByName(NamespaceID.from(n)), PLAINS));
                                     chunk.setBiome(finalX, finalY, finalZ, biome);
                                 }
                             }
