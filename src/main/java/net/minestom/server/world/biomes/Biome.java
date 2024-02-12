@@ -94,7 +94,8 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         private Precipitation precipitation = Precipitation.RAIN;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
-        public Builder name(NamespaceID name) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder name(@NotNull NamespaceID name) {
             this.name = name;
             return this;
         }
@@ -124,19 +125,19 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder effects(BiomeEffects effects) {
+        public @NotNull Builder effects(@NotNull BiomeEffects effects) {
             this.effects = effects;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder precipitation(Biome.Precipitation precipitation) {
+        public @NotNull Builder precipitation(@NotNull Biome.Precipitation precipitation) {
             this.precipitation = precipitation;
             return this;
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder temperatureModifier(TemperatureModifier temperatureModifier) {
+        public @NotNull Builder temperatureModifier(@NotNull TemperatureModifier temperatureModifier) {
             this.temperatureModifier = temperatureModifier;
             return this;
         }
