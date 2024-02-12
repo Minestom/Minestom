@@ -1,4 +1,4 @@
 package net.minestom.server.world.biomes;
 
-public class VanillaBiome implements Biomes {
+final public class VanillaBiome implements Biomes {
 }
