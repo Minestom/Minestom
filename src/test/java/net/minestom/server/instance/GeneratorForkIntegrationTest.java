@@ -1,11 +1,12 @@
 package net.minestom.server.instance;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
-import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -97,11 +98,13 @@ public class GeneratorForkIntegrationTest {
     @Test
     public void biome(Env env) {
         var manager = env.process().instance();
+
+        var plains = MinecraftServer.getBiomeManager().getByName(NamespaceID.from("minecraft:plains"));
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> {
             var u = unit.fork(unit.absoluteStart(), unit.absoluteEnd().add(16, 0, 16));
-            assertThrows(IllegalStateException.class, () -> u.modifier().setBiome(16, 0, 0, Biome.PLAINS));
-            assertThrows(IllegalStateException.class, () -> u.modifier().fillBiome(Biome.PLAINS));
+            assertThrows(IllegalStateException.class, () -> u.modifier().setBiome(16, 0, 0, plains));
+            assertThrows(IllegalStateException.class, () -> u.modifier().fillBiome(plains));
         });
         instance.loadChunk(0, 0).join();
     }

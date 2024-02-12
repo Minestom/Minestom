@@ -1,6 +1,6 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
@@ -10,7 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 
-public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
+public sealed interface DamageType extends StaticProtocolObject, DamageTypes permits DamageTypeImpl {
     /**
      * Returns the damage type registry.
      *

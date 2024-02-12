@@ -28,13 +28,18 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Handles registry data, used by {@link ProtocolObject} implementations and is strictly internal.
+ * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
  */
 public final class Registry {
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Properties main) {
         return new BlockEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static BiomeEntry biome(String namespace, Properties properties) {
+        return new BiomeEntry(namespace, properties, null);
     }
 
     @ApiStatus.Internal
@@ -89,7 +94,7 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
@@ -104,9 +109,9 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public record Container<T extends ProtocolObject>(Resource resource,
-                                                      Map<String, T> namespaces,
-                                                      ObjectArray<T> ids) {
+    public record Container<T extends StaticProtocolObject>(Resource resource,
+                                                            Map<String, T> namespaces,
+                                                            ObjectArray<T> ids) {
         public Container {
             namespaces = Map.copyOf(namespaces);
             ids.trim();
@@ -150,6 +155,54 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
+        var entries = Registry.load(resource);
+        Map<String, T> namespaces = new HashMap<>(entries.size());
+        for (var entry : entries.entrySet()) {
+            final String namespace = entry.getKey();
+            final Properties properties = Properties.fromMap(entry.getValue());
+            final T value = loader.get(namespace, properties);
+            namespaces.put(value.name(), value);
+        }
+        return new DynamicContainer<>(resource, namespaces);
+    }
+
+    @ApiStatus.Internal
+    public record DynamicContainer<T>(Resource resource, Map<String, T> namespaces) {
+        public DynamicContainer {
+            namespaces = Map.copyOf(namespaces);
+        }
+
+        public T get(@NotNull String namespace) {
+            return namespaces.get(namespace);
+        }
+
+        public T getSafe(@NotNull String namespace) {
+            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
+        }
+
+        public Collection<T> values() {
+            return namespaces.values();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Container<?> container)) return false;
+            return resource == container.resource;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(resource);
+        }
+
+        public interface Loader<T extends ProtocolObject> {
+            T get(String namespace, Properties properties);
+        }
+    }
+
+    @ApiStatus.Internal
     public enum Resource {
         BLOCKS("blocks.json"),
         ITEMS("items.json"),
@@ -168,7 +221,8 @@ public final class Registry {
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
         FLUID_TAGS("tags/fluid_tags.json"),
         GAMEPLAY_TAGS("tags/gameplay_tags.json"),
-        ITEM_TAGS("tags/item_tags.json");
+        ITEM_TAGS("tags/item_tags.json"),
+        BIOMES("biomes.json");
 
         private final String name;
 
@@ -320,6 +374,81 @@ public final class Registry {
         @Override
         public Properties custom() {
             return custom;
+        }
+    }
+
+    public static final class BiomeEntry implements Entry {
+        private final Properties custom;
+        private final NamespaceID namespace;
+        private final Integer foliageColor;
+        private final Integer grassColor;
+        private final Integer skyColor;
+        private final Integer waterColor;
+        private final Integer waterFogColor;
+        private final Integer fogColor;
+        private final float temperature;
+        private final float downfall;
+        private final boolean hasPrecipitation;
+
+        private BiomeEntry(String namespace, Properties main, Properties custom) {
+            this.custom = custom;
+            this.namespace = NamespaceID.from(namespace);
+
+            this.foliageColor = main.containsKey("foliageColor") ? main.getInt("foliageColor") : null;
+            this.grassColor = main.containsKey("grassColor") ? main.getInt("grassColor") : null;
+            this.skyColor = main.containsKey("skyColor") ? main.getInt("skyColor") : null;
+            this.waterColor = main.containsKey("waterColor") ? main.getInt("waterColor") : null;
+            this.waterFogColor = main.containsKey("waterFogColor") ? main.getInt("waterFogColor") : null;
+            this.fogColor = main.containsKey("fogColor") ? main.getInt("fogColor") : null;
+
+            this.temperature = (float) main.getDouble("temperature", 0.5F);
+            this.downfall = (float) main.getDouble("downfall", 0.5F);
+            this.hasPrecipitation = main.getBoolean("has_precipitation", true);
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public @Nullable Integer foliageColor() {
+            return foliageColor;
+        }
+
+        public @Nullable Integer grassColor() {
+            return grassColor;
+        }
+
+        public @Nullable Integer skyColor() {
+            return skyColor;
+        }
+
+        public @Nullable Integer waterColor() {
+            return waterColor;
+        }
+
+        public @Nullable Integer waterFogColor() {
+            return waterFogColor;
+        }
+
+        public @Nullable Integer fogColor() {
+            return fogColor;
+        }
+
+        public float temperature() {
+            return temperature;
+        }
+
+        public float downfall() {
+            return downfall;
+        }
+
+        public boolean hasPrecipitation() {
+            return hasPrecipitation;
         }
     }
 
@@ -601,6 +730,11 @@ public final class Registry {
         }
 
         @Override
+        public boolean containsKey(String name) {
+            return map.containsKey(name);
+        }
+
+        @Override
         public Map<String, Object> asMap() {
             return map;
         }
@@ -641,6 +775,8 @@ public final class Registry {
         boolean getBoolean(String name);
 
         Properties section(String name);
+
+        boolean containsKey(String name);
 
         Map<String, Object> asMap();
 

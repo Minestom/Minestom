@@ -2,14 +2,14 @@ package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEvents permits SoundEventImpl {
+public sealed interface SoundEvent extends StaticProtocolObject, Sound.Type, SoundEvents permits SoundEventImpl {
 
     static @NotNull Collection<@NotNull SoundEvent> values() {
         return SoundEventImpl.values();
@@ -29,6 +29,6 @@ public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEven
 
     @Override
     default @NotNull Key key() {
-        return ProtocolObject.super.key();
+        return StaticProtocolObject.super.key();
     }
 }

@@ -4,7 +4,7 @@ import net.minestom.server.color.Color;
 import net.minestom.server.item.ItemMetaView;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.List;
 
 public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMeta.Builder> {
-    private static final Tag<PotionType> POTION_TYPE = Tag.String("Potion").map(PotionType::fromNamespaceId, ProtocolObject::name).defaultValue(PotionType.EMPTY);
+    private static final Tag<PotionType> POTION_TYPE = Tag.String("Potion").map(PotionType::fromNamespaceId, StaticProtocolObject::name).defaultValue(PotionType.EMPTY);
     private static final Tag<List<CustomPotionEffect>> CUSTOM_POTION_EFFECTS = Tag.Structure("CustomPotionEffects", new TagSerializer<CustomPotionEffect>() {
         @Override
         public @Nullable CustomPotionEffect read(@NotNull TagReadable reader) {

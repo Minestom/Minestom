@@ -1,6 +1,6 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface EntityType extends ProtocolObject, EntityTypes permits EntityTypeImpl {
+public sealed interface EntityType extends StaticProtocolObject, EntityTypes permits EntityTypeImpl {
     /**
      * Returns the entity registry.
      *
