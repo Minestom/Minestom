@@ -27,13 +27,17 @@ final class BiomeImpl implements DynamicProtocolObject, Biome {
         return CONTAINER.getSafe(namespace);
     }
 
+    @NotNull
     private final NamespaceID name;
     private final float depth;
     private final float temperature;
     private final float scale;
     private final float downfall;
+    @NotNull
     private final BiomeEffects effects;
+    @NotNull
     private final Precipitation precipitation;
+    @NotNull
     private final TemperatureModifier temperatureModifier;
 
     BiomeImpl(NamespaceID name, float depth, float temperature, float scale, float downfall, BiomeEffects effects, Precipitation precipitation, TemperatureModifier temperatureModifier) {

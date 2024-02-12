@@ -2,6 +2,7 @@ package net.minestom.server.world.biomes;
 
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
@@ -80,10 +81,12 @@ public final class BiomeManager {
      * @param id the id of the biome
      * @return the {@link Biome} linked to this id
      */
+    @Nullable
     public Biome getById(int id) {
         return biomes.get(id);
     }
 
+    @Nullable
     public Biome getByName(NamespaceID namespaceID) {
         return biomesByName.get(namespaceID);
     }
@@ -100,6 +103,12 @@ public final class BiomeManager {
                 }).toList())));
     }
 
+    /**
+     * Gets the id of a biome.
+     *`
+     * @param biome
+     * @return the id of the biome, or -1 if the biome is not registered
+     */
     public int getId(Biome biome) {
         return idMappings.getOrDefault(biome.namespace(), -1);
     }
