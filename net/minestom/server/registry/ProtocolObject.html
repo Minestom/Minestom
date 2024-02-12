@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code>, <code><a href="../entity/damage/DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a></code>, <code><a href="../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a></code>, <code><a href="../entity/EntityType.html" title="interface in net.minestom.server.entity">EntityType</a></code>, <code><a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a></code>, <code><a href="../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></code>, <code><a href="../potion/PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a></code>, <code><a href="../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a></code>, <code><a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code>, <code><a href="../statistic/StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></code>, <code><a href="../item/armor/TrimMaterial.html" title="interface in net.minestom.server.item.armor">TrimMaterial</a></code>, <code><a href="../item/armor/TrimPattern.html" title="interface in net.minestom.server.item.armor">TrimPattern</a></code></dd>
+<dd><code><a href="../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a></code>, <code><a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code>, <code><a href="../entity/damage/DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a></code>, <code><a href="../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a></code>, <code><a href="../entity/EntityType.html" title="interface in net.minestom.server.entity">EntityType</a></code>, <code><a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a></code>, <code><a href="../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></code>, <code><a href="../potion/PotionEffect.html" title="interface in net.minestom.server.potion">PotionEffect</a></code>, <code><a href="../potion/PotionType.html" title="interface in net.minestom.server.potion">PotionType</a></code>, <code><a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code>, <code><a href="StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code>, <code><a href="../statistic/StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></code>, <code><a href="../item/armor/TrimMaterial.html" title="interface in net.minestom.server.item.armor">TrimMaterial</a></code>, <code><a href="../item/armor/TrimPattern.html" title="interface in net.minestom.server.item.armor">TrimPattern</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">ProtocolObject</span><span class="extends-implements">
@@ -97,18 +97,15 @@ extends net.kyori.adventure.key.Keyed</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull net.kyori.adventure.key.Key</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#name()" class="member-name-link">name</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull net.kyori.adventure.key.Key</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#name()" class="member-name-link">name</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -132,6 +129,14 @@ extends net.kyori.adventure.key.Keyed</span></div>
 </section>
 </li>
 <li>
+<section class="detail" id="name()">
+<h3>name</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">name</span>()</div>
+</section>
+</li>
+<li>
 <section class="detail" id="key()">
 <h3>key</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
@@ -141,21 +146,6 @@ extends net.kyori.adventure.key.Keyed</span></div>
 <dt>Specified by:</dt>
 <dd><code>key</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.key.Keyed</code></dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="name()">
-<h3>name</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">name</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="id()">
-<h3>id</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="return-type">int</span>&nbsp;<span class="element-name">id</span>()</div>
 </section>
 </li>
 </ul>

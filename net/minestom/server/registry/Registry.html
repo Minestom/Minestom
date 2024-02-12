@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">Registry</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Handles registry data, used by <a href="ProtocolObject.html" title="interface in net.minestom.server.registry"><code>ProtocolObject</code></a> implementations and is strictly internal.
+<div class="block">Handles registry data, used by <a href="StaticProtocolObject.html" title="interface in net.minestom.server.registry"><code>StaticProtocolObject</code></a> implementations and is strictly internal.
  Use at your own risk.</div>
 </section>
 <section class="summary">
@@ -93,13 +93,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Registry.BlockEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.BlockEntry</a></code></div>
+<div class="col-second even-row-color"><code><a href="Registry.BiomeEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.BiomeEntry</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="Registry.Container.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.Container</a>&lt;<a href="Registry.Container.html" title="type parameter in Registry.Container">T</a> extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="Registry.BlockEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.BlockEntry</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Registry.DamageTypeEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.DamageTypeEntry</a></code></div>
+<div class="col-second even-row-color"><code><a href="Registry.Container.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.Container</a>&lt;<a href="Registry.Container.html" title="type parameter in Registry.Container">T</a> extends <a href="StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a>&gt;</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="Registry.DamageTypeEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.DamageTypeEntry</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Registry.DynamicContainer.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.DynamicContainer</a>&lt;<a href="Registry.DynamicContainer.html" title="type parameter in Registry.DynamicContainer">T</a>&gt;</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="Registry.EnchantmentEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.EnchantmentEntry</a></code></div>
@@ -155,12 +161,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.BlockEntry.html" title="class in net.minestom.server.registry">Registry.BlockEntry</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#block(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">block</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
- @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.BiomeEntry.html" title="class in net.minestom.server.registry">Registry.BiomeEntry</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#biome(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">biome</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;properties)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br><a href="Registry.Container.html" title="class in net.minestom.server.registry">Registry.Container</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createContainer(net.minestom.server.registry.Registry.Resource,net.minestom.server.registry.Registry.Container.Loader)" class="member-name-link">createContainer</a><wbr>(<a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.BlockEntry.html" title="class in net.minestom.server.registry">Registry.BlockEntry</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#block(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">block</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br><a href="Registry.DynamicContainer.html" title="class in net.minestom.server.registry">Registry.DynamicContainer</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createDynamicContainer(net.minestom.server.registry.Registry.Resource,net.minestom.server.registry.Registry.Container.Loader)" class="member-name-link">createDynamicContainer</a><wbr>(<a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource,
+ <a href="Registry.Container.Loader.html" title="interface in net.minestom.server.registry">Registry.Container.Loader</a>&lt;T&gt;&nbsp;loader)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a>&gt;<br><a href="Registry.Container.html" title="class in net.minestom.server.registry">Registry.Container</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createStaticContainer(net.minestom.server.registry.Registry.Resource,net.minestom.server.registry.Registry.Container.Loader)" class="member-name-link">createStaticContainer</a><wbr>(<a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource,
  <a href="Registry.Container.Loader.html" title="interface in net.minestom.server.registry">Registry.Container.Loader</a>&lt;T&gt;&nbsp;loader)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.DamageTypeEntry.html" title="class in net.minestom.server.registry">Registry.DamageTypeEntry</a></code></div>
@@ -235,6 +249,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="biome(java.lang.String,net.minestom.server.registry.Registry.Properties)">
+<h3>biome</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Registry.BiomeEntry.html" title="class in net.minestom.server.registry">Registry.BiomeEntry</a></span>&nbsp;<span class="element-name">biome</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;properties)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="material(java.lang.String,net.minestom.server.registry.Registry.Properties)">
 <h3>material</h3>
 <div class="member-signature"><span class="annotations">@Internal
@@ -305,11 +327,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="createContainer(net.minestom.server.registry.Registry.Resource,net.minestom.server.registry.Registry.Container.Loader)">
-<h3>createContainer</h3>
+<section class="detail" id="createStaticContainer(net.minestom.server.registry.Registry.Resource,net.minestom.server.registry.Registry.Container.Loader)">
+<h3>createStaticContainer</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a>&gt;</span>
+<span class="return-type"><a href="Registry.Container.html" title="class in net.minestom.server.registry">Registry.Container</a>&lt;T&gt;</span>&nbsp;<span class="element-name">createStaticContainer</span><wbr><span class="parameters">(<a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource,
+ <a href="Registry.Container.Loader.html" title="interface in net.minestom.server.registry">Registry.Container.Loader</a>&lt;T&gt;&nbsp;loader)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="createDynamicContainer(net.minestom.server.registry.Registry.Resource,net.minestom.server.registry.Registry.Container.Loader)">
+<h3>createDynamicContainer</h3>
 <div class="member-signature"><span class="annotations">@Internal
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span>
-<span class="return-type"><a href="Registry.Container.html" title="class in net.minestom.server.registry">Registry.Container</a>&lt;T&gt;</span>&nbsp;<span class="element-name">createContainer</span><wbr><span class="parameters">(<a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource,
+<span class="return-type"><a href="Registry.DynamicContainer.html" title="class in net.minestom.server.registry">Registry.DynamicContainer</a>&lt;T&gt;</span>&nbsp;<span class="element-name">createDynamicContainer</span><wbr><span class="parameters">(<a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource,
  <a href="Registry.Container.Loader.html" title="interface in net.minestom.server.registry">Registry.Container.Loader</a>&lt;T&gt;&nbsp;loader)</span></div>
 </section>
 </li>
