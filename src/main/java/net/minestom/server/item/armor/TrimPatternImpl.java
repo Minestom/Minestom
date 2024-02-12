@@ -13,7 +13,7 @@ record TrimPatternImpl(Registry.TrimPatternEntry registry, int id) implements Tr
     private static final Registry.Container<TrimPattern> CONTAINER;
 
     static {
-        CONTAINER = Registry.createContainer(Registry.Resource.TRIM_PATTERNS,
+        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_PATTERNS,
                 (namespace, properties) -> new TrimPatternImpl(Registry.trimPattern(namespace, properties)));
     }
 

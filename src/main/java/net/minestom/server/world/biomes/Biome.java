@@ -1,7 +1,7 @@
 package net.minestom.server.world.biomes;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.registry.DynamicProtocolObject;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
@@ -13,11 +13,11 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Locale;
 
-sealed public interface Biome extends DynamicProtocolObject permits BiomeImpl {
+sealed public interface Biome extends ProtocolObject permits BiomeImpl {
     /**
      * Returns the entity registry.
      *
-     * @return the entity registry
+     * @return the entity registry or null if it was created with a builder
      */
     @Contract(pure = true)
     @Nullable Registry.BiomeEntry registry();

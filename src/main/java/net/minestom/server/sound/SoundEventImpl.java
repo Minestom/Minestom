@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record SoundEventImpl(NamespaceID namespace, int id) implements SoundEvent {
-    private static final Registry.Container<SoundEvent> CONTAINER = Registry.createContainer(Registry.Resource.SOUNDS,
+    private static final Registry.Container<SoundEvent> CONTAINER = Registry.createStaticContainer(Registry.Resource.SOUNDS,
             (namespace, properties) -> new SoundEventImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static SoundEvent get(@NotNull String namespace) {

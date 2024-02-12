@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record ParticleImpl(NamespaceID namespace, int id) implements Particle {
-    private static final Registry.Container<Particle> CONTAINER = Registry.createContainer(Registry.Resource.PARTICLES,
+    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
             (namespace, properties) -> new ParticleImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static Particle get(@NotNull String namespace) {

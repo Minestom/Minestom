@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Handles registry data, used by {@link ProtocolObject} implementations and is strictly internal.
+ * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
  */
 public final class Registry {
@@ -94,7 +94,7 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
@@ -109,9 +109,9 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public record Container<T extends ProtocolObject>(Resource resource,
-                                                      Map<String, T> namespaces,
-                                                      ObjectArray<T> ids) {
+    public record Container<T extends StaticProtocolObject>(Resource resource,
+                                                            Map<String, T> namespaces,
+                                                            ObjectArray<T> ids) {
         public Container {
             namespaces = Map.copyOf(namespaces);
             ids.trim();
@@ -149,13 +149,13 @@ public final class Registry {
             return Objects.hash(resource);
         }
 
-        public interface Loader<T extends DynamicProtocolObject> {
+        public interface Loader<T extends ProtocolObject> {
             T get(String namespace, Properties properties);
         }
     }
 
     @ApiStatus.Internal
-    public static <T extends DynamicProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         for (var entry : entries.entrySet()) {
@@ -197,7 +197,7 @@ public final class Registry {
             return Objects.hash(resource);
         }
 
-        public interface Loader<T extends DynamicProtocolObject> {
+        public interface Loader<T extends ProtocolObject> {
             T get(String namespace, Properties properties);
         }
     }

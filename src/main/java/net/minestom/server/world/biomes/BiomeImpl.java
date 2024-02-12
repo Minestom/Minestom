@@ -1,6 +1,6 @@
 package net.minestom.server.world.biomes;
 
-import net.minestom.server.registry.DynamicProtocolObject;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-final class BiomeImpl implements DynamicProtocolObject, Biome {
+final class BiomeImpl implements ProtocolObject, Biome {
     // https://minecraft.wiki/w/Rain
     private final static Double SNOW_TEMPERATURE = 0.15;
 
