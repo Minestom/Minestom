@@ -73,7 +73,7 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         });
     }
 
-    static Builder builder() {
+    @NotNull static Builder builder() {
         return new Builder();
     }
 
@@ -99,42 +99,50 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
             return this;
         }
 
-        public Builder depth(float depth) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder depth(float depth) {
             this.depth = depth;
             return this;
         }
 
-        public Builder temperature(float temperature) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder temperature(float temperature) {
             this.temperature = temperature;
             return this;
         }
 
-        public Builder scale(float scale) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder scale(float scale) {
             this.scale = scale;
             return this;
         }
 
-        public Builder downfall(float downfall) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder downfall(float downfall) {
             this.downfall = downfall;
             return this;
         }
 
-        public Builder effects(BiomeEffects effects) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder effects(BiomeEffects effects) {
             this.effects = effects;
             return this;
         }
 
-        public Builder precipitation(Biome.Precipitation precipitation) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder precipitation(Biome.Precipitation precipitation) {
             this.precipitation = precipitation;
             return this;
         }
 
-        public Builder temperatureModifier(TemperatureModifier temperatureModifier) {
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder temperatureModifier(TemperatureModifier temperatureModifier) {
             this.temperatureModifier = temperatureModifier;
             return this;
         }
 
-        public Biome build() {
+        @Contract(pure = true)
+        public @NotNull Biome build() {
             return new BiomeImpl(name, depth, temperature, scale, downfall, effects, precipitation, temperatureModifier);
         }
     }
