@@ -91,14 +91,14 @@ public final class BiomeManager {
     }
 
     @Nullable
-    public Biome getByName(NamespaceID namespaceID) {
+    public Biome getByName(@NotNull NamespaceID namespaceID) {
         return biomesByName.get(namespaceID);
     }
 
     @Nullable
-    public Biome getByName(String namespaceID) {
+    public Biome getByName(@NotNull String namespaceID) {
         NamespaceID namespace = NamespaceID.from(namespaceID);
-        return biomesByName.get(namespace);
+        return getByName(namespace);
     }
 
     public @NotNull NBTCompound toNBT() {
