@@ -87,6 +87,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -993,11 +994,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         .pages(book.pages()))
                 .build();
         // Set book in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventory.OFF_HAND_SLOT, writtenBook));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, writtenBook));
         // Open the book
         sendPacket(new OpenBookPacket(Hand.OFF));
         // Restore the item in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventory.OFF_HAND_SLOT, getItemInOffHand()));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, getItemInOffHand()));
     }
 
     @Override

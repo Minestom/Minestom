@@ -1,9 +1,9 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.ints.IntIterator;
-import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -127,24 +127,20 @@ public class StandardClickHandler implements ClickHandler {
     }
 
     public void hotbarSwap(@NotNull ClickInfo.HotbarSwap info, @NotNull ClickResult.Builder builder) {
-        var hotbarSlot = PlayerInventory.HOTBAR_START + info.hotbarSlot();
-
-        var hotbarItem = builder.playerInventory().getItemStack(hotbarSlot);
+        var hotbarItem = builder.playerInventory().getItemStack(info.hotbarSlot());
         var selectedItem = builder.get(info.clickedSlot());
 
         if (!hotbarItem.isAir() || !selectedItem.isAir()) {
-            builder.change(hotbarSlot, selectedItem, true).change(info.clickedSlot(), hotbarItem);
+            builder.change(info.hotbarSlot(), selectedItem, true).change(info.clickedSlot(), hotbarItem);
         }
     }
 
     public void offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull ClickResult.Builder builder) {
-        var offhandSlot = PlayerInventory.OFF_HAND_SLOT;
-
-        var offhandItem = builder.playerInventory().getItemStack(offhandSlot);
+        var offhandItem = builder.playerInventory().getItemStack(PlayerInventoryUtils.OFF_HAND_SLOT);
         var selectedItem = builder.get(info.clickedSlot());
 
         if (!offhandItem.isAir() || !selectedItem.isAir()) {
-            builder.change(offhandSlot, selectedItem, true).change(info.clickedSlot(), offhandItem);
+            builder.change(PlayerInventoryUtils.OFF_HAND_SLOT, selectedItem, true).change(info.clickedSlot(), offhandItem);
         }
     }
 

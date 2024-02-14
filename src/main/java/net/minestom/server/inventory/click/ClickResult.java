@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +70,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
 
         public @NotNull Builder change(int slot, @NotNull ItemStack item) {
             if (slot >= clickedInventory.getSize()) {
-                change(slot - clickedInventory.getSize() + 9, item, true);
+                change(PlayerInventoryUtils.protocolToMinestom(slot - clickedInventory.getSize() + 9), item, true);
             } else {
                 change(slot, item, false);
             }

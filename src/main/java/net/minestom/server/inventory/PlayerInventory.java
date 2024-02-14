@@ -13,26 +13,21 @@ import net.minestom.server.inventory.click.ClickResult;
 import net.minestom.server.inventory.click.StandardClickHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.stream.IntStream;
+
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
 public non-sealed class PlayerInventory extends InventoryImpl {
-
-    public static final int INVENTORY_SIZE = 46;
-    public static final int INNER_SIZE = 36;
-
-    public static final int HELMET_SLOT = 5;
-    public static final int CHESTPLATE_SLOT = 6;
-    public static final int LEGGINGS_SLOT = 7;
-    public static final int BOOTS_SLOT = 8;
-    public static final int OFF_HAND_SLOT = 45;
-
-    public static final int HOTBAR_START = 36;
 
     public static final @NotNull ClickHandler CLICK_HANDLER = new StandardClickHandler(
             (builder, item, slot) -> {
@@ -47,12 +42,12 @@ public non-sealed class PlayerInventory extends InventoryImpl {
                     base = IntIterators.concat(base, IntIterators.singleton(OFF_HAND_SLOT));
                 }
 
-                if (slot < 9 || slot > 35) {
-                    base = IntIterators.concat(base, IntIterators.fromTo(9, 36));
+                if (slot < 0 || slot > 8) {
+                    base = IntIterators.concat(base, IntIterators.fromTo(0, 9));
                 }
 
-                if (slot < 36 || slot > 44) {
-                    base = IntIterators.concat(base, IntIterators.fromTo(36, 45));
+                if (slot < 9 || slot > 35) {
+                    base = IntIterators.concat(base, IntIterators.fromTo(9, 36));
                 }
 
                 if (slot == 0) {
@@ -61,7 +56,11 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
                 return base;
             },
-            (builder, item, slot) -> IntIterators.fromTo(1, builder.clickedInventory().getSize())
+            (builder, item, slot) -> IntIterators.concat(
+                    IntIterators.fromTo(CRAFT_SLOT_1, CRAFT_SLOT_4 + 1),
+                    IntIterators.fromTo(9, 36),
+                    IntIterators.fromTo(0, 9)
+            )
     );
 
     public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
@@ -76,7 +75,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
         return switch (slot) {
             case HELMET, CHESTPLATE, LEGGINGS, BOOTS -> slot.armorSlot();
             case OFF_HAND -> OFF_HAND_SLOT;
-            case MAIN_HAND -> HOTBAR_START + heldSlot;
+            case MAIN_HAND -> heldSlot;
         };
     }
 
@@ -87,7 +86,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
             case BOOTS_SLOT -> EquipmentSlot.BOOTS;
             case OFF_HAND_SLOT -> EquipmentSlot.OFF_HAND;
-            default -> slot == (HOTBAR_START + heldSlot) ? EquipmentSlot.MAIN_HAND : null;
+            default -> slot == heldSlot ? EquipmentSlot.MAIN_HAND : null;
         };
     }
 
@@ -123,7 +122,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     @Override
     public void updateSlot(int slot, @NotNull ItemStack itemStack) {
-        super.updateSlot(slot, itemStack);
+        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot), itemStack));
 
         for (var player : getViewers()) {
             var equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
@@ -131,6 +130,18 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
             player.syncEquipment(equipmentSlot, itemStack);
         }
+    }
+
+    @Override
+    public void update(@NotNull Player player) {
+        ItemStack[] local = getItemStacks();
+        ItemStack[] mapped = new ItemStack[getSize()];
+
+        for (int slot = 0; slot < getSize(); slot++) {
+            mapped[PlayerInventoryUtils.minestomToProtocol(slot)] = local[slot];
+        }
+
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
     }
 
     @Override

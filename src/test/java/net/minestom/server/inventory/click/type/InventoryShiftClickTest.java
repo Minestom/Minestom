@@ -1,10 +1,10 @@
 package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.ClickInfo;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.inventory.click.ClickUtils.*;
@@ -123,25 +123,25 @@ public class InventoryShiftClickTest {
         assertPlayerClick(
                 builder -> builder.change(9, ItemStack.of(Material.IRON_CHESTPLATE)),
                 new ClickInfo.ShiftClick(9),
-                builder -> builder.change(9, ItemStack.AIR).change(PlayerInventory.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE))
+                builder -> builder.change(9, ItemStack.AIR).change(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE))
         );
 
         assertPlayerClick(
-                builder -> builder.change(PlayerInventory.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE)),
-                new ClickInfo.ShiftClick(PlayerInventory.CHESTPLATE_SLOT),
-                builder -> builder.change(PlayerInventory.CHESTPLATE_SLOT, ItemStack.AIR).change(9, ItemStack.of(Material.IRON_CHESTPLATE))
+                builder -> builder.change(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE)),
+                new ClickInfo.ShiftClick(PlayerInventoryUtils.CHESTPLATE_SLOT),
+                builder -> builder.change(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.AIR).change(9, ItemStack.of(Material.IRON_CHESTPLATE))
         );
 
         assertPlayerClick(
                 builder -> builder.change(9, ItemStack.of(Material.SHIELD)),
                 new ClickInfo.ShiftClick(9),
-                builder -> builder.change(9, ItemStack.AIR).change(PlayerInventory.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))
+                builder -> builder.change(9, ItemStack.AIR).change(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))
         );
 
         assertPlayerClick(
-                builder -> builder.change(PlayerInventory.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)),
-                new ClickInfo.ShiftClick(PlayerInventory.OFF_HAND_SLOT),
-                builder -> builder.change(PlayerInventory.OFF_HAND_SLOT, ItemStack.AIR).change(9, ItemStack.of(Material.SHIELD))
+                builder -> builder.change(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)),
+                new ClickInfo.ShiftClick(PlayerInventoryUtils.OFF_HAND_SLOT),
+                builder -> builder.change(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.AIR).change(9, ItemStack.of(Material.SHIELD))
         );
     }
 

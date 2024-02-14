@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
-import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
@@ -21,7 +20,7 @@ public class PlayerHeldIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();
 
-        player.getInventory().setItemStack(PlayerInventory.HOTBAR_START + 1, ItemStack.of(Material.STONE));
+        player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(0, player.getHeldSlot());
 
@@ -38,7 +37,7 @@ public class PlayerHeldIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();
 
-        player.getInventory().setItemStack(PlayerInventory.HOTBAR_START + 1, ItemStack.of(Material.STONE));
+        player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(0, player.getHeldSlot());
 
