@@ -30,7 +30,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
         return new Builder(player, clickedInventory);
     }
 
-    public static class Builder {
+    public static final class Builder {
         private final @NotNull Player player;
         private final @NotNull Inventory clickedInventory;
 

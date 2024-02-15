@@ -255,10 +255,9 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public <T> @NotNull T processItemStack(
-            @NotNull ItemStack itemStack,
-            @NotNull TransactionType type,
-            @NotNull TransactionOption<T> option) {
+    public <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
+                                           @NotNull TransactionType type,
+                                           @NotNull TransactionOption<T> option) {
         lock.lock();
         try {
             return option.fill(type, this, itemStack);

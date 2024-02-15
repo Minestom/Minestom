@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 /**
  * Preprocesses click packets for an inventory, turning them into {@link ClickInfo} instances for further processing.
  */
-public class ClickPreprocessor {
+public final class ClickPreprocessor {
 
     private final @NotNull Inventory inventory;
 

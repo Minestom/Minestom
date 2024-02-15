@@ -128,7 +128,8 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
     void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator);
 
     <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
-                                                        @NotNull TransactionType type, @NotNull TransactionOption<T> option);
+                                    @NotNull TransactionType type,
+                                    @NotNull TransactionOption<T> option);
 
     <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                     @NotNull TransactionType type, @NotNull TransactionOption<T> option);
