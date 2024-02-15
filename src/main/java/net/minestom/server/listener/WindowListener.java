@@ -2,9 +2,11 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryButtonClickEvent;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
+import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.common.PingPacket;
@@ -44,6 +46,14 @@ public class WindowListener {
         Inventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
             player.openInventory(newInventory);
+    }
+
+    public static void buttonClickListener(ClientClickWindowButtonPacket packet, Player player) {
+        var openInventory = player.getOpenInventory();
+        if (openInventory == null) openInventory = player.getInventory();
+
+        InventoryButtonClickEvent event = new InventoryButtonClickEvent(openInventory, player, packet.buttonId());
+        EventDispatcher.call(event);
     }
 
 }
