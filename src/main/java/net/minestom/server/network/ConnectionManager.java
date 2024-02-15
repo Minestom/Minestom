@@ -218,6 +218,10 @@ public final class ConnectionManager {
         return AsyncUtils.runAsync(() -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
 
+            // Map the connection to the player provided if no mapping currently exists (fallback)
+            if (!connectionPlayerMap.containsKey(playerConnection))
+                connectionPlayerMap.put(playerConnection, player);
+
             // Compression
             if (playerConnection instanceof PlayerSocketConnection socketConnection) {
                 final int threshold = MinecraftServer.getCompressionThreshold();
