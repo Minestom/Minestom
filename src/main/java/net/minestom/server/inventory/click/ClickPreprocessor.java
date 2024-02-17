@@ -70,7 +70,7 @@ public final class ClickPreprocessor {
                 }
                 yield null;
             }
-            case QUICK_MOVE -> validate(slot) ? new ClickInfo.ShiftClick(slot) : null;
+            case QUICK_MOVE -> validate(slot) ? new ClickInfo.ShiftClick(slot, button == 0 ? ClickInfo.ShiftClick.Button.PRIMARY : ClickInfo.ShiftClick.Button.SECONDARY) : null;
             case SWAP -> {
                 if (!validate(slot)) {
                     yield null;
