@@ -27,6 +27,7 @@ final class BiomeImpl implements ProtocolObject, Biome {
         return CONTAINER.getSafe(namespace);
     }
 
+    private Registry.BiomeEntry entry;
     @NotNull
     private final NamespaceID name;
     private final float depth;
@@ -52,6 +53,7 @@ final class BiomeImpl implements ProtocolObject, Biome {
     }
 
     BiomeImpl(Registry.BiomeEntry entry) {
+        this.entry = entry;
         this.name = entry.namespace();
         this.depth = 0.2f;
         this.scale = 0.2f;
@@ -85,7 +87,7 @@ final class BiomeImpl implements ProtocolObject, Biome {
     @Nullable
     @Override
     public Registry.BiomeEntry registry() {
-        return null;
+        return this.entry;
     }
 
     @Override
