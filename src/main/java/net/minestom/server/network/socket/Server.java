@@ -117,6 +117,7 @@ public final class Server {
             MinecraftServer.getExceptionManager().handleException(e);
         }
         try {
+            this.selector.wakeup();
             this.selector.close();
         } catch (IOException e) {
             LOGGER.error("Server socket sector could not be closed", e);
