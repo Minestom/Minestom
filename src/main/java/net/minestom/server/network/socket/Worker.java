@@ -19,10 +19,14 @@ import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApiStatus.Internal
 public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
+
+    static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
     final Selector selector;
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();

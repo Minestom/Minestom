@@ -15,8 +15,12 @@ import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class Server {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
     public static final boolean NO_DELAY = true;
 
@@ -112,8 +116,21 @@ public final class Server {
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        this.selector.wakeup();
-        this.workers.forEach(worker -> worker.selector.wakeup());
+        try {
+            this.selector.close();
+        } catch (IOException e) {
+            LOGGER.error("Server socket sector could not be closed", e);
+            System.exit(-1);
+        }
+        this.workers.forEach(worker -> {
+            try {
+                worker.selector.close();
+            } catch (IOException e) {
+                Worker.LOGGER.error("Worker Socket Sector could not be closed", e);
+                System.exit(-1);
+            }
+
+        });
     }
 
     @ApiStatus.Internal
