@@ -62,7 +62,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
 
         public @NotNull ItemStack get(int slot) {
             if (slot >= clickedInventory.getSize()) {
-                return playerInventory().getItemStack(slot - clickedInventory.getSize() + 9);
+                return playerInventory().getItemStack(PlayerInventoryUtils.protocolToMinestom(slot - clickedInventory.getSize() + 9));
             } else {
                 return clickedInventory.getItemStack(slot);
             }
