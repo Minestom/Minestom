@@ -122,15 +122,7 @@ public final class Server {
             LOGGER.error("Server socket sector could not be closed", e);
             System.exit(-1);
         }
-        this.workers.forEach(worker -> {
-            try {
-                worker.selector.close();
-            } catch (IOException e) {
-                Worker.LOGGER.error("Worker Socket Sector could not be closed", e);
-                System.exit(-1);
-            }
-
-        });
+        this.workers.forEach(Worker::close);
     }
 
     @ApiStatus.Internal
