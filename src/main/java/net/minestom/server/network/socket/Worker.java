@@ -19,12 +19,16 @@ import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApiStatus.Internal
 public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    final Selector selector;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+
+    private final Selector selector;
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
@@ -41,6 +45,16 @@ public final class Worker extends MinestomThread {
 
     public void tick() {
         this.selector.wakeup();
+    }
+
+    public void close() {
+        this.selector.wakeup();
+        try {
+            this.selector.close();
+        } catch (IOException e) {
+            LOGGER.error("Worker Socket Sector could not be closed", e);
+            System.exit(-1);
+        }
     }
 
     @Override
