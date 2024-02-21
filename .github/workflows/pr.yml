@@ -32,7 +32,7 @@ jobs:
       run: ./gradlew test
   publish:
     runs-on: ubuntu-latest
-    if: github.repository == 'Minestom/Minestom'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     env:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
