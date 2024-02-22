@@ -9,6 +9,8 @@ import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -19,8 +21,6 @@ import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ApiStatus.Internal
 public final class Worker extends MinestomThread {
@@ -48,6 +48,11 @@ public final class Worker extends MinestomThread {
     }
 
     public void close() {
+        try {
+            this.queue.drain(Runnable::run);
+        } catch (Exception e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
         this.selector.wakeup();
         try {
             this.selector.close();
