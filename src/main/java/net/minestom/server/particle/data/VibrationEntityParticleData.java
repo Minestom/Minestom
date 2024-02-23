@@ -4,7 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 public record VibrationEntityParticleData (int entityId, float eyeHeight, int ticks) implements ParticleData {
-    public VibrationEntityParticleData(NetworkBuffer buffer) {
+    VibrationEntityParticleData(NetworkBuffer buffer) {
         this(buffer.read(NetworkBuffer.VAR_INT), buffer.read(NetworkBuffer.FLOAT), buffer.read(NetworkBuffer.VAR_INT));
     }
 

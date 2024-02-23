@@ -18,7 +18,7 @@ public interface ParticleData {
         else if (particleId == Particle.VIBRATION.id()) {
             int type = reader.read(NetworkBuffer.VAR_INT);
             if (type == 0) return new VibrationBlockParticleData(reader);
-            else if (type == 1) return new VibrationBlockParticleData(reader);
+            else if (type == 1) return new VibrationEntityParticleData(reader);
             else return null;
         } else if (particleId == Particle.SHRIEK.id()) return new ShriekParticleData(reader);
         else return null;
