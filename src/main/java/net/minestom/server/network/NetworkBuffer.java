@@ -8,6 +8,7 @@ import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
@@ -69,6 +70,7 @@ public final class NetworkBuffer {
     public static final Type<Point> VECTOR3 = NetworkBufferTypes.VECTOR3;
     public static final Type<Point> VECTOR3D = NetworkBufferTypes.VECTOR3D;
     public static final Type<float[]> QUATERNION = NetworkBufferTypes.QUATERNION;
+    public static final Type<Particle> PARTICLE = NetworkBufferTypes.PARTICLE_DATA;
 
     ByteBuffer nioBuffer;
     final boolean resizable;

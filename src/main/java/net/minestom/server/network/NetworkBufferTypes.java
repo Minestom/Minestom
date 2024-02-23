@@ -12,6 +12,7 @@ import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -626,6 +627,13 @@ final class NetworkBufferTypes {
                 final float w = buffer.read(FLOAT);
                 return new float[]{x, y, z, w};
             });
+    static final TypeImpl<Particle> PARTICLE_DATA = new TypeImpl<>(Particle.class,
+            (buffer, value) -> {
+                buffer.write(VAR_INT, value.id());
+                if (value.data() != null) value.data().write(buffer);
+                return -1;
+            },
+            buffer -> null);
 
     record TypeImpl<T>(@NotNull Class<T> type,
                        @NotNull TypeWriter<T> writer,

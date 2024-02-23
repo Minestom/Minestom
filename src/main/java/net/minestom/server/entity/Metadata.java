@@ -8,6 +8,7 @@ import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -124,6 +125,10 @@ public final class Metadata {
 
     public static Entry<float[]> Quaternion(float @NotNull[] value) {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
+    }
+
+    public static Entry<Particle> Particle(@NotNull Particle particle) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, NetworkBuffer.PARTICLE);
     }
 
     public static final byte TYPE_BYTE = 0;
