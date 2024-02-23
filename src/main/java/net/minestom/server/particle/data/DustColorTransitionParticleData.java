@@ -3,7 +3,7 @@ package net.minestom.server.particle.data;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
-public record DustColorTransitionParticleData (float fromRed, float fromGreen, float fromBlue, float scale, float toRed, float toGreen, float toBlue) implements ParticleData {
+public record DustColorTransitionParticleData(float fromRed, float fromGreen, float fromBlue, float scale, float toRed, float toGreen, float toBlue) implements ParticleData {
     public DustColorTransitionParticleData {
         if (fromRed < 0 || fromRed > 1) {
             throw new IllegalArgumentException("fromRed must be between 0 and 1");

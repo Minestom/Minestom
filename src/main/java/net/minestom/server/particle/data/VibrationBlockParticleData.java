@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
-public record VibrationBlockParticleData (Point source, int ticks) implements ParticleData {
+public record VibrationBlockParticleData(Point source, int ticks) implements ParticleData {
     VibrationBlockParticleData(NetworkBuffer buffer) {
         this(buffer.read(NetworkBuffer.BLOCK_POSITION), buffer.read(NetworkBuffer.VAR_INT));
     }

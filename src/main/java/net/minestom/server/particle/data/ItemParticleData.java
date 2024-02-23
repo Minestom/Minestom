@@ -4,7 +4,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
-public record ItemParticleData (ItemStack item) implements ParticleData {
+public record ItemParticleData(ItemStack item) implements ParticleData {
     ItemParticleData(NetworkBuffer reader) {
         this(reader.read(NetworkBuffer.ITEM));
     }

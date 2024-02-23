@@ -4,7 +4,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
-public record BlockParticleData (Block block) implements ParticleData {
+public record BlockParticleData(Block block) implements ParticleData {
     BlockParticleData(NetworkBuffer reader) {
         this(Block.fromStateId(reader.read(NetworkBuffer.VAR_INT).shortValue()));
     }
