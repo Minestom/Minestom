@@ -15,7 +15,7 @@ record TrimMaterialImpl(Registry.TrimMaterialEntry registry, int id) implements 
     private static final Registry.Container<TrimMaterial> CONTAINER;
 
     static {
-        CONTAINER = Registry.createContainer(Registry.Resource.TRIM_MATERIALS,
+        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_MATERIALS,
                 (namespace, properties) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, properties)));
     }
 

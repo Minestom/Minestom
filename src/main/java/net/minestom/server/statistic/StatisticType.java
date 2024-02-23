@@ -1,13 +1,13 @@
 package net.minestom.server.statistic;
 
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface StatisticType extends ProtocolObject, StatisticTypes permits StatisticTypeImpl {
+public sealed interface StatisticType extends StaticProtocolObject, StatisticTypes permits StatisticTypeImpl {
 
     static @NotNull Collection<@NotNull StatisticType> values() {
         return StatisticTypeImpl.values();

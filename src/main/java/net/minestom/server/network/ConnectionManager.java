@@ -267,6 +267,7 @@ public final class ConnectionManager {
 
             var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
             EventDispatcher.call(event);
+            if (!player.isOnline()) return; // Player was kicked during config.
 
             final Instance spawningInstance = event.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");

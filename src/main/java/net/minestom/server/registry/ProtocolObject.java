@@ -11,17 +11,14 @@ public interface ProtocolObject extends Keyed {
     @Contract(pure = true)
     @NotNull NamespaceID namespace();
 
-    @Override
-    @Contract(pure = true)
-    default @NotNull Key key() {
-        return namespace();
-    }
-
     @Contract(pure = true)
     default @NotNull String name() {
         return namespace().asString();
     }
 
+    @Override
     @Contract(pure = true)
-    int id();
+    default @NotNull Key key() {
+        return namespace();
+    }
 }

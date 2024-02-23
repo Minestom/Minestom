@@ -16,7 +16,7 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements Dama
 
     static {
         AtomicInteger i = new AtomicInteger();
-        CONTAINER = Registry.createContainer(Registry.Resource.DAMAGE_TYPES,
+        CONTAINER = Registry.createStaticContainer(Registry.Resource.DAMAGE_TYPES,
                 (namespace, properties) -> new DamageTypeImpl(Registry.damageType(namespace, properties), i.getAndIncrement()));
     }
 

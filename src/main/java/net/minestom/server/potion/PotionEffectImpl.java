@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record PotionEffectImpl(Registry.PotionEffectEntry registry) implements PotionEffect {
-    private static final Registry.Container<PotionEffect> CONTAINER = Registry.createContainer(Registry.Resource.POTION_EFFECTS,
+    private static final Registry.Container<PotionEffect> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_EFFECTS,
             (namespace, properties) -> new PotionEffectImpl(Registry.potionEffect(namespace, properties)));
 
     static PotionEffect get(@NotNull String namespace) {

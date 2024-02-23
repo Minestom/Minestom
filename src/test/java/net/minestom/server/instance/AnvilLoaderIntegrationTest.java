@@ -70,13 +70,11 @@ public class AnvilLoaderIntegrationTest {
                 assertEquals(-4, chunk.getMinSection());
                 assertEquals(20, chunk.getMaxSection());
 
-                // TODO: skylight
-                // TODO: block light
                 for (int y = 0; y < 16; y++) {
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
                             Biome b = chunk.getBiome(x, y, z);
-                            assertEquals(NamespaceID.from("minecraft:plains"), b.name());
+                            assertEquals(NamespaceID.from("minecraft:plains"), b.namespace());
                         }
                     }
                 }

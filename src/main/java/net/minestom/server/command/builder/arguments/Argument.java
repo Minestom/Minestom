@@ -7,7 +7,7 @@ import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
@@ -30,10 +30,10 @@ import java.util.function.Supplier;
  */
 public abstract class Argument<T> {
     @ApiStatus.Internal
-    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createContainer(Registry.Resource.COMMAND_ARGUMENTS,
+    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.COMMAND_ARGUMENTS,
             (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
-    record ArgumentImpl(NamespaceID namespace, int id) implements ProtocolObject {
+    record ArgumentImpl(NamespaceID namespace, int id) implements StaticProtocolObject {
         @Override
         public String toString() {
             return name();

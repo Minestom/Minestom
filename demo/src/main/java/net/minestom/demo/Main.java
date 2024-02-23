@@ -36,6 +36,7 @@ public class Main {
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer.getBiomeManager().loadVanillaBiomes();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
@@ -73,6 +74,7 @@ public class Main {
         commandManager.register(new SidebarCommand());
         commandManager.register(new SetEntityType());
         commandManager.register(new RelightCommand());
+        commandManager.register(new KillCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

@@ -22,8 +22,8 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -51,6 +51,7 @@ public class DynamicChunk extends Chunk {
 
     private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -118,10 +119,14 @@ public class DynamicChunk extends Chunk {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
+
+        var id = BIOME_MANAGER.getId(biome);
+        if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+
         section.biomePalette().set(
                 toSectionRelativeCoordinate(x) / 4,
                 toSectionRelativeCoordinate(y) / 4,
-                toSectionRelativeCoordinate(z) / 4, biome.id());
+                toSectionRelativeCoordinate(z) / 4, id);
     }
 
     @Override
@@ -174,7 +179,13 @@ public class DynamicChunk extends Chunk {
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
-        return MinecraftServer.getBiomeManager().getById(id);
+
+        Biome biome = BIOME_MANAGER.getById(id);
+        if (biome == null) {
+            throw new IllegalStateException("Biome with id " + id + " is not registered");
+        }
+
+        return biome;
     }
 
     @Override
@@ -199,6 +210,11 @@ public class DynamicChunk extends Chunk {
     public void reset() {
         for (Section section : sections) section.clear();
         this.entries.clear();
+    }
+
+    @Override
+    public void invalidate() {
+        this.chunkCache.invalidate();
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {

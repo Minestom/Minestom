@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.Taggable;
@@ -165,7 +165,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_PLACE_ON, blocks.stream().map(ProtocolObject::name).toList());
+            return set(ItemTags.CAN_PLACE_ON, blocks.stream().map(StaticProtocolObject::name).toList());
         }
 
         @Contract("_ -> this")
@@ -175,7 +175,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder canDestroy(@NotNull Set<@NotNull Block> blocks) {
-            return set(ItemTags.CAN_DESTROY, blocks.stream().map(ProtocolObject::name).toList());
+            return set(ItemTags.CAN_DESTROY, blocks.stream().map(StaticProtocolObject::name).toList());
         }
 
         @Contract("_ -> this")

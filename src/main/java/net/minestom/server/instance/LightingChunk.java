@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -30,6 +29,12 @@ import java.util.concurrent.Executors;
 
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
+/**
+ * A chunk which supports lighting computation.
+ * <p>
+ *     This chunk is used to compute the light data for each block.
+ * <p>
+ */
 public class LightingChunk extends DynamicChunk {
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
@@ -74,6 +79,11 @@ public class LightingChunk extends DynamicChunk {
             Block.TALL_SEAGRASS.namespace(),
             Block.LAVA.namespace()
     );
+
+    public void invalidate() {
+        this.lightCache.invalidate();
+        this.chunkCache.invalidate();
+    }
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
@@ -309,24 +319,60 @@ public class LightingChunk extends DynamicChunk {
         return responseChunks;
     }
 
-    public static void relight(Instance instance, Collection<Chunk> chunks) {
+    /**
+     * Forces a relight of the specified chunks.
+     * <p>
+     * This method is used to force a relight of the specified chunks.
+     * <p>
+     * This method is thread-safe and can be called from any thread.
+     *
+     * @param instance the instance
+     * @param chunks   the chunks to relight
+     * @return the chunks which have been relighted
+     */
+    public static List<Chunk> relight(Instance instance, Collection<Chunk> chunks) {
         Set<Point> sections = new HashSet<>();
 
-        for (Chunk chunk : chunks) {
-            if (chunk == null) continue;
-            for (int section = chunk.minSection; section < chunk.maxSection; section++) {
-                if (chunk instanceof LightingChunk) {
-                    chunk.getSection(section).blockLight().invalidate();
-                    chunk.getSection(section).skyLight().invalidate();
+        synchronized (instance) {
+            for (Chunk chunk : chunks) {
+                if (chunk == null) continue;
+                if (chunk instanceof LightingChunk lighting) {
+                    for (int section = chunk.minSection; section < chunk.maxSection; section++) {
+                        chunk.getSection(section).blockLight().invalidate();
+                        chunk.getSection(section).skyLight().invalidate();
 
-                    sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
+                        sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
+                    }
+
+                    lighting.lightCache.invalidate();
+                    lighting.chunkCache.invalidate();
                 }
             }
-        }
 
-        synchronized (instance) {
-            relight(instance, sections, LightType.BLOCK);
-            relight(instance, sections, LightType.SKY);
+            // Expand the sections to include nearby sections
+            var blockSections = new HashSet<Point>();
+            for (Point point : sections) {
+                blockSections.addAll(getNearbyRequired(instance, point, LightType.BLOCK));
+            }
+
+            var skySections = new HashSet<Point>();
+            for (Point point : sections) {
+                skySections.addAll(getNearbyRequired(instance, point, LightType.SKY));
+            }
+
+            relight(instance, blockSections, LightType.BLOCK);
+            relight(instance, skySections, LightType.SKY);
+
+            var chunksToRelight = new HashSet<Chunk>();
+            for (Point point : blockSections) {
+                chunksToRelight.add(instance.getChunk(point.blockX(), point.blockZ()));
+            }
+
+            for (Point point : skySections) {
+                chunksToRelight.add(instance.getChunk(point.blockX(), point.blockZ()));
+            }
+
+            return new ArrayList<>(chunksToRelight);
         }
     }
 
@@ -402,6 +448,7 @@ public class LightingChunk extends DynamicChunk {
     private static Set<Chunk> relightSection(Instance instance, int chunkX, int sectionY, int chunkZ, LightType type) {
         Chunk c = instance.getChunk(chunkX, chunkZ);
         if (c == null) return Set.of();
+        if (!(c instanceof LightingChunk)) return Set.of();
 
         synchronized (instance) {
             Set<Point> collected = collectRequiredNearby(instance, new Vec(chunkX, sectionY, chunkZ), type);

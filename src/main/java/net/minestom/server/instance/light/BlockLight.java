@@ -9,13 +9,11 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.instance.light.LightCompute.*;
 
@@ -34,6 +32,27 @@ final class BlockLight implements Light {
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
+    }
+
+    @ApiStatus.Internal
+    public void setInternalLighting(byte[] content) {
+        this.content = content;
+        this.isValidBorders = true;
+    }
+
+    @ApiStatus.Internal
+    public void setExternalLighting(byte[] content) {
+        this.contentPropagation = content;
+    }
+
+    @ApiStatus.Internal
+    public byte[] getInternalLighting() {
+        return content;
+    }
+
+    @ApiStatus.Internal
+    public byte[] getExternalLighting() {
+        return contentPropagation;
     }
 
     @Override
