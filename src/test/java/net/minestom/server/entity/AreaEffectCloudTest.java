@@ -18,7 +18,7 @@ public class AreaEffectCloudTest {
         int g = (colour & 0x0000FF00) >> 8;
         int r = (colour & 0x00FF0000) >> 16;
 
-        float size = 0;
+        float size = 1;
 
         particle = particle.withData(new DustParticleData((float) (r / 255.0), (float) (g / 255.0), (float) (b / 255.0), size));
 
@@ -50,7 +50,7 @@ public class AreaEffectCloudTest {
         int g2 = (colourAfter & 0x0000FF00) >> 8;
         int r2 = (colourAfter & 0x00FF0000) >> 16;
 
-        float size = 0;
+        float size = 1;
 
         particle = particle.withData(new DustColorTransitionParticleData((float) (r / 255.0), (float) (g / 255.0), (float) (b / 255.0), size, (float) (r2 / 255.0), (float) (g2 / 255.0), (float) (b2 / 255.0)));
 

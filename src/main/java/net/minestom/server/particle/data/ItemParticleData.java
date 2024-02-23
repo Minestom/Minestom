@@ -5,6 +5,10 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 public record ItemParticleData (ItemStack item) implements ParticleData {
+    ItemParticleData(NetworkBuffer reader) {
+        this(reader.read(NetworkBuffer.ITEM));
+    }
+
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(NetworkBuffer.ITEM, item);
