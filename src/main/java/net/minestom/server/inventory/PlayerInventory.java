@@ -42,24 +42,26 @@ public non-sealed class PlayerInventory extends InventoryImpl {
                     base = IntIterators.concat(base, IntIterators.singleton(OFF_HAND_SLOT));
                 }
 
-                if (slot < 0 || slot > 8) {
-                    base = IntIterators.concat(base, IntIterators.fromTo(0, 9));
-                }
-
                 if (slot < 9 || slot > 35) {
                     base = IntIterators.concat(base, IntIterators.fromTo(9, 36));
                 }
 
-                if (slot == 0) {
+                if (slot < 0 || slot > 8) {
+                    base = IntIterators.concat(base, IntIterators.fromTo(0, 9));
+                }
+
+                if (slot == CRAFT_RESULT) {
                     base = IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(base)));
                 }
 
                 return base;
             },
             (builder, item, slot) -> IntIterators.concat(
-                    IntIterators.fromTo(CRAFT_SLOT_1, CRAFT_SLOT_4 + 1),
-                    IntIterators.fromTo(9, 36),
-                    IntIterators.fromTo(0, 9)
+                    IntIterators.fromTo(CRAFT_SLOT_1, CRAFT_SLOT_4 + 1), // 1-4
+                    IntIterators.fromTo(HELMET_SLOT, BOOTS_SLOT + 1), // 5-8
+                    IntIterators.fromTo(9, 36), // 9-35
+                    IntIterators.fromTo(0, 9), // 36-44
+                    IntIterators.singleton(OFF_HAND_SLOT) // 45
             )
     );
 
