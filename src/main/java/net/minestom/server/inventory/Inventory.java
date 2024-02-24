@@ -49,23 +49,6 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
     byte getWindowId();
 
     /**
-     * Gets the cursor item of a viewer.
-     *
-     * @param player the player to get the cursor item from
-     * @return the player cursor item, air item if the player is not a viewer
-     */
-    @NotNull ItemStack getCursorItem(@NotNull Player player);
-
-    /**
-     * Changes the cursor item of a viewer,
-     * does nothing if <code>player</code> is not a viewer.
-     *
-     * @param player     the player to change the cursor item
-     * @param cursorItem the new player cursor item
-     */
-    void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem);
-
-    /**
      * Handles the provided click from the given player, returning the results after it is applied. If the results are
      * null, this indicates that the click was cancelled or was otherwise not processed.
      *

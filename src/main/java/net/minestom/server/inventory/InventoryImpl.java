@@ -39,8 +39,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     // the players currently viewing this inventory
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
     protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    // (player -> cursor item) map, used by the click listeners
-    protected final Map<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
     public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
             (builder, item, slot) -> slot >= builder.clickedInventory().getSize() ?
@@ -73,21 +71,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public @NotNull ItemStack getCursorItem(@NotNull Player player) {
-        return cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-    }
-
-    @Override
-    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        updateCursor(player, cursorItem);
-        if (!cursorItem.isAir()) {
-            this.cursorPlayersItem.put(player, cursorItem);
-        } else {
-            this.cursorPlayersItem.remove(player);
-        }
-    }
-
-    @Override
     public @NotNull Set<Player> getViewers() {
         return unmodifiableViewers;
     }
@@ -104,7 +87,8 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     public boolean removeViewer(@NotNull Player player) {
         if (!this.viewers.remove(player)) return false;
 
-        ItemStack cursorItem = getCursorItem(player);
+        ItemStack cursorItem = player.getCursorItem();
+        player.setCursorItem(ItemStack.AIR);
 
         if (!cursorItem.isAir()) {
             // Drop the item if it can not be added back to the inventory
@@ -113,7 +97,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
             }
         }
 
-        setCursorItem(player, ItemStack.AIR);
         getClickPreprocessor().clearCache(player);
         if (player.didCloseInventory()) {
             player.UNSAFE_changeDidCloseInventory(false);
@@ -133,19 +116,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
-    /**
-     * Updates the cursor item for the provided player.
-     *
-     * @param player     the player to update
-     * @param cursorItem the cursor item to send to the player
-     */
-    protected void updateCursor(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        if (!currentCursorItem.equals(cursorItem)) {
-            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
-        }
-    }
-
     @Override
     public void update() {
         this.viewers.forEach(this::update);
@@ -153,7 +123,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
     @Override
     public void update(@NotNull Player player) {
-        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), player.getCursorItem()));
     }
 
     @Override
@@ -241,7 +211,9 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
         lock.lock();
 
         try {
-            this.cursorPlayersItem.clear();
+            for (Player viewer : getViewers()) {
+                viewer.setCursorItem(ItemStack.AIR, false);
+            }
 
             // Clear the item array
             for (int i = 0; i < size; i++) {

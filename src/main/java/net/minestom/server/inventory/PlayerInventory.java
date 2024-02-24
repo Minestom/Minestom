@@ -143,7 +143,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             mapped[PlayerInventoryUtils.minestomToProtocol(slot)] = local[slot];
         }
 
-        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), cursorPlayersItem.getOrDefault(player, ItemStack.AIR)));
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), player.getCursorItem()));
     }
 
     @Override
