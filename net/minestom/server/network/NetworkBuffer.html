@@ -285,10 +285,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readBytes(int)" class="member-name-link">readBytes</a><wbr>(int&nbsp;length)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readCollection(java.util.function.Function)" class="member-name-link">readCollection</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readCollection(java.util.function.Function,int)" class="member-name-link">readCollection</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function,
+ int&nbsp;maxSize)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readCollection(net.minestom.server.network.NetworkBuffer.Type)" class="member-name-link">readCollection</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readCollection(net.minestom.server.network.NetworkBuffer.Type,int)" class="member-name-link">readCollection</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ int&nbsp;maxSize)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;L,<wbr>
 R&gt;&nbsp;@NotNull <a href="../utils/Either.html" title="class in net.minestom.server.utils">Either</a>&lt;L,<wbr>R&gt;</code></div>
@@ -758,19 +760,21 @@ R&gt;&nbsp;void</code></div>
 </section>
 </li>
 <li>
-<section class="detail" id="readCollection(net.minestom.server.network.NetworkBuffer.Type)">
+<section class="detail" id="readCollection(net.minestom.server.network.NetworkBuffer.Type,int)">
 <h3>readCollection</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</span>&nbsp;<span class="element-name">readCollection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</span></div>
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ int&nbsp;maxSize)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="readCollection(java.util.function.Function)">
+<section class="detail" id="readCollection(java.util.function.Function,int)">
 <h3>readCollection</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</span>&nbsp;<span class="element-name">readCollection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function,
+ int&nbsp;maxSize)</span></div>
 </section>
 </li>
 <li>
