@@ -45,16 +45,20 @@ public interface ClickHandler {
                 EventDispatcher.call(postClickEvent);
 
                 if (!clickInfo.equals(newInfo) || !changes.equals(newChanges)) {
-                    preClickEvent.getPlayerInventory().update(player);
-                    preClickEvent.getInventory().update(player);
+                    inventory.update(player);
+                    if (inventory != player.getInventory()) {
+                        player.getInventory().update(player);
+                    }
                 }
 
                 return newChanges;
             }
         }
 
-        preClickEvent.getPlayerInventory().update(player);
-        preClickEvent.getInventory().update(player);
+        inventory.update(player);
+        if (inventory != player.getInventory()) {
+            player.getInventory().update(player);
+        }
         return null;
     }
 
