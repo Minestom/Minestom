@@ -102,7 +102,7 @@ public final class BoundingBox implements Shape {
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
+     * Creates a new {@link BoundingBox} with an expanded size.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -114,7 +114,7 @@ public final class BoundingBox implements Shape {
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with contracted size.
+     * Creates a new {@link BoundingBox} with a contracted size.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -126,7 +126,7 @@ public final class BoundingBox implements Shape {
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with an offset.
+     * Creates a new {@link BoundingBox} with an offset.
      *
      * @param offset the offset
      * @return a new bounding box with an offset.
