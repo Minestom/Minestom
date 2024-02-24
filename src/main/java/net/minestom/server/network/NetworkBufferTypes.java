@@ -13,6 +13,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -219,6 +220,8 @@ final class NetworkBufferTypes {
             },
             buffer -> {
                 final int length = buffer.read(VAR_INT);
+                final int remaining = buffer.nioBuffer.limit() - buffer.readIndex();
+                Check.argCondition(length > remaining, "String is too long (length: " + length + ", readable: " + remaining + ")");
                 byte[] bytes = new byte[length];
                 buffer.nioBuffer.get(buffer.readIndex(), bytes);
                 buffer.readIndex += length;

@@ -13,12 +13,14 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record SetPassengersPacket(int vehicleEntityId,
                                   @NotNull List<Integer> passengersId) implements ServerPacket {
+    public static final int MAX_PASSENGERS = 16384;
+
     public SetPassengersPacket {
         passengersId = List.copyOf(passengersId);
     }
 
     public SetPassengersPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.readCollection(VAR_INT));
+        this(reader.read(VAR_INT), reader.readCollection(VAR_INT, MAX_PASSENGERS));
     }
 
     @Override

@@ -8,12 +8,14 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ArgumentSignatures(@NotNull List<@NotNull Entry> entries) implements NetworkBuffer.Writer {
+    public static final int MAX_ENTRIES = 8;
+
     public ArgumentSignatures {
         entries = List.copyOf(entries);
     }
 
     public ArgumentSignatures(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(Entry::new));
+        this(reader.readCollection(Entry::new, MAX_ENTRIES));
     }
 
     @Override

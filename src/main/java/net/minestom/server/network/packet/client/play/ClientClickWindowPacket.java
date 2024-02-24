@@ -13,6 +13,8 @@ public record ClientClickWindowPacket(byte windowId, int stateId,
                                       short slot, byte button, @NotNull ClickType clickType,
                                       @NotNull List<ChangedSlot> changedSlots,
                                       @NotNull ItemStack clickedItem) implements ClientPacket {
+    public static final int MAX_CHANGED_SLOTS = 128;
+
     public ClientClickWindowPacket {
         changedSlots = List.copyOf(changedSlots);
     }
@@ -20,7 +22,7 @@ public record ClientClickWindowPacket(byte windowId, int stateId,
     public ClientClickWindowPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(VAR_INT),
                 reader.read(SHORT), reader.read(BYTE), reader.readEnum(ClickType.class),
-                reader.readCollection(ChangedSlot::new), reader.read(ITEM));
+                reader.readCollection(ChangedSlot::new, MAX_CHANGED_SLOTS), reader.read(ITEM));
     }
 
     @Override

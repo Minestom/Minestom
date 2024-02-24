@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 public record PlayerInfoRemovePacket(@NotNull List<@NotNull UUID> uuids) implements ServerPacket {
+    public static final int MAX_ENTRIES = 1024;
+
     public PlayerInfoRemovePacket(@NotNull UUID uuid) {
         this(List.of(uuid));
     }
@@ -20,7 +22,7 @@ public record PlayerInfoRemovePacket(@NotNull List<@NotNull UUID> uuids) impleme
     }
 
     public PlayerInfoRemovePacket(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(NetworkBuffer.UUID));
+        this(reader.readCollection(NetworkBuffer.UUID, MAX_ENTRIES));
     }
 
     @Override

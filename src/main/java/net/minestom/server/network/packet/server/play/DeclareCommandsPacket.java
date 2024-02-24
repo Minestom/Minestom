@@ -16,6 +16,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                                     int rootIndex) implements ServerPacket {
+    public static final int MAX_NODES = Short.MAX_VALUE;
+
     public DeclareCommandsPacket {
         nodes = List.copyOf(nodes);
     }
@@ -25,7 +27,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             Node node = new Node();
             node.read(r);
             return node;
-        }), reader.read(VAR_INT));
+        }, MAX_NODES), reader.read(VAR_INT));
     }
 
     @Override

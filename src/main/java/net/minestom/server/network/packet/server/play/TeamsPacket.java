@@ -23,6 +23,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
  * The packet creates or updates teams
  */
 public record TeamsPacket(String teamName, Action action) implements ComponentHoldingServerPacket {
+    public static final int MAX_MEMBERS = 16384;
+
     public TeamsPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), switch (reader.read(BYTE)) {
             case 0 -> new CreateTeamAction(reader);
@@ -73,7 +75,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
             this(reader.read(COMPONENT), reader.read(BYTE),
                     NameTagVisibility.fromIdentifier(reader.read(STRING)), CollisionRule.fromIdentifier(reader.read(STRING)),
                     NamedTextColor.namedColor(reader.read(VAR_INT)), reader.read(COMPONENT), reader.read(COMPONENT),
-                    reader.readCollection(STRING));
+                    reader.readCollection(STRING, MAX_MEMBERS));
         }
 
         @Override
@@ -178,7 +180,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
         }
 
         public AddEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING));
+            this(reader.readCollection(STRING, MAX_MEMBERS));
         }
 
         @Override
@@ -198,7 +200,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
         }
 
         public RemoveEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING));
+            this(reader.readCollection(STRING, MAX_MEMBERS));
         }
 
         @Override

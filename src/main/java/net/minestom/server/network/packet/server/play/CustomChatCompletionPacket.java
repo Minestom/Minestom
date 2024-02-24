@@ -13,12 +13,14 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record CustomChatCompletionPacket(@NotNull Action action,
                                          @NotNull List<@NotNull String> entries) implements ServerPacket {
+    public static final int MAX_ENTRIES = Short.MAX_VALUE;
+
     public CustomChatCompletionPacket {
         entries = List.copyOf(entries);
     }
 
     public CustomChatCompletionPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readEnum(Action.class), reader.readCollection(STRING));
+        this(reader.readEnum(Action.class), reader.readCollection(STRING, MAX_ENTRIES));
     }
 
     @Override

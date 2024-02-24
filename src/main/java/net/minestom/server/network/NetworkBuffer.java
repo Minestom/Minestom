@@ -1,13 +1,5 @@
 package net.minestom.server.network;
 
-import java.util.BitSet;
-import java.util.Collection;
-
-import java.util.EnumSet;
-import java.util.List;
-
-import java.util.UUID;
-
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -18,6 +10,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +20,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -176,8 +170,9 @@ public final class NetworkBuffer {
         }
     }
 
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type) {
+    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type, int maxSize) {
         final int size = read(VAR_INT);
+        Check.argCondition(size > maxSize, "Collection size (" + size + ") is higher than the maximum allowed size (" + maxSize + ")");
         final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             values.add(read(type));
@@ -185,8 +180,9 @@ public final class NetworkBuffer {
         return values;
     }
 
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
+    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function, int maxSize) {
         final int size = read(VAR_INT);
+        Check.argCondition(size > maxSize, "Collection size (" + size + ") is higher than the maximum allowed size (" + maxSize + ")");
         final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             values.add(function.apply(this));
