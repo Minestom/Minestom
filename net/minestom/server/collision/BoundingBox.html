@@ -114,6 +114,11 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
  double&nbsp;height,
  double&nbsp;depth)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(double,double,double,net.minestom.server.coordinate.Point)" class="member-name-link">BoundingBox</a><wbr>(double&nbsp;width,
+ double&nbsp;height,
+ double&nbsp;depth,
+ <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -138,7 +143,7 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
  double&nbsp;y,
  double&nbsp;z)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to the same <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with contracted size.</div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with a contracted size.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#depth()" class="member-name-link">depth</a>()</code></div>
@@ -151,7 +156,7 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
  double&nbsp;y,
  double&nbsp;z)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to the same <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with expanded size.</div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an expanded size.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromPose(net.minestom.server.entity.Entity.Pose)" class="member-name-link">fromPose</a><wbr>(<a href="../entity/Entity.Pose.html" title="enum class in net.minestom.server.entity">Entity.Pose</a>&nbsp;pose)</code></div>
@@ -226,6 +231,11 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#width()" class="member-name-link">width</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withOffset(net.minestom.server.coordinate.Point)" class="member-name-link">withOffset</a><wbr>(<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an offset.</div>
+</div>
 </div>
 </div>
 </div>
@@ -246,6 +256,15 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="&lt;init&gt;(double,double,double,net.minestom.server.coordinate.Point)">
+<h3>BoundingBox</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BoundingBox</span><wbr><span class="parameters">(double&nbsp;width,
+ double&nbsp;height,
+ double&nbsp;depth,
+ <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset)</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="&lt;init&gt;(double,double,double)">
 <h3>BoundingBox</h3>
@@ -399,7 +418,7 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></span>&nbsp;<span class="element-name">expand</span><wbr><span class="parameters">(double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z)</span></div>
-<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to the same <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with expanded size.</div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an expanded size.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>x</code> - the X offset</dd>
@@ -417,7 +436,7 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></span>&nbsp;<span class="element-name">contract</span><wbr><span class="parameters">(double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z)</span></div>
-<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> linked to the same <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with contracted size.</div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with a contracted size.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>x</code> - the X offset</dd>
@@ -425,6 +444,20 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 <dd><code>z</code> - the Z offset</dd>
 <dt>Returns:</dt>
 <dd>a new bounding box contracted</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="withOffset(net.minestom.server.coordinate.Point)">
+<h3>withOffset</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></span>&nbsp;<span class="element-name">withOffset</span><wbr><span class="parameters">(<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset)</span></div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an offset.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>offset</code> - the offset</dd>
+<dt>Returns:</dt>
+<dd>a new bounding box with an offset.</dd>
 </dl>
 </section>
 </li>
