@@ -131,7 +131,7 @@ public final class BoundingBox implements Shape {
      * @param offset the offset
      * @return a new bounding box with an offset.
      */
-    public @NotNull BoundingBox wtihOffset(Point offset) {
+    public @NotNull BoundingBox withOffset(Point offset) {
         return new BoundingBox(this.width, this.height, this.depth, offset);
     }
 
