@@ -170,53 +170,31 @@ public class StandardClickHandler implements ClickHandler {
         final var originalCursorAmount = RULE.getAmount(cursor);
         var cursorAmount = originalCursorAmount;
 
-        if (info.evenlyDistribute()) {
-            int countPerSlot = (int) Math.floor(cursorAmount / (double) slots.size());
-            var iter = slots.iterator();
+        int countPerSlot = info.evenlyDistribute() ?
+                (int) Math.floor(cursorAmount / (double) slots.size()) : 1;
 
-            while (iter.hasNext() && cursorAmount > 0) {
-                var next = iter.nextInt();
+        for (int slot : slots) {
+            if (cursorAmount <= 0) break;
 
-                var slotItem = builder.get(next);
-                if (slotItem.isAir()) {
+            var slotItem = builder.get(slot);
+            if (slotItem.isAir()) {
+                cursorAmount -= countPerSlot;
+                builder.change(slot, RULE.apply(cursor, countPerSlot));
+            } else if (RULE.canBeStacked(cursor, slotItem)) {
+                int total = RULE.getAmount(slotItem) + countPerSlot;
+                int maxSize = RULE.getMaxSize(slotItem);
+
+                if (RULE.canApply(slotItem, total)) { // Add all
                     cursorAmount -= countPerSlot;
-                    builder.change(next, RULE.apply(cursor, countPerSlot));
-                } else if (RULE.canBeStacked(cursor, slotItem)) {
-                    int total = RULE.getAmount(slotItem) + countPerSlot;
-                    int maxSize = RULE.getMaxSize(slotItem);
+                    builder.change(slot, RULE.apply(slotItem, total));
+                } else { // Apply all possible
+                    var countUsed = maxSize - RULE.getAmount(slotItem);
+                    if (countUsed <= 0) continue;
 
-                    if (RULE.canApply(slotItem, total)) { // Add all
-                        cursorAmount -= countPerSlot;
-                        builder.change(next, RULE.apply(slotItem, total));
-                    } else { // Apply all possible
-                        var countUsed = maxSize - RULE.getAmount(slotItem);
-                        if (countUsed <= 0) continue;
-
-                        cursorAmount -= countUsed;
-                        builder.change(next, RULE.apply(slotItem, maxSize));
-                    }
+                    cursorAmount -= countUsed;
+                    builder.change(slot, RULE.apply(slotItem, maxSize));
                 }
             }
-
-        } else {
-            var iter = slots.iterator();
-
-            while (iter.hasNext() && cursorAmount > 0) {
-                var next = iter.nextInt();
-
-                var slotItem = builder.get(next);
-                if (slotItem.isAir()) {
-                    cursorAmount--;
-                    builder.change(next, RULE.apply(cursor, 1));
-                } else if (RULE.canBeStacked(cursor, slotItem)) {
-                    var newAmount = RULE.getAmount(slotItem) + 1;
-                    if (RULE.canApply(slotItem, newAmount)) {
-                        cursorAmount--;
-                        builder.change(next, RULE.apply(slotItem, newAmount));
-                    }
-                }
-            }
-
         }
 
         if (originalCursorAmount != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
@@ -292,7 +270,26 @@ public class StandardClickHandler implements ClickHandler {
             var next = slots.nextInt();
 
             var slotItem = builder.get(next);
-            if (slotItem.isAir() || !RULE.canBeStacked(cursor, slotItem)) continue;
+            if (slotItem.isAir() || !RULE.canBeStacked(cursor, slotItem) || RULE.getAmount(slotItem) == RULE.getMaxSize(slotItem)) continue;
+
+            var sum = cursorAmount + RULE.getAmount(slotItem);
+
+            if (sum <= maxSize) {
+                cursorAmount = sum;
+                builder.change(next, RULE.apply(slotItem, 0));
+            } else {
+                cursorAmount = maxSize;
+                builder.change(next, RULE.apply(slotItem, sum - maxSize));
+            }
+        }
+
+        var secondSlots = doubleClickSlots.get(builder, cursor, info.clickedSlot());
+
+        while (secondSlots.hasNext() && cursorAmount < maxSize) {
+            var next = secondSlots.nextInt();
+
+            var slotItem = builder.get(next);
+            if (slotItem.isAir() || !RULE.canBeStacked(cursor, slotItem) || RULE.getAmount(slotItem) != RULE.getMaxSize(slotItem)) continue;
 
             var sum = cursorAmount + RULE.getAmount(slotItem);
 
