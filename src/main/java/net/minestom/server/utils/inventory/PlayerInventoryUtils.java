@@ -1,5 +1,8 @@
 package net.minestom.server.utils.inventory;
 
+import net.minestom.server.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Minestom uses different slot IDs for player inventories as the Minecraft protocol uses a strange system (e.g. the
  * crafting result is the first slot).<br>
@@ -11,6 +14,8 @@ public final class PlayerInventoryUtils {
 
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_SIZE = 36;
+
+    public static final int PROTOCOL_OFFSET = 9;
 
     public static final int CRAFT_RESULT = 36;
     public static final int CRAFT_SLOT_1 = 37;
@@ -29,7 +34,8 @@ public final class PlayerInventoryUtils {
     }
 
     /**
-     * Converts a Minestom slot ID to a Minecraft protocol slot ID.
+     * Converts a Minestom slot ID to a Minecraft protocol slot ID.<br>
+     * This is the inverse of {@link #protocolToMinestom(int)}.
      * @param slot the internal slot ID to convert
      * @return the protocol slot ID, or -1 if the given slot could not be converted
      */
@@ -58,7 +64,8 @@ public final class PlayerInventoryUtils {
     }
 
     /**
-     * Converts a Minecraft protocol slot ID to a Minestom slot ID.
+     * Converts a Minecraft protocol slot ID to a Minestom slot ID.<br>
+     * This is the inverse of {@link #minestomToProtocol(int)}.
      * @param slot the protocol slot ID to convert
      * @return the Minestom slot ID, or -1 if the given slot could not be converted
      */
@@ -84,6 +91,36 @@ public final class PlayerInventoryUtils {
                 }
             }
         };
+    }
+
+    /**
+     * Converts the given slot into a protocol ID directly after the provided inventory.
+     * This is intended for when a player's inner inventory is interacted with while a player has another inventory
+     * open.<br>
+     * This is the inverse of {@link #protocolToMinestom(int, Inventory)}.
+     *
+     * @param slot the player slot that was interacted with
+     * @param openInventory the inventory opened by the player (not the player's inventory)
+     * @return the protocol slot ID
+     */
+    public static int minestomToProtocol(int slot, @NotNull Inventory openInventory) {
+        return PlayerInventoryUtils.minestomToProtocol(slot) + openInventory.getSize() - PROTOCOL_OFFSET;
+    }
+
+    /**
+     * Converts the given protocol ID that is directly after the provided inventory's slots into a player inventory slot
+     * ID. This is intended for when a player's inner inventory is interacted with while a player has another inventory
+     * open.<br>
+     * This is the inverse of {@link #minestomToProtocol(int, Inventory)}.
+     *
+     * @param slot the protocol slot ID, situated directly after the slot IDs for the open inventory
+     * @param openInventory the inventory opened by the player (not the player's inventory)
+     * @return the player slot ID
+     */
+    public static int protocolToMinestom(int slot, @NotNull Inventory openInventory) {
+        if (slot < openInventory.getSize()) return -1;
+
+        return PlayerInventoryUtils.protocolToMinestom(slot - openInventory.getSize() + PROTOCOL_OFFSET);
     }
 
 }

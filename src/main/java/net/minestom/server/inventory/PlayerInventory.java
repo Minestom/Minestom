@@ -124,9 +124,16 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     @Override
     public void updateSlot(int slot, @NotNull ItemStack itemStack) {
-        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot), itemStack));
+        SetSlotPacket defaultPacket = new SetSlotPacket(getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot), itemStack);
 
-        for (var player : getViewers()) {
+        for (Player player : getViewers()) {
+            Inventory open = player.getOpenInventory();
+            if (open != null && slot >= 0 && slot < INNER_SIZE) {
+                player.sendPacket(new SetSlotPacket(open.getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot, open), itemStack));
+            } else if (open == null || slot == OFF_HAND_SLOT) {
+                player.sendPacket(defaultPacket);
+            }
+
             var equipmentSlot = fromSlotIndex(slot, player.getHeldSlot());
             if (equipmentSlot == null) continue;
 

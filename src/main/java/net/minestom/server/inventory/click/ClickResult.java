@@ -62,7 +62,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
 
         public @NotNull ItemStack get(int slot) {
             if (slot >= clickedInventory.getSize()) {
-                return playerInventory().getItemStack(PlayerInventoryUtils.protocolToMinestom(slot - clickedInventory.getSize() + 9));
+                return playerInventory().getItemStack(PlayerInventoryUtils.protocolToMinestom(slot, clickedInventory));
             } else {
                 return clickedInventory.getItemStack(slot);
             }
@@ -70,7 +70,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
 
         public @NotNull Builder change(int slot, @NotNull ItemStack item) {
             if (slot >= clickedInventory.getSize()) {
-                change(PlayerInventoryUtils.protocolToMinestom(slot - clickedInventory.getSize() + 9), item, true);
+                change(PlayerInventoryUtils.protocolToMinestom(slot, clickedInventory), item, true);
             } else {
                 change(slot, item, false);
             }
