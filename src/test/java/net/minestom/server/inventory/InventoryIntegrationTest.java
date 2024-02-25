@@ -1,6 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -143,6 +144,49 @@ public class InventoryIntegrationTest {
         listener.followup(event -> event.getPlayer().openInventory(secondInventory));
         player.closeInventory();
         assertSame(secondInventory, player.getOpenInventory());
+    }
+
+    @Test
+    public void testInnerInventorySlotSending(Env env) {
+        // Inner inventory changes are sent along with the open inventory
+        // Otherwise, they are sent separately
+
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, player.getInstance());
+
+        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        player.openInventory(inventory);
+        assertEquals(inventory, player.getOpenInventory());
+
+        // Ensure that slots not in the inner inventory are sent separately
+        var packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        player.getInventory().setItemStack(PlayerInventoryUtils.OFFHAND_SLOT, MAGIC_STACK);
+        packetTracker.assertSingle(slot -> {
+            System.out.println(slot);
+            assertEquals((byte) 0, slot.windowId());
+            assertEquals(PlayerInventoryUtils.OFFHAND_SLOT, slot.slot());
+            assertEquals(MAGIC_STACK, slot.itemStack());
+        });
+
+        // Ensure that inner inventory slots are sent as the opened inventory
+        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        player.getInventory().setItemStack(0, MAGIC_STACK); // Test with first inner inventory slot
+        packetTracker.assertSingle(slot -> {
+            assertEquals(inventory.getWindowId(), slot.windowId());
+            System.out.println(slot.slot());
+            assertEquals(PlayerInventoryUtils.convertToPacketSlot(0) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(MAGIC_STACK, slot.itemStack());
+        });
+
+        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        player.getInventory().setItemStack(35, MAGIC_STACK); // Test with last inner inventory slot
+        packetTracker.assertSingle(slot -> {
+            assertEquals(inventory.getWindowId(), slot.windowId());
+            assertEquals(PlayerInventoryUtils.convertToPacketSlot(35) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(MAGIC_STACK, slot.itemStack());
+        });
     }
 
 }
