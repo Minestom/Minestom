@@ -172,7 +172,7 @@ public final class NetworkBuffer {
 
     public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type, int maxSize) {
         final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Collection size (" + size + ") is higher than the maximum allowed size (" + maxSize + ")");
+        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
         final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             values.add(read(type));
@@ -182,7 +182,7 @@ public final class NetworkBuffer {
 
     public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function, int maxSize) {
         final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Collection size (" + size + ") is higher than the maximum allowed size (" + maxSize + ")");
+        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
         final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             values.add(function.apply(this));

@@ -221,7 +221,7 @@ final class NetworkBufferTypes {
             buffer -> {
                 final int length = buffer.read(VAR_INT);
                 final int remaining = buffer.nioBuffer.limit() - buffer.readIndex();
-                Check.argCondition(length > remaining, "String is too long (length: " + length + ", readable: " + remaining + ")");
+                Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
                 byte[] bytes = new byte[length];
                 buffer.nioBuffer.get(buffer.readIndex(), bytes);
                 buffer.readIndex += length;
