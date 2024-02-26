@@ -4,6 +4,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
@@ -12,19 +13,7 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public final class ParticlePacket implements ServerPacket {
-    private final int particleId;
-    private final boolean longDistance;
-    private final double x;
-    private final double y;
-    private final double z;
-    private final float offsetX;
-    private final float offsetY;
-    private final float offsetZ;
-    private final float maxSpeed;
-    private final int particleCount;
-    private final ParticleData data;
-
+public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, ParticleData data) implements ServerPacket {
     public ParticlePacket(int particleId, boolean longDistance,
                           double x, double y, double z,
                           float offsetX, float offsetY, float offsetZ,
@@ -42,22 +31,39 @@ public final class ParticlePacket implements ServerPacket {
         this.data = data;
     }
 
+    private ParticlePacket(ParticlePacket copy) {
+        this(copy.particleId, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount, copy.data);
+    }
+
     public ParticlePacket(@NotNull NetworkBuffer reader) {
-        this.particleId = reader.read(VAR_INT);
-        this.longDistance = reader.read(BOOLEAN);
-        this.x = reader.read(DOUBLE);
-        this.y = reader.read(DOUBLE);
-        this.z = reader.read(DOUBLE);
-        this.offsetX = reader.read(FLOAT);
-        this.offsetY = reader.read(FLOAT);
-        this.offsetZ = reader.read(FLOAT);
-        this.maxSpeed = reader.read(FLOAT);
-        this.particleCount = reader.read(INT);
-        this.data = ParticleData.read(particleId, reader);
+        this(readPacket(reader));
+    }
+
+    public ParticlePacket(Particle particle, boolean longDistance, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
+        this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, null);
+    }
+
+    private static ParticlePacket readPacket(NetworkBuffer reader) {
+        int particleId = reader.read(VAR_INT);
+        Boolean longDistance = reader.read(BOOLEAN);
+        Double x = reader.read(DOUBLE);
+        Double y = reader.read(DOUBLE);
+        Double z = reader.read(DOUBLE);
+        Float offsetX = reader.read(FLOAT);
+        Float offsetY = reader.read(FLOAT);
+        Float offsetZ = reader.read(FLOAT);
+        Float maxSpeed = reader.read(FLOAT);
+        Integer particleCount = reader.read(INT);
+        ParticleData data = ParticleData.read(particleId, reader);
+
+        return new ParticlePacket(particleId, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, data);
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
+        if (data != null && !data.validate(particleId)) throw new IllegalStateException("Particle data is not valid for this particle type");
+        if (data == null && ParticleData.requiresData(particleId)) throw new IllegalStateException("Particle data is required for this particle type");
+
         writer.write(VAR_INT, particleId);
         writer.write(BOOLEAN, longDistance);
         writer.write(DOUBLE, x);
@@ -79,88 +85,4 @@ public final class ParticlePacket implements ServerPacket {
             default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
         };
     }
-
-    public int particleId() {
-        return particleId;
-    }
-
-    public boolean longDistance() {
-        return longDistance;
-    }
-
-    public double x() {
-        return x;
-    }
-
-    public double y() {
-        return y;
-    }
-
-    public double z() {
-        return z;
-    }
-
-    public float offsetX() {
-        return offsetX;
-    }
-
-    public float offsetY() {
-        return offsetY;
-    }
-
-    public float offsetZ() {
-        return offsetZ;
-    }
-
-    public float maxSpeed() {
-        return maxSpeed;
-    }
-
-    public int particleCount() {
-        return particleCount;
-    }
-
-    public ParticleData data() {
-        return data;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ParticlePacket) obj;
-        return this.particleId == that.particleId &&
-                this.longDistance == that.longDistance &&
-                Double.doubleToLongBits(this.x) == Double.doubleToLongBits(that.x) &&
-                Double.doubleToLongBits(this.y) == Double.doubleToLongBits(that.y) &&
-                Double.doubleToLongBits(this.z) == Double.doubleToLongBits(that.z) &&
-                Float.floatToIntBits(this.offsetX) == Float.floatToIntBits(that.offsetX) &&
-                Float.floatToIntBits(this.offsetY) == Float.floatToIntBits(that.offsetY) &&
-                Float.floatToIntBits(this.offsetZ) == Float.floatToIntBits(that.offsetZ) &&
-                Float.floatToIntBits(this.maxSpeed) == Float.floatToIntBits(that.maxSpeed) &&
-                this.particleCount == that.particleCount &&
-                Objects.equals(this.data, that.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(particleId, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, data);
-    }
-
-    @Override
-    public String toString() {
-        return "ParticlePacket[" +
-                "particleId=" + particleId + ", " +
-                "longDistance=" + longDistance + ", " +
-                "x=" + x + ", " +
-                "y=" + y + ", " +
-                "z=" + z + ", " +
-                "offsetX=" + offsetX + ", " +
-                "offsetY=" + offsetY + ", " +
-                "offsetZ=" + offsetZ + ", " +
-                "maxSpeed=" + maxSpeed + ", " +
-                "particleCount=" + particleCount + ", " +
-                "data=" + data + ']';
-    }
-
 }

@@ -70,7 +70,7 @@ public final class NetworkBuffer {
     public static final Type<Point> VECTOR3 = NetworkBufferTypes.VECTOR3;
     public static final Type<Point> VECTOR3D = NetworkBufferTypes.VECTOR3D;
     public static final Type<float[]> QUATERNION = NetworkBufferTypes.QUATERNION;
-    public static final Type<Particle> PARTICLE = NetworkBufferTypes.PARTICLE_DATA;
+    public static final Type<Particle> PARTICLE = NetworkBufferTypes.PARTICLE;
 
     ByteBuffer nioBuffer;
     final boolean resizable;
