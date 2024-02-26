@@ -40,11 +40,11 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
     }
 
     public ParticlePacket(Particle particle, boolean longDistance, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
-        this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, null);
+        this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
     }
 
     public ParticlePacket(Particle particle, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
-        this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, null);
+        this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
     }
 
     private static ParticlePacket readPacket(NetworkBuffer reader) {

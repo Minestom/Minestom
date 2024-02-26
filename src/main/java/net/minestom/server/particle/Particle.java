@@ -26,6 +26,6 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         return ParticleImpl.getId(id);
     }
 
-    Particle withData(ParticleData data);
-    ParticleData data();
+    @NotNull Particle withData(@Nullable ParticleData data);
+    @Nullable ParticleData data();
 }

@@ -627,7 +627,7 @@ final class NetworkBufferTypes {
                 final float w = buffer.read(FLOAT);
                 return new float[]{x, y, z, w};
             });
-    static final TypeImpl<Particle> PARTICLE_DATA = new TypeImpl<>(Particle.class,
+    static final TypeImpl<Particle> PARTICLE = new TypeImpl<>(Particle.class,
             (buffer, value) -> {
                 buffer.write(VAR_INT, value.id());
                 if (value.data() != null) value.data().write(buffer);
