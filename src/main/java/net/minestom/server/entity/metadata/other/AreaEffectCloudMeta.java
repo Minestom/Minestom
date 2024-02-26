@@ -5,7 +5,6 @@ import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class AreaEffectCloudMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
@@ -39,11 +38,11 @@ public class AreaEffectCloudMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
     }
 
-    public @NotNull Particle getParticle() {
+    public Particle getParticle() {
         return super.metadata.getIndex(OFFSET + 3, Particle.DUST);
     }
 
-    public void setParticle(@NotNull Particle value) {
+    public void setParticle(Particle value) {
         super.metadata.setIndex(OFFSET + 3, Metadata.Particle(value));
     }
 
