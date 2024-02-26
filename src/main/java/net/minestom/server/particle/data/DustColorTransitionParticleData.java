@@ -12,16 +12,16 @@ public record DustColorTransitionParticleData(@NotNull RGBLike from, float scale
         Check.argCondition(scale < 0.01 || scale > 4, "scale must be positive");
     }
 
+    DustColorTransitionParticleData() {
+        this(new Color(255, 255, 255), 1, new Color(255, 255, 255));
+    }
+
     DustColorTransitionParticleData(NetworkBuffer buffer) {
         this(read(buffer));
     }
 
     private DustColorTransitionParticleData(DustColorTransitionParticleData copy) {
         this(copy.from, copy.scale, copy.to);
-    }
-
-    DustColorTransitionParticleData() {
-        this(new Color(255, 255, 255), 1, new Color(255, 255, 255));
     }
 
     private static DustColorTransitionParticleData read(NetworkBuffer buffer) {

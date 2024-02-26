@@ -10,14 +10,14 @@ public record BlockMarkerParticleData(@NotNull Block block) implements ParticleD
         this(read(reader));
     }
 
+    BlockMarkerParticleData() {
+        this(Block.STONE);
+    }
+
     private static Block read(NetworkBuffer reader) {
         Block block = Block.fromStateId(reader.read(NetworkBuffer.VAR_INT).shortValue());
         if (block == null) return Block.STONE;
         return block;
-    }
-
-    BlockMarkerParticleData() {
-        this(Block.STONE);
     }
 
     @Override
