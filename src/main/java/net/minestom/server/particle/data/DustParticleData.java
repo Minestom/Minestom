@@ -1,33 +1,49 @@
 package net.minestom.server.particle.data;
 
+import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-public record DustParticleData (float red, float green, float blue, float scale) implements ParticleData {
+public record DustParticleData(@NotNull RGBLike color, float scale) implements ParticleData {
     public DustParticleData {
-        if (red < 0 || red > 1) {
-            throw new IllegalArgumentException("Red must be between 0 and 1");
-        }
-        if (green < 0 || green > 1) {
-            throw new IllegalArgumentException("Green must be between 0 and 1");
-        }
-        if (blue < 0 || blue > 1) {
-            throw new IllegalArgumentException("Blue must be between 0 and 1");
-        }
-        if (scale < 0.01 || scale > 4) {
-            throw new IllegalArgumentException("Scale must be positive");
-        }
+        Check.argCondition(scale < 0.01 || scale > 4, "scale must be positive");
     }
 
-    public DustParticleData(NetworkBuffer buffer) {
-        this(buffer.read(NetworkBuffer.FLOAT), buffer.read(NetworkBuffer.FLOAT), buffer.read(NetworkBuffer.FLOAT), buffer.read(NetworkBuffer.FLOAT));
+    DustParticleData(NetworkBuffer buffer) {
+        this(read(buffer));
+    }
+
+    private DustParticleData(DustParticleData copy) {
+        this(copy.color, copy.scale);
+    }
+
+    private static DustParticleData read(NetworkBuffer buffer) {
+        RGBLike color = new Color(
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255)
+        );
+        float scale = buffer.read(NetworkBuffer.FLOAT);
+        return new DustParticleData(color, scale);
+    }
+
+    DustParticleData() {
+        this(new Color(255, 255, 255), 1);
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.FLOAT, red);
-        writer.write(NetworkBuffer.FLOAT, green);
-        writer.write(NetworkBuffer.FLOAT, blue);
+        writer.write(NetworkBuffer.FLOAT, color.red() / 255f);
+        writer.write(NetworkBuffer.FLOAT, color.green() / 255f);
+        writer.write(NetworkBuffer.FLOAT, color.blue() / 255f);
         writer.write(NetworkBuffer.FLOAT, scale);
+    }
+
+    @Override
+    public boolean validate(int particleId) {
+        return particleId == Particle.DUST.id();
     }
 }

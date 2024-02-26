@@ -1,52 +1,57 @@
 package net.minestom.server.particle.data;
 
+import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-public record DustColorTransitionParticleData (float fromRed, float fromGreen, float fromBlue, float scale, float toRed, float toGreen, float toBlue) implements ParticleData {
+public record DustColorTransitionParticleData(@NotNull RGBLike from, float scale, @NotNull RGBLike to) implements ParticleData {
     public DustColorTransitionParticleData {
-        if (fromRed < 0 || fromRed > 1) {
-            throw new IllegalArgumentException("fromRed must be between 0 and 1");
-        }
-        if (fromGreen < 0 || fromGreen > 1) {
-            throw new IllegalArgumentException("fromGreen must be between 0 and 1");
-        }
-        if (fromBlue < 0 || fromBlue > 1) {
-            throw new IllegalArgumentException("fromBlue must be between 0 and 1");
-        }
-        if (toRed < 0 || toRed > 1) {
-            throw new IllegalArgumentException("toRed must be between 0 and 1");
-        }
-        if (toGreen < 0 || toGreen > 1) {
-            throw new IllegalArgumentException("toGreen must be between 0 and 1");
-        }
-        if (toBlue < 0 || toBlue > 1) {
-            throw new IllegalArgumentException("toBlue must be between 0 and 1");
-        }
-        if (scale < 0.01 || scale > 4) {
-            throw new IllegalArgumentException("scale must be positive");
-        }
+        Check.argCondition(scale < 0.01 || scale > 4, "scale must be positive");
     }
 
-    public DustColorTransitionParticleData(NetworkBuffer buffer) {
-        this(buffer.read(NetworkBuffer.FLOAT),
-            buffer.read(NetworkBuffer.FLOAT),
-            buffer.read(NetworkBuffer.FLOAT),
-            buffer.read(NetworkBuffer.FLOAT),
-            buffer.read(NetworkBuffer.FLOAT),
-            buffer.read(NetworkBuffer.FLOAT),
-            buffer.read(NetworkBuffer.FLOAT)
+    DustColorTransitionParticleData(NetworkBuffer buffer) {
+        this(read(buffer));
+    }
+
+    private DustColorTransitionParticleData(DustColorTransitionParticleData copy) {
+        this(copy.from, copy.scale, copy.to);
+    }
+
+    DustColorTransitionParticleData() {
+        this(new Color(255, 255, 255), 1, new Color(255, 255, 255));
+    }
+
+    private static DustColorTransitionParticleData read(NetworkBuffer buffer) {
+        RGBLike from = new Color(
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255)
         );
+        float scale = buffer.read(NetworkBuffer.FLOAT);
+        RGBLike to = new Color(
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
+                (int) (buffer.read(NetworkBuffer.FLOAT) * 255)
+        );
+        return new DustColorTransitionParticleData(from, scale, to);
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.FLOAT, fromRed);
-        writer.write(NetworkBuffer.FLOAT, fromGreen);
-        writer.write(NetworkBuffer.FLOAT, fromBlue);
+        writer.write(NetworkBuffer.FLOAT, from.red() / 255f);
+        writer.write(NetworkBuffer.FLOAT, from.green() / 255f);
+        writer.write(NetworkBuffer.FLOAT, from.blue() / 255f);
         writer.write(NetworkBuffer.FLOAT, scale);
-        writer.write(NetworkBuffer.FLOAT, toRed);
-        writer.write(NetworkBuffer.FLOAT, toGreen);
-        writer.write(NetworkBuffer.FLOAT, toBlue);
+        writer.write(NetworkBuffer.FLOAT, to.red() / 255f);
+        writer.write(NetworkBuffer.FLOAT, to.green() / 255f);
+        writer.write(NetworkBuffer.FLOAT, to.blue() / 255f);
+    }
+
+    @Override
+    public boolean validate(int particleId) {
+        return particleId == Particle.DUST_COLOR_TRANSITION.id();
     }
 }

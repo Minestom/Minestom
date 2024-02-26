@@ -43,6 +43,10 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, null);
     }
 
+    public ParticlePacket(Particle particle, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
+        this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, null);
+    }
+
     private static ParticlePacket readPacket(NetworkBuffer reader) {
         int particleId = reader.read(VAR_INT);
         Boolean longDistance = reader.read(BOOLEAN);
