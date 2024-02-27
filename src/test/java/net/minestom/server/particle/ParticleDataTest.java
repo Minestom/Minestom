@@ -52,4 +52,11 @@ public class ParticleDataTest {
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
         assertDoesNotThrow(() -> packet.write(new NetworkBuffer()));
     }
+
+    @Test
+    public void invalidBlock() {
+        var particle = Particle.BLOCK.withData(new BlockParticleData(null));
+        ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
+        assertThrows(NullPointerException.class, () -> packet.write(new NetworkBuffer()));
+    }
 }
