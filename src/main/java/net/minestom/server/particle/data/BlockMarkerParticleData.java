@@ -3,6 +3,7 @@ package net.minestom.server.particle.data;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 public record BlockMarkerParticleData(@NotNull Block block) implements ParticleData {
@@ -15,8 +16,9 @@ public record BlockMarkerParticleData(@NotNull Block block) implements ParticleD
     }
 
     private static Block read(NetworkBuffer reader) {
-        Block block = Block.fromStateId(reader.read(NetworkBuffer.VAR_INT).shortValue());
-        if (block == null) return Block.STONE;
+        short blockState = reader.read(NetworkBuffer.VAR_INT).shortValue();
+        Block block = Block.fromStateId(blockState);
+        Check.stateCondition(block == null, "Block state " + blockState + " is invalid");
         return block;
     }
 

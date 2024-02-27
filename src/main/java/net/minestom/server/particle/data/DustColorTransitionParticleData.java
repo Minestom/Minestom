@@ -17,26 +17,15 @@ public record DustColorTransitionParticleData(@NotNull RGBLike from, float scale
     }
 
     DustColorTransitionParticleData(NetworkBuffer buffer) {
-        this(read(buffer));
-    }
-
-    private DustColorTransitionParticleData(DustColorTransitionParticleData copy) {
-        this(copy.from, copy.scale, copy.to);
-    }
-
-    private static DustColorTransitionParticleData read(NetworkBuffer buffer) {
-        RGBLike from = new Color(
+        this(new Color(
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255)
-        );
-        float scale = buffer.read(NetworkBuffer.FLOAT);
-        RGBLike to = new Color(
+        ), buffer.read(NetworkBuffer.FLOAT), new Color(
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255)
-        );
-        return new DustColorTransitionParticleData(from, scale, to);
+        ));
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -65,8 +66,8 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        if (data != null && !data.validate(particleId)) throw new IllegalStateException("Particle data is not valid for this particle type");
-        if (data == null && ParticleData.requiresData(particleId)) throw new IllegalStateException("Particle data is required for this particle type");
+        Check.stateCondition(data != null && !data.validate(particleId), "Particle data is not valid for this particle type");
+        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type");
 
         writer.write(VAR_INT, particleId);
         writer.write(BOOLEAN, longDistance);

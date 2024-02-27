@@ -13,21 +13,11 @@ public record DustParticleData(@NotNull RGBLike color, float scale) implements P
     }
 
     DustParticleData(NetworkBuffer buffer) {
-        this(read(buffer));
-    }
-
-    private DustParticleData(DustParticleData copy) {
-        this(copy.color, copy.scale);
-    }
-
-    private static DustParticleData read(NetworkBuffer buffer) {
-        RGBLike color = new Color(
+        this(new Color(
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255),
                 (int) (buffer.read(NetworkBuffer.FLOAT) * 255)
-        );
-        float scale = buffer.read(NetworkBuffer.FLOAT);
-        return new DustParticleData(color, scale);
+        ), buffer.read(NetworkBuffer.FLOAT));
     }
 
     DustParticleData() {
