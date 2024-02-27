@@ -14,7 +14,6 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.Damage;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -41,7 +40,6 @@ import net.minestom.server.world.DimensionType;
 import java.time.Duration;
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -84,10 +82,6 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
-
-                FakePlayer.initPlayer(UUID.randomUUID(), "fake123", fp -> {
-                    System.out.println("fp = " + fp);
-                });
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
