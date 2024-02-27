@@ -28,7 +28,6 @@ net.minestom.server.entity.ai
 net.minestom.server.entity.ai.goal
 net.minestom.server.entity.ai.target
 net.minestom.server.entity.damage
-net.minestom.server.entity.fakeplayer
 net.minestom.server.entity.metadata
 net.minestom.server.entity.metadata.ambient
 net.minestom.server.entity.metadata.animal
