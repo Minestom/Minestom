@@ -66,8 +66,8 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        Check.stateCondition(data != null && !data.validate(particleId), "Particle data is not valid for this particle type");
-        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type");
+        Check.stateCondition(data != null && !data.validate(particleId), "Particle data " + data + " is not valid for this particle type " + Particle.fromId(particleId));
+        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type " + Particle.fromId(particleId));
 
         writer.write(VAR_INT, particleId);
         writer.write(BOOLEAN, longDistance);

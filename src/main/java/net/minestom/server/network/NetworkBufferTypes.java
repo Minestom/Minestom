@@ -13,6 +13,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -629,7 +630,11 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Particle> PARTICLE = new TypeImpl<>(Particle.class,
             (buffer, value) -> {
+                Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data " + value.data() + " is not valid for this particle type " + value.namespace());
+                Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type " + value.namespace());
+
                 buffer.write(VAR_INT, value.id());
+
                 if (value.data() != null) value.data().write(buffer);
                 return -1;
             },

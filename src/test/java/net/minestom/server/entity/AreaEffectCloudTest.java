@@ -3,20 +3,18 @@ package net.minestom.server.entity;
 import net.minestom.server.color.Color;
 import net.minestom.server.entity.metadata.other.AreaEffectCloudMeta;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.BlockParticleData;
-import net.minestom.server.particle.data.DustColorTransitionParticleData;
-import net.minestom.server.particle.data.DustParticleData;
+import net.minestom.server.particle.data.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AreaEffectCloudTest {
     @Test
     public void createWithDustParticle() {
-        Particle particle = Particle.fromNamespaceId("minecraft:dust");
-        assertNotNull(particle);
-
         int colour = 0x5505FF01;
 
         int b = (colour & 0x000000FF);
@@ -25,7 +23,7 @@ public class AreaEffectCloudTest {
 
         float size = 0.1f;
 
-        particle = particle.withData(new DustParticleData(new Color(r, g, b), size));
+        Particle particle = Particle.DUST.withData(new DustParticleData(new Color(r, g, b), size));
 
         Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
         AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
@@ -44,9 +42,6 @@ public class AreaEffectCloudTest {
 
     @Test
     public void createWithDustTransition() {
-        Particle particle = Particle.fromNamespaceId("minecraft:dust_color_transition");
-        assertNotNull(particle);
-
         int colour = 0xFF05FF01;
         int colourAfter = 0xFF05FF01;
 
@@ -60,7 +55,7 @@ public class AreaEffectCloudTest {
 
         float size = 0.1f;
 
-        particle = particle.withData(new DustColorTransitionParticleData(new Color(r, g, b), size, new Color(r2, g2, b2)));
+        Particle particle = Particle.DUST_COLOR_TRANSITION.withData(new DustColorTransitionParticleData(new Color(r, g, b), size, new Color(r2, g2, b2)));
 
         Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
         AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
@@ -82,9 +77,8 @@ public class AreaEffectCloudTest {
 
     @Test
     public void createWithBlockParticle() {
-        Particle particle = Particle.fromNamespaceId("minecraft:block");
         Block block = Block.GRASS_BLOCK;
-        particle = particle.withData(new BlockParticleData(block));
+        Particle particle = Particle.BLOCK.withData(new BlockParticleData(block));
 
         Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
         AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
@@ -95,5 +89,76 @@ public class AreaEffectCloudTest {
 
         BlockParticleData gotBlock = (BlockParticleData) gotParticle.data();
         assert gotBlock.block() == block;
+    }
+
+    @Test
+    public void createWithBlockMarkerParticle() {
+        Block block = Block.GRASS_BLOCK;
+        Particle particle = Particle.BLOCK_MARKER.withData(new BlockMarkerParticleData(block));
+
+        Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
+        AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
+        meta.setParticle(particle);
+
+        var gotParticle = meta.getParticle();
+        assert gotParticle == particle;
+
+        BlockMarkerParticleData gotBlock = (BlockMarkerParticleData) gotParticle.data();
+        assert gotBlock.block() == block;
+    }
+
+    @Test
+    public void createWithItemParticle() {
+        Particle particle = Particle.ITEM.withData(new ItemParticleData(ItemStack.of(Material.ACACIA_LOG)));
+
+        Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
+        AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
+        meta.setParticle(particle);
+
+        var gotParticle = meta.getParticle();
+        assert gotParticle == particle;
+
+        ItemParticleData gotBlock = (ItemParticleData) gotParticle.data();
+        assert gotBlock.item().material() == Material.ACACIA_LOG;
+    }
+
+    @Test
+    public void createWithSculkChargeParticle() {
+        Particle particle = Particle.SCULK_CHARGE.withData(new SculkChargeParticleData(3));
+
+        Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
+        AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
+        meta.setParticle(particle);
+
+        var gotParticle = meta.getParticle();
+        assert gotParticle == particle;
+
+        SculkChargeParticleData gotBlock = (SculkChargeParticleData) gotParticle.data();
+        assert gotBlock.roll() == 3;
+    }
+
+    @Test
+    public void createWithDustParticleIncorrectType() {
+        Particle particle = Particle.DUST.withData(new FallingDustParticleData(Block.GLOWSTONE));
+
+        Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
+        AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
+        meta.setParticle(particle);
+        assertThrows(IllegalStateException.class, () -> entity.getMetadataPacket().write(new NetworkBuffer()));
+    }
+
+    @Test
+    public void createWithComposterParticle() {
+        Particle particle = Particle.COMPOSTER;
+
+        Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
+        AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();
+        meta.setParticle(particle);
+
+        var gotParticle = meta.getParticle();
+        assert gotParticle == particle;
+
+        ParticleData gotBlock = gotParticle.data();
+        assertNull(gotBlock);
     }
 }
