@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record DustColorTransitionParticleData(@NotNull RGBLike from, float scale, @NotNull RGBLike to) implements ParticleData {
     public DustColorTransitionParticleData {
-        Check.argCondition(scale < 0.01 || scale > 4, "scale must be positive");
+        Check.argCondition(scale < 0.01 || scale > 4, "scale must be between 0.01 and 4");
     }
 
     DustColorTransitionParticleData() {
