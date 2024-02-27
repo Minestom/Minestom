@@ -48,15 +48,15 @@ public class PlayerInventoryIntegrationTest {
         assertEquals(instance, player.getInstance());
 
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.setCursorItem(ItemStack.AIR);
+        player.getInventory().setCursorItem(ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
 
@@ -73,7 +73,7 @@ public class PlayerInventoryIntegrationTest {
         player.getInventory().setItemStack(3, MAGIC_STACK);
         player.getInventory().setItemStack(19, MAGIC_STACK);
         player.getInventory().setItemStack(40, MAGIC_STACK);
-        player.setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
 
         setSlotTracker.assertCount(5);
 

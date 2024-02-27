@@ -87,8 +87,8 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     public boolean removeViewer(@NotNull Player player) {
         if (!this.viewers.remove(player)) return false;
 
-        ItemStack cursorItem = player.getCursorItem();
-        player.setCursorItem(ItemStack.AIR);
+        ItemStack cursorItem = player.getInventory().getCursorItem();
+        player.getInventory().setCursorItem(ItemStack.AIR);
 
         if (!cursorItem.isAir()) {
             // Drop the item if it can not be added back to the inventory
@@ -123,7 +123,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
     @Override
     public void update(@NotNull Player player) {
-        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), player.getCursorItem()));
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), player.getInventory().getCursorItem()));
     }
 
     @Override
@@ -212,7 +212,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
         try {
             for (Player viewer : getViewers()) {
-                viewer.setCursorItem(ItemStack.AIR, false);
+                viewer.getInventory().setCursorItem(ItemStack.AIR, false);
             }
 
             // Clear the item array

@@ -113,6 +113,8 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             )
     ).toArray();
 
+    private ItemStack cursorItem = ItemStack.AIR;
+
     public PlayerInventory() {
         super(INVENTORY_SIZE);
     }
@@ -120,6 +122,41 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     @Override
     public byte getWindowId() {
         return 0;
+    }
+
+    /**
+     * Gets the cursor item of this inventory
+     * @return the cursor item that is shared between all viewers
+     */
+    public @NotNull ItemStack getCursorItem() {
+        return cursorItem;
+    }
+
+    /**
+     * Sets the cursor item for all viewers of this inventory.
+     * @param cursorItem the new item (will not update if same as current)
+     */
+    public void setCursorItem(@NotNull ItemStack cursorItem) {
+        setCursorItem(cursorItem, true);
+    }
+
+    /**
+     * Sets the cursor item for all viewers of this inventory.
+     * @param cursorItem the new item (will not update if same as current)
+     * @param sendPacket whether or not to send a packet
+     */
+    public void setCursorItem(@NotNull ItemStack cursorItem, boolean sendPacket) {
+        if (this.cursorItem.equals(cursorItem)) return;
+
+        lock.lock();
+        try {
+            this.cursorItem = cursorItem;
+        } finally {
+            lock.unlock();
+        }
+
+        if (!sendPacket) return;
+        sendPacketToViewers(SetSlotPacket.createCursorPacket(cursorItem));
     }
 
     @Override
@@ -150,7 +187,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             mapped[PlayerInventoryUtils.minestomToProtocol(slot)] = local[slot];
         }
 
-        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), player.getCursorItem()));
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), getCursorItem()));
     }
 
     @Override

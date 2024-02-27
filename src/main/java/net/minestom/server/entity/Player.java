@@ -176,7 +176,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     protected PlayerInventory inventory;
     private Inventory openInventory;
-    private ItemStack cursorItem = ItemStack.AIR;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
@@ -1703,25 +1702,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         this.belowNameTag = belowNameTag;
     }
-
-    public @NotNull ItemStack getCursorItem() {
-        return cursorItem;
-    }
-
-    public void setCursorItem(@NotNull ItemStack cursorItem, boolean sendPacket) {
-        if (this.cursorItem.equals(cursorItem)) return;
-        this.cursorItem = cursorItem;
-
-        if (sendPacket) {
-            sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
-        }
-
-    }
-
-    public void setCursorItem(@NotNull ItemStack cursorItem) {
-        setCursorItem(cursorItem, true);
-    }
-
 
     /**
      * Gets the player open inventory.

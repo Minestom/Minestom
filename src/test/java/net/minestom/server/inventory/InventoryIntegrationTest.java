@@ -56,15 +56,15 @@ public class InventoryIntegrationTest {
         assertEquals(inventory, player.getOpenInventory());
 
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.setCursorItem(ItemStack.AIR);
+        player.getInventory().setCursorItem(ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
 
@@ -85,7 +85,7 @@ public class InventoryIntegrationTest {
         inventory.setItemStack(3, MAGIC_STACK);
         inventory.setItemStack(19, MAGIC_STACK);
         inventory.setItemStack(40, MAGIC_STACK);
-        player.setCursorItem(MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
 
         setSlotTracker.assertCount(5);
 
@@ -132,14 +132,14 @@ public class InventoryIntegrationTest {
         final var firstInventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
-        player.setCursorItem(ItemStack.of(Material.STONE));
+        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
 
         listener.followup();
         player.closeInventory();
         assertNull(player.getOpenInventory());
 
         player.openInventory(firstInventory);
-        player.setCursorItem(ItemStack.of(Material.STONE));
+        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
         final var secondInventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         listener.followup(event -> player.openInventory(secondInventory));
         player.closeInventory();

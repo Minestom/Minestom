@@ -57,7 +57,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
         }
 
         public @NotNull ItemStack getCursorItem() {
-            return player.getCursorItem();
+            return player().getInventory().getCursorItem();
         }
 
         public @NotNull ItemStack get(int slot) {
@@ -118,7 +118,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
         }
 
         if (newCursorItem != null) {
-            player.setCursorItem(newCursorItem);
+            player.getInventory().setCursorItem(newCursorItem);
         }
 
         if (sideEffects != null) {
