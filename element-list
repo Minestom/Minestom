@@ -112,6 +112,7 @@ net.minestom.server.network.packet.server.status
 net.minestom.server.network.player
 net.minestom.server.network.socket
 net.minestom.server.particle
+net.minestom.server.particle.data
 net.minestom.server.permission
 net.minestom.server.ping
 net.minestom.server.potion

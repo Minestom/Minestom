@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -398,23 +402,31 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="caption"><span>Static Methods</span></div>
-<div class="summary-table three-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel">
+<div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="data/ParticleData.html" title="interface in net.minestom.server.particle.data">ParticleData</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#data()" class="member-name-link">data</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromId(int)" class="member-name-link">fromId</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromId(int)" class="member-name-link">fromId</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(java.lang.String)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceID)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(java.lang.String)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceID)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(net.minestom.server.utils.NamespaceID)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceID)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(net.minestom.server.utils.NamespaceID)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceID)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#withData(net.minestom.server.particle.data.ParticleData)" class="member-name-link">withData</a><wbr>(@Nullable <a href="data/ParticleData.html" title="interface in net.minestom.server.particle.data">ParticleData</a>&nbsp;data)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+</div>
 </div>
 </div>
 <div class="inherited-list">
@@ -1076,6 +1088,21 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <h3>fromId</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></span>&nbsp;<span class="element-name">fromId</span><wbr><span class="parameters">(int&nbsp;id)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="withData(net.minestom.server.particle.data.ParticleData)">
+<h3>withData</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></span>&nbsp;<span class="element-name">withData</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="data/ParticleData.html" title="interface in net.minestom.server.particle.data">ParticleData</a>&nbsp;data)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="data()">
+<h3>data</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="data/ParticleData.html" title="interface in net.minestom.server.particle.data">ParticleData</a></span>&nbsp;<span class="element-name">data</span>()</div>
 </section>
 </li>
 </ul>
