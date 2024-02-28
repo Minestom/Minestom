@@ -1,5 +1,6 @@
 package net.minestom.server.particle;
 
+import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -24,4 +25,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
     static @Nullable Particle fromId(int id) {
         return ParticleImpl.getId(id);
     }
+
+    @NotNull Particle withData(@Nullable ParticleData data);
+    @Nullable ParticleData data();
 }

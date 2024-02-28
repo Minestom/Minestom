@@ -1,5 +1,13 @@
 package net.minestom.server.network;
 
+import java.util.BitSet;
+import java.util.Collection;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import java.util.UUID;
+
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -8,6 +16,7 @@ import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
@@ -20,7 +29,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -69,6 +77,7 @@ public final class NetworkBuffer {
     public static final Type<Point> VECTOR3 = NetworkBufferTypes.VECTOR3;
     public static final Type<Point> VECTOR3D = NetworkBufferTypes.VECTOR3D;
     public static final Type<float[]> QUATERNION = NetworkBufferTypes.QUATERNION;
+    public static final Type<Particle> PARTICLE = NetworkBufferTypes.PARTICLE;
 
     ByteBuffer nioBuffer;
     final boolean resizable;
