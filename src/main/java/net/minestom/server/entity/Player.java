@@ -1589,13 +1589,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 this.allowFlying = true;
                 this.instantBreak = false;
                 this.invulnerable = true;
-                this.flying = true;
+                if (isActive()) {
+                    refreshFlying(true);
+                } else {
+                    this.flying = true;
+                }
             }
             default -> {
                 this.allowFlying = false;
                 this.instantBreak = false;
                 this.invulnerable = false;
-                this.flying = false;
+                if (isActive()) {
+                    refreshFlying(false);
+                } else {
+                    this.flying = false;
+                }
             }
         }
         // Make sure that the player is in the PLAY state and synchronize their flight speed.
