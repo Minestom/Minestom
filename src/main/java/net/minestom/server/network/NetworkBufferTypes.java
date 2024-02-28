@@ -630,8 +630,8 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Particle> PARTICLE = new TypeImpl<>(Particle.class,
             (buffer, value) -> {
-                Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data " + value.data() + " is not valid for this particle type " + value.namespace());
-                Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type " + value.namespace());
+                Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data {0} is not valid for this particle type {1}", value.data(),  value.namespace());
+                Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type {0}", value.namespace());
 
                 buffer.write(VAR_INT, value.id());
 

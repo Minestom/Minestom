@@ -9,29 +9,11 @@ import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, ParticleData data) implements ServerPacket {
-    public ParticlePacket(int particleId, boolean longDistance,
-                          double x, double y, double z,
-                          float offsetX, float offsetY, float offsetZ,
-                          float maxSpeed, int particleCount, ParticleData data) {
-        this.particleId = particleId;
-        this.longDistance = longDistance;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.offsetZ = offsetZ;
-        this.maxSpeed = maxSpeed;
-        this.particleCount = particleCount;
-        this.data = data;
-    }
-
+public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, @Nullable ParticleData data) implements ServerPacket {
     private ParticlePacket(ParticlePacket copy) {
         this(copy.particleId, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount, copy.data);
     }
@@ -40,11 +22,11 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         this(readPacket(reader));
     }
 
-    public ParticlePacket(Particle particle, boolean longDistance, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
+    public ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
         this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
     }
 
-    public ParticlePacket(Particle particle, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
+    public ParticlePacket(@NotNull Particle particle, double x, double y, double z, int offsetX, int offsetY, int offsetZ, int maxSpeed, int particleCount) {
         this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
     }
 
@@ -66,8 +48,8 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        Check.stateCondition(data != null && !data.validate(particleId), "Particle data " + data + " is not valid for this particle type " + Particle.fromId(particleId));
-        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type " + Particle.fromId(particleId));
+        Check.stateCondition(data != null && !data.validate(particleId), "Particle data {0} is not valid for this particle type {1}", data, Particle.fromId(particleId));
+        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type {0}", Particle.fromId(particleId));
 
         writer.write(VAR_INT, particleId);
         writer.write(BOOLEAN, longDistance);
