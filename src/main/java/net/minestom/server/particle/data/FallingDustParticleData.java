@@ -18,7 +18,7 @@ public record FallingDustParticleData(Block block) implements ParticleData {
     private static Block read(NetworkBuffer reader) {
         short blockState = reader.read(NetworkBuffer.VAR_INT).shortValue();
         Block block = Block.fromStateId(blockState);
-        Check.stateCondition(block == null, "Block state " + blockState + " is invalid");
+        Check.stateCondition(block == null, "Block state {0} is invalid", blockState);
         return block;
     }
 
