@@ -1,5 +1,7 @@
 package net.minestom.server.recipe;
 
+import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,24 +11,24 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class RecipeManager {
-    private DeclareRecipesPacket declareRecipesPacket = new DeclareRecipesPacket(List.of());
+    private final CachedPacket declareRecipesPacket = new CachedPacket(this::createDeclareRecipesPacket);
     private final Set<Recipe> recipes = new CopyOnWriteArraySet<>();
 
     public void addRecipes(@NotNull Recipe... recipe) {
         if (recipes.addAll(List.of(recipe))) {
-            refreshRecipesPacket();
+            declareRecipesPacket.invalidate();
         }
     }
 
     public void addRecipe(@NotNull Recipe recipe) {
         if (this.recipes.add(recipe)) {
-            refreshRecipesPacket();
+            declareRecipesPacket.invalidate();
         }
     }
 
     public void removeRecipe(@NotNull Recipe recipe) {
         if (this.recipes.remove(recipe)) {
-            refreshRecipesPacket();
+            declareRecipesPacket.invalidate();
         }
     }
 
@@ -36,27 +38,26 @@ public class RecipeManager {
     }
 
     @NotNull
-    public DeclareRecipesPacket getDeclareRecipesPacket() {
+    public SendablePacket getDeclareRecipesPacket() {
         return declareRecipesPacket;
     }
 
-    private void refreshRecipesPacket() {
-        declareRecipesPacket = new DeclareRecipesPacket(recipes.stream().map(this::mapPacket).toList());
-    }
-
-    @NotNull
-    private DeclareRecipesPacket.DeclaredRecipe mapPacket(@NotNull Recipe recipe) {
-        return switch (recipe.recipeType) {
-            case SHAPELESS -> PacketDeclaration.create((ShapelessRecipe) recipe);
-            case SHAPED -> PacketDeclaration.create((ShapedRecipe) recipe);
-            case SMELTING -> PacketDeclaration.create((SmeltingRecipe) recipe);
-            case BLASTING -> PacketDeclaration.create((BlastingRecipe) recipe);
-            case SMOKING -> PacketDeclaration.create((SmokingRecipe) recipe);
-            case CAMPFIRE_COOKING -> PacketDeclaration.create((CampfireCookingRecipe) recipe);
-            case STONECUTTING -> PacketDeclaration.create((StonecutterRecipe) recipe);
-            case SMITHING_TRANSFORM -> PacketDeclaration.create((SmithingTransformRecipe) recipe);
-            case SMITHING_TRIM -> PacketDeclaration.create((SmithingTrimRecipe) recipe);
-        };
+    private @NotNull DeclareRecipesPacket createDeclareRecipesPacket() {
+        var entries = new ArrayList<DeclareRecipesPacket.DeclaredRecipe>();
+        for (var recipe : recipes) {
+            entries.add(switch (recipe.recipeType) {
+                case SHAPELESS -> RecipeConversion.shapeless((ShapelessRecipe) recipe);
+                case SHAPED -> RecipeConversion.shaped((ShapedRecipe) recipe);
+                case SMELTING -> RecipeConversion.smelting((SmeltingRecipe) recipe);
+                case BLASTING -> RecipeConversion.blasting((BlastingRecipe) recipe);
+                case SMOKING -> RecipeConversion.smoking((SmokingRecipe) recipe);
+                case CAMPFIRE_COOKING -> RecipeConversion.campfire((CampfireCookingRecipe) recipe);
+                case STONECUTTING -> RecipeConversion.stonecutter((StonecutterRecipe) recipe);
+                case SMITHING_TRANSFORM -> RecipeConversion.smithingTransform((SmithingTransformRecipe) recipe);
+                case SMITHING_TRIM -> RecipeConversion.smithingTrim((SmithingTrimRecipe) recipe);
+            });
+        }
+        return new DeclareRecipesPacket(entries);
     }
 
 }

@@ -3,10 +3,9 @@ package net.minestom.server.recipe;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import org.jetbrains.annotations.NotNull;
 
-interface PacketDeclaration {
+final class RecipeConversion {
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredShapelessCraftingRecipe create(@NotNull ShapelessRecipe shapelessRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredShapelessCraftingRecipe shapeless(@NotNull ShapelessRecipe shapelessRecipe) {
         return new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(shapelessRecipe.getRecipeId(),
                 shapelessRecipe.getGroup(),
                 shapelessRecipe.getCategory(),
@@ -14,8 +13,7 @@ interface PacketDeclaration {
                 shapelessRecipe.getResult());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredShapedCraftingRecipe create(@NotNull ShapedRecipe shapedRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredShapedCraftingRecipe shaped(@NotNull ShapedRecipe shapedRecipe) {
         return new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(shapedRecipe.getRecipeId(),
                 shapedRecipe.getGroup(),
                 shapedRecipe.getCategory(),
@@ -26,8 +24,7 @@ interface PacketDeclaration {
                 shapedRecipe.getShowNotification());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredSmeltingRecipe create(@NotNull SmeltingRecipe smeltingRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredSmeltingRecipe smelting(@NotNull SmeltingRecipe smeltingRecipe) {
         return  new DeclareRecipesPacket.DeclaredSmeltingRecipe(
                 smeltingRecipe.getRecipeId(),
                 smeltingRecipe.getGroup(),
@@ -38,8 +35,7 @@ interface PacketDeclaration {
                 smeltingRecipe.getCookingTime());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredBlastingRecipe create(@NotNull BlastingRecipe blastingRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredBlastingRecipe blasting(@NotNull BlastingRecipe blastingRecipe) {
         return new DeclareRecipesPacket.DeclaredBlastingRecipe(
                 blastingRecipe.getRecipeId(),
                 blastingRecipe.getGroup(),
@@ -50,8 +46,7 @@ interface PacketDeclaration {
                 blastingRecipe.getCookingTime());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredSmokingRecipe create(@NotNull SmokingRecipe smokingRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredSmokingRecipe smoking(@NotNull SmokingRecipe smokingRecipe) {
         return new DeclareRecipesPacket.DeclaredSmokingRecipe(
                 smokingRecipe.getRecipeId(),
                 smokingRecipe.getGroup(),
@@ -62,8 +57,7 @@ interface PacketDeclaration {
                 smokingRecipe.getCookingTime());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredCampfireCookingRecipe create(@NotNull CampfireCookingRecipe campfireCookingRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredCampfireCookingRecipe campfire(@NotNull CampfireCookingRecipe campfireCookingRecipe) {
         return new DeclareRecipesPacket.DeclaredCampfireCookingRecipe(
                 campfireCookingRecipe.getRecipeId(),
                 campfireCookingRecipe.getGroup(),
@@ -74,8 +68,7 @@ interface PacketDeclaration {
                 campfireCookingRecipe.getCookingTime());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredStonecutterRecipe create(@NotNull StonecutterRecipe stonecuttingRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredStonecutterRecipe stonecutter(@NotNull StonecutterRecipe stonecuttingRecipe) {
         return new DeclareRecipesPacket.DeclaredStonecutterRecipe(
                 stonecuttingRecipe.getRecipeId(),
                 stonecuttingRecipe.getGroup(),
@@ -83,8 +76,7 @@ interface PacketDeclaration {
                 stonecuttingRecipe.getResult());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredSmithingTransformRecipe create(@NotNull SmithingTransformRecipe smithingTransformRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredSmithingTransformRecipe smithingTransform(@NotNull SmithingTransformRecipe smithingTransformRecipe) {
         return  new DeclareRecipesPacket.DeclaredSmithingTransformRecipe(
                 smithingTransformRecipe.getRecipeId(),
                 smithingTransformRecipe.getTemplate(),
@@ -93,12 +85,15 @@ interface PacketDeclaration {
                 smithingTransformRecipe.getResult());
     }
 
-    @NotNull
-    static DeclareRecipesPacket.DeclaredSmithingTrimRecipe create(@NotNull SmithingTrimRecipe smithingTrimRecipe) {
+    static @NotNull DeclareRecipesPacket.DeclaredSmithingTrimRecipe smithingTrim(@NotNull SmithingTrimRecipe smithingTrimRecipe) {
         return  new DeclareRecipesPacket.DeclaredSmithingTrimRecipe(
                 smithingTrimRecipe.getRecipeId(),
                 smithingTrimRecipe.getTemplate(),
                 smithingTrimRecipe.getBaseIngredient(),
                 smithingTrimRecipe.getAdditionIngredient());
+    }
+
+    private RecipeConversion() {
+
     }
 }
