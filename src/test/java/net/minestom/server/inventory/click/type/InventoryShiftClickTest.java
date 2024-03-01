@@ -83,25 +83,25 @@ public class InventoryShiftClickTest {
     public void testCannotTransfer() {
         assertClick(
                 builder -> builder
-                        .change(0, ItemStack.of(Material.STONE, 64), true)
+                        .change(9, ItemStack.of(Material.STONE, 64), true)
                         .change(0, ItemStack.of(Material.STONE, 64))
                         .change(1, ItemStack.of(Material.DIRT))
                         .change(2, ItemStack.of(Material.DIRT))
                         .change(3, ItemStack.of(Material.DIRT))
                         .change(4, ItemStack.of(Material.DIRT)),
-                new ClickInfo.ShiftClick(SIZE),
+                new ClickInfo.ShiftClick(SIZE), // Equivalent to player slot 9
                 builder -> builder
         );
 
         assertClick(
                 builder -> builder
-                        .change(0, ItemStack.of(Material.STONE, 64), true)
+                        .change(9, ItemStack.of(Material.STONE, 64), true)
                         .change(0, ItemStack.of(Material.DIRT))
                         .change(1, ItemStack.of(Material.DIRT))
                         .change(2, ItemStack.of(Material.DIRT))
                         .change(3, ItemStack.of(Material.DIRT))
                         .change(4, ItemStack.of(Material.DIRT)),
-                new ClickInfo.ShiftClick(SIZE),
+                new ClickInfo.ShiftClick(SIZE), // Equivalent to player slot 9
                 builder -> builder
         );
     }

@@ -29,15 +29,15 @@ public class FurnaceInventory extends ContainerInventory {
                 if (slot < size) {
                     return PlayerInventory.getInnerShiftClickSlots(builder, item, slot);
                 } else if (slot < size + 27) {
-                    return IntIterators.fromTo(size + 27, size + 36);
+                    return IntIterators.pour(IntIterators.fromTo(size + 27, size + 36));
                 } else {
-                    return IntIterators.fromTo(size, size + 27);
+                    return IntIterators.pour(IntIterators.fromTo(size, size + 27));
                 }
             },
-            (builder, item, slot) -> IntIterators.concat(
+            (builder, item, slot) -> IntIterators.pour(IntIterators.concat(
                     IntIterators.fromTo(0, builder.clickedInventory().getSize()),
-                    PlayerInventory.getInnerDoubleClickSlots(builder, item, slot)
-            ));
+                    PlayerInventory.getInnerDoubleClickSlots(builder, item, slot).iterator()
+            )));
 
     private short remainingFuelTick;
     private short maximumFuelBurnTime;

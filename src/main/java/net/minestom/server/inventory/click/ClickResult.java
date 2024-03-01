@@ -1,6 +1,7 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.entity.Player;
@@ -30,7 +31,7 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
         return new Builder(player, clickedInventory);
     }
 
-    public static final class Builder {
+    public static final class Builder implements Int2ObjectFunction<ItemStack> {
         private final @NotNull Player player;
         private final @NotNull Inventory clickedInventory;
 
@@ -60,12 +61,24 @@ public record ClickResult(@NotNull Player player, @NotNull Inventory clickedInve
             return player().getInventory().getCursorItem();
         }
 
+        @Override
         public @NotNull ItemStack get(int slot) {
             if (slot >= clickedInventory.getSize()) {
-                return playerInventory().getItemStack(PlayerInventoryUtils.protocolToMinestom(slot, clickedInventory));
+                int converted = PlayerInventoryUtils.protocolToMinestom(slot, clickedInventory);
+
+                return playerInventoryChanges.containsKey(converted) ?
+                        playerInventoryChanges.get(converted) : playerInventory().getItemStack(converted);
             } else {
-                return clickedInventory.getItemStack(slot);
+                return changes.containsKey(slot) ?
+                        changes.get(slot) : clickedInventory.getItemStack(slot);
             }
+        }
+
+        @Override
+        public ItemStack put(int key, ItemStack value) {
+            ItemStack get = get(key);
+            change(key, value);
+            return get;
         }
 
         public @NotNull Builder change(int slot, @NotNull ItemStack item) {

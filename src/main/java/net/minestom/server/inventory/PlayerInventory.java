@@ -3,6 +3,7 @@ package net.minestom.server.inventory;
 import it.unimi.dsi.fastutil.ints.IntArrays;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntIterators;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -20,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
@@ -54,23 +54,23 @@ public non-sealed class PlayerInventory extends InventoryImpl {
                     base = IntIterators.wrap(IntArrays.reverse(IntIterators.unwrap(base)));
                 }
 
-                return base;
+                return IntIterators.pour(base);
             },
-            (builder, item, slot) -> IntIterators.concat(
+            (builder, item, slot) -> IntIterators.pour(IntIterators.concat(
                     IntIterators.fromTo(CRAFT_SLOT_1, CRAFT_SLOT_4 + 1), // 1-4
                     IntIterators.fromTo(HELMET_SLOT, BOOTS_SLOT + 1), // 5-8
                     IntIterators.fromTo(9, 36), // 9-35
                     IntIterators.fromTo(0, 9), // 36-44
                     IntIterators.singleton(OFF_HAND_SLOT) // 45
-            )
+            ))
     );
 
-    public static @NotNull IntIterator getInnerShiftClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
-        return IntIterators.fromTo(builder.clickedInventory().getSize(), builder.clickedInventory().getSize() + 36);
+    public static @NotNull IntList getInnerShiftClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
+        return IntIterators.pour(IntIterators.fromTo(builder.clickedInventory().getSize(), builder.clickedInventory().getSize() + 36));
     }
 
-    public static @NotNull IntIterator getInnerDoubleClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
-        return IntIterators.fromTo(builder.clickedInventory().getSize(), builder.clickedInventory().getSize() + 36);
+    public static @NotNull IntList getInnerDoubleClickSlots(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot) {
+        return IntIterators.pour(IntIterators.fromTo(builder.clickedInventory().getSize(), builder.clickedInventory().getSize() + 36));
     }
 
     private static int getSlotIndex(@NotNull EquipmentSlot slot, int heldSlot) {
@@ -92,26 +92,18 @@ public non-sealed class PlayerInventory extends InventoryImpl {
         };
     }
 
-    private static final int[] EXISTING_ADD_SLOTS = IntStream.concat(
-            IntStream.concat(
-                    IntStream.rangeClosed(36, 44),
-                    IntStream.of(OFF_HAND_SLOT)
-            ),
-            IntStream.rangeClosed(9, 35)
-    ).toArray();
+    private static final IntList FILL_ADD_SLOTS = IntIterators.pour(IntIterators.concat(
+        IntIterators.singleton(OFF_HAND_SLOT),
+        IntIterators.fromTo(0, 36)
+    ));
 
-    private static final int[] AIR_ADD_SLOTS = IntStream.concat(
-            IntStream.rangeClosed(36, 44),
-            IntStream.rangeClosed(9, 35)
-    ).toArray();
+    private static final IntList AIR_ADD_SLOTS = IntIterators.pour(IntIterators.fromTo(0, 36));
 
-    private static final int[] TAKE_SLOTS = IntStream.concat(
-            IntStream.rangeClosed(36, 45),
-            IntStream.concat(
-                    IntStream.rangeClosed(9, 35),
-                    IntStream.rangeClosed(0, 8)
-            )
-    ).toArray();
+    private static final IntList TAKE_SLOTS = IntIterators.pour(IntIterators.concat(
+        IntIterators.fromTo(0, 36),
+        IntIterators.singleton(OFF_HAND_SLOT),
+        IntIterators.fromTo(36, 45)
+    ));
 
     private ItemStack cursorItem = ItemStack.AIR;
 
@@ -233,12 +225,12 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     @Override
     public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
-        return processItemStack(itemStack, TransactionType.add(() -> IntIterators.wrap(EXISTING_ADD_SLOTS), () -> IntIterators.wrap(AIR_ADD_SLOTS)), option);
+        return processItemStack(itemStack, TransactionType.add(FILL_ADD_SLOTS, AIR_ADD_SLOTS), option);
     }
 
     @Override
     public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
-        return processItemStack(itemStack, TransactionType.take(() -> IntIterators.wrap(TAKE_SLOTS)), option);
+        return processItemStack(itemStack, TransactionType.take(TAKE_SLOTS), option);
     }
 
 }

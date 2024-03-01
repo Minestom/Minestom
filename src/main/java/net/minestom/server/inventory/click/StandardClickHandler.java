@@ -1,6 +1,9 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.ints.IntIterator;
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.ints.*;
+import net.minestom.server.inventory.TransactionOperator;
+import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -27,7 +30,7 @@ public class StandardClickHandler implements ClickHandler {
          * @param slot the slot of the clicked item
          * @return the list of slots, in order of priority, to be used for this operation
          */
-        @NotNull IntIterator get(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot);
+        @NotNull IntList get(@NotNull ClickResult.Builder builder, @NotNull ItemStack item, int slot);
 
     }
 
@@ -53,21 +56,11 @@ public class StandardClickHandler implements ClickHandler {
         ItemStack cursor = builder.getCursorItem();
         ItemStack clickedItem = builder.get(info.clickedSlot());
 
-        if (cursor.isAir() && clickedItem.isAir()) return; // Both are air, no changes
-
-        if (RULE.canBeStacked(cursor, clickedItem)) { // Stackable items, combine their counts
-            int total = RULE.getAmount(cursor) + RULE.getAmount(clickedItem);
-            int maxSize = RULE.getMaxSize(cursor);
-            if (RULE.canApply(clickedItem, total)) { // Apply all
-                cursor = RULE.apply(cursor, 0);
-                clickedItem = RULE.apply(clickedItem, total);
-            } else { // Apply all possible
-                cursor = RULE.apply(cursor, total - maxSize);
-                clickedItem = RULE.apply(clickedItem, maxSize);
-            }
-            builder.cursor(cursor).change(info.clickedSlot(), clickedItem);
-        } else { // Unstackable items, switch them
-            builder.cursor(clickedItem).change(info.clickedSlot(), cursor);
+        Pair<ItemStack, ItemStack> pair = TransactionOperator.STACK_LEFT.apply(clickedItem, cursor);
+        if (pair != null) { // Stackable items, combine their counts
+            builder.change(info.clickedSlot(), pair.left()).cursor(pair.right());
+        } else if (!RULE.canBeStacked(cursor, clickedItem)) { // If they're unstackable, switch them
+            builder.change(info.clickedSlot(), cursor).cursor(clickedItem);
         }
     }
 
@@ -203,56 +196,16 @@ public class StandardClickHandler implements ClickHandler {
     }
 
     public void shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull ClickResult.Builder builder) {
-        var slot = info.clickedSlot();
-        var clickedItem = builder.get(slot);
+        int slot = info.clickedSlot();
+        ItemStack clicked = builder.get(slot);
 
-        if (clickedItem.isAir()) return;
+        IntList slots = shiftClickSlots.get(builder, clicked, slot);
+        slots.removeIf(i -> i == slot);
 
-        final var originalItemAmount = RULE.getAmount(clickedItem);
-        var itemAmount = originalItemAmount;
+        ItemStack result = TransactionType.add(slots, slots).process(clicked, builder);
 
-        var slots = shiftClickSlots.get(builder, clickedItem, info.clickedSlot());
-
-        while (slots.hasNext() && itemAmount > 0) {
-            var next = slots.nextInt();
-            var slotItem = builder.get(next);
-
-            if (slot == next || !RULE.canBeStacked(clickedItem, slotItem)) continue;
-
-            var maxSize = RULE.getMaxSize(slotItem);
-            var slotSize = RULE.getAmount(slotItem);
-            if (slotSize >= maxSize) continue;
-
-            var sum = itemAmount + slotSize;
-
-            if (sum <= maxSize) {
-                builder.change(next, RULE.apply(slotItem, sum));
-                itemAmount = 0;
-            } else {
-                builder.change(next, RULE.apply(slotItem, maxSize));
-                itemAmount = sum - maxSize;
-            }
-        }
-
-        if (itemAmount > 0) { // Deposit the remaining amount in the first air slot.
-            var airSlots = shiftClickSlots.get(builder, clickedItem, info.clickedSlot());
-
-            while (airSlots.hasNext()) {
-                var next = airSlots.nextInt();
-                var slotItem = builder.get(next);
-
-                if (slot == next || !slotItem.isAir()) continue;
-
-                builder.change(next, RULE.apply(clickedItem, itemAmount));
-                itemAmount = 0;
-
-                break;
-            }
-        }
-
-        // Final remaining item check
-        if (originalItemAmount != itemAmount && RULE.canApply(clickedItem, itemAmount)) {
-            builder.change(slot, RULE.apply(clickedItem, itemAmount));
+        if (!result.equals(clicked)) {
+            builder.change(slot, result);
         }
     }
 
@@ -260,50 +213,14 @@ public class StandardClickHandler implements ClickHandler {
         var cursor = builder.getCursorItem();
         if (cursor.isAir()) return;
 
-        final var maxSize = RULE.getMaxSize(cursor);
-        final var originalCursorAmount = RULE.getAmount(cursor);
-        var cursorAmount = originalCursorAmount;
-
         var slots = doubleClickSlots.get(builder, cursor, info.clickedSlot());
 
-        while (slots.hasNext() && cursorAmount < maxSize) {
-            var next = slots.nextInt();
+        var unstacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (first, second) -> RULE.getAmount(first) < RULE.getAmount(first)), slots);
+        var stacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (first, second) -> RULE.getAmount(first) == RULE.getAmount(first)), slots);
+        var result = TransactionType.join(unstacked, stacked).process(cursor, builder);
 
-            var slotItem = builder.get(next);
-            if (slotItem.isAir() || !RULE.canBeStacked(cursor, slotItem) || RULE.getAmount(slotItem) == RULE.getMaxSize(slotItem)) continue;
-
-            var sum = cursorAmount + RULE.getAmount(slotItem);
-
-            if (sum <= maxSize) {
-                cursorAmount = sum;
-                builder.change(next, RULE.apply(slotItem, 0));
-            } else {
-                cursorAmount = maxSize;
-                builder.change(next, RULE.apply(slotItem, sum - maxSize));
-            }
-        }
-
-        var secondSlots = doubleClickSlots.get(builder, cursor, info.clickedSlot());
-
-        while (secondSlots.hasNext() && cursorAmount < maxSize) {
-            var next = secondSlots.nextInt();
-
-            var slotItem = builder.get(next);
-            if (slotItem.isAir() || !RULE.canBeStacked(cursor, slotItem) || RULE.getAmount(slotItem) != RULE.getMaxSize(slotItem)) continue;
-
-            var sum = cursorAmount + RULE.getAmount(slotItem);
-
-            if (sum <= maxSize) {
-                cursorAmount = sum;
-                builder.change(next, RULE.apply(slotItem, 0));
-            } else {
-                cursorAmount = maxSize;
-                builder.change(next, RULE.apply(slotItem, sum - maxSize));
-            }
-        }
-
-        if (originalCursorAmount != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
-            builder.cursor(RULE.apply(cursor, cursorAmount));
+        if (!result.equals(cursor)) {
+            builder.cursor(result);
         }
     }
 

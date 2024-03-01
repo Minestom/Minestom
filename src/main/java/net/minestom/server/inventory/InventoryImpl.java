@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.UnaryOperator;
@@ -42,12 +41,12 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
     public static final @NotNull ClickHandler DEFAULT_HANDLER = new StandardClickHandler(
             (builder, item, slot) -> slot >= builder.clickedInventory().getSize() ?
-                    IntIterators.fromTo(0, builder.clickedInventory().getSize()) :
+                    IntIterators.pour(IntIterators.fromTo(0, builder.clickedInventory().getSize())) :
                     PlayerInventory.getInnerShiftClickSlots(builder, item, slot),
-            (builder, item, slot) -> IntIterators.concat(
+            (builder, item, slot) -> IntIterators.pour(IntIterators.concat(
                     IntIterators.fromTo(0, builder.clickedInventory().getSize()),
-                    PlayerInventory.getInnerDoubleClickSlots(builder, item, slot)
-            ));
+                    PlayerInventory.getInnerDoubleClickSlots(builder, item, slot).iterator()
+            )));
 
     protected InventoryImpl(int size) {
         this.size = size;
@@ -257,7 +256,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
     @Override
     public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
-        return processItemStack(itemStack, TransactionType.add(() -> IntIterators.fromTo(0, getSize()), () -> IntIterators.fromTo(0, getSize())), option);
+        return processItemStack(itemStack, TransactionType.add(IntIterators.pour(IntIterators.fromTo(0, getSize())), IntIterators.pour(IntIterators.fromTo(0, getSize()))), option);
     }
 
     @Override
@@ -283,7 +282,7 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
 
     @Override
     public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
-        return processItemStack(itemStack, TransactionType.take(() -> IntIterators.fromTo(0, getSize())), option);
+        return processItemStack(itemStack, TransactionType.take(IntIterators.pour(IntIterators.fromTo(0, getSize()))), option);
     }
 
     @Override
