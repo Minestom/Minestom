@@ -5,8 +5,10 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
+import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
+import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,29 +26,27 @@ public class PathGenerator {
     }
 
     static Comparator<PNode> pNodeComparator = (s1, s2) -> (int) (((s1.g + s1.h) - (s2.g + s2.h)) * 1000);
-    public static PPath generate(Instance instance, Pos orgStart, Point orgTarget, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, PPath.PathfinderCapabilities capabilities, boolean startOnGround, Runnable onComplete) {
-        Pos start = (capabilities.type() == PPath.PathfinderType.AQUATIC
-                || capabilities.type() == PPath.PathfinderType.FLYING
-                || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && instance.getBlock(orgStart).compare(Block.WATER))
-                || startOnGround)
-                    ? orgStart
-                    : PNode.gravitySnap(instance, orgStart, boundingBox, 100);
+    public static PPath generate(Instance instance, Pos orgStart, Point orgTarget, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, boolean isOnGround, Runnable onComplete) {
+        var generator = new GroundNodeGenerator();
+        var follower = new GroundNodeFollower();
 
-        Pos target = (capabilities.type() == PPath.PathfinderType.AQUATIC
-                || capabilities.type() == PPath.PathfinderType.FLYING
-                || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && instance.getBlock(orgTarget).compare(Block.WATER)))
-                    ? Pos.fromPoint(orgTarget)
-                    : PNode.gravitySnap(instance, orgTarget, boundingBox, 100);
+        Point start = (!isOnGround && follower.requiresGroundStart())
+                    ? generator.gravitySnap(instance, orgStart, boundingBox, 100)
+                    : orgStart;
+
+        Point target = (!isOnGround && follower.requiresGroundStart())
+                    ? generator.gravitySnap(instance, orgTarget, boundingBox, 100)
+                    : Pos.fromPoint(orgTarget);
 
         if (start == null || target == null) return null;
 
-        PPath path = new PPath(maxDistance, pathVariance, capabilities, onComplete);
-        pool.submit(() -> computePath(instance, start, target, closeDistance, maxDistance, pathVariance, boundingBox, path));
+        PPath path = new PPath(maxDistance, pathVariance, onComplete);
+        pool.submit(() -> computePath(instance, start, target, closeDistance, maxDistance, pathVariance, boundingBox, path, generator));
 
         return path;
     }
 
-    private static void computePath(Instance instance, Pos start, Pos target, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, PPath path) {
+    private static void computePath(Instance instance, Point start, Point target, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, PPath path, NodeGenerator generator) {
         double closestDistance = Double.MAX_VALUE;
         double straightDistance = heuristic(start, target);
         int maxSize = (int) Math.floor(maxDistance * 10);
@@ -85,7 +85,7 @@ public class PathGenerator {
                 closestFoundNodes = List.of(current);
             }
 
-            var found = current.getNearby(instance, closed, target, boundingBox, path.capabilities());
+            var found = generator.getWalkable(instance, closed, current, target, boundingBox);
             found.forEach(p -> {
                 if (p.point.distance(start) <= maxDistance) {
                     open.enqueue(p);
@@ -134,7 +134,7 @@ public class PathGenerator {
         path.setState(PPath.PathState.COMPUTED);
     }
 
-    private static boolean withinDistance(Pos point, Pos target, double closeDistance) {
+    private static boolean withinDistance(Point point, Point target, double closeDistance) {
         return point.distanceSquared(target) < (closeDistance * closeDistance);
     }
 }

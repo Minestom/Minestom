@@ -14,25 +14,13 @@ public class PPath {
 
     private final double pathVariance;
     private final double maxDistance;
-    private final PathfinderCapabilities capabilities;
     private int index = 0;
     private final AtomicReference<PathState> state = new AtomicReference<>(PathState.CALCULATING);
-
-    public PathfinderCapabilities capabilities() {
-        return capabilities;
-    }
 
     public Point getNext() {
         if (index + 1 >= nodes.size()) return null;
         var current = nodes.get(index + 1);
         return current.point;
-    }
-
-    public enum PathfinderType {
-        LAND, AQUATIC, FLYING, AMPHIBIOUS
-    }
-
-    public record PathfinderCapabilities (PathfinderType type, boolean canJump, boolean canClimbAnything, float swimSpeedModifier) {
     }
 
     public void setState(PathState newState) {
@@ -53,11 +41,10 @@ public class PPath {
         return nodes;
     }
 
-    public PPath(double maxDistance, double pathVariance, PathfinderCapabilities capabilities, Runnable onComplete) {
+    public PPath(double maxDistance, double pathVariance, Runnable onComplete) {
         this.onComplete = onComplete;
         this.maxDistance = maxDistance;
         this.pathVariance = pathVariance;
-        this.capabilities = capabilities;
     }
 
     void runComplete() {

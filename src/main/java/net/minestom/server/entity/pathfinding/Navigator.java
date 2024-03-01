@@ -11,8 +11,8 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -54,9 +54,8 @@ public final class Navigator {
      *
      * @param direction    the targeted position
      * @param speed        define how far the entity will move
-     * @param capabilities
      */
-    public void moveTowards(@NotNull Point direction, double speed, PPath.PathfinderCapabilities capabilities, Point lookAt) {
+    public void moveTowards(@NotNull Point direction, double speed, Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -76,7 +75,7 @@ public final class Navigator {
         var instance = entity.getInstance();
         if (instance != null)
             if (instance.getBlock(position).isLiquid()) {
-                speed *= capabilities.swimSpeedModifier();
+            //    speed *= capabilities.swimSpeedModifier();
                 inWater = true;
             }
 
@@ -86,11 +85,13 @@ public final class Navigator {
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        final double speedY = (capabilities.type() == PPath.PathfinderType.AQUATIC
-                || capabilities.type() == PPath.PathfinderType.FLYING
-                || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && inWater))
-                ? Math.signum(dy) * 0.5 * speed
-                : 0;
+        // final double speedY = (capabilities.type() == PPath.PathfinderType.AQUATIC
+        //         || capabilities.type() == PPath.PathfinderType.FLYING
+        //         || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && inWater))
+        //         ? Math.signum(dy) * 0.5 * speed
+        //         : 0;
+
+        final double speedY = 0;
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
         this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
@@ -108,7 +109,7 @@ public final class Navigator {
     }
 
     public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, Runnable onComplete) {
-        return setPathTo(point, minimumDistance, 50, 20, PPath.PathfinderType.LAND, onComplete);
+        return setPathTo(point, minimumDistance, 50, 20, onComplete);
     }
 
     /**
@@ -121,7 +122,7 @@ public final class Navigator {
      * @param onComplete called when the path has been completed
      * @return true if a path has been found
      */
-    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, PPath.PathfinderType type, Runnable onComplete) {
+    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, Runnable onComplete) {
         final Instance instance = entity.getInstance();
         if (point == null) {
             this.path = null;
@@ -164,7 +165,6 @@ public final class Navigator {
                         minimumDistance, maxDistance,
                         pathVariance,
                 this.entity.getBoundingBox(),
-                new PPath.PathfinderCapabilities(type, true, true, 0.4f),
                 this.entity.isOnGround(),
                 onComplete);
 
@@ -177,7 +177,7 @@ public final class Navigator {
     public synchronized void tick() {
         if (goalPosition == null) return; // No path
         if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) return; // No pathfinding tick for dead entities
-        if (computingPath != null && computingPath.getState() == PPath.PathState.COMPUTED) {
+        if (computingPath != null && (computingPath.getState() == PPath.PathState.COMPUTED || computingPath.getState() == PPath.PathState.BEST_EFFORT)) {
             path = computingPath;
             computingPath = null;
         }
@@ -185,7 +185,7 @@ public final class Navigator {
         if (path == null) return;
 
         // If the path is computed start following it
-        if (path.getState() == PPath.PathState.COMPUTED) {
+        if (path.getState() == PPath.PathState.COMPUTED || path.getState() == PPath.PathState.BEST_EFFORT) {
             path.setState(PPath.PathState.FOLLOWING);
             // Remove nodes that are too close to the start. Prevents doubling back to hit points that have already been hit
             for (int i = 0; i < path.getNodes().size(); i++) {
@@ -224,7 +224,7 @@ public final class Navigator {
                     entity.getPosition(),
                     Pos.fromPoint(goalPosition),
                     minimumDistance, path.maxDistance(),
-                    path.pathVariance(), entity.getBoundingBox(), path.capabilities(), this.entity.isOnGround(), null);
+                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), null);
 
             return;
         }
@@ -235,8 +235,8 @@ public final class Navigator {
 
         boolean nextIsRepath = nextTarget.sameBlock(Pos.ZERO);
 
-        // drawPath(path);
-        moveTowards(currentTarget, movementSpeed, path.capabilities(), nextIsRepath ? currentTarget : nextTarget);
+        drawPath(path);
+        moveTowards(currentTarget, movementSpeed, nextIsRepath ? currentTarget : nextTarget);
 
         if (entity.getPosition().sameBlock(currentTarget)) {
             path.next();
@@ -245,7 +245,7 @@ public final class Navigator {
 
         if ((path.getCurrentType() == PNode.NodeType.JUMP)
                 && entity.isOnGround()
-                && path.capabilities().canJump()
+             //   && path.capabilities().canJump()
         ) {
             jump(4f);
         }
@@ -297,7 +297,7 @@ public final class Navigator {
 
         for (PNode point : path.getNodes()) {
             Point pos = point.point();
-            var packet = ParticleCreator.createParticlePacket(Particle.COMPOSTER, pos.x(), pos.y() + 0.5, pos.z(), 0, 0, 0, 1);
+            var packet = new ParticlePacket(Particle.COMPOSTER, pos.x(), pos.y() + 0.5, pos.z(), 0, 0, 0, 0, 1);
             entity.sendPacketToViewers(packet);
         }
     }
