@@ -17,6 +17,11 @@ public class FlyingNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
 
     @Override
+    public boolean requiresGroundStart() {
+        return false;
+    }
+
+    @Override
     public Collection<? extends PNode> getWalkable(Instance instance, Set<PNode> visited, PNode current, Point goal, @NotNull BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(Pos.ZERO, 0, 0, current);

@@ -5,8 +5,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
-import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
+import net.minestom.server.entity.pathfinding.followers.NodeFollower;
 import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.Instance;
 
@@ -26,15 +25,12 @@ public class PathGenerator {
     }
 
     static Comparator<PNode> pNodeComparator = (s1, s2) -> (int) (((s1.g + s1.h) - (s2.g + s2.h)) * 1000);
-    public static PPath generate(Instance instance, Pos orgStart, Point orgTarget, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, boolean isOnGround, Runnable onComplete) {
-        var generator = new GroundNodeGenerator();
-        var follower = new GroundNodeFollower();
-
-        Point start = (!isOnGround && follower.requiresGroundStart())
+    public static PPath generate(Instance instance, Pos orgStart, Point orgTarget, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, boolean isOnGround, NodeGenerator generator, NodeFollower follower, Runnable onComplete) {
+        Point start = (!isOnGround && generator.requiresGroundStart())
                     ? generator.gravitySnap(instance, orgStart, boundingBox, 100)
                     : orgStart;
 
-        Point target = (!isOnGround && follower.requiresGroundStart())
+        Point target = (!isOnGround && generator.requiresGroundStart())
                     ? generator.gravitySnap(instance, orgTarget, boundingBox, 100)
                     : Pos.fromPoint(orgTarget);
 

@@ -2,26 +2,26 @@ package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.pathfinding.followers.LandNodeFollower;
+import net.minestom.server.entity.pathfinding.followers.NodeFollower;
+import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
+import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-// TODO all pathfinding requests could be processed in another thread
 
 /**
  * Necessary object for all {@link NavigableEntity}.
@@ -37,69 +37,18 @@ public final class Navigator {
     private double minimumDistance;
     private float movementSpeed = 0.1f;
 
+    private NodeGenerator nodeGenerator = new GroundNodeGenerator();
+    private NodeFollower nodeFollower;
+
     public Navigator(@NotNull Entity entity) {
         this.entity = entity;
+        nodeFollower = new LandNodeFollower(entity);
     }
 
     public PPath.PathState getState() {
         if (path == null && computingPath == null) return PPath.PathState.INVALID;
         if (path == null) return computingPath.getState();
         return path.getState();
-    }
-
-    /**
-     * Used to move the entity toward {@code direction} in the X and Z axis
-     * Gravity is still applied but the entity will not attempt to jump
-     * Also update the yaw/pitch of the entity to look along 'direction'
-     *
-     * @param direction    the targeted position
-     * @param speed        define how far the entity will move
-     */
-    public void moveTowards(@NotNull Point direction, double speed, Point lookAt) {
-        final Pos position = entity.getPosition();
-        final double dx = direction.x() - position.x();
-        final double dy = direction.y() - position.y();
-        final double dz = direction.z() - position.z();
-
-        final double dxLook = lookAt.x() - position.x();
-        final double dyLook = lookAt.y() - position.y();
-        final double dzLook = lookAt.z() - position.z();
-
-        // the purpose of these few lines is to slow down entities when they reach their destination
-        final double distSquared = dx * dx + dy * dy + dz * dz;
-        if (speed > distSquared) {
-            speed = distSquared;
-        }
-
-        boolean inWater = false;
-        var instance = entity.getInstance();
-        if (instance != null)
-            if (instance.getBlock(position).isLiquid()) {
-            //    speed *= capabilities.swimSpeedModifier();
-                inWater = true;
-            }
-
-        final double radians = Math.atan2(dz, dx);
-        final double speedX = Math.cos(radians) * speed;
-        final double speedZ = Math.sin(radians) * speed;
-        final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
-        final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
-
-        // final double speedY = (capabilities.type() == PPath.PathfinderType.AQUATIC
-        //         || capabilities.type() == PPath.PathfinderType.FLYING
-        //         || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && inWater))
-        //         ? Math.signum(dy) * 0.5 * speed
-        //         : 0;
-
-        final double speedY = 0;
-
-        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
-    }
-
-    public void jump(float height) {
-        // FIXME magic value
-        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
     }
 
     public synchronized boolean setPathTo(@Nullable Point point) {
@@ -166,6 +115,8 @@ public final class Navigator {
                         pathVariance,
                 this.entity.getBoundingBox(),
                 this.entity.isOnGround(),
+                this.nodeGenerator,
+                this.nodeFollower,
                 onComplete);
 
         final boolean success = computingPath != null;
@@ -224,7 +175,7 @@ public final class Navigator {
                     entity.getPosition(),
                     Pos.fromPoint(goalPosition),
                     minimumDistance, path.maxDistance(),
-                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), null);
+                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, nodeFollower, null);
 
             return;
         }
@@ -236,18 +187,15 @@ public final class Navigator {
         boolean nextIsRepath = nextTarget.sameBlock(Pos.ZERO);
 
         drawPath(path);
-        moveTowards(currentTarget, movementSpeed, nextIsRepath ? currentTarget : nextTarget);
+        nodeFollower.moveTowards(currentTarget, movementSpeed, nextIsRepath ? currentTarget : nextTarget);
 
         if (entity.getPosition().sameBlock(currentTarget)) {
             path.next();
             return;
         }
 
-        if ((path.getCurrentType() == PNode.NodeType.JUMP)
-                && entity.isOnGround()
-             //   && path.capabilities().canJump()
-        ) {
-            jump(4f);
+        if (path.getCurrentType() == PNode.NodeType.JUMP) {
+            nodeFollower.jump();
         }
     }
 

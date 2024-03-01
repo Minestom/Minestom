@@ -28,6 +28,11 @@ public interface NodeGenerator {
     Collection<? extends PNode> getWalkable(Instance instance, Set<PNode> visited, PNode current, Point goal, @NotNull BoundingBox boundingBox);
 
     /**
+     * @return true if pathfinding should start on the ground
+     */
+    boolean requiresGroundStart();
+
+    /**
      * Snap the point to the ground.
      * @param instance
      * @param point

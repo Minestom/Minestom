@@ -9,10 +9,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class FlyingNodeFollower implements NodeFollower {
+public class LandNodeFollower implements NodeFollower {
     private final Entity entity;
 
-    public FlyingNodeFollower(Entity entity) {
+    public LandNodeFollower(Entity entity) {
         this.entity = entity;
     }
 
@@ -40,13 +40,27 @@ public class FlyingNodeFollower implements NodeFollower {
             speed = distSquared;
         }
 
+        boolean inWater = false;
+        var instance = entity.getInstance();
+        if (instance != null)
+            if (instance.getBlock(position).isLiquid()) {
+                //    speed *= capabilities.swimSpeedModifier();
+                inWater = true;
+            }
+
         final double radians = Math.atan2(dz, dx);
         final double speedX = Math.cos(radians) * speed;
         final double speedZ = Math.sin(radians) * speed;
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        final double speedY = Math.signum(dy) * 0.5 * speed;
+        // final double speedY = (capabilities.type() == PPath.PathfinderType.AQUATIC
+        //         || capabilities.type() == PPath.PathfinderType.FLYING
+        //         || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && inWater))
+        //         ? Math.signum(dy) * 0.5 * speed
+        //         : 0;
+
+        final double speedY = 0;
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
         this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
@@ -56,5 +70,12 @@ public class FlyingNodeFollower implements NodeFollower {
 
     @Override
     public void jump() {
+        if (entity.isOnGround()) {
+            jump(4f);
+        }
+    }
+
+    public void jump(float height) {
+        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
     }
 }

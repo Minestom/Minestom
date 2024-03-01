@@ -9,10 +9,11 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class FlyingNodeFollower implements NodeFollower {
+public class WaterNodeFollower implements NodeFollower {
     private final Entity entity;
+    private static final double WATER_SPEED_MULTIPLIER = 0.5;
 
-    public FlyingNodeFollower(Entity entity) {
+    public WaterNodeFollower(Entity entity) {
         this.entity = entity;
     }
 
@@ -39,6 +40,12 @@ public class FlyingNodeFollower implements NodeFollower {
         if (speed > distSquared) {
             speed = distSquared;
         }
+
+        var instance = entity.getInstance();
+        if (instance != null)
+            if (instance.getBlock(position).isLiquid()) {
+                speed *= WATER_SPEED_MULTIPLIER;
+            }
 
         final double radians = Math.atan2(dz, dx);
         final double speedX = Math.cos(radians) * speed;
