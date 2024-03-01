@@ -3,6 +3,7 @@ package net.minestom.server.entity.pathfinding;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -183,7 +184,10 @@ public class PathfinderIntegrationTest {
         });
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
-        var snapped = PNode.gravitySnap(i, new Pos(-140.74433362614695, 40.58268292446131, 18.87966960447388), zombie.getBoundingBox(), 100);
+
+        var nodeGenerator = new GroundNodeGenerator();
+
+        var snapped = nodeGenerator.gravitySnap(i, new Pos(-140.74433362614695, 40.58268292446131, 18.87966960447388), zombie.getBoundingBox(), 100);
         assertEquals(new Pos(-140.5, 40.0, 18.5), snapped);
     }
 }
