@@ -65,31 +65,25 @@ public class StandardClickHandler implements ClickHandler {
     }
 
     public void rightClick(@NotNull ClickInfo.RightClick info, @NotNull ClickResult.Builder builder) {
+        int slot = info.clickedSlot();
         ItemStack cursor = builder.getCursorItem();
-        ItemStack clickedItem = builder.get(info.clickedSlot());
+        ItemStack clickedItem = builder.get(slot);
 
         if (cursor.isAir() && clickedItem.isAir()) return; // Both are air, no changes
 
-        if (RULE.canBeStacked(clickedItem, cursor)) { // Stackable items, transfer one over
-            int newAmount = RULE.getAmount(clickedItem) + 1;
-            if (RULE.canApply(clickedItem, newAmount)) { // Transfer one count over if possible. Otherwise, do nothing
-                cursor = RULE.apply(cursor, count -> count - 1);
-                clickedItem = RULE.apply(clickedItem, newAmount);
-                builder.cursor(cursor).change(info.clickedSlot(), clickedItem);
+        if (cursor.isAir()) { // Take half (rounded up) of the clicked item
+            int newAmount = (int) Math.ceil(RULE.getAmount(clickedItem) / 2d);
+            Pair<ItemStack, ItemStack> cursorSlot = TransactionOperator.stackLeftN(newAmount).apply(cursor, clickedItem);
+            if (cursorSlot != null) {
+                builder.change(slot, cursorSlot.left()).cursor(cursorSlot.right());
             }
-        } else {
-            if (cursor.isAir()) { // Take half (rounded up) of the clicked item
-                int newAmount = (int) Math.ceil(RULE.getAmount(clickedItem) / 2d);
-                cursor = RULE.apply(clickedItem, newAmount);
-                clickedItem = RULE.apply(clickedItem, count -> count - newAmount);
-                builder.cursor(cursor).change(info.clickedSlot(), clickedItem);
-            } else if (clickedItem.isAir()) { // Leave one of the cursor on the slot
-                clickedItem = RULE.apply(cursor, 1);
-                cursor = RULE.apply(cursor, count -> count - 1);
-                builder.cursor(cursor).change(info.clickedSlot(), clickedItem);
-            } else { // Two existing of items of different types, so switch
-                builder.cursor(clickedItem).change(info.clickedSlot(), cursor);
+        } else if (clickedItem.isAir() || RULE.canBeStacked(clickedItem, cursor)) { // Can add, transfer one over
+            Pair<ItemStack, ItemStack> slotCursor = TransactionOperator.stackLeftN(1).apply(clickedItem, cursor);
+            if (slotCursor != null) {
+                builder.change(slot, slotCursor.left()).cursor(slotCursor.right());
             }
+        } else { // Two existing of items of different types, so switch
+            builder.cursor(clickedItem).change(slot, cursor);
         }
     }
 
@@ -160,38 +154,13 @@ public class StandardClickHandler implements ClickHandler {
 
         if (cursor.isAir()) return;
 
-        final var originalCursorAmount = RULE.getAmount(cursor);
-        var cursorAmount = originalCursorAmount;
-
         int countPerSlot = info.evenlyDistribute() ?
-                (int) Math.floor(cursorAmount / (double) slots.size()) : 1;
+                (int) Math.floor(RULE.getAmount(cursor) / (double) slots.size()) : 1;
 
-        for (int slot : slots) {
-            if (cursorAmount <= 0) break;
+        ItemStack result = TransactionType.general(TransactionOperator.stackLeftN(countPerSlot), slots).process(cursor, builder);
 
-            var slotItem = builder.get(slot);
-            if (slotItem.isAir()) {
-                cursorAmount -= countPerSlot;
-                builder.change(slot, RULE.apply(cursor, countPerSlot));
-            } else if (RULE.canBeStacked(cursor, slotItem)) {
-                int total = RULE.getAmount(slotItem) + countPerSlot;
-                int maxSize = RULE.getMaxSize(slotItem);
-
-                if (RULE.canApply(slotItem, total)) { // Add all
-                    cursorAmount -= countPerSlot;
-                    builder.change(slot, RULE.apply(slotItem, total));
-                } else { // Apply all possible
-                    var countUsed = maxSize - RULE.getAmount(slotItem);
-                    if (countUsed <= 0) continue;
-
-                    cursorAmount -= countUsed;
-                    builder.change(slot, RULE.apply(slotItem, maxSize));
-                }
-            }
-        }
-
-        if (originalCursorAmount != cursorAmount && RULE.canApply(cursor, cursorAmount)) {
-            builder.cursor(RULE.apply(cursor, cursorAmount));
+        if (!result.equals(cursor)) {
+            builder.cursor(result);
         }
     }
 

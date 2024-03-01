@@ -34,6 +34,31 @@ public interface TransactionOperator {
     }
 
     /**
+     * Provides operators that try to stack up to the provided number of items to the left.
+     */
+    static @NotNull TransactionOperator stackLeftN(int count) {
+        return (left, right) -> {
+            final StackingRule rule = StackingRule.get();
+
+            // Quick exit if the right is air (nothing can be transferred anyway)
+            // If the left is air then we know it can be transferred, but it can also be transferred if they're stackable
+            // and left isn't full, even if left isn't air.
+            if (right.isAir() || (!left.isAir() && !(rule.canBeStacked(left, right) && rule.getAmount(left) < rule.getMaxSize(left)))) {
+                return null;
+            }
+
+            int leftAmount = left.isAir() ? 0 : rule.getAmount(left);
+            int rightAmount = rule.getAmount(right);
+
+            int addedAmount = Math.min(Math.min(rightAmount, count), rule.getMaxSize(left) - leftAmount);
+
+            if (addedAmount == 0) return null;
+
+            return Pair.of(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
+        };
+    }
+
+    /**
      * Stacks as many items to the left as possible, including if the left is an air item.<br>
      * This will not swap the items if they are of different types.
      */
