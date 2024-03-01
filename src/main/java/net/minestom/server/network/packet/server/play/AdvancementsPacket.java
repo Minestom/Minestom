@@ -24,6 +24,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
                                  @NotNull List<String> identifiersToRemove,
                                  @NotNull List<ProgressMapping> progressMappings) implements ComponentHoldingServerPacket {
+    public static final int MAX_ADVANCEMENTS = Short.MAX_VALUE;
+
     public AdvancementsPacket {
         advancementMappings = List.copyOf(advancementMappings);
         identifiersToRemove = List.copyOf(identifiersToRemove);
@@ -31,9 +33,9 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     public AdvancementsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BOOLEAN), reader.readCollection(AdvancementMapping::new),
-                reader.readCollection(STRING),
-                reader.readCollection(ProgressMapping::new));
+        this(reader.read(BOOLEAN), reader.readCollection(AdvancementMapping::new, MAX_ADVANCEMENTS),
+                reader.readCollection(STRING, MAX_ADVANCEMENTS),
+                reader.readCollection(ProgressMapping::new, MAX_ADVANCEMENTS));
     }
 
     @Override
@@ -112,7 +114,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
         public Advancement(@NotNull NetworkBuffer reader) {
             this(reader.readOptional(STRING), reader.readOptional(DisplayData::new),
-                    reader.readCollection(Requirement::new), reader.read(BOOLEAN));
+                    reader.readCollection(Requirement::new, MAX_ADVANCEMENTS), reader.read(BOOLEAN));
         }
 
         @Override
@@ -140,7 +142,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
 
         public Requirement(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING));
+            this(reader.readCollection(STRING, MAX_ADVANCEMENTS));
         }
 
         @Override
@@ -224,7 +226,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
 
         public AdvancementProgress(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(Criteria::new));
+            this(reader.readCollection(Criteria::new, MAX_ADVANCEMENTS));
         }
 
         @Override

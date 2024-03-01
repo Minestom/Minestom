@@ -16,6 +16,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record MapDataPacket(int mapId, byte scale, boolean locked,
                             boolean trackingPosition, @NotNull List<Icon> icons,
                             @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket {
+    public static final int MAX_ICONS = 1024;
+
     public MapDataPacket {
         icons = List.copyOf(icons);
     }
@@ -35,7 +37,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         var scale = reader.read(BYTE);
         var locked = reader.read(BOOLEAN);
         var trackingPosition = reader.read(BOOLEAN);
-        List<Icon> icons = trackingPosition ? reader.readCollection(Icon::new) : List.of();
+        List<Icon> icons = trackingPosition ? reader.readCollection(Icon::new, MAX_ICONS) : List.of();
 
         var columns = reader.read(BYTE);
         if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);

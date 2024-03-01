@@ -7,6 +7,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,8 @@ import java.util.UUID;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public final class PlayerInfoUpdatePacket implements ServerPacket {
+    public static final int MAX_ENTRIES = 1024;
+
     private final @NotNull EnumSet<@NotNull Action> actions;
     private final @NotNull List<@NotNull Entry> entries;
 
@@ -47,7 +50,7 @@ public final class PlayerInfoUpdatePacket implements ServerPacket {
                 switch (action) {
                     case ADD_PLAYER -> {
                         username = reader.read(STRING);
-                        properties = reader.readCollection(Property::new);
+                        properties = reader.readCollection(Property::new, GameProfile.MAX_PROPERTIES);
                     }
                     case INITIALIZE_CHAT -> chatSession = new ChatSession(reader);
                     case UPDATE_GAME_MODE -> gameMode = reader.readEnum(GameMode.class);
@@ -57,7 +60,7 @@ public final class PlayerInfoUpdatePacket implements ServerPacket {
                 }
             }
             return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession);
-        });
+        }, MAX_ENTRIES);
     }
 
     @Override

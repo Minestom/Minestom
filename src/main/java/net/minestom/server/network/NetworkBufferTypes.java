@@ -12,7 +12,10 @@ import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -219,6 +222,8 @@ final class NetworkBufferTypes {
             },
             buffer -> {
                 final int length = buffer.read(VAR_INT);
+                final int remaining = buffer.nioBuffer.limit() - buffer.readIndex();
+                Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
                 byte[] bytes = new byte[length];
                 buffer.nioBuffer.get(buffer.readIndex(), bytes);
                 buffer.readIndex += length;
@@ -623,6 +628,17 @@ final class NetworkBufferTypes {
                 final float w = buffer.read(FLOAT);
                 return new float[]{x, y, z, w};
             });
+    static final TypeImpl<Particle> PARTICLE = new TypeImpl<>(Particle.class,
+            (buffer, value) -> {
+                Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data {0} is not valid for this particle type {1}", value.data(),  value.namespace());
+                Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type {0}", value.namespace());
+
+                buffer.write(VAR_INT, value.id());
+
+                if (value.data() != null) value.data().write(buffer);
+                return -1;
+            },
+            buffer -> null);
 
     record TypeImpl<T>(@NotNull Class<T> type,
                        @NotNull TypeWriter<T> writer,

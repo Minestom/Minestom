@@ -12,6 +12,8 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
                                    @Nullable String title) implements ClientPacket {
+    public static final int MAX_PAGES = 200;
+
     public ClientEditBookPacket {
         pages = List.copyOf(pages);
         if (title != null && title.length() > 128) {
@@ -20,7 +22,7 @@ public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
     }
 
     public ClientEditBookPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.readCollection(STRING),
+        this(reader.read(VAR_INT), reader.readCollection(STRING, MAX_PAGES),
                 reader.readOptional(STRING));
     }
 

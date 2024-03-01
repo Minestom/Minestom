@@ -9,12 +9,14 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries) implements NetworkBuffer.Writer {
+    public static final int MAX_ENTRIES = 20;
+
     public LastSeenMessages {
         entries = List.copyOf(entries);
     }
 
     public LastSeenMessages(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(MessageSignature::new));
+        this(reader.readCollection(MessageSignature::new, MAX_ENTRIES));
     }
 
     @Override
@@ -25,7 +27,7 @@ public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries)
         public static final Packed EMPTY = new Packed(List.of());
 
         public Packed(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(MessageSignature.Packed::new));
+            this(reader.readCollection(MessageSignature.Packed::new, MAX_ENTRIES));
         }
 
         @Override

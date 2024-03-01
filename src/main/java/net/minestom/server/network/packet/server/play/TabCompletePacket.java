@@ -20,12 +20,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record TabCompletePacket(int transactionId, int start, int length,
                                 @NotNull List<Match> matches) implements ComponentHoldingServerPacket {
+    public static final int MAX_ENTRIES = Short.MAX_VALUE;
+
     public TabCompletePacket {
         matches = List.copyOf(matches);
     }
 
     public TabCompletePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readCollection(Match::new));
+        this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readCollection(Match::new, MAX_ENTRIES));
     }
 
     @Override

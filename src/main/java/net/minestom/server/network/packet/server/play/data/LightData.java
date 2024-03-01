@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.BitSet;
 import java.util.List;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.LONG_ARRAY;
 
 public record LightData(
         @NotNull BitSet skyMask, @NotNull BitSet blockMask,
@@ -14,11 +15,13 @@ public record LightData(
         @NotNull List<byte[]> skyLight,
         @NotNull List<byte[]> blockLight
 ) implements NetworkBuffer.Writer {
+    public static final int MAX_SECTIONS = 4096 / 16;
+
     public LightData(@NotNull NetworkBuffer reader) {
         this(
                 BitSet.valueOf(reader.read(LONG_ARRAY)), BitSet.valueOf(reader.read(LONG_ARRAY)),
                 BitSet.valueOf(reader.read(LONG_ARRAY)), BitSet.valueOf(reader.read(LONG_ARRAY)),
-                reader.readCollection(BYTE_ARRAY), reader.readCollection(BYTE_ARRAY)
+                reader.readCollection(BYTE_ARRAY, MAX_SECTIONS), reader.readCollection(BYTE_ARRAY, MAX_SECTIONS)
         );
     }
 

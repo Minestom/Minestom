@@ -9,7 +9,6 @@ import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 
@@ -22,6 +21,8 @@ public record JoinGamePacket(
         String dimensionType, String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, DeathLocation deathLocation, int portalCooldown
 ) implements ServerPacket {
+    public static final int MAX_WORLDS = Short.MAX_VALUE;
+
     public JoinGamePacket {
         worlds = List.copyOf(worlds);
     }
@@ -30,7 +31,7 @@ public record JoinGamePacket(
         this(
                 reader.read(INT),
                 reader.read(BOOLEAN),
-                reader.readCollection(STRING),
+                reader.readCollection(STRING, MAX_WORLDS),
                 reader.read(VAR_INT),
                 reader.read(VAR_INT),
                 reader.read(VAR_INT),

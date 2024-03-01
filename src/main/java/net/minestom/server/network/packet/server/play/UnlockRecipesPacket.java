@@ -49,8 +49,8 @@ public record UnlockRecipesPacket(int mode,
         var blastFurnaceRecipeBookFilterActive = reader.read(BOOLEAN);
         var smokerRecipeBookOpen = reader.read(BOOLEAN);
         var smokerRecipeBookFilterActive = reader.read(BOOLEAN);
-        var recipeIds = reader.readCollection(STRING);
-        var initRecipeIds = mode == 0 ? reader.readCollection(STRING) : null;
+        var recipeIds = reader.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES);
+        var initRecipeIds = mode == 0 ? reader.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES) : null;
         return new UnlockRecipesPacket(mode,
                 craftingRecipeBookOpen, craftingRecipeBookFilterActive,
                 smeltingRecipeBookOpen, smeltingRecipeBookFilterActive,

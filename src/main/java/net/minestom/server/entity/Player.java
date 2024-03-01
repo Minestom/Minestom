@@ -33,7 +33,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -112,8 +111,7 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 /**
- * Those are the major actors of the server,
- * they are not necessary backed by a {@link PlayerSocketConnection} as shown by {@link FakePlayer}.
+ * Those are the major actors of the server
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
@@ -1591,13 +1589,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 this.allowFlying = true;
                 this.instantBreak = false;
                 this.invulnerable = true;
-                this.flying = true;
+                if (isActive()) {
+                    refreshFlying(true);
+                } else {
+                    this.flying = true;
+                }
             }
             default -> {
                 this.allowFlying = false;
                 this.instantBreak = false;
                 this.invulnerable = false;
-                this.flying = false;
+                if (isActive()) {
+                    refreshFlying(false);
+                } else {
+                    this.flying = false;
+                }
             }
         }
         // Make sure that the player is in the PLAY state and synchronize their flight speed.

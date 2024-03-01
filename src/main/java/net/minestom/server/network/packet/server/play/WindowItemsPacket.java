@@ -19,12 +19,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
                                 @NotNull ItemStack carriedItem) implements ComponentHoldingServerPacket {
+    public static final int MAX_ENTRIES = 128;
+
     public WindowItemsPacket {
         items = List.copyOf(items);
     }
 
     public WindowItemsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BYTE), reader.read(VAR_INT), reader.readCollection(ITEM),
+        this(reader.read(BYTE), reader.read(VAR_INT), reader.readCollection(ITEM, MAX_ENTRIES),
                 reader.read(ITEM));
     }
 

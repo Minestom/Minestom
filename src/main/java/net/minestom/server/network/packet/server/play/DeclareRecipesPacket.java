@@ -16,6 +16,9 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implements ServerPacket {
+    public static final int MAX_RECIPES = Short.MAX_VALUE;
+    public static final int MAX_INGREDIENTS = 128;
+
     public DeclareRecipesPacket {
         recipes = List.copyOf(recipes);
     }
@@ -35,7 +38,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                 case "smithing_transform" -> new DeclaredSmithingTransformRecipe(reader);
                 default -> throw new UnsupportedOperationException("Unrecognized type: " + type);
             };
-        }));
+        }, MAX_RECIPES));
     }
 
     @Override
@@ -72,7 +75,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         private DeclaredShapelessCraftingRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
                     reader.readEnum(RecipeCategory.Crafting.class),
-                    reader.readCollection(Ingredient::new), reader.read(ITEM));
+                    reader.readCollection(Ingredient::new, MAX_INGREDIENTS), reader.read(ITEM));
         }
 
         @Override
@@ -314,7 +317,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         public Ingredient(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(ITEM));
+            this(reader.readCollection(ITEM, MAX_INGREDIENTS));
         }
 
         public void write(@NotNull NetworkBuffer writer) {
