@@ -4,7 +4,6 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.pathfinding.PNode;
-import net.minestom.server.entity.pathfinding.PathGenerator;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,12 +1,12 @@
 package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.coordinate.Point;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 public class PPath {
     private final Runnable onComplete;
@@ -23,21 +23,21 @@ public class PPath {
         return current.point();
     }
 
-    public void setState(PathState newState) {
+    public void setState(@NotNull PathState newState) {
         state.set(newState);
     }
 
-    enum PathState {
+    public enum PathState {
         CALCULATING,
         FOLLOWING,
         TERMINATING, TERMINATED, COMPUTED, BEST_EFFORT, INVALID
     }
 
-    PathState getState() {
+    @NotNull PathState getState() {
         return state.get();
     }
 
-    public List<PNode> getNodes() {
+    public @NotNull List<PNode> getNodes() {
         return nodes;
     }
 
@@ -52,10 +52,11 @@ public class PPath {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return nodes.toString();
     }
 
+    @Nullable
     PNode.NodeType getCurrentType() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);

@@ -15,7 +15,7 @@ public class WaterNodeFollower implements NodeFollower {
     private final Entity entity;
     private static final double WATER_SPEED_MULTIPLIER = 0.5;
 
-    public WaterNodeFollower(Entity entity) {
+    public WaterNodeFollower(@NotNull Entity entity) {
         this.entity = entity;
     }
 

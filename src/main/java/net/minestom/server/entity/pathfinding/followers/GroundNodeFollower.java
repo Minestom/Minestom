@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class GroundNodeFollower implements NodeFollower {
     private final Entity entity;
 
-    public GroundNodeFollower(Entity entity) {
+    public GroundNodeFollower(@NotNull Entity entity) {
         this.entity = entity;
     }
 

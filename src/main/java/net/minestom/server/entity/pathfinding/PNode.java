@@ -33,7 +33,7 @@ public class PNode {
         this(point, g, h, NodeType.WALK, parent);
     }
 
-    public PNode(@NotNull Point point, double g, double h, NodeType type, @Nullable PNode parent) {
+    public PNode(@NotNull Point point, double g, double h, @NotNull NodeType type, @Nullable PNode parent) {
         this.point = new Vec(point.x(), point.y(), point.z());
         this.g = g;
         this.h = h;
@@ -106,12 +106,12 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    public PNode parent() {
+    public @Nullable PNode parent() {
         return parent;
     }
 
     @ApiStatus.Internal
-    public void setParent(PNode current) {
+    public void setParent(@Nullable PNode current) {
         this.parent = current;
     }
 }
