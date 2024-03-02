@@ -3,6 +3,7 @@ package net.minestom.server.entity.pathfinding.followers;
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface NodeFollower {
     /**
@@ -18,7 +19,7 @@ public interface NodeFollower {
     /**
      * Jump
      */
-    void jump();
+    void jump(@Nullable Point point, @Nullable Point target);
 
     /**
      * Check if the follower is at the specified point

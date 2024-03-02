@@ -10,6 +10,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GroundNodeFollower implements NodeFollower {
     private final Entity entity;
@@ -55,7 +56,7 @@ public class GroundNodeFollower implements NodeFollower {
     }
 
     @Override
-    public void jump() {
+    public void jump(@Nullable Point point, @Nullable Point target) {
         if (entity.isOnGround()) {
             jump(4f);
         }
