@@ -61,17 +61,6 @@ public final class BoundingBox implements Shape {
         return false;
     }
 
-    /**
-     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
-     *
-     * @param entity the entity to check the bounding box
-     * @return true if this bounding box intersects with the entity, false otherwise
-     */
-    @ApiStatus.Experimental
-    public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
-        return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
-    }
-
     @ApiStatus.Experimental
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
