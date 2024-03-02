@@ -7,12 +7,13 @@ import org.jetbrains.annotations.NotNull;
 public interface NodeFollower {
     /**
      * Move towards the specified point
+     *
      * @param target the point to move towards
-     * @param speed the speed to move at
+     * @param speed  the speed to move at
      * @param lookAt the point to look at
      * @return the result of the movement
      */
-    PhysicsResult moveTowards(@NotNull Point target, double speed, Point lookAt);
+    @NotNull PhysicsResult moveTowards(@NotNull Point target, double speed, @NotNull Point lookAt);
 
     /**
      * Jump

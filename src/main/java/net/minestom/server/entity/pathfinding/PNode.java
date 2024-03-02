@@ -2,20 +2,11 @@ package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PNode {
-    public double g() {
-        return g;
-    }
-
-    public void setG(double v) {
-        this.g = v;
-    }
-
-    public void setH(double heuristic) {
-        this.h = heuristic;
-    }
-
     public enum NodeType {
         WALK,
         JUMP,
@@ -26,36 +17,23 @@ public class PNode {
         FLY, REPATH
     }
 
-    double g;
-    double h;
-    PNode parent;
-    Point point;
-    int hashCode;
+    private double g;
+    private double h;
+    private PNode parent;
+    private Point point;
+    private int hashCode;
 
-    int cantor(int a, int b) {
+    private int cantor(int a, int b) {
         return (a + b + 1) * (a + b) / 2 + b;
     }
 
     private NodeType type;
 
-    public void setType(NodeType newType) {
-        this.type = newType;
-    }
-
-    public NodeType getType() {
-        return type;
-    }
-
-    public void setPoint(Point point) {
-        this.point = point;
-        this.hashCode = cantor(point.blockX(), cantor(point.blockY(), point.blockZ()));
-    }
-
-    public PNode(Point point, double g, double h, PNode parent) {
+    public PNode(@NotNull Point point, double g, double h, @Nullable PNode parent) {
         this(point, g, h, NodeType.WALK, parent);
     }
 
-    public PNode(Point point, double g, double h, NodeType type, PNode parent) {
+    public PNode(@NotNull Point point, double g, double h, NodeType type, @Nullable PNode parent) {
         this.point = new Vec(point.x(), point.y(), point.z());
         this.g = g;
         this.h = h;
@@ -86,7 +64,54 @@ public class PNode {
                 '}';
     }
 
+    @ApiStatus.Internal
     public Point point() {
         return point;
+    }
+
+    @ApiStatus.Internal
+    @NotNull NodeType getType() {
+        return type;
+    }
+
+    @ApiStatus.Internal
+    public double g() {
+        return g;
+    }
+
+    @ApiStatus.Internal
+    public double h() {
+        return h;
+    }
+
+    @ApiStatus.Internal
+    public void setG(double v) {
+        this.g = v;
+    }
+
+    @ApiStatus.Internal
+    public void setH(double heuristic) {
+        this.h = heuristic;
+    }
+
+    @ApiStatus.Internal
+    public void setType(@NotNull NodeType newType) {
+        this.type = newType;
+    }
+
+    @ApiStatus.Internal
+    public void setPoint(@NotNull Point point) {
+        this.point = point;
+        this.hashCode = cantor(point.blockX(), cantor(point.blockY(), point.blockZ()));
+    }
+
+    @ApiStatus.Internal
+    public PNode parent() {
+        return parent;
+    }
+
+    @ApiStatus.Internal
+    public void setParent(PNode current) {
+        this.parent = current;
     }
 }

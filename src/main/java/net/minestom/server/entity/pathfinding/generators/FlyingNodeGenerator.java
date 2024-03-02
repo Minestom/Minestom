@@ -6,7 +6,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.entity.pathfinding.PathGenerator;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
     }
 
     @Override
-    public Collection<? extends PNode> getWalkable(Instance instance, Set<PNode> visited, PNode current, Point goal, @NotNull BoundingBox boundingBox) {
+    public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(Pos.ZERO, 0, 0, current);
 
@@ -72,7 +71,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
 
     private PNode newNode(PNode current, double cost, Point point, Point goal) {
         tempNode.setG(current.g() + cost);
-        tempNode.setH(PathGenerator.heuristic(point, goal));
+        tempNode.setH(heuristic(point, goal));
         tempNode.setPoint(point);
 
         var newNode = tempNode;

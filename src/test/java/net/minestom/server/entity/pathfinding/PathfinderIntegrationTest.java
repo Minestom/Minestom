@@ -31,7 +31,7 @@ public class PathfinderIntegrationTest {
         if (nodes.size() == 0) fail("Path is empty");
 
         nodes.forEach((node) -> {
-            if (instance.getBlock(node.point).isSolid()) {
+            if (instance.getBlock(node.point()).isSolid()) {
                 fail("Node is inside a block");
             }
         });

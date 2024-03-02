@@ -1,13 +1,11 @@
 package net.minestom.server.entity.pathfinding;
 
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.pathfinding.followers.LandNodeFollower;
+import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
 import net.minestom.server.entity.pathfinding.followers.NodeFollower;
 import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
 import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
@@ -41,10 +39,10 @@ public final class Navigator {
 
     public Navigator(@NotNull Entity entity) {
         this.entity = entity;
-        nodeFollower = new LandNodeFollower(entity);
+        nodeFollower = new GroundNodeFollower(entity);
     }
 
-    public PPath.PathState getState() {
+    public @NotNull PPath.PathState getState() {
         if (path == null && computingPath == null) return PPath.PathState.INVALID;
         if (path == null) return computingPath.getState();
         return path.getState();
@@ -56,7 +54,7 @@ public final class Navigator {
         return setPathTo(point, centerToCorner, null);
     }
 
-    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, Runnable onComplete) {
+    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, @Nullable Runnable onComplete) {
         return setPathTo(point, minimumDistance, 50, 20, onComplete);
     }
 
@@ -70,7 +68,7 @@ public final class Navigator {
      * @param onComplete called when the path has been completed
      * @return true if a path has been found
      */
-    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, Runnable onComplete) {
+    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, @Nullable Runnable onComplete) {
         final Instance instance = entity.getInstance();
         if (point == null) {
             this.path = null;
@@ -115,7 +113,6 @@ public final class Navigator {
                 this.entity.getBoundingBox(),
                 this.entity.isOnGround(),
                 this.nodeGenerator,
-                this.nodeFollower,
                 onComplete);
 
         final boolean success = computingPath != null;
@@ -139,7 +136,7 @@ public final class Navigator {
             path.setState(PPath.PathState.FOLLOWING);
             // Remove nodes that are too close to the start. Prevents doubling back to hit points that have already been hit
             for (int i = 0; i < path.getNodes().size(); i++) {
-                if (path.getNodes().get(i).point.sameBlock(entity.getPosition())) {
+                if (path.getNodes().get(i).point().sameBlock(entity.getPosition())) {
                     path.getNodes().subList(0, i).clear();
                     break;
                 }
@@ -174,7 +171,7 @@ public final class Navigator {
                     entity.getPosition(),
                     Pos.fromPoint(goalPosition),
                     minimumDistance, path.maxDistance(),
-                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, nodeFollower, null);
+                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, null);
 
             return;
         }
@@ -195,6 +192,11 @@ public final class Navigator {
         return goalPosition;
     }
 
+    /**
+     * Gets the entity which is navigating.
+     *
+     * @return the entity
+     */
     public @NotNull Entity getEntity() {
         return entity;
     }
@@ -223,11 +225,11 @@ public final class Navigator {
         return goalPosition;
     }
 
-    public void setNodeFollower(NodeFollower nodeFollower) {
+    public void setNodeFollower(@NotNull NodeFollower nodeFollower) {
         this.nodeFollower = nodeFollower;
     }
 
-    public void setNodeGenerator(NodeGenerator nodeGenerator) {
+    public void setNodeGenerator(@NotNull NodeGenerator nodeGenerator) {
         this.nodeGenerator = nodeGenerator;
     }
 

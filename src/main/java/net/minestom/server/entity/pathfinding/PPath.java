@@ -20,7 +20,7 @@ public class PPath {
     public Point getNext() {
         if (index + 1 >= nodes.size()) return null;
         var current = nodes.get(index + 1);
-        return current.point;
+        return current.point();
     }
 
     public void setState(PathState newState) {
@@ -66,7 +66,7 @@ public class PPath {
     Point getCurrent() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);
-        return current.point;
+        return current.point();
     }
 
     void next() {

@@ -11,10 +11,10 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class LandNodeFollower implements NodeFollower {
+public class GroundNodeFollower implements NodeFollower {
     private final Entity entity;
 
-    public LandNodeFollower(Entity entity) {
+    public GroundNodeFollower(Entity entity) {
         this.entity = entity;
     }
 
@@ -23,10 +23,10 @@ public class LandNodeFollower implements NodeFollower {
      * Gravity is still applied but the entity will not attempt to jump
      * Also update the yaw/pitch of the entity to look along 'direction'
      *
-     * @param direction    the targeted position
-     * @param speed        define how far the entity will move
+     * @param direction the targeted position
+     * @param speed     define how far the entity will move
      */
-    public PhysicsResult moveTowards(@NotNull Point direction, double speed, Point lookAt) {
+    public @NotNull PhysicsResult moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -41,14 +41,6 @@ public class LandNodeFollower implements NodeFollower {
         if (speed > distSquared) {
             speed = distSquared;
         }
-
-        boolean inWater = false;
-        var instance = entity.getInstance();
-        if (instance != null)
-            if (instance.getBlock(position).isLiquid()) {
-                //    speed *= capabilities.swimSpeedModifier();
-                inWater = true;
-            }
 
         final double radians = Math.atan2(dz, dx);
         final double speedX = Math.cos(radians) * speed;

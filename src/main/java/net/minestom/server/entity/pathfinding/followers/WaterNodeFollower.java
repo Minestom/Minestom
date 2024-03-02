@@ -24,10 +24,10 @@ public class WaterNodeFollower implements NodeFollower {
      * Gravity is still applied but the entity will not attempt to jump
      * Also update the yaw/pitch of the entity to look along 'direction'
      *
-     * @param direction    the targeted position
-     * @param speed        define how far the entity will move
+     * @param direction the targeted position
+     * @param speed     define how far the entity will move
      */
-    public PhysicsResult moveTowards(@NotNull Point direction, double speed, Point lookAt) {
+    public @NotNull PhysicsResult moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -55,7 +55,10 @@ public class WaterNodeFollower implements NodeFollower {
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        final double speedY = Math.signum(dy) * 0.5 * speed;
+        double speedY = Math.signum(dy) * 0.5 * speed;
+        if (Math.min(Math.abs(dy), Math.abs(speedY)) == Math.abs(dy)) {
+            speedY = dy;
+        }
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
         this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
