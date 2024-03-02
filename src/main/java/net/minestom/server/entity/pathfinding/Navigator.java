@@ -180,7 +180,7 @@ public final class Navigator {
         nodeFollower.moveTowards(currentTarget, nodeFollower.movementSpeed(), nextIsRepath ? currentTarget : nextTarget);
 
         if (nodeFollower.isAtPoint(currentTarget)) path.next();
-        else if (path.getCurrentType() == PNode.NodeType.JUMP) nodeFollower.jump(path.getCurrent(), path.getNext());
+        else if (path.getCurrentType() == PNode.NodeType.JUMP) nodeFollower.jump(currentTarget, nextTarget);
     }
 
     /**
