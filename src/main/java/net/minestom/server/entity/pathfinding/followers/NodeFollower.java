@@ -5,6 +5,30 @@ import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public interface NodeFollower {
-    PhysicsResult moveTowards(@NotNull Point direction, double speed, Point lookAt);
+    /**
+     * Move towards the specified point
+     * @param target the point to move towards
+     * @param speed the speed to move at
+     * @param lookAt the point to look at
+     * @return the result of the movement
+     */
+    PhysicsResult moveTowards(@NotNull Point target, double speed, Point lookAt);
+
+    /**
+     * Jump
+     */
     void jump();
+
+    /**
+     * Check if the follower is at the specified point
+     * @param point the point to check
+     * @return true if the follower is at the point
+     */
+    boolean isAtPoint(@NotNull Point point);
+
+    /**
+     * Get the movement speed of the follower
+     * @return the movement speed
+     */
+    double movementSpeed();
 }

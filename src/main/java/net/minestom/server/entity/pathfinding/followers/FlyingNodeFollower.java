@@ -1,11 +1,13 @@
 package net.minestom.server.entity.pathfinding.followers;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,5 +58,19 @@ public class FlyingNodeFollower implements NodeFollower {
 
     @Override
     public void jump() {
+    }
+
+    @Override
+    public boolean isAtPoint(@NotNull Point point) {
+        return entity.getPosition().sameBlock(point);
+    }
+
+    @Override
+    public double movementSpeed() {
+        if (entity instanceof LivingEntity living) {
+            return living.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue();
+        }
+
+        return 0.1f;
     }
 }

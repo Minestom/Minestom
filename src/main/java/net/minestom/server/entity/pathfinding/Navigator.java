@@ -35,7 +35,6 @@ public final class Navigator {
     private PPath path;
 
     private double minimumDistance;
-    private float movementSpeed = 0.1f;
 
     private NodeGenerator nodeGenerator = new GroundNodeGenerator();
     private NodeFollower nodeFollower;
@@ -180,23 +179,11 @@ public final class Navigator {
             return;
         }
 
-        if (entity instanceof LivingEntity living) {
-            movementSpeed = living.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue();
-        }
-
         boolean nextIsRepath = nextTarget.sameBlock(Pos.ZERO);
+        nodeFollower.moveTowards(currentTarget, nodeFollower.movementSpeed(), nextIsRepath ? currentTarget : nextTarget);
 
-        drawPath(path);
-        nodeFollower.moveTowards(currentTarget, movementSpeed, nextIsRepath ? currentTarget : nextTarget);
-
-        if (entity.getPosition().sameBlock(currentTarget)) {
-            path.next();
-            return;
-        }
-
-        if (path.getCurrentType() == PNode.NodeType.JUMP) {
-            nodeFollower.jump();
-        }
+        if (nodeFollower.isAtPoint(currentTarget)) path.next();
+        else if (path.getCurrentType() == PNode.NodeType.JUMP) nodeFollower.jump();
     }
 
     /**
@@ -234,6 +221,14 @@ public final class Navigator {
 
     public Point getPathPosition() {
         return goalPosition;
+    }
+
+    public void setNodeFollower(NodeFollower nodeFollower) {
+        this.nodeFollower = nodeFollower;
+    }
+
+    public void setNodeGenerator(NodeGenerator nodeGenerator) {
+        this.nodeGenerator = nodeGenerator;
     }
 
     /**

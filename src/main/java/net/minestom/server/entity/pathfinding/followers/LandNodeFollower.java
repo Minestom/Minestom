@@ -1,11 +1,13 @@
 package net.minestom.server.entity.pathfinding.followers;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,15 +56,7 @@ public class LandNodeFollower implements NodeFollower {
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        // final double speedY = (capabilities.type() == PPath.PathfinderType.AQUATIC
-        //         || capabilities.type() == PPath.PathfinderType.FLYING
-        //         || (capabilities.type() == PPath.PathfinderType.AMPHIBIOUS && inWater))
-        //         ? Math.signum(dy) * 0.5 * speed
-        //         : 0;
-
-        final double speedY = 0;
-
-        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
+        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, 0, speedZ));
         this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
 
         return physicsResult;
@@ -75,7 +69,21 @@ public class LandNodeFollower implements NodeFollower {
         }
     }
 
+    @Override
+    public boolean isAtPoint(@NotNull Point point) {
+        return entity.getPosition().sameBlock(point);
+    }
+
     public void jump(float height) {
         this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
+    }
+
+    @Override
+    public double movementSpeed() {
+        if (entity instanceof LivingEntity living) {
+            return living.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue();
+        }
+
+        return 0.1f;
     }
 }
