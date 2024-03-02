@@ -109,22 +109,28 @@ loadScripts(document, 'script');</script>
 <div class="block">Checks if a moving bounding box will hit this shape.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isFaceFull(net.minestom.server.instance.block.BlockFace)" class="member-name-link">isFaceFull</a><wbr>(@NotNull <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#intersectEntity(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity)" class="member-name-link">intersectEntity</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;src,
+ @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Used to know if this <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersects with the bounding box of an entity.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isFaceFull(net.minestom.server.instance.block.BlockFace)" class="member-name-link">isFaceFull</a><wbr>(@NotNull <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Returns true if the given block face is completely covered by this shape, false otherwise.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#isOccluded(net.minestom.server.collision.Shape,net.minestom.server.instance.block.BlockFace)" class="member-name-link">isOccluded</a><wbr>(@NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>&nbsp;shape,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#isOccluded(net.minestom.server.collision.Shape,net.minestom.server.instance.block.BlockFace)" class="member-name-link">isOccluded</a><wbr>(@NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>&nbsp;shape,
  @NotNull <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#relativeEnd()" class="member-name-link">relativeEnd</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#relativeEnd()" class="member-name-link">relativeEnd</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Relative End</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#relativeStart()" class="member-name-link">relativeStart</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#relativeStart()" class="member-name-link">relativeStart</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Relative Start</div>
 </div>
 </div>
@@ -202,6 +208,23 @@ loadScripts(document, 'script');</script>
 <dd><code>finalResult</code> - Stores final SweepResult</dd>
 <dt>Returns:</dt>
 <dd>is an intersection found</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="intersectEntity(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity)">
+<h3>intersectEntity</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">intersectEntity</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;src,
+ @NotNull
+ @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</span></div>
+<div class="block">Used to know if this <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersects with the bounding box of an entity.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>entity</code> - the entity to check the bounding box</dd>
+<dt>Returns:</dt>
+<dd>true if this bounding box intersects with the entity, false otherwise</dd>
 </dl>
 </section>
 </li>
