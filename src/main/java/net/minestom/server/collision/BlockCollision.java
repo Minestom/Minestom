@@ -158,18 +158,11 @@ final class BlockCollision {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
         // Diagonals are a special case which will work with fast physics
-        if (velocity.length() < 1) {
+        if (velocity.length() <= 1 || isDiagonal(velocity)) {
             fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         } else {
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         }
-
-        // if ((velocity.length() - 1.41421356) <= Vec.EPSILON) {
-        //     fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
-        // } else {
-        //     System.out.println("slowPhysics " + velocity.length());
-        //     slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
-        // }
 
         final boolean collisionX = finalResult.normalX != 0;
         final boolean collisionY = finalResult.normalY != 0;
@@ -192,6 +185,10 @@ final class BlockCollision {
         return new PhysicsResult(finalPos, new Vec(remainingX, remainingY, remainingZ),
                 collisionY, collisionX, collisionY, collisionZ,
                 Vec.ZERO, null, null, false, finalResult);
+    }
+
+    private static boolean isDiagonal(Vec velocity) {
+        return Math.abs(velocity.x()) == 1 && Math.abs(velocity.z()) == 1;
     }
 
     private static void slowPhysics(@NotNull BoundingBox boundingBox,

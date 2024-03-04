@@ -5,8 +5,11 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +17,7 @@ import java.util.Set;
 
 public class GroundNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
+    private BoundingBox.PointIterator pointIterator = new BoundingBox.PointIterator();
 
     @Override
     public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
@@ -28,7 +32,7 @@ public class GroundNodeGenerator implements NodeGenerator {
                 if (x == 0 && z == 0) continue;
                 double cost = Math.sqrt(x * x + z * z) * 0.98;
 
-                Point floorPoint = current.point().withX(current.point().blockX() + 0.5 + x).withZ(current.point().blockZ() + 0.5 + z);
+                Point floorPoint = new Vec(current.point().blockX() + 0.5 + x, current.point().blockY(), current.point().blockZ() + 0.5 + z);
                 floorPoint = gravitySnap(instance, floorPoint, boundingBox, 5);
                 if (floorPoint == null) continue;
 
@@ -36,7 +40,7 @@ public class GroundNodeGenerator implements NodeGenerator {
                 if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
 
                 for (int i = 1; i <= 1; ++i) {
-                    Point jumpPoint = current.point().withX(current.point().blockX() + 0.5 + x).withZ(current.point().blockZ() + 0.5 + z).add(0, i, 0);
+                    Point jumpPoint = new Vec(current.point().blockX() + 0.5 + x, current.point().blockY() + i, current.point().blockZ() + 0.5 + z);
                     jumpPoint = gravitySnap(instance, jumpPoint, boundingBox, 5);
 
                     if (jumpPoint == null) continue;
@@ -93,5 +97,29 @@ public class GroundNodeGenerator implements NodeGenerator {
         tempNode = new PNode(Pos.ZERO, 0, 0, PNode.NodeType.WALK, current);
 
         return newNode;
+    }
+
+    @Override
+    public @Nullable Point gravitySnap(@NotNull Instance instance, @NotNull Point pointOrg, @NotNull BoundingBox boundingBox, double maxFall) {
+        double pointX = pointOrg.blockX() + 0.5;
+        double pointY = pointOrg.blockY();
+        double pointZ = pointOrg.blockZ() + 0.5;
+
+        Chunk c = instance.getChunkAt(pointX, pointZ);
+        if (c == null) return null;
+
+        for (int axis = 1; axis <= maxFall; ++axis) {
+            pointIterator.reset(boundingBox, pointX, pointY, pointZ, BoundingBox.AxisMask.Y, -axis);
+
+            while (pointIterator.hasNext()) {
+                var block = pointIterator.next();
+
+                if (instance.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
+                    return new Vec(pointX, block.blockY() + 1, pointZ);
+                }
+            }
+        }
+
+        return new Vec(pointX, pointY - maxFall, pointZ);
     }
 }

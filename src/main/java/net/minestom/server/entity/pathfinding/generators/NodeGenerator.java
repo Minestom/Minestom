@@ -7,10 +7,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -40,26 +40,7 @@ public interface NodeGenerator {
      * @param maxFall the maximum distance to snap down
      * @return the snapped point
      */
-    default Point gravitySnap(@NotNull Instance instance, @NotNull Point point, @NotNull BoundingBox boundingBox, double maxFall) {
-        point = new Pos(point.blockX() + 0.5, point.blockY(), point.blockZ() + 0.5);
-
-        Chunk c = instance.getChunkAt(point);
-        if (c == null) return null;
-
-        for (int axis = 1; axis <= maxFall; ++axis) {
-            var iterator = boundingBox.getBlocks(point, BoundingBox.AxisMask.Y, -axis);
-
-            while (iterator.hasNext()) {
-                var block = iterator.next();
-
-                if (instance.getBlock(block, Block.Getter.Condition.TYPE).isSolid()) {
-                    return point.withY(block.blockY() + 1);
-                }
-            }
-        }
-
-        return point.withY(point.y() - maxFall);
-    }
+    @Nullable Point gravitySnap(@NotNull Instance instance, @NotNull Point point, @NotNull BoundingBox boundingBox, double maxFall);
 
     /**
      * Check if we can move directly from one point to another
@@ -86,7 +67,7 @@ public interface NodeGenerator {
         var iterator = boundingBox.getBlocks(point);
         while (iterator.hasNext()) {
             var block = iterator.next();
-            if (instance.getBlock(block, Block.Getter.Condition.TYPE).isSolid()) {
+            if (instance.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
                 return true;
             }
         }

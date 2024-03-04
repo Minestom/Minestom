@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -13,46 +14,6 @@ import java.util.NoSuchElementException;
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
-    private static class MutablePoint {
-        public double x, y, z;
-
-        public void setPoint(double x, double y, double z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Vec asVec() {
-            return new Vec(x, y, z);
-        }
-    }
-    private final MutablePoint[] extraPoints = new MutablePoint[] {
-        new MutablePoint(), new MutablePoint(), new MutablePoint(),
-        new MutablePoint(), new MutablePoint(), new MutablePoint()
-    };
-
-    private int extraPointsUsedBitmap = 0;
-
-    private MutablePoint getAndFreeExtraPoint() {
-        for (int i = 0; i < 6; i++) {
-            if ((extraPointsUsedBitmap & (1 << i)) != 0) {
-                extraPointsUsedBitmap &= ~(1 << i);
-                return extraPoints[i];
-            }
-        }
-        return null;
-    }
-
-    private MutablePoint getUnusedExtraPoint() {
-        for (int i = 0; i < 6; i++) {
-            if ((extraPointsUsedBitmap & (1 << i)) == 0) {
-                extraPointsUsedBitmap |= 1 << i;
-                return extraPoints[i];
-            }
-        }
-        return null;
-    }
-
     private final short[] signums = new short[3];
     private final Vec end;
     private final boolean smooth;
@@ -73,6 +34,8 @@ public class BlockIterator implements Iterator<Point> {
     int mapX;
     int mapY;
     int mapZ;
+
+    private final ArrayDeque<Point> extraPoints = new ArrayDeque<>();
 
     /**
      * Constructs the BlockIterator.
@@ -238,8 +201,8 @@ public class BlockIterator implements Iterator<Point> {
     @Override
     public Point next() {
         if (foundEnd) throw new NoSuchElementException();
-        if (extraPointsUsedBitmap != 0) {
-            var res = getAndFreeExtraPoint().asVec();
+        if (!extraPoints.isEmpty()) {
+            var res = extraPoints.poll();
             if (end != null && res.sameBlock(end)) foundEnd = true;
             return res;
         }
@@ -268,28 +231,27 @@ public class BlockIterator implements Iterator<Point> {
         }
 
         if (needsX && needsY && needsZ) {
-            getUnusedExtraPoint().setPoint(signums[0] + current.x(), signums[1] + current.y(), current.z());
-
+            extraPoints.add(new Vec(signums[0] + current.x(), signums[1] + current.y(), current.z()));
             if (smooth) return current;
 
-            getUnusedExtraPoint().setPoint(current.x(), signums[1] + current.y(), signums[2] + current.z());
-            getUnusedExtraPoint().setPoint(signums[0] + current.x(), current.y(), signums[2] + current.z());
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), signums[2] + current.z()));
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), signums[2] + current.z()));
 
-            getUnusedExtraPoint().setPoint(signums[0] + current.x(), current.y(), current.z());
-            getUnusedExtraPoint().setPoint(current.x(), signums[1] + current.y(), current.z());
-            getUnusedExtraPoint().setPoint(current.x(), current.y(), signums[2] + current.z());
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsX && needsY) {
-            getUnusedExtraPoint().setPoint(signums[0] + current.x(), current.y(), current.z());
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
             if (smooth) return current;
-            getUnusedExtraPoint().setPoint(current.x(), signums[1] + current.y(), current.z());
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
         } else if (needsX && needsZ) {
-            getUnusedExtraPoint().setPoint(signums[0] + current.x(), current.y(), current.z());
+            extraPoints.add(new Vec(signums[0] + current.x(), current.y(), current.z()));
             if (smooth) return current;
-            getUnusedExtraPoint().setPoint(current.x(), current.y(), signums[2] + current.z());
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         } else if (needsY && needsZ) {
-            getUnusedExtraPoint().setPoint(current.x(), signums[1] + current.y(), current.z());
+            extraPoints.add(new Vec(current.x(), signums[1] + current.y(), current.z()));
             if (smooth) return current;
-            getUnusedExtraPoint().setPoint(current.x(), current.y(), signums[2] + current.z());
+            extraPoints.add(new Vec(current.x(), current.y(), signums[2] + current.z()));
         }
 
         return current;

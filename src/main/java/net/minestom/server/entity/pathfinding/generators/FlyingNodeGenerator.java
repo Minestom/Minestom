@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -77,5 +78,10 @@ public class FlyingNodeGenerator implements NodeGenerator {
         tempNode = new PNode(Pos.ZERO, 0, 0, PNode.NodeType.WALK, current);
 
         return newNode;
+    }
+
+    @Override
+    public @Nullable Point gravitySnap(@NotNull Instance instance, @NotNull Point point, @NotNull BoundingBox boundingBox, double maxFall) {
+        return null;
     }
 }

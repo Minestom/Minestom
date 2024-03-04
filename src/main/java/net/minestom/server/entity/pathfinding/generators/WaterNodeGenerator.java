@@ -16,6 +16,7 @@ import java.util.Set;
 
 public class WaterNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
+    private BoundingBox.PointIterator pointIterator = new BoundingBox.PointIterator();
 
     @Override
     public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
@@ -99,12 +100,12 @@ public class WaterNodeGenerator implements NodeGenerator {
         if (c == null) return null;
 
         for (int axis = 1; axis <= maxFall; ++axis) {
-            var iterator = boundingBox.getBlocks(point, BoundingBox.AxisMask.Y, -axis);
+            pointIterator.reset(boundingBox, point, BoundingBox.AxisMask.Y, -axis);
 
-            while (iterator.hasNext()) {
-                var block = iterator.next();
+            while (pointIterator.hasNext()) {
+                var block = pointIterator.next();
 
-                var foundBlock = instance.getBlock(block, Block.Getter.Condition.TYPE);
+                var foundBlock = instance.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE);
                 // Stop falling when water is hit
                 if (foundBlock.isSolid() || foundBlock.compare(Block.WATER)) {
                     return point.withY(block.blockY() + 1);
