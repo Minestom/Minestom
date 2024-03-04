@@ -156,17 +156,17 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        Inventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
         // Ensure that slots not in the inner inventory are sent separately
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.getInventory().setItemStack(PlayerInventoryUtils.OFFHAND_SLOT, MAGIC_STACK);
+        player.getInventory().setItemStack(PlayerInventoryUtils.OFF_HAND_SLOT, MAGIC_STACK);
         packetTracker.assertSingle(slot -> {
             System.out.println(slot);
             assertEquals((byte) 0, slot.windowId());
-            assertEquals(PlayerInventoryUtils.OFFHAND_SLOT, slot.slot());
+            assertEquals(PlayerInventoryUtils.OFF_HAND_SLOT, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
@@ -176,7 +176,7 @@ public class InventoryIntegrationTest {
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
             System.out.println(slot.slot());
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(0) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(PlayerInventoryUtils.minestomToProtocol(0, inventory), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
@@ -184,7 +184,7 @@ public class InventoryIntegrationTest {
         player.getInventory().setItemStack(35, MAGIC_STACK); // Test with last inner inventory slot
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(35) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(PlayerInventoryUtils.minestomToProtocol(35, inventory), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
     }
