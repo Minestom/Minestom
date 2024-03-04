@@ -268,6 +268,10 @@ public final class BoundingBox implements Shape {
             reset(boundingBox, p.x(), p.y(), p.z(), axisMask, (int) axis);
         }
 
+        public void reset(BoundingBox boundingBox, double x, double y, double z, AxisMask axisMask, double axis) {
+            reset(boundingBox, x, y, z, axisMask, (int) axis);
+        }
+
         @Override
         public boolean hasNext() {
             return x <= maxX && y <= maxY && z <= maxZ;

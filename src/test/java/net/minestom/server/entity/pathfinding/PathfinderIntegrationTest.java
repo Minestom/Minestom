@@ -15,7 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @EnvTest
 public class PathfinderIntegrationTest {
@@ -31,7 +32,7 @@ public class PathfinderIntegrationTest {
         if (nodes.size() == 0) fail("Path is empty");
 
         nodes.forEach((node) -> {
-            if (instance.getBlock(node.point()).isSolid()) {
+            if (instance.getBlock(node.blockX(), node.blockY(), node.blockZ()).isSolid()) {
                 fail("Node is inside a block");
             }
         });
@@ -107,6 +108,32 @@ public class PathfinderIntegrationTest {
     }
 
     @Test
+    public void testBug(Env env) {
+        var i = env.createFlatInstance();
+        i.getWorldBorder().setCenter(0, 0);
+        i.getWorldBorder().setDiameter(10000);
+
+        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+            i.loadChunk(x, z).join();
+        });
+
+        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        zombie.setInstance(i, new Pos(43.972731367054266, 40.000000000040735, -39.89155139999369));
+
+        zombie.tick(0);
+        zombie.tick(0);
+
+        Navigator nav = new Navigator(zombie);
+        nav.setPathTo(new Pos(43.5, 40, -41.5));
+
+        while (nav.getState() == PPath.PathState.CALCULATING) {}
+
+        assert(nav.getNodes() != null);
+
+        validateNodes(nav.getNodes(), i);
+    }
+
+    @Test
     public void testPFNodeEqual(Env env) {
         PNode node1 = new PNode(new Pos(0.777, 0, 0), 2, 0, PNode.NodeType.WALK, null);
         PNode node2 = new PNode(new Pos(0.777, 0, 0), 0, 3, PNode.NodeType.WALK, node1);
@@ -167,8 +194,6 @@ public class PathfinderIntegrationTest {
         nav.setPathTo(new Pos(0, 40, 10));
         while (nav.getState() == PPath.PathState.CALCULATING) {}
 
-        System.out.println(nav.getNodes());
-
         assert(nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
@@ -187,7 +212,7 @@ public class PathfinderIntegrationTest {
 
         var nodeGenerator = new GroundNodeGenerator();
 
-        var snapped = nodeGenerator.gravitySnap(i, new Pos(-140.74433362614695, 40.58268292446131, 18.87966960447388), zombie.getBoundingBox(), 100);
-        assertEquals(new Pos(-140.5, 40.0, 18.5), snapped);
+        var snapped = nodeGenerator.gravitySnap(i, -140.74433362614695, 40.58268292446131, 18.87966960447388, zombie.getBoundingBox(), 100);
+        assertEquals(40.0, snapped);
     }
 }

@@ -20,7 +20,9 @@ public class PNode {
     private double g;
     private double h;
     private PNode parent;
-    private Point point;
+    private double pointX;
+    private double pointY;
+    private double pointZ;
     private int hashCode;
 
     private int cantor(int a, int b) {
@@ -31,17 +33,23 @@ public class PNode {
 
     private NodeType type;
 
-    public PNode(@NotNull Point point, double g, double h, @Nullable PNode parent) {
-        this(point, g, h, NodeType.WALK, parent);
+    public PNode(double px, double py, double pz, double g, double h, @Nullable PNode parent) {
+        this(px, py, pz, g, h, NodeType.WALK, parent);
     }
 
-    public PNode(@NotNull Point point, double g, double h, @NotNull NodeType type, @Nullable PNode parent) {
-        this.point = new Vec(point.x(), point.y(), point.z());
+    public PNode(double px, double py, double pz, double g, double h, @NotNull NodeType type, @Nullable PNode parent) {
         this.g = g;
         this.h = h;
         this.parent = parent;
-        this.hashCode = cantor(point.blockX(), cantor(point.blockY(), point.blockZ()));
         this.type = type;
+        this.pointX = px;
+        this.pointY = py;
+        this.pointZ = pz;
+        this.hashCode = cantor((int) Math.floor(px), cantor((int) Math.floor(py), (int) Math.floor(pz)));
+    }
+
+    public PNode(Point point, double g, double h, NodeType walk, @Nullable PNode parent) {
+        this(point.x(), point.y(), point.z(), g, h, walk, parent);
     }
 
     @Override
@@ -60,15 +68,37 @@ public class PNode {
     @Override
     public String toString() {
         return "PNode{" +
-                "point=" + point +
+                "point=" + pointX + ", " + pointY + ", " + pointZ +
                 ", d=" + (g + h) +
                 ", type=" + type +
                 '}';
     }
 
     @ApiStatus.Internal
-    public Point point() {
-        return point;
+    public double x() {
+        return pointX;
+    }
+
+    @ApiStatus.Internal
+    public double y() {
+        return pointY;
+    }
+
+    @ApiStatus.Internal
+    public double z() {
+        return pointZ;
+    }
+
+    public int blockX() {
+        return (int) Math.floor(pointX);
+    }
+
+    public int blockY() {
+        return (int) Math.floor(pointY);
+    }
+
+    public int blockZ() {
+        return (int) Math.floor(pointZ);
     }
 
     @ApiStatus.Internal
@@ -102,9 +132,11 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    public void setPoint(@NotNull Point point) {
-        this.point = point;
-        this.hashCode = cantor(point.blockX(), cantor(point.blockY(), point.blockZ()));
+    public void setPoint(double px, double py, double pz) {
+        this.pointX = px;
+        this.pointY = py;
+        this.pointZ = pz;
+        this.hashCode = cantor((int) Math.floor(px), cantor((int) Math.floor(py), (int) Math.floor(pz)));
     }
 
     @ApiStatus.Internal

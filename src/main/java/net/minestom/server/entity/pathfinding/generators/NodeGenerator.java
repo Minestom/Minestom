@@ -10,7 +10,6 @@ import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -34,13 +33,16 @@ public interface NodeGenerator {
     boolean hasGravitySnap();
 
     /**
-     * Snap the point to the ground.
-     * @param point the point
+     * Snap point to the ground
+     * @param instance the instance
+     * @param pointX the x coordinate
+     * @param pointY the y coordinate
+     * @param pointZ the z coordinate
      * @param boundingBox the bounding box
-     * @param maxFall the maximum distance to snap down
-     * @return the snapped point
+     * @param maxFall the maximum fall distance
+     * @return the snapped y coordinate
      */
-    @Nullable Point gravitySnap(@NotNull Instance instance, @NotNull Point point, @NotNull BoundingBox boundingBox, double maxFall);
+    double gravitySnap(@NotNull Instance instance, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall);
 
     /**
      * Check if we can move directly from one point to another

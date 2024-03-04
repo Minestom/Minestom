@@ -28,7 +28,7 @@ public final class Navigator {
     private Point goalPosition;
     private final Entity entity;
 
-    // Essentially a double buffer. Wait until a path is done computing before replpacing the old one.
+    // Essentially a double buffer. Wait until a path is done computing before replacing the old one.
     private PPath computingPath;
     private PPath path;
 
@@ -66,7 +66,7 @@ public final class Navigator {
      * @param maxDistance maximum search distance
      * @param pathVariance how far to search off of the direct path. For open worlds, this can be low (around 20) and for large mazes this needs to be very high.
      * @param onComplete called when the path has been completed
-     * @return true if a path has been found
+     * @return true if a path is being generated
      */
     public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, @Nullable Runnable onComplete) {
         final Instance instance = entity.getInstance();
@@ -115,9 +115,8 @@ public final class Navigator {
                 this.nodeGenerator,
                 onComplete);
 
-        final boolean success = computingPath != null;
-        this.goalPosition = success ? point : null;
-        return success;
+        this.goalPosition = point;
+        return true;
     }
 
     @ApiStatus.Internal
@@ -136,7 +135,7 @@ public final class Navigator {
             path.setState(PPath.PathState.FOLLOWING);
             // Remove nodes that are too close to the start. Prevents doubling back to hit points that have already been hit
             for (int i = 0; i < path.getNodes().size(); i++) {
-                if (path.getNodes().get(i).point().sameBlock(entity.getPosition())) {
+                if (isSameBlock(path.getNodes().get(i), entity.getPosition())) {
                     path.getNodes().subList(0, i).clear();
                     break;
                 }
@@ -241,9 +240,12 @@ public final class Navigator {
         if (path == null) return;
 
         for (PNode point : path.getNodes()) {
-            Point pos = point.point();
-            var packet = new ParticlePacket(Particle.COMPOSTER, pos.x(), pos.y() + 0.5, pos.z(), 0, 0, 0, 0, 1);
+            var packet = new ParticlePacket(Particle.COMPOSTER, point.x(), point.y() + 0.5, point.z(), 0, 0, 0, 0, 1);
             entity.sendPacketToViewers(packet);
         }
+    }
+
+    private static boolean isSameBlock(PNode pNode, Pos position) {
+        return Math.floor(pNode.x()) == position.blockX() && Math.floor(pNode.y()) == position.blockY() && Math.floor(pNode.z()) == position.blockZ();
     }
 }
