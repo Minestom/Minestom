@@ -3,6 +3,7 @@ package net.minestom.server.entity.pathfinding.generators;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -13,11 +14,6 @@ import java.util.Set;
 
 public class GroundNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
-
-    @Override
-    public boolean requiresGroundStart() {
-        return true;
-    }
 
     @Override
     public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
@@ -55,11 +51,16 @@ public class GroundNodeGenerator implements NodeGenerator {
         return nearby;
     }
 
+    @Override
+    public boolean hasGravitySnap() {
+        return true;
+    }
+
     private PNode createWalk(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         var n = newNode(start, cost, point, goal);
         if (closed.contains(n)) return null;
 
-        if (point.y() < start.point().y()) {
+        if (Math.abs(point.y() - start.point().y()) > Vec.EPSILON && point.y() < start.point().y()) {
             if (!canMoveTowards(instance, start.point(), point.withY(start.point().y()), boundingBox)) return null;
             n.setType(PNode.NodeType.FALL);
         } else {
@@ -69,7 +70,7 @@ public class GroundNodeGenerator implements NodeGenerator {
     }
 
     private PNode createJump(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
-        if (point.y() - start.point().y() == 0) return null;
+        if (Math.abs(point.y() - start.point().y()) < Vec.EPSILON) return null;
         if (point.y() - start.point().y() > 2) return null;
         if (point.blockX() != start.point().blockX() && point.blockZ() != start.point().blockZ()) return null;
 

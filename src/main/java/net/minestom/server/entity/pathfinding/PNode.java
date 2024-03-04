@@ -24,7 +24,9 @@ public class PNode {
     private int hashCode;
 
     private int cantor(int a, int b) {
-        return (a + b + 1) * (a + b) / 2 + b;
+        int ca = a >= 0 ? 2 * a : -2 * a - 1;
+        int cb = b >= 0 ? 2 * b : -2 * b - 1;
+        return (ca + cb + 1) * (ca + cb) / 2 + cb;
     }
 
     private NodeType type;

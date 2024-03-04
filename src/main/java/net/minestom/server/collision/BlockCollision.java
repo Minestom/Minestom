@@ -89,7 +89,7 @@ final class BlockCollision {
                                              @NotNull Vec velocity, @NotNull Pos entityPosition,
                                              @NotNull Block.Getter getter, boolean singleCollision) {
         // Allocate once and update values
-        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, null);
+        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
@@ -113,19 +113,19 @@ final class BlockCollision {
             if (result.collisionX()) {
                 foundCollisionX = true;
                 collisionShapes[0] = finalResult.collidedShape;
-                collidedPoints[0] = finalResult.collidedPosition;
+                collidedPoints[0] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
                 hasCollided = true;
                 if (singleCollision) break;
             } else if (result.collisionZ()) {
                 foundCollisionZ = true;
                 collisionShapes[2] = finalResult.collidedShape;
-                collidedPoints[2] = finalResult.collidedPosition;
+                collidedPoints[2] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
                 hasCollided = true;
                 if (singleCollision) break;
             } else if (result.collisionY()) {
                 foundCollisionY = true;
                 collisionShapes[1] = finalResult.collidedShape;
-                collidedPoints[1] = finalResult.collidedPosition;
+                collidedPoints[1] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
                 hasCollided = true;
                 if (singleCollision) break;
             }
@@ -157,11 +157,19 @@ final class BlockCollision {
                                                 @NotNull SweepResult finalResult) {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
+        // Diagonals are a special case which will work with fast physics
         if (velocity.length() < 1) {
             fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         } else {
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         }
+
+        // if ((velocity.length() - 1.41421356) <= Vec.EPSILON) {
+        //     fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
+        // } else {
+        //     System.out.println("slowPhysics " + velocity.length());
+        //     slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
+        // }
 
         final boolean collisionX = finalResult.normalX != 0;
         final boolean collisionY = finalResult.normalY != 0;

@@ -5,15 +5,13 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,13 +21,13 @@ public class PathGenerator {
     private static Comparator<PNode> pNodeComparator = (s1, s2) -> (int) (((s1.g() + s1.h()) - (s2.g() + s2.h())) * 1000);
 
     public static @Nullable PPath generate(@NotNull Instance instance, @NotNull Pos orgStart, @NotNull Point orgTarget, double closeDistance, double maxDistance, double pathVariance, @NotNull BoundingBox boundingBox, boolean isOnGround, @NotNull NodeGenerator generator, @Nullable Runnable onComplete) {
-        Point start = (!isOnGround && generator.requiresGroundStart())
-                    ? generator.gravitySnap(instance, orgStart, boundingBox, 100)
-                    : orgStart;
+        Point start = (!isOnGround && generator.hasGravitySnap())
+                ? generator.gravitySnap(instance, orgStart, boundingBox, 100)
+                : orgStart;
 
-        Point target = (!isOnGround && generator.requiresGroundStart())
-                    ? generator.gravitySnap(instance, orgTarget, boundingBox, 100)
-                    : Pos.fromPoint(orgTarget);
+        Point target = (generator.hasGravitySnap())
+                ? generator.gravitySnap(instance, orgTarget, boundingBox, 100)
+                : Pos.fromPoint(orgTarget);
 
         if (start == null || target == null) return null;
 
@@ -78,7 +76,7 @@ public class PathGenerator {
                 closestFoundNodes = List.of(current);
             }
 
-            var found = generator.getWalkable(instance, closed, current, target, boundingBox);
+            Collection<? extends PNode> found = generator.getWalkable(instance, closed, current, target, boundingBox);
             found.forEach(p -> {
                 if (p.point().distance(start) <= maxDistance) {
                     open.enqueue(p);

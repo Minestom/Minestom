@@ -18,11 +18,6 @@ public class WaterNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
 
     @Override
-    public boolean requiresGroundStart() {
-        return false;
-    }
-
-    @Override
     public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(Pos.ZERO, 0, 0, current);
@@ -71,6 +66,11 @@ public class WaterNodeGenerator implements NodeGenerator {
         }
 
         return nearby;
+    }
+
+    @Override
+    public boolean hasGravitySnap() {
+        return false;
     }
 
     private PNode createFly(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
