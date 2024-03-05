@@ -104,8 +104,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
         Acquired<T> acquired = lock();
         try {
             consumer.accept(acquired.get());
-        }
-        finally {
+        } finally {
             acquired.unlock();
         }
     }
