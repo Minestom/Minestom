@@ -102,8 +102,11 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      */
     default void sync(@NotNull Consumer<T> consumer) {
         Acquired<T> acquired = lock();
-        consumer.accept(acquired.get());
-        acquired.unlock();
+        try {
+            consumer.accept(acquired.get());
+        } finally {
+            acquired.unlock();
+        }
     }
 
     /**
