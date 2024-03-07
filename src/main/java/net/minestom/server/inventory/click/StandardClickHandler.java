@@ -75,7 +75,7 @@ public class StandardClickHandler implements ClickHandler {
             int newAmount = (int) Math.ceil(RULE.getAmount(clickedItem) / 2d);
             Pair<ItemStack, ItemStack> cursorSlot = TransactionOperator.stackLeftN(newAmount).apply(cursor, clickedItem);
             if (cursorSlot != null) {
-                builder.change(slot, cursorSlot.left()).cursor(cursorSlot.right());
+                builder.cursor(cursorSlot.left()).change(slot, cursorSlot.right());
             }
         } else if (clickedItem.isAir() || RULE.canBeStacked(clickedItem, cursor)) { // Can add, transfer one over
             Pair<ItemStack, ItemStack> slotCursor = TransactionOperator.stackLeftN(1).apply(clickedItem, cursor);
