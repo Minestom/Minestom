@@ -49,7 +49,7 @@ public class ClickPreprocessorTest {
         player.setGameMode(GameMode.CREATIVE);
 
         assertProcessed(null, clickPacket(CLONE, 1, 0, 0));
-        assertProcessed(player, new ClickInfo.CopyItem(0), clickPacket(CLONE, 1, 0, 0));
+        assertProcessed(player, new ClickInfo.CreativeCopyItem(0), clickPacket(CLONE, 1, 0, 0));
         assertProcessed(player, null, clickPacket(CLONE, 1, 0, -1));
     }
 
@@ -88,7 +88,7 @@ public class ClickPreprocessorTest {
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 8, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 1));
-        assertProcessed(processor, player, new ClickInfo.CopyCursor(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 10, 0));
+        assertProcessed(processor, player, new ClickInfo.CreativeCopyCursor(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 10, 0));
     }
 
 }

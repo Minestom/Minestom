@@ -82,7 +82,7 @@ public final class ClickPreprocessor {
                     yield null;
                 }
             }
-            case CLONE -> (player.isCreative() && validate(slot)) ? new ClickInfo.CopyItem(slot) : null;
+            case CLONE -> (player.isCreative() && validate(slot)) ? new ClickInfo.CreativeCopyItem(slot) : null;
             case THROW -> validate(slot) ? new ClickInfo.DropSlot(slot, button == 1) : null;
             case QUICK_CRAFT -> {
                 // Prevent invalid creative actions
@@ -97,7 +97,7 @@ public final class ClickPreprocessor {
                     yield new ClickInfo.DragClick(list != null ? list : IntLists.emptyList(), false);
                 } else if (button == 10) {
                     var list = creativeDragMap.remove(player);
-                    yield new ClickInfo.CopyCursor(list != null ? list : IntLists.emptyList());
+                    yield new ClickInfo.CreativeCopyCursor(list != null ? list : IntLists.emptyList());
                 }
 
                 // Handle intermediate state

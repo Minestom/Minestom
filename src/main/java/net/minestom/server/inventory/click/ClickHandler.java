@@ -81,16 +81,20 @@ public interface ClickHandler {
             hotbarSwap(swap, builder);
         } else if (info instanceof ClickInfo.OffhandSwap swap) {
             offhandSwap(swap, builder);
-        } else if (info instanceof ClickInfo.CopyItem copy) {
-            copyItem(copy, builder);
-        } else if (info instanceof ClickInfo.CopyCursor copy) {
-            copyCursor(copy, builder);
         } else if (info instanceof ClickInfo.DragClick dragClick) {
             distributeCursor(dragClick, builder);
         } else if (info instanceof ClickInfo.ShiftClick shift) {
             shiftClick(shift, builder);
         } else if (info instanceof ClickInfo.DoubleClick doubleClick) {
             doubleClick(doubleClick, builder);
+        } else if (info instanceof ClickInfo.CreativeCopyItem copy) {
+            creativeCopyItem(copy, builder);
+        } else if (info instanceof ClickInfo.CreativeSetItem set) {
+            creativeSetItem(set, builder);
+        } else if (info instanceof ClickInfo.CreativeCopyCursor copy) {
+            creativeCopyCursor(copy, builder);
+        } else if (info instanceof ClickInfo.CreativeDropItem drop) {
+            creativeDropItem(drop, builder);
         }
 
         return builder;
@@ -108,14 +112,18 @@ public interface ClickHandler {
 
     void offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull ClickResult.Builder builder);
 
-    void copyItem(@NotNull ClickInfo.CopyItem info, @NotNull ClickResult.Builder builder);
-
-    void copyCursor(@NotNull ClickInfo.CopyCursor info, @NotNull ClickResult.Builder builder);
-
     void distributeCursor(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder);
 
     void shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull ClickResult.Builder builder);
 
     void doubleClick(@NotNull ClickInfo.DoubleClick info, @NotNull ClickResult.Builder builder);
+
+    void creativeCopyItem(@NotNull ClickInfo.CreativeCopyItem info, @NotNull ClickResult.Builder builder);
+
+    void creativeSetItem(@NotNull ClickInfo.CreativeSetItem info, @NotNull ClickResult.Builder builder);
+
+    void creativeCopyCursor(@NotNull ClickInfo.CreativeCopyCursor info, @NotNull ClickResult.Builder builder);
+
+    void creativeDropItem(@NotNull ClickInfo.CreativeDropItem info, @NotNull ClickResult.Builder builder);
 
 }

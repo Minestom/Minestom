@@ -131,23 +131,6 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
-    public void copyItem(@NotNull ClickInfo.CopyItem info, @NotNull ClickResult.Builder builder) {
-        var item = builder.get(info.clickedSlot());
-        if (builder.getCursorItem().isAir() && !item.isAir()) {
-            builder.cursor(item);
-        }
-    }
-
-    public void copyCursor(@NotNull ClickInfo.CopyCursor info, @NotNull ClickResult.Builder builder) {
-        var cursor = builder.getCursorItem();
-
-        for (int slot : info.includedSlots()) {
-            if (builder.get(slot).isAir()) {
-                builder.change(slot, cursor);
-            }
-        }
-    }
-
     public void distributeCursor(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder) {
         var slots = info.includedSlots();
         var cursor = builder.getCursorItem();
@@ -191,6 +174,33 @@ public class StandardClickHandler implements ClickHandler {
         if (!result.equals(cursor)) {
             builder.cursor(result);
         }
+    }
+
+    public void creativeCopyItem(@NotNull ClickInfo.CreativeCopyItem info, @NotNull ClickResult.Builder builder) {
+        var item = builder.get(info.clickedSlot());
+        if (builder.getCursorItem().isAir() && !item.isAir()) {
+            builder.cursor(RULE.apply(item, RULE.getMaxSize(item)));
+        }
+    }
+
+    @Override
+    public void creativeSetItem(@NotNull ClickInfo.CreativeSetItem info, @NotNull ClickResult.Builder builder) {
+        builder.change(info.slot(), info.item());
+    }
+
+    public void creativeCopyCursor(@NotNull ClickInfo.CreativeCopyCursor info, @NotNull ClickResult.Builder builder) {
+        var cursor = builder.getCursorItem();
+
+        for (int slot : info.includedSlots()) {
+            if (builder.get(slot).isAir()) {
+                builder.change(slot, cursor);
+            }
+        }
+    }
+
+    @Override
+    public void creativeDropItem(@NotNull ClickInfo.CreativeDropItem info, @NotNull ClickResult.Builder builder) {
+        builder.sideEffects(new ClickResult.SideEffects.DropFromPlayer(info.item()));
     }
 
 }
