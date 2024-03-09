@@ -52,6 +52,7 @@ public class StandardClickHandler implements ClickHandler {
         this.doubleClickSlots = doubleClickSlots;
     }
 
+    @Override
     public void leftClick(@NotNull ClickInfo.LeftClick info, @NotNull ClickResult.Builder builder) {
         ItemStack cursor = builder.getCursorItem();
         ItemStack clickedItem = builder.get(info.clickedSlot());
@@ -64,6 +65,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void rightClick(@NotNull ClickInfo.RightClick info, @NotNull ClickResult.Builder builder) {
         int slot = info.clickedSlot();
         ItemStack cursor = builder.getCursorItem();
@@ -87,6 +89,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void dropSlot(@NotNull ClickInfo.DropSlot info, @NotNull ClickResult.Builder builder) {
         var item = builder.get(info.clickedSlot());
         if (item.isAir()) return; // Do nothing
@@ -100,6 +103,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void dropCursor(@NotNull ClickInfo.DropCursor info, @NotNull ClickResult.Builder builder) {
         var cursor = builder.getCursorItem();
         if (cursor.isAir()) return; // Do nothing
@@ -113,6 +117,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void hotbarSwap(@NotNull ClickInfo.HotbarSwap info, @NotNull ClickResult.Builder builder) {
         var hotbarItem = builder.playerInventory().getItemStack(info.hotbarSlot());
         var selectedItem = builder.get(info.clickedSlot());
@@ -122,6 +127,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull ClickResult.Builder builder) {
         var offhandItem = builder.playerInventory().getItemStack(PlayerInventoryUtils.OFF_HAND_SLOT);
         var selectedItem = builder.get(info.clickedSlot());
@@ -131,6 +137,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void dragClick(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder) {
         var slots = info.includedSlots();
         var cursor = builder.getCursorItem();
@@ -147,6 +154,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull ClickResult.Builder builder) {
         int slot = info.clickedSlot();
         ItemStack clicked = builder.get(slot);
@@ -161,6 +169,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void doubleClick(@NotNull ClickInfo.DoubleClick info, @NotNull ClickResult.Builder builder) {
         var cursor = builder.getCursorItem();
         if (cursor.isAir()) return;
@@ -176,6 +185,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
+    @Override
     public void creativeCopyItem(@NotNull ClickInfo.CreativeCopyItem info, @NotNull ClickResult.Builder builder) {
         var item = builder.get(info.clickedSlot());
         if (builder.getCursorItem().isAir() && !item.isAir()) {
@@ -188,6 +198,7 @@ public class StandardClickHandler implements ClickHandler {
         builder.change(info.slot(), info.item());
     }
 
+    @Override
     public void creativeCopyCursor(@NotNull ClickInfo.CreativeCopyCursor info, @NotNull ClickResult.Builder builder) {
         var cursor = builder.getCursorItem();
 
