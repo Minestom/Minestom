@@ -82,7 +82,7 @@ public interface ClickHandler {
         } else if (info instanceof ClickInfo.OffhandSwap swap) {
             offhandSwap(swap, builder);
         } else if (info instanceof ClickInfo.DragClick dragClick) {
-            distributeCursor(dragClick, builder);
+            dragClick(dragClick, builder);
         } else if (info instanceof ClickInfo.ShiftClick shift) {
             shiftClick(shift, builder);
         } else if (info instanceof ClickInfo.DoubleClick doubleClick) {
@@ -112,7 +112,7 @@ public interface ClickHandler {
 
     void offhandSwap(@NotNull ClickInfo.OffhandSwap info, @NotNull ClickResult.Builder builder);
 
-    void distributeCursor(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder);
+    void dragClick(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder);
 
     void shiftClick(@NotNull ClickInfo.ShiftClick info, @NotNull ClickResult.Builder builder);
 

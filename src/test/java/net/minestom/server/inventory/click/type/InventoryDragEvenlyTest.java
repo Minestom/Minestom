@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.inventory.click.ClickUtils.assertClick;
 
-public class InventoryDistributeEvenlyTest {
+public class InventoryDragEvenlyTest {
 
     static {
         MinecraftServer.init();

@@ -131,7 +131,7 @@ public class StandardClickHandler implements ClickHandler {
         }
     }
 
-    public void distributeCursor(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder) {
+    public void dragClick(@NotNull ClickInfo.DragClick info, @NotNull ClickResult.Builder builder) {
         var slots = info.includedSlots();
         var cursor = builder.getCursorItem();
 
