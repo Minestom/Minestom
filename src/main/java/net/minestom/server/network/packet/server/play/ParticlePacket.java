@@ -22,11 +22,11 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         this(readPacket(reader));
     }
 
-    public ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, int maxSpeed, int particleCount) {
+    public ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
     }
 
-    public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, int maxSpeed, int particleCount) {
+    public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
     }
 
