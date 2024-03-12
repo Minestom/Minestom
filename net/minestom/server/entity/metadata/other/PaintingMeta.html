@@ -77,9 +77,14 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../ObjectDataProvider.html" title="interface in net.minestom.server.entity.metadata">ObjectDataProvider</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PaintingMeta</span>
-<span class="extends-implements">extends <a href="../EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></span></div>
+<span class="extends-implements">extends <a href="../EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a>
+implements <a href="../ObjectDataProvider.html" title="interface in net.minestom.server.entity.metadata">ObjectDataProvider</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -93,8 +98,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="PaintingMeta.Motive.html" class="type-name-link" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Motive</a></code></div>
+<div class="col-second even-row-color"><code><a href="PaintingMeta.Orientation.html" class="type-name-link" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Orientation</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="PaintingMeta.Variant.html" class="type-name-link" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Variant</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -144,22 +152,26 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDirection()" class="member-name-link">getDirection</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getObjectData()" class="member-name-link">getObjectData</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PaintingMeta.Motive.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Motive</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMotive()" class="member-name-link">getMotive</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PaintingMeta.Orientation.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Orientation</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOrientation()" class="member-name-link">getOrientation</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PaintingMeta.Variant.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Variant</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVariant()" class="member-name-link">getVariant</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requiresVelocityPacketAtSpawn()" class="member-name-link">requiresVelocityPacketAtSpawn</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDirection(net.minestom.server.utils.Direction)" class="member-name-link">setDirection</a><wbr>(@NotNull <a href="../../../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a>&nbsp;direction)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setOrientation(net.minestom.server.entity.metadata.other.PaintingMeta.Orientation)" class="member-name-link">setOrientation</a><wbr>(@NotNull <a href="PaintingMeta.Orientation.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Orientation</a>&nbsp;orientation)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets direction of a painting.</div>
+<div class="block">Sets orientation of the painting.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMotive(net.minestom.server.entity.metadata.other.PaintingMeta.Motive)" class="member-name-link">setMotive</a><wbr>(@NotNull <a href="PaintingMeta.Motive.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Motive</a>&nbsp;motive)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets motive of a painting.</div>
-</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVariant(net.minestom.server.entity.metadata.other.PaintingMeta.Variant)" class="member-name-link">setVariant</a><wbr>(@NotNull <a href="PaintingMeta.Variant.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Variant</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -234,42 +246,56 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getMotive()">
-<h3>getMotive</h3>
+<section class="detail" id="getVariant()">
+<h3>getVariant</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PaintingMeta.Motive.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Motive</a></span>&nbsp;<span class="element-name">getMotive</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PaintingMeta.Variant.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Variant</a></span>&nbsp;<span class="element-name">getVariant</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="setMotive(net.minestom.server.entity.metadata.other.PaintingMeta.Motive)">
-<h3>setMotive</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMotive</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="PaintingMeta.Motive.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Motive</a>&nbsp;motive)</span></div>
-<div class="block">Sets motive of a painting.
+<section class="detail" id="setVariant(net.minestom.server.entity.metadata.other.PaintingMeta.Variant)">
+<h3>setVariant</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setVariant</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="PaintingMeta.Variant.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Variant</a>&nbsp;value)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getOrientation()">
+<h3>getOrientation</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PaintingMeta.Orientation.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Orientation</a></span>&nbsp;<span class="element-name">getOrientation</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setOrientation(net.minestom.server.entity.metadata.other.PaintingMeta.Orientation)">
+<h3>setOrientation</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setOrientation</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="PaintingMeta.Orientation.html" title="enum class in net.minestom.server.entity.metadata.other">PaintingMeta.Orientation</a>&nbsp;orientation)</span></div>
+<div class="block">Sets orientation of the painting.
  This is possible only before spawn packet is sent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>motive</code> - motive of a painting.</dd>
+<dd><code>orientation</code> - the orientation of the painting.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getDirection()">
-<h3>getDirection</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a></span>&nbsp;<span class="element-name">getDirection</span>()</div>
+<section class="detail" id="getObjectData()">
+<h3>getObjectData</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getObjectData</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../ObjectDataProvider.html#getObjectData()">getObjectData</a></code>&nbsp;in interface&nbsp;<code><a href="../ObjectDataProvider.html" title="interface in net.minestom.server.entity.metadata">ObjectDataProvider</a></code></dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setDirection(net.minestom.server.utils.Direction)">
-<h3>setDirection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDirection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a>&nbsp;direction)</span></div>
-<div class="block">Sets direction of a painting.
- This is possible only before spawn packet is sent.</div>
+<section class="detail" id="requiresVelocityPacketAtSpawn()">
+<h3>requiresVelocityPacketAtSpawn</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">requiresVelocityPacketAtSpawn</span>()</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>direction</code> - direction of a painting.</dd>
+<dt>Specified by:</dt>
+<dd><code><a href="../ObjectDataProvider.html#requiresVelocityPacketAtSpawn()">requiresVelocityPacketAtSpawn</a></code>&nbsp;in interface&nbsp;<code><a href="../ObjectDataProvider.html" title="interface in net.minestom.server.entity.metadata">ObjectDataProvider</a></code></dd>
 </dl>
 </section>
 </li>
