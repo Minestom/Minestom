@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -45,7 +46,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatMeta.Variant.TABBY));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
         // OptGlobalPos
-        // PaintingVariant
+        EMPTY_VALUES.set(TYPE_PAINTINGVARIANT, PaintingVariant(PaintingMeta.Variant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
         EMPTY_VALUES.set(TYPE_VECTOR3, Vector3(Vec.ZERO));
         EMPTY_VALUES.set(TYPE_QUATERNION, Quaternion(new float[]{0, 0, 0, 0}));

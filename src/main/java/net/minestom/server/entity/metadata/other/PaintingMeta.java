@@ -114,6 +114,21 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
             return VALUES[id];
         }
 
+        public static @Nullable Variant fromNamespaceId(@Nullable String namespaceId) {
+            if (namespaceId == null) return null;
+            return fromNamespaceId(NamespaceID.from(namespaceId));
+        }
+
+        public static @Nullable Variant fromNamespaceId(@Nullable NamespaceID namespaceId) {
+            if (namespaceId == null) return null;
+            for (Variant value : VALUES) {
+                if (value.namespace().equals(namespaceId)) {
+                    return value;
+                }
+            }
+            return null;
+        }
+
         private final NamespaceID namespace;
         private final int width;
         private final int height;
