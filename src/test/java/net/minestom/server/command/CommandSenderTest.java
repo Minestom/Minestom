@@ -4,11 +4,9 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -23,15 +21,15 @@ public class CommandSenderTest {
 
         CommandSender sender = new SenderTest();
 
-        Permission permission = new Permission("permission.test", new NBTCompound());
 
         assertEquals(sender.getAllPermissions(), Set.of());
 
+        String permission = "permission.test";
         sender.addPermission(permission);
-        assertEquals(sender.getPermission(permission.getPermissionName()), permission);
+        assertTrue(sender.hasPermission(permission));
         assertEquals(sender.getAllPermissions(), Set.of(permission));
 
-        sender.removePermission(permission.getPermissionName());
+        sender.removePermission(permission);
         assertEquals(sender.getAllPermissions(), Set.of());
     }
 
@@ -53,13 +51,13 @@ public class CommandSenderTest {
 
     private static final class SenderTest implements CommandSender {
 
-        private final Set<Permission> permissions = new HashSet<>();
+        private final Set<String> permissions = new HashSet<>();
         private final TagHandler handler = TagHandler.newHandler();
 
         private Component mostRecentMessage = null;
 
         @Override
-        public @NotNull Set<Permission> getAllPermissions() {
+        public @NotNull Set<String> getAllPermissions() {
             return permissions;
         }
 

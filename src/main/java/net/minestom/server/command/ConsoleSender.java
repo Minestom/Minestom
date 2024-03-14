@@ -1,14 +1,10 @@
 package net.minestom.server.command;
 
-import java.util.UUID;
-
 import net.kyori.adventure.audience.MessageType;
-import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class ConsoleSender implements CommandSender {
     private static final ComponentLogger LOGGER = ComponentLogger.logger(ConsoleSender.class);
 
-    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
+    private final Set<String> permissions = new CopyOnWriteArraySet<>();
     private final TagHandler tagHandler = TagHandler.newHandler();
 
     private final Identity identity = Identity.nil();
@@ -41,7 +37,7 @@ public class ConsoleSender implements CommandSender {
 
     @NotNull
     @Override
-    public Set<Permission> getAllPermissions() {
+    public Set<String> getAllPermissions() {
         return permissions;
     }
 
