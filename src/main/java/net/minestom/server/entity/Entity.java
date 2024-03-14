@@ -157,7 +157,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
-    private final Permissions permissions = new PermissionsImpl();
+    protected Permissions permissions = new PermissionsImpl();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
