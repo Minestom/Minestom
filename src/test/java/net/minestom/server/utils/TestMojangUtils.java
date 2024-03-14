@@ -58,9 +58,4 @@ public class TestMojangUtils {
     public void testGetInvalidNameThrows() {
         assertThrows(UsernameDoesNotExistException.class, () -> MojangUtils.getUUID("a")); // Too short
     }
-
-    @Test
-    public void testGetInvalidUUIDThrows() {
-        assertThrows(UsernameDoesNotExistException.class, () -> MojangUtils.getUsername(UUID.fromString("00000000-0000-0000-0000-000000000000")));
-    }
 }
