@@ -1,11 +1,16 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.utils.mojang.MojangUtils;
+import net.minestom.server.utils.mojang.ServiceNotAvailableException;
+import net.minestom.server.utils.mojang.UsernameDoesNotExistException;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMojangUtils {
+    private final UUID JEB_UUID = UUID.fromString("853c80ef-3c37-49fd-aa49-938b674adae6");
     @Test
     public void testValidNameWorks() {
         var result = MojangUtils.fromUsername("jeb_");
@@ -37,5 +42,25 @@ public class TestMojangUtils {
     public void testNonExistentUuidReturnsNull() {
         var result = MojangUtils.fromUuid("00000000-0000-0000-0000-000000000000");
         assertNull(result);
+    }
+
+    @Test
+    public void testGetValidNameWorks() throws ServiceNotAvailableException, UsernameDoesNotExistException {
+        assertEquals(JEB_UUID, MojangUtils.getUUID("jeb_"));
+    }
+
+    @Test
+    public void testGetValidUUIDWorks() throws ServiceNotAvailableException, UsernameDoesNotExistException {
+        assertEquals("jeb_", MojangUtils.getUsername(JEB_UUID));
+    }
+
+    @Test
+    public void testGetInvalidNameThrows() {
+        assertThrows(UsernameDoesNotExistException.class, () -> MojangUtils.getUUID("a")); // Too short
+    }
+
+    @Test
+    public void testGetInvalidUUIDThrows() {
+        assertThrows(UsernameDoesNotExistException.class, () -> MojangUtils.getUsername(UUID.fromString("00000000-0000-0000-0000-000000000000")));
     }
 }
