@@ -112,10 +112,10 @@ public class ItemTest {
     @Test
     public void testEntityType() {
         var item1 = ItemStack.of(Material.DIAMOND, 1);
-        assertNull(item1.material().registry().entityType());
+        assertNull(item1.material().registry().spawnEntityType());
         var item2 = ItemStack.of(Material.CAMEL_SPAWN_EGG, 1);
-        assertNotNull(item2.material().registry().entityType());
-        assertEquals(EntityType.CAMEL, item2.material().registry().entityType());
+        assertNotNull(item2.material().registry().spawnEntityType());
+        assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
     }
 
     static ItemStack createItem() {

@@ -537,7 +537,13 @@ public final class Registry {
             return equipmentSlot;
         }
 
-        public @Nullable EntityType entityType() { return entityType; }
+        /**
+         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+         * @return The entity type it can spawn, or null if it is not a spawn egg
+         */
+        public @Nullable EntityType spawnEntityType() {
+            return entityType;
+        }
 
         @Override
         public Properties custom() {
