@@ -5,6 +5,7 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.minestom.server.permission.OpPermissionsImpl;
 import net.minestom.server.permission.Permissions;
 import net.minestom.server.permission.PermissionsImpl;
 import net.minestom.server.tag.TagHandler;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public class ConsoleSender implements CommandSender {
     private static final ComponentLogger LOGGER = ComponentLogger.logger(ConsoleSender.class);
 
-    private final Permissions permissions = new PermissionsImpl();
+    private final Permissions permissions = new OpPermissionsImpl();
     private final TagHandler tagHandler = TagHandler.newHandler();
 
     private final Identity identity = Identity.nil();
