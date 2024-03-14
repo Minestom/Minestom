@@ -9,6 +9,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -461,6 +462,7 @@ public final class Registry {
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
+        private final EntityType entityType;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -487,6 +489,14 @@ public final class Registry {
                     }
                 } else {
                     this.equipmentSlot = null;
+                }
+            }
+            {
+                final Properties spawnEggProperties = main.section("spawnEggProperties");
+                if (spawnEggProperties != null) {
+                    this.entityType = EntityType.fromNamespaceId(spawnEggProperties.getString("entityType"));
+                } else {
+                    this.entityType = null;
                 }
             }
         }
@@ -525,6 +535,14 @@ public final class Registry {
 
         public @Nullable EquipmentSlot equipmentSlot() {
             return equipmentSlot;
+        }
+
+        /**
+         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+         * @return The entity type it can spawn, or null if it is not a spawn egg
+         */
+        public @Nullable EntityType spawnEntityType() {
+            return entityType;
         }
 
         @Override
