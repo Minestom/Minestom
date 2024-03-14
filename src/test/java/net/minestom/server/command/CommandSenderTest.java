@@ -4,6 +4,9 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.PermissionHandlerImpl;
+import net.minestom.server.permission.PermissionHandlerProxy;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,23 +18,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandSenderTest {
-
-    @Test
-    public void testSenderPermissions() {
-
-        CommandSender sender = new SenderTest();
-
-
-        assertEquals(sender.getAllPermissions(), Set.of());
-
-        String permission = "permission.test";
-        sender.addPermission(permission);
-        assertTrue(sender.hasPermission(permission));
-        assertEquals(sender.getAllPermissions(), Set.of(permission));
-
-        sender.removePermission(permission);
-        assertEquals(sender.getAllPermissions(), Set.of());
-    }
 
     @Test
     public void testMessageSending() {
@@ -49,15 +35,15 @@ public class CommandSenderTest {
         assertEquals(sender.getMostRecentMessage(), Component.text("Message test!", NamedTextColor.GREEN));
     }
 
-    private static final class SenderTest implements CommandSender {
+    private static final class SenderTest implements CommandSender, PermissionHandlerProxy {
 
-        private final Set<String> permissions = new HashSet<>();
+        private final PermissionHandler permissions = new PermissionHandlerImpl();
         private final TagHandler handler = TagHandler.newHandler();
 
         private Component mostRecentMessage = null;
 
         @Override
-        public @NotNull Set<String> getAllPermissions() {
+        public @NotNull PermissionHandler getPermissionHandler() {
             return permissions;
         }
 

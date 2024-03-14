@@ -3,12 +3,11 @@ package net.minestom.server.command;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.PermissionHandlerImpl;
+import net.minestom.server.permission.PermissionHandlerProxy;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Sender used in {@link CommandManager#executeServerCommand(String)}.
@@ -17,14 +16,14 @@ import java.util.Set;
  * data can be sent to this sender because it's purpose is to process the data of
  * {@link CommandContext#getReturnData()}.
  */
-public class ServerSender implements CommandSender {
+public class ServerSender implements CommandSender, PermissionHandlerProxy {
 
-    private final Set<String> permissions = Collections.unmodifiableSet(new HashSet<>());
+    private final PermissionHandler permissions = new PermissionHandlerImpl();
     private final TagHandler tagHandler = TagHandler.newHandler();
 
     @NotNull
     @Override
-    public Set<String> getAllPermissions() {
+    public PermissionHandler getPermissionHandler() {
         return permissions;
     }
 

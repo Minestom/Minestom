@@ -3,6 +3,8 @@ package net.minestom.server.command;
 import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
+import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.PermissionHandlerProxy;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -124,9 +126,9 @@ public class CommandConditionTest {
         }
     }
 
-    private static final class Sender implements CommandSender {
+    private static final class Sender implements CommandSender, PermissionHandlerProxy {
         @Override
-        public @NotNull Set<String> getAllPermissions() {
+        public @NotNull PermissionHandler getPermissionHandler() {
             return null;
         }
 
