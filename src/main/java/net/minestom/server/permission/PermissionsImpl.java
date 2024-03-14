@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class PermissionHandlerImpl implements PermissionHandler {
+public class PermissionsImpl implements Permissions {
     private final Map<String, Boolean> allPermissions = new HashMap<>();
 
     @Override

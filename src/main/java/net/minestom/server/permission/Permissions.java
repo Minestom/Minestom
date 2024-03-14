@@ -2,8 +2,6 @@ package net.minestom.server.permission;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-
 /**
  * Represents an object which can have permissions.
  * <p>
@@ -13,7 +11,7 @@ import java.util.Collection;
  * and {link Permission#getNBTData()} serializable into a string using {link NBTCompound#toSNBT()}
  * and deserialized back with {link SNBTParser#parse()}.
  */
-public interface PermissionHandler {
+public interface Permissions {
     PermissionTristate checkPermission(@NotNull String permission);
 
     void setPermission(@NotNull String permission, PermissionTristate tristate);
