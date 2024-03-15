@@ -25,6 +25,14 @@ public final class MojangUtils {
             .softValues()
             .build();
 
+    /**
+     * Gets a player's UUID from their username
+     * @param username The players username
+     * @return The {@link UUID}
+     * @throws ServiceNotAvailableException If the mojang API is down
+     * @throws UsernameDoesNotExistException If the username is invalid
+     */
+    @Blocking
     public static @NotNull UUID getUUID(String username) throws ServiceNotAvailableException, UsernameDoesNotExistException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
         return UUID.fromString(
@@ -37,10 +45,23 @@ public final class MojangUtils {
         );
     }
 
+    /**
+     * Gets a player's username from their UUID
+     * @param playerUUID The {@link UUID} of the player
+     * @return The player's username
+     * @throws ServiceNotAvailableException If the mojang API is down
+     * @throws UsernameDoesNotExistException If the UUID is invalid
+     */
+    @Blocking
     public static @NotNull String getUsername(UUID playerUUID) throws ServiceNotAvailableException, UsernameDoesNotExistException {
         return retrieve(String.format(FROM_UUID_URL, playerUUID)).get("name").getAsString();
     }
 
+    /**
+     * Gets a {@link JsonObject} with the response from the mojang API
+     * @param uuid The UUID as a {@link String}
+     * @return The {@link JsonObject} or {@code null} if the mojang API is down or the UUID is invalid
+     */
     @Blocking
     public static @Nullable JsonObject fromUuid(@NotNull String uuid) {
         try {
@@ -50,6 +71,11 @@ public final class MojangUtils {
         }
     }
 
+    /**
+     * Gets a {@link JsonObject} with the response from the mojang API
+     * @param username The username as a {@link String}
+     * @return The {@link JsonObject} or {@code null} if the mojang API is down or the username is invalid
+     */
     @Blocking
     public static @Nullable JsonObject fromUsername(@NotNull String username) {
         try {
