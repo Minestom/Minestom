@@ -252,6 +252,8 @@ public final class Registry {
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
         private final Shape shape;
+        private final boolean redstoneConductor;
+        private final boolean signalSource;
         private final Properties custom;
 
         private BlockEntry(String namespace, Properties main, Properties custom) {
@@ -290,6 +292,8 @@ public final class Registry {
                 final String occlusion = main.getString("occlusionShape");
                 this.shape = CollisionUtils.parseBlockShape(collision, occlusion, this);
             }
+            this.redstoneConductor = main.getBoolean("redstoneConductor");
+            this.signalSource = main.getBoolean("signalSource", false);
         }
 
         public @NotNull NamespaceID namespace() {
@@ -366,6 +370,14 @@ public final class Registry {
 
         public @Nullable Material material() {
             return materialSupplier.get();
+        }
+
+        public boolean isRedstoneConductor() {
+            return redstoneConductor;
+        }
+
+        public boolean isSignalSource() {
+            return signalSource;
         }
 
         public Shape collisionShape() {
