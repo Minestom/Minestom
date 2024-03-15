@@ -59,6 +59,16 @@ public final class MojangUtils {
 
     /**
      * Gets a {@link JsonObject} with the response from the mojang API
+     * @param uuid The UUID as a {@link UUID}
+     * @return The {@link JsonObject} or {@code null} if the mojang API is down or the UUID is invalid
+     */
+    @Blocking
+    public static @Nullable JsonObject fromUuid(@NotNull UUID uuid) {
+        return fromUuid(uuid.toString());
+    }
+
+    /**
+     * Gets a {@link JsonObject} with the response from the mojang API
      * @param uuid The UUID as a {@link String}
      * @return The {@link JsonObject} or {@code null} if the mojang API is down or the UUID is invalid
      */
