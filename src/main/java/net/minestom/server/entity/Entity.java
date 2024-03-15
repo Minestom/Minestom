@@ -34,9 +34,9 @@ import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.permission.Permissions;
-import net.minestom.server.permission.PermissionsHolder;
-import net.minestom.server.permission.PermissionsImpl;
+import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.PermissionHolder;
+import net.minestom.server.permission.BasePermissionHandler;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
@@ -85,7 +85,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        PermissionsHolder, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
+        PermissionHolder, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
 
     private static final int VELOCITY_UPDATE_INTERVAL = 1;
 
@@ -157,7 +157,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
-    protected Permissions permissions = new PermissionsImpl();
+    private PermissionHandler permissionHandler = new BasePermissionHandler();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -531,8 +531,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     @NotNull
     @Override
-    public Permissions getPermissions() {
-        return permissions;
+    public PermissionHandler getPermissionHandler() {
+        return permissionHandler;
+    }
+
+    public void setPermissionHandler(@NotNull PermissionHandler permissionHandler) {
+        this.permissionHandler = permissionHandler;
     }
 
     /**

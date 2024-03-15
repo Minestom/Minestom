@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * and {link Permission#getNBTData()} serializable into a string using {link NBTCompound#toSNBT()}
  * and deserialized back with {link SNBTParser#parse()}.
  */
-public interface Permissions {
+public interface PermissionHandler {
     PermissionTristate checkPermission(@NotNull String permission);
 
     void setPermission(@NotNull String permission, PermissionTristate tristate);

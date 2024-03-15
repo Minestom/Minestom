@@ -3,8 +3,8 @@ package net.minestom.server.command;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.permission.OpPermissionsImpl;
-import net.minestom.server.permission.Permissions;
+import net.minestom.server.permission.OpPermissionHandler;
+import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ServerSender implements CommandSender {
 
-    private final Permissions permissions = new OpPermissionsImpl();
+    private final PermissionHandler permissionHandler = new OpPermissionHandler();
     private final TagHandler tagHandler = TagHandler.newHandler();
 
     @NotNull
     @Override
-    public Permissions getPermissions() {
-        return permissions;
+    public PermissionHandler getPermissionHandler() {
+        return permissionHandler;
     }
 
     @Override
