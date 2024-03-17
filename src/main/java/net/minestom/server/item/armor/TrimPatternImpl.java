@@ -1,9 +1,8 @@
 package net.minestom.server.item.armor;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.registry.Registry;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,13 +28,13 @@ record TrimPatternImpl(Registry.TrimPatternEntry registry, int id) implements Tr
         return CONTAINER.values();
     }
 
-    public NBTCompound asNBT() {
-        return NBT.Compound(nbt -> {
-            nbt.setString("asset_id", assetID().asString());
-            nbt.setString("template_item", template().namespace().asString());
-            nbt.set("description", NbtComponentSerializer.nbt().serialize(description()));
-            nbt.setByte("decal", (byte) (decal() ? 1 : 0));
-        });
+    public CompoundBinaryTag asNBT() {
+        return CompoundBinaryTag.builder()
+                .putString("asset_id", assetID().asString())
+                .putString("template_item", template().namespace().asString())
+                .put("description", NbtComponentSerializer.nbt().serialize(description()))
+                .putBoolean("decal", decal())
+                .build();
     }
 
 }
