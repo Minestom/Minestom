@@ -1,16 +1,15 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.StringReader;
+import java.io.IOException;
 
 /**
  * Argument which can be used to retrieve an {@link ItemStack} from its material and with NBT data.
@@ -65,10 +64,10 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
 
-            NBTCompound compound;
+            CompoundBinaryTag compound;
             try {
-                compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
-            } catch (NBTException e) {
+                compound = TagStringIO.get().asCompound(sNBT);
+            } catch (IOException e) {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }
 

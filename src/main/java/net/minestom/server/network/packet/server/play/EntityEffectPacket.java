@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -8,15 +9,14 @@ import net.minestom.server.potion.Potion;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityEffectPacket(int entityId, @NotNull Potion potion,
-                                 @Nullable NBTCompound factorCodec) implements ServerPacket {
+                                 @Nullable CompoundBinaryTag factorCodec) implements ServerPacket {
     public EntityEffectPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), new Potion(reader),
-                reader.read(BOOLEAN) ? (NBTCompound) reader.read(NBT) : null);
+                reader.read(BOOLEAN) ? (CompoundBinaryTag) reader.read(NBT) : null);
     }
 
     @Override

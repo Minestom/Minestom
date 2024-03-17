@@ -1,5 +1,9 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.BinaryTagType;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
@@ -16,14 +20,12 @@ import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -230,35 +232,33 @@ final class NetworkBufferTypes {
                 buffer.readIndex += length;
                 return new String(bytes, StandardCharsets.UTF_8);
             });
-    static final TypeImpl<NBT> NBT = new TypeImpl<>(NBT.class,
+    static final TypeImpl<BinaryTag> NBT = new TypeImpl<>(BinaryTag.class,
             (buffer, value) -> {
-                NBTWriter nbtWriter = buffer.nbtWriter;
+                DataOutput nbtWriter = buffer.nbtWriter;
                 if (nbtWriter == null) {
-                    nbtWriter = new NBTWriter(new OutputStream() {
+                    nbtWriter = new DataOutputStream(new OutputStream() {
                         @Override
                         public void write(int b) {
                             buffer.write(BYTE, (byte) b);
                         }
-                    }, CompressedProcesser.NONE);
+                    });
                     buffer.nbtWriter = nbtWriter;
                 }
                 try {
-                    if (value == NBTEnd.INSTANCE) {
-                        // Kotlin - https://discord.com/channels/706185253441634317/706186227493109860/1163703658341478462
-                        buffer.write(BYTE, (byte) NBTType.TAG_End.getOrdinal());
-                    } else {
-                        buffer.write(BYTE, (byte) value.getID().getOrdinal());
-                        nbtWriter.writeRaw(value);
-                    }
+                    if (value instanceof CompoundBinaryTag compound && compound.size() == 0)
+                        value = EndBinaryTag.endBinaryTag();
+                    BinaryTagType<BinaryTag> type = (BinaryTagType<BinaryTag>) value.type();
+                    buffer.write(BYTE, type.id());
+                    type.write(value, nbtWriter);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 return -1;
             },
             buffer -> {
-                NBTReader nbtReader = buffer.nbtReader;
+                DataInput nbtReader = buffer.nbtReader;
                 if (nbtReader == null) {
-                    nbtReader = new NBTReader(new InputStream() {
+                    nbtReader = new DataInputStream(new InputStream() {
                         @Override
                         public int read() {
                             return buffer.read(BYTE) & 0xFF;
@@ -268,15 +268,13 @@ final class NetworkBufferTypes {
                         public int available() {
                             return buffer.readableBytes();
                         }
-                    }, CompressedProcesser.NONE);
+                    });
                     buffer.nbtReader = nbtReader;
                 }
                 try {
-                    byte tagId = buffer.read(BYTE);
-                    if (tagId == NBTType.TAG_End.getOrdinal())
-                        return NBTEnd.INSTANCE;
-                    return nbtReader.readRaw(tagId);
-                } catch (IOException | NBTException e) {
+                    var tagId = NBTUtils.nbtTypeFromId(buffer.read(BYTE));
+                    return tagId.read(buffer.nbtReader);
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -300,12 +298,12 @@ final class NetworkBufferTypes {
             });
     static final TypeImpl<Component> COMPONENT = new TypeImpl<>(Component.class,
             (buffer, value) -> {
-                final NBT nbt = NbtComponentSerializer.nbt().serialize(value);
+                final BinaryTag nbt = NbtComponentSerializer.nbt().serialize(value);
                 buffer.write(NBT, nbt);
                 return -1;
             },
             buffer -> {
-                final NBT nbt = buffer.read(NBT);
+                final BinaryTag nbt = buffer.read(NBT);
                 return NbtComponentSerializer.nbt().deserialize(nbt);
             });
     static final TypeImpl<Component> JSON_COMPONENT = new TypeImpl<>(Component.class,
@@ -338,10 +336,7 @@ final class NetworkBufferTypes {
                 buffer.write(BOOLEAN, true);
                 buffer.write(VAR_INT, value.material().id());
                 buffer.write(BYTE, (byte) value.amount());
-
-                // Vanilla does not write an empty object, just an end tag.
-                NBTCompound nbt = value.meta().toNBT();
-                buffer.write(NBT, nbt.isEmpty() ? NBTEnd.INSTANCE : nbt);
+                buffer.write(NBT, value.meta().toNBT());
                 return -1;
             },
             buffer -> {
@@ -353,8 +348,8 @@ final class NetworkBufferTypes {
                 if (material == null) throw new RuntimeException("Unknown material id: " + id);
 
                 final int amount = buffer.read(BYTE);
-                final NBT nbt = buffer.read(NBT);
-                if (!(nbt instanceof NBTCompound compound)) {
+                final BinaryTag nbt = buffer.read(NBT);
+                if (!(nbt instanceof CompoundBinaryTag compound)) {
                     return ItemStack.of(material, amount);
                 }
 

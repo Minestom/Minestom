@@ -1,11 +1,11 @@
 package net.minestom.server.world;
 
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.Collections;
 import java.util.List;
@@ -81,21 +81,19 @@ public final class DimensionTypeManager {
     }
 
     /**
-     * Creates the {@link NBTCompound} containing all the registered dimensions.
+     * Creates the {@link CompoundBinaryTag} containing all the registered dimensions.
      * <p>
      * Used when a player connects.
      *
      * @return an nbt compound containing the registered dimensions
      */
-    public @NotNull NBTCompound toNBT() {
-        return NBT.Compound(dimensions -> {
-            dimensions.setString("type", "minecraft:dimension_type");
-            dimensions.set("value", NBT.List(
-                    NBTType.TAG_Compound,
-                    dimensionTypes.stream()
-                            .map(DimensionType::toIndexedNBT)
-                            .toList()
-            ));
-        });
+    public @NotNull CompoundBinaryTag toNBT() {
+        ListBinaryTag.Builder<CompoundBinaryTag> entries = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
+        for (DimensionType dimensionType : dimensionTypes)
+            entries.add(dimensionType.toIndexedNBT());
+        return CompoundBinaryTag.builder()
+                .putString("type", "minecraft:dimension_type")
+                .put("value", entries.build())
+                .build();
     }
 }

@@ -1,35 +1,35 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.function.Function;
 
 final class TagSerializerImpl {
-    public static final TagSerializer<NBTCompound> COMPOUND = new TagSerializer<>() {
+    public static final TagSerializer<CompoundBinaryTag> COMPOUND = new TagSerializer<>() {
         @Override
-        public @NotNull NBTCompound read(@NotNull TagReadable reader) {
+        public @NotNull CompoundBinaryTag read(@NotNull TagReadable reader) {
             return ((TagHandler) reader).asCompound();
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @NotNull NBTCompound value) {
+        public void write(@NotNull TagWritable writer, @NotNull CompoundBinaryTag value) {
             TagNbtSeparator.separate(value, entry -> writer.setTag(entry.tag(), entry.value()));
         }
     };
 
-    static <T> TagSerializer<T> fromCompound(Function<NBTCompound, T> readFunc, Function<T, NBTCompound> writeFunc) {
+    static <T> TagSerializer<T> fromCompound(Function<CompoundBinaryTag, T> readFunc, Function<T, CompoundBinaryTag> writeFunc) {
         return new TagSerializer<>() {
             @Override
             public @Nullable T read(@NotNull TagReadable reader) {
-                final NBTCompound compound = COMPOUND.read(reader);
+                final CompoundBinaryTag compound = COMPOUND.read(reader);
                 return readFunc.apply(compound);
             }
 
             @Override
             public void write(@NotNull TagWritable writer, @NotNull T value) {
-                final NBTCompound compound = writeFunc.apply(value);
+                final CompoundBinaryTag compound = writeFunc.apply(value);
                 COMPOUND.write(writer, compound);
             }
         };

@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
@@ -18,8 +20,6 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -150,14 +150,17 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    protected NBTCompound computeHeightmap() {
+    protected CompoundBinaryTag computeHeightmap() {
         // Heightmap
         int[] heightmap = getHeightmap();
         int dimensionHeight = getInstance().getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight)),
-                "WORLD_SURFACE", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight))));
+
+        LongArrayBinaryTag encoded = LongArrayBinaryTag.longArrayBinaryTag(encodeBlocks(heightmap, bitsForHeight));
+        return CompoundBinaryTag.builder()
+                .put("MOTION_BLOCKING", encoded)
+                .put("WORLD_SURFACE", encoded)
+                .build();
     }
 
     // Lazy compute heightmap

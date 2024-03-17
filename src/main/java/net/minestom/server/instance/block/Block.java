@@ -1,15 +1,15 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
-import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.*;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 import java.util.Map;
@@ -67,7 +67,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return a new block with different nbt
      */
     @Contract(pure = true)
-    @NotNull Block withNbt(@Nullable NBTCompound compound);
+    @NotNull Block withNbt(@Nullable CompoundBinaryTag compound);
 
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
@@ -86,7 +86,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the block nbt, null if not present
      */
     @Contract(pure = true)
-    @Nullable NBTCompound nbt();
+    @Nullable CompoundBinaryTag nbt();
 
     @Contract(pure = true)
     default boolean hasNbt() {

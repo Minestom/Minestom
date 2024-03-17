@@ -1,12 +1,12 @@
 package net.minestom.server.network.packet.server.play.data;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
+public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] data,
                         @NotNull Map<Integer, Block> blockEntities) implements NetworkBuffer.Writer {
     public ChunkData {
         blockEntities = blockEntities.entrySet()
@@ -24,7 +24,7 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
     }
 
     public ChunkData(@NotNull NetworkBuffer reader) {
-        this((NBTCompound) reader.read(NBT), reader.read(BYTE_ARRAY),
+        this((CompoundBinaryTag) reader.read(NBT), reader.read(BYTE_ARRAY),
                 readBlockEntities(reader));
     }
 
@@ -46,7 +46,7 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
             writer.write(SHORT, (short) point.blockY()); // y
 
             writer.write(VAR_INT, registry.blockEntityId());
-            final NBTCompound nbt = BlockUtils.extractClientNbt(block);
+            final CompoundBinaryTag nbt = BlockUtils.extractClientNbt(block);
             assert nbt != null;
             writer.write(NBT, nbt); // block nbt
         }
@@ -59,7 +59,7 @@ public record ChunkData(@NotNull NBTCompound heightmaps, byte @NotNull [] data,
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
             final int blockEntityId = reader.read(VAR_INT);
-            final NBTCompound nbt = (NBTCompound) reader.read(NBT);
+            final CompoundBinaryTag nbt = (CompoundBinaryTag) reader.read(NBT);
             // TODO create block object
         }
         return blockEntities;

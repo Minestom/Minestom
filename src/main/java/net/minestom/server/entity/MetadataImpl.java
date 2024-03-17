@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
@@ -13,7 +14,6 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.NBTEnd;
 
 import static net.minestom.server.entity.Metadata.*;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -38,7 +38,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_OPTUUID, OptUUID(null));
         EMPTY_VALUES.set(TYPE_BLOCKSTATE, BlockState(Block.AIR.id()));
         EMPTY_VALUES.set(TYPE_OPTBLOCKSTATE, OptBlockState(null));
-        EMPTY_VALUES.set(TYPE_NBT, NBT(NBTEnd.INSTANCE));
+        EMPTY_VALUES.set(TYPE_NBT, NBT(EndBinaryTag.endBinaryTag()));
         //EMPTY_VALUES.set(TYPE_PARTICLE -> throw new UnsupportedOperationException();
         EMPTY_VALUES.set(TYPE_VILLAGERDATA, VillagerData(0, 0, 0));
         EMPTY_VALUES.set(TYPE_OPTVARINT, OptVarInt(null));
