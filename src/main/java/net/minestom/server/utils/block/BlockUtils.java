@@ -1,16 +1,14 @@
 package net.minestom.server.utils.block;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
 import java.util.Objects;
@@ -90,22 +88,22 @@ public class BlockUtils {
         return new Object2ObjectArrayMap<>(keys, values, entryCount);
     }
 
-    public static @Nullable NBTCompound extractClientNbt(@NotNull Block block) {
+    public static @Nullable CompoundBinaryTag extractClientNbt(@NotNull Block block) {
         if (!block.registry().isBlockEntity()) return null;
         // Append handler tags
         final BlockHandler handler = block.handler();
-        final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+        final CompoundBinaryTag blockNbt = Objects.requireNonNullElseGet(block.nbt(), CompoundBinaryTag::empty);
         if (handler != null) {
             // Extract explicitly defined tags and keep the rest server-side
-            return NBT.Compound(nbt -> {
-                for (Tag<?> tag : handler.getBlockEntityTags()) {
-                    final var value = tag.read(blockNbt);
-                    if (value != null) {
-                        // Tag is present and valid
-                        tag.writeUnsafe(nbt, value);
-                    }
+            var builder = CompoundBinaryTag.builder();
+            for (Tag<?> tag : handler.getBlockEntityTags()) {
+                final var value = tag.read(blockNbt);
+                if (value != null) {
+                    // Tag is present and valid
+                    tag.writeUnsafe(builder, value);
                 }
-            });
+            }
+            return builder.build();
         }
         // Complete nbt shall be sent if the block has no handler
         // Necessary to support all vanilla blocks

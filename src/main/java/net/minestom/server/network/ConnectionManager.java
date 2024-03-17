@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -32,7 +33,8 @@ import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -280,14 +282,15 @@ public final class ConnectionManager {
 
             // Registry data (if it should be sent)
             if (event.willSendRegistryData()) {
-                var registry = new HashMap<String, NBT>();
-                registry.put("minecraft:chat_type", Messenger.chatRegistry());
-                registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
-                registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
-                registry.put("minecraft:damage_type", DamageType.getNBT());
-                registry.put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT());
-                registry.put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT());
-                player.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
+                var registryCompound = CompoundBinaryTag.builder()
+                        .put("minecraft:chat_type", Messenger.chatRegistry())
+                        .put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT())
+                        .put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT())
+                        .put("minecraft:damage_type", DamageType.getNBT())
+//                        .put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT())
+//                        .put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT())
+                        .build();
+                player.sendPacket(new RegistryDataPacket(registryCompound));
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }
