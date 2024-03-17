@@ -227,7 +227,7 @@ public final class PacketUtils {
                 try {
                     payloadConsumer.accept(packetId, payload);
                 } catch (Exception e) {
-                    // Empty
+                    throw new RuntimeException(e);
                 }
                 // Position buffer to read the next packet
                 readBuffer.readerOffset(readerStart + packetLength);
