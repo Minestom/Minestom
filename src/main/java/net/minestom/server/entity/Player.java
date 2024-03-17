@@ -2377,6 +2377,83 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * Teleports the player only if the chunk at {@code position} is loaded or if
+     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
+     * Supply additional {@link TeleportFlag} values to control which values of the
+     * position set relative to your current position
+     *
+     * @param position the teleport position
+     * @param chunks   the chunk indexes to load before teleporting the entity,
+     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                 can be null or empty to only load the chunk at {@code position}
+     * @param flags    determines the components of the position that will be added to
+     *                 rather than explicitly set
+     * @throws IllegalStateException if you try to teleport an entity before settings its instance
+     */
+    public @NotNull CompletableFuture<Void> teleportWithFlags(@NotNull Pos position, long @Nullable [] chunks, @NotNull TeleportFlag... flags) {
+        Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
+        chunkUpdateLimitChecker.clearHistory();
+
+        int bits = 0;
+        for (TeleportFlag flag : flags) {
+            bits = bits | flag.bit;
+        }
+
+        final byte flaggedBits = (byte)bits;
+        double x = (flaggedBits & TeleportFlag.X.bit) != 0 ? this.position.x() + position.x() : position.x();
+        double y = (flaggedBits & TeleportFlag.Y.bit) != 0 ? this.position.y() + position.y() : position.y();
+        double z = (flaggedBits & TeleportFlag.Z.bit) != 0 ? this.position.z() + position.z() : position.z();
+        float yaw = (flaggedBits & TeleportFlag.YAW.bit) != 0 ? this.position.yaw() + position.yaw() : position.yaw();
+        float pitch = (flaggedBits & TeleportFlag.PITCH.bit) != 0 ? this.position.pitch() + position.pitch() : position.pitch();
+        final Pos absoluteTeleportPosition = new Pos(x, y, z, yaw, pitch);
+
+        final Runnable endCallback = () -> {
+            this.previousPosition = this.position;
+            this.position = absoluteTeleportPosition;
+            refreshCoordinate(absoluteTeleportPosition);
+            synchronizePositionWithFlags(position, flaggedBits);
+            setView(yaw, pitch);
+        };
+
+        if (chunks != null && chunks.length > 0) {
+            // Chunks need to be loaded before the teleportation can happen
+            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
+        }
+        final Pos currentPosition = this.position;
+        if (!currentPosition.sameChunk(absoluteTeleportPosition)) {
+            // Ensure that the chunk is loaded
+            return instance.loadOptionalChunk(absoluteTeleportPosition).thenRun(endCallback);
+        } else {
+            // Position is in the same chunk, keep it sync
+            endCallback.run();
+            return AsyncUtils.empty();
+        }
+    }
+
+    public @NotNull CompletableFuture<Void> teleportWithFlags(@NotNull Pos position, @NotNull TeleportFlag... flags) {
+        return teleportWithFlags(position, null, flags);
+    }
+
+    private void synchronizePositionWithFlags(@NotNull Pos positionForSelf, byte flags) {
+        sendPacket(new PlayerPositionAndLookPacket(positionForSelf, flags, getNextTeleportId()));
+        super.synchronizePosition(false);
+    }
+
+    public enum TeleportFlag {
+        X(0x01),
+        Y(0x02),
+        Z(0x04),
+        YAW(0x08),
+        PITCH(0x10);
+
+        private final int bit;
+
+        TeleportFlag(int bit) {
+            this.bit = bit;
+        }
+    }
+
+    /**
      * Represents the main or off hand of the player.
      */
     public enum Hand {

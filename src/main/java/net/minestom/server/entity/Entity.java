@@ -1345,7 +1345,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param newPosition the new position
      */
-    private void refreshCoordinate(Point newPosition) {
+    @ApiStatus.Internal
+    protected void refreshCoordinate(Point newPosition) {
         // Passengers update
         final Set<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
