@@ -1,10 +1,10 @@
 package net.minestom.server.permission;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
- * Interface used to check if the {@link NBTCompound nbt data} of a {@link Permission} is correct.
+ * Interface used to check if the {@link CompoundBinaryTag nbt data} of a {@link Permission} is correct.
  */
 @FunctionalInterface
 public interface PermissionVerifier {
@@ -16,5 +16,5 @@ public interface PermissionVerifier {
      * @return true if {@link PermissionHandler#hasPermission(String, PermissionVerifier)}
      * should return true, false otherwise
      */
-    boolean isValid(@Nullable NBTCompound nbtCompound);
+    boolean isValid(@Nullable CompoundBinaryTag nbtCompound);
 }
