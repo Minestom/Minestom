@@ -1,16 +1,17 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.NBT;
 
 record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
@@ -29,23 +30,22 @@ record ItemMetaImpl(TagHandler tagHandler) implements ItemMeta {
     }
 
     @Override
-    public @NotNull NBTCompound toNBT() {
+    public @NotNull CompoundBinaryTag toNBT() {
         return tagHandler.asCompound();
     }
 
     @Override
     public @NotNull String toSNBT() {
-        return toNBT().toSNBT();
+        try {
+            return TagStringIO.get().asString(toNBT());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to convert to SNBT", e);
+        }
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        final NBTCompound nbt = toNBT();
-        if (nbt.isEmpty()) {
-            writer.write(BYTE, (byte) 0);
-            return;
-        }
-        writer.write(NBT, nbt);
+        writer.write(NBT, toNBT());
     }
 
     @Override

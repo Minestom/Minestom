@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
@@ -12,7 +13,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -26,7 +26,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemMeta with(@NotNull Consumer<@NotNull Builder> builderConsumer);
 
-    @NotNull NBTCompound toNBT();
+    @NotNull CompoundBinaryTag toNBT();
 
     @NotNull String toSNBT();
 

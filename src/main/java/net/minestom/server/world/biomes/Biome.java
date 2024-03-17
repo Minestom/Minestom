@@ -1,5 +1,6 @@
 package net.minestom.server.world.biomes;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
@@ -8,8 +9,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Locale;
 
@@ -54,18 +53,20 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         }
     }
 
-    default @NotNull NBTCompound toNbt() {
+    default @NotNull CompoundBinaryTag toNbt() {
         Check.notNull(name(), "The biome namespace cannot be null");
         Check.notNull(effects(), "The biome effects cannot be null");
 
-        return NBT.Compound(element -> {
-                element.setFloat("temperature", temperature());
-                element.setFloat("downfall", downfall());
-                element.setByte("has_precipitation", (byte) (precipitation() == Precipitation.NONE ? 0 : 1));
-                if (temperatureModifier() != TemperatureModifier.NONE)
-                    element.setString("temperature_modifier", temperatureModifier().name().toLowerCase(Locale.ROOT));
-                element.set("effects", effects().toNbt());
-        });
+        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
+                .putFloat("temperature", temperature())
+                .putFloat("downfall", downfall())
+                .putByte("has_precipitation", (byte) (precipitation() == Precipitation.NONE ? 0 : 1))
+                .putString("precipitation", precipitation().name().toLowerCase(Locale.ROOT));
+        if (temperatureModifier() != TemperatureModifier.NONE)
+            builder.putString("temperature_modifier", temperatureModifier().name().toLowerCase(Locale.ROOT));
+        return builder
+                .put("effects", effects().toNbt())
+                .build();
     }
 
     static @NotNull Builder builder() {
