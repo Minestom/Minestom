@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
@@ -33,7 +34,6 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
@@ -187,7 +187,7 @@ public class InstanceContainer extends Instance {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
                 var registry = block.registry();
                 if (registry.isBlockEntity()) {
-                    final NBTCompound data = BlockUtils.extractClientNbt(block);
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }
