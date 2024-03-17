@@ -2,8 +2,6 @@ package net.minestom.server.utils.binary;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTReader;
-import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,8 +15,6 @@ import java.nio.channels.WritableByteChannel;
 @ApiStatus.Internal
 public final class BinaryBuffer {
     private ByteBuffer nioBuffer; // To become a `MemorySegment` once released
-    private NBTReader nbtReader;
-    private NBTWriter nbtWriter;
 
     private final int capacity;
     private int readerOffset, writerOffset;
