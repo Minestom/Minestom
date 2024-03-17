@@ -1,12 +1,12 @@
 package net.minestom.server.world.biomes;
 
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +25,7 @@ public final class BiomeManager {
     private final Map<NamespaceID, Integer> idMappings = new ConcurrentHashMap<>();
 
     private final AtomicInteger ID_COUNTER = new AtomicInteger(0);
-    private NBTCompound nbtCache = null;
+    private CompoundBinaryTag nbtCache = null;
 
     public BiomeManager() {
         // Need to register plains for the client to work properly
@@ -101,18 +101,21 @@ public final class BiomeManager {
         return getByName(namespace);
     }
 
-    public @NotNull NBTCompound toNBT() {
+    public @NotNull CompoundBinaryTag toNBT() {
         if (nbtCache != null) return nbtCache;
-        nbtCache = NBT.Compound(Map.of(
-                "type", NBT.String("minecraft:worldgen/biome"),
-                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(biome -> {
-                    return NBT.Compound(Map.of(
-                            "id", NBT.Int(getId(biome)),
-                            "name", NBT.String(biome.namespace().toString()),
-                            "element", biome.toNbt()
-                    ));
-                }).toList())));
 
+        ListBinaryTag.Builder<CompoundBinaryTag> entries = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
+        for (Biome biome : biomes.values()) {
+            entries.add(CompoundBinaryTag.builder()
+                    .putInt("id", getId(biome))
+                    .putString("name", biome.namespace().toString())
+                    .put("element", biome.toNbt())
+                    .build());
+        }
+        nbtCache = CompoundBinaryTag.builder()
+                .putString("type", "minecraft:worldgen/biome")
+                .put("value", entries.build())
+                .build();
         return nbtCache;
     }
 

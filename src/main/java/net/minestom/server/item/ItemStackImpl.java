@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
@@ -7,12 +8,7 @@ import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTByte;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implements ItemStack {
@@ -89,12 +85,13 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
     }
 
     @Override
-    public @NotNull NBTCompound toItemNBT() {
-        final NBTString material = NBT.String(material().name());
-        final NBTByte amount = NBT.Byte(amount());
-        final NBTCompound nbt = meta().toNBT();
-        if (nbt.isEmpty()) return NBT.Compound(Map.of("id", material, "Count", amount));
-        return NBT.Compound(Map.of("id", material, "Count", amount, "tag", nbt));
+    public @NotNull CompoundBinaryTag toItemNBT() {
+        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
+                .putString("id", material.name())
+                .putByte("Count", (byte) amount);
+        CompoundBinaryTag nbt = meta.toNBT();
+        if (nbt.size() > 0) builder.put("tag", nbt);
+        return builder.build();
     }
 
     @Contract(value = "-> new", pure = true)
@@ -129,7 +126,7 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
 
         @Override
-        public ItemStack.@NotNull Builder meta(@NotNull NBTCompound compound) {
+        public ItemStack.@NotNull Builder meta(@NotNull CompoundBinaryTag compound) {
             return metaBuilder(new ItemMetaImpl.Builder(TagHandler.fromCompound(compound)));
         }
 

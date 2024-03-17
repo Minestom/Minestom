@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -27,8 +28,6 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -225,7 +224,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT = computeHeightmap();
+        final CompoundBinaryTag heightmapsNBT = computeHeightmap();
         // Data
 
         final byte[] data;
@@ -242,7 +241,7 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    protected NBTCompound computeHeightmap() {
+    protected CompoundBinaryTag computeHeightmap() {
         // TODO: don't hardcode heightmaps
         // Heightmap
         int dimensionHeight = getInstance().getDimensionType().getHeight();
@@ -255,9 +254,10 @@ public class DynamicChunk extends Chunk {
             }
         }
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(motionBlocking, bitsForHeight)),
-                "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurface, bitsForHeight))));
+        return CompoundBinaryTag.builder()
+                .putLongArray("MOTION_BLOCKING", encodeBlocks(motionBlocking, bitsForHeight))
+                .putLongArray("WORLD_SURFACE", encodeBlocks(worldSurface, bitsForHeight))
+                .build();
     }
 
     @NotNull UpdateLightPacket createLightPacket() {
