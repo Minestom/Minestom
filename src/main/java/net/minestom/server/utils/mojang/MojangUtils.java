@@ -29,11 +29,10 @@ public final class MojangUtils {
      * Gets a player's UUID from their username
      * @param username The players username
      * @return The {@link UUID}
-     * @throws ServiceNotAvailableException If the mojang API is down
-     * @throws UsernameDoesNotExistException If the username is invalid
+     * @throws IOException with text detailing the exception
      */
     @Blocking
-    public static @NotNull UUID getUUID(String username) throws ServiceNotAvailableException, UsernameDoesNotExistException {
+    public static @NotNull UUID getUUID(String username) throws IOException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
         return UUID.fromString(
                 retrieve(String.format(FROM_USERNAME_URL, username)).get("id")
@@ -49,11 +48,10 @@ public final class MojangUtils {
      * Gets a player's username from their UUID
      * @param playerUUID The {@link UUID} of the player
      * @return The player's username
-     * @throws ServiceNotAvailableException If the mojang API is down
-     * @throws UsernameDoesNotExistException If the UUID is invalid
+     * @throws IOException with text detailing the exception
      */
     @Blocking
-    public static @NotNull String getUsername(UUID playerUUID) throws ServiceNotAvailableException, UsernameDoesNotExistException {
+    public static @NotNull String getUsername(UUID playerUUID) throws IOException {
         return retrieve(String.format(FROM_UUID_URL, playerUUID)).get("name").getAsString();
     }
 
@@ -76,7 +74,7 @@ public final class MojangUtils {
     public static @Nullable JsonObject fromUuid(@NotNull String uuid) {
         try {
             return retrieve(String.format(FROM_UUID_URL, uuid));
-        } catch (ServiceNotAvailableException | UsernameDoesNotExistException e) {
+        } catch (IOException e) {
             return null;
         }
     }
@@ -90,7 +88,7 @@ public final class MojangUtils {
     public static @Nullable JsonObject fromUsername(@NotNull String username) {
         try {
             return retrieve(String.format(FROM_USERNAME_URL, username));
-        } catch (ServiceNotAvailableException | UsernameDoesNotExistException e) {
+        } catch (IOException e) {
             return null;
         }
     }
@@ -99,34 +97,35 @@ public final class MojangUtils {
      * Gets the JsonObject from a URL, expects a mojang player URL so the errors might not make sense if it is not
      * @param url The url to retrieve
      * @return The {@link JsonObject} of the result
-     * @throws ServiceNotAvailableException When the result is empty
-     * @throws UsernameDoesNotExistException If there is an "errorMessage" field in the JSON
+     * @throws IOException with the text detailing the exception
      */
-    private static @NotNull JsonObject retrieve(@NotNull String url) throws ServiceNotAvailableException, UsernameDoesNotExistException {
+    private static @NotNull JsonObject retrieve(@NotNull String url) throws IOException {
         @Nullable final var cacheResult = URL_CACHE.getIfPresent(url);
 
         if (cacheResult != null) {
             return cacheResult;
         }
 
+        final String response;
         try {
             // Retrieve from the rate-limited Mojang API
-            final String response = URLUtils.getText(url);
-            // If our response is "", that means the url did not get a proper object from the url
-            // So the username or UUID was invalid, and therefore we return null
-            if (response.isEmpty()) {
-                throw new ServiceNotAvailableException("The Mojang API is down");
-            }
-
-            JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
-            if (jsonObject.has("errorMessage")) {
-                throw new UsernameDoesNotExistException("The username entered does not exist");
-            }
-            URL_CACHE.put(url, jsonObject);
-            return jsonObject;
+            response = URLUtils.getText(url);
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             throw new RuntimeException(e);
         }
+
+        // If our response is "", that means the url did not get a proper object from the url
+        // So the username or UUID was invalid, and therefore we return null
+        if (response.isEmpty()) {
+            throw new IOException("The Mojang API is down");
+        }
+
+        JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
+        if (jsonObject.has("errorMessage")) {
+            throw new IOException(jsonObject.get("errorMessage").getAsString());
+        }
+        URL_CACHE.put(url, jsonObject);
+        return jsonObject;
     }
 }
