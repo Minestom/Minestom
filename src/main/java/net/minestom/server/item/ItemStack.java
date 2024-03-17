@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -12,8 +13,8 @@ import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
@@ -48,13 +49,13 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     }
 
     @Contract(value = "_, _, _ -> new", pure = true)
-    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
+    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable CompoundBinaryTag nbtCompound, int amount) {
         if (nbtCompound == null) return of(material, amount);
         return builder(material).amount(amount).meta(nbtCompound).build();
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound) {
+    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable CompoundBinaryTag nbtCompound) {
         return fromNBT(material, nbtCompound, 1);
     }
 
@@ -64,7 +65,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
      * @param nbtCompound The nbt representation of the item
      */
     @ApiStatus.Experimental
-    static @NotNull ItemStack fromItemNBT(@NotNull NBTCompound nbtCompound) {
+    static @NotNull ItemStack fromItemNBT(@NotNull CompoundBinaryTag nbtCompound) {
         String id = nbtCompound.getString("id");
         Check.notNull(id, "Item NBT must contain an id field.");
         Material material = Material.fromNamespaceId(id);
@@ -72,7 +73,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
         Byte amount = nbtCompound.getByte("Count");
         if (amount == null) amount = 1;
-        final NBTCompound tag = nbtCompound.getCompound("tag");
+        final CompoundBinaryTag tag = nbtCompound.getCompound("tag");
         return tag != null ? fromNBT(material, tag, amount) : of(material, amount);
     }
 
@@ -169,8 +170,13 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
 
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
-        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
+        try {
+            final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
+            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
+        } catch (IOException e) {
+            //todo(matt): revisit,
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -179,7 +185,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
      * @return The nbt representation of the item
      */
     @ApiStatus.Experimental
-    @NotNull NBTCompound toItemNBT();
+    @NotNull CompoundBinaryTag toItemNBT();
 
 
     @Deprecated
@@ -209,7 +215,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
         @NotNull Builder meta(@NotNull TagHandler tagHandler);
 
         @Contract(value = "_ -> this")
-        @NotNull Builder meta(@NotNull NBTCompound compound);
+        @NotNull Builder meta(@NotNull CompoundBinaryTag compound);
 
         @Contract(value = "_ -> this")
         @NotNull Builder meta(@NotNull ItemMeta itemMeta);
