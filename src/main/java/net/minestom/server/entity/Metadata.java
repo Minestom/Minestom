@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -100,7 +100,7 @@ public final class Metadata {
         });
     }
 
-    public static Entry<NBT> NBT(@NotNull NBT nbt) {
+    public static Entry<BinaryTag> NBT(@NotNull BinaryTag nbt) {
         return new MetadataImpl.EntryImpl<>(TYPE_NBT, nbt, NetworkBuffer.NBT);
     }
 

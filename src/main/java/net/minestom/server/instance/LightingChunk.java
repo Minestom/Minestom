@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;

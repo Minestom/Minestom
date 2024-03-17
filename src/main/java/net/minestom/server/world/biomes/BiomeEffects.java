@@ -1,12 +1,10 @@
 package net.minestom.server.world.biomes;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Locale;
-import java.util.Map;
 
 public record BiomeEffects(int fogColor, int skyColor, int waterColor, int waterFogColor, int foliageColor,
                            int grassColor,
@@ -18,29 +16,29 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         return new Builder();
     }
 
-    public NBTCompound toNbt() {
-        return NBT.Compound(nbt -> {
-            nbt.setInt("fog_color", fogColor);
-            if (foliageColor != -1)
-                nbt.setInt("foliage_color", foliageColor);
-            if (grassColor != -1)
-                nbt.setInt("grass_color", grassColor);
-            nbt.setInt("sky_color", skyColor);
-            nbt.setInt("water_color", waterColor);
-            nbt.setInt("water_fog_color", waterFogColor);
-            if (grassColorModifier != null)
-                nbt.setString("grass_color_modifier", grassColorModifier.name().toLowerCase(Locale.ROOT));
-            if (biomeParticle != null)
-                nbt.set("particle", biomeParticle.toNbt());
-            if (ambientSound != null)
-                nbt.setString("ambient_sound", ambientSound.toString());
-            if (moodSound != null)
-                nbt.set("mood_sound", moodSound.toNbt());
-            if (additionsSound != null)
-                nbt.set("additions_sound", additionsSound.toNbt());
-            if (music != null)
-                nbt.set("music", music.toNbt());
-        });
+    public CompoundBinaryTag toNbt() {
+        var builder = CompoundBinaryTag.builder();
+        builder.putInt("fog_color", fogColor);
+        if (foliageColor != -1)
+            builder.putInt("foliage_color", foliageColor);
+        if (grassColor != -1)
+            builder.putInt("grass_color", grassColor);
+        builder.putInt("sky_color", skyColor);
+        builder.putInt("water_color", waterColor);
+        builder.putInt("water_fog_color", waterFogColor);
+        if (grassColorModifier != null)
+            builder.putString("grass_color_modifier", grassColorModifier.name().toLowerCase(Locale.ROOT));
+        if (biomeParticle != null)
+            builder.put("particle", biomeParticle.toNbt());
+        if (ambientSound != null)
+            builder.putString("ambient_sound", ambientSound.toString());
+        if (moodSound != null)
+            builder.put("mood_sound", moodSound.toNbt());
+        if (additionsSound != null)
+            builder.put("additions_sound", additionsSound.toNbt());
+        if (music != null)
+            builder.put("music", music.toNbt());
+        return builder.build();
     }
 
     public enum GrassColorModifier {
@@ -48,30 +46,33 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
     }
 
     public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {
-        public @NotNull NBTCompound toNbt() {
-            return NBT.Compound(Map.of(
-                    "sound", NBT.String(sound.toString()),
-                    "tick_delay", NBT.Int(tickDelay),
-                    "block_search_extent", NBT.Int(blockSearchExtent),
-                    "offset", NBT.Double(offset)));
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("sound", sound.toString())
+                    .putInt("tick_delay", tickDelay)
+                    .putInt("block_search_extent", blockSearchExtent)
+                    .putDouble("offset", offset)
+                    .build();
         }
     }
 
     public record AdditionsSound(NamespaceID sound, double tickChance) {
-        public @NotNull NBTCompound toNbt() {
-            return NBT.Compound(Map.of(
-                    "sound", NBT.String(sound.toString()),
-                    "tick_chance", NBT.Double(tickChance)));
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("sound", sound.toString())
+                    .putDouble("tick_chance", tickChance)
+                    .build();
         }
     }
 
     public record Music(NamespaceID sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
-        public @NotNull NBTCompound toNbt() {
-            return NBT.Compound(Map.of(
-                    "sound", NBT.String(sound.toString()),
-                    "min_delay", NBT.Int(minDelay),
-                    "max_delay", NBT.Int(maxDelay),
-                    "replace_current_music", NBT.Boolean(replaceCurrentMusic)));
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("sound", sound.toString())
+                    .putInt("min_delay", minDelay)
+                    .putInt("max_delay", maxDelay)
+                    .putBoolean("replace_current_music", replaceCurrentMusic)
+                    .build();
         }
     }
 
