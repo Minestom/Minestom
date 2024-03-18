@@ -85,9 +85,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // Weather of the instance
     private Weather weather = new Weather(false, 0, 0);
-    private boolean isRaining;
-    private float rainLevel;
-    private float thunderLevel;
 
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
