@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
@@ -22,7 +23,6 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public final class PlayerDiggingListener {
 
@@ -58,7 +58,7 @@ public final class PlayerDiggingListener {
                 // Refresh block on player screen in case it had special data (like a sign)
                 var registry = diggingResult.block().registry();
                 if (registry.isBlockEntity()) {
-                    final NBTCompound data = BlockUtils.extractClientNbt(diggingResult.block());
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
                     player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }

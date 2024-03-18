@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -16,10 +17,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTReader;
-import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -41,7 +41,7 @@ public final class NetworkBuffer {
     public static final Type<Long> VAR_LONG = NetworkBufferTypes.VAR_LONG;
     public static final Type<byte[]> RAW_BYTES = NetworkBufferTypes.RAW_BYTES;
     public static final Type<String> STRING = NetworkBufferTypes.STRING;
-    public static final Type<NBT> NBT = NetworkBufferTypes.NBT;
+    public static final Type<BinaryTag> NBT = NetworkBufferTypes.NBT;
     public static final Type<Point> BLOCK_POSITION = NetworkBufferTypes.BLOCK_POSITION;
     public static final Type<Component> COMPONENT = NetworkBufferTypes.COMPONENT;
     public static final Type<Component> JSON_COMPONENT = NetworkBufferTypes.JSON_COMPONENT;
@@ -79,8 +79,8 @@ public final class NetworkBuffer {
     int writeIndex;
     int readIndex;
 
-    NBTWriter nbtWriter;
-    NBTReader nbtReader;
+    DataOutput nbtWriter;
+    DataInput nbtReader;
 
     public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);

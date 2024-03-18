@@ -1,20 +1,19 @@
 package net.minestom.server.item.armor;
 
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class TrimManager {
     private final Set<TrimMaterial> trimMaterials;
     private final Set<TrimPattern> trimPatterns;
-    private NBTCompound trimMaterialCache = null;
-    private NBTCompound trimPatternCache = null;
+    private CompoundBinaryTag trimMaterialCache = null;
+    private CompoundBinaryTag trimPatternCache = null;
 
     public TrimManager() {
         this.trimMaterials = new HashSet<>();
@@ -30,38 +29,28 @@ public class TrimManager {
     }
 
 
-    public NBTCompound getTrimMaterialNBT() {
+    public CompoundBinaryTag getTrimMaterialNBT() {
         if (trimMaterialCache == null) {
-            var trimMaterials = this.trimMaterials.stream()
-                    .map((trimMaterial) -> NBT.Compound(Map.of(
-                            "id", NBT.Int(trimMaterial.id()),
-                            "name", NBT.String(trimMaterial.name()),
-                            "element", trimMaterial.asNBT()
-                    )))
-                    .toList();
-
-            trimMaterialCache = NBT.Compound(Map.of(
-                    "type", NBT.String("minecraft:trim_material"),
-                    "value", NBT.List(NBTType.TAG_Compound, trimMaterials)
-            ));
+            ListBinaryTag.Builder<CompoundBinaryTag> entries = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
+            for (TrimMaterial trimMaterial : this.trimMaterials)
+                entries.add(trimMaterial.asNBT());
+            trimMaterialCache = CompoundBinaryTag.builder()
+                    .putString("type", "minecraft:trim_material")
+                    .put("value", entries.build())
+                    .build();
         }
         return trimMaterialCache;
     }
 
-    public NBTCompound getTrimPatternNBT() {
+    public CompoundBinaryTag getTrimPatternNBT() {
         if (trimPatternCache == null) {
-            var trimPatterns = this.trimPatterns.stream()
-                    .map((trimPattern) -> NBT.Compound(Map.of(
-                            "id", NBT.Int(trimPattern.id()),
-                            "name", NBT.String(trimPattern.name()),
-                            "element", trimPattern.asNBT()
-                    )))
-                    .toList();
-
-            trimPatternCache = NBT.Compound(Map.of(
-                    "type", NBT.String("minecraft:trim_pattern"),
-                    "value", NBT.List(NBTType.TAG_Compound, trimPatterns)
-            ));
+            ListBinaryTag.Builder<CompoundBinaryTag> entries = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
+            for (TrimPattern trimPattern : this.trimPatterns)
+                entries.add(trimPattern.asNBT());
+            trimPatternCache = CompoundBinaryTag.builder()
+                    .putString("type", "minecraft:trim_pattern")
+                    .put("value", entries.build())
+                    .build();
         }
 
         return trimPatternCache;

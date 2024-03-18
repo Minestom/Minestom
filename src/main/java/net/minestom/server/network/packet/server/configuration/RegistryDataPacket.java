@@ -1,19 +1,19 @@
 package net.minestom.server.network.packet.server.configuration;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import static net.minestom.server.network.NetworkBuffer.NBT;
 
-public record RegistryDataPacket(@NotNull NBTCompound data) implements ServerPacket {
+public record RegistryDataPacket(@NotNull CompoundBinaryTag data) implements ServerPacket {
 
     public RegistryDataPacket(@NotNull NetworkBuffer buffer) {
-        this((NBTCompound) buffer.read(NBT));
+        this((CompoundBinaryTag) buffer.read(NBT));
     }
 
     @Override
