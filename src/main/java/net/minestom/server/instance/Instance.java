@@ -684,10 +684,20 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         this.worldBorder.update();
     }
 
+    /**
+     * Gets the current weather on this instance
+     *
+     * @return the current weather
+     */
     public @NotNull Weather getWeather() {
         return weather;
     }
 
+    /**
+     * Sets the weather on this instance
+     *
+     * @param weather the new weather
+     */
     public void setWeather(@NotNull Weather weather) {
         Weather previousWeather = this.weather;
         this.weather = weather;
