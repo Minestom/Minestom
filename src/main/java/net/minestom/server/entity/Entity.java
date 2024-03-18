@@ -891,6 +891,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 if (this instanceof Player player) {
                     instance.getWorldBorder().init(player);
                     player.sendPacket(instance.createTimePacket());
+                    player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 spawn();

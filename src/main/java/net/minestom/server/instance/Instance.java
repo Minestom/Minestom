@@ -83,6 +83,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
 
+    // Weather of the instance
+    private Weather weather = new Weather(false, 0, 0);
+    private boolean isRaining;
+    private float rainLevel;
+    private float thunderLevel;
+
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
@@ -676,6 +682,18 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.lastTickAge = time;
         }
         this.worldBorder.update();
+    }
+
+    public @NotNull Weather getWeather() {
+        return weather;
+    }
+
+    public void setWeather(@NotNull Weather weather) {
+        Weather previousWeather = this.weather;
+        this.weather = weather;
+        if (weather.isRaining() != previousWeather.isRaining()) sendGroupedPacket(weather.createIsRainingPacket());
+        if (weather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(weather.createRainLevelPacket());
+        if (weather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(weather.createThunderLevelPacket());
     }
 
     @Override
