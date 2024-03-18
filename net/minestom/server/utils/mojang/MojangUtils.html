@@ -108,10 +108,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable com.google.gson.JsonObject</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromUsername(java.lang.String)" class="member-name-link">fromUsername</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a <code>JsonObject</code> with the response from the mojang API</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable com.google.gson.JsonObject</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromUuid(java.lang.String)" class="member-name-link">fromUuid</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uuid)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a <code>JsonObject</code> with the response from the mojang API</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable com.google.gson.JsonObject</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromUuid(java.util.UUID)" class="member-name-link">fromUuid</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a <code>JsonObject</code> with the response from the mojang API</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getUsername(java.util.UUID)" class="member-name-link">getUsername</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;playerUUID)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a player's username from their UUID</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getUUID(java.lang.String)" class="member-name-link">getUUID</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Gets a player's UUID from their username</div>
+</div>
 </div>
 </div>
 </div>
@@ -144,12 +163,71 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="getUUID(java.lang.String)">
+<h3>getUUID</h3>
+<div class="member-signature"><span class="annotations">@Blocking
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></span>&nbsp;<span class="element-name">getUUID</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span>
+                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Gets a player's UUID from their username</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - The players username</dd>
+<dt>Returns:</dt>
+<dd>The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - with text detailing the exception</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getUsername(java.util.UUID)">
+<h3>getUsername</h3>
+<div class="member-signature"><span class="annotations">@Blocking
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getUsername</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;playerUUID)</span>
+                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Gets a player's username from their UUID</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>playerUUID</code> - The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> of the player</dd>
+<dt>Returns:</dt>
+<dd>The player's username</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - with text detailing the exception</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="fromUuid(java.util.UUID)">
+<h3>fromUuid</h3>
+<div class="member-signature"><span class="annotations">@Blocking
+@Nullable
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@Nullable com.google.gson.JsonObject</span>&nbsp;<span class="element-name">fromUuid</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</span></div>
+<div class="block">Gets a <code>JsonObject</code> with the response from the mojang API</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>uuid</code> - The UUID as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a></dd>
+<dt>Returns:</dt>
+<dd>The <code>JsonObject</code> or <code>null</code> if the mojang API is down or the UUID is invalid</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="fromUuid(java.lang.String)">
 <h3>fromUuid</h3>
 <div class="member-signature"><span class="annotations">@Blocking
 @Nullable
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@Nullable com.google.gson.JsonObject</span>&nbsp;<span class="element-name">fromUuid</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;uuid)</span></div>
+<div class="block">Gets a <code>JsonObject</code> with the response from the mojang API</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>uuid</code> - The UUID as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a></dd>
+<dt>Returns:</dt>
+<dd>The <code>JsonObject</code> or <code>null</code> if the mojang API is down or the UUID is invalid</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -159,6 +237,13 @@ loadScripts(document, 'script');</script>
 @Nullable
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@Nullable com.google.gson.JsonObject</span>&nbsp;<span class="element-name">fromUsername</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Gets a <code>JsonObject</code> with the response from the mojang API</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - The username as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a></dd>
+<dt>Returns:</dt>
+<dd>The <code>JsonObject</code> or <code>null</code> if the mojang API is down or the username is invalid</dd>
+</dl>
 </section>
 </li>
 </ul>
