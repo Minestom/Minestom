@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -14,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
                                 @NotNull Pos position, float headRot, int data,
-                                short velocityX, short velocityY, short velocityZ) implements ServerPacket {
+                                short velocityX, short velocityY, short velocityZ) implements ServerPacket.Play {
     public SpawnEntityPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(UUID), reader.read(VAR_INT),
                 new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
@@ -44,10 +42,7 @@ public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.SPAWN_ENTITY;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.SPAWN_ENTITY;
     }
 }

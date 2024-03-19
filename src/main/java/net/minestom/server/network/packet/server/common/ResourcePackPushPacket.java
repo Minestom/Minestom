@@ -4,7 +4,7 @@ import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.PacketUtils;
@@ -24,7 +24,7 @@ public record ResourcePackPushPacket(
         @NotNull String hash,
         boolean forced,
         @Nullable Component prompt
-) implements ComponentHoldingServerPacket {
+) implements ServerPacket.ComponentHolding {
     public ResourcePackPushPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(UUID), reader.read(STRING), reader.read(STRING),
                 reader.read(BOOLEAN), reader.readOptional(COMPONENT));

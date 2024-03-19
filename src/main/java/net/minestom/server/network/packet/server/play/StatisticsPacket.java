@@ -1,18 +1,16 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.statistic.StatisticCategory;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record StatisticsPacket(@NotNull List<Statistic> statistics) implements ServerPacket {
+public record StatisticsPacket(@NotNull List<Statistic> statistics) implements ServerPacket.Play {
     public static final int MAX_ENTRIES = 16384;
 
     public StatisticsPacket {
@@ -29,11 +27,8 @@ public record StatisticsPacket(@NotNull List<Statistic> statistics) implements S
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.STATISTICS;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.STATISTICS;
     }
 
     public record Statistic(@NotNull StatisticCategory category,

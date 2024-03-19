@@ -1,12 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.play.data.DeathLocation;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -16,7 +14,7 @@ public record RespawnPacket(
         long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, DeathLocation deathLocation,
         int portalCooldown, int copyData
-) implements ServerPacket {
+) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
     public static final int COPY_ATTRIBUTES = 0x1;
     public static final int COPY_METADATA = 0x2;
@@ -46,10 +44,7 @@ public record RespawnPacket(
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.RESPAWN;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.RESPAWN;
     }
 }

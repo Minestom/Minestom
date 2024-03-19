@@ -1,17 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements ServerPacket {
+public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements ServerPacket.Play {
     public static final int MAX_ENTRIES = Short.MAX_VALUE;
 
     public DestroyEntitiesPacket {
@@ -32,10 +30,7 @@ public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.DESTROY_ENTITIES;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.DESTROY_ENTITIES;
     }
 }

@@ -1,15 +1,13 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket {
+public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket.Play {
     public UnloadChunkPacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
@@ -26,11 +24,8 @@ public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket 
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.UNLOAD_CHUNK;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.UNLOAD_CHUNK;
     }
 
     private static UnloadChunkPacket read(@NotNull NetworkBuffer reader) {

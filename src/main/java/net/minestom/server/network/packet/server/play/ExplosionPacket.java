@@ -1,12 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +16,7 @@ public record ExplosionPacket(double x, double y, double z, float radius,
                               @NotNull BlockInteraction blockInteraction,
                               int smallParticleId, byte @NotNull [] smallParticleData,
                               int largeParticleId, byte @NotNull [] largeParticleData,
-                              @NotNull String soundName, boolean hasFixedSoundRange, float soundRange) implements ServerPacket {
+                              @NotNull String soundName, boolean hasFixedSoundRange, float soundRange) implements ServerPacket.Play {
     private static @NotNull ExplosionPacket fromReader(@NotNull NetworkBuffer reader) {
         double x = reader.read(DOUBLE), y = reader.read(DOUBLE), z = reader.read(DOUBLE);
         float radius = reader.read(FLOAT);
@@ -107,11 +105,8 @@ public record ExplosionPacket(double x, double y, double z, float radius,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.EXPLOSION;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.EXPLOSION;
     }
 
     public enum BlockInteraction {
