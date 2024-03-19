@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -23,16 +21,6 @@ public record DisconnectPacket(@NotNull Component message) implements ServerPack
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(COMPONENT, message);
-    }
-
-    @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_DISCONNECT;
-            case PLAY -> ServerPacketIdentifier.DISCONNECT;
-            default ->
-                    PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
-        };
     }
 
     @Override
