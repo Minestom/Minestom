@@ -79,12 +79,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;</code>, <code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></dd>
+<dd><code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;</code>, <code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">TeamsPacket</span>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName, <a href="TeamsPacket.Action.html" title="interface in net.minestom.server.network.packet.server.play">TeamsPacket.Action</a>&nbsp;action)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
-implements <a href="../ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a></span></div>
+implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a>, <a href="../ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a></span></div>
 <div class="block">The packet creates or updates teams</div>
 </section>
 <section class="summary">
@@ -127,6 +127,9 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <div class="col-second odd-row-color"><code><a href="TeamsPacket.UpdateTeamAction.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">TeamsPacket.UpdateTeamAction</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
+<div class="inherited-list">
+<h2 id="nested-classes-inherited-from-class-net.minestom.server.network.packet.server.ServerPacket">Nested classes/interfaces inherited from interface&nbsp;net.minestom.server.network.packet.server.<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></h2>
+<code><a href="../ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a>, <a href="../ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a>, <a href="../ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a>, <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a>, <a href="../ServerPacket.Status.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Status</a></code></div>
 </section>
 </li>
 <!-- =========== FIELD SUMMARY =========== -->
@@ -193,15 +196,15 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getId(net.minestom.server.network.ConnectionState)" class="member-name-link">getId</a><wbr>(@NotNull <a href="../../../ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a>&nbsp;state)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the identifier of the packet</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the identifier of the packet</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#teamName()" class="member-name-link">teamName</a>()</code></div>
@@ -225,6 +228,9 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.adventure.ComponentHolder">Methods inherited from interface&nbsp;net.minestom.server.adventure.<a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a></h3>
 <code><a href="../../../../adventure/ComponentHolder.html#visitComponents(java.util.function.Consumer)">visitComponents</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-net.minestom.server.network.packet.server.ServerPacket">Methods inherited from interface&nbsp;net.minestom.server.network.packet.server.<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></h3>
+<code><a href="../ServerPacket.html#getId(net.minestom.server.network.ConnectionState)">getId</a></code></div>
 </section>
 </li>
 </ul>
@@ -332,14 +338,13 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 </section>
 </li>
 <li>
-<section class="detail" id="getId(net.minestom.server.network.ConnectionState)">
-<h3>getId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getId</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a>&nbsp;state)</span></div>
+<section class="detail" id="playId()">
+<h3>playId</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">playId</span>()</div>
 <div class="block">Gets the identifier of the packet</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../ServerPacket.html#getId(net.minestom.server.network.ConnectionState)">getId</a></code>&nbsp;in interface&nbsp;<code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></dd>
+<dd><code><a href="../ServerPacket.Play.html#playId()">playId</a></code>&nbsp;in interface&nbsp;<code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 <dt>Returns:</dt>
 <dd>the identifier</dd>
 </dl>
