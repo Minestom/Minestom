@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
                               int villagerLevel, int experience,
-                              boolean regularVillager, boolean canRestock) implements ServerPacket {
+                              boolean regularVillager, boolean canRestock) implements ServerPacket.Play {
     public static final int MAX_TRADES = Short.MAX_VALUE;
 
     public TradeListPacket {
@@ -38,11 +36,8 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.TRADE_LIST;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.TRADE_LIST;
     }
 
     public record Trade(ItemStack inputItem1, ItemStack result,

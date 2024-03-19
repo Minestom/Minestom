@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -13,7 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
-                                    @Nullable NBTCompound data) implements ServerPacket {
+                                    @Nullable NBTCompound data) implements ServerPacket.Play {
     public BlockEntityDataPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BLOCK_POSITION), reader.read(VAR_INT), (NBTCompound) reader.read(NBT));
     }
@@ -31,10 +29,7 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.BLOCK_ENTITY_DATA;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.BLOCK_ENTITY_DATA;
     }
 }

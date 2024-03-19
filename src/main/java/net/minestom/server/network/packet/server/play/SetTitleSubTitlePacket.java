@@ -1,12 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -15,7 +13,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record SetTitleSubTitlePacket(@NotNull Component subtitle) implements ComponentHoldingServerPacket {
+public record SetTitleSubTitlePacket(@NotNull Component subtitle) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public SetTitleSubTitlePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(COMPONENT));
     }
@@ -26,11 +24,8 @@ public record SetTitleSubTitlePacket(@NotNull Component subtitle) implements Com
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.SET_TITLE_SUBTITLE;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.SET_TITLE_SUBTITLE;
     }
 
     @Override

@@ -1,17 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EffectPacket(int effectId, Point position, int data,
-                           boolean disableRelativeVolume) implements ServerPacket {
+                           boolean disableRelativeVolume) implements ServerPacket.Play {
     public EffectPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(BLOCK_POSITION), reader.read(INT), reader.read(BOOLEAN));
     }
@@ -25,10 +23,7 @@ public record EffectPacket(int effectId, Point position, int data,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.EFFECT;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.EFFECT;
     }
 }

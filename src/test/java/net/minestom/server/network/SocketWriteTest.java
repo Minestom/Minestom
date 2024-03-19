@@ -16,26 +16,26 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SocketWriteTest {
 
-    record IntPacket(int value) implements ServerPacket {
+    record IntPacket(int value) implements ServerPacket.Play {
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(INT, value);
         }
 
         @Override
-        public int getId(@NotNull ConnectionState state) {
+        public int playId() {
             return 1;
         }
     }
 
-    record CompressiblePacket(String value) implements ServerPacket {
+    record CompressiblePacket(String value) implements ServerPacket.Play {
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(STRING, value);
         }
 
         @Override
-        public int getId(@NotNull ConnectionState state) {
+        public int playId() {
             return 1;
         }
     }

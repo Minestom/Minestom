@@ -1,16 +1,14 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record SelectAdvancementTabPacket(@Nullable String identifier) implements ServerPacket {
+public record SelectAdvancementTabPacket(@Nullable String identifier) implements ServerPacket.Play {
     public SelectAdvancementTabPacket(@NotNull NetworkBuffer reader) {
         this(reader.readOptional(STRING));
     }
@@ -21,10 +19,7 @@ public record SelectAdvancementTabPacket(@Nullable String identifier) implements
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
     }
 }
