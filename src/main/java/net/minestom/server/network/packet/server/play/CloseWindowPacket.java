@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record CloseWindowPacket(byte windowId) implements ServerPacket.Play.Play {
+public record CloseWindowPacket(byte windowId) implements ServerPacket.Play {
     public CloseWindowPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE));
     }

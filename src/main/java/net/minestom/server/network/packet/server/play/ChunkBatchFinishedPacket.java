@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ChunkBatchFinishedPacket(int batchSize) implements ServerPacket.Play.Play {
+public record ChunkBatchFinishedPacket(int batchSize) implements ServerPacket.Play {
     public ChunkBatchFinishedPacket(@NotNull NetworkBuffer buffer) {
         this(buffer.read(VAR_INT));
     }

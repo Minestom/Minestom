@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record ClearTitlesPacket(boolean reset) implements ServerPacket.Play.Play {
+public record ClearTitlesPacket(boolean reset) implements ServerPacket.Play {
     public ClearTitlesPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BOOLEAN));
     }

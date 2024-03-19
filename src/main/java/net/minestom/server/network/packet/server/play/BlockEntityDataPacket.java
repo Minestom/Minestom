@@ -11,7 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
-                                    @Nullable NBTCompound data) implements ServerPacket.Play.Play {
+                                    @Nullable NBTCompound data) implements ServerPacket.Play {
     public BlockEntityDataPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BLOCK_POSITION), reader.read(VAR_INT), (NBTCompound) reader.read(NBT));
     }

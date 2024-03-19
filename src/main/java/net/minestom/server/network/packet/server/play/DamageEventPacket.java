@@ -20,7 +20,7 @@ import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
  * @param sourcePos      null if there is no source position, otherwise the position of the source
  */
 public record DamageEventPacket(int targetEntityId, int damageTypeId, int sourceEntityId, int sourceDirectId,
-                                @Nullable Point sourcePos) implements ServerPacket.Play.Play {
+                                @Nullable Point sourcePos) implements ServerPacket.Play {
 
     public DamageEventPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readOptional(VECTOR3D));

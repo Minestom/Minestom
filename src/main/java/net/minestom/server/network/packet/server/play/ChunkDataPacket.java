@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 
 public record ChunkDataPacket(int chunkX, int chunkZ,
                               @NotNull ChunkData chunkData,
-                              @NotNull LightData lightData) implements ServerPacket.Play.Play {
+                              @NotNull LightData lightData) implements ServerPacket.Play {
     public ChunkDataPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(INT),
                 new ChunkData(reader),

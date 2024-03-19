@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record CraftRecipeResponse(byte windowId, String recipe) implements ServerPacket.Play.Play {
+public record CraftRecipeResponse(byte windowId, String recipe) implements ServerPacket.Play {
     public CraftRecipeResponse(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(STRING));
     }

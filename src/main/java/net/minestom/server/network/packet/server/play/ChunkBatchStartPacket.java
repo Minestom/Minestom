@@ -5,7 +5,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-public record ChunkBatchStartPacket() implements ServerPacket.Play.Play {
+public record ChunkBatchStartPacket() implements ServerPacket.Play {
     public ChunkBatchStartPacket(@NotNull NetworkBuffer buffer) {
         this();
     }

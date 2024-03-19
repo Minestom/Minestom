@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record AcknowledgeBlockChangePacket(int sequence) implements ServerPacket.Play.Play {
+public record AcknowledgeBlockChangePacket(int sequence) implements ServerPacket.Play {
     public AcknowledgeBlockChangePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
     }

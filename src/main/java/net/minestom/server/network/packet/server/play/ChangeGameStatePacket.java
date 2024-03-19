@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket.Play.Play {
+public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket.Play {
     public ChangeGameStatePacket(@NotNull NetworkBuffer reader) {
         this(Reason.values()[reader.read(BYTE)], reader.read(FLOAT));
     }

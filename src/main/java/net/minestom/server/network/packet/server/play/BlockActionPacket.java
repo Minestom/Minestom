@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
-                                byte actionParam, int blockId) implements ServerPacket.Play.Play {
+                                byte actionParam, int blockId) implements ServerPacket.Play {
     public BlockActionPacket(Point blockPosition, byte actionId, byte actionParam, Block block) {
         this(blockPosition, actionId, actionParam, block.id());
     }

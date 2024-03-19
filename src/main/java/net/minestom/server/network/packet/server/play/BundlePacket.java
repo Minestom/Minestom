@@ -5,7 +5,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-public record BundlePacket() implements ServerPacket.Play.Play {
+public record BundlePacket() implements ServerPacket.Play {
     public BundlePacket(@NotNull NetworkBuffer reader) {
         this();
     }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record CollectItemPacket(int collectedEntityId, int collectorEntityId, int pickupItemCount)
-        implements ServerPacket.Play.Play {
+        implements ServerPacket.Play {
     public CollectItemPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT));
     }

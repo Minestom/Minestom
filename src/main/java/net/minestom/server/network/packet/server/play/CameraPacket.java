@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record CameraPacket(int cameraId) implements ServerPacket.Play.Play {
+public record CameraPacket(int cameraId) implements ServerPacket.Play {
     public CameraPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
     }

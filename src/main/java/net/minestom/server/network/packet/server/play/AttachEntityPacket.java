@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record AttachEntityPacket(int attachedEntityId, int holdingEntityId) implements ServerPacket.Play.Play {
+public record AttachEntityPacket(int attachedEntityId, int holdingEntityId) implements ServerPacket.Play {
     public AttachEntityPacket(@NotNull Entity attachedEntity, @Nullable Entity holdingEntity) {
         this(attachedEntity.getEntityId(), holdingEntity != null ? holdingEntity.getEntityId() : -1);
     }
