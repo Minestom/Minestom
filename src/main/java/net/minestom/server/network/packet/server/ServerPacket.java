@@ -15,8 +15,8 @@ import java.util.List;
  * <p>
  * Packets are value-based, and should therefore not be reliant on identity.
  */
-public sealed interface ServerPacket extends NetworkBuffer.Writer, SendablePacket
-        permits ServerPacket.Configuration, ServerPacket.Status, ServerPacket.Login, ServerPacket.Play, ServerPacket.ComponentHolding {
+public sealed interface ServerPacket extends NetworkBuffer.Writer, SendablePacket permits
+        ServerPacket.Configuration, ServerPacket.Status, ServerPacket.Login, ServerPacket.Play {
 
     /**
      * Gets the id of this packet.
@@ -59,6 +59,6 @@ public sealed interface ServerPacket extends NetworkBuffer.Writer, SendablePacke
         int playId();
     }
 
-    non-sealed interface ComponentHolding extends ServerPacket, ComponentHolder<ServerPacket> {
+    interface ComponentHolding extends ComponentHolder<ServerPacket> {
     }
 }
