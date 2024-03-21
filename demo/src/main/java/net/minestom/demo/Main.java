@@ -75,6 +75,7 @@ public class Main {
         commandManager.register(new SetEntityType());
         commandManager.register(new RelightCommand());
         commandManager.register(new KillCommand());
+        commandManager.register(new WeatherCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

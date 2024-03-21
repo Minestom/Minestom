@@ -1,15 +1,13 @@
 package net.minestom.server.network.packet.server.common;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.LONG;
 
-public record KeepAlivePacket(long id) implements ServerPacket {
+public record KeepAlivePacket(long id) implements ServerPacket.Configuration, ServerPacket.Play {
     public KeepAlivePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(LONG));
     }
@@ -20,11 +18,12 @@ public record KeepAlivePacket(long id) implements ServerPacket {
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_KEEP_ALIVE;
-            case PLAY -> ServerPacketIdentifier.KEEP_ALIVE;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
-        };
+    public int configurationId() {
+        return ServerPacketIdentifier.CONFIGURATION_KEEP_ALIVE;
+    }
+
+    @Override
+    public int playId() {
+        return ServerPacketIdentifier.KEEP_ALIVE;
     }
 }

@@ -1,17 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
+public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket.Play {
     public VehicleMovePacket(@NotNull NetworkBuffer reader) {
         this(new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
                 reader.read(FLOAT), reader.read(FLOAT)));
@@ -27,10 +25,7 @@ public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.VEHICLE_MOVE;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.VEHICLE_MOVE;
     }
 }

@@ -1,12 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.scoreboard.Sidebar;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +20,7 @@ public record UpdateScorePacket(
         int score,
         @Nullable Component displayName,
         @Nullable Sidebar.NumberFormat numberFormat
-) implements ServerPacket {
+) implements ServerPacket.Play {
     public UpdateScorePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
                 reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
@@ -38,10 +36,7 @@ public record UpdateScorePacket(
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.UPDATE_SCORE;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.UPDATE_SCORE;
     }
 }

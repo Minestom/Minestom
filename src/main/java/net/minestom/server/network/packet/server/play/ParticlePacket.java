@@ -1,19 +1,17 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, @Nullable ParticleData data) implements ServerPacket {
+public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, @Nullable ParticleData data) implements ServerPacket.Play {
     private ParticlePacket(ParticlePacket copy) {
         this(copy.particleId, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount, copy.data);
     }
@@ -66,10 +64,7 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.PARTICLE;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.PARTICLE;
     }
 }

@@ -1,19 +1,17 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityVelocityPacket(int entityId, short velocityX, short velocityY,
-                                   short velocityZ) implements ServerPacket {
+                                   short velocityZ) implements ServerPacket.Play {
     public EntityVelocityPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT));
     }
@@ -36,10 +34,7 @@ public record EntityVelocityPacket(int entityId, short velocityX, short velocity
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.ENTITY_VELOCITY;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.ENTITY_VELOCITY;
     }
 }
