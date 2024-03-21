@@ -33,6 +33,7 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -118,6 +119,36 @@ public class PlayerSocketConnection extends PlayerConnection {
                     });
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
+            disconnect();
+        } catch (IllegalStateException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            try {
+                final ByteBuffer buffer = ByteBuffer.wrap(("""
+                        HTTP/1.1 418 I'm a teapot
+                        Date: Wed, 21 Mar 2024 00:00:00 GMT
+                        Server: Apache/2.4.46 (Unix)
+                        Content-Length: 275
+                        Content-Type: text/html; charset=UTF-8
+
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Error 418: I'm a teapot</title>
+                        </head>
+                        <body>
+                            <h1>Error 418</h1>
+                            <p>I'm a teapot. The requested entity body is short and stout.</p>
+                            <p>Here is my handle, here is my spout. Tip me over and pour me out.</p>
+                        </body>
+                        </html>
+                        """).getBytes(StandardCharsets.UTF_8));
+                while (buffer.remaining() > 0) {
+                    channel.write(buffer);
+                }
+                // Ignore exception because this is a joke
+            } catch (Exception ex) {
+                MinecraftServer.getExceptionManager().handleException(ex);
+            }
             disconnect();
         }
     }
