@@ -94,7 +94,7 @@ final class SchedulerImpl implements Scheduler {
         try {
             schedule = task.task().get();
         } catch (Throwable t) {
-            MinecraftServer.LOGGER.error("Error in scheduled task", t);
+            MinecraftServer.getExceptionManager().handleException(new RuntimeException("Exception in scheduled task", t));
             schedule = TaskSchedule.stop();
         }
 
