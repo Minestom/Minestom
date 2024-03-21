@@ -189,15 +189,12 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
-                                                     BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException, IllegalStateException {
+                                                     BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
         BinaryBuffer remaining = null;
         ByteBuffer pool = ObjectPool.PACKET_POOL.get();
         while (readBuffer.readableBytes() > 0) {
             final var beginMark = readBuffer.mark();
             try {
-                // Check for http request
-                final byte firstByte = readBuffer.readBytes(1)[0];
-                if (firstByte == 'G') throw new IllegalStateException("I'm a teapot!");
                 // Ensure that the buffer contains the full packet (or wait for next socket read)
                 final int packetLength = readBuffer.readVarInt();
                 final int readerStart = readBuffer.readerOffset();

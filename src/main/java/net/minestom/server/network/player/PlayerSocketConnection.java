@@ -105,6 +105,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                     (id, payload) -> {
                         if (!isOnline())
                             return; // Prevent packet corruption
+                        // Check for HTTP connection
+                        if (getConnectionState() == ConnectionState.HANDSHAKE && id == 0x45)
+                            throw new IllegalStateException("I'm a teapot!");
                         ClientPacket packet = null;
                         try {
                             packet = packetProcessor.process(this, id, payload);
@@ -120,8 +123,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             disconnect();
-        } catch (IllegalStateException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+        } catch (RuntimeException e) {
+            if (!e.getMessage().contains("I'm a teapot!"))
+                throw e;
+
+            LOGGER.warn("Cannot brew coffee as I am a teapot!");
             try {
                 final ByteBuffer buffer = ByteBuffer.wrap(("""
                         HTTP/1.1 418 I'm a teapot
