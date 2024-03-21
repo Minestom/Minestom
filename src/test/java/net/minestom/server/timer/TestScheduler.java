@@ -1,10 +1,12 @@
 package net.minestom.server.timer;
 
+import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -138,5 +140,25 @@ public class TestScheduler {
         scheduler.process();
         Thread.sleep(250);
         assertTrue(result.get(), "Async task didn't get executed");
+    }
+
+    @Test
+    public void exceptionTask() {
+        MinecraftServer.init();
+        Scheduler scheduler = Scheduler.newScheduler();
+        scheduler.scheduleNextTick(() -> {
+            throw new RuntimeException("Test exception");
+        });
+
+        // This is a bit of a weird use case. I dont want this test to depend on the order the scheduler executes in
+        // so this is a guess that the first one wont be before all 100 of the ones scheduled below.
+        // Not great, but should be fine anyway.
+        AtomicInteger executed = new AtomicInteger(0);
+        for (int i = 0; i < 100; i++) {
+            scheduler.scheduleNextTick(executed::incrementAndGet);
+        }
+
+        assertDoesNotThrow(scheduler::processTick);
+        assertEquals(100, executed.get());
     }
 }
