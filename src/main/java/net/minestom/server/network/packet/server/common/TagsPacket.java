@@ -2,12 +2,10 @@ package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +15,8 @@ import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket {
+public record TagsPacket(
+        @NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket.Configuration, ServerPacket.Play {
     @ApiStatus.Internal
     public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
 
@@ -49,12 +48,13 @@ public record TagsPacket(@NotNull Map<Tag.BasicType, List<Tag>> tagsMap) impleme
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_TAGS;
-            case PLAY -> ServerPacketIdentifier.TAGS;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
-        };
+    public int configurationId() {
+        return ServerPacketIdentifier.CONFIGURATION_TAGS;
+    }
+
+    @Override
+    public int playId() {
+        return ServerPacketIdentifier.TAGS;
     }
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {

@@ -1,10 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -12,7 +10,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record InitializeWorldBorderPacket(double x, double z,
                                           double oldDiameter, double newDiameter, long speed,
                                           int portalTeleportBoundary, int warningTime,
-                                          int warningBlocks) implements ServerPacket {
+                                          int warningBlocks) implements ServerPacket.Play {
     public InitializeWorldBorderPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(DOUBLE), reader.read(DOUBLE),
                 reader.read(DOUBLE), reader.read(DOUBLE),
@@ -32,10 +30,7 @@ public record InitializeWorldBorderPacket(double x, double z,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.INITIALIZE_WORLD_BORDER;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.INITIALIZE_WORLD_BORDER;
     }
 }

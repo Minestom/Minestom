@@ -3,12 +3,10 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
 import net.minestom.server.crypto.SignedMessageBody;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +25,7 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
                                       SignedMessageBody.@NotNull Packed messageBody,
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,
-                                      @Nullable Component msgTypeTarget) implements ComponentHoldingServerPacket {
+                                      @Nullable Component msgTypeTarget) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public PlayerChatMessagePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(UUID), reader.read(VAR_INT), reader.readOptional(r -> r.readBytes(256)),
                 new SignedMessageBody.Packed(reader),
@@ -50,11 +48,8 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.PLAYER_CHAT;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.PLAYER_CHAT;
     }
 
     @Override

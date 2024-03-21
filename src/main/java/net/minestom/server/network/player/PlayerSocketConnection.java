@@ -363,8 +363,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     private void writeServerPacketSync(ServerPacket serverPacket, boolean compressed) {
         final Player player = getPlayer();
         if (player != null) {
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ComponentHoldingServerPacket) {
-                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
+            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ServerPacket.ComponentHolding) {
+                serverPacket = ((ServerPacket.ComponentHolding) serverPacket).copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
         }

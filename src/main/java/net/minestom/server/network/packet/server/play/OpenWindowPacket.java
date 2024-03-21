@@ -1,12 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -17,7 +15,7 @@ import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record OpenWindowPacket(int windowId, int windowType,
-                               @NotNull Component title) implements ComponentHoldingServerPacket {
+                               @NotNull Component title) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public OpenWindowPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(COMPONENT));
     }
@@ -30,11 +28,8 @@ public record OpenWindowPacket(int windowId, int windowType,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.OPEN_WINDOW;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.OPEN_WINDOW;
     }
 
     @Override

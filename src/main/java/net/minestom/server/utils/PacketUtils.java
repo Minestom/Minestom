@@ -20,7 +20,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.*;
+import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
@@ -108,14 +111,14 @@ public final class PacketUtils {
 
     /**
      * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
-     * Note: {@link ComponentHoldingServerPacket}s are not translated inside a {@link CachedPacket}.
+     * Note: {@link ServerPacket.ComponentHolding}s are not translated inside a {@link CachedPacket}.
      *
      * @see CachedPacket#body(ConnectionState)
      * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
      */
     static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
         if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
-        if (!(packet instanceof ComponentHoldingServerPacket holder)) return ServerFlag.GROUPED_PACKET;
+        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return ServerFlag.GROUPED_PACKET;
         return !containsTranslatableComponents(holder);
     }
 
@@ -386,6 +389,7 @@ public final class PacketUtils {
 
     @ApiStatus.Internal
     public static int invalidPacketState(@NotNull Class<?> packetClass, @NotNull ConnectionState state, @NotNull ConnectionState... expected) {
+        assert expected.length > 0 : "Expected states cannot be empty: " + packetClass;
         StringBuilder expectedStr = new StringBuilder();
         for (ConnectionState connectionState : expected) {
             expectedStr.append(connectionState).append(", ");

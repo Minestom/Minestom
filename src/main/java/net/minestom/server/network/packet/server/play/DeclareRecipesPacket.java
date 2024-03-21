@@ -1,12 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.recipe.RecipeCategory;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +13,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implements ServerPacket {
+public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implements ServerPacket.Play {
     public static final int MAX_RECIPES = Short.MAX_VALUE;
     public static final int MAX_INGREDIENTS = 128;
 
@@ -51,11 +49,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.DECLARE_RECIPES;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.DECLARE_RECIPES;
     }
 
     public sealed interface DeclaredRecipe extends NetworkBuffer.Writer
