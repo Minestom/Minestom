@@ -77,6 +77,10 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
         return scheduleNextProcess(task, ExecutionType.SYNC);
     }
 
+    /**
+     * Implementation of {@link Executor}, proxies to {@link #scheduleNextTick(Runnable)}.
+     * @param command the task to execute on the next tick
+     */
     @Override
     default void execute(@NotNull Runnable command) {
         scheduleNextTick(command);
