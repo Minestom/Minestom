@@ -34,27 +34,6 @@ final class BlockLight implements Light {
         this.blockPalette = blockPalette;
     }
 
-    @ApiStatus.Internal
-    public void setInternalLighting(byte[] content) {
-        this.content = content;
-        this.isValidBorders = true;
-    }
-
-    @ApiStatus.Internal
-    public void setExternalLighting(byte[] content) {
-        this.contentPropagation = content;
-    }
-
-    @ApiStatus.Internal
-    public byte[] getInternalLighting() {
-        return content;
-    }
-
-    @ApiStatus.Internal
-    public byte[] getExternalLighting() {
-        return contentPropagation;
-    }
-
     @Override
     public Set<Point> flip() {
         if (this.contentPropagationSwap != null)

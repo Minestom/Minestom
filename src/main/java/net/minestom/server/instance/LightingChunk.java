@@ -43,7 +43,6 @@ public class LightingChunk extends DynamicChunk {
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
     boolean chunkLoaded = false;
     private int highestBlock;
-    private boolean initialLightingSent = false;
 
     enum LightType {
         SKY,
@@ -87,6 +86,16 @@ public class LightingChunk extends DynamicChunk {
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
+        // Invalidate nearby lighting chunks
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk chunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (chunk instanceof LightingChunk light) {
+                    System.out.println("Invalidating lighting chunk " + light.getChunkX() + " " + light.getChunkZ());
+                    light.invalidate();
+                }
+            }
+        }
     }
 
     private boolean checkSkyOcclusion(Block block) {
@@ -143,10 +152,6 @@ public class LightingChunk extends DynamicChunk {
     @Override
     protected void onLoad() {
         chunkLoaded = true;
-    }
-
-    public boolean isLightingCalculated() {
-        return initialLightingSent;
     }
 
     @Override
@@ -252,27 +257,15 @@ public class LightingChunk extends DynamicChunk {
                 }
             }
 
-            MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-                for (Chunk chunk : combined) {
-                    if (chunk instanceof LightingChunk light) {
-                        if (light.initialLightingSent) {
-                            light.lightCache.invalidate();
-                            light.chunkCache.invalidate();
-
-                            // Compute Lighting. This will ensure lighting is computed even with no players
-                            lightCache.body(ConnectionState.PLAY);
-                            light.sendLighting();
-
-                            light.sections.forEach(s -> {
-                                s.blockLight().setRequiresSend(true);
-                                s.skyLight().setRequiresSend(true);
-                            });
+            if (!combined.isEmpty()) {
+                MinecraftServer.getSchedulerManager().buildTask(() -> {
+                    for (Chunk chunk : combined) {
+                        if (chunk instanceof LightingChunk lighting) {
+                            lighting.sendLighting();
                         }
                     }
-                }
-
-                this.initialLightingSent = true;
-            });
+                }).schedule();
+            }
 
             return new LightData(skyMask, blockMask,
                     emptySkyMask, emptyBlockMask,
