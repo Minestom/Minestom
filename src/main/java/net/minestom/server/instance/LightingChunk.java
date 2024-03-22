@@ -10,8 +10,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
@@ -26,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
@@ -41,8 +40,14 @@ public class LightingChunk extends DynamicChunk {
 
     private int[] heightmap;
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
+    private LightData lightData;
+
     boolean chunkLoaded = false;
     private int highestBlock;
+
+    private final ReentrantLock packetGenerationLock = new ReentrantLock();
+
+    private int resendTimer = -1;
 
     enum LightType {
         SKY,
@@ -82,6 +87,7 @@ public class LightingChunk extends DynamicChunk {
     public void invalidate() {
         this.lightCache.invalidate();
         this.chunkCache.invalidate();
+        this.lightData = null;
     }
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
@@ -106,8 +112,7 @@ public class LightingChunk extends DynamicChunk {
                 if (neighborChunk == null) continue;
 
                 if (neighborChunk instanceof LightingChunk light) {
-                    light.lightCache.invalidate();
-                    light.chunkCache.invalidate();
+                    light.invalidate();
                 }
 
                 for (int k = -1; k <= 1; k++) {
@@ -185,71 +190,94 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     protected LightData createLightData() {
-        if (lightCache.isValid()) {
-            ServerPacket packet = lightCache.packet(ConnectionState.PLAY);
-            return ((UpdateLightPacket) packet).lightData();
+        packetGenerationLock.lock();
+        if (lightData != null) {
+            packetGenerationLock.unlock();
+            return lightData;
         }
 
-        synchronized (lightCache) {
-            BitSet skyMask = new BitSet();
-            BitSet blockMask = new BitSet();
-            BitSet emptySkyMask = new BitSet();
-            BitSet emptyBlockMask = new BitSet();
-            List<byte[]> skyLights = new ArrayList<>();
-            List<byte[]> blockLights = new ArrayList<>();
+        BitSet skyMask = new BitSet();
+        BitSet blockMask = new BitSet();
+        BitSet emptySkyMask = new BitSet();
+        BitSet emptyBlockMask = new BitSet();
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
 
-            Set<Chunk> combined = new HashSet<>();
-            int chunkMin = instance.getDimensionType().getMinY();
+        int chunkMin = instance.getDimensionType().getMinY();
+        Set<Chunk> collected = new HashSet<>();
 
-            int index = 0;
-            for (Section section : sections) {
-                boolean wasUpdatedBlock = false;
-                boolean wasUpdatedSky = false;
+        int index = 0;
+        for (Section section : sections) {
+            boolean wasUpdatedBlock = false;
+            boolean wasUpdatedSky = false;
 
-                if (section.blockLight().requiresUpdate()) {
-                    var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
-                    combined.addAll(needsSend);
-                    wasUpdatedBlock = true;
-                } else if (section.blockLight().requiresSend()) {
-                    wasUpdatedBlock = true;
-                }
+            if (section.blockLight().requiresUpdate()) {
+                var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
+                collected.addAll(needsSend);
+                wasUpdatedBlock = true;
+            } else if (section.blockLight().requiresSend()) {
+                wasUpdatedBlock = true;
+            }
 
-                if (section.skyLight().requiresUpdate()) {
-                    var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
-                    combined.addAll(needsSend);
-                    wasUpdatedSky = true;
-                } else if (section.skyLight().requiresSend()) {
-                    wasUpdatedSky = true;
-                }
+            if (section.skyLight().requiresUpdate()) {
+                var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
+                collected.addAll(needsSend);
+                wasUpdatedSky = true;
+            } else if (section.skyLight().requiresSend()) {
+                wasUpdatedSky = true;
+            }
 
-                index++;
+            index++;
 
-                final byte[] skyLight = section.skyLight().array();
-                final byte[] blockLight = section.blockLight().array();
-                final int sectionMaxY = index * 16 + chunkMin;
+            final byte[] skyLight = section.skyLight().array();
+            final byte[] blockLight = section.blockLight().array();
+            final int sectionMaxY = index * 16 + chunkMin;
 
-                if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestBlock + 16)) {
-                    if (skyLight.length != 0 && skyLight != emptyContent) {
-                        skyLights.add(skyLight);
-                        skyMask.set(index);
-                    } else {
-                        emptySkyMask.set(index);
-                    }
-                }
-
-                if (wasUpdatedBlock) {
-                    if (blockLight.length != 0 && blockLight != emptyContent) {
-                        blockLights.add(blockLight);
-                        blockMask.set(index);
-                    } else {
-                        emptyBlockMask.set(index);
-                    }
+            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestBlock + 16)) {
+                if (skyLight.length != 0 && skyLight != emptyContent) {
+                    skyLights.add(skyLight);
+                    skyMask.set(index);
+                } else {
+                    emptySkyMask.set(index);
                 }
             }
 
-            return new LightData(skyMask, blockMask,
-                    emptySkyMask, emptyBlockMask,
-                    skyLights, blockLights);
+            if (wasUpdatedBlock) {
+                if (blockLight.length != 0 && blockLight != emptyContent) {
+                    blockLights.add(blockLight);
+                    blockMask.set(index);
+                } else {
+                    emptyBlockMask.set(index);
+                }
+            }
+        }
+
+        this.lightData = new LightData(skyMask, blockMask,
+                emptySkyMask, emptyBlockMask,
+                skyLights, blockLights);
+
+        collected.forEach(chunk -> {
+            if (chunk instanceof LightingChunk lighting) {
+                lighting.resendTimer = 20;
+            }
+        });
+
+        packetGenerationLock.unlock();
+
+        return this.lightData;
+    }
+
+    @Override
+    public void tick(long time) {
+        super.tick(time);
+
+        if (resendTimer > 0) {
+            resendTimer--;
+            if (resendTimer == 0) {
+                relight(instance, List.of(this));
+                lightCache.body(ConnectionState.PLAY);
+                sendLighting();
+            }
         }
     }
 
@@ -317,8 +345,7 @@ public class LightingChunk extends DynamicChunk {
                         sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
                     }
 
-                    lighting.lightCache.invalidate();
-                    lighting.chunkCache.invalidate();
+                    lighting.invalidate();
                 }
             }
 
