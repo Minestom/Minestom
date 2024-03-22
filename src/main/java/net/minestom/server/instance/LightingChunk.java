@@ -86,16 +86,6 @@ public class LightingChunk extends DynamicChunk {
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
-        // Invalidate nearby lighting chunks
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                Chunk chunk = instance.getChunk(chunkX + i, chunkZ + j);
-                if (chunk instanceof LightingChunk light) {
-                    System.out.println("Invalidating lighting chunk " + light.getChunkX() + " " + light.getChunkZ());
-                    light.invalidate();
-                }
-            }
-        }
     }
 
     private boolean checkSkyOcclusion(Block block) {
@@ -255,16 +245,6 @@ public class LightingChunk extends DynamicChunk {
                         emptyBlockMask.set(index);
                     }
                 }
-            }
-
-            if (!combined.isEmpty()) {
-                MinecraftServer.getSchedulerManager().buildTask(() -> {
-                    for (Chunk chunk : combined) {
-                        if (chunk instanceof LightingChunk lighting) {
-                            lighting.sendLighting();
-                        }
-                    }
-                }).schedule();
             }
 
             return new LightData(skyMask, blockMask,
