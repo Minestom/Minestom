@@ -131,8 +131,6 @@ public class PlayerSocketConnection extends PlayerConnection {
             try {
                 final ByteBuffer buffer = ByteBuffer.wrap(("""
                         HTTP/1.1 418 I'm a teapot
-                        Date: Wed, 21 Mar 2024 00:00:00 GMT
-                        Server: Apache/2.4.46 (Unix)
                         Content-Length: 275
                         Content-Type: text/html; charset=UTF-8
 
