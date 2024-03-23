@@ -7,6 +7,8 @@ plugins {
 
 dependencies {
     implementation(rootProject)
+    // https://mvnrepository.com/artifact/org.jctools/jctools-core
+    implementation("org.jctools:jctools-core:4.0.3")
 
     runtimeOnly(libs.bundles.logback)
 }

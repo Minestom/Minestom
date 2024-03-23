@@ -1,7 +1,6 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
@@ -30,7 +29,7 @@ public final class ObjectPool<T> {
     private final Supplier<T> supplier;
     private final UnaryOperator<T> sanitizer;
 
-    ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+    public ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
         this.supplier = supplier;
         this.sanitizer = sanitizer;
     }

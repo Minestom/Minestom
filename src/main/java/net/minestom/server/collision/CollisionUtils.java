@@ -26,25 +26,20 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
-     * @param lastPhysicsResult the last physics result, can be null
+     * @param entity          the entity to move
+     * @param entityVelocity  the velocity of the entity
      * @param singleCollision if the entity should only collide with one block
      * @return the result of physics simulation
      */
-    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity, boolean singleCollision) {
         final Instance instance = entity.getInstance();
         assert instance != null;
-        return handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
-                entity.getPosition(), entityVelocity,
-                lastPhysicsResult, singleCollision);
+        return handlePhysics(instance, entity.getChunk(), entity.getBoundingBox(),
+                entity.getPosition(), entityVelocity, singleCollision);
     }
 
     /**
-     *
-     * @param entity the entity to move
+     * @param entity         the entity to move
      * @param entityVelocity the velocity of the entity
      * @return the closest entity we collide with
      */
@@ -55,8 +50,7 @@ public final class CollisionUtils {
     }
 
     /**
-     *
-     * @param velocity the velocity of the entity
+     * @param velocity     the velocity of the entity
      * @param extendRadius the largest entity bounding box we can collide with
      *                     Measured from bottom center to top corner
      *                     This is used to extend the search radius for entities we collide with
@@ -73,19 +67,15 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
+     * @param entity         the entity to move
      * @param entityVelocity the velocity of the entity
-     * @param lastPhysicsResult the last physics result, can be null
      * @return the result of physics simulation
      */
-    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult) {
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
         final Instance instance = entity.getInstance();
         assert instance != null;
-        return handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
-                entity.getPosition(), entityVelocity,
-                lastPhysicsResult, false);
+        return handlePhysics(instance, entity.getChunk(), entity.getBoundingBox(),
+                entity.getPosition(), entityVelocity, false);
     }
 
     /**
@@ -99,10 +89,9 @@ public final class CollisionUtils {
      */
     public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
                                               @NotNull BoundingBox boundingBox,
-                                              @NotNull Pos position, @NotNull Vec velocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                              @NotNull Pos position, @NotNull Vec velocity, boolean singleCollision) {
         final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
-        return handlePhysics(getter, boundingBox, position, velocity, lastPhysicsResult, singleCollision);
+        return handlePhysics(getter, boundingBox, position, velocity, singleCollision);
     }
 
     /**
@@ -117,11 +106,9 @@ public final class CollisionUtils {
     @ApiStatus.Internal
     public static PhysicsResult handlePhysics(@NotNull Block.Getter blockGetter,
                                               @NotNull BoundingBox boundingBox,
-                                              @NotNull Pos position, @NotNull Vec velocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                              @NotNull Pos position, @NotNull Vec velocity, boolean singleCollision) {
         return BlockCollision.handlePhysics(boundingBox,
-                velocity, position,
-                blockGetter, lastPhysicsResult, singleCollision);
+                velocity, position, blockGetter, singleCollision);
     }
 
     /**
@@ -138,16 +125,10 @@ public final class CollisionUtils {
     public static boolean isLineOfSightReachingShape(@NotNull Instance instance, @Nullable Chunk chunk,
                                                      @NotNull Point start, @NotNull Point end,
                                                      @NotNull Shape shape) {
-        final PhysicsResult result = handlePhysics(instance, chunk,
-                BoundingBox.ZERO,
-                Pos.fromPoint(start), Vec.fromPoint(end.sub(start)),
-                null, false);
+        final PhysicsResult result = handlePhysics(instance, chunk, BoundingBox.ZERO,
+                Pos.fromPoint(start), Vec.fromPoint(end.sub(start)), false);
 
         return shape.intersectBox(end.sub(result.newPosition()).sub(Vec.EPSILON), BoundingBox.ZERO);
-    }
-
-    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        return handlePhysics(entity, entityVelocity, null);
     }
 
     public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
@@ -184,7 +165,7 @@ public final class CollisionUtils {
     public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
         return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry);
     }
-    
+
     /**
      * Simulate the entity's collision physics as if the world had no blocks
      *

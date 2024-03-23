@@ -12,7 +12,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockIterator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 final class BlockCollision {
     /**
@@ -24,20 +23,58 @@ final class BlockCollision {
     static PhysicsResult handlePhysics(@NotNull BoundingBox boundingBox,
                                        @NotNull Vec velocity, @NotNull Pos entityPosition,
                                        @NotNull Block.Getter getter,
-                                       @Nullable PhysicsResult lastPhysicsResult,
                                        boolean singleCollision) {
-        if (velocity.isZero()) {
-            // TODO should return a constant
-            return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
-                    velocity, new Point[3], new Shape[3], false, SweepResult.NO_COLLISION);
+        return rayPhysics(boundingBox, velocity, entityPosition, false, getter, singleCollision);
+    }
+
+    private static PhysicsResult rayPhysics(@NotNull BoundingBox boundingBox,
+                                            @NotNull Vec velocity, @NotNull Pos position, boolean onGround,
+                                            @NotNull Block.Getter getter,
+                                            boolean singleCollision) {
+        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, null);
+        final Vec[] allFaces = calculateFaces(velocity, boundingBox);
+        for (var face : allFaces) {
+            BlockIterator iterator = new BlockIterator(Vec.fromPoint(face.add(position)), velocity, 0, velocity.length());
+            while (iterator.hasNext()) {
+                Point p = iterator.next();
+                final Block block = getter.getBlock(p, Block.Getter.Condition.TYPE);
+                final Shape shape = block.registry().collisionShape();
+                final boolean collide = shape.intersectBoxSwept(position, velocity, p, boundingBox, finalResult);
+                final boolean collisionX = finalResult.normalX != 0;
+                final boolean collisionY = finalResult.normalY != 0;
+                final boolean collisionZ = finalResult.normalZ != 0;
+                final boolean hasCollided = collisionX || collisionY || collisionZ;
+                if (!hasCollided) continue;
+                double deltaX = finalResult.res * velocity.x();
+                double deltaY = finalResult.res * velocity.y();
+                double deltaZ = finalResult.res * velocity.z();
+                if (Math.abs(deltaX) < Vec.EPSILON) deltaX = 0;
+                if (Math.abs(deltaY) < Vec.EPSILON) deltaY = 0;
+                if (Math.abs(deltaZ) < Vec.EPSILON) deltaZ = 0;
+                final Pos newPosition = position.add(deltaX, deltaY, deltaZ);
+                final double remainingX = collisionX ? 0 : velocity.x() - deltaX;
+                final double remainingY = collisionY ? 0 : velocity.y() - deltaY;
+                final double remainingZ = collisionZ ? 0 : velocity.z() - deltaZ;
+                final Vec newVelocity = new Vec(remainingX, remainingY, remainingZ);
+                if (newVelocity.isZero() || singleCollision) {
+                    // Collided on all required axis
+                    return new PhysicsResult(newPosition, newVelocity,
+                            collisionY || onGround, false, false, false, Vec.ZERO,
+                            new Point[3], new Shape[3], false,
+                            SweepResult.NO_COLLISION);
+                } else {
+                    // Additional axis to check
+                    return rayPhysics(boundingBox, newVelocity, newPosition,
+                            collisionY || onGround, getter, singleCollision);
+                }
+            }
         }
-        // Fast-exit using cache
-        final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);
-        if (cachedResult != null) {
-            return cachedResult;
-        }
-        // Expensive AABB computation
-        return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
+        // No collision
+        final Pos newPosition = position.add(velocity);
+        return new PhysicsResult(newPosition, velocity,
+                onGround, false, false, false, Vec.ZERO,
+                new Point[3], new Shape[3], false,
+                SweepResult.NO_COLLISION);
     }
 
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {

@@ -134,8 +134,7 @@ public class PlayerProjectile extends LivingEntity {
         PhysicsResult result = CollisionUtils.handlePhysics(
                 instance, this.getChunk(),
                 this.getBoundingBox(),
-                posBefore, diff,
-                null, true
+                posBefore, diff, true
         );
 
         if (cooldown + 500 < System.currentTimeMillis()) {
