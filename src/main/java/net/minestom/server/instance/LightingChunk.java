@@ -98,40 +98,6 @@ public class LightingChunk extends DynamicChunk {
         super(instance, chunkX, chunkZ);
     }
 
-    @Override
-    public void onGenerate() {
-        super.onGenerate();
-
-        for (int section = minSection; section < maxSection; section++) {
-            getSection(section).blockLight().invalidate();
-            getSection(section).skyLight().invalidate();
-        }
-
-        invalidate();
-
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                    if (neighborChunk == null) continue;
-
-                    if (neighborChunk instanceof LightingChunk light) {
-                        for (int section = light.minSection; section < light.maxSection; section++) {
-                            light.getSection(section).blockLight().invalidate();
-                            light.getSection(section).skyLight().invalidate();
-                        }
-
-                        light.invalidate();
-
-                        light.resendTimer.set(20);
-                    }
-                }
-            }
-        });
-
-        doneInit = true;
-    }
-
     private boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
         if (DIFFUSE_SKY_LIGHT.contains(block.namespace())) return true;
@@ -198,6 +164,40 @@ public class LightingChunk extends DynamicChunk {
     @Override
     protected void onLoad() {
         chunkLoaded = true;
+        doneInit = true;
+    }
+
+    @Override
+    public void onGenerate() {
+        super.onGenerate();
+
+        for (int section = minSection; section < maxSection; section++) {
+            getSection(section).blockLight().invalidate();
+            getSection(section).skyLight().invalidate();
+        }
+
+        invalidate();
+
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                    if (neighborChunk == null) continue;
+
+                    if (neighborChunk instanceof LightingChunk light) {
+                        for (int section = light.minSection; section < light.maxSection; section++) {
+                            light.getSection(section).blockLight().invalidate();
+                            light.getSection(section).skyLight().invalidate();
+                        }
+
+                        light.invalidate();
+
+                        light.resendTimer.set(20);
+                    }
+                }
+            }
+        });
+
         doneInit = true;
     }
 
