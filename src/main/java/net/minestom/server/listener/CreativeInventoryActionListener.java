@@ -18,6 +18,10 @@ public final class CreativeInventoryActionListener {
             player.dropItem(item);
             return;
         }
+        // Bounds check
+        if (slot < 0 || slot > PlayerInventoryUtils.OFFHAND_SLOT) {
+            return;
+        }
         // Set item
         slot = (short) PlayerInventoryUtils.convertPlayerInventorySlot(slot, PlayerInventoryUtils.OFFSET);
         PlayerInventory inventory = player.getInventory();
