@@ -224,6 +224,16 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
     }
 
+    @Override
+    public void onLoaderComplete() {
+
+    }
+
+    @Override
+    public void onGeneratorComplete() {
+
+    }
+
     private @NotNull ChunkDataPacket createChunkPacket() {
         final NBTCompound heightmapsNBT = computeHeightmap();
         // Data

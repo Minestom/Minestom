@@ -320,4 +320,14 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Invalidate the chunk caches
      */
     public abstract void invalidate();
+
+    /**
+     * Called when the chunk loader has finished loading the chunk.
+     */
+    public abstract void onLoaderComplete();
+
+    /**
+     * Called when the chunk generator has finished generating the chunk.
+     */
+    public abstract void onGeneratorComplete();
 }

@@ -292,13 +292,14 @@ public class InstanceContainer extends Instance {
         if (prev != null) return prev;
         final IChunkLoader loader = chunkLoader;
         final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
+                .whenComplete((c, a) -> { if (c != null) c.onLoaderComplete(); })
                 .thenCompose(chunk -> {
                     if (chunk != null) {
                         // Chunk has been loaded from storage
                         return CompletableFuture.completedFuture(chunk);
                     } else {
                         // Loader couldn't load the chunk, generate it
-                        return createChunk(chunkX, chunkZ);
+                        return createChunk(chunkX, chunkZ).whenComplete((c, a) -> c.onGeneratorComplete());
                     }
                 })
                 // cache the retrieved chunk

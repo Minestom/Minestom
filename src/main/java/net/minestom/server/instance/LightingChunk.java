@@ -46,8 +46,9 @@ public class LightingChunk extends DynamicChunk {
     private int highestBlock;
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
+    private final AtomicInteger resendTimer = new AtomicInteger(-1);
 
-    private AtomicInteger resendTimer = new AtomicInteger(-1);
+    boolean doneInit = false;
 
     enum LightType {
         SKY,
@@ -71,6 +72,7 @@ public class LightingChunk extends DynamicChunk {
             Block.DARK_OAK_LEAVES.namespace(),
             Block.FLOWERING_AZALEA_LEAVES.namespace(),
             Block.JUNGLE_LEAVES.namespace(),
+            Block.CHERRY_LEAVES.namespace(),
             Block.OAK_LEAVES.namespace(),
             Block.SPRUCE_LEAVES.namespace(),
             Block.SPAWNER.namespace(),
@@ -92,6 +94,24 @@ public class LightingChunk extends DynamicChunk {
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
+    }
+
+    @Override
+    public void onLoaderComplete() {
+        super.onLoaderComplete();
+        doneInit = true;
+    }
+
+    @Override
+    public void onGeneratorComplete() {
+        super.onGeneratorComplete();
+
+        for (int section = minSection; section < maxSection; section++) {
+            getSection(section).blockLight().invalidate();
+            getSection(section).skyLight().invalidate();
+        }
+
+        invalidate();
 
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
             for (int i = -1; i <= 1; i++) {
@@ -105,6 +125,8 @@ public class LightingChunk extends DynamicChunk {
                 }
             }
         });
+
+        doneInit = true;
     }
 
     private boolean checkSkyOcclusion(Block block) {
@@ -149,6 +171,19 @@ public class LightingChunk extends DynamicChunk {
         if (chunkLoaded) {
             invalidateSection(coordinate);
             this.lightCache.invalidate();
+
+            if (doneInit) {
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                        if (neighborChunk == null) continue;
+
+                        if (neighborChunk instanceof LightingChunk light) {
+                            light.resendTimer.set(20);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -188,11 +223,11 @@ public class LightingChunk extends DynamicChunk {
                     int height = maxY;
                     while (height > minY) {
                         Block block = getBlock(x, height, z, Condition.TYPE);
+                        if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
                         if (checkSkyOcclusion(block)) break;
                         height--;
                     }
                     heightmap[z << 4 | x] = (height + 1);
-                    if (height > highestBlock) highestBlock = height;
                 }
             }
         }
