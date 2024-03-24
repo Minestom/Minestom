@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -47,6 +48,7 @@ public class LightingChunk extends DynamicChunk {
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
     private final AtomicInteger resendTimer = new AtomicInteger(-1);
+    private final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
 
     private boolean doneInit = false;
 
@@ -120,6 +122,13 @@ public class LightingChunk extends DynamicChunk {
                     if (neighborChunk == null) continue;
 
                     if (neighborChunk instanceof LightingChunk light) {
+                        for (int section = light.minSection; section < light.maxSection; section++) {
+                            light.getSection(section).blockLight().invalidate();
+                            light.getSection(section).skyLight().invalidate();
+                        }
+
+                        light.invalidate();
+
                         light.resendTimer.set(20);
                     }
                 }
@@ -179,7 +188,7 @@ public class LightingChunk extends DynamicChunk {
                         if (neighborChunk == null) continue;
 
                         if (neighborChunk instanceof LightingChunk light) {
-                            light.resendTimer.set(20);
+                            light.resendTimer.set(resendDelay);
                         }
                     }
                 }
@@ -323,16 +332,7 @@ public class LightingChunk extends DynamicChunk {
     public void tick(long time) {
         super.tick(time);
 
-        if (resendTimer.get() > 0) {
-            if (resendTimer.get() == 15) {
-                for (int section = minSection; section < maxSection; section++) {
-                    getSection(section).blockLight().invalidate();
-                    getSection(section).skyLight().invalidate();
-                }
-
-                invalidate();
-            }
-
+        if (doneInit && resendTimer.get() > 0) {
             if (resendTimer.decrementAndGet() == 0) {
                 sendLighting();
             }
