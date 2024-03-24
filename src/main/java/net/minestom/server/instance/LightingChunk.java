@@ -253,6 +253,19 @@ public class LightingChunk extends DynamicChunk {
 
         int chunkMin = instance.getDimensionType().getMinY();
 
+        int highestNeighborBlock = instance.getDimensionType().getMinY();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (neighborChunk == null) continue;
+
+                if (neighborChunk instanceof LightingChunk light) {
+                    light.getHeightmap();
+                    highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
+                }
+            }
+        }
+
         int index = 0;
         for (Section section : sections) {
             boolean wasUpdatedBlock = false;
@@ -278,7 +291,7 @@ public class LightingChunk extends DynamicChunk {
             final byte[] blockLight = section.blockLight().array();
             final int sectionMaxY = index * 16 + chunkMin;
 
-            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestBlock + 16)) {
+            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestNeighborBlock + 16)) {
                 if (skyLight.length != 0 && skyLight != emptyContent) {
                     skyLights.add(skyLight);
                     skyMask.set(index);
