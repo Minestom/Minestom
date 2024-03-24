@@ -169,7 +169,7 @@ public class PlayerInit {
         });
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
-        instanceContainer.setTime(6000);
+        instanceContainer.setTime(12000);
 
 //        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
 //        instanceManager.registerInstance(i2);

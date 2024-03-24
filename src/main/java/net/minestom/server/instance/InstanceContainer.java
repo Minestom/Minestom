@@ -298,7 +298,7 @@ public class InstanceContainer extends Instance {
                         return CompletableFuture.completedFuture(chunk);
                     } else {
                         // Loader couldn't load the chunk, generate it
-                        return createChunk(chunkX, chunkZ);
+                        return createChunk(chunkX, chunkZ).whenComplete((c, a) -> c.onGenerate());
                     }
                 })
                 // cache the retrieved chunk

@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -8,10 +9,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.light.Light;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
@@ -26,6 +24,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
 
@@ -41,9 +41,16 @@ public class LightingChunk extends DynamicChunk {
 
     private int[] heightmap;
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
+    private LightData lightData;
+
     boolean chunkLoaded = false;
     private int highestBlock;
-    private boolean initialLightingSent = false;
+
+    private final ReentrantLock packetGenerationLock = new ReentrantLock();
+    private final AtomicInteger resendTimer = new AtomicInteger(-1);
+    private final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
+
+    private boolean doneInit = false;
 
     enum LightType {
         SKY,
@@ -67,6 +74,7 @@ public class LightingChunk extends DynamicChunk {
             Block.DARK_OAK_LEAVES.namespace(),
             Block.FLOWERING_AZALEA_LEAVES.namespace(),
             Block.JUNGLE_LEAVES.namespace(),
+            Block.CHERRY_LEAVES.namespace(),
             Block.OAK_LEAVES.namespace(),
             Block.SPRUCE_LEAVES.namespace(),
             Block.SPAWNER.namespace(),
@@ -83,6 +91,7 @@ public class LightingChunk extends DynamicChunk {
     public void invalidate() {
         this.lightCache.invalidate();
         this.chunkCache.invalidate();
+        this.lightData = null;
     }
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
@@ -107,8 +116,7 @@ public class LightingChunk extends DynamicChunk {
                 if (neighborChunk == null) continue;
 
                 if (neighborChunk instanceof LightingChunk light) {
-                    light.lightCache.invalidate();
-                    light.chunkCache.invalidate();
+                    light.invalidate();
                 }
 
                 for (int k = -1; k <= 1; k++) {
@@ -132,6 +140,19 @@ public class LightingChunk extends DynamicChunk {
         if (chunkLoaded) {
             invalidateSection(coordinate);
             this.lightCache.invalidate();
+
+            if (doneInit) {
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                        if (neighborChunk == null) continue;
+
+                        if (neighborChunk instanceof LightingChunk light) {
+                            light.resendTimer.set(resendDelay);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -143,10 +164,41 @@ public class LightingChunk extends DynamicChunk {
     @Override
     protected void onLoad() {
         chunkLoaded = true;
+        doneInit = true;
     }
 
-    public boolean isLightingCalculated() {
-        return initialLightingSent;
+    @Override
+    public void onGenerate() {
+        super.onGenerate();
+
+        for (int section = minSection; section < maxSection; section++) {
+            getSection(section).blockLight().invalidate();
+            getSection(section).skyLight().invalidate();
+        }
+
+        invalidate();
+
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                    if (neighborChunk == null) continue;
+
+                    if (neighborChunk instanceof LightingChunk light) {
+                        for (int section = light.minSection; section < light.maxSection; section++) {
+                            light.getSection(section).blockLight().invalidate();
+                            light.getSection(section).skyLight().invalidate();
+                        }
+
+                        light.invalidate();
+
+                        light.resendTimer.set(20);
+                    }
+                }
+            }
+        });
+
+        doneInit = true;
     }
 
     @Override
@@ -175,11 +227,11 @@ public class LightingChunk extends DynamicChunk {
                     int height = maxY;
                     while (height > minY) {
                         Block block = getBlock(x, height, z, Condition.TYPE);
+                        if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
                         if (checkSkyOcclusion(block)) break;
                         height--;
                     }
                     heightmap[z << 4 | x] = (height + 1);
-                    if (height > highestBlock) highestBlock = height;
                 }
             }
         }
@@ -190,93 +242,95 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     protected LightData createLightData() {
-        if (lightCache.isValid()) {
-            ServerPacket packet = lightCache.packet(ConnectionState.PLAY);
-            return ((UpdateLightPacket) packet).lightData();
+        packetGenerationLock.lock();
+        if (lightData != null) {
+            packetGenerationLock.unlock();
+            return lightData;
         }
 
-        synchronized (lightCache) {
-            BitSet skyMask = new BitSet();
-            BitSet blockMask = new BitSet();
-            BitSet emptySkyMask = new BitSet();
-            BitSet emptyBlockMask = new BitSet();
-            List<byte[]> skyLights = new ArrayList<>();
-            List<byte[]> blockLights = new ArrayList<>();
+        BitSet skyMask = new BitSet();
+        BitSet blockMask = new BitSet();
+        BitSet emptySkyMask = new BitSet();
+        BitSet emptyBlockMask = new BitSet();
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
 
-            Set<Chunk> combined = new HashSet<>();
-            int chunkMin = instance.getDimensionType().getMinY();
+        int chunkMin = instance.getDimensionType().getMinY();
 
-            int index = 0;
-            for (Section section : sections) {
-                boolean wasUpdatedBlock = false;
-                boolean wasUpdatedSky = false;
+        int highestNeighborBlock = instance.getDimensionType().getMinY();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (neighborChunk == null) continue;
 
-                if (section.blockLight().requiresUpdate()) {
-                    var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
-                    combined.addAll(needsSend);
-                    wasUpdatedBlock = true;
-                } else if (section.blockLight().requiresSend()) {
-                    wasUpdatedBlock = true;
+                if (neighborChunk instanceof LightingChunk light) {
+                    light.getHeightmap();
+                    highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
                 }
+            }
+        }
 
-                if (section.skyLight().requiresUpdate()) {
-                    var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
-                    combined.addAll(needsSend);
-                    wasUpdatedSky = true;
-                } else if (section.skyLight().requiresSend()) {
-                    wasUpdatedSky = true;
-                }
+        int index = 0;
+        for (Section section : sections) {
+            boolean wasUpdatedBlock = false;
+            boolean wasUpdatedSky = false;
 
-                index++;
+            if (section.blockLight().requiresUpdate()) {
+                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
+                wasUpdatedBlock = true;
+            } else if (section.blockLight().requiresSend()) {
+                wasUpdatedBlock = true;
+            }
 
-                final byte[] skyLight = section.skyLight().array();
-                final byte[] blockLight = section.blockLight().array();
-                final int sectionMaxY = index * 16 + chunkMin;
+            if (section.skyLight().requiresUpdate()) {
+                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
+                wasUpdatedSky = true;
+            } else if (section.skyLight().requiresSend()) {
+                wasUpdatedSky = true;
+            }
 
-                if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestBlock + 16)) {
-                    if (skyLight.length != 0 && skyLight != emptyContent) {
-                        skyLights.add(skyLight);
-                        skyMask.set(index);
-                    } else {
-                        emptySkyMask.set(index);
-                    }
-                }
+            index++;
 
-                if (wasUpdatedBlock) {
-                    if (blockLight.length != 0 && blockLight != emptyContent) {
-                        blockLights.add(blockLight);
-                        blockMask.set(index);
-                    } else {
-                        emptyBlockMask.set(index);
-                    }
+            final byte[] skyLight = section.skyLight().array();
+            final byte[] blockLight = section.blockLight().array();
+            final int sectionMaxY = index * 16 + chunkMin;
+
+            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestNeighborBlock + 16)) {
+                if (skyLight.length != 0 && skyLight != emptyContent) {
+                    skyLights.add(skyLight);
+                    skyMask.set(index);
+                } else {
+                    emptySkyMask.set(index);
                 }
             }
 
-            MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-                for (Chunk chunk : combined) {
-                    if (chunk instanceof LightingChunk light) {
-                        if (light.initialLightingSent) {
-                            light.lightCache.invalidate();
-                            light.chunkCache.invalidate();
-
-                            // Compute Lighting. This will ensure lighting is computed even with no players
-                            lightCache.body(ConnectionState.PLAY);
-                            light.sendLighting();
-
-                            light.sections.forEach(s -> {
-                                s.blockLight().setRequiresSend(true);
-                                s.skyLight().setRequiresSend(true);
-                            });
-                        }
-                    }
+            if (wasUpdatedBlock) {
+                if (blockLight.length != 0 && blockLight != emptyContent) {
+                    blockLights.add(blockLight);
+                    blockMask.set(index);
+                } else {
+                    emptyBlockMask.set(index);
                 }
+            }
+        }
 
-                this.initialLightingSent = true;
-            });
+        this.lightData = new LightData(skyMask, blockMask,
+                emptySkyMask, emptyBlockMask,
+                skyLights, blockLights);
 
-            return new LightData(skyMask, blockMask,
-                    emptySkyMask, emptyBlockMask,
-                    skyLights, blockLights);
+        packetGenerationLock.unlock();
+
+        return this.lightData;
+    }
+
+    @Override
+    public void tick(long time) {
+        super.tick(time);
+
+        if (doneInit && resendTimer.get() > 0) {
+            if (resendTimer.decrementAndGet() == 0) {
+                sendLighting();
+            }
         }
     }
 
@@ -344,8 +398,7 @@ public class LightingChunk extends DynamicChunk {
                         sections.add(new Vec(chunk.getChunkX(), section, chunk.getChunkZ()));
                     }
 
-                    lighting.lightCache.invalidate();
-                    lighting.chunkCache.invalidate();
+                    lighting.invalidate();
                 }
             }
 
