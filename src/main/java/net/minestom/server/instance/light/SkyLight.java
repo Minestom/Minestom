@@ -227,7 +227,7 @@ final class SkyLight implements Light {
             this.contentPropagation = emptyContent;
         } else {
             this.content = copyArray.clone();
-            this.contentPropagation = copyArray.clone();
+            this.contentPropagation = this.content;
         }
     }
 

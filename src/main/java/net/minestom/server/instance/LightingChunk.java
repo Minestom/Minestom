@@ -48,7 +48,7 @@ public class LightingChunk extends DynamicChunk {
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
     private final AtomicInteger resendTimer = new AtomicInteger(-1);
 
-    boolean doneInit = false;
+    private boolean doneInit = false;
 
     enum LightType {
         SKY,
