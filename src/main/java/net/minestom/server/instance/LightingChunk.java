@@ -99,14 +99,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void onLoaderComplete() {
-        super.onLoaderComplete();
-        doneInit = true;
-    }
-
-    @Override
-    public void onGeneratorComplete() {
-        super.onGeneratorComplete();
+    public void onGenerate() {
+        super.onGenerate();
 
         for (int section = minSection; section < maxSection; section++) {
             getSection(section).blockLight().invalidate();
@@ -204,6 +198,7 @@ public class LightingChunk extends DynamicChunk {
     @Override
     protected void onLoad() {
         chunkLoaded = true;
+        doneInit = true;
     }
 
     @Override

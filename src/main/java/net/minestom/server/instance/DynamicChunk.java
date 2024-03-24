@@ -225,13 +225,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void onLoaderComplete() {
-
-    }
-
-    @Override
-    public void onGeneratorComplete() {
-
+    public void onGenerate() {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
