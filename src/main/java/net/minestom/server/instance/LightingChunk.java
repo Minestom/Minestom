@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -7,7 +8,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.light.Light;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.MathUtils;
@@ -92,6 +92,19 @@ public class LightingChunk extends DynamicChunk {
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ);
+
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                    if (neighborChunk == null) continue;
+
+                    if (neighborChunk instanceof LightingChunk light) {
+                        light.resendTimer.set(20);
+                    }
+                }
+            }
+        });
     }
 
     private boolean checkSkyOcclusion(Block block) {
@@ -204,7 +217,6 @@ public class LightingChunk extends DynamicChunk {
         List<byte[]> blockLights = new ArrayList<>();
 
         int chunkMin = instance.getDimensionType().getMinY();
-        Set<Chunk> collected = new HashSet<>();
 
         int index = 0;
         for (Section section : sections) {
@@ -212,16 +224,14 @@ public class LightingChunk extends DynamicChunk {
             boolean wasUpdatedSky = false;
 
             if (section.blockLight().requiresUpdate()) {
-                var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
-                collected.addAll(needsSend);
+                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
                 wasUpdatedBlock = true;
             } else if (section.blockLight().requiresSend()) {
                 wasUpdatedBlock = true;
             }
 
             if (section.skyLight().requiresUpdate()) {
-                var needsSend = relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
-                collected.addAll(needsSend);
+                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
                 wasUpdatedSky = true;
             } else if (section.skyLight().requiresSend()) {
                 wasUpdatedSky = true;
@@ -256,12 +266,6 @@ public class LightingChunk extends DynamicChunk {
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights);
 
-        collected.forEach(chunk -> {
-            if (chunk instanceof LightingChunk lighting) {
-                lighting.resendTimer.set(20);
-            }
-        });
-
         packetGenerationLock.unlock();
 
         return this.lightData;
@@ -272,9 +276,16 @@ public class LightingChunk extends DynamicChunk {
         super.tick(time);
 
         if (resendTimer.get() > 0) {
+            if (resendTimer.get() == 15) {
+                for (int section = minSection; section < maxSection; section++) {
+                    getSection(section).blockLight().invalidate();
+                    getSection(section).skyLight().invalidate();
+                }
+
+                invalidate();
+            }
+
             if (resendTimer.decrementAndGet() == 0) {
-                relight(instance, List.of(this));
-                lightCache.body(ConnectionState.PLAY);
                 sendLighting();
             }
         }
