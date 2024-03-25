@@ -31,6 +31,13 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     void processTick();
 
     /**
+     * Execute tasks set to run at the end of this tick.
+     * <p>
+     * This method is not thread-safe.
+     */
+    void processTickEnd();
+
+    /**
      * Submits a new task with custom scheduling logic.
      * <p>
      * This is the primitive method used by all scheduling shortcuts,
@@ -67,6 +74,10 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
 
     default @NotNull Task scheduleNextTick(@NotNull Runnable task) {
         return scheduleNextTick(task, ExecutionType.SYNC);
+    }
+
+    default @NotNull Task scheduleEndOfTick(@NotNull Runnable task) {
+        return buildTask(task).delay(TaskSchedule.immediate()).executionType(ExecutionType.TICK_END).schedule();
     }
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task, @NotNull ExecutionType executionType) {

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,6 +21,8 @@ public class TestScheduler {
         assertFalse(result.get(), "Tick task should not be executed after scheduling");
         scheduler.process();
         assertFalse(result.get(), "Tick task should not be executed after process");
+        scheduler.processTickEnd();
+        assertFalse(result.get(), "Tick task should not be executed after processTickEnd");
         scheduler.processTick();
         assertTrue(result.get(), "Tick task must be executed after tick process");
         assertFalse(task.isAlive(), "Tick task should be cancelled after execution");
@@ -46,6 +49,8 @@ public class TestScheduler {
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.scheduleNextProcess(() -> result.set(true));
         assertFalse(result.get());
+        scheduler.processTickEnd();
+        assertFalse(result.get(), "processTickEnd should never execute immediate tasks unless it is of type TICK_END");
         scheduler.process();
         assertTrue(result.get());
 
@@ -138,5 +143,76 @@ public class TestScheduler {
         scheduler.process();
         Thread.sleep(250);
         assertTrue(result.get(), "Async task didn't get executed");
+    }
+
+    @Test
+    public void scheduleEndOfTick() {
+        Scheduler scheduler = Scheduler.newScheduler();
+        AtomicBoolean result = new AtomicBoolean(false);
+        scheduler.scheduleEndOfTick(() -> result.set(true));
+        assertFalse(result.get(), "End of tick tasks should not be executed immediately upon submission");
+        scheduler.processTick();
+        assertFalse(result.get(), "End of tick tasks should not be executed by processTick()");
+        scheduler.processTickEnd();
+        assertTrue(result.get(), "scheduleEndOfTick(...) tasks should be executed after the next call to processTickEnd()");
+
+        result.set(false);
+        scheduler.scheduleEndOfTick(() -> result.set(true));
+        scheduler.processTickEnd();
+        assertTrue(result.get(), "scheduleEndOfTick(...) tasks should always execute on the very next processTickEnd()");
+    }
+
+    @Test
+    public void delayedEndOfTick() {
+        Scheduler scheduler = Scheduler.newScheduler();
+        AtomicBoolean result = new AtomicBoolean(false);
+        scheduler.buildTask(() -> result.set(true)).delay(TaskSchedule.tick(1))
+                .executionType(ExecutionType.TICK_END).schedule();
+
+        scheduler.processTickEnd(); scheduler.processTickEnd();
+        assertFalse(result.get(), "processTickEnd() should not increment the scheduler's internal tick counter");
+        scheduler.processTick();
+        scheduler.processTickEnd();
+        assertTrue(result.get(), "processTick() should increment the current tick counter processTickEnd() uses");
+    }
+
+    @Test
+    public void repeatingEndOfTick() {
+        Scheduler scheduler = Scheduler.newScheduler();
+        AtomicInteger result = new AtomicInteger(0);
+        Task task = scheduler.scheduleTask(result::getAndIncrement, TaskSchedule.immediate(), TaskSchedule.tick(1), ExecutionType.TICK_END);
+        assertEquals(0, result.get(), "TICK_END tasks should not be executed immediately upon submission");
+        scheduler.processTickEnd();
+        assertEquals(1, result.get(), "processTickEnd() should always execute TaskSchedule.immediate() TICK_END tasks");
+        scheduler.processTickEnd();
+        assertEquals(1, result.get(), "task should not executed on processTickEnd() again until processTick() is called");
+        scheduler.processTick();
+        assertEquals(1, result.get(), "processTick() should never execute TICK_END tasks");
+        scheduler.processTickEnd();
+        assertEquals(2, result.get(), "processTickEnd() should execute this task");
+
+        task.cancel();
+        scheduler.processTick();
+        scheduler.processTickEnd();
+        assertEquals(2, result.get(), "this task should have been cancelled");
+    }
+
+    @Test
+    public void durationEndOfTick() throws InterruptedException {
+        Scheduler scheduler = Scheduler.newScheduler();
+        AtomicBoolean result = new AtomicBoolean(false);
+        scheduler.buildTask(() -> result.set(true))
+                .delay(TaskSchedule.seconds(1))
+                .executionType(ExecutionType.TICK_END)
+                .schedule();
+        Thread.sleep(100);
+        scheduler.process();
+        scheduler.processTickEnd();
+        assertFalse(result.get(), "900ms remaining");
+        Thread.sleep(1200);
+        scheduler.process();
+        assertFalse(result.get(), "process() should never execute TICK_END tasks");
+        scheduler.processTickEnd();
+        assertTrue(result.get(), "Tick end task must be executed after 1 second");
     }
 }
