@@ -18,6 +18,11 @@ public final class CreativeInventoryActionListener {
             player.dropItem(item);
             return;
         }
+        // Bounds check
+        // 0 is crafting result inventory slot, ignore attempts to place into it
+        if (slot < 1 || slot > PlayerInventoryUtils.OFFHAND_SLOT) {
+            return;
+        }
         // Set item
         slot = (short) PlayerInventoryUtils.convertPlayerInventorySlot(slot, PlayerInventoryUtils.OFFSET);
         PlayerInventory inventory = player.getInventory();
