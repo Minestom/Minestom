@@ -7,13 +7,12 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayDeque;
 import java.util.Objects;
 
 import static net.minestom.server.instance.light.BlockLight.buildInternalQueue;
 
 public final class LightCompute {
-    static final BlockFace[] FACES = BlockFace.values();
+    static final Direction[] DIRECTIONS = Direction.values();
     static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SECTION_SIZE = 16;
 
@@ -23,45 +22,49 @@ public final class LightCompute {
         return LightCompute.compute(blockPalette, buildInternalQueue(blockPalette));
     }
 
+    /**
+     * Computes light in one section
+     * <p>
+     * Takes queue of lights positions and spreads light from this positions in 3d using Breadth-first search
+     * @param blockPalette blocks placed in section
+     * @param lightPre shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
+     * @return lighting wrapped in Result
+     */
     static @NotNull Result compute(Palette blockPalette, ShortArrayFIFOQueue lightPre) {
         if (lightPre.isEmpty()) {
             return new Result(emptyContent);
         }
 
-        byte[] lightArray = new byte[LIGHT_LENGTH];
+        final byte[] lightArray = new byte[LIGHT_LENGTH];
 
-        var lightSources = new ArrayDeque<Short>();
+        final ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         while (!lightPre.isEmpty()) {
-            int index = lightPre.dequeueShort();
+            final int index = lightPre.dequeueShort();
 
-            final int x = index & 15;
-            final int z = (index >> 4) & 15;
-            final int y = (index >> 8) & 15;
             final int newLightLevel = (index >> 12) & 15;
-            final int newIndex = x | (z << 4) | (y << 8);
+            final int newIndex = index & 0xFFF;
 
             final int oldLightLevel = getLight(lightArray, newIndex);
 
             if (oldLightLevel < newLightLevel) {
                 placeLight(lightArray, newIndex, newLightLevel);
-                lightSources.add((short) index);
+                lightSources.enqueue((short) index);
             }
         }
 
         while (!lightSources.isEmpty()) {
-            final int index = lightSources.poll();
+            final int index = lightSources.dequeueShort();
             final int x = index & 15;
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
             final int lightLevel = (index >> 12) & 15;
+            final byte newLightLevel = (byte) (lightLevel - 1);
 
-            for (BlockFace face : FACES) {
-                Direction dir = face.toDirection();
-                final int xO = x + dir.normalX();
-                final int yO = y + dir.normalY();
-                final int zO = z + dir.normalZ();
-                final byte newLightLevel = (byte) (lightLevel - 1);
+            for (Direction direction : DIRECTIONS) {
+                final int xO = x + direction.normalX();
+                final int yO = y + direction.normalY();
+                final int zO = z + direction.normalZ();
 
                 // Handler border
                 if (xO < 0 || xO >= SECTION_SIZE || yO < 0 || yO >= SECTION_SIZE || zO < 0 || zO >= SECTION_SIZE) {
@@ -70,14 +73,16 @@ public final class LightCompute {
 
                 // Section
                 final int newIndex = xO | (zO << 4) | (yO << 8);
-                if (getLight(lightArray, newIndex) + 2 <= lightLevel) {
+
+                if (getLight(lightArray, newIndex) < newLightLevel) {
                     final Block currentBlock = Objects.requireNonNullElse(Block.fromStateId((short)blockPalette.get(x, y, z)), Block.AIR);
                     final Block propagatedBlock = Objects.requireNonNullElse(Block.fromStateId((short)blockPalette.get(xO, yO, zO)), Block.AIR);
 
-                    boolean airAir = currentBlock.isAir() && propagatedBlock.isAir();
-                    if (!airAir && currentBlock.registry().collisionShape().isOccluded(propagatedBlock.registry().collisionShape(), face)) continue;
+                    final boolean airAir = currentBlock.isAir() && propagatedBlock.isAir();
+                    if (!airAir && currentBlock.registry().collisionShape().isOccluded(propagatedBlock.registry().collisionShape(), BlockFace.fromDirection(direction))) continue;
+
                     placeLight(lightArray, newIndex, newLightLevel);
-                    lightSources.add((short) (newIndex | (newLightLevel << 12)));
+                    lightSources.enqueue((short) (newIndex | (newLightLevel << 12)));
                 }
             }
         }
