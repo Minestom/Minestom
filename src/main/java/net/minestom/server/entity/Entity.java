@@ -1479,6 +1479,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Gets the previous entity position.
+     *
+     * @return the previous position of the entity
+     */
+    public @NotNull Pos getPreviousPosition() {
+        return previousPosition;
+    }
+
+    /**
      * Gets the entity eye height.
      * <p>
      * Default to {@link BoundingBox#height()}x0.85
