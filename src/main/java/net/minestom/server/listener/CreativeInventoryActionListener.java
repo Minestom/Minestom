@@ -19,7 +19,8 @@ public final class CreativeInventoryActionListener {
             return;
         }
         // Bounds check
-        if (slot < 0 || slot > PlayerInventoryUtils.OFFHAND_SLOT) {
+        // 0 is crafting result inventory slot, ignore attempts to place into it
+        if (slot < 1 || slot > PlayerInventoryUtils.OFFHAND_SLOT) {
             return;
         }
         // Set item
