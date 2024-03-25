@@ -20,7 +20,11 @@ public class TestShape {
                 Arguments.of(Block.ENCHANTING_TABLE, BlockFace.TOP, false),
                 Arguments.of(Block.ENCHANTING_TABLE, BlockFace.NORTH, false),
                 Arguments.of(Block.ACACIA_FENCE, BlockFace.TOP, false),
-                Arguments.of(Block.IRON_BARS, BlockFace.TOP, false)
+                Arguments.of(Block.IRON_BARS, BlockFace.TOP, false),
+                // We are testing collision faces here, so this should be true even though it doesnt occlude light
+                Arguments.of(Block.GLASS, BlockFace.TOP, true),
+                Arguments.of(Block.DARK_OAK_DOOR, BlockFace.NORTH, false),
+                Arguments.of(Block.DARK_OAK_DOOR, BlockFace.SOUTH, true)
         );
     }
 
