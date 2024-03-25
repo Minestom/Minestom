@@ -27,14 +27,11 @@ public interface Light {
     }
 
     boolean requiresSend();
-    void setRequiresSend(boolean b);
 
     @ApiStatus.Internal
     byte[] array();
 
     Set<Point> flip();
-
-    void copyFrom(byte @NotNull [] array);
 
     @ApiStatus.Internal
     Light calculateExternal(Instance instance, Chunk chunk, int sectionY);

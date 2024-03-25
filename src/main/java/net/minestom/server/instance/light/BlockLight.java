@@ -24,7 +24,7 @@ final class BlockLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private boolean isValidBorders = false;
+    private boolean isValidBorders = true;
     private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
@@ -32,27 +32,6 @@ final class BlockLight implements Light {
 
     BlockLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
-    }
-
-    @ApiStatus.Internal
-    public void setInternalLighting(byte[] content) {
-        this.content = content;
-        this.isValidBorders = true;
-    }
-
-    @ApiStatus.Internal
-    public void setExternalLighting(byte[] content) {
-        this.contentPropagation = content;
-    }
-
-    @ApiStatus.Internal
-    public byte[] getInternalLighting() {
-        return content;
-    }
-
-    @ApiStatus.Internal
-    public byte[] getExternalLighting() {
-        return contentPropagation;
     }
 
     @Override
@@ -165,12 +144,6 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public void copyFrom(byte @NotNull [] array) {
-        if (array.length == 0) this.content = null;
-        else this.content = array.clone();
-    }
-
-    @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
@@ -223,7 +196,13 @@ final class BlockLight implements Light {
 
     @Override
     public void set(byte[] copyArray) {
-        this.content = copyArray.clone();
+        if (copyArray.length == 0) {
+            this.content = emptyContent;
+            this.contentPropagation = emptyContent;
+        } else {
+            this.content = copyArray.clone();
+            this.contentPropagation = this.content;
+        }
     }
 
     @Override
@@ -231,11 +210,6 @@ final class BlockLight implements Light {
         boolean res = needsSend;
         needsSend = false;
         return res;
-    }
-
-    @Override
-    public void setRequiresSend(boolean b) {
-        this.needsSend = b;
     }
 
     private void clearCache() {

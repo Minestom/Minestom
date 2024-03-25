@@ -82,6 +82,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
 
+    // Weather of the instance
+    private Weather targetWeather = new Weather(false, 0, 0);
+    private Weather currentWeather = new Weather(false, 0, 0);
+    private int remainingWeatherTransitionTicks;
+
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
@@ -664,6 +669,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             }
 
         }
+        // Weather
+        if (remainingWeatherTransitionTicks > 0) {
+            Weather previousWeather = currentWeather;
+            currentWeather = transitionWeather(remainingWeatherTransitionTicks);
+            sendWeatherPackets(previousWeather);
+            remainingWeatherTransitionTicks--;
+        }
         // Tick event
         {
             // Process tick events
@@ -672,6 +684,45 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.lastTickAge = time;
         }
         this.worldBorder.update();
+    }
+
+    /**
+     * Gets the current weather on this instance
+     *
+     * @return the current weather
+     */
+    public @NotNull Weather getWeather() {
+        return currentWeather;
+    }
+
+    /**
+     * Sets the weather on this instance, transitions over time
+     *
+     * @param weather the new weather
+     * @param transitionTicks the ticks to transition to new weather
+     */
+    public void setWeather(@NotNull Weather weather, int transitionTicks) {
+        Check.stateCondition(transitionTicks < 1, "Transition ticks cannot be lower than 1");
+        targetWeather = weather;
+        remainingWeatherTransitionTicks = transitionTicks;
+    }
+
+    private void sendWeatherPackets(@NotNull Weather previousWeather) {
+        if (currentWeather.isRaining() != previousWeather.isRaining()) sendGroupedPacket(currentWeather.createIsRainingPacket());
+        if (currentWeather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(currentWeather.createRainLevelPacket());
+        if (currentWeather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(currentWeather.createThunderLevelPacket());
+    }
+
+    private @NotNull Weather transitionWeather(int remainingTicks) {
+        Weather target = targetWeather;
+        Weather current = currentWeather;
+        if (remainingTicks <= 1) {
+            return new Weather(target.isRaining(), target.isRaining() ? target.rainLevel() : 0,
+                    target.isRaining() ? target.thunderLevel() : 0);
+        }
+        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)remainingTicks);
+        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)remainingTicks);
+        return new Weather(rainLevel > 0, rainLevel, thunderLevel);
     }
 
     @Override

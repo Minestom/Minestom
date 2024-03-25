@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
@@ -113,6 +114,10 @@ public final class Metadata {
 
     public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+    }
+
+    public static Entry<PaintingMeta.Variant> PaintingVariant(@NotNull PaintingMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PAINTINGVARIANT, value, NetworkBuffer.PAINTING_VARIANT);
     }
 
     public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {

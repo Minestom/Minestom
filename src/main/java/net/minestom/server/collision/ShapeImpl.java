@@ -18,6 +18,7 @@ public final class ShapeImpl implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
     private final BoundingBox[] collisionBoundingBoxes;
     private final Point relativeStart, relativeEnd;
+    private final byte fullFaces;
 
     private final BoundingBox[] occlusionBoundingBoxes;
     private final byte blockOcclusion;
@@ -32,7 +33,7 @@ public final class ShapeImpl implements Shape {
         this.blockEntry = blockEntry;
 
         // Find bounds of collision
-        {
+        if (collisionBoundingBoxes.length > 0) {
             double minX = 1, minY = 1, minZ = 1;
             double maxX = 0, maxY = 0, maxZ = 0;
             for (BoundingBox blockSection : collisionBoundingBoxes) {
@@ -47,12 +48,22 @@ public final class ShapeImpl implements Shape {
             }
             this.relativeStart = new Vec(minX, minY, minZ);
             this.relativeEnd = new Vec(maxX, maxY, maxZ);
+        } else {
+            this.relativeStart = Vec.ZERO;
+            this.relativeEnd = Vec.ZERO;
         }
+
+        byte fullCollisionFaces = 0;
+        for (BlockFace f : BlockFace.values()) {
+            final byte res = isFaceCovered(computeOcclusionSet(f, collisionBoundingBoxes));
+            fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
+        }
+        this.fullFaces = fullCollisionFaces;
 
         byte airFaces = 0;
         byte fullFaces = 0;
         for (BlockFace f : BlockFace.values()) {
-            final byte res = isFaceCovered(computeOcclusionSet(f));
+            final byte res = isFaceCovered(computeOcclusionSet(f, occlusionBoundingBoxes));
             airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
             fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
         }
@@ -145,14 +156,14 @@ public final class ShapeImpl implements Shape {
         if (hasAirOcclusion || hasAirOcclusionOther) return false;
 
         // Comparing two partial faces. Computation needed
-        List<Rectangle> allRectangles = shapeImpl.computeOcclusionSet(face.getOppositeFace());
-        allRectangles.addAll(computeOcclusionSet(face));
+        List<Rectangle> allRectangles = computeOcclusionSet(face.getOppositeFace(), shapeImpl.occlusionBoundingBoxes);
+        allRectangles.addAll(computeOcclusionSet(face, occlusionBoundingBoxes));
         return isFaceCovered(allRectangles) == 2;
     }
 
     @Override
     public boolean isFaceFull(@NotNull BlockFace face) {
-        return (((blockOcclusion >> face.ordinal()) & 1) == 1);
+        return (((fullFaces >> face.ordinal()) & 1) == 1);
     }
 
     @Override
@@ -187,9 +198,9 @@ public final class ShapeImpl implements Shape {
         return block;
     }
 
-    private List<Rectangle> computeOcclusionSet(BlockFace face) {
+    private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, BoundingBox[] boundingBoxes) {
         List<Rectangle> rSet = new ArrayList<>();
-        for (BoundingBox boundingBox : this.occlusionBoundingBoxes) {
+        for (BoundingBox boundingBox : boundingBoxes) {
             switch (face) {
                 case NORTH -> // negative Z
                 {

@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +13,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record MapDataPacket(int mapId, byte scale, boolean locked,
                             boolean trackingPosition, @NotNull List<Icon> icons,
-                            @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket {
+                            @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket.Play {
     public static final int MAX_ICONS = 1024;
 
     public MapDataPacket {
@@ -65,11 +63,8 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.MAP_DATA;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.MAP_DATA;
     }
 
     public record Icon(int type, byte x, byte z, byte direction,

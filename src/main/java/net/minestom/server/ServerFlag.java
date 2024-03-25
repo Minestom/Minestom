@@ -15,6 +15,7 @@ public final class ServerFlag {
     public static final int SERVER_TICKS_PER_SECOND = Integer.getInteger("minestom.tps", 20);
     public static final int CHUNK_VIEW_DISTANCE = Integer.getInteger("minestom.chunk-view-distance", 8);
     public static final int ENTITY_VIEW_DISTANCE = Integer.getInteger("minestom.entity-view-distance", 5);
+    public static final int ENTITY_SYNCHRONIZATION_TICKS = Integer.getInteger("minestom.entity-synchronization-ticks", 20);
     public static final int WORKER_COUNT = Integer.getInteger("minestom.workers", Runtime.getRuntime().availableProcessors());
     public static final int MAX_PACKET_SIZE = Integer.getInteger("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
     public static final int SOCKET_SEND_BUFFER_SIZE = Integer.getInteger("minestom.send-buffer-size", 262_143);
@@ -22,6 +23,7 @@ public final class ServerFlag {
     public static final int POOLED_BUFFER_SIZE = Integer.getInteger("minestom.pooled-buffer-size", 262_143);
     public static final int PLAYER_PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     public static final int PLAYER_PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
+    public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = Integer.getInteger("minestom.send-light-after-block-placement-delay", 100);
 
     // Packet sending optimizations
     public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);

@@ -1,4 +1,4 @@
-# Thanks paper: https://github.com/lynxplay/paper/blob/master/.github/workflows/close_invalid_prs.yml
+# Thanks paper: https://github.com/papermc/paper/blob/master/.github/workflows/close_invalid_prs.yml
 name: Close invalid PRs
 
 on:

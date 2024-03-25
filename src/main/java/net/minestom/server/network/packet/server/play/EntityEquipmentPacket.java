@@ -3,12 +3,10 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityEquipmentPacket(int entityId,
-                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ComponentHoldingServerPacket {
+                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public EntityEquipmentPacket {
         equipments = Map.copyOf(equipments);
         if (equipments.isEmpty())
@@ -46,11 +44,8 @@ public record EntityEquipmentPacket(int entityId,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.ENTITY_EQUIPMENT;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
 
     @Override

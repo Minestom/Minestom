@@ -2,18 +2,16 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.adventure.AdventurePacketConvertor;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
-                              @Nullable String sound) implements ServerPacket {
+                              @Nullable String sound) implements ServerPacket.Play {
     public StopSoundPacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
@@ -43,10 +41,7 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.STOP_SOUND;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.STOP_SOUND;
     }
 }

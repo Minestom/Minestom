@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.entity.EntityType;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 
@@ -106,6 +107,15 @@ public class ItemTest {
         var item1 = ItemStack.of(Material.DIAMOND, 5);
         assertEquals(5, item1.amount());
         assertEquals(6, item1.withAmount(6).amount());
+    }
+
+    @Test
+    public void testEntityType() {
+        var item1 = ItemStack.of(Material.DIAMOND, 1);
+        assertNull(item1.material().registry().spawnEntityType());
+        var item2 = ItemStack.of(Material.CAMEL_SPAWN_EGG, 1);
+        assertNotNull(item2.material().registry().spawnEntityType());
+        assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
     }
 
     static ItemStack createItem() {

@@ -4,12 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +21,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
                                  @NotNull List<String> identifiersToRemove,
-                                 @NotNull List<ProgressMapping> progressMappings) implements ComponentHoldingServerPacket {
+                                 @NotNull List<ProgressMapping> progressMappings) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ADVANCEMENTS = Short.MAX_VALUE;
 
     public AdvancementsPacket {
@@ -47,11 +45,8 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.ADVANCEMENTS;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.ADVANCEMENTS;
     }
 
     // TODO is the display-item needed to be updated?

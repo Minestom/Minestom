@@ -2,6 +2,7 @@ package net.minestom.server.timer;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 /**
@@ -10,7 +11,7 @@ import java.util.function.Supplier;
  * <p>
  * Tasks are by default executed in the caller thread.
  */
-public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
+public sealed interface Scheduler extends Executor permits SchedulerImpl, SchedulerManager {
     static @NotNull Scheduler newScheduler() {
         return new SchedulerImpl();
     }
@@ -74,5 +75,14 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task) {
         return scheduleNextProcess(task, ExecutionType.SYNC);
+    }
+
+    /**
+     * Implementation of {@link Executor}, proxies to {@link #scheduleNextTick(Runnable)}.
+     * @param command the task to execute on the next tick
+     */
+    @Override
+    default void execute(@NotNull Runnable command) {
+        scheduleNextTick(command);
     }
 }

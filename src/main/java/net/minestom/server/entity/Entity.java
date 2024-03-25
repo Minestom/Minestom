@@ -5,10 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerProcess;
-import net.minestom.server.Tickable;
-import net.minestom.server.Viewable;
+import net.minestom.server.*;
 import net.minestom.server.collision.*;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -31,8 +28,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.LazyPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
@@ -56,7 +51,6 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -162,12 +156,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean removed;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
+
+    private final Set<Entity> leashedEntities = new CopyOnWriteArraySet<>();
+    private Entity leashHolder;
+
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
-    // Network synchronization, send the absolute position of the entity each X milliseconds
-    private static final Duration SYNCHRONIZATION_COOLDOWN = Duration.of(1, TimeUnit.MINUTE);
-    private Duration customSynchronizationCooldown;
-    private long lastAbsoluteSynchronizationTime;
+    // Network synchronization, send the absolute position of the entity every n ticks
+    private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
+    private long nextSynchronizationTick = synchronizationTicks;
 
     protected Metadata metadata = new Metadata(this);
     protected EntityMeta entityMeta;
@@ -322,7 +319,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             this.position = position;
             refreshCoordinate(position);
             synchronizePosition(true);
-            setView(position.yaw(), position.pitch());
+            sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
         };
 
         if (chunks != null && chunks.length > 0) {
@@ -464,7 +461,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void updateNewViewer(@NotNull Player player) {
         player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
-        player.sendPacket(new LazyPacket(this::getMetadataPacket));
+        player.sendPacket(getMetadataPacket());
         // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
@@ -473,6 +470,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             }
             player.sendPacket(getPassengersPacket());
         }
+        // Leashes
+        if (leashHolder != null && (player.equals(leashHolder) || leashHolder.isViewer(player))) {
+            player.sendPacket(getAttachEntityPacket());
+        }
+        for (Entity entity : leashedEntities) {
+            if (entity.isViewer(player)) {
+                player.sendPacket(entity.getAttachEntityPacket());
+            }
+        };
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
@@ -491,6 +497,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 if (passenger != player) passenger.updateOldViewer(player);
             }
         }
+        leashedEntities.forEach(entity -> player.sendPacket(new AttachEntityPacket(entity, null)));
         player.sendPacket(destroyPacketCache);
     }
 
@@ -567,7 +574,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             effectTick(time);
         }
         // Scheduled synchronization
-        if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
+        if (ticks >= nextSynchronizationTick) {
             synchronizePosition(false);
         }
     }
@@ -890,6 +897,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 if (this instanceof Player player) {
                     instance.getWorldBorder().init(player);
                     player.sendPacket(instance.createTimePacket());
+                    player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 spawn();
@@ -1096,6 +1104,40 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected @NotNull SetPassengersPacket getPassengersPacket() {
         return new SetPassengersPacket(getEntityId(), passengers.stream().map(Entity::getEntityId).toList());
+    }
+
+    /**
+     * Gets the entities that this entity is leashing.
+     *
+     * @return an unmodifiable list containing all the leashed entities
+     */
+    public @NotNull Set<Entity> getLeashedEntities() {
+        return Collections.unmodifiableSet(leashedEntities);
+    }
+
+    /**
+     * Gets the current leash holder.
+     *
+     * @return the entity leashing this entity, null if no leash holder
+     */
+    public @Nullable Entity getLeashHolder() {
+        return leashHolder;
+    }
+
+    /**
+     * Sets the leash holder to this entity.
+     *
+     * @param entity the new leash holder
+     */
+    public void setLeashHolder(@Nullable Entity entity) {
+        if (leashHolder != null) leashHolder.leashedEntities.remove(this);
+        if (entity != null) entity.leashedEntities.add(this);
+        this.leashHolder = entity;
+        sendPacketToViewersAndSelf(getAttachEntityPacket());
+    }
+
+    protected @NotNull AttachEntityPacket getAttachEntityPacket() {
+        return new AttachEntityPacket(this, leashHolder);
     }
 
     /**
@@ -1321,6 +1363,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.position = position;
         this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) refreshCoordinate(position);
+        if (nextSynchronizationTick <= ticks + 1) {
+            // The entity will be synchronized at the end of its tick
+            // not returning here will duplicate position packets
+            return;
+        }
         // Update viewers
         final boolean viewChange = !position.sameView(lastSyncedPosition);
         final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
@@ -1331,7 +1378,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Chunk chunk = getChunk();
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
             PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
-            this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
+            nextSynchronizationTick = synchronizationTicks + 1;
         } else if (positionChange && viewChange) {
             PacketUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, isOnGround()), this);
@@ -1543,6 +1590,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
 
+        Set<Entity> leashedEntities = getLeashedEntities();
+        leashedEntities.forEach(entity -> entity.setLeashHolder(null));
+
         MinecraftServer.process().dispatcher().removeElement(this);
         this.removed = true;
         if (permanent) {
@@ -1628,9 +1678,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
         final Pos posCache = this.position;
-        final ServerPacket packet = new EntityTeleportPacket(getEntityId(), posCache, isOnGround());
-        PacketUtils.prepareViewablePacket(currentChunk, packet, this);
-        this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
+        PacketUtils.prepareViewablePacket(currentChunk, new EntityTeleportPacket(getEntityId(), posCache, isOnGround()), this);
+        if (posCache.yaw() != lastSyncedPosition.yaw()) {
+            PacketUtils.prepareViewablePacket(currentChunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+        }
+        nextSynchronizationTick = ticks + synchronizationTicks;
         this.lastSyncedPosition = posCache;
     }
 
@@ -1640,28 +1692,34 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Asks for a synchronization (position) to happen during next entity tick.
+     * Asks for a position synchronization to happen during next entity tick.
      */
-    public void askSynchronization() {
-        this.lastAbsoluteSynchronizationTime = 0;
+    public void synchronizeNextTick() {
+        this.nextSynchronizationTick = 0;
     }
 
     /**
-     * Set custom cooldown for position synchronization.
+     * Returns the current synchronization interval. The default value is {@link ServerFlag#ENTITY_SYNCHRONIZATION_TICKS}
+     * but can be overridden per entity with {@link #setSynchronizationTicks(long)}.
      *
-     * @param cooldown custom cooldown for position synchronization.
+     * @return The current synchronization ticks
      */
-    public void setCustomSynchronizationCooldown(@Nullable Duration cooldown) {
-        this.customSynchronizationCooldown = cooldown;
+    public long getSynchronizationTicks() {
+        return this.synchronizationTicks;
+    }
+
+    /**
+     * Set the tick period until this entity's position is synchronized.
+     *
+     * @param ticks the new synchronization tick period
+     */
+    public void setSynchronizationTicks(long ticks) {
+        this.synchronizationTicks = ticks;
     }
 
     @Override
     public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
-        return HoverEvent.showEntity(ShowEntity.of(this.entityType, this.uuid));
-    }
-
-    private Duration getSynchronizationCooldown() {
-        return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
+        return HoverEvent.showEntity(ShowEntity.showEntity(this.entityType, this.uuid));
     }
 
     @ApiStatus.Experimental

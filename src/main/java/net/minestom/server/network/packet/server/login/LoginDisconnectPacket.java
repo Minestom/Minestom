@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.login;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -14,7 +12,8 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.JSON_COMPONENT;
 
-public record LoginDisconnectPacket(@NotNull Component kickMessage) implements ComponentHoldingServerPacket {
+public record LoginDisconnectPacket(@NotNull Component kickMessage) implements ServerPacket.Login,
+        ServerPacket.ComponentHolding {
     public LoginDisconnectPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(JSON_COMPONENT));
     }
@@ -25,11 +24,8 @@ public record LoginDisconnectPacket(@NotNull Component kickMessage) implements C
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case LOGIN -> ServerPacketIdentifier.LOGIN_DISCONNECT;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.LOGIN);
-        };
+    public int loginId() {
+        return ServerPacketIdentifier.LOGIN_DISCONNECT;
     }
 
     @Override
