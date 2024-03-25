@@ -28,8 +28,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.LazyPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
@@ -1702,6 +1700,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Returns the current synchronization interval. The default value is {@link ServerFlag#ENTITY_SYNCHRONIZATION_TICKS}
+     * but can be overridden per entity with {@link #setSynchronizationTicks(long)}.
+     *
+     * @return The current synchronization ticks
+     */
+    public long getSynchronizationTicks() {
+        return this.synchronizationTicks;
+    }
+
+    /**
      * Set the tick period until this entity's position is synchronized.
      *
      * @param ticks the new synchronization tick period
@@ -1712,7 +1720,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     @Override
     public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
-        return HoverEvent.showEntity(ShowEntity.of(this.entityType, this.uuid));
+        return HoverEvent.showEntity(ShowEntity.showEntity(this.entityType, this.uuid));
     }
 
     @ApiStatus.Experimental
