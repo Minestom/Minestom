@@ -4,12 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +20,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * The packet creates or updates teams
  */
-public record TeamsPacket(String teamName, Action action) implements ComponentHoldingServerPacket {
+public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
     public TeamsPacket(@NotNull NetworkBuffer reader) {
@@ -220,11 +218,8 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
      * @return the identifier
      */
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.TEAMS;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.TEAMS;
     }
 
     /**

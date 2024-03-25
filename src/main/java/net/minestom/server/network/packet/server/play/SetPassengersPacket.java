@@ -1,10 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record SetPassengersPacket(int vehicleEntityId,
-                                  @NotNull List<Integer> passengersId) implements ServerPacket {
+                                  @NotNull List<Integer> passengersId) implements ServerPacket.Play {
     public static final int MAX_PASSENGERS = 16384;
 
     public SetPassengersPacket {
@@ -30,10 +28,7 @@ public record SetPassengersPacket(int vehicleEntityId,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.SET_PASSENGERS;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.SET_PASSENGERS;
     }
 }

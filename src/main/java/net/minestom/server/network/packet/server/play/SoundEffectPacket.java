@@ -3,12 +3,10 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +25,7 @@ public record SoundEffectPacket(
         float volume,
         float pitch,
         long seed
-) implements ServerPacket {
+) implements ServerPacket.Play {
 
     public SoundEffectPacket {
         Check.argCondition(soundEvent == null && soundName == null, "soundEvent and soundName cannot both be null");
@@ -100,10 +98,7 @@ public record SoundEffectPacket(
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.SOUND_EFFECT;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.SOUND_EFFECT;
     }
 }

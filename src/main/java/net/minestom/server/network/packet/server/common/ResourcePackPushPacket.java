@@ -2,12 +2,9 @@ package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +21,7 @@ public record ResourcePackPushPacket(
         @NotNull String hash,
         boolean forced,
         @Nullable Component prompt
-) implements ComponentHoldingServerPacket {
+) implements ServerPacket.Configuration, ServerPacket.Play, ServerPacket.ComponentHolding {
     public ResourcePackPushPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(UUID), reader.read(STRING), reader.read(STRING),
                 reader.read(BOOLEAN), reader.readOptional(COMPONENT));
@@ -44,12 +41,13 @@ public record ResourcePackPushPacket(
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case CONFIGURATION -> ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_PUSH_PACKET;
-            case PLAY -> ServerPacketIdentifier.RESOURCE_PACK_PUSH;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.CONFIGURATION, ConnectionState.PLAY);
-        };
+    public int configurationId() {
+        return ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_PUSH_PACKET;
+    }
+
+    @Override
+    public int playId() {
+        return ServerPacketIdentifier.RESOURCE_PACK_PUSH;
     }
 
     @Override

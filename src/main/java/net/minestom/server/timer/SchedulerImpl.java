@@ -1,6 +1,7 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
+import net.minestom.server.MinecraftServer;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,7 +90,14 @@ final class SchedulerImpl implements Scheduler {
     }
 
     private void handleTask(TaskImpl task) {
-        final TaskSchedule schedule = task.task().get();
+        TaskSchedule schedule;
+        try {
+            schedule = task.task().get();
+        } catch (Throwable t) {
+            MinecraftServer.getExceptionManager().handleException(new RuntimeException("Exception in scheduled task", t));
+            schedule = TaskSchedule.stop();
+        }
+
         if (schedule instanceof TaskScheduleImpl.DurationSchedule durationSchedule) {
             final Duration duration = durationSchedule.duration();
             SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);

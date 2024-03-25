@@ -22,6 +22,7 @@ public final class ServerFlag {
     public static final int POOLED_BUFFER_SIZE = Integer.getInteger("minestom.pooled-buffer-size", 262_143);
     public static final int PLAYER_PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     public static final int PLAYER_PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
+    public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = Integer.getInteger("minestom.send-light-after-block-placement-delay", 100);
 
     // Packet sending optimizations
     public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);

@@ -414,6 +414,25 @@ public class BlockLightMergeIntegrationTest {
         assertEquals(14, val);
     }
 
+
+    @Test
+    public void skylightShortGrass(Env env) {
+        Instance instance = env.createFlatInstance();
+        instance.setChunkSupplier(LightingChunk::new);
+        for (int x = 4; x <= 7; x++) {
+            for (int z = 6; z <= 8; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(94, 50, 128, Block.SHORT_GRASS);
+
+        LightingChunk.relight(instance, instance.getChunks());
+
+        var val = lightValSky(instance, new Vec(94, 50, 128));
+        assertEquals(15, val);
+    }
+
     @Test
     public void skylightContained(Env env) {
         Instance instance = env.createFlatInstance();

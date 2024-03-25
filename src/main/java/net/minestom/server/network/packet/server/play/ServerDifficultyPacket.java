@@ -1,16 +1,14 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.world.Difficulty;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean locked) implements ServerPacket {
+public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean locked) implements ServerPacket.Play {
     public ServerDifficultyPacket(@NotNull NetworkBuffer reader) {
         this(reader.readEnum(Difficulty.class), reader.read(BOOLEAN));
     }
@@ -22,10 +20,7 @@ public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean loc
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.SERVER_DIFFICULTY;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.SERVER_DIFFICULTY;
     }
 }

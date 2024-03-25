@@ -1,10 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -18,7 +16,7 @@ public record UnlockRecipesPacket(int mode,
                                   boolean blastFurnaceRecipeBookOpen, boolean blastFurnaceRecipeBookFilterActive,
                                   boolean smokerRecipeBookOpen, boolean smokerRecipeBookFilterActive,
                                   @NotNull List<String> recipeIds,
-                                  @UnknownNullability List<String> initRecipeIds) implements ServerPacket {
+                                  @UnknownNullability List<String> initRecipeIds) implements ServerPacket.Play {
     public UnlockRecipesPacket {
         recipeIds = List.copyOf(recipeIds);
         if (initRecipeIds != null) {
@@ -78,10 +76,7 @@ public record UnlockRecipesPacket(int mode,
     }
 
     @Override
-    public int getId(@NotNull ConnectionState state) {
-        return switch (state) {
-            case PLAY -> ServerPacketIdentifier.UNLOCK_RECIPES;
-            default -> PacketUtils.invalidPacketState(getClass(), state, ConnectionState.PLAY);
-        };
+    public int playId() {
+        return ServerPacketIdentifier.UNLOCK_RECIPES;
     }
 }
