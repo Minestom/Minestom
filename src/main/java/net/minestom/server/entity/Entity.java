@@ -1688,8 +1688,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     private void synchronizeView() {
-        sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), position.yaw()));
-        sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
+        sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }
 
     /**
