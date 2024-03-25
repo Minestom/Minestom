@@ -291,11 +291,11 @@ public class LightingChunk extends DynamicChunk {
 
             index++;
 
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
             final int sectionMaxY = index * 16 + chunkMin;
 
-            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestNeighborBlock + 16)) {
+            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY < (highestNeighborBlock + 32)) {
+                final byte[] skyLight = section.skyLight().array();
+
                 if (skyLight.length != 0 && skyLight != emptyContent) {
                     skyLights.add(skyLight);
                     skyMask.set(index);
@@ -305,6 +305,8 @@ public class LightingChunk extends DynamicChunk {
             }
 
             if (wasUpdatedBlock) {
+                final byte[] blockLight = section.blockLight().array();
+
                 if (blockLight.length != 0 && blockLight != emptyContent) {
                     blockLights.add(blockLight);
                     blockMask.set(index);
