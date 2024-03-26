@@ -106,18 +106,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean hasPhysics = true;
     protected boolean hasCollision = true;
 
-    /**
-     * The amount of drag applied on the Y axle.
-     * <p>
-     * Unit: 1/tick
-     */
-    protected double gravityDragPerTick;
-    /**
-     * Acceleration on the Y axle due to gravity
-     * <p>
-     * Unit: blocks/tick
-     */
-    protected double gravityAcceleration;
+    private Aerodynamics aerodynamics;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
     private final int id;
@@ -192,8 +181,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        this.gravityAcceleration = entityType.registry().acceleration();
-        this.gravityDragPerTick = entityType.registry().drag();
+        EntitySpawnType type = entityType.registry().spawnType();
+        this.aerodynamics = new Aerodynamics(entityType.registry().acceleration(),
+                type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -529,7 +519,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.entityType = entityType;
         this.metadata = new Metadata(this);
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
-
+        EntitySpawnType type = entityType.registry().spawnType();
+        this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
+                type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
         Set<Player> viewers = new HashSet<>(getViewers());
         getViewers().forEach(this::updateOldViewer);
         viewers.forEach(this::updateNewViewer);
@@ -622,7 +614,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             } else if (hasVelocity || newVelocity.isZero()) {
                 this.velocity = noGravity ? Vec.ZERO : new Vec(
                         0,
-                        -gravityAcceleration * tps * (1 - gravityDragPerTick),
+                        -aerodynamics.gravity() * tps * aerodynamics.verticalAirResistance(),
                         0
                 );
                 if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
@@ -667,18 +659,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
-        EntitySpawnType type = entityType.registry().spawnType();
-        final double airDrag = type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98;
         final double drag;
         if (wasOnGround) {
             final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
             synchronized (chunk) {
-                drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * airDrag;
+                drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance();
             }
-        } else drag = airDrag;
+        } else drag = aerodynamics.horizontalAirResistance();
 
-        double gravity = flying ? 0 : gravityAcceleration;
-        double gravityDrag = flying ? 0.6 : (1 - gravityDragPerTick);
+        double gravity = flying ? 0 : aerodynamics.gravity();
+        double gravityDrag = flying ? 0.6 : aerodynamics.verticalAirResistance();
 
         this.velocity = newVelocity
                 // Apply gravity and drag
@@ -972,21 +962,21 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Gets the gravity drag per tick.
+     * Gets the aerodynamics; how the entity behaves in the air.
      *
-     * @return the gravity drag per tick in block
+     * @return the aerodynamic properties this entity is using
      */
-    public double getGravityDragPerTick() {
-        return gravityDragPerTick;
+    public @NotNull Aerodynamics getAerodynamics() {
+        return aerodynamics;
     }
 
     /**
-     * Gets the gravity acceleration.
+     * Sets the aerodynamics; how the entity behaves in the air.
      *
-     * @return the gravity acceleration in block
+     * @param aerodynamics the new aerodynamic properties
      */
-    public double getGravityAcceleration() {
-        return gravityAcceleration;
+    public void setAerodynamics(@NotNull Aerodynamics aerodynamics) {
+        this.aerodynamics = aerodynamics;
     }
 
     /**
@@ -996,18 +986,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public int getGravityTickCount() {
         return gravityTickCount;
-    }
-
-    /**
-     * Changes the gravity of the entity.
-     *
-     * @param gravityDragPerTick  the gravity drag per tick in block
-     * @param gravityAcceleration the gravity acceleration in block
-     * @see <a href="https://minecraft.wiki/w/Entity#Motion_of_entities">Entities motion</a>
-     */
-    public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
-        this.gravityDragPerTick = gravityDragPerTick;
-        this.gravityAcceleration = gravityAcceleration;
     }
 
     public double getDistance(@NotNull Point point) {
