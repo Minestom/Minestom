@@ -76,7 +76,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
 
     public Potion(@NotNull NetworkBuffer reader) {
         this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
-                reader.read(VAR_INT), reader.read(BYTE), reader.read(BOOLEAN) ? FactorData.fromNBT((NBTCompound) reader.read(NBT)) : null);
+                reader.read(VAR_INT), reader.read(BYTE), reader.readOptional(r -> FactorData.fromNBT((NBTCompound) r.read(NBT))));
     }
 
     /**
