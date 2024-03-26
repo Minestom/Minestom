@@ -4,14 +4,13 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.concurrent.locks.LockSupport;
-
 @ApiStatus.Internal
 public final class TickSchedulerThread extends MinestomThread {
-    private final ServerProcess serverProcess;
+    // Windows has an issue with periodically being unable to sleep for < ~16ms at a time
+    private static final long SLEEP_THRESHOLD = System.getProperty("os.name", "")
+            .toLowerCase().startsWith("windows") ? 17 : 5;
 
-    private final long startTickNs = System.nanoTime();
-    private long tick = 1;
+    private final ServerProcess serverProcess;
 
     public TickSchedulerThread(ServerProcess serverProcess) {
         super(MinecraftServer.THREAD_NAME_TICK_SCHEDULER);
@@ -20,31 +19,35 @@ public final class TickSchedulerThread extends MinestomThread {
 
     @Override
     public void run() {
-        final long tickNs = (long) (MinecraftServer.TICK_MS * 1e6);
         while (serverProcess.isAlive()) {
-            final long tickStart = System.nanoTime();
+            final long tickStart = System.currentTimeMillis();
             try {
                 serverProcess.ticker().tick(tickStart);
             } catch (Exception e) {
                 serverProcess.exception().handleException(e);
             }
-            fixTickRate(tickNs);
+            long tickEnd = System.currentTimeMillis();
+            long timeElapsed = tickEnd - tickStart;
+            waitUntilNextTick(tickEnd + MinecraftServer.TICK_MS - timeElapsed);
         }
     }
 
-    private void fixTickRate(long tickNs) {
-        long nextTickNs = startTickNs + (tickNs * tick);
-        if (System.nanoTime() < nextTickNs) {
-            while (true) {
-                // Checks in every 1/10 ms to see if the current time has reached the next scheduled time.
-                Thread.yield();
-                LockSupport.parkNanos(100000);
-                long currentNs = System.nanoTime();
-                if (currentNs >= nextTickNs) {
-                    break;
-                }
+    private void waitUntilNextTick(long nextTickTimeMillis) {
+        long currentTime;
+        while ((currentTime = System.currentTimeMillis()) < nextTickTimeMillis) {
+            long remainingTime = nextTickTimeMillis - currentTime;
+            // Sleep less the closer we are to the next tick
+            if (remainingTime >= SLEEP_THRESHOLD) {
+                sleepThread(remainingTime / 2);
             }
         }
-        tick++;
+    }
+
+    private void sleepThread(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            serverProcess.exception().handleException(e);
+        }
     }
 }
