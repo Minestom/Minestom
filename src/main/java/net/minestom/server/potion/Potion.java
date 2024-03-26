@@ -5,22 +5,25 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Objects;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
-import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.NBT;
 
 /**
  * Represents a potion effect that can be added to an {@link net.minestom.server.entity.Entity}.
  *
- * @param effect    the potion effect
- * @param amplifier the amplifier starting at 0 (level 1)
- * @param duration  the duration (in ticks) that the potion will last
- * @param flags     the flags of the potion, see {@link #flags()}
+ * @param effect     the potion effect
+ * @param amplifier  the amplifier starting at 0 (level 1)
+ * @param duration   the duration (in ticks) that the potion will last
+ * @param flags      the flags of the potion, see {@link #flags()}
+ * @param factorData used to change how the darkness effect looks, see {@link Potion#darkness(Entity, byte, int, byte)}
  */
 public record Potion(@NotNull PotionEffect effect, byte amplifier,
-                     int duration, byte flags) implements NetworkBuffer.Writer {
+                     int duration, byte flags, @Nullable FactorData factorData) implements NetworkBuffer.Writer {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -54,17 +57,26 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     public static final int INFINITE_DURATION = -1;
 
     /**
-     * Creates a new Potion with no flags.
+     * Creates a new Potion with no factor data.
      *
-     * @see #Potion(PotionEffect, byte, int, byte)
+     * @see #Potion(PotionEffect, byte, int, byte, FactorData)
+     */
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, byte flags) {
+        this(effect, amplifier, duration, flags, null);
+    }
+
+    /**
+     * Creates a new Potion with no flags and factor data.
+     *
+     * @see #Potion(PotionEffect, byte, int, byte, FactorData)
      */
     public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
-        this(effect, amplifier, duration, (byte) 0);
+        this(effect, amplifier, duration, (byte) 0, null);
     }
 
     public Potion(@NotNull NetworkBuffer reader) {
         this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
-                reader.read(VAR_INT), reader.read(BYTE));
+                reader.read(VAR_INT), reader.read(BYTE), reader.read(BOOLEAN) ? FactorData.fromNBT((NBTCompound) reader.read(NBT)) : null);
     }
 
     /**
@@ -114,7 +126,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      * @param entity the entity to add the effect to
      */
     public void sendAddPacket(@NotNull Entity entity) {
-        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this, null));
+        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
     }
 
     /**
@@ -134,5 +146,10 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         writer.write(BYTE, amplifier);
         writer.write(VAR_INT, duration);
         writer.write(BYTE, flags);
+        writer.writeOptional(factorData);
+    }
+
+    public static @NotNull Potion darkness(@NotNull Entity entity, byte amplifier, int duration, byte flags) {
+        return new Potion(PotionEffect.DARKNESS, amplifier, duration, flags, FactorData.defaultFactorData(entity));
     }
 }
