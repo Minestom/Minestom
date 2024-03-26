@@ -2381,11 +2381,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return super.teleport(position, chunks, flags);
     }
 
-    @Override
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
-        return teleport(position, chunks, new RelativeFlag[0]);
-    }
-
     /**
      * Represents the main or off hand of the player.
      */

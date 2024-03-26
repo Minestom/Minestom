@@ -336,10 +336,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
-        return teleport(position, chunks, new RelativeFlag[0]);
-    }
-
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
         return teleport(position, null);
     }

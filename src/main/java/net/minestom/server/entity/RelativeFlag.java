@@ -32,11 +32,11 @@ public enum RelativeFlag {
         return new RelativeFlag[] { X, Y, Z, YAW, PITCH };
     }
 
-    public static RelativeFlag @NotNull [] axisFlags() {
+    public static RelativeFlag @NotNull [] coordFlags() {
         return new RelativeFlag[] { X, Y, Z };
     }
 
-    public static RelativeFlag @NotNull [] lookFlags() {
+    public static RelativeFlag @NotNull [] viewFlags() {
         return new RelativeFlag[] { YAW, PITCH };
     }
 }

@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.RelativeFlag;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.minestom.server.message.ChatMessageType;
