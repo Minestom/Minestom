@@ -1,11 +1,13 @@
 package net.minestom.server.entity.player;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -64,7 +66,7 @@ public class PlayerMovementIntegrationTest {
     @Test
     public void chunkUpdateDebounceTest(Env env) {
         final Instance flatInstance = env.createFlatInstance();
-        final int viewDiameter = MinecraftServer.getChunkViewDistance() * 2 + 1;
+        final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
         ChunkUtils.forChunksInRange(0, 0, viewDiameter+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
@@ -113,5 +115,20 @@ public class PlayerMovementIntegrationTest {
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(16.5, 40, -16.5), true));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(viewDiameter * 2 - 1);
+    }
+
+    @Test
+    public void testClientViewDistanceSettings(Env env) {
+        int viewDistance = 4;
+        final Instance flatInstance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
+        player.getSettings().refresh("en_US", (byte) viewDistance, ChatMessageType.FULL, true, (byte) 0, Player.MainHand.RIGHT, false, true);
+
+        Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
+        player.teleport(new Pos(160, 40, 160));
+        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true));
+        player.interpretPacketQueue();
+        chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
     }
 }

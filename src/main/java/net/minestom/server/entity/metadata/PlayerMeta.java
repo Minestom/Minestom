@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class PlayerMeta extends LivingEntityMeta {
     public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
+    public static final byte MAX_OFFSET = OFFSET + 5;
 
     private final static byte CAPE_BIT = 0x01;
     private final static byte JACKET_BIT = 0x02;
@@ -94,6 +94,10 @@ public class PlayerMeta extends LivingEntityMeta {
 
     public void setHatEnabled(boolean value) {
         setMaskBit(OFFSET + 2, HAT_BIT, value);
+    }
+
+    public void setSkinDisplayByte(byte skinDisplayByte) {
+        super.metadata.setIndex(OFFSET + 2, Metadata.Byte(skinDisplayByte));
     }
 
     public boolean isRightMainHand() {
