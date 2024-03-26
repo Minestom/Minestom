@@ -55,6 +55,7 @@ import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -307,17 +308,18 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
      *                 can be null or empty to only load the chunk at {@code position}
      * @param flags    flags used to teleport the entity relatively rather than absolutely
+     *                 use {@link RelativeFlags} to see available flags
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, @NotNull RelativeFlag... flags) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-        int relativeBits = RelativeFlag.getBitsFromFlags(flags);
-        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, relativeBits);
+        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, relativeBits);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags);
             else synchronizePosition();
         };
 
@@ -337,7 +339,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
-        return teleport(position, null);
+        return teleport(position, null, RelativeFlags.NONE);
     }
 
     /**

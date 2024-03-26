@@ -98,11 +98,11 @@ public class EntityTeleportIntegrationTest {
         player.teleport(new Pos(10, 10, 10, 90, 0)).join();
         assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
 
-        player.teleport(new Pos(0, 0, 0, 0, 0), null, RelativeFlag.allFlags()).join();
+        player.teleport(new Pos(0, 0, 0, 0, 0), null, RelativeFlags.ALL).join();
         assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
 
         var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
-        player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlag.viewFlags());
+        player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlags.VIEW).join();
         assertEquals(player.getPosition(), new Pos(5, 10, 2, 95, 5));
     }
 }

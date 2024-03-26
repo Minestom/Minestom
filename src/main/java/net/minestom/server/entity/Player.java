@@ -1822,7 +1822,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], RelativeFlag...)}
+     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], RelativeFlags...)}
      * in cases where a {@link PlayerPositionAndLookPacket} is required
      *
      * @param position the position used by {@link PlayerPositionAndLookPacket}
@@ -2373,10 +2373,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * @see #teleport(Pos, long[], RelativeFlag...) 
+     * @see #teleport(Pos, long[], int)
      */
     @Override
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, RelativeFlag... flags) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
         chunkUpdateLimitChecker.clearHistory();
         return super.teleport(position, chunks, flags);
     }
