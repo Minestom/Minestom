@@ -1,6 +1,7 @@
 package net.minestom.server.utils.position;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.RelativeFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,5 +24,14 @@ public final class PositionUtils {
     public static float getLookPitch(double dx, double dy, double dz) {
         final double radians = -Math.atan2(dy, Math.max(Math.abs(dx), Math.abs(dz)));
         return (float) Math.toDegrees(radians);
+    }
+
+    public static @NotNull Pos getPositionWithRelativeFlags(@NotNull Pos start, @NotNull Pos modifier, int relativeFlags) {
+        double x = (relativeFlags & RelativeFlag.X.bit()) == 0 ? modifier.x() : start.x() + modifier.x();
+        double y = (relativeFlags & RelativeFlag.Y.bit()) == 0 ? modifier.y() : start.y() + modifier.y();
+        double z = (relativeFlags & RelativeFlag.Z.bit()) == 0 ? modifier.z() : start.z() + modifier.z();
+        float yaw = (relativeFlags & RelativeFlag.YAW.bit()) == 0 ? modifier.yaw() : start.yaw() + modifier.yaw();
+        float pitch = (relativeFlags & RelativeFlag.PITCH.bit()) == 0 ? modifier.pitch() : start.pitch() + modifier.pitch();
+        return new Pos(x, y, z, yaw, pitch);
     }
 }

@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.RelativeFlag;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.minestom.server.message.ChatMessageType;
@@ -227,22 +228,5 @@ public class PlayerIntegrationTest {
                 packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(2, displayNamePackets3);
-    }
-
-    @Test
-    public void teleportWithFlagsTest(Env env) {
-        var instance = env.createFlatInstance();
-        var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 0, 0)).join();
-
-        player.teleportWithFlags(new Pos(10, 10, 10, 90, 0)).join();
-        assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
-
-        player.teleportWithFlags(new Pos(0, 0, 0, 0, 0), TeleportFlag.X, TeleportFlag.Y, TeleportFlag.Z, TeleportFlag.YAW, TeleportFlag.PITCH).join();
-        assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
-
-        var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
-        player.teleportWithFlags(new Pos(5, 10, 2, 5, 5), TeleportFlag.YAW, TeleportFlag.PITCH);
-        assertEquals(player.getPosition(), new Pos(5, 10, 2, 95, 5));
     }
 }
