@@ -2372,68 +2372,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
+    /**
+     * @see #teleport(Pos, long[], RelativeFlag...) 
+     */
+    @Override
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, RelativeFlag... flags) {
+        chunkUpdateLimitChecker.clearHistory();
+        return super.teleport(position, chunks, flags);
+    }
+
     @Override
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
-        chunkUpdateLimitChecker.clearHistory();
-        return super.teleport(position, chunks);
-    }
-
-    /**
-     * Teleports the player only if the chunk at {@code position} is loaded or if
-     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
-     * Supply additional {@link TeleportFlag} values to control which values of the
-     * position set relative to your current position
-     *
-     * @param position the teleport position
-     * @param chunks   the chunk indexes to load before teleporting the entity,
-     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
-     *                 can be null or empty to only load the chunk at {@code position}
-     * @param flags    determines the components of the position that will be added to
-     *                 rather than explicitly set
-     * @throws IllegalStateException if you try to teleport an entity before settings its instance
-     */
-    public @NotNull CompletableFuture<Void> teleportWithFlags(@NotNull Pos position, long @Nullable [] chunks, @NotNull RelativeFlag... flags) {
-        Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-        chunkUpdateLimitChecker.clearHistory();
-
-        byte bits = (byte)RelativeFlag.getBitsFromFlags(flags);
-        double x = (bits & RelativeFlag.X.bit()) != 0 ? this.position.x() + position.x() : position.x();
-        double y = (bits & RelativeFlag.Y.bit()) != 0 ? this.position.y() + position.y() : position.y();
-        double z = (bits & RelativeFlag.Z.bit()) != 0 ? this.position.z() + position.z() : position.z();
-        float yaw = (bits & RelativeFlag.YAW.bit()) != 0 ? this.position.yaw() + position.yaw() : position.yaw();
-        float pitch = (bits & RelativeFlag.PITCH.bit()) != 0 ? this.position.pitch() + position.pitch() : position.pitch();
-        final Pos globalTeleportPosition = new Pos(x, y, z, yaw, pitch);
-
-        final Runnable endCallback = () -> {
-            this.previousPosition = this.position;
-            this.position = globalTeleportPosition;
-            refreshCoordinate(globalTeleportPosition);
-            synchronizePositionWithFlags(position, bits);
-            setView(yaw, pitch);
-        };
-
-        if (chunks != null && chunks.length > 0) {
-            // Chunks need to be loaded before the teleportation can happen
-            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
-        }
-        final Pos currentPosition = this.position;
-        if (!currentPosition.sameChunk(globalTeleportPosition)) {
-            // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(globalTeleportPosition).thenRun(endCallback);
-        } else {
-            // Position is in the same chunk, keep it sync
-            endCallback.run();
-            return AsyncUtils.empty();
-        }
-    }
-
-    public @NotNull CompletableFuture<Void> teleportWithFlags(@NotNull Pos position, @NotNull RelativeFlag... flags) {
-        return teleportWithFlags(position, null, flags);
-    }
-
-    private void synchronizePositionWithFlags(@NotNull Pos positionForSelf, byte flags) {
-        sendPacket(new PlayerPositionAndLookPacket(positionForSelf, flags, getNextTeleportId()));
-        super.synchronizePosition();
+        return teleport(position, chunks, new RelativeFlag[0]);
     }
 
     /**
