@@ -262,8 +262,8 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final class TickerImpl implements Ticker {
         @Override
-        public void tick(long msTime) {
-            final long nanoTime = System.nanoTime();
+        public void tick(long nanoTime) {
+            final long msTime = System.currentTimeMillis();
 
             scheduler().processTick();
 
