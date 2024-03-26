@@ -33,7 +33,7 @@ public final class ShapeImpl implements Shape {
         this.blockEntry = blockEntry;
 
         // Find bounds of collision
-        {
+        if (collisionBoundingBoxes.length > 0) {
             double minX = 1, minY = 1, minZ = 1;
             double maxX = 0, maxY = 0, maxZ = 0;
             for (BoundingBox blockSection : collisionBoundingBoxes) {
@@ -48,6 +48,9 @@ public final class ShapeImpl implements Shape {
             }
             this.relativeStart = new Vec(minX, minY, minZ);
             this.relativeEnd = new Vec(maxX, maxY, maxZ);
+        } else {
+            this.relativeStart = Vec.ZERO;
+            this.relativeEnd = Vec.ZERO;
         }
 
         byte fullCollisionFaces = 0;
