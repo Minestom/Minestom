@@ -33,12 +33,12 @@ public class EntityTrackerIntegrationTest {
         final AtomicInteger viewersCount = new AtomicInteger();
         final Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override
-            public void updateNewViewer(Player player) {
+            public void updateNewViewer(@NotNull Player player) {
                 viewersCount.incrementAndGet();
             }
 
             @Override
-            public void updateOldViewer(Player player) {
+            public void updateOldViewer(@NotNull Player player) {
                 viewersCount.decrementAndGet();
             }
         };
@@ -65,12 +65,12 @@ public class EntityTrackerIntegrationTest {
         final AtomicInteger viewersCount = new AtomicInteger();
         final Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override
-            public void updateNewViewer(Player player) {
+            public void updateNewViewer(@NotNull Player player) {
                 viewersCount.incrementAndGet();
             }
 
             @Override
-            public void updateOldViewer(Player player) {
+            public void updateOldViewer(@NotNull Player player) {
                 viewersCount.decrementAndGet();
             }
         };
