@@ -75,7 +75,7 @@ import java.util.function.UnaryOperator;
 /**
  * Could be a player, a monster, or an object.
  * <p>
- * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
+ * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
         PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
@@ -1272,6 +1272,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
         final Chunk chunk = getChunk();
+        assert chunk != null;
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
             PacketUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
             nextSynchronizationTick = synchronizationTicks + 1;
