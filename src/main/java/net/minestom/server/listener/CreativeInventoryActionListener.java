@@ -9,12 +9,16 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 public final class CreativeInventoryActionListener {
     public static void listener(ClientCreativeInventoryActionPacket packet, Player player) {
         if (!player.isCreative()) return;
-        int slot = PlayerInventoryUtils.protocolToMinestom(packet.slot());
-        final ItemStack item = packet.item();
-        if (slot == -1) {
+
+        ItemStack item = packet.item();
+
+        if (packet.slot() == -1) { // -1 here indicates a drop
             player.getInventory().handleClick(player, new ClickInfo.CreativeDropItem(item));
-        } else {
-            player.getInventory().handleClick(player, new ClickInfo.CreativeSetItem(slot, item));
         }
+
+        int slot = PlayerInventoryUtils.protocolToMinestom(packet.slot());
+        if (slot == -1) return; // -1 after conversion indicates an invalid slot
+
+        player.getInventory().handleClick(player, new ClickInfo.CreativeSetItem(slot, item));
     }
 }
