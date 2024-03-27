@@ -38,7 +38,20 @@ final class BlockCollision {
             while (iterator.hasNext()) {
                 Point p = iterator.next();
                 final Block block = getter.getBlock(p, Block.Getter.Condition.TYPE);
-                final Shape shape = block.registry().collisionShape();
+                Shape shape = block.registry().collisionShape();
+                final boolean currentShort = shape.relativeEnd().y() < 0.5;
+                //System.out.println("check " + p + " " + block.name() + " " + shape.relativeEnd());
+                if (currentShort) {
+                    // Must check for fence block below
+                    final Point belowPoint = p.sub(0, 1, 0);
+                    final Block belowBlock = getter.getBlock(belowPoint, Block.Getter.Condition.TYPE);
+                    final Shape belowShape = belowBlock.registry().collisionShape();
+                    //System.out.println("below " + belowBlock.name() + " " + belowShape.relativeEnd());
+                    if (belowShape.relativeEnd().y() > 1) {
+                        p = belowPoint;
+                        shape = belowShape;
+                    }
+                }
                 final boolean collide = shape.intersectBoxSwept(position, velocity, p, boundingBox, finalResult);
                 final boolean collisionX = finalResult.normalX != 0;
                 final boolean collisionY = finalResult.normalY != 0;
