@@ -79,12 +79,12 @@ import java.util.function.UnaryOperator;
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
         PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
-
-    private static final int VELOCITY_UPDATE_INTERVAL = 1;
-
     private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
+
+    // Certain entities should only have their position packets sent during synchronization
+    private static final Collection<EntityType> SYNCHRONIZE_ONLY_ENTITIES = Set.of(EntityType.ITEM, EntityType.FALLING_BLOCK);
 
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
@@ -96,7 +96,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     protected BoundingBox boundingBox;
-    private PhysicsResult lastPhysicsResult = null;
+    private PhysicsResult previousPhysicsResult = null;
 
     protected Entity vehicle;
 
@@ -551,8 +551,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         // Entity tick
         {
-            // Cache the number of "gravity tick"
-            velocityTick();
+            // handle position and velocity updates
+            movementTick();
 
             // handle block contacts
             touchTick();
@@ -572,115 +572,29 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-    private void velocityTick() {
+    @ApiStatus.Internal
+    protected void movementTick() {
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
         if (vehicle != null) return;
 
-        final boolean noGravity = hasNoGravity();
-        final boolean hasVelocity = hasVelocity();
-        if (!hasVelocity && noGravity) {
-            return;
+        Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
+        boolean entityIsPlayer = this instanceof Player;
+        boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
+        PhysicsResult physicsResult = PhysicsUtil.simulateMovement(position, velocity, boundingBox, chunk, aerodynamics,
+                hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
+        this.previousPhysicsResult = physicsResult;
+
+        Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, physicsResult.newPosition());
+        if (!ChunkUtils.isLoaded(finalChunk)) return;
+
+        boolean shouldSendVelocity = !entityIsPlayer && hasVelocity();
+        velocity = physicsResult.newVelocity();
+        onGround = physicsResult.isOnGround();
+
+        if (!PlayerUtils.isSocketClient(this)) {
+            refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
+            if (shouldSendVelocity) sendPacketToViewers(getVelocityPacket());
         }
-        final float tps = MinecraftServer.TICK_PER_SECOND;
-        final Pos positionBeforeMove = getPosition();
-        final Vec currentVelocity = getVelocity();
-        final boolean wasOnGround = this.onGround;
-        final Vec deltaPos = currentVelocity.div(tps);
-
-        final Pos newPosition;
-        final Vec newVelocity;
-        if (this.hasPhysics) {
-            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos, lastPhysicsResult);
-            this.lastPhysicsResult = physicsResult;
-            if (!PlayerUtils.isSocketClient(this))
-                this.onGround = physicsResult.isOnGround();
-
-            newPosition = physicsResult.newPosition();
-            newVelocity = physicsResult.newVelocity();
-        } else {
-            newVelocity = deltaPos;
-            newPosition = position.add(currentVelocity.div(20));
-        }
-
-        // World border collision
-        final Pos finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-        final boolean positionChanged = !finalVelocityPosition.samePoint(position);
-        final boolean isPlayer = this instanceof Player;
-        final boolean flying = isPlayer && ((Player) this).isFlying();
-        if (!positionChanged) {
-            if (flying) {
-                this.velocity = Vec.ZERO;
-                return;
-            } else if (hasVelocity || newVelocity.isZero()) {
-                this.velocity = noGravity ? Vec.ZERO : new Vec(
-                        0,
-                        -aerodynamics.gravity() * tps * aerodynamics.verticalAirResistance(),
-                        0
-                );
-                if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
-                    if (!isPlayer && !this.lastVelocityWasZero) {
-                        sendPacketToViewers(getVelocityPacket());
-                        this.lastVelocityWasZero = !hasVelocity;
-                    }
-                }
-                return;
-            }
-        }
-        final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
-        if (!ChunkUtils.isLoaded(finalChunk)) {
-            // Entity shouldn't be updated when moving in an unloaded chunk
-            return;
-        }
-
-        if (positionChanged) {
-            if (entityType == EntityTypes.ITEM || entityType == EntityType.FALLING_BLOCK) {
-                // TODO find other exceptions
-                this.previousPosition = this.position;
-                this.position = finalVelocityPosition;
-                refreshCoordinate(finalVelocityPosition);
-            } else {
-                if (!PlayerUtils.isSocketClient(this))
-                    refreshPosition(finalVelocityPosition, true);
-            }
-        }
-
-        // Update velocity
-        if (!noGravity && (hasVelocity || !newVelocity.isZero())) {
-            updateVelocity(wasOnGround, flying, positionBeforeMove, newVelocity);
-        }
-
-        // Verify if velocity packet has to be sent
-        if (this.ticks % VELOCITY_UPDATE_INTERVAL == 0) {
-            if (!isPlayer && (hasVelocity || !lastVelocityWasZero)) {
-                sendPacketToViewers(getVelocityPacket());
-                this.lastVelocityWasZero = !hasVelocity;
-            }
-        }
-    }
-
-    protected void updateVelocity(boolean wasOnGround, boolean flying, Pos positionBeforeMove, Vec newVelocity) {
-        final double drag;
-        if (wasOnGround) {
-            final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
-            synchronized (chunk) {
-                drag = chunk.getBlock(positionBeforeMove.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance();
-            }
-        } else drag = aerodynamics.horizontalAirResistance();
-
-        double gravity = flying ? 0 : aerodynamics.gravity();
-        double gravityDrag = flying ? 0.6 : aerodynamics.verticalAirResistance();
-
-        this.velocity = newVelocity
-                // Apply gravity and drag
-                .apply((x, y, z) -> new Vec(
-                        x * drag,
-                        !hasNoGravity() ? (y - gravity) * gravityDrag : y,
-                        z * drag
-                ))
-                // Convert from block/tick to block/sec
-                .mul(MinecraftServer.TICK_PER_SECOND)
-                // Prevent infinitely decreasing velocity
-                .apply(Vec.Operator.EPSILON);
     }
 
     private void touchTick() {
@@ -1335,14 +1249,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param newPosition the new position
      */
     @ApiStatus.Internal
-    public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView) {
+    public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView, boolean sendPackets) {
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
         this.position = position;
         this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) refreshCoordinate(position);
-        if (nextSynchronizationTick <= ticks + 1) {
+        if (nextSynchronizationTick <= ticks + 1 || !sendPackets) {
             // The entity will be synchronized at the end of its tick
             // not returning here will duplicate position packets
             return;
@@ -1374,6 +1288,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     lastSyncedPosition, isOnGround()), this);
         }
         this.lastSyncedPosition = position;
+    }
+
+    @ApiStatus.Internal
+    public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView) {
+        refreshPosition(newPosition, ignoreView, true);
     }
 
     @ApiStatus.Internal

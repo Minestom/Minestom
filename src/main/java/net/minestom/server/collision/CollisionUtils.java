@@ -168,4 +168,17 @@ public final class CollisionUtils {
     public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
         return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry);
     }
+    
+    /**
+     * Simulate the entity's collision physics as if the world had no blocks
+     *
+     * @param entityPosition the position of the entity
+     * @param entityVelocity the velocity of the entity
+     * @return the result of physics simulation
+     */
+    public static PhysicsResult blocklessCollision(@NotNull Pos entityPosition, @NotNull Vec entityVelocity) {
+        return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
+                false, false, false, entityVelocity, PhysicsResult.EMPTY_COLLISION_POINTS,
+                PhysicsResult.EMPTY_COLLISION_SHAPES, false, SweepResult.NO_COLLISION);
+    }
 }

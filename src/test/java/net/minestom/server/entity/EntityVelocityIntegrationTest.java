@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -172,6 +173,8 @@ public class EntityVelocityIntegrationTest {
         viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0,40,0)).join();
+        instance.setBlock(new Vec(0, 39, 0), Block.STONE);
+        env.tick(); // Tick because the entity is in the air, they'll send velocity from gravity
 
         AtomicInteger i = new AtomicInteger();
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(VELOCITY_UPDATE_INTERVAL, 1);

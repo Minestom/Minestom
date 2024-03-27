@@ -1,4 +1,4 @@
-package net.minestom.server.entity;
+package net.minestom.server.collision;
 
 import it.unimi.dsi.fastutil.doubles.DoubleUnaryOperator;
 import org.jetbrains.annotations.Contract;
