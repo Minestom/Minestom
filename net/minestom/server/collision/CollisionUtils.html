@@ -108,52 +108,68 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#applyWorldBorder(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Pos)" class="member-name-link">applyWorldBorder</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#applyWorldBorder(net.minestom.server.instance.WorldBorder,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Pos)" class="member-name-link">applyWorldBorder</a><wbr>(@NotNull <a href="../instance/WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a>&nbsp;worldBorder,
  @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;currentPosition,
  @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPosition)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Applies world border collision.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canPlaceBlockAt(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.Block)" class="member-name-link">canPlaceBlockAt</a><wbr>(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blocklessCollision(net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec)" class="member-name-link">blocklessCollision</a><wbr>(@NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;entityPosition,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Simulate the entity's collision physics as if the world had no blocks</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#canPlaceBlockAt(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.Block)" class="member-name-link">canPlaceBlockAt</a><wbr>(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPos,
  <a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;b)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.instance.Instance,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.instance.Instance,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
  <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pos,
  @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
  double&nbsp;extendRadius,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
  <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;blockResult)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity,
  @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult,boolean)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity,
- @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult,
- boolean&nbsp;singleCollision)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult,boolean)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult,boolean)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity,
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult,
+ boolean&nbsp;singleCollision)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult,boolean)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  @Nullable <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
+ @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult,
+ boolean&nbsp;singleCollision)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Moves bounding box with physics applied (ie checking against blocks)</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.instance.block.Block.Getter,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult,boolean)" class="member-name-link">handlePhysics</a><wbr>(<a href="../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;blockGetter,
  @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
  @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
  @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
@@ -325,6 +341,33 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="handlePhysics(net.minestom.server.instance.block.Block.Getter,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,net.minestom.server.collision.PhysicsResult,boolean)">
+<h3>handlePhysics</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">handlePhysics</span><wbr><span class="parameters">(@NotNull
+ <a href="../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;blockGetter,
+ @NotNull
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
+ @NotNull
+ @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
+ @NotNull
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
+ @Nullable
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;lastPhysicsResult,
+ boolean&nbsp;singleCollision)</span></div>
+<div class="block">Moves bounding box with physics applied (ie checking against blocks)
+ <p>
+ Works by getting all the full blocks that a bounding box could interact with.
+ All bounding boxes inside the full blocks are checked for collisions with the given bounding box.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>blockGetter</code> - the block getter to check collisions against, ensure block access is synchronized</dd>
+<dt>Returns:</dt>
+<dd>the result of physics simulation</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="isLineOfSightReachingShape(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.Shape)">
 <h3>isLineOfSightReachingShape</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isLineOfSightReachingShape</span><wbr><span class="parameters">(@NotNull
@@ -369,11 +412,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="applyWorldBorder(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Pos)">
+<section class="detail" id="applyWorldBorder(net.minestom.server.instance.WorldBorder,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Pos)">
 <h3>applyWorldBorder</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></span>&nbsp;<span class="element-name">applyWorldBorder</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+ @NotNull <a href="../instance/WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a>&nbsp;worldBorder,
  @NotNull
  @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;currentPosition,
  @NotNull
@@ -381,7 +424,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Applies world border collision.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>instance</code> - the instance where the world border is</dd>
+<dd><code>worldBorder</code> - the world border</dd>
 <dd><code>currentPosition</code> - the current position</dd>
 <dd><code>newPosition</code> - the future target position</dd>
 <dt>Returns:</dt>
@@ -395,6 +438,23 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a></span>&nbsp;<span class="element-name">parseBlockShape</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;collision,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;occlusion,
  <a href="../registry/Registry.BlockEntry.html" title="class in net.minestom.server.registry">Registry.BlockEntry</a>&nbsp;blockEntry)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="blocklessCollision(net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec)">
+<h3>blocklessCollision</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">blocklessCollision</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;entityPosition,
+ @NotNull
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</span></div>
+<div class="block">Simulate the entity's collision physics as if the world had no blocks</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>entityPosition</code> - the position of the entity</dd>
+<dd><code>entityVelocity</code> - the velocity of the entity</dd>
+<dt>Returns:</dt>
+<dd>the result of physics simulation</dd>
+</dl>
 </section>
 </li>
 </ul>
