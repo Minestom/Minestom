@@ -25,9 +25,9 @@ public class PlayerCreativeSlotTest {
         assertEquals(instance, player.getInstance());
 
         player.setGameMode(GameMode.CREATIVE);
-        player.addPacketToQueue(new ClientCreativeInventoryActionPacket((short) PlayerInventoryUtils.OFFHAND_SLOT, ItemStack.of(Material.STICK)));
+        player.addPacketToQueue(new ClientCreativeInventoryActionPacket((short) PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.STICK)));
         player.interpretPacketQueue();
-        assertEquals(Material.STICK, player.getInventory().getItemInOffHand().material());
+        assertEquals(Material.STICK, player.getItemInOffHand().material());
     }
 
     @Test

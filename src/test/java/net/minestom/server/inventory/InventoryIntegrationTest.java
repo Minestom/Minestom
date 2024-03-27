@@ -164,7 +164,6 @@ public class InventoryIntegrationTest {
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
         player.getInventory().setItemStack(PlayerInventoryUtils.OFF_HAND_SLOT, MAGIC_STACK);
         packetTracker.assertSingle(slot -> {
-            System.out.println(slot);
             assertEquals((byte) 0, slot.windowId());
             assertEquals(PlayerInventoryUtils.OFF_HAND_SLOT, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
@@ -175,7 +174,6 @@ public class InventoryIntegrationTest {
         player.getInventory().setItemStack(0, MAGIC_STACK); // Test with first inner inventory slot
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
-            System.out.println(slot.slot());
             assertEquals(PlayerInventoryUtils.minestomToProtocol(0, inventory), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
