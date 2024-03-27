@@ -2,12 +2,10 @@ package net.minestom.server.permission;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,7 +16,7 @@ public class TestPermissions {
 
     private Player player;
 
-    private Permission permission1, permission2, permission3, wildcard;
+    private String permission1, permission2, permission3, wildcard;
 
     @BeforeEach
     public void init() {
@@ -34,107 +32,88 @@ public class TestPermissions {
             }
         };
 
-        permission1 = new Permission("perm.name",
-                NBT.Compound(nbt -> {
-                    nbt.setString("name", "Minestom");
-                    nbt.setInt("amount", 5);
-                })
-        );
+        permission1 = "perm.name";
 
-        permission2 = new Permission("perm.name2");
+        permission2 = "perm.name2";
 
-        permission3 = new Permission("perm.name2.sub.sub2");
+        permission3 = "perm.name2.sub.sub2";
 
-        wildcard = new Permission("*");
+        wildcard = "*";
     }
 
     @Test
     public void noPermission() {
-        assertFalse(player.hasPermission(""));
-        assertFalse(player.hasPermission("random.permission"));
+        assertFalse(player.getPermissionHandler().hasPermission(""));
+        assertFalse(player.getPermissionHandler().hasPermission("random.permission"));
     }
 
     @Test
     public void hasPermissionClass() {
 
-        assertFalse(player.hasPermission(permission1));
-        player.addPermission(permission1);
-        assertTrue(player.hasPermission(permission1));
-        assertFalse(player.hasPermission(permission2));
+        assertFalse(player.getPermissionHandler().hasPermission(permission1));
+        player.getPermissionHandler().addPermission(permission1);
+        assertTrue(player.getPermissionHandler().hasPermission(permission1));
+        assertFalse(player.getPermissionHandler().hasPermission(permission2));
 
-        player.addPermission(permission2);
-        assertTrue(player.hasPermission(permission2));
-    }
-
-    @Test
-    public void hasPermissionNameNbt() {
-        player.addPermission(permission1);
-        assertTrue(player.hasPermission("perm.name"));
-        assertTrue(player.hasPermission("perm.name",
-                nbtCompound -> {
-                    final String name = nbtCompound != null ? nbtCompound.getString("name") : null;
-                    return Objects.equals(name, "Minestom");
-                }));
-
-        player.addPermission(permission2);
-        assertFalse(player.hasPermission("perm.name2", Objects::nonNull));
+        player.getPermissionHandler().addPermission(permission2);
+        assertTrue(player.getPermissionHandler().hasPermission(permission2));
     }
 
     @Test
     public void hasPatternMatchingWildcard() {
-        Permission permission = new Permission("foo.b*r.baz");
-        Permission match = new Permission("foo.baaar.baz");
-        Permission match2 = new Permission("foo.br.baz");
+        String permission = "foo.b*r.baz";
+        String match = "foo.baaar.baz";
+        String match2 = "foo.br.baz";
         String match3 = "foo.br.baz";
         String match4 = "foo.baaar.baz";
-        Permission nomatch = new Permission("foo.br.bz");
-        Permission nomatch2 = new Permission("foo.b.baz");
-        assertFalse(player.hasPermission(match));
-        assertFalse(player.hasPermission(match2));
-        assertFalse(player.hasPermission(nomatch));
-        assertFalse(player.hasPermission(nomatch2));
+        String nomatch = "foo.br.bz";
+        String nomatch2 = "foo.b.baz";
+        assertFalse(player.getPermissionHandler().hasPermission(match));
+        assertFalse(player.getPermissionHandler().hasPermission(match2));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch2));
 
-        player.addPermission(permission);
+        player.getPermissionHandler().addPermission(permission);
 
-        assertTrue(player.hasPermission(match));
-        assertTrue(player.hasPermission(match2));
-        assertTrue(player.hasPermission(match3));
-        assertTrue(player.hasPermission(match4));
-        assertFalse(player.hasPermission(nomatch));
-        assertFalse(player.hasPermission(nomatch2));
+        assertTrue(player.getPermissionHandler().hasPermission(match));
+        assertTrue(player.getPermissionHandler().hasPermission(match2));
+        assertTrue(player.getPermissionHandler().hasPermission(match3));
+        assertTrue(player.getPermissionHandler().hasPermission(match4));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch2));
     }
 
     @Test
     public void hasPermissionWildcard() {
-        Permission permission = new Permission("foo.b*");
-        Permission match = new Permission("foo.baaar.baz");
-        Permission match2 = new Permission("foo.b");
+        String permission = "foo.b*";
+        String match = "foo.baaar.baz";
+        String match2 = "foo.b";
         String match3 = "foo.b";
         String match4 = "foo.baaar.baz";
-        Permission nomatch = new Permission("foo.");
-        Permission nomatch2 = new Permission("foo/b");
-        assertFalse(player.hasPermission(match));
-        assertFalse(player.hasPermission(match2));
-        assertFalse(player.hasPermission(nomatch));
-        assertFalse(player.hasPermission(nomatch2));
+        String nomatch = "foo.";
+        String nomatch2 = "foo/b";
+        assertFalse(player.getPermissionHandler().hasPermission(match));
+        assertFalse(player.getPermissionHandler().hasPermission(match2));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch2));
 
-        player.addPermission(permission);
+        player.getPermissionHandler().addPermission(permission);
 
-        assertTrue(player.hasPermission(match));
-        assertTrue(player.hasPermission(match2));
-        assertTrue(player.hasPermission(match3));
-        assertTrue(player.hasPermission(match4));
-        assertFalse(player.hasPermission(nomatch));
-        assertFalse(player.hasPermission(nomatch2));
+        assertTrue(player.getPermissionHandler().hasPermission(match));
+        assertTrue(player.getPermissionHandler().hasPermission(match2));
+        assertTrue(player.getPermissionHandler().hasPermission(match3));
+        assertTrue(player.getPermissionHandler().hasPermission(match4));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch));
+        assertFalse(player.getPermissionHandler().hasPermission(nomatch2));
     }
 
     @Test
     public void hasAllPermissionsWithWildcard() {
-        assertFalse(player.hasPermission(permission2));
-        assertFalse(player.hasPermission(permission3));
-        player.addPermission(wildcard);
-        assertTrue(player.hasPermission(permission2));
-        assertTrue(player.hasPermission(permission3));
+        assertFalse(player.getPermissionHandler().hasPermission(permission2));
+        assertFalse(player.getPermissionHandler().hasPermission(permission3));
+        player.getPermissionHandler().addPermission(wildcard);
+        assertTrue(player.getPermissionHandler().hasPermission(permission2));
+        assertTrue(player.getPermissionHandler().hasPermission(permission3));
     }
 
     @AfterEach
