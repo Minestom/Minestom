@@ -51,13 +51,8 @@ public final class PhysicsUtils {
             return new Vec(0, entityNoGravity ? 0 : -aerodynamics.gravity() * aerodynamics.verticalAirResistance(), 0);
         }
 
-        final double drag;
-        if (entityOnGround) {
-            synchronized (blockGetter) {
-                drag = blockGetter.getBlock(entityPosition.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance();
-            }
-        } else drag = aerodynamics.horizontalAirResistance();
-
+        double drag = entityOnGround ? blockGetter.getBlock(entityPosition.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance() :
+                aerodynamics.horizontalAirResistance();
         double gravity = entityFlying ? 0 : aerodynamics.gravity();
         double gravityDrag = entityFlying ? 0.6 : aerodynamics.verticalAirResistance();
 
