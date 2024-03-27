@@ -56,11 +56,8 @@ public final class PhysicsUtils {
         double gravity = entityFlying ? 0 : aerodynamics.gravity();
         double gravityDrag = entityFlying ? 0.6 : aerodynamics.verticalAirResistance();
 
-        return currentVelocity.apply((x, y, z) -> new Vec(
-                        x * drag,
-                        !entityNoGravity ? (y - gravity) * gravityDrag : y,
-                        z * drag)
-                ).apply(Vec.Operator.EPSILON);
+        double x = currentVelocity.x() * drag, y = !entityNoGravity ? ((currentVelocity.y() - gravity) * gravityDrag) : currentVelocity.y(), z = currentVelocity.z() * drag;
+        return new Vec(Math.abs(x) < Vec.EPSILON ? 0 : x, Math.abs(y) < Vec.EPSILON ? 0 : y, Math.abs(z) < Vec.EPSILON ? 0 : z);
     }
 
     private PhysicsUtils() {}
