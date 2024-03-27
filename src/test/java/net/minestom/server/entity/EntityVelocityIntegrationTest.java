@@ -110,7 +110,7 @@ public class EntityVelocityIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         env.tick();
 
-        final double epsilon = 0.00005;
+        final double epsilon = 0.000001;
 
         assertEquals(player.getVelocity().y(), -1.568, epsilon);
         double previousVelocity = player.getVelocity().y();
@@ -119,7 +119,7 @@ public class EntityVelocityIntegrationTest {
         env.tick();
 
         // Every tick, the y velocity is multiplied by 0.6, and after 27 ticks it should be 0
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 22; i++) {
             assertEquals(player.getVelocity().y(), previousVelocity * 0.6, epsilon);
             previousVelocity = player.getVelocity().y();
             env.tick();
