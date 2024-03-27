@@ -50,7 +50,6 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -269,7 +268,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public boolean isOnGround() {
-        return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
+        return onGround;
     }
 
     /**
@@ -869,13 +868,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return true if the entity is moving
      */
     public boolean hasVelocity() {
-        if (isOnGround()) {
-            // if the entity is on the ground and only "moves" downwards, it does not have a velocity.
-            return Double.compare(velocity.x(), 0) != 0 || Double.compare(velocity.z(), 0) != 0 || velocity.y() > 0;
-        } else {
-            // The entity does not have velocity if the velocity is zero
-            return !velocity.isZero();
-        }
+        // if the entity is on the ground and only "moves" downwards, it does not have a velocity.
+        if (onGround) return Double.compare(velocity.x(), 0) != 0 || Double.compare(velocity.z(), 0) != 0 || velocity.y() > 0;
+        return !velocity.isZero();
     }
 
     /**
