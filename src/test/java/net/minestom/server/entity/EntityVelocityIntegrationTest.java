@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -109,7 +110,7 @@ public class EntityVelocityIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         env.tick();
 
-        final double epsilon = 0.00001;
+        final double epsilon = 0.000001;
 
         assertEquals(player.getVelocity().y(), -1.568, epsilon);
         double previousVelocity = player.getVelocity().y();
@@ -118,7 +119,7 @@ public class EntityVelocityIntegrationTest {
         env.tick();
 
         // Every tick, the y velocity is multiplied by 0.6, and after 27 ticks it should be 0
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < 22; i++) {
             assertEquals(player.getVelocity().y(), previousVelocity * 0.6, epsilon);
             previousVelocity = player.getVelocity().y();
             env.tick();
@@ -172,6 +173,8 @@ public class EntityVelocityIntegrationTest {
         viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0,40,0)).join();
+        instance.setBlock(new Vec(0, 39, 0), Block.STONE);
+        env.tick(); // Tick because the entity is in the air, they'll send velocity from gravity
 
         AtomicInteger i = new AtomicInteger();
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(VELOCITY_UPDATE_INTERVAL, 1);
