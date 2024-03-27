@@ -580,7 +580,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
         boolean entityIsPlayer = this instanceof Player;
         boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
-        PhysicsResult physicsResult = PhysicsUtil.simulateMovement(position, velocity, boundingBox, chunk, aerodynamics,
+        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity, boundingBox, chunk, aerodynamics,
                 hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
         this.previousPhysicsResult = physicsResult;
 

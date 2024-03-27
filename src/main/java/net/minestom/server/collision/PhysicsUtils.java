@@ -7,7 +7,7 @@ import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class PhysicsUtil {
+public final class PhysicsUtils {
     /**
      * Simulate the entity's movement physics
      * <p>
@@ -68,4 +68,6 @@ public final class PhysicsUtil {
                 ).mul(ServerFlag.SERVER_TICKS_PER_SECOND)
                 .apply(Vec.Operator.EPSILON);
     }
+
+    private PhysicsUtils() {}
 }
