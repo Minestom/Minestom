@@ -1,9 +1,9 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.WorldBorder;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,9 +16,10 @@ public final class PhysicsUtils {
      * air resistance and friction.
      *
      * @param entityPosition the current entity position
-     * @param entityVelocity the current entity velocity
+     * @param entityVelocityPerTick the current entity velocity in blocks/tick
      * @param entityBoundingBox the current entity bounding box
-     * @param entityChunk the current entity chunk
+     * @param worldBorder the world border to test bounds against
+     * @param blockGetter the block getter to test block collisions against
      * @param aerodynamics the current entity aerodynamics
      * @param entityNoGravity whether the entity has gravity
      * @param entityHasPhysics whether the entity has physics
@@ -27,34 +28,33 @@ public final class PhysicsUtils {
      * @param previousPhysicsResult the physics result from the previous simulation or null
      * @return a {@link PhysicsResult} containing the resulting physics state of this simulation
      */
-    public static @NotNull PhysicsResult simulateMovement(@NotNull Pos entityPosition, @NotNull Vec entityVelocity, @NotNull BoundingBox entityBoundingBox,
-                                                          @NotNull Chunk entityChunk, @NotNull Aerodynamics aerodynamics, boolean entityNoGravity,
+    public static @NotNull PhysicsResult simulateMovement(@NotNull Pos entityPosition, @NotNull Vec entityVelocityPerTick, @NotNull BoundingBox entityBoundingBox,
+                                                          @NotNull WorldBorder worldBorder, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics, boolean entityNoGravity,
                                                           boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
-        Vec velocityPerTick = entityVelocity.div(ServerFlag.SERVER_TICKS_PER_SECOND);
         final PhysicsResult physicsResult = entityHasPhysics ?
-                CollisionUtils.handlePhysics(entityChunk.getInstance(), entityChunk, entityBoundingBox, entityPosition, velocityPerTick, previousPhysicsResult, false) :
-                CollisionUtils.blocklessCollision(entityPosition, velocityPerTick);
+                CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
+                CollisionUtils.blocklessCollision(entityPosition, entityVelocityPerTick);
 
         Pos newPosition = physicsResult.newPosition();
         Vec newVelocity = physicsResult.newVelocity();
 
-        Pos positionWithinBorder = CollisionUtils.applyWorldBorder(entityChunk.getInstance(), entityPosition, newPosition);
-        newVelocity = updateVelocity(entityPosition, newVelocity, entityChunk, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
+        Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
+        newVelocity = updateVelocity(entityPosition, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
         return new PhysicsResult(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
                 physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.hasCollision(), physicsResult.res());
     }
 
-    private static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Chunk entityChunk, @NotNull Aerodynamics aerodynamics,
+    private static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics,
                                                boolean positionChanged, boolean entityFlying, boolean entityOnGround, boolean entityNoGravity) {
         if (!positionChanged) {
             if (entityOnGround || entityFlying) return Vec.ZERO;
-            return new Vec(0, entityNoGravity ? 0 : -aerodynamics.gravity() * ServerFlag.SERVER_TICKS_PER_SECOND * aerodynamics.verticalAirResistance(), 0);
+            return new Vec(0, entityNoGravity ? 0 : -aerodynamics.gravity() * aerodynamics.verticalAirResistance(), 0);
         }
 
         final double drag;
         if (entityOnGround) {
-            synchronized (entityChunk) {
-                drag = entityChunk.getBlock(entityPosition.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance();
+            synchronized (blockGetter) {
+                drag = blockGetter.getBlock(entityPosition.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance();
             }
         } else drag = aerodynamics.horizontalAirResistance();
 
@@ -65,8 +65,7 @@ public final class PhysicsUtils {
                         x * drag,
                         !entityNoGravity ? (y - gravity) * gravityDrag : y,
                         z * drag)
-                ).mul(ServerFlag.SERVER_TICKS_PER_SECOND)
-                .apply(Vec.Operator.EPSILON);
+                ).apply(Vec.Operator.EPSILON);
     }
 
     private PhysicsUtils() {}

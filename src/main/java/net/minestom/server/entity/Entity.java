@@ -577,19 +577,18 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
         if (vehicle != null) return;
 
-        Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, position);
         boolean entityIsPlayer = this instanceof Player;
         boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
-        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity, boundingBox, chunk, aerodynamics,
-                hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
+        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
+                instance.getWorldBorder(), instance, aerodynamics, hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
         this.previousPhysicsResult = physicsResult;
 
         Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, physicsResult.newPosition());
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
-        boolean shouldSendVelocity = !entityIsPlayer && hasVelocity();
-        velocity = physicsResult.newVelocity();
+        velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
         onGround = physicsResult.isOnGround();
+        boolean shouldSendVelocity = !entityIsPlayer && hasVelocity();
 
         if (!PlayerUtils.isSocketClient(this)) {
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));

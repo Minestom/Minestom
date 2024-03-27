@@ -102,9 +102,26 @@ public final class CollisionUtils {
                                               @NotNull Pos position, @NotNull Vec velocity,
                                               @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
         final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
+        return handlePhysics(getter, boundingBox, position, velocity, lastPhysicsResult, singleCollision);
+    }
+
+    /**
+     * Moves bounding box with physics applied (ie checking against blocks)
+     * <p>
+     * Works by getting all the full blocks that a bounding box could interact with.
+     * All bounding boxes inside the full blocks are checked for collisions with the given bounding box.
+     *
+     * @param blockGetter the block getter to check collisions against, ensure block access is synchronized
+     * @return the result of physics simulation
+     */
+    @ApiStatus.Internal
+    public static PhysicsResult handlePhysics(@NotNull Block.Getter blockGetter,
+                                              @NotNull BoundingBox boundingBox,
+                                              @NotNull Pos position, @NotNull Vec velocity,
+                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
         return BlockCollision.handlePhysics(boundingBox,
                 velocity, position,
-                getter, lastPhysicsResult, singleCollision);
+                blockGetter, lastPhysicsResult, singleCollision);
     }
 
     /**
@@ -140,14 +157,13 @@ public final class CollisionUtils {
     /**
      * Applies world border collision.
      *
-     * @param instance        the instance where the world border is
+     * @param worldBorder     the world border
      * @param currentPosition the current position
      * @param newPosition     the future target position
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
-    public static @NotNull Pos applyWorldBorder(@NotNull Instance instance,
+    public static @NotNull Pos applyWorldBorder(@NotNull WorldBorder worldBorder,
                                                 @NotNull Pos currentPosition, @NotNull Pos newPosition) {
-        final WorldBorder worldBorder = instance.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
         return switch (collisionAxis) {
             case NONE ->
@@ -178,7 +194,7 @@ public final class CollisionUtils {
      */
     public static PhysicsResult blocklessCollision(@NotNull Pos entityPosition, @NotNull Vec entityVelocity) {
         return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
-                false, false, false, entityVelocity, PhysicsResult.EMPTY_COLLISION_POINTS,
-                PhysicsResult.EMPTY_COLLISION_SHAPES, false, SweepResult.NO_COLLISION);
+                false, false, false, entityVelocity, new Point[3],
+                new Shape[3], false, SweepResult.NO_COLLISION);
     }
 }

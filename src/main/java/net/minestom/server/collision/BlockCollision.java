@@ -29,7 +29,7 @@ final class BlockCollision {
         if (velocity.isZero()) {
             // TODO should return a constant
             return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
-                    velocity, PhysicsResult.EMPTY_COLLISION_POINTS, PhysicsResult.EMPTY_COLLISION_SHAPES, false, SweepResult.NO_COLLISION);
+                    velocity, new Point[3], new Shape[3], false, SweepResult.NO_COLLISION);
         }
         // Fast-exit using cache
         final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);

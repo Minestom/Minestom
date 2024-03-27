@@ -32,6 +32,4 @@ public record PhysicsResult(
         boolean hasCollision,
         SweepResult res
 ) {
-    static final Point[] EMPTY_COLLISION_POINTS = new Point[3];
-    static final Shape[] EMPTY_COLLISION_SHAPES = new Shape[3];
 }
