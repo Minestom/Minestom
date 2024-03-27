@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
