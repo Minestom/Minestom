@@ -126,20 +126,21 @@ public final class Scratch {
                 this.players.put(player.id, player);
             }
             // Tick playing players
+            List<Player> toRemove = new ArrayList<>();
             final boolean sendKeepAlive = keepAliveId++ % (20 * 20) == 0;
             for (Player player : players.values()) {
-                if (!player.connection.online) {
-                    this.players.remove(player.id);
-                    var synchronizerEntry = player.synchronizerEntry;
-                    if (synchronizerEntry != null) synchronizerEntry.unmake();
-                    continue;
-                }
                 if (sendKeepAlive) player.connection.sendPacket(new KeepAlivePacket(keepAliveId));
-                player.tick();
+                if (!player.tick()) toRemove.add(player);
             }
             // Tick entities
             for (Entity entity : entities.values()) {
                 entity.tick();
+            }
+            // Remove disconnected players
+            for (Player player : toRemove) {
+                this.players.remove(player.id);
+                var synchronizerEntry = player.synchronizerEntry;
+                if (synchronizerEntry != null) synchronizerEntry.unmake();
             }
             // Compute broadcast packets
             try (Broadcaster.Collector collector = instance.broadcaster.collector()) {
@@ -491,7 +492,7 @@ public final class Scratch {
             return packets;
         }
 
-        void tick() {
+        boolean tick() {
             ClientPacket packet;
             while ((packet = connection.packetQueue.poll()) != null) {
                 this.messaging.accept(packet);
@@ -500,6 +501,7 @@ public final class Scratch {
                 this.entityInteract.accept(packet);
             }
             this.oldPosition = this.position;
+            return connection.online;
         }
 
         private PlayerInfoUpdatePacket getAddPlayerToList() {
