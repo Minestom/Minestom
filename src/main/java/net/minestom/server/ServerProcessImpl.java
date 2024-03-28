@@ -273,6 +273,8 @@ final class ServerProcessImpl implements ServerProcess {
             // Server tick (chunks/entities)
             serverTick(msTime);
 
+            scheduler().processTickEnd();
+
             // Flush all waiting packets
             PacketUtils.flush();
 
