@@ -21,7 +21,6 @@ import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -230,10 +229,9 @@ public class DynamicChunk extends Chunk {
 
         final byte[] data;
         synchronized (this) {
-            data = ObjectPool.PACKET_POOL.use(buffer ->
-                    NetworkBuffer.makeArray(networkBuffer -> {
-                        for (Section section : sections) networkBuffer.write(section);
-                    }));
+            data = NetworkBuffer.makeArray( networkBuffer -> {
+                for (Section section : sections) networkBuffer.write(section);
+            });
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,
