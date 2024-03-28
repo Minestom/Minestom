@@ -677,11 +677,13 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the dimension of the player.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" class="member-name-link">sendMessage</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a>&nbsp;source,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" class="member-name-link">sendMessage</a><wbr>(@NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a>&nbsp;source,
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;message,
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/audience/MessageType.html" title="class or interface in net.kyori.adventure.audience" class="external-link">MessageType</a>&nbsp;type)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPacket(net.minestom.server.network.packet.server.SendablePacket)" class="member-name-link">sendPacket</a><wbr>(@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a>&nbsp;packet)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -1316,15 +1318,22 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li>
 <section class="detail" id="sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">
 <h3>sendMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendMessage</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendMessage</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a>&nbsp;source,
  @NotNull
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;message,
  @NotNull
  @NotNull <a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/audience/MessageType.html" title="class or interface in net.kyori.adventure.audience" class="external-link">MessageType</a>&nbsp;type)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
+<div class="block">Deprecated, as the Adventure library has deprecated this method in the Audience class</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/audience/Audience.html#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="external-link">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.15.0/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>source</code> - the identity of the source of the message</dd>
+<dd><code>message</code> - a message</dd>
+<dd><code>type</code> - the type</dd>
 </dl>
 </section>
 </li>
@@ -2294,7 +2303,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li>
 <section class="detail" id="UNSAFE_changeDidCloseInventory(boolean)">
 <h3>UNSAFE_changeDidCloseInventory</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UNSAFE_changeDidCloseInventory</span><wbr><span class="parameters">(boolean&nbsp;didCloseInventory)</span></div>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UNSAFE_changeDidCloseInventory</span><wbr><span class="parameters">(boolean&nbsp;didCloseInventory)</span></div>
 <div class="block">Used internally to reset the didCloseInventory field.
  <p>
  Shouldn't be used externally without proper understanding of its consequence.</div>
