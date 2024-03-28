@@ -2,6 +2,8 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Area;
+import net.minestom.server.coordinate.AreaQuery;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -45,6 +47,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
@@ -69,6 +72,10 @@ public class InstanceContainer extends Instance {
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
+
+    // Block tracking
+    private final Map<Area, Set<Block.Tracker>> blockTrackers = new HashMap<>();
+    private final Set<Block.Tracker> globalBlockTrackers = new HashSet<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
@@ -175,6 +182,31 @@ public class InstanceContainer extends Instance {
 
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
+
+            // Update the block trackers
+            // TODO: Write tests for duplicate block updates (two updates after another where the block has not changed)?
+            synchronized (blockTrackers) {
+                @NotNull Block newBlock = block;
+                if (blockTrackers.size() != 0) {
+                    for (var entry : blockTrackers.entrySet()) {
+                        Area area = entry.getKey();
+                        Set<Block.Tracker> trackers = entry.getValue();
+
+                        if (trackers.stream().noneMatch(Block.Tracker::trackBlockPlacement)) continue;
+                        if (AreaQuery.contains(area, blockPosition)) {
+                            trackers.stream()
+                                    .filter(Block.Tracker::trackBlockPlacement)
+                                    .forEach(tracker -> tracker.updateBlock(blockPosition, newBlock));
+                        }
+                    }
+                }
+            }
+            synchronized (globalBlockTrackers) {
+                @NotNull Block newBlock = block;
+                globalBlockTrackers.stream()
+                        .filter(Block.Tracker::trackBlockPlacement)
+                        .forEach(tracker -> tracker.updateBlock(blockPosition, newBlock));
+            }
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
@@ -308,6 +340,12 @@ public class InstanceContainer extends Instance {
                     chunk.onLoad();
 
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
+
+                    // Update the block trackers
+                    synchronized (chunk) {
+                        updateBlockTrackersForChunk(chunk);
+                    }
+
                     final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
                     assert future == completableFuture : "Invalid future: " + future;
                     completableFuture.complete(chunk);
@@ -322,6 +360,68 @@ public class InstanceContainer extends Instance {
             retriever.run();
         }
         return completableFuture;
+    }
+
+    private void updateBlockTrackersForChunk(Chunk chunk) {
+        if (blockTrackers.isEmpty()) return;
+        if (blockTrackers.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .noneMatch(Block.Tracker::trackGeneration)) return;
+
+        int chunkX = chunk.getChunkX();
+        int chunkZ = chunk.getChunkZ();
+
+        int minX = chunkX * Chunk.CHUNK_SIZE_X;
+        int minY = getDimensionType().getMinY();
+        int minZ = chunkZ * Chunk.CHUNK_SIZE_Z;
+
+        int maxX = minX + Chunk.CHUNK_SIZE_X;
+        int maxY = getDimensionType().getMaxY();
+        int maxZ = minZ + Chunk.CHUNK_SIZE_Z;
+
+        // Scan through the chunk and collect blocks that need to be tracked
+        // TODO: Optimize this using the generation api where possible
+        // Optimizing the block trackers using the generation api means saving a list of all the operations as fill
+        // areas, and using them here.
+
+        Map<Block, Set<Point>> block2points = new HashMap<>();
+
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    Block block = chunk.getBlock(x, y, z);
+                    block2points.computeIfAbsent(block, b -> new HashSet<>()).add(new Vec(x, y, z));
+                }
+            }
+        }
+
+        Map<Block, Area> areas = block2points.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> Area.collection(e.getValue())));
+
+        // Update the block trackers
+        synchronized (blockTrackers) {
+            areas.forEach((block, area) -> {
+                blockTrackers.forEach((trackerArea, trackers) -> {
+
+                    // Exit early if none of the trackers are tracking generation
+                    if (trackers.stream().noneMatch(Block.Tracker::trackGeneration)) return;
+
+                    if (AreaQuery.hasOverlap(area, trackerArea)) {
+                        Area intersection = Area.intersection(trackerArea, area);
+                        trackers.stream()
+                                .filter(Block.Tracker::trackGeneration)
+                                .forEach(tracker -> tracker.updateBlocks(intersection, block));
+                    }
+                });
+            });
+        }
+
+        synchronized (globalBlockTrackers) {
+            areas.forEach((block, area) -> globalBlockTrackers.stream()
+                    .filter(Block.Tracker::trackGeneration)
+                    .forEach(tracker -> tracker.updateBlocks(area, block)));
+        }
     }
 
     Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
@@ -665,5 +765,19 @@ public class InstanceContainer extends Instance {
         this.chunks.put(getChunkIndex(chunk), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
+    }
+
+    @Override
+    public void trackBlocks(@NotNull Area area, Block.@NotNull Tracker tracker) {
+        synchronized (blockTrackers) {
+            blockTrackers.computeIfAbsent(area, a -> new HashSet<>()).add(tracker);
+        }
+    }
+
+    @Override
+    public void trackAllBlocks(Block.@NotNull Tracker tracker) {
+        synchronized (globalBlockTrackers) {
+            globalBlockTrackers.add(tracker);
+        }
     }
 }

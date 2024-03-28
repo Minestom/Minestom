@@ -7,8 +7,9 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class InstanceBlockIntegrationTest {
@@ -72,5 +73,41 @@ public class InstanceBlockIntegrationTest {
         // Different block type
         instance.setBlock(point, Block.GRASS_BLOCK.withTag(tag, 8));
         assertEquals(8, instance.getBlock(point).getTag(tag));
+    }
+
+    @Test
+    public void basicTracker(Env env) {
+        var instance = env.createFlatInstance();
+
+        instance.loadChunk(0, 0).join();
+
+        AtomicBoolean called = new AtomicBoolean(false);
+        instance.trackBlock(new Vec(0, 0, 0), block -> called.set(true));
+        instance.setBlock(0, 0, 0, Block.GRASS);
+
+        assertEquals(Block.GRASS, instance.getBlock(0, 0, 0), "Block not set");
+        assertTrue(called.get(), "Tracker not called");
+    }
+
+    @Test
+    public void singleLoadChunkTracker(Env env) {
+        var instance = env.createFlatInstance();
+
+        AtomicBoolean called = new AtomicBoolean(false);
+        instance.trackBlock(new Vec(0, 0, 0), block -> called.set(true));
+        instance.loadChunk(0, 0).join();
+        assertTrue(called.get(), "Tracker not called");
+    }
+
+    @Test
+    public void singleGenerateChunkTracker(Env env) {
+        var instance = env.createFlatInstance();
+
+        instance.setGenerator(unit -> unit.modifier().fill(Block.STONE));
+
+        AtomicBoolean called = new AtomicBoolean(false);
+        instance.trackBlock(new Vec(0, 0, 0), block -> called.set(block == Block.STONE));
+        instance.loadChunk(0, 0).join();
+        assertTrue(called.get(), "Tracker not called with the correct block.");
     }
 }

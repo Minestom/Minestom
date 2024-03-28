@@ -1,6 +1,8 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -12,9 +14,11 @@ import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 
 /**
  * Represents a block that can be placed anywhere.
@@ -250,6 +254,66 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
              * Be aware that the returned block may not return the proper handler/nbt.
              */
             TYPE
+        }
+    }
+
+    /**
+     * Represents an object in which blocks changes may be tracked.
+     */
+    interface Trackable {
+
+        /**
+         * Tracks the given area, listening for any block changes.
+         * All changes given to the tracker object are guaranteed to be within this area.
+         * @param area the area to track
+         * @param tracker the tracker object
+         */
+        void trackBlocks(@NotNull Area area, @NotNull Tracker tracker);
+
+        /**
+         * Tracks all block changes.
+         * @param tracker the tracker object
+         */
+        void trackAllBlocks(@NotNull Tracker tracker);
+
+        /**
+         * Tracks this specific block position, running the given update consumer when the block changes.
+         * @param point the block position
+         * @param newBlock the update consumer
+         */
+        default void trackBlock(Point point, @NotNull Consumer<Block> newBlock) {
+            trackBlocks(Area.collection(List.of(point)), (pos, block) -> newBlock.accept(block));
+        }
+    }
+
+    /**
+     * Represents a target for where block-trackable objects can update their changes to.
+     */
+    interface Tracker {
+        /**
+         * Called when the block at the given position has changed.
+         * @param point the position
+         * @param block the new block
+         */
+        void updateBlock(Point point, @NotNull Block block);
+
+        /**
+         * Updates the block at the given rectangular prism.
+         * @param area the area
+         * @param block the new block
+         */
+        default void updateBlocks(Area area, @NotNull Block block) {
+            for (Point pos : area) {
+                updateBlock(pos, block);
+            }
+        }
+
+        default boolean trackGeneration() {
+            return true;
+        }
+
+        default boolean trackBlockPlacement() {
+            return true;
         }
     }
 }
