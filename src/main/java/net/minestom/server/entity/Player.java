@@ -45,8 +45,8 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -239,7 +239,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setRespawnPoint(Pos.ZERO);
 
         this.settings = new PlayerSettings();
-        this.inventory = new PlayerInventory(this);
+        this.inventory = new PlayerInventory();
 
         setCanPickupItem(true); // By default
 
@@ -369,6 +369,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
+
+        inventory.addViewer(this);
 
         return setInstance(spawnInstance);
     }
@@ -1003,11 +1005,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         .pages(book.pages()))
                 .build();
         // Set book in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, writtenBook));
         // Open the book
         sendPacket(new OpenBookPacket(Hand.OFF));
         // Restore the item in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, getItemInOffHand()));
     }
 
     @Override
@@ -1721,6 +1723,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return openInventory;
     }
 
+    private void tryCloseInventory(boolean fromClient) {
+        var closedInventory = getOpenInventory();
+        if (closedInventory == null) return;
+
+        didCloseInventory = fromClient;
+
+        if (closedInventory.removeViewer(this)) {
+            if (closedInventory == getOpenInventory()) {
+                this.openInventory = null;
+            }
+        }
+    }
+
     /**
      * Opens the specified Inventory, close the previous inventory if existing.
      *
@@ -1731,21 +1746,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            Inventory openInventory = getOpenInventory();
-            if (openInventory != null) {
-                openInventory.removeViewer(this);
-            }
+            tryCloseInventory(false);
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory == null) {
-                // just close the inventory
-                return;
+            if (newInventory.addViewer(this)) {
+                this.openInventory = newInventory;
             }
-
-            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
-                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
-            newInventory.addViewer(this);
-            this.openInventory = newInventory;
         });
         return !inventoryOpenEvent.isCancelled();
     }
@@ -1760,37 +1766,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
-        Inventory openInventory = getOpenInventory();
-
-        // Drop cursor item when closing inventory
-        ItemStack cursorItem;
-        if (openInventory == null) {
-            cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.AIR);
-        } else {
-            cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.AIR);
-        }
-        if (!cursorItem.isAir()) {
-            // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
-                getInventory().addItemStack(cursorItem);
-            }
-        }
-
-        if (openInventory == getOpenInventory()) {
-            CloseWindowPacket closeWindowPacket;
-            if (openInventory == null) {
-                closeWindowPacket = new CloseWindowPacket((byte) 0);
-            } else {
-                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-                openInventory.removeViewer(this); // Clear cache
-                this.openInventory = null;
-            }
-            if (!fromClient) sendPacket(closeWindowPacket);
-            inventory.update();
-            this.didCloseInventory = true;
-        }
+        tryCloseInventory(fromClient);
+        inventory.update();
     }
 
     /**
@@ -2260,62 +2237,62 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull ItemStack getItemInMainHand() {
-        return inventory.getItemInMainHand();
+        return inventory.getEquipment(EquipmentSlot.MAIN_HAND, getHeldSlot());
     }
 
     @Override
     public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInMainHand(itemStack);
+        inventory.setEquipment(EquipmentSlot.MAIN_HAND, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getItemInOffHand() {
-        return inventory.getItemInOffHand();
+        return inventory.getEquipment(EquipmentSlot.OFF_HAND, getHeldSlot());
     }
 
     @Override
     public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInOffHand(itemStack);
+        inventory.setEquipment(EquipmentSlot.OFF_HAND, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getHelmet() {
-        return inventory.getHelmet();
+        return inventory.getEquipment(EquipmentSlot.HELMET, getHeldSlot());
     }
 
     @Override
     public void setHelmet(@NotNull ItemStack itemStack) {
-        inventory.setHelmet(itemStack);
+        inventory.setEquipment(EquipmentSlot.HELMET, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getChestplate() {
-        return inventory.getChestplate();
+        return inventory.getEquipment(EquipmentSlot.CHESTPLATE, getHeldSlot());
     }
 
     @Override
     public void setChestplate(@NotNull ItemStack itemStack) {
-        inventory.setChestplate(itemStack);
+        inventory.setEquipment(EquipmentSlot.CHESTPLATE, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getLeggings() {
-        return inventory.getLeggings();
+        return inventory.getEquipment(EquipmentSlot.LEGGINGS, getHeldSlot());
     }
 
     @Override
     public void setLeggings(@NotNull ItemStack itemStack) {
-        inventory.setLeggings(itemStack);
+        inventory.setEquipment(EquipmentSlot.LEGGINGS, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getBoots() {
-        return inventory.getBoots();
+        return inventory.getEquipment(EquipmentSlot.BOOTS, getHeldSlot());
     }
 
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
-        inventory.setBoots(itemStack);
+        inventory.setEquipment(EquipmentSlot.BOOTS, getHeldSlot(), itemStack);
     }
 
     @Override

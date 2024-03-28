@@ -1,13 +1,13 @@
 package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
-public class BeaconInventory extends Inventory {
+public class BeaconInventory extends ContainerInventory {
 
     private short powerLevel;
     private PotionEffect firstPotionEffect;

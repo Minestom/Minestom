@@ -22,7 +22,7 @@ public class InventoryCloseStateTest {
         assertEquals(instance, player.getInstance());
 
         var packetTracker = connection.trackIncoming(CloseWindowPacket.class);
-        var inventory = new Inventory(InventoryType.CHEST_2_ROW, Component.text("Test"));
+        var inventory = new ContainerInventory(InventoryType.CHEST_2_ROW, Component.text("Test"));
         player.openInventory(inventory);
         player.closeInventory(); // Closes the inventory server-side, should send a CloseWindowPacket
         player.openInventory(inventory);

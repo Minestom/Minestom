@@ -163,10 +163,19 @@ public interface EquipmentHandler {
      * @param slot the slot of the equipment
      */
     default void syncEquipment(@NotNull EquipmentSlot slot) {
+        syncEquipment(slot, getEquipment(slot));
+    }
+
+    /**
+     * Sends a specific equipment to viewers.
+     *
+     * @param slot the slot of the equipment
+     * @param itemStack the item to be sent for the slot
+     */
+    default void syncEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
-        final ItemStack itemStack = getEquipment(slot);
         entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(), Map.of(slot, itemStack)));
     }
 
