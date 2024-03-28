@@ -34,7 +34,6 @@ import net.minestom.server.network.packet.server.play.data.DeathLocation;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -43,7 +42,6 @@ import java.net.StandardProtocolFamily;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -70,10 +68,11 @@ public final class Scratch {
     private final AtomicInteger lastEntityId = new AtomicInteger();
     private final AtomicBoolean stop = new AtomicBoolean(false);
     private final ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.INET);
+    private final ConcurrentLinkedQueue<PlayerInfo> waitingPlayers = new ConcurrentLinkedQueue<>();
 
     private final Instance instance = new Instance(DimensionType.OVERWORLD, new World(DimensionType.OVERWORLD));
-    private final Map<Integer, Player> players = new ConcurrentHashMap<>();
-    private final Map<Integer, Entity> entities = new ConcurrentHashMap<>();
+    private final Map<Integer, Player> players = new HashMap<>();
+    private final Map<Integer, Entity> entities = new HashMap<>();
 
     Scratch() throws Exception {
         server.bind(ADDRESS);
@@ -119,8 +118,15 @@ public final class Scratch {
         }
         int keepAliveId = 0;
         while (serverRunning()) {
-            final boolean sendKeepAlive = keepAliveId++ % (20 * 20) == 0;
             final long time = System.nanoTime();
+            // Connect waiting players
+            PlayerInfo playerInfo;
+            while ((playerInfo = waitingPlayers.poll()) != null) {
+                final Player player = new Player(playerInfo, instance, new Pos(0, 55, 0));
+                this.players.put(player.id, player);
+            }
+            // Tick playing players
+            final boolean sendKeepAlive = keepAliveId++ % (20 * 20) == 0;
             for (Player player : players.values()) {
                 if (!player.connection.online) {
                     this.players.remove(player.id);
@@ -128,13 +134,10 @@ public final class Scratch {
                     if (synchronizerEntry != null) synchronizerEntry.unmake();
                     continue;
                 }
-                if (!player.initialized) {
-                    player.init(instance);
-                    player.initialized = true;
-                }
-                if (sendKeepAlive) player.sendPacket(new KeepAlivePacket(keepAliveId));
+                if (sendKeepAlive) player.connection.sendPacket(new KeepAlivePacket(keepAliveId));
                 player.tick();
             }
+            // Tick entities
             for (Entity entity : entities.values()) {
                 entity.tick();
             }
@@ -162,7 +165,7 @@ public final class Scratch {
                                 .append(Component.newline())
                                 .append(Component.text("Heap: " + heapUsage / 1024 / 1024 + "MB"))
                 );
-                players.values().forEach(player -> player.sendPacket(packet));
+                players.values().forEach(player -> player.connection.sendPacket(packet));
             }
             // Flush all connections
             for (Player player : players.values()) {
@@ -289,8 +292,7 @@ public final class Scratch {
                 case CONFIGURATION -> {
                     if (packet instanceof ClientFinishConfigurationPacket) {
                         stateRef.set(ConnectionState.PLAY);
-                        final Player player = new Player(this, nameRef.get(), uuidRef.get());
-                        players.put(player.id, player);
+                        waitingPlayers.offer(new PlayerInfo(this, nameRef.get(), uuidRef.get()));
                     }
                 }
                 case PLAY -> packetQueue.add(packet);
@@ -300,6 +302,9 @@ public final class Scratch {
         void sendPacket(ServerPacket.Play packet) {
             this.networkContext.writePlay(packet);
         }
+    }
+
+    record PlayerInfo(Connection connection, String username, UUID uuid) {
     }
 
     final class Entity {
@@ -355,10 +360,8 @@ public final class Scratch {
         private final String username;
         private final UUID uuid;
 
-        boolean initialized = false;
-
-        Instance instance;
-        Synchronizer.Entry synchronizerEntry;
+        final Instance instance;
+        final Synchronizer.Entry synchronizerEntry;
         Pos position;
         Pos oldPosition;
 
@@ -367,10 +370,24 @@ public final class Scratch {
         final ScratchFeature.ChunkLoading chunkLoading;
         final ScratchFeature.EntityInteract entityInteract;
 
-        Player(Connection connection, String username, UUID uuid) {
-            this.connection = connection;
-            this.username = username;
-            this.uuid = uuid;
+        Player(PlayerInfo info, Instance spawnInstance, Pos spawnPosition) {
+            this.connection = info.connection;
+            this.username = info.username;
+            this.uuid = info.uuid;
+
+            this.instance = spawnInstance;
+            this.position = spawnPosition;
+            this.oldPosition = spawnPosition;
+
+            this.synchronizerEntry = instance.synchronizer.makeEntry(true, id, position,
+                    () -> {
+                        final var spawnPacket = new SpawnEntityPacket(
+                                id, uuid, EntityType.PLAYER.id(),
+                                this.position, 0, 0, (short) 0, (short) 0, (short) 0
+                        );
+                        return List.of(getAddPlayerToList(), spawnPacket);
+                    },
+                    () -> List.of(new DestroyEntitiesPacket(id)));
 
             this.messaging = new ScratchFeature.Messaging(new ScratchFeature.Messaging.Mapping() {
                 @Override
@@ -427,7 +444,7 @@ public final class Scratch {
 
                 @Override
                 public void sendPacket(ServerPacket.Play packet) {
-                    Player.this.sendPacket(packet);
+                    Player.this.connection.sendPacket(packet);
                 }
             });
 
@@ -443,25 +460,14 @@ public final class Scratch {
                 public void right(int id) {
                 }
             });
+
+            this.connection.networkContext.writePlays(initPackets());
         }
 
-        void init(Instance instance) {
-            final Pos position = new Pos(0, 55, 0);
-            this.position = position;
-            this.oldPosition = position;
-
-            this.instance = instance;
-            this.synchronizerEntry = instance.synchronizer.makeEntry(true, id, position,
-                    () -> {
-                        final var spawnPacket = new SpawnEntityPacket(
-                                id, uuid, EntityType.PLAYER.id(),
-                                this.position, 0, 0, (short) 0, (short) 0, (short) 0
-                        );
-                        return List.of(getAddPlayerToList(), spawnPacket);
-                    },
-                    () -> List.of(new DestroyEntitiesPacket(id)));
+        private List<ServerPacket.Play> initPackets() {
             final DimensionType dimensionType = instance.dimensionType;
             World world = instance.world;
+            List<ServerPacket.Play> packets = new ArrayList<>();
 
             final JoinGamePacket joinGamePacket = new JoinGamePacket(
                     id, false, List.of(), 0,
@@ -470,17 +476,19 @@ public final class Scratch {
                     dimensionType.toString(), "world",
                     0, GameMode.CREATIVE, null, false, true,
                     new DeathLocation("dimension", Vec.ZERO), 0);
-            sendPacket(joinGamePacket);
-            sendPacket(new SpawnPositionPacket(position, 0));
-            sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0, 0));
-            sendPacket(getAddPlayerToList());
+            packets.add(joinGamePacket);
+            packets.add(new SpawnPositionPacket(position, 0));
+            packets.add(new PlayerPositionAndLookPacket(position, (byte) 0, 0));
+            packets.add(getAddPlayerToList());
 
-            sendPacket(new UpdateViewDistancePacket(VIEW_DISTANCE));
-            sendPacket(new UpdateViewPositionPacket(position.chunkX(), position.chunkZ()));
+            packets.add(new UpdateViewDistancePacket(VIEW_DISTANCE));
+            packets.add(new UpdateViewPositionPacket(position.chunkX(), position.chunkZ()));
             ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), VIEW_DISTANCE,
-                    (x, z) -> sendPacket(world.generatePacket(x, z)));
+                    (x, z) -> packets.add(world.generatePacket(x, z)));
 
-            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0f));
+            packets.add(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0f));
+
+            return packets;
         }
 
         void tick() {
@@ -494,15 +502,11 @@ public final class Scratch {
             this.oldPosition = this.position;
         }
 
-        private @NotNull PlayerInfoUpdatePacket getAddPlayerToList() {
+        private PlayerInfoUpdatePacket getAddPlayerToList() {
             final var infoEntry = new PlayerInfoUpdatePacket.Entry(uuid, username, List.of(),
                     true, 1, GameMode.CREATIVE, null, null);
             return new PlayerInfoUpdatePacket(EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED),
                     List.of(infoEntry));
-        }
-
-        void sendPacket(ServerPacket.Play packet) {
-            this.connection.sendPacket(packet);
         }
     }
 }
