@@ -574,7 +574,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             EventDispatcher.call(new EntityTickEvent(this));
 
             // remove expired effects
-            effectTick(time);
+            effectTick();
         }
         // Scheduled synchronization
         if (ticks >= nextSynchronizationTick) {
@@ -640,18 +640,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-    private void effectTick(long time) {
+    private void effectTick() {
         final List<TimedPotion> effects = this.effects;
         if (effects.isEmpty()) return;
         effects.removeIf(timedPotion -> {
-            long duration = timedPotion.getPotion().duration();
+            long duration = timedPotion.potion().duration();
             if (duration == Potion.INFINITE_DURATION) return false;
-            final long potionTime = duration * MinecraftServer.TICK_MS;
             // Remove if the potion should be expired
-            if (time >= timedPotion.getStartingTime() + potionTime) {
+            if (getAliveTicks() >= timedPotion.startingTicks() + duration) {
                 // Send the packet that the potion should no longer be applied
-                timedPotion.getPotion().sendRemovePacket(this);
-                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
+                timedPotion.potion().sendRemovePacket(this);
+                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.potion()));
                 return true;
             }
             return false;
@@ -1422,7 +1421,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void addEffect(@NotNull Potion potion) {
         removeEffect(potion.effect());
-        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        this.effects.add(new TimedPotion(potion, getAliveTicks()));
         potion.sendAddPacket(this);
         EventDispatcher.call(new EntityPotionAddEvent(this, potion));
     }
@@ -1434,9 +1433,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void removeEffect(@NotNull PotionEffect effect) {
         this.effects.removeIf(timedPotion -> {
-            if (timedPotion.getPotion().effect() == effect) {
-                timedPotion.getPotion().sendRemovePacket(this);
-                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
+            if (timedPotion.potion().effect() == effect) {
+                timedPotion.potion().sendRemovePacket(this);
+                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.potion()));
                 return true;
             }
             return false;
@@ -1449,7 +1448,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param effect the effect to check
      */
     public boolean hasEffect(@NotNull PotionEffect effect) {
-        return this.effects.stream().anyMatch(timedPotion -> timedPotion.getPotion().effect() == effect);
+        return this.effects.stream().anyMatch(timedPotion -> timedPotion.potion().effect() == effect);
     }
 
     /**
@@ -1459,7 +1458,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the effect, null if not found
      */
     public @Nullable TimedPotion getEffect(@NotNull PotionEffect effect) {
-        return this.effects.stream().filter(timedPotion -> timedPotion.getPotion().effect() == effect).findFirst().orElse(null);
+        return this.effects.stream().filter(timedPotion -> timedPotion.potion().effect() == effect).findFirst().orElse(null);
     }
 
     /**
@@ -1470,7 +1469,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public int getEffectLevel(@NotNull PotionEffect effect) {
         TimedPotion timedPotion = getEffect(effect);
-        return timedPotion == null ? 0 : timedPotion.getPotion().amplifier();
+        return timedPotion == null ? 0 : timedPotion.potion().amplifier();
     }
 
     /**
@@ -1478,8 +1477,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void clearEffects() {
         for (TimedPotion timedPotion : effects) {
-            timedPotion.getPotion().sendRemovePacket(this);
-            EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
+            timedPotion.potion().sendRemovePacket(this);
+            EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.potion()));
         }
         this.effects.clear();
     }
