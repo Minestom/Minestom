@@ -467,9 +467,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
-                if (passenger != player && !passenger.isViewer(player)) {
-                    passenger.addViewer(player);
-                }
+                if (passenger != player) passenger.updateNewViewer(player);
             }
             player.sendPacket(getPassengersPacket());
         }

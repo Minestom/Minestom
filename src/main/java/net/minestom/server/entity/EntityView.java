@@ -40,12 +40,14 @@ final class EntityView {
                     var lock2 = lock1 == entity ? player : entity;
                     synchronized (lock1.viewEngine.mutex) {
                         synchronized (lock2.viewEngine.mutex) {
-                            if (entity.isViewer(player) || !entity.viewEngine.viewableOption.predicate(player) ||
+                            if (!entity.viewEngine.viewableOption.predicate(player) ||
                                     !player.viewEngine.viewerOption.predicate(entity)) return;
                             entity.viewEngine.viewableOption.register(player);
                             player.viewEngine.viewerOption.register(entity);
                         }
                     }
+                    // Entity#updateNewViewer handles calling itself for passengers
+                    if (entity.getVehicle() != null) return;
                     entity.updateNewViewer(player);
                 },
                 player -> {
