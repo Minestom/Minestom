@@ -27,15 +27,18 @@ public class HeightMapImpl implements HeightMap {
         this.instance = attachedChunk.getInstance();
 
         minY = instance.getDimensionType().getMinY();
-        maxY = minY + instance.getDimensionType().getHeight();
+        maxY = instance.getDimensionType().getMaxY();
     }
 
     @Override
     public void refresh() {
         synchronized (attachedChunk) {
+            int startY = HeightMap.getStartY(attachedChunk);
+
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                    refreshAt(x, z);
+                    refreshSurface(x, z, startY, minY);
+                    refreshMotionBlocking(x, z, startY, minY);
                 }
             }
         }
@@ -43,12 +46,13 @@ public class HeightMapImpl implements HeightMap {
 
     @Override
     public void refreshAt(int x, int z) {
-        refreshSurface(x, z, maxY, minY);
-        refreshMotionBlocking(x, z, maxY, minY);
+        int startY = HeightMap.getStartY(attachedChunk);
+        refreshSurface(x, z, startY, minY);
+        refreshMotionBlocking(x, z, startY, minY);
     }
 
-    private void refreshSurface(int x, int z, int maxY, int minY) {
-        int y = maxY;
+    private void refreshSurface(int x, int z, int startY, int minY) {
+        int y = startY;
         while (y >= minY) {
             Block block = attachedChunk.getBlock(x, y, z, Block.Getter.Condition.TYPE);
             if (block == null) continue;
@@ -58,8 +62,8 @@ public class HeightMapImpl implements HeightMap {
         surface[z << 4 | x] = (y + 1 - minY);
     }
 
-    private void refreshMotionBlocking(int x, int z, int maxY, int minY) {
-        int y = maxY;
+    private void refreshMotionBlocking(int x, int z, int startY, int minY) {
+        int y = startY;
         while (y >= minY) {
             Block block = attachedChunk.getBlock(x, y, z, Block.Getter.Condition.TYPE);
             if (block == null) continue;
@@ -80,37 +84,7 @@ public class HeightMapImpl implements HeightMap {
         final int dimensionHeight = instance.getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
         return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeHeightMap(motionBlocking, bitsForHeight)),
-                "WORLD_SURFACE", NBT.LongArray(encodeHeightMap(surface, bitsForHeight))));
-    }
-
-    /**
-     * Creates compressed longs array from uncompressed heights array.
-     *
-     * @param heights array of heights. Note that for this method it doesn't matter what size this array will be.
-     * But to get correct heights, array must be 256 elements long, and at index `i` must be height of (z=i/16, x=i%16).
-     * @param bitsPerEntry bits that each entry from height will take in `long` container.
-     * @return array of encoded heights.
-     */
-    private static long[] encodeHeightMap(int[] heights, int bitsPerEntry) {
-        final int entriesPerLong = 64 / bitsPerEntry;
-        // ceil(HeightsCount / entriesPerLong)
-        final int len = (heights.length + entriesPerLong - 1) / entriesPerLong;
-
-        final int maxPossibleIndexInContainer = entriesPerLong - 1;
-        final int entryMask = (1 << bitsPerEntry) - 1;
-
-        long[] data = new long[len];
-        int containerIndex = 0;
-        for (int i = 0; i < heights.length; i++) {
-            final int indexInContainer = i % entriesPerLong;
-            final int entry = heights[i];
-
-            data[containerIndex] |= ((long) (entry & entryMask)) << (indexInContainer * bitsPerEntry);
-
-            if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
-        }
-
-        return data;
+                "MOTION_BLOCKING", NBT.LongArray(HeightMap.encode(motionBlocking, bitsForHeight)),
+                "WORLD_SURFACE", NBT.LongArray(HeightMap.encode(surface, bitsForHeight))));
     }
 }
