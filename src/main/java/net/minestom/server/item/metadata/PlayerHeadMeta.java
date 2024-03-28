@@ -66,6 +66,10 @@ public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<Playe
         }
 
         public Builder playerSkin(@Nullable PlayerSkin playerSkin) {
+            if (getTag(SKULL_OWNER) == null) {
+                setTag(SKULL_OWNER, UUID.randomUUID());
+            }
+
             setTag(SKIN, playerSkin);
             return this;
         }
