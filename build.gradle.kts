@@ -50,6 +50,8 @@ allprojects {
         // Viewable packets make tracking harder. Could be re-enabled later.
         jvmArgs("-Dminestom.viewable-packet=false")
         jvmArgs("-Dminestom.inside-test=true")
+        minHeapSize = "512m"
+        maxHeapSize = "1024m"
     }
 
     tasks.withType<JavaCompile> {
