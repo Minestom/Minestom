@@ -127,6 +127,7 @@ public class PlayerMovementIntegrationTest {
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.teleport(new Pos(160, 40, 160));
+        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
