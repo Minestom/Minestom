@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -44,6 +45,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
@@ -291,6 +293,15 @@ public class InstanceContainer extends Instance {
         final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
         if (prev != null) return prev;
         final IChunkLoader loader = chunkLoader;
+        final Consumer<Chunk> postLoadCallback = chunk -> {
+            cacheChunk(chunk);
+            chunk.onLoad();
+
+            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
+            final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
+            assert future == completableFuture : "Invalid future: " + future;
+            completableFuture.complete(chunk);
+        };
         final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
                 .thenCompose(chunk -> {
                     if (chunk != null) {
@@ -303,14 +314,11 @@ public class InstanceContainer extends Instance {
                 })
                 // cache the retrieved chunk
                 .thenAccept(chunk -> {
-                    // TODO run in the instance thread?
-                    cacheChunk(chunk);
-                    chunk.onLoad();
-
-                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
-                    final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
-                    assert future == completableFuture : "Invalid future: " + future;
-                    completableFuture.complete(chunk);
+                    if (Thread.currentThread() instanceof TickSchedulerThread) {
+                        postLoadCallback.accept(chunk); // Already running in instance tick thread
+                    } else {
+                        scheduleNextTick(ignored -> postLoadCallback.accept(chunk));
+                    }
                 })
                 .exceptionally(throwable -> {
                     MinecraftServer.getExceptionManager().handleException(throwable);
