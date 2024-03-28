@@ -10,6 +10,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Aerodynamics;
 import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.collision.PhysicsUtils;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
@@ -339,19 +340,18 @@ public final class Scratch {
         }
 
         void tick() {
-            Block.Getter getter = (x, y, z, condition) -> y > 47 ? Block.AIR : Block.STONE;
             var worldBorder = new WorldBorder(null);
             PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity, type.registry().boundingBox(),
-                    worldBorder, getter, aerodynamics, false, true, onGround, false);
+                    worldBorder, instance.world, aerodynamics, false, true, onGround, false);
 
             this.position = physicsResult.newPosition();
             velocity = physicsResult.newVelocity();
             onGround = physicsResult.isOnGround();
 
             synchronizerEntry.move(physicsResult.newPosition());
-            synchronizerEntry.signalUpdate(new EntityTeleportPacket(id, physicsResult.newPosition(), onGround));
+            synchronizerEntry.signal(new EntityTeleportPacket(id, physicsResult.newPosition(), onGround));
             if (!velocity.isZero())
-                synchronizerEntry.signalUpdate(new EntityVelocityPacket(id, velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND)));
+                synchronizerEntry.signal(new EntityVelocityPacket(id, velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND)));
         }
     }
 
@@ -370,6 +370,7 @@ public final class Scratch {
         final ScratchFeature.Movement movement;
         final ScratchFeature.ChunkLoading chunkLoading;
         final ScratchFeature.EntityInteract entityInteract;
+        final ScratchFeature.BlockInteract blockInteract;
 
         Player(PlayerInfo info, Instance spawnInstance, Pos spawnPosition) {
             this.connection = info.connection;
@@ -423,7 +424,7 @@ public final class Scratch {
 
                 @Override
                 public void signalMovement(ServerPacket.Play packet) {
-                    synchronizerEntry.signalUpdate(packet);
+                    synchronizerEntry.signal(packet);
                 }
             });
 
@@ -459,6 +460,26 @@ public final class Scratch {
 
                 @Override
                 public void right(int id) {
+                }
+            });
+
+            this.blockInteract = new ScratchFeature.BlockInteract(new ScratchFeature.BlockInteract.Mapping() {
+                @Override
+                public boolean creative() {
+                    return true;
+                }
+
+                @Override
+                public void breakBlock(Point point) {
+                    instance.world.setBlock(point, Block.BEDROCK);
+                    instance.world.setBlock(point.add(0, 1, 0), Block.BEDROCK);
+                    instance.synchronizer.signalAt(point, new BlockChangePacket(point, Block.BEDROCK));
+                    instance.synchronizer.signalAt(point, new BlockChangePacket(point.add(0, 1, 0), Block.BEDROCK));
+                }
+
+                @Override
+                public void acknowledge(ServerPacket.Play packet) {
+                    connection.sendPacket(packet);
                 }
             });
 
@@ -499,6 +520,7 @@ public final class Scratch {
                 this.movement.accept(packet);
                 this.chunkLoading.accept(packet);
                 this.entityInteract.accept(packet);
+                this.blockInteract.accept(packet);
             }
             this.oldPosition = this.position;
             return connection.online;

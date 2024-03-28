@@ -42,6 +42,15 @@ public final class ScratchViewTools {
             return entry;
         }
 
+        public void signalAt(Point point, ServerPacket.Play packet) {
+            signalAt(point.chunkX(), point.chunkZ(), packet);
+        }
+
+        public void signalAt(int chunkX, int chunkZ, ServerPacket.Play packet) {
+            Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+            if (chunk != null) chunk.broadcaster.append(packet);
+        }
+
         public void computePackets(BiConsumer<Integer, NetworkContext.Packet> consumer) {
             // Update chunks viewers
             for (int entryId : entriesChanged) {
@@ -166,8 +175,12 @@ public final class ScratchViewTools {
                 }
             }
 
-            public void signalUpdate(ServerPacket.Play packet) {
-                Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(newChunkX, newChunkZ));
+            public void signal(ServerPacket.Play packet) {
+                signalAt(newChunkX, newChunkZ, packet);
+            }
+
+            public void signalAt(int chunkX, int chunkZ, ServerPacket.Play packet) {
+                Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
                 if (chunk != null) chunk.broadcaster.append(packet, id);
             }
 

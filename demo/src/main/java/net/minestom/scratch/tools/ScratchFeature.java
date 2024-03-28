@@ -1,6 +1,7 @@
 package net.minestom.scratch.tools;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.*;
@@ -110,6 +111,32 @@ public interface ScratchFeature extends Consumer<ClientPacket> {
             void left(int id);
 
             void right(int id);
+        }
+    }
+
+    record BlockInteract(Mapping mapping) implements ScratchFeature {
+        @Override
+        public void accept(ClientPacket packet) {
+            if (packet instanceof ClientPlayerDiggingPacket diggingPacket) {
+                final ClientPlayerDiggingPacket.Status status = diggingPacket.status();
+                final Point blockPosition = diggingPacket.blockPosition();
+                mapping.acknowledge(new AcknowledgeBlockChangePacket(diggingPacket.sequence()));
+                switch (status) {
+                    case STARTED_DIGGING -> {
+                        if (mapping.creative()) {
+                            mapping.breakBlock(blockPosition);
+                        }
+                    }
+                }
+            }
+        }
+
+        public interface Mapping {
+            boolean creative();
+
+            void breakBlock(Point point);
+
+            void acknowledge(ServerPacket.Play packet);
         }
     }
 }
