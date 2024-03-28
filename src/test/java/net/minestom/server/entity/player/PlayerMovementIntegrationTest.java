@@ -123,9 +123,14 @@ public class PlayerMovementIntegrationTest {
         final Instance flatInstance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
+        // Preload all possible chunks to avoid issues due to async loading
+        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
+        ChunkUtils.forChunksInRange(10, 10, viewDistance+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         player.getSettings().refresh("en_US", (byte) viewDistance, ChatMessageType.FULL, true, (byte) 0, Player.MainHand.RIGHT, false, true);
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
+        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
         player.teleport(new Pos(160, 40, 160));
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true));
