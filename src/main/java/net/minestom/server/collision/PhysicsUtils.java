@@ -47,7 +47,7 @@ public final class PhysicsUtils {
     private static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics,
                                                boolean positionChanged, boolean entityFlying, boolean entityOnGround, boolean entityNoGravity) {
         if (!positionChanged) {
-            if (entityOnGround || entityFlying) return Vec.ZERO;
+            if (entityFlying) return Vec.ZERO;
             return new Vec(0, entityNoGravity ? 0 : -aerodynamics.gravity() * aerodynamics.verticalAirResistance(), 0);
         }
 
@@ -56,8 +56,9 @@ public final class PhysicsUtils {
         double gravity = entityFlying ? 0 : aerodynamics.gravity();
         double gravityDrag = entityFlying ? 0.6 : aerodynamics.verticalAirResistance();
 
-        double x = currentVelocity.x() * drag, z = currentVelocity.z() * drag;
-        double y = !entityNoGravity ? ((currentVelocity.y() - gravity) * gravityDrag) : currentVelocity.y();
+        double x = currentVelocity.x() * drag;
+        double y = entityNoGravity ? currentVelocity.y() : (currentVelocity.y() - gravity) * gravityDrag;
+        double z = currentVelocity.z() * drag;
         return new Vec(Math.abs(x) < Vec.EPSILON ? 0 : x, Math.abs(y) < Vec.EPSILON ? 0 : y, Math.abs(z) < Vec.EPSILON ? 0 : z);
     }
 

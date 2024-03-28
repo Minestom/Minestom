@@ -1,6 +1,8 @@
 package net.minestom.server.utils.position;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.RelativeFlags;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,5 +25,14 @@ public final class PositionUtils {
     public static float getLookPitch(double dx, double dy, double dz) {
         final double radians = -Math.atan2(dy, Math.max(Math.abs(dx), Math.abs(dz)));
         return (float) Math.toDegrees(radians);
+    }
+
+    public static @NotNull Pos getPositionWithRelativeFlags(@NotNull Pos start, @NotNull Pos modifier, @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        double x = (flags & RelativeFlags.X) == 0 ? modifier.x() : start.x() + modifier.x();
+        double y = (flags & RelativeFlags.Y) == 0 ? modifier.y() : start.y() + modifier.y();
+        double z = (flags & RelativeFlags.Z) == 0 ? modifier.z() : start.z() + modifier.z();
+        float yaw = (flags & RelativeFlags.YAW) == 0 ? modifier.yaw() : start.yaw() + modifier.yaw();
+        float pitch = (flags & RelativeFlags.PITCH) == 0 ? modifier.pitch() : start.pitch() + modifier.pitch();
+        return new Pos(x, y, z, yaw, pitch);
     }
 }
