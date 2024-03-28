@@ -96,7 +96,7 @@ public class PlayerMeta extends LivingEntityMeta {
         setMaskBit(OFFSET + 2, HAT_BIT, value);
     }
 
-    public void setSkinDisplayByte(byte skinDisplayByte) {
+    public void setDisplaySkinParts(byte skinDisplayByte) {
         super.metadata.setIndex(OFFSET + 2, Metadata.Byte(skinDisplayByte));
     }
 

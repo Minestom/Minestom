@@ -126,9 +126,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     public static final boolean EXPERIMENT_PERFORM_POSE_UPDATES = Boolean.getBoolean("minestom.experiment.pose-updates");
     // Magic values: https://wiki.vg/Entity_statuses#Player
-    private static final int ENABLE_REDUCED_DEBUG_INFO = 22;
-    private static final int DISABLE_REDUCED_DEBUG_INFO = 23;
-    private static final int BASE_PERMISSION_LEVEL = 24;
+    private static final int STATUS_ENABLE_REDUCED_DEBUG_INFO = 22;
+    private static final int STATUS_DISABLE_REDUCED_DEBUG_INFO = 23;
+    private static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -366,7 +366,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Some client updates
         sendPacket(getPropertiesPacket()); // Send default properties
-        triggerStatus((byte) (BASE_PERMISSION_LEVEL + permissionLevel)); // Set permission level
+        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -552,7 +552,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), false));
         sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         sendPacket(new SetExperiencePacket(exp, level, 0));
-        triggerStatus((byte) (BASE_PERMISSION_LEVEL + permissionLevel)); // Set permission level
+        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
         refreshAbilities();
     }
 
@@ -1868,7 +1868,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
 
-            final byte permissionLevelStatus = (byte) (BASE_PERMISSION_LEVEL + permissionLevel);
+            final byte permissionLevelStatus = (byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel);
             triggerStatus(permissionLevelStatus);
         }
     }
@@ -1881,7 +1881,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setReducedDebugScreenInformation(boolean reduced) {
         this.reducedDebugScreenInformation = reduced;
 
-        final byte debugScreenStatus = (byte) (reduced ? ENABLE_REDUCED_DEBUG_INFO : DISABLE_REDUCED_DEBUG_INFO);
+        final byte debugScreenStatus = (byte) (reduced ? STATUS_ENABLE_REDUCED_DEBUG_INFO : STATUS_DISABLE_REDUCED_DEBUG_INFO);
         triggerStatus(debugScreenStatus);
     }
 
@@ -2511,7 +2511,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
             PlayerMeta playerMeta = getPlayerMeta();
             if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
-            playerMeta.setSkinDisplayByte(displayedSkinParts);
+            playerMeta.setDisplaySkinParts(displayedSkinParts);
             playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
             if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
         }
