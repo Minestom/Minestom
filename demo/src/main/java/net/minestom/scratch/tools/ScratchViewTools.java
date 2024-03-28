@@ -50,12 +50,16 @@ public final class ScratchViewTools {
                 if (entry.initialized) {
                     final long oldChunkIndex = ChunkUtils.getChunkIndex(entry.oldChunkX, entry.oldChunkZ);
                     Chunk oldChunk = chunks.get(oldChunkIndex);
-                    if (oldChunk != null) oldChunk.viewers.remove(entryId);
+                    if (oldChunk != null) {
+                        oldChunk.viewers.remove(entryId);
+                        if (entry.receiver) oldChunk.viewersReceivers.remove(entryId);
+                    }
                 }
                 if (entry.alive) {
                     final long newChunkIndex = ChunkUtils.getChunkIndex(entry.newChunkX, entry.newChunkZ);
                     Chunk newChunk = chunks.computeIfAbsent(newChunkIndex, Chunk::new);
                     newChunk.viewers.add(entryId);
+                    if (entry.receiver) newChunk.viewersReceivers.add(entryId);
                 }
             }
             // Send init/destroy packets
@@ -64,7 +68,7 @@ public final class ScratchViewTools {
                 if (entry == null) continue;
                 IntegerBiConsumer newCallback = (x, z) -> {
                     Chunk chunk = chunks.computeIfAbsent(ChunkUtils.getChunkIndex(x, z), Chunk::new);
-                    for (int viewerId : chunk.viewers) {
+                    for (int viewerId : entry.receiver ? chunk.viewers : chunk.viewersReceivers) {
                         if (viewerId == entryId) continue;
                         final Entry viewer = entries.get(viewerId);
                         if (viewer == null) continue;
@@ -82,7 +86,7 @@ public final class ScratchViewTools {
                 IntegerBiConsumer oldCallback = (x, z) -> {
                     final Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(x, z));
                     if (chunk == null) return;
-                    for (int viewerId : chunk.viewers) {
+                    for (int viewerId : entry.receiver ? chunk.viewers : chunk.viewersReceivers) {
                         if (viewerId == entryId) continue;
                         final Entry viewer = entries.get(viewerId);
                         if (viewer == null) continue;
@@ -176,6 +180,7 @@ public final class ScratchViewTools {
         private static final class Chunk {
             private final int x, z;
             private final IntSet viewers = new IntOpenHashSet();
+            private final IntSet viewersReceivers = new IntOpenHashSet();
             private final IntSet receivers = new IntOpenHashSet();
             private final Broadcaster broadcaster = new Broadcaster();
 
@@ -200,8 +205,8 @@ public final class ScratchViewTools {
         }
 
         public void append(ServerPacket.Play packet, int senderId) {
+            final int index = packets.size();
             this.packets.add(packet);
-            final int index = packets.size() - 1;
             IntArrayList list = entityIdMap.computeIfAbsent(senderId, id -> new IntArrayList());
             list.add(index);
         }
