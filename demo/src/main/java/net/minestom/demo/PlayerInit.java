@@ -8,11 +8,7 @@ import net.minestom.server.advancements.notifications.NotificationCenter;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.ItemEntity;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -40,6 +36,7 @@ import net.minestom.server.world.DimensionType;
 import java.time.Duration;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -74,14 +71,18 @@ public class PlayerInit {
             })
             .addListener(ItemDropEvent.class, event -> {
                 final Player player = event.getPlayer();
-                ItemStack droppedItem = event.getItemStack();
 
-                Pos playerPos = player.getPosition();
-                ItemEntity itemEntity = new ItemEntity(droppedItem);
-                itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
-                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
-                Vec velocity = playerPos.direction().mul(6);
-                itemEntity.setVelocity(velocity);
+                for (int i = 0; i < 1; ++i) {
+                    EntityCreature zombie = new EntityCreature(EntityType.ZOMBIE) {
+                        @Override
+                        public void update(long time) {
+                            super.update(time);
+                            this.getNavigator().setPathTo(player.getPosition());
+                        }
+                    };
+
+                    zombie.setInstance(player.getInstance(), player.getPosition());
+                }
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -170,6 +171,11 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
+
+//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
+//        instanceManager.registerInstance(i2);
+//        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+//        i2.setChunkSupplier(LightingChunk::new);
 
 //        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
 //        instanceManager.registerInstance(i2);

@@ -112,9 +112,9 @@ public class PlayerProjectile extends LivingEntity {
 
         while (iterator.hasNext()) {
             var block = iterator.next();
-            Block b = instance.getBlock(block);
-            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block), this.getBoundingBox());
-            if (hit) return Pos.fromPoint(block);
+            Block b = instance.getBlock(block.blockX(), block.blockY(), block.blockZ());
+            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block.x(), block.y(), block.z()), this.getBoundingBox());
+            if (hit) return new Pos(block.blockX(), block.blockY(), block.blockZ());
         }
 
         return null;
