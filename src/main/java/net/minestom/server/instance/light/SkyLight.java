@@ -56,7 +56,7 @@ final class SkyLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         if (c instanceof LightingChunk lc) {
-            int[] heightmap = lc.getHeightmap();
+            int[] heightmap = lc.getOcclusionMap();
             int maxY = c.getInstance().getDimensionType().getMinY() + c.getInstance().getDimensionType().getHeight();
             int sectionMaxY = (sectionY + 1) * 16 - 1;
             int sectionMinY = sectionY * 16;

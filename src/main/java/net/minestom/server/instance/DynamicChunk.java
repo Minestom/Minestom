@@ -9,6 +9,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.heightmap.HeightMap;
+import net.minestom.server.instance.heightmap.HeightMapImpl;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -20,14 +22,12 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +45,7 @@ public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
+    protected HeightMap heightMap = new HeightMapImpl(this);
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -119,6 +120,8 @@ public class DynamicChunk extends Chunk {
                     () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
         }
 
+        // UpdateHeightMap
+        heightMap.refreshAt(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(z));
     }
 
     @Override
@@ -225,7 +228,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT = computeHeightmap();
+        final NBTCompound heightmapsNBT = heightMap.getNBT();
         // Data
 
         final byte[] data;
@@ -240,21 +243,6 @@ public class DynamicChunk extends Chunk {
                 new ChunkData(heightmapsNBT, data, entries),
                 createLightData()
         );
-    }
-
-    protected NBTCompound computeHeightmap() {
-        int dimensionHeight = getInstance().getDimensionType().getHeight();
-
-        int[] motionBlocking = new int[16 * 16];
-        Arrays.fill(motionBlocking, 0);
-
-        int[] worldSurface = new int[16 * 16];
-        Arrays.fill(worldSurface, dimensionHeight - 1);
-
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeHeightmap(motionBlocking, bitsForHeight, 0)),
-                "WORLD_SURFACE", NBT.LongArray(encodeHeightmap(worldSurface, bitsForHeight, 0))));
     }
 
     @NotNull UpdateLightPacket createLightPacket() {
@@ -308,36 +296,5 @@ public class DynamicChunk extends Chunk {
 
     private void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
-    }
-
-    /**
-     * Creates compressed longs array from uncompressed heights array.
-     *
-     * @param heights array of heights. Note that for this method it doesn't matter what size this array will be.
-     * But to get correct heights, array must be 256 elements long, and at index `i` must be height of (z=i/16, x=i%16).
-     * @param bitsPerEntry bits that each entry from height will take in `long` container.
-     * @param heightShift some addition to apply to every height provided in heights array.
-     * @return array of encoded heights.
-     */
-    static long[] encodeHeightmap(int[] heights, int bitsPerEntry, int heightShift) {
-        final int entriesPerLong = 64 / bitsPerEntry;
-        // ceil(BlocksCount / entriesPerLong)
-        final int len = (heights.length + entriesPerLong - 1) / entriesPerLong;
-
-        final int maxPossibleIndexInContainer = entriesPerLong - 1;
-        final int entryMask = (1 << bitsPerEntry) - 1;
-
-        long[] data = new long[len];
-        int containerIndex = 0;
-        for (int i = 0; i < heights.length; i++) {
-            final int indexInContainer = i % entriesPerLong;
-            final int entry = heights[i] + heightShift;
-
-            data[containerIndex] |= ((long) (entry & entryMask)) << (indexInContainer * bitsPerEntry);
-
-            if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
-        }
-
-        return data;
     }
 }

@@ -11,13 +11,10 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -39,7 +36,7 @@ public class LightingChunk extends DynamicChunk {
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
-    private int[] heightmap;
+    private int[] occlusionMap;
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
     private LightData lightData;
 
@@ -133,7 +130,7 @@ public class LightingChunk extends DynamicChunk {
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         super.setBlock(x, y, z, block, placement, destroy);
-        this.heightmap = null;
+        this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
         int coordinate = ChunkUtils.getChunkCoordinate(y);
@@ -201,22 +198,10 @@ public class LightingChunk extends DynamicChunk {
         doneInit = true;
     }
 
-    @Override
-    protected NBTCompound computeHeightmap() {
-        int[] heightmap = getHeightmap();
-        int minY = getInstance().getDimensionType().getMinY();
-
-        int dimensionHeight = getInstance().getDimensionType().getHeight();
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeHeightmap(heightmap, bitsForHeight, -minY)),
-                "WORLD_SURFACE", NBT.LongArray(encodeHeightmap(heightmap, bitsForHeight, -minY))));
-    }
-
     // Lazy compute heightmap
-    public int[] getHeightmap() {
-        if (this.heightmap != null) return this.heightmap;
-        var heightmap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
+    public int[] getOcclusionMap() {
+        if (this.occlusionMap != null) return this.occlusionMap;
+        var occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
         int minY = instance.getDimensionType().getMinY();
         int maxY = instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight();
@@ -232,13 +217,13 @@ public class LightingChunk extends DynamicChunk {
                         if (checkSkyOcclusion(block)) break;
                         height--;
                     }
-                    heightmap[z << 4 | x] = (height + 1);
+                    occlusionMap[z << 4 | x] = (height + 1);
                 }
             }
         }
 
-        this.heightmap = heightmap;
-        return heightmap;
+        this.occlusionMap = occlusionMap;
+        return occlusionMap;
     }
 
     @Override
@@ -265,7 +250,7 @@ public class LightingChunk extends DynamicChunk {
                 if (neighborChunk == null) continue;
 
                 if (neighborChunk instanceof LightingChunk light) {
-                    light.getHeightmap();
+                    light.getOcclusionMap();
                     highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
                 }
             }
@@ -444,7 +429,7 @@ public class LightingChunk extends DynamicChunk {
 
                 if (chunkCheck instanceof LightingChunk lighting) {
                     // Ensure heightmap is calculated before taking values from it
-                    lighting.getHeightmap();
+                    lighting.getOcclusionMap();
                     highestRegionPoint = Math.max(highestRegionPoint, lighting.highestBlock);
                 }
             }
