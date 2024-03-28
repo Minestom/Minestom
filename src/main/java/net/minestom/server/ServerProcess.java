@@ -74,6 +74,11 @@ public interface ServerProcess extends Snapshotable {
      */
     @NotNull SchedulerManager scheduler();
 
+    /**
+     * Scheduler ticked at the end of server tick.
+     */
+    @NotNull SchedulerManager endOfTickScheduler();
+
     @NotNull BenchmarkManager benchmark();
 
     /**

@@ -58,6 +58,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final TeamManager team;
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
+    private final SchedulerManager endOfTickScheduler;
     private final BenchmarkManager benchmark;
     private final DimensionTypeManager dimension;
     private final BiomeManager biome;
@@ -85,6 +86,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
+        this.endOfTickScheduler = new SchedulerManager();
         this.benchmark = new BenchmarkManager();
         this.dimension = new DimensionTypeManager();
         this.biome = new BiomeManager();
@@ -136,6 +138,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull SchedulerManager scheduler() {
         return scheduler;
+    }
+
+    @Override
+    public @NotNull SchedulerManager endOfTickScheduler() {
+        return endOfTickScheduler;
     }
 
     @Override
@@ -272,6 +279,8 @@ final class ServerProcessImpl implements ServerProcess {
 
             // Server tick (chunks/entities)
             serverTick(msTime);
+
+            endOfTickScheduler().processTick();
 
             // Flush all waiting packets
             PacketUtils.flush();

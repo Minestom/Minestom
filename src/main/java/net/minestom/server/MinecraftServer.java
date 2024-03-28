@@ -161,6 +161,10 @@ public final class MinecraftServer {
         return serverProcess.scheduler();
     }
 
+    public static @NotNull SchedulerManager getEndOfTickScheduler() {
+        return serverProcess.endOfTickScheduler();
+    }
+
     /**
      * Gets the manager handling server monitoring.
      *
