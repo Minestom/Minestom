@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -13,22 +14,50 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
-    private byte slot;
+    private final byte oldSlot;
+    private byte newSlot;
 
     private boolean cancelled;
 
-    public PlayerChangeHeldSlotEvent(@NotNull Player player, byte slot) {
+    public PlayerChangeHeldSlotEvent(@NotNull Player player, byte oldSlot, byte newSlot) {
         this.player = player;
-        this.slot = slot;
+        this.oldSlot = oldSlot;
+        this.newSlot = newSlot;
     }
 
     /**
-     * Gets the slot which the player will held.
-     *
+     * Gets the slot number that the player is currently holding
+     * @return The slot index that the player currently is holding
+     */
+    public int getOldSlot() {
+        return oldSlot;
+    }
+
+    /**
+     * Gets the slot which the player will hold.
+     * @deprecated Use {{@link #getNewSlot()}} instead
      * @return the held slot
      */
+    @Deprecated
     public byte getSlot() {
-        return slot;
+        return newSlot;
+    }
+
+    /**
+     * Gets the slot which the player will hold.
+     * @return the held slot
+     */
+    public byte getNewSlot() { return newSlot; }
+
+    /**
+     * Changes the final held slot of the player.
+     * @deprecated Use {{@link #setNewSlot(byte)}} instead
+     * @param slot the new held slot
+     * @throws IllegalArgumentException if <code>slot</code> is not between 0 and 8
+     */
+    public void setSlot(byte slot) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "The held slot needs to be between 0 and 8");
+        this.newSlot = slot;
     }
 
     /**
@@ -37,9 +66,25 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
      * @param slot the new held slot
      * @throws IllegalArgumentException if <code>slot</code> is not between 0 and 8
      */
-    public void setSlot(byte slot) {
+    public void setNewSlot(byte slot) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "The held slot needs to be between 0 and 8");
-        this.slot = slot;
+        this.newSlot = slot;
+    }
+
+    /**
+     * Gets the ItemStack in the player's currently held slot
+     * @return The ItemStack in the player's currently held slot
+     */
+    public ItemStack getItemInOldSlot() {
+        return player.getInventory().getItemStack(oldSlot);
+    }
+
+    /**
+     * Gets the ItemStack in the slot the player will hold
+     * @return The ItemStack in the final held slot of the player
+     */
+    public ItemStack getItemInNewSlot() {
+        return player.getInventory().getItemStack(newSlot);
     }
 
     @Override
