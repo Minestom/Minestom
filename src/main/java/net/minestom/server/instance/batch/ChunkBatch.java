@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -58,6 +59,24 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         synchronized (blocks) {
             this.blocks.put(index, block);
         }
+    }
+    
+    @Override
+    public Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
+        synchronized (blocks) {
+            return this.blocks.get(index);
+        }
+    }
+    
+    @Override
+    public @Nullable Block getBlock(int x, int y, int z) {
+        return getBlock(x, y, z, Condition.NONE);
+    }
+    
+    @Override
+    public @Nullable Block getBlock(Point point) {
+        return getBlock(point, Condition.NONE);
     }
 
     @Override

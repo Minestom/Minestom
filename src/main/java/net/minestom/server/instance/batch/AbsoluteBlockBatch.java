@@ -3,6 +3,7 @@ package net.minestom.server.instance.batch;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -67,6 +68,32 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
         final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
         chunkBatch.setBlock(relativeX, y, relativeZ, block);
+    }
+    
+    @Override
+    public Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        
+        final ChunkBatch chunkBatch;
+        synchronized (chunkBatchesMap) {
+            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options));
+        }
+        
+        final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
+        final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
+        return chunkBatch.getBlock(relativeX, y, relativeZ);
+    }
+    
+    @Override
+    public @Nullable Block getBlock(int x, int y, int z) {
+        return getBlock(x, y, z, Condition.NONE);
+    }
+    
+    @Override
+    public @Nullable Block getBlock(Point point) {
+        return getBlock(point, Condition.NONE);
     }
 
     @Override
