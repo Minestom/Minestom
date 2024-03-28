@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.heightmap.HeightMap;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
@@ -198,19 +199,20 @@ public class LightingChunk extends DynamicChunk {
         doneInit = true;
     }
 
-    // Lazy compute heightmap
+    // Lazy compute occlusion map
     public int[] getOcclusionMap() {
         if (this.occlusionMap != null) return this.occlusionMap;
         var occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
         int minY = instance.getDimensionType().getMinY();
-        int maxY = instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight();
         highestBlock = minY - 1;
 
         synchronized (this) {
+            int startY = HeightMap.getStartY(this);
+
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int height = maxY;
+                    int height = startY;
                     while (height >= minY) {
                         Block block = getBlock(x, height, z, Condition.TYPE);
                         if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
