@@ -150,7 +150,7 @@ public class EntityVelocityIntegrationTest {
         // Should  be false because the new entity should have no velocity
         assertFalse(entity.hasVelocity());
 
-        entity.setInstance(instance, new Pos(0, 41, 0)).join();
+        entity.setInstance(instance, new Pos(0, 40.05, 0)).join();
 
         env.tick();
 
@@ -159,7 +159,6 @@ public class EntityVelocityIntegrationTest {
         assertTrue(entity.hasVelocity());
 
         env.tick();
-
         // Now that the entity is on the ground, it should no longer have a velocity.
         assertFalse(entity.hasVelocity());
     }
