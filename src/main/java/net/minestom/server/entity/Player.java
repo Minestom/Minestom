@@ -740,7 +740,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
         }
 
-        synchronizePosition(true); // So the player doesn't get stuck
+        synchronizePositionAfterTeleport(spawnPosition, 0); // So the player doesn't get stuck
 
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
@@ -1834,15 +1834,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * @see Entity#synchronizePosition(boolean)
+     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], RelativeFlags...)}
+     * in cases where a {@link PlayerPositionAndLookPacket} is required
+     *
+     * @param position the position used by {@link PlayerPositionAndLookPacket}
+     *                 this may not be the same as the {@link Entity#position}
+     * @param relativeFlags byte flags used by {@link PlayerPositionAndLookPacket}
      */
-    @Override
     @ApiStatus.Internal
-    protected void synchronizePosition(boolean includeSelf) {
-        if (includeSelf) {
-            sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId()));
-        }
-        super.synchronizePosition(includeSelf);
+    void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags) {
+        sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, getNextTeleportId()));
+        super.synchronizePosition();
     }
 
     /**
@@ -2379,10 +2381,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
+    /**
+     * @see #teleport(Pos, long[], int)
+     */
     @Override
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
         chunkUpdateLimitChecker.clearHistory();
-        return super.teleport(position, chunks);
+        return super.teleport(position, chunks, flags);
     }
 
     /**
