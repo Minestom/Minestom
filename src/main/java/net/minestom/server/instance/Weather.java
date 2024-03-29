@@ -63,7 +63,7 @@ public record Weather(float rainLevel, float thunderLevel) {
     }
 
     public ChangeGameStatePacket createIsRainingPacket() {
-        return new ChangeGameStatePacket(rainLevel > 0 ? ChangeGameStatePacket.Reason.BEGIN_RAINING : ChangeGameStatePacket.Reason.END_RAINING, 0);
+        return new ChangeGameStatePacket(isRaining() ? ChangeGameStatePacket.Reason.BEGIN_RAINING : ChangeGameStatePacket.Reason.END_RAINING, 0);
     }
 
     public ChangeGameStatePacket createRainLevelPacket() {
