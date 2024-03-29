@@ -8,7 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.HeightMap;
+import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
@@ -208,7 +208,7 @@ public class LightingChunk extends DynamicChunk {
         highestBlock = minY - 1;
 
         synchronized (this) {
-            int startY = HeightMap.getStartY(this);
+            int startY = Heightmap.getStartY(this);
 
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {

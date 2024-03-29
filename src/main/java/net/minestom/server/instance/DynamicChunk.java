@@ -9,8 +9,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.HeightMap;
-import net.minestom.server.instance.heightmap.HeightMapImpl;
+import net.minestom.server.instance.heightmap.HeightmapsRegistry;
+import net.minestom.server.instance.heightmap.HeightmapsRegistryImpl;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -45,7 +45,7 @@ public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
-    protected HeightMap heightMap;
+    protected HeightmapsRegistry heightmaps = new HeightmapsRegistryImpl(this);
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -120,8 +120,8 @@ public class DynamicChunk extends Chunk {
                     () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
         }
 
-        // UpdateHeightMap
-        getHeightmap().refreshAt(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(z));
+        // UpdateHeightMaps
+        heightmaps.refreshAt(toSectionRelativeCoordinate(x), y, toSectionRelativeCoordinate(z), block);
     }
 
     @Override
@@ -228,7 +228,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT = getHeightmap().getNBT();
+        final NBTCompound heightmapsNBT = heightmaps.getNBT();
         // Data
 
         final byte[] data;
@@ -280,11 +280,6 @@ public class DynamicChunk extends Chunk {
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights
         );
-    }
-
-    private HeightMap getHeightmap() {
-        if (heightMap == null) heightMap = new HeightMapImpl(this);
-        return heightMap;
     }
 
     @Override
