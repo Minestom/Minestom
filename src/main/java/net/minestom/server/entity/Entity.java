@@ -577,7 +577,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             effectTick();
         }
         // Scheduled synchronization
-        if (ticks >= nextSynchronizationTick) {
+        if (vehicle == null && ticks >= nextSynchronizationTick) {
             synchronizePosition();
         }
     }
@@ -1310,30 +1310,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * @return The height offset for passengers of this vehicle
-     */
-    private double getPassengerHeightOffset() {
-        // TODO: Move this logic elsewhere
-        if (entityType == EntityType.BOAT) {
-            return -0.1;
-        } else if (entityType == EntityType.MINECART) {
-            return 0.0;
-        } else {
-            return entityType.height() * 0.75;
-        }
-    }
-
-    /**
-     * Sets the X,Z coordinate of the passenger to the X,Z coordinate of this vehicle
-     * and sets the Y coordinate of the passenger to the Y coordinate of this vehicle + {@link #getPassengerHeightOffset()}
+     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerHeightOffset(Entity, Entity)}
      *
-     * @param newPosition The X,Y,Z position of this vehicle
-     * @param passenger   The passenger to be moved
+     * @param newPosition the new position of this vehicle
+     * @param passenger   the passenger to be moved
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
         final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                newPosition.y() + getPassengerHeightOffset(),
+                newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
                 newPosition.z());
         passenger.position = newPassengerPos;
         passenger.previousPosition = oldPassengerPos;

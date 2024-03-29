@@ -46,6 +46,8 @@ final class EntityView {
                             player.viewEngine.viewerOption.register(entity);
                         }
                     }
+                    // Entity#updateNewViewer handles calling itself for passengers
+                    if (entity.getVehicle() != null) return;
                     entity.updateNewViewer(player);
                 },
                 player -> {
