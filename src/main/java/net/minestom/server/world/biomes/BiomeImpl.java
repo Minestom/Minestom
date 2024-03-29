@@ -30,9 +30,7 @@ final class BiomeImpl implements ProtocolObject, Biome {
     private Registry.BiomeEntry entry;
     @NotNull
     private final NamespaceID name;
-    private final float depth;
     private final float temperature;
-    private final float scale;
     private final float downfall;
     @NotNull
     private final BiomeEffects effects;
@@ -41,11 +39,9 @@ final class BiomeImpl implements ProtocolObject, Biome {
     @NotNull
     private final TemperatureModifier temperatureModifier;
 
-    BiomeImpl(NamespaceID name, float depth, float temperature, float scale, float downfall, BiomeEffects effects, Precipitation precipitation, TemperatureModifier temperatureModifier) {
+    BiomeImpl(NamespaceID name, float temperature, float downfall, BiomeEffects effects, Precipitation precipitation, TemperatureModifier temperatureModifier) {
         this.name = name;
-        this.depth = depth;
         this.temperature = temperature;
-        this.scale = scale;
         this.downfall = downfall;
         this.effects = effects;
         this.precipitation = precipitation;
@@ -55,8 +51,6 @@ final class BiomeImpl implements ProtocolObject, Biome {
     BiomeImpl(Registry.BiomeEntry entry) {
         this.entry = entry;
         this.name = entry.namespace();
-        this.depth = 0.2f;
-        this.scale = 0.2f;
         this.temperature = entry.temperature();
 
         BiomeEffects.Builder effectsBuilder = getBuilder(entry);
@@ -95,16 +89,8 @@ final class BiomeImpl implements ProtocolObject, Biome {
         return this.name;
     }
 
-    public float depth() {
-        return this.depth;
-    }
-
     public float temperature() {
         return this.temperature;
-    }
-
-    public float scale() {
-        return this.scale;
     }
 
     public float downfall() {

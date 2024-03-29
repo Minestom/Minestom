@@ -24,9 +24,7 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
 
     @Override
     @NotNull NamespaceID namespace();
-    float depth();
     float temperature();
-    float scale();
     float downfall();
     @NotNull BiomeEffects effects();
     @NotNull Precipitation precipitation();
@@ -61,12 +59,9 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         Check.notNull(effects(), "The biome effects cannot be null");
 
         return NBT.Compound(element -> {
-                element.setFloat("depth", depth());
                 element.setFloat("temperature", temperature());
-                element.setFloat("scale", scale());
                 element.setFloat("downfall", downfall());
                 element.setByte("has_precipitation", (byte) (precipitation() == Precipitation.NONE ? 0 : 1));
-                element.setString("precipitation", precipitation().name().toLowerCase(Locale.ROOT));
                 if (temperatureModifier() != TemperatureModifier.NONE)
                     element.setString("temperature_modifier", temperatureModifier().name().toLowerCase(Locale.ROOT));
                 element.set("effects", effects().toNbt());
@@ -86,9 +81,7 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
                 .build();
 
         private NamespaceID name;
-        private float depth = 0.2f;
         private float temperature = 0.25f;
-        private float scale = 0.2f;
         private float downfall = 0.8f;
         private BiomeEffects effects = DEFAULT_EFFECTS;
         private Precipitation precipitation = Precipitation.RAIN;
@@ -101,20 +94,8 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder depth(float depth) {
-            this.depth = depth;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder temperature(float temperature) {
             this.temperature = temperature;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder scale(float scale) {
-            this.scale = scale;
             return this;
         }
 
@@ -144,7 +125,7 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(name, depth, temperature, scale, downfall, effects, precipitation, temperatureModifier);
+            return new BiomeImpl(name, temperature, downfall, effects, precipitation, temperatureModifier);
         }
     }
 }
