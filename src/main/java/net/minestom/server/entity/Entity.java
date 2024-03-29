@@ -462,7 +462,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void updateNewViewer(@NotNull Player player) {
         player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
-        player.sendPacket(getMetadataPacket());
+        player.sendPacket(new LazyPacket(this::getMetadataPacket));
         // Passengers
         final Set<Entity> passengers = this.passengers;
         if (!passengers.isEmpty()) {
