@@ -150,6 +150,11 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
+    public @NotNull HeightmapsRegistry getHeightmaps() {
+        return heightmaps;
+    }
+
+    @Override
     public void tick(long time) {
         if (tickableMap.isEmpty()) return;
         tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
@@ -228,15 +233,14 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT = heightmaps.getNBT();
-        // Data
-
         final byte[] data;
+        final NBTCompound heightmapsNBT;
         synchronized (this) {
-            data = ObjectPool.PACKET_POOL.use(buffer ->
-                    NetworkBuffer.makeArray(networkBuffer -> {
-                        for (Section section : sections) networkBuffer.write(section);
-                    }));
+            heightmapsNBT = heightmaps.getNBT();
+
+            data = NetworkBuffer.makeArray(networkBuffer -> {
+                for (Section section : sections) networkBuffer.write(section);
+            });
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,

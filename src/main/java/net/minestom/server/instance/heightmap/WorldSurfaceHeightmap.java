@@ -13,4 +13,9 @@ public class WorldSurfaceHeightmap extends Heightmap {
     protected boolean isBreakBlock(@NotNull Block block) {
         return !block.isAir();
     }
+
+    @Override
+    public String NBTName() {
+        return "WORLD_SURFACE";
+    }
 }

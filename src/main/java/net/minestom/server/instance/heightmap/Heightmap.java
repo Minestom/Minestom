@@ -4,7 +4,9 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTLongArray;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
@@ -24,6 +26,7 @@ public abstract class Heightmap {
     }
 
     protected abstract boolean isBreakBlock(@NotNull Block block);
+    public abstract String NBTName();
 
     public void refresh(int x, int y, int z, Block block) {
         if (isBreakBlock(block)) {
@@ -46,8 +49,24 @@ public abstract class Heightmap {
         setHeightY(x, z, y);
     }
 
-    public NBT getNBT(int bitsForHeight) {
+    public NBTLongArray getNBT(int bitsForHeight) {
         return NBT.LongArray(encode(heights, bitsForHeight));
+    }
+
+    public void loadFrom(ImmutableLongArray data, int bitsPerEntry) {
+        final int entriesPerLong = 64 / bitsPerEntry;
+
+        final int maxPossibleIndexInContainer = entriesPerLong - 1;
+        final int entryMask = (1 << bitsPerEntry) - 1;
+
+        int containerIndex = 0;
+        for (int i = 0; i < heights.length; i++) {
+            final int indexInContainer = i % entriesPerLong;
+
+            heights[i] = (int)(data.get(containerIndex) >> (indexInContainer * bitsPerEntry)) & entryMask;
+
+            if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
+        }
     }
 
     // highest breaking block in section
@@ -62,7 +81,7 @@ public abstract class Heightmap {
     public static int getStartY(Chunk chunk) {
         int y = chunk.getInstance().getDimensionType().getMaxY();
 
-        final int sectionsCount = chunk.getSections().size();
+        final int sectionsCount = chunk.getMaxSection() - chunk.getMinSection();
         for (int i = 0; i < sectionsCount; i++) {
             int sectionY = chunk.getMaxSection() - i - 1;
             var blockPalette = chunk.getSection(sectionY).blockPalette();

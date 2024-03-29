@@ -13,4 +13,9 @@ public class MotionBlockingHeightmap extends Heightmap {
     protected boolean isBreakBlock(@NotNull Block block) {
         return block.isSolid() || block.isLiquid() || "true".equals(block.getProperty("waterlogged"));
     }
+
+    @Override
+    public String NBTName() {
+        return "MOTION_BLOCKING";
+    }
 }
