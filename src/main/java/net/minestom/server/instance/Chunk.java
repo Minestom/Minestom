@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.heightmap.HeightmapsRegistry;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
@@ -28,7 +29,7 @@ import java.util.UUID;
 
 /**
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
- * Should contains all the blocks located at those positions and manage their tick updates.
+ * Should contain all the blocks located at those positions and manage their tick updates.
  * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  * <p>
  * You can create your own implementation of this class by extending it
@@ -101,6 +102,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     public abstract @NotNull Section getSection(int section);
 
+    public abstract @NotNull HeightmapsRegistry getHeightmaps();
+
     public @NotNull Section getSectionAt(int blockY) {
         return getSection(ChunkUtils.getChunkCoordinate(blockY));
     }
@@ -122,7 +125,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * <p>
      * "Change" means here data used in {@link ChunkDataPacket}.
      * It is necessary to see if the cached version of this chunk can be used
-     * instead of re writing and compressing everything.
+     * instead of re-writing and compressing everything.
      *
      * @return the last change time in milliseconds
      */
