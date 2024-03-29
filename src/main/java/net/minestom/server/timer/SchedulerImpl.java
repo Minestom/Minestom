@@ -69,7 +69,7 @@ final class SchedulerImpl implements Scheduler {
             targetQueue.drain(task -> {
                 if (!task.isAlive()) return;
                 switch (task.executionType()) {
-                    case SYNC, TICK_END -> handleTask(task);
+                    case TICK_START, TICK_END, SYNC -> handleTask(task);
                     case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
                 }
             });
@@ -94,7 +94,7 @@ final class SchedulerImpl implements Scheduler {
         // Prevent the task from being executed in the current thread
         // By either adding the task to the execution queue or submitting it to the pool
         switch (task.executionType()) {
-            case SYNC -> tasksToExecute.offer(task);
+            case TICK_START, SYNC -> tasksToExecute.offer(task);
             case TICK_END -> tickEndTasksToExecute.offer(task);
             case ASYNC -> EXECUTOR.submit(() -> {
                 if (!task.isAlive()) {
@@ -121,7 +121,7 @@ final class SchedulerImpl implements Scheduler {
             synchronized (this) {
                 final int target = tickState + tickSchedule.tick();
                 var targetTaskQueue = switch (task.executionType()) {
-                    case SYNC, ASYNC -> tickStartTaskQueue;
+                    case TICK_START, SYNC, ASYNC -> tickStartTaskQueue;
                     case TICK_END -> tickEndTaskQueue;
                 };
                 targetTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);

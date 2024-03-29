@@ -27,7 +27,7 @@ public sealed interface Task permits TaskImpl {
     final class Builder {
         private final Scheduler scheduler;
         private final Runnable runnable;
-        private ExecutionType executionType = ExecutionType.SYNC;
+        private ExecutionType executionType = ExecutionType.TICK_START;
         private TaskSchedule delay = TaskSchedule.immediate();
         private TaskSchedule repeat = TaskSchedule.stop();
 
