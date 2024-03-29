@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
  *                                  this world from another dimension (has no use)
  */
 public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime, int dimensionTeleportBoundary) {
+    public static final WorldBorder DEFAULT_BORDER = new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
+
     /**
      * @throws IllegalArgumentException if {@code diameter} is less than 0
      */
@@ -132,9 +134,5 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      */
     public @NotNull WorldBorderWarningReachPacket createWarningReachPacket() {
         return new WorldBorderWarningReachPacket(warningDistance);
-    }
-
-    public static @NotNull WorldBorder defaultBorder() {
-        return new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
     }
 }

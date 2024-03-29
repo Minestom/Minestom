@@ -14,9 +14,9 @@ public class WorldBorderIntegrationTest {
     public void setWorldborderSize(Env env) {
         Instance instance = env.createFlatInstance();
 
-        instance.setWorldBorder(WorldBorder.defaultBorder().withDiameter(50));
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(50));
         assertEquals(50, instance.getWorldBorder().diameter());
-        instance.setWorldBorder(WorldBorder.defaultBorder().withDiameter(10));
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(10));
         assertEquals(10, instance.getWorldBorder().diameter());
     }
 

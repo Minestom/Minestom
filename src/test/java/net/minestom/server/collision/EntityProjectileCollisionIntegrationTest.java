@@ -31,7 +31,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void blockShootAndBlockRemoval(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.setWorldBorder(WorldBorder.defaultBorder().withDiameter(1000));
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
         final Entity shooter = new Entity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -75,7 +75,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void entityShoot(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.setWorldBorder(WorldBorder.defaultBorder().withDiameter(1000));
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
         final Entity shooter = new Entity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -123,7 +123,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void entitySelfShoot(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.setWorldBorder(WorldBorder.defaultBorder().withDiameter(1000));
+        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
         final LivingEntity shooter = new LivingEntity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();

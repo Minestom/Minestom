@@ -149,7 +149,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
 
-        this.worldBorder = WorldBorder.defaultBorder();
+        this.worldBorder = WorldBorder.DEFAULT_BORDER;
         targetBorderDiameter = this.worldBorder.diameter();
 
         this.pointers = Pointers.builder()
