@@ -45,7 +45,7 @@ public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
-    protected HeightMap heightMap = new HeightMapImpl(this);
+    protected HeightMap heightMap;
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -121,7 +121,7 @@ public class DynamicChunk extends Chunk {
         }
 
         // UpdateHeightMap
-        heightMap.refreshAt(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(z));
+        getHeightmap().refreshAt(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(z));
     }
 
     @Override
@@ -228,7 +228,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT = heightMap.getNBT();
+        final NBTCompound heightmapsNBT = getHeightmap().getNBT();
         // Data
 
         final byte[] data;
@@ -280,6 +280,11 @@ public class DynamicChunk extends Chunk {
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights
         );
+    }
+
+    private HeightMap getHeightmap() {
+        if (heightMap == null) heightMap = new HeightMapImpl(this);
+        return heightMap;
     }
 
     @Override

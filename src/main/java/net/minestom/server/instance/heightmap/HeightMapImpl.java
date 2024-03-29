@@ -20,18 +20,13 @@ public class HeightMapImpl implements HeightMap {
     private final Instance instance;
 
     private final int minY;
-    private final int maxY;
 
     public HeightMapImpl(Chunk attachedChunk) {
         this.attachedChunk = attachedChunk;
         this.instance = attachedChunk.getInstance();
 
         minY = instance.getDimensionType().getMinY();
-        maxY = instance.getDimensionType().getMaxY();
-    }
 
-    @Override
-    public void refresh() {
         synchronized (attachedChunk) {
             int startY = HeightMap.getStartY(attachedChunk);
 
@@ -79,8 +74,6 @@ public class HeightMapImpl implements HeightMap {
 
     @Override
     public NBTCompound getNBT() {
-        refresh();
-
         final int dimensionHeight = instance.getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
         return NBT.Compound(Map.of(

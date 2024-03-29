@@ -1,15 +1,10 @@
 package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.utils.MathUtils;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-
-import java.util.Map;
 
 public interface HeightMap {
     NBTCompound getNBT();
-    void refresh();
     void refreshAt(int x, int z);
 
     static int getStartY(Chunk chunk) {
