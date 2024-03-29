@@ -3,183 +3,51 @@ package net.minestom.server.instance;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.utils.PacketUtils;
-import org.jetbrains.annotations.ApiStatus;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents the world border of an {@link Instance},
+ * Represents the world border state of an {@link Instance},
  * can be retrieved with {@link Instance#getWorldBorder()}.
+ *
+ * @param diameter                  the diameter of this world border
+ * @param centerX                   the center x coordinate of this world border
+ * @param centerZ                   the center z coordinate of this world border
+ * @param warningDistance           the distance from this world border before
+ *                                  the warning indicator is displayed
+ * @param warningTime               the length of time the warning indicator
+ *                                  is displayed
+ * @param dimensionTeleportBoundary restricts the distance travelled when entering
+ *                                  this world from another dimension (has no use)
  */
-public class WorldBorder {
-
-    private final Instance instance;
-
-    private float centerX, centerZ;
-
-    private volatile double currentDiameter;
-
-    private double oldDiameter;
-    private double newDiameter;
-
-    private long lerpStartTime;
-
-    private long speed;
-    private final int portalTeleportBoundary;
-    private int warningTime;
-    private int warningBlocks;
-
-    protected WorldBorder(@NotNull Instance instance) {
-        this.instance = instance;
-
-        this.oldDiameter = Double.MAX_VALUE;
-        this.newDiameter = Double.MAX_VALUE;
-
-        this.speed = 0;
-
-        this.portalTeleportBoundary = ServerFlag.WORLD_BORDER_SIZE;
-
-        // Update immediately so the current size is present on init
-        update();
-    }
-
+public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime, int dimensionTeleportBoundary) {
     /**
-     * Changes the X and Z position of the center.
-     *
-     * @param centerX the X center
-     * @param centerZ the Z center
+     * @throws IllegalArgumentException if {@code diameter} is less than 0
      */
-    public void setCenter(float centerX, float centerZ) {
-        this.centerX = centerX;
-        this.centerZ = centerZ;
-        refreshCenter();
+    public WorldBorder {
+        Check.argCondition(diameter < 0, "Diameter should be >= 0");
     }
 
-    /**
-     * Gets the center X of the world border.
-     *
-     * @return the X center
-     */
-    public float getCenterX() {
-        return centerX;
+    @Contract(pure = true)
+    public @NotNull WorldBorder withDiameter(double diameter) {
+        return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
-    /**
-     * Changes the center X of the world border.
-     *
-     * @param centerX the new center X
-     */
-    public void setCenterX(float centerX) {
-        this.centerX = centerX;
-        refreshCenter();
+    @Contract(pure = true)
+    public @NotNull WorldBorder withCenter(double centerX, double centerZ) {
+        return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
-    /**
-     * Gets the center Z of the world border.
-     *
-     * @return the Z center
-     */
-    public float getCenterZ() {
-        return centerZ;
+    @Contract(pure = true)
+    public @NotNull WorldBorder withWarningDistance(int warningDistance) {
+        return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
-    /**
-     * Changes the center Z of the world border.
-     *
-     * @param centerZ the new center Z
-     */
-    public void setCenterZ(float centerZ) {
-        this.centerZ = centerZ;
-        refreshCenter();
-    }
-
-    public int getWarningTime() {
-        return warningTime;
-    }
-
-    /**
-     * @param warningTime In seconds as /worldborder warning time
-     */
-    public void setWarningTime(int warningTime) {
-        this.warningTime = warningTime;
-        sendPacket(new WorldBorderWarningDelayPacket(warningTime));
-    }
-
-    public int getWarningBlocks() {
-        return warningBlocks;
-    }
-
-    /**
-     * @param warningBlocks In meters
-     */
-    public void setWarningBlocks(int warningBlocks) {
-        this.warningBlocks = warningBlocks;
-        sendPacket(new WorldBorderWarningReachPacket(warningBlocks));
-    }
-
-    /**
-     * Changes the diameter to {@code diameter} in {@code speed} milliseconds (interpolation).
-     *
-     * @param diameter the diameter target
-     * @param speed    the time it will take to reach {@code diameter} in milliseconds
-     */
-    public void setDiameter(double diameter, long speed) {
-        if (speed <= 0) {
-            setDiameter(diameter);
-            return;
-        }
-        this.newDiameter = diameter;
-        this.speed = speed;
-        this.lerpStartTime = System.currentTimeMillis();
-        sendPacket(new WorldBorderLerpSizePacket(oldDiameter, newDiameter, speed));
-    }
-
-    /**
-     * Gets the diameter of the world border.
-     * It takes lerp in consideration.
-     *
-     * @return the current world border diameter
-     */
-    public double getDiameter() {
-        return currentDiameter;
-    }
-
-    /**
-     * Changes the diameter of the world border.
-     *
-     * @param diameter the new diameter of the world border
-     */
-    public void setDiameter(double diameter) {
-        this.currentDiameter = diameter;
-        this.oldDiameter = diameter;
-        this.newDiameter = diameter;
-        this.lerpStartTime = 0;
-        sendPacket(new WorldBorderSizePacket(diameter));
-    }
-
-    /**
-     * Used to check at which axis does the position collides with the world border.
-     *
-     * @param point the point to check
-     * @return the axis where the position collides with the world border
-     */
-    public @NotNull CollisionAxis getCollisionAxis(@NotNull Point point) {
-        final double radius = getDiameter() / 2d;
-        final boolean checkX = point.x() <= getCenterX() + radius && point.x() >= getCenterX() - radius;
-        final boolean checkZ = point.z() <= getCenterZ() + radius && point.z() >= getCenterZ() - radius;
-        if (!checkX || !checkZ) {
-            if (!checkX && !checkZ) {
-                return CollisionAxis.BOTH;
-            } else if (!checkX) {
-                return CollisionAxis.X;
-            } else {
-                return CollisionAxis.Z;
-            }
-        }
-        return CollisionAxis.NONE;
+    @Contract(pure = true)
+    public @NotNull WorldBorder withWarningTime(int warningTime) {
+        return new WorldBorder(diameter, centerX, centerZ, warningDistance, warningTime, dimensionTeleportBoundary);
     }
 
     /**
@@ -188,8 +56,10 @@ public class WorldBorder {
      * @param point the point to check
      * @return true if {@code position} is inside the world border, false otherwise
      */
-    public boolean isInside(@NotNull Point point) {
-        return getCollisionAxis(point) == CollisionAxis.NONE;
+    public boolean inBounds(@NotNull Point point) {
+        double radius = diameter / 2;
+        return point.x() <= centerX + radius && point.x() >= centerX - radius &&
+                point.z() <= centerZ + radius && point.z() >= centerZ - radius;
     }
 
     /**
@@ -198,68 +68,73 @@ public class WorldBorder {
      * @param entity the entity to check
      * @return true if {@code entity} is inside the world border, false otherwise
      */
-    public boolean isInside(@NotNull Entity entity) {
-        return isInside(entity.getPosition());
+    public boolean inBounds(@NotNull Entity entity) {
+        return inBounds(entity.getPosition());
     }
 
     /**
-     * Used to update in real-time the current diameter time.
-     * Called in the instance tick update.
-     */
-    protected void update() {
-        if (lerpStartTime == 0) {
-            this.currentDiameter = oldDiameter;
-        } else {
-            double diameterDelta = newDiameter - oldDiameter;
-            long elapsedTime = System.currentTimeMillis() - lerpStartTime;
-            double percentage = (double) elapsedTime / (double) speed;
-
-            // World border finished lerp
-            if (percentage > 0.99) {
-                this.lerpStartTime = 0;
-                this.speed = 0;
-                this.oldDiameter = newDiameter;
-                this.currentDiameter = newDiameter;
-            } else {
-                this.currentDiameter = oldDiameter + (diameterDelta * percentage);
-            }
-        }
-    }
-
-    /**
-     * Sends the world border init packet to a player.
+     * Creates a {@link InitializeWorldBorderPacket} which dictates every property
+     * of the world border.
      *
-     * @param player the player to send the packet to
+     * @param targetDiameter the target diameter if there is a current lerp in progress
+     * @param transitionTime the transition time in milliseconds of the current
+     *                       lerp in progress
+     * @return               an {@link InitializeWorldBorderPacket} reflecting the
+     *                       properties of this border
      */
-    @ApiStatus.Internal
-    public void init(@NotNull Player player) {
-        player.sendPacket(new InitializeWorldBorderPacket(centerX, centerZ,
-                oldDiameter, newDiameter, speed, portalTeleportBoundary, warningTime, warningBlocks));
+    public @NotNull InitializeWorldBorderPacket createInitializePacket(double targetDiameter, long transitionTime) {
+        return new InitializeWorldBorderPacket(centerX, centerZ, diameter, targetDiameter, transitionTime, dimensionTeleportBoundary, warningTime, warningDistance);
     }
 
     /**
-     * Gets the {@link Instance} linked to this world border.
+     * Creates a {@link WorldBorderSizePacket} which dictates the origin of the world border.
      *
-     * @return the {@link Instance} of this world border
+     * @return the {@link WorldBorderSizePacket} with the center values of this world border
      */
-    @NotNull
-    public Instance getInstance() {
-        return instance;
+    public @NotNull WorldBorderCenterPacket createCenterPacket() {
+        return new WorldBorderCenterPacket(centerX, centerZ);
     }
 
     /**
-     * Sends the new world border centers to all instance players.
+     * Creates a {@link WorldBorderLerpSizePacket} which lerps the border from its current
+     * diameter to the target diameter over the given transition time.
+     *
+     * @param targetDiameter the final diameter of the border after this transition
+     * @param transitionTime the transition time in milliseconds for this lerp
+     * @return               the {@link WorldBorderLerpSizePacket} representing this lerp
      */
-    private void refreshCenter() {
-        sendPacket(new WorldBorderCenterPacket(centerX, centerZ));
+    public @NotNull WorldBorderLerpSizePacket createLerpSizePacket(double targetDiameter, long transitionTime) {
+        return new WorldBorderLerpSizePacket(diameter, targetDiameter, transitionTime);
     }
 
-    private void sendPacket(@NotNull ServerPacket packet) {
-        PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
+    /**
+     * Creates a {@link WorldBorderSizePacket} with this world border's diameter.
+     *
+     * @return the {@link WorldBorderSizePacket} with this world border's diameter
+     */
+    public @NotNull WorldBorderSizePacket createSizePacket() {
+        return new WorldBorderSizePacket(diameter);
     }
 
-    public enum CollisionAxis {
-        X, Z, BOTH, NONE
+    /**
+     * Creates a {@link WorldBorderWarningDelayPacket} with this world border's warning time
+     *
+     * @return the {@link WorldBorderWarningDelayPacket} with this world border's warning time
+     */
+    public @NotNull WorldBorderWarningDelayPacket createWarningDelayPacket() {
+        return new WorldBorderWarningDelayPacket(warningTime);
     }
 
+    /**
+     * Creates a {@link WorldBorderWarningReachPacket} with this world border's warning distance
+     *
+     * @return the {@link WorldBorderWarningReachPacket} with this world border's warning distance
+     */
+    public @NotNull WorldBorderWarningReachPacket createWarningReachPacket() {
+        return new WorldBorderWarningReachPacket(warningDistance);
+    }
+
+    public static @NotNull WorldBorder defaultBorder() {
+        return new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
+    }
 }
