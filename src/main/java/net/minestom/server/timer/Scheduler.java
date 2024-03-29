@@ -77,7 +77,7 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     }
 
     default @NotNull Task scheduleEndOfTick(@NotNull Runnable task) {
-        return buildTask(task).delay(TaskSchedule.immediate()).executionType(ExecutionType.TICK_END).schedule();
+        return scheduleNextProcess(task, ExecutionType.TICK_END);
     }
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task, @NotNull ExecutionType executionType) {
