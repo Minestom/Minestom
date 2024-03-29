@@ -1318,7 +1318,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
         final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                newPosition.y() + EntityUtils.getPassengerHeightOffset(vehicle, passenger),
+                newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
                 newPosition.z());
         passenger.position = newPassengerPos;
         passenger.previousPosition = oldPassengerPos;
