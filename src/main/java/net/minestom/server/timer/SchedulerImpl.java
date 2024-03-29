@@ -43,27 +43,24 @@ final class SchedulerImpl implements Scheduler {
     }
 
     private void processTick(int tickDelta) {
-        synchronized (this) {
-            this.tickState += tickDelta;
-            int tickToProcess;
-            while (!tickStartTaskQueue.isEmpty() && (tickToProcess = tickStartTaskQueue.firstIntKey()) <= tickState) {
-                final List<TaskImpl> tickScheduledTasks = tickStartTaskQueue.remove(tickToProcess);
-                if (tickScheduledTasks != null) tickScheduledTasks.forEach(tasksToExecute::relaxedOffer);
-            }
-        }
-        runTasks(tasksToExecute);
+        processTickTasks(tickStartTaskQueue, tasksToExecute, tickDelta);
     }
 
     @Override
     public void processTickEnd() {
+        processTickTasks(tickEndTaskQueue, tickEndTasksToExecute, 0);
+    }
+
+    private void processTickTasks(Int2ObjectAVLTreeMap<List<TaskImpl>> targetTaskQueue, MpscUnboundedArrayQueue<TaskImpl> targetTasksToExecute, int tickDelta) {
         synchronized (this) {
+            this.tickState += tickDelta;
             int tickToProcess;
-            while (!tickEndTaskQueue.isEmpty() && (tickToProcess = tickEndTaskQueue.firstIntKey()) <= tickState) {
-                final List<TaskImpl> tickScheduledTasks = tickEndTaskQueue.remove(tickToProcess);
-                if (tickScheduledTasks != null) tickScheduledTasks.forEach(tickEndTasksToExecute::relaxedOffer);
+            while (!targetTaskQueue.isEmpty() && (tickToProcess = targetTaskQueue.firstIntKey()) <= tickState) {
+                final List<TaskImpl> tickScheduledTasks = targetTaskQueue.remove(tickToProcess);
+                if (tickScheduledTasks != null) tickScheduledTasks.forEach(targetTasksToExecute::relaxedOffer);
             }
         }
-        runTasks(tickEndTasksToExecute);
+        runTasks(targetTasksToExecute);
     }
 
     private void runTasks(MpscUnboundedArrayQueue<TaskImpl> targetQueue) {

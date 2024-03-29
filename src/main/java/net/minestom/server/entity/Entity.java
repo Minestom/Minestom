@@ -585,6 +585,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             synchronizePosition(false);
         }
+        // End of tick scheduled tasks
+        this.scheduler.processTickEnd();
     }
 
     private void velocityTick() {
