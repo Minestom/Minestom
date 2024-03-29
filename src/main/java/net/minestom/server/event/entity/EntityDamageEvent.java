@@ -18,7 +18,7 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
     private final Entity entity;
     private final Damage damage;
     private SoundEvent sound;
-    private boolean animation = true;
+    private AnimationType animationType = AnimationType.WITH_SOURCE;
 
     private boolean cancelled;
 
@@ -64,21 +64,21 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
     }
 
     /**
-     * Gets whether the damage animation should be played.
+     * Gets the damage animation.
      *
-     * @return true if the animation should be played
+     * @return the damage animation
      */
-    public boolean shouldAnimate() {
-        return animation;
+    public @NotNull AnimationType getAnimationType() {
+        return animationType;
     }
 
     /**
-     * Sets whether the damage animation should be played.
+     * Sets the animation type to be used.
      *
-     * @param animation whether the animation should be played or not
+     * @param animation the new animation type
      */
-    public void setAnimation(boolean animation) {
-        this.animation = animation;
+    public void setAnimationType(@NotNull AnimationType animation) {
+        this.animationType = animation;
     }
 
     @Override
@@ -89,5 +89,25 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    /**
+     * The different damage animation types
+     */
+    public enum AnimationType {
+        /**
+         * No damage animation will be played
+         */
+        NONE,
+        /**
+         * The damage animation will be played with the screen shake animation
+         * tilting towards the damage source
+         */
+        WITH_SOURCE,
+        /**
+         * The damage animation will be played with the screen shake animation
+         * ignoring source (pre 1.20 behaviour)
+         */
+        WITHOUT_SOURCE
     }
 }

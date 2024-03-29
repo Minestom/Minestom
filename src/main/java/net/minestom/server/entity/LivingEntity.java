@@ -20,10 +20,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
-import net.minestom.server.network.packet.server.play.CollectItemPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
@@ -335,8 +332,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
-            if (entityDamageEvent.shouldAnimate()) {
-                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+            EntityDamageEvent.AnimationType animation = entityDamageEvent.getAnimationType();
+            if (animation != EntityDamageEvent.AnimationType.NONE) {
+                int entitySourceId = damage.getSource() == null ? 0 : damage.getSource().getEntityId();
+                boolean withSource = animation == EntityDamageEvent.AnimationType.WITH_SOURCE;
+                DamageEventPacket damageEventPacket = withSource ? new DamageEventPacket(getEntityId(), damage.getType().id(), entitySourceId, entitySourceId, damage.getSourcePosition()) :
+                        new DamageEventPacket(getEntityId(), damage.getType().id(), 0, 0, null);
+                sendPacketToViewersAndSelf(damageEventPacket);
             }
 
             // Additional hearts support
