@@ -11,19 +11,17 @@ public class WeatherCommand extends Command {
     public WeatherCommand() {
         super("weather");
 
-        var isRaining = ArgumentType.Boolean("isRaining").setDefaultValue(false);
         var rainLevel = ArgumentType.Float("rainLevel").setDefaultValue(0.0f);
         var thunderLevel = ArgumentType.Float("thunderLevel").setDefaultValue(0.0f);
         var transitionTicks = ArgumentType.Integer("transition").setDefaultValue(0);
-        addSyntax(this::handleWeather, isRaining, rainLevel, thunderLevel, transitionTicks);
+        addSyntax(this::handleWeather, rainLevel, thunderLevel, transitionTicks);
     }
 
     private void handleWeather(CommandSender source, CommandContext context) {
         Player player = (Player) source;
-        boolean isRaining = context.get("isRaining");
         float rainLevel = context.get("rainLevel");
         float thunderLevel = context.get("thunderLevel");
         int transitionTicks = context.get("transition");
-        player.getInstance().setWeather(new Weather(isRaining, rainLevel, thunderLevel), transitionTicks);
+        player.getInstance().setWeather(new Weather(rainLevel, thunderLevel), transitionTicks);
     }
 }
