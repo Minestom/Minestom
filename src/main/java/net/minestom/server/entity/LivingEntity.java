@@ -334,11 +334,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             EntityDamageEvent.AnimationType animation = entityDamageEvent.getAnimationType();
             if (animation != EntityDamageEvent.AnimationType.NONE) {
-                int entitySourceId = damage.getSource() == null ? 0 : damage.getSource().getEntityId();
                 boolean withSource = animation == EntityDamageEvent.AnimationType.WITH_SOURCE;
-                DamageEventPacket damageEventPacket = withSource ? new DamageEventPacket(getEntityId(), damage.getType().id(), entitySourceId, entitySourceId, damage.getSourcePosition()) :
-                        new DamageEventPacket(getEntityId(), damage.getType().id(), 0, 0, null);
-                sendPacketToViewersAndSelf(damageEventPacket);
+                int entitySourceId = withSource && damage.getSource() != null ? damage.getSource().getEntityId() : 0;
+                Point sourcePoint = withSource ? damage.getSourcePosition() : null;
+                sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getType().id(), entitySourceId, entitySourceId, sourcePoint));
             }
 
             // Additional hearts support
