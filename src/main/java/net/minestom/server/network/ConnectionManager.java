@@ -253,9 +253,8 @@ public final class ConnectionManager {
                 try {
                     messageBox.getFutureForAllReplies().get(LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (Throwable t) {
-                    MinecraftServer.LOGGER.error("Error getting replies for login plugin messages", t);
                     player.kick(LoginListener.INVALID_PROXY_RESPONSE);
-                    return;
+                    throw new RuntimeException("Error getting replies for login plugin messages", t);
                 }
             }
 
