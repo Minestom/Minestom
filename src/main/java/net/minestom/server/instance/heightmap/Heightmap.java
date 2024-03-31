@@ -25,11 +25,11 @@ public abstract class Heightmap {
         minHeight = instance.getDimensionType().getMinY() - 1;
     }
 
-    protected abstract boolean isBreakBlock(@NotNull Block block);
+    protected abstract boolean checkBlock(@NotNull Block block);
     public abstract String NBTName();
 
     public void refresh(int x, int y, int z, Block block) {
-        if (isBreakBlock(block)) {
+        if (checkBlock(block)) {
             if (getHeightY(x, z) < y) {
                 setHeightY(x, z, y);
             }
@@ -43,7 +43,7 @@ public abstract class Heightmap {
         while (y > minHeight) {
             Block block = attachedChunk.getBlock(x, y, z, Block.Getter.Condition.TYPE);
             if (block == null) continue;
-            if (isBreakBlock(block)) break;
+            if (checkBlock(block)) break;
             y--;
         }
         setHeightY(x, z, y);

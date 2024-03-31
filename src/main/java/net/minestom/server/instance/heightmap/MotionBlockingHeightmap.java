@@ -10,8 +10,10 @@ public class MotionBlockingHeightmap extends Heightmap {
     }
 
     @Override
-    protected boolean isBreakBlock(@NotNull Block block) {
-        return block.isSolid() || block.isLiquid() || "true".equals(block.getProperty("waterlogged"));
+    protected boolean checkBlock(@NotNull Block block) {
+        return (block.isSolid() && !block.compare(Block.COBWEB) && !block.compare(Block.BAMBOO_SAPLING))
+                || block.isLiquid()
+                || "true".equals(block.getProperty("waterlogged"));
     }
 
     @Override
