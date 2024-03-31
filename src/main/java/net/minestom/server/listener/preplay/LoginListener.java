@@ -19,12 +19,14 @@ import net.minestom.server.network.packet.client.login.ClientLoginPluginResponse
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.network.plugin.LoginPluginMessageBox;
+import net.minestom.server.network.plugin.LoginPluginResponse;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -44,6 +46,7 @@ public final class LoginListener {
     private static final Gson GSON = new Gson();
 
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
+    private static final Component ERROR_DURING_LOGIN = Component.text("Error during login!", NamedTextColor.RED);
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
     public static void loginStartListener(@NotNull ClientLoginStartPacket packet, @NotNull PlayerConnection connection) {
@@ -54,11 +57,8 @@ public final class LoginListener {
             socketConnection.UNSAFE_setLoginUsername(packet.username());
             // Velocity support
             if (VelocityProxy.isEnabled()) {
-                final int messageId = ThreadLocalRandom.current().nextInt();
-                final String channel = VelocityProxy.PLAYER_INFO_CHANNEL;
-                // Important in order to retrieve the channel in the response packet
-                socketConnection.addPluginRequestEntry(messageId, channel);
-                connection.sendPacket(new LoginPluginRequestPacket(messageId, channel, null));
+                socketConnection.getLoginPluginMessageBox().request(VelocityProxy.PLAYER_INFO_CHANNEL, null)
+                        .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
                 return;
             }
         }
@@ -163,47 +163,57 @@ public final class LoginListener {
         return MojangCrypt.decryptByteToSecretKey(MojangAuth.getKeyPair().getPrivate(), sharedSecret);
     }
 
+    private static void handleVelocityProxyResponse(PlayerSocketConnection socketConnection, LoginPluginResponse response) {
+        byte[] data = response.getPayload();
+
+        SocketAddress socketAddress = null;
+        GameProfile gameProfile = null;
+        boolean success = false;
+        if (data != null && data.length > 0) {
+            NetworkBuffer buffer = new NetworkBuffer(ByteBuffer.wrap(data));
+            success = VelocityProxy.checkIntegrity(buffer);
+            if (success) {
+                // Get the real connection address
+                final InetAddress address;
+                try {
+                    address = InetAddress.getByName(buffer.read(STRING));
+                } catch (UnknownHostException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    return;
+                }
+                final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
+                socketAddress = new InetSocketAddress(address, port);
+                gameProfile = new GameProfile(buffer);
+            }
+        }
+
+        if (success) {
+            socketConnection.setRemoteAddress(socketAddress);
+            socketConnection.UNSAFE_setProfile(gameProfile);
+            CONNECTION_MANAGER.createPlayer(socketConnection, gameProfile.uuid(), gameProfile.name());
+        } else {
+            LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
+            socketConnection.sendPacket(disconnectPacket);
+        }
+    }
+
     public static void loginPluginResponseListener(@NotNull ClientLoginPluginResponsePacket packet, @NotNull PlayerConnection connection) {
         // Proxy support
-        if (connection instanceof PlayerSocketConnection socketConnection) {
-            final String channel = socketConnection.getPluginRequestChannel(packet.messageId());
-            if (channel != null) {
-                boolean success = false;
+        if (!(connection instanceof PlayerSocketConnection socketConnection)) {
+            MinecraftServer.LOGGER.warn("Received Login Plugin Respones for non-socket connection " + connection);
+            return;
+        }
 
-                SocketAddress socketAddress = null;
-                GameProfile gameProfile = null;
+        String channel = socketConnection.getPluginRequestChannel(packet.messageId());
 
-                // Velocity
-                if (VelocityProxy.isEnabled() && channel.equals(VelocityProxy.PLAYER_INFO_CHANNEL)) {
-                    byte[] data = packet.data();
-                    if (data != null && data.length > 0) {
-                        NetworkBuffer buffer = new NetworkBuffer(ByteBuffer.wrap(data));
-                        success = VelocityProxy.checkIntegrity(buffer);
-                        if (success) {
-                            // Get the real connection address
-                            final InetAddress address;
-                            try {
-                                address = InetAddress.getByName(buffer.read(STRING));
-                            } catch (UnknownHostException e) {
-                                MinecraftServer.getExceptionManager().handleException(e);
-                                return;
-                            }
-                            final int port = ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort();
-                            socketAddress = new InetSocketAddress(address, port);
-                            gameProfile = new GameProfile(buffer);
-                        }
-                    }
-                }
-
-                if (success) {
-                    socketConnection.setRemoteAddress(socketAddress);
-                    socketConnection.UNSAFE_setProfile(gameProfile);
-                    CONNECTION_MANAGER.createPlayer(connection, gameProfile.uuid(), gameProfile.name());
-                } else {
-                    LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
-                    socketConnection.sendPacket(disconnectPacket);
-                }
-            }
+        LoginPluginMessageBox messageBox = socketConnection.getLoginPluginMessageBox();
+        try {
+            messageBox.handle(packet.messageId(), channel, packet.data());
+        } catch (Throwable t) {
+            MinecraftServer.LOGGER.error("Error handling Login Plugin Response", t);
+            LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(ERROR_DURING_LOGIN);
+            socketConnection.sendPacket(disconnectPacket);
+            socketConnection.disconnect();
         }
     }
 

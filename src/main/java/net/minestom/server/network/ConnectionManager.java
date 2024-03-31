@@ -9,6 +9,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
@@ -16,10 +17,12 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
+import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.network.plugin.LoginPluginMessageBox;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.debug.DebugUtils;
@@ -37,6 +40,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
@@ -47,6 +51,7 @@ public final class ConnectionManager {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
+    private static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = 5_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
 
@@ -239,6 +244,18 @@ public final class ConnectionManager {
                 }
                 if (!player.getUuid().equals(eventUuid)) {
                     player.setUuid(eventUuid);
+                }
+            }
+
+            // Login plugin messages
+            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+                LoginPluginMessageBox messageBox = socketConnection.getLoginPluginMessageBox();
+                try {
+                    messageBox.getFutureForAllReplies().get(LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
+                } catch (Throwable t) {
+                    MinecraftServer.LOGGER.error("Error getting replies for login plugin messages", t);
+                    player.kick(LoginListener.INVALID_PROXY_RESPONSE);
+                    return;
                 }
             }
 

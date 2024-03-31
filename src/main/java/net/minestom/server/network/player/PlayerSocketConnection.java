@@ -13,6 +13,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.network.plugin.LoginPluginMessageBox;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
@@ -69,6 +70,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
     private final Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
+
+    private final LoginPluginMessageBox loginPluginMessageBox = new LoginPluginMessageBox(this);
 
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(POOL.get());
@@ -316,12 +319,17 @@ public class PlayerSocketConnection extends PlayerConnection {
         return pluginRequestMap.get(messageId);
     }
 
+    public LoginPluginMessageBox getLoginPluginMessageBox() {
+        return loginPluginMessageBox;
+    }
+
     @Override
     public void setConnectionState(@NotNull ConnectionState connectionState) {
         super.setConnectionState(connectionState);
         // Clear the plugin request map (since it is not used anymore)
         if (connectionState.equals(ConnectionState.PLAY)) {
             this.pluginRequestMap.clear();
+            this.loginPluginMessageBox.clear();
         }
     }
 
