@@ -250,6 +250,9 @@ public final class ConnectionManager {
             // Login plugin messages
             if (playerConnection instanceof PlayerSocketConnection socketConnection) {
                 LoginPluginMessageBox messageBox = socketConnection.getLoginPluginMessageBox();
+
+                asyncPlayerPreLoginEvent.getLoginPluginMessageRequests().forEach(messageBox::request);
+
                 try {
                     messageBox.getFutureForAllReplies().get(LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (Throwable t) {

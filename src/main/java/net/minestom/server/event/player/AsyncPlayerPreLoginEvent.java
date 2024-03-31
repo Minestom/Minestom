@@ -2,9 +2,12 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.network.plugin.LoginPluginRequest;
+import net.minestom.server.network.plugin.LoginPluginResponse;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Called before the player initialization, it can be used to kick the player before any connection
@@ -13,6 +16,9 @@ import java.util.UUID;
 public class AsyncPlayerPreLoginEvent implements PlayerEvent {
 
     private final Player player;
+
+    private final List<LoginPluginRequest> loginPluginMessageRequests = new ArrayList<>();
+
     private String username;
     private UUID playerUuid;
 
@@ -58,6 +64,24 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
      */
     public void setPlayerUuid(@NotNull UUID playerUuid) {
         this.playerUuid = playerUuid;
+    }
+
+    /**
+     * Changes the player uuid.
+     *
+     * @param channel the plugin message channel
+     * @param requestPayload the contents of the plugin message, can be null for empty
+     *
+     * @return a CompletableFuture for the response. The thread on which it completes is asynchronous.
+     */
+    public CompletableFuture<LoginPluginResponse> addPluginRequest(String channel, byte[] requestPayload) {
+        LoginPluginRequest request = new LoginPluginRequest(channel, requestPayload);
+        loginPluginMessageRequests.add(request);
+        return request.getResponseFuture();
+    }
+
+    public Collection<LoginPluginRequest> getLoginPluginMessageRequests() {
+        return Collections.unmodifiableCollection(loginPluginMessageRequests);
     }
 
     @Override

@@ -4,13 +4,11 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class LoginPluginMessageBox {
     private static final AtomicInteger REQUEST_ID = new AtomicInteger(ThreadLocalRandom.current().nextInt());
@@ -24,17 +22,21 @@ public class LoginPluginMessageBox {
     }
 
     public CompletableFuture<LoginPluginResponse> request(String channel, byte[] requestPayload) {
+        return request(new LoginPluginRequest(channel, requestPayload));
+    }
+
+    public CompletableFuture<LoginPluginResponse> request(LoginPluginRequest request) {
         ConnectionState connState = connection.getConnectionState();
         if (connState != ConnectionState.LOGIN) {
             return CompletableFuture.failedFuture(new IllegalStateException("Invalid connection state " + connState));
         }
 
         int messageId = getNextMessageId();
-        LoginPluginRequest request = new LoginPluginRequest(channel, requestPayload);
-        connection.addPluginRequestEntry(messageId, channel);
+
+        connection.addPluginRequestEntry(messageId, request.getChannel());
         requestByMsgId.put(messageId, request);
 
-        connection.sendPacket(new LoginPluginRequestPacket(messageId, channel, requestPayload));
+        connection.sendPacket(new LoginPluginRequestPacket(messageId, request.getChannel(), request.getRequestPayload()));
 
         return request.getResponseFuture();
     }
