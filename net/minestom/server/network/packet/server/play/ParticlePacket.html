@@ -146,13 +146,26 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  float&nbsp;maxSpeed,
  int&nbsp;particleCount)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,double,double,double,float,float,float,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,boolean,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ boolean&nbsp;longDistance,
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset,
+ float&nbsp;maxSpeed,
+ int&nbsp;particleCount)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,double,double,double,float,float,float,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
  double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z,
  float&nbsp;offsetX,
  float&nbsp;offsetY,
  float&nbsp;offsetZ,
+ float&nbsp;maxSpeed,
+ int&nbsp;particleCount)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset,
  float&nbsp;maxSpeed,
  int&nbsp;particleCount)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
@@ -300,6 +313,33 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  float&nbsp;offsetX,
  float&nbsp;offsetY,
  float&nbsp;offsetZ,
+ float&nbsp;maxSpeed,
+ int&nbsp;particleCount)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.particle.Particle,boolean,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)">
+<h3>ParticlePacket</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ParticlePacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ boolean&nbsp;longDistance,
+ @NotNull
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+ @NotNull
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset,
+ float&nbsp;maxSpeed,
+ int&nbsp;particleCount)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.particle.Particle,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)">
+<h3>ParticlePacket</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ParticlePacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ @NotNull
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+ @NotNull
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset,
  float&nbsp;maxSpeed,
  int&nbsp;particleCount)</span></div>
 </section>
