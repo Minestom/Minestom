@@ -1,7 +1,6 @@
 package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
@@ -12,17 +11,14 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public abstract class Heightmap {
-    private final int[] heights = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
-
-    private final Chunk attachedChunk;
-
+    private final short[] heights = new short[CHUNK_SIZE_X * CHUNK_SIZE_Z];
+    private final Chunk chunk;
     private final int minHeight;
+    private boolean needsRefresh = true;
 
-    public Heightmap(Chunk attachedChunk) {
-        this.attachedChunk = attachedChunk;
-        Instance instance = attachedChunk.getInstance();
-
-        minHeight = instance.getDimensionType().getMinY() - 1;
+    public Heightmap(Chunk chunk) {
+        this.chunk = chunk;
+        minHeight = chunk.getInstance().getDimensionType().getMinY() - 1;
     }
 
     protected abstract boolean checkBlock(@NotNull Block block);
@@ -38,10 +34,20 @@ public abstract class Heightmap {
         }
     }
 
+    public void refresh(int startY) {
+        if (!needsRefresh) return;
+        for (int x = 0; x < CHUNK_SIZE_X; x++) {
+            for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+                refresh(x, z, startY);
+            }
+        }
+        needsRefresh = false;
+    }
+
     public void refresh(int x, int z, int startY) {
         int y = startY;
         while (y > minHeight) {
-            Block block = attachedChunk.getBlock(x, y, z, Block.Getter.Condition.TYPE);
+            Block block = chunk.getBlock(x, y, z, Block.Getter.Condition.TYPE);
             if (block == null) continue;
             if (checkBlock(block)) break;
             y--;
@@ -63,7 +69,7 @@ public abstract class Heightmap {
         for (int i = 0; i < heights.length; i++) {
             final int indexInContainer = i % entriesPerLong;
 
-            heights[i] = (int)(data.get(containerIndex) >> (indexInContainer * bitsPerEntry)) & entryMask;
+            heights[i] = (short) ((int)(data.get(containerIndex) >> (indexInContainer * bitsPerEntry)) & entryMask);
 
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }
@@ -75,7 +81,7 @@ public abstract class Heightmap {
     }
 
     private void setHeightY(int x, int z, int height) {
-        heights[z << 4 | x] = height - minHeight;
+        heights[z << 4 | x] = (short) (height - minHeight);
     }
 
     public static int getStartY(Chunk chunk) {
@@ -99,7 +105,7 @@ public abstract class Heightmap {
      * @param bitsPerEntry bits that each entry from height will take in `long` container.
      * @return array of encoded heights.
      */
-    static long[] encode(int[] heights, int bitsPerEntry) {
+    static long[] encode(short[] heights, int bitsPerEntry) {
         final int entriesPerLong = 64 / bitsPerEntry;
         // ceil(HeightsCount / entriesPerLong)
         final int len = (heights.length + entriesPerLong - 1) / entriesPerLong;

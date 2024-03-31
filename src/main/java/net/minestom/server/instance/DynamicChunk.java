@@ -9,8 +9,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.HeightmapsRegistry;
-import net.minestom.server.instance.heightmap.HeightmapsRegistryImpl;
+import net.minestom.server.instance.heightmap.HeightMapContainer;
+import net.minestom.server.instance.heightmap.HeightMapContainerImpl;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -22,7 +22,6 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -45,7 +44,7 @@ public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
-    protected HeightmapsRegistry heightmaps = new HeightmapsRegistryImpl(this);
+    protected HeightMapContainer heightmaps = new HeightMapContainerImpl(this);
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -150,7 +149,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull HeightmapsRegistry getHeightmaps() {
+    public @NotNull HeightMapContainer getHeightmaps() {
         return heightmaps;
     }
 
