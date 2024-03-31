@@ -4,7 +4,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.MathUtils;
-import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -18,7 +17,7 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 public class HeightmapsRegistryImpl implements HeightmapsRegistry {
     private final Heightmap[] heightmaps;
     private final BitSet skipRefresh = new BitSet();
-    private boolean skipRefreshCompletely = false;
+    private boolean needsCompleteRefresh = true;
 
     private final Chunk attachedChunk;
     private final Instance instance;
@@ -33,9 +32,7 @@ public class HeightmapsRegistryImpl implements HeightmapsRegistry {
         };
     }
 
-    private void calculateInitialIfNeeded() {
-        if (skipRefreshCompletely) return;
-
+    private void calculateInitial() {
         int startY = Heightmap.getStartY(attachedChunk);
 
         for (int i = 0; i < heightmaps.length; i++) {
@@ -50,7 +47,7 @@ public class HeightmapsRegistryImpl implements HeightmapsRegistry {
             skipRefresh.set(i);
         }
 
-        skipRefreshCompletely = true;
+        needsCompleteRefresh = false;
     }
 
     @Override
@@ -69,7 +66,7 @@ public class HeightmapsRegistryImpl implements HeightmapsRegistry {
 
     @Override
     public void refreshAt(int x, int y, int z, Block block) {
-        calculateInitialIfNeeded();
+        if (needsCompleteRefresh) calculateInitial();
         for (Heightmap heightmap : heightmaps) {
             heightmap.refresh(x, y, z, block);
         }
@@ -87,7 +84,7 @@ public class HeightmapsRegistryImpl implements HeightmapsRegistry {
 
     @Override
     public NBTCompound getNBT() {
-        calculateInitialIfNeeded();
+        if (needsCompleteRefresh) calculateInitial();
         final int dimensionHeight = instance.getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
 
