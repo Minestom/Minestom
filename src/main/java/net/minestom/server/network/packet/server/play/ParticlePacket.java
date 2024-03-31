@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -26,6 +27,14 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
 
     public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
+    }
+
+    public ParticlePacket(@NotNull Particle particle, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
+        this(particle, longDistance, position.x(), position.y(), position.z(), (float)offset.x(), (float)offset.y(), (float)offset.z(), maxSpeed, particleCount);
+    }
+
+    public ParticlePacket(@NotNull Particle particle, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
+        this(particle, false, position, offset, maxSpeed, particleCount);
     }
 
     private static ParticlePacket readPacket(NetworkBuffer reader) {
