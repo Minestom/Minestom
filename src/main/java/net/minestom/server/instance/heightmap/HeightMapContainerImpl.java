@@ -70,9 +70,9 @@ public class HeightMapContainerImpl implements HeightMapContainer {
         final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
 
-        Map<String, NBT> heightmapsNBTs = new HashMap<>(2);
-        heightmapsNBTs.put(motionBlocking.NBTName(), motionBlocking.getNBT(bitsForHeight));
-        heightmapsNBTs.put(worldSurface.NBTName(), worldSurface.getNBT(bitsForHeight));
-        return NBT.Compound(heightmapsNBTs);
+        return NBT.Compound(Map.of(
+                motionBlocking.NBTName(), motionBlocking.getNBT(bitsForHeight),
+                worldSurface.NBTName(), worldSurface.getNBT(bitsForHeight)
+        ));
     }
 }

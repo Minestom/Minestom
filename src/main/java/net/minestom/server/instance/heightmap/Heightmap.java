@@ -73,6 +73,8 @@ public abstract class Heightmap {
 
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }
+
+        needsRefresh = false;
     }
 
     // highest breaking block in section
