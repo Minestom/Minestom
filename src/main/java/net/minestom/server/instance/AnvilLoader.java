@@ -442,7 +442,7 @@ public class AnvilLoader implements IChunkLoader {
         final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
 
-        chunkWriter.setMotionBlockingHeightMap(chunk.getHeightmaps().getWorldSurface().getNBT(bitsForHeight));
+        chunkWriter.setMotionBlockingHeightMap(chunk.getHeightmaps().getMotionBlocking().getNBT(bitsForHeight));
         chunkWriter.setWorldSurfaceHeightMap(chunk.getHeightmaps().getWorldSurface().getNBT(bitsForHeight));
     }
 
