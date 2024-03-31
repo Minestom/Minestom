@@ -138,12 +138,17 @@ implements <a href="Scheduler.html" title="interface in net.minestom.server.time
 <div class="block">Advance 1 tick and call <a href="Scheduler.html#process()"><code>Scheduler.process()</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shutdown()" class="member-name-link">shutdown</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Task.html" title="interface in net.minestom.server.timer">Task</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitTask(java.util.function.Supplier,net.minestom.server.timer.ExecutionType)" class="member-name-link">submitTask</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="TaskSchedule.html" title="interface in net.minestom.server.timer">TaskSchedule</a>&gt;&nbsp;task,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processTickEnd()" class="member-name-link">processTickEnd</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Execute tasks set to run at the end of this tick.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shutdown()" class="member-name-link">shutdown</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Task.html" title="interface in net.minestom.server.timer">Task</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitTask(java.util.function.Supplier,net.minestom.server.timer.ExecutionType)" class="member-name-link">submitTask</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="TaskSchedule.html" title="interface in net.minestom.server.timer">TaskSchedule</a>&gt;&nbsp;task,
  @NotNull <a href="ExecutionType.html" title="enum class in net.minestom.server.timer">ExecutionType</a>&nbsp;executionType)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Submits a new task with custom scheduling logic.</div>
 </div>
 </div>
@@ -154,7 +159,7 @@ implements <a href="Scheduler.html" title="interface in net.minestom.server.time
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.timer.Scheduler">Methods inherited from interface&nbsp;net.minestom.server.timer.<a href="Scheduler.html" title="interface in net.minestom.server.timer">Scheduler</a></h3>
-<code><a href="Scheduler.html#buildTask(java.lang.Runnable)">buildTask</a>, <a href="Scheduler.html#execute(java.lang.Runnable)">execute</a>, <a href="Scheduler.html#scheduleNextProcess(java.lang.Runnable)">scheduleNextProcess</a>, <a href="Scheduler.html#scheduleNextProcess(java.lang.Runnable,net.minestom.server.timer.ExecutionType)">scheduleNextProcess</a>, <a href="Scheduler.html#scheduleNextTick(java.lang.Runnable)">scheduleNextTick</a>, <a href="Scheduler.html#scheduleNextTick(java.lang.Runnable,net.minestom.server.timer.ExecutionType)">scheduleNextTick</a>, <a href="Scheduler.html#scheduleTask(java.lang.Runnable,net.minestom.server.timer.TaskSchedule,net.minestom.server.timer.TaskSchedule)">scheduleTask</a>, <a href="Scheduler.html#scheduleTask(java.lang.Runnable,net.minestom.server.timer.TaskSchedule,net.minestom.server.timer.TaskSchedule,net.minestom.server.timer.ExecutionType)">scheduleTask</a>, <a href="Scheduler.html#submitTask(java.util.function.Supplier)">submitTask</a></code></div>
+<code><a href="Scheduler.html#buildTask(java.lang.Runnable)">buildTask</a>, <a href="Scheduler.html#execute(java.lang.Runnable)">execute</a>, <a href="Scheduler.html#scheduleEndOfTick(java.lang.Runnable)">scheduleEndOfTick</a>, <a href="Scheduler.html#scheduleNextProcess(java.lang.Runnable)">scheduleNextProcess</a>, <a href="Scheduler.html#scheduleNextProcess(java.lang.Runnable,net.minestom.server.timer.ExecutionType)">scheduleNextProcess</a>, <a href="Scheduler.html#scheduleNextTick(java.lang.Runnable)">scheduleNextTick</a>, <a href="Scheduler.html#scheduleNextTick(java.lang.Runnable,net.minestom.server.timer.ExecutionType)">scheduleNextTick</a>, <a href="Scheduler.html#scheduleTask(java.lang.Runnable,net.minestom.server.timer.TaskSchedule,net.minestom.server.timer.TaskSchedule)">scheduleTask</a>, <a href="Scheduler.html#scheduleTask(java.lang.Runnable,net.minestom.server.timer.TaskSchedule,net.minestom.server.timer.TaskSchedule,net.minestom.server.timer.ExecutionType)">scheduleTask</a>, <a href="Scheduler.html#submitTask(java.util.function.Supplier)">submitTask</a></code></div>
 </section>
 </li>
 </ul>
@@ -205,6 +210,20 @@ implements <a href="Scheduler.html" title="interface in net.minestom.server.time
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="Scheduler.html#processTick()">processTick</a></code>&nbsp;in interface&nbsp;<code><a href="Scheduler.html" title="interface in net.minestom.server.timer">Scheduler</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="processTickEnd()">
+<h3>processTickEnd</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">processTickEnd</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="Scheduler.html#processTickEnd()">Scheduler</a></code></span></div>
+<div class="block">Execute tasks set to run at the end of this tick.
+ <p>
+ This method is not thread-safe.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Scheduler.html#processTickEnd()">processTickEnd</a></code>&nbsp;in interface&nbsp;<code><a href="Scheduler.html" title="interface in net.minestom.server.timer">Scheduler</a></code></dd>
 </dl>
 </section>
 </li>
