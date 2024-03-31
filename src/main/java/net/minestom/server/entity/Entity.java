@@ -581,6 +581,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (vehicle == null && ticks >= nextSynchronizationTick) {
             synchronizePosition();
         }
+        // End of tick scheduled tasks
+        this.scheduler.processTickEnd();
     }
 
     @ApiStatus.Internal
