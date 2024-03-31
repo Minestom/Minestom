@@ -13,6 +13,7 @@ public final class ServerFlag {
 
     // Server Behavior
     public static final int SERVER_TICKS_PER_SECOND = Integer.getInteger("minestom.tps", 20);
+    public static final int SERVER_MAX_TICK_CATCH_UP = Integer.getInteger("minestom.max-tick-catch-up", 5);
     public static final int CHUNK_VIEW_DISTANCE = Integer.getInteger("minestom.chunk-view-distance", 8);
     public static final int ENTITY_VIEW_DISTANCE = Integer.getInteger("minestom.entity-view-distance", 5);
     public static final int ENTITY_SYNCHRONIZATION_TICKS = Integer.getInteger("minestom.entity-synchronization-ticks", 20);

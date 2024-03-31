@@ -20,6 +20,11 @@ public final class SchedulerManager implements Scheduler {
     }
 
     @Override
+    public void processTickEnd() {
+        this.scheduler.processTickEnd();
+    }
+
+    @Override
     public @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task,
                                     @NotNull ExecutionType executionType) {
         return scheduler.submitTask(task, executionType);

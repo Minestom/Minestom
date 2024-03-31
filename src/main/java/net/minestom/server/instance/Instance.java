@@ -690,6 +690,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.lastTickAge = time;
         }
         this.worldBorder.update();
+        // End of tick scheduled tasks
+        this.scheduler.processTickEnd();
     }
 
     /**

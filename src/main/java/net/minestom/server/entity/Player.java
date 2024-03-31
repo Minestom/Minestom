@@ -88,6 +88,7 @@ import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -1834,7 +1835,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], RelativeFlags...)}
+     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
      * in cases where a {@link PlayerPositionAndLookPacket} is required
      *
      * @param position the position used by {@link PlayerPositionAndLookPacket}
@@ -1845,6 +1846,45 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags) {
         sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, getNextTeleportId()));
         super.synchronizePosition();
+    }
+
+    /**
+     * Forces the player's client to look towards the target yaw/pitch
+     *
+     * @param yaw   the new yaw
+     * @param pitch the new pitch
+     */
+    @Override
+    public void setView(float yaw, float pitch) {
+        teleport(new Pos(0, 0, 0, yaw, pitch), null, RelativeFlags.COORD).join();
+    }
+
+    /**
+     * Forces the player's client to look towards the specified point
+     * <p>
+     * Note: the player's position is not updated on the server until
+     * the client receives this packet
+     *
+     * @param point the point to look at
+     */
+    @Override
+    public void lookAt(@NotNull Point point) {
+        // Let the player's client provide updated position values
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, 0, null));
+    }
+
+    /**
+     * Forces the player's client to look towards the specified entity
+     * <p>
+     * Note: the player's position is not updated on the server until
+     * the client receives this packet
+     *
+     * @param entity the entity to look at
+     */
+    @Override
+    public void lookAt(@NotNull Entity entity) {
+        // Let the player's client provide updated position values
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), entity.getEntityId(), FacePlayerPacket.FacePosition.EYES));
     }
 
     /**

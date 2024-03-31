@@ -31,6 +31,13 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     void processTick();
 
     /**
+     * Execute tasks set to run at the end of this tick.
+     * <p>
+     * This method is not thread-safe.
+     */
+    void processTickEnd();
+
+    /**
      * Submits a new task with custom scheduling logic.
      * <p>
      * This is the primitive method used by all scheduling shortcuts,
@@ -44,7 +51,7 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task, @NotNull ExecutionType executionType);
 
     default @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task) {
-        return submitTask(task, ExecutionType.SYNC);
+        return submitTask(task, ExecutionType.TICK_START);
     }
 
     default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
@@ -58,7 +65,7 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     }
 
     default @NotNull Task scheduleTask(@NotNull Runnable task, @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat) {
-        return scheduleTask(task, delay, repeat, ExecutionType.SYNC);
+        return scheduleTask(task, delay, repeat, ExecutionType.TICK_START);
     }
 
     default @NotNull Task scheduleNextTick(@NotNull Runnable task, @NotNull ExecutionType executionType) {
@@ -66,7 +73,11 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     }
 
     default @NotNull Task scheduleNextTick(@NotNull Runnable task) {
-        return scheduleNextTick(task, ExecutionType.SYNC);
+        return scheduleNextTick(task, ExecutionType.TICK_START);
+    }
+
+    default @NotNull Task scheduleEndOfTick(@NotNull Runnable task) {
+        return scheduleNextProcess(task, ExecutionType.TICK_END);
     }
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task, @NotNull ExecutionType executionType) {
@@ -74,7 +85,7 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
     }
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task) {
-        return scheduleNextProcess(task, ExecutionType.SYNC);
+        return scheduleNextProcess(task, ExecutionType.TICK_START);
     }
 
     /**
