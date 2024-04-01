@@ -10,7 +10,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
@@ -21,19 +23,22 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
+import net.minestom.server.network.plugin.LoginPluginResponse;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
-import java.net.URI;
-import java.net.URLEncoder;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public final class LoginListener {
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
@@ -49,6 +54,12 @@ public final class LoginListener {
         if (isSocketConnection) {
             PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
             socketConnection.UNSAFE_setLoginUsername(packet.username());
+            // Velocity support
+            if (VelocityProxy.isEnabled()) {
+                connection.loginPluginMessageProcessor().request(VelocityProxy.PLAYER_INFO_CHANNEL, null)
+                        .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
+                return;
+            }
         }
 
         if (MojangAuth.isEnabled() && isSocketConnection) {
@@ -149,6 +160,40 @@ public final class LoginListener {
 
     private static SecretKey getSecretKey(byte[] sharedSecret) {
         return MojangCrypt.decryptByteToSecretKey(MojangAuth.getKeyPair().getPrivate(), sharedSecret);
+    }
+
+    private static void handleVelocityProxyResponse(PlayerSocketConnection socketConnection, LoginPluginResponse response) {
+        byte[] data = response.getPayload();
+
+        SocketAddress socketAddress = null;
+        GameProfile gameProfile = null;
+        boolean success = false;
+        if (data != null && data.length > 0) {
+            NetworkBuffer buffer = new NetworkBuffer(ByteBuffer.wrap(data));
+            success = VelocityProxy.checkIntegrity(buffer);
+            if (success) {
+                // Get the real connection address
+                final InetAddress address;
+                try {
+                    address = InetAddress.getByName(buffer.read(STRING));
+                } catch (UnknownHostException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    return;
+                }
+                final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
+                socketAddress = new InetSocketAddress(address, port);
+                gameProfile = new GameProfile(buffer);
+            }
+        }
+
+        if (success) {
+            socketConnection.setRemoteAddress(socketAddress);
+            socketConnection.UNSAFE_setProfile(gameProfile);
+            CONNECTION_MANAGER.createPlayer(socketConnection, gameProfile.uuid(), gameProfile.name());
+        } else {
+            LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
+            socketConnection.sendPacket(disconnectPacket);
+        }
     }
 
     public static void loginPluginResponseListener(@NotNull ClientLoginPluginResponsePacket packet, @NotNull PlayerConnection connection) {

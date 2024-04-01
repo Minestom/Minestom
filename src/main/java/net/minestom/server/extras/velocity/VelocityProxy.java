@@ -1,24 +1,12 @@
 package net.minestom.server.extras.velocity;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.extras.MojangAuth;
-import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.player.GameProfile;
-import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.network.plugin.LoginPluginResponse;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -51,8 +39,6 @@ public final class VelocityProxy {
 
         VelocityProxy.enabled = true;
         VelocityProxy.key = new SecretKeySpec(secret.getBytes(), MAC_ALGORITHM);
-
-        MinecraftServer.getGlobalEventHandler().addListener(AsyncPlayerPreLoginEvent.class, VelocityProxy::handlePlayerLogin);
     }
 
     /**
@@ -64,50 +50,7 @@ public final class VelocityProxy {
         return enabled;
     }
 
-    private static void handlePlayerLogin(@NotNull AsyncPlayerPreLoginEvent event) {
-        if (!(event.getPlayer().getPlayerConnection() instanceof PlayerSocketConnection socketConnection)) {
-            return;
-        }
-
-        event.sendPluginRequest(PLAYER_INFO_CHANNEL, null)
-                .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
-    }
-
-    private static void handleVelocityProxyResponse(PlayerSocketConnection socketConnection, LoginPluginResponse response) {
-        byte[] data = response.getPayload();
-
-        SocketAddress socketAddress = null;
-        GameProfile gameProfile = null;
-        boolean success = false;
-        if (data != null && data.length > 0) {
-            NetworkBuffer buffer = new NetworkBuffer(ByteBuffer.wrap(data));
-            success = VelocityProxy.checkIntegrity(buffer);
-            if (success) {
-                // Get the real connection address
-                final InetAddress address;
-                try {
-                    address = InetAddress.getByName(buffer.read(STRING));
-                } catch (UnknownHostException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    return;
-                }
-                final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
-                socketAddress = new InetSocketAddress(address, port);
-                gameProfile = new GameProfile(buffer);
-            }
-        }
-
-        if (success) {
-            socketConnection.setRemoteAddress(socketAddress);
-            socketConnection.UNSAFE_setProfile(gameProfile);
-            MinecraftServer.getConnectionManager().createPlayer(socketConnection, gameProfile.uuid(), gameProfile.name());
-        } else {
-            LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(LoginListener.INVALID_PROXY_RESPONSE);
-            socketConnection.sendPacket(disconnectPacket);
-        }
-    }
-
-    private static boolean checkIntegrity(@NotNull NetworkBuffer buffer) {
+    public static boolean checkIntegrity(@NotNull NetworkBuffer buffer) {
         final byte[] signature = new byte[32];
         for (int i = 0; i < signature.length; i++) {
             signature[i] = buffer.read(BYTE);
@@ -128,5 +71,4 @@ public final class VelocityProxy {
         final int version = buffer.read(VAR_INT);
         return version == SUPPORTED_FORWARDING_VERSION;
     }
-
 }
