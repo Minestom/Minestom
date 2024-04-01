@@ -36,9 +36,7 @@ public class HeightMapContainerImpl implements HeightMapContainer {
     private void loadFromNBT(Heightmap heightmap, NBTCompound heightmapsNBT) {
         if (!heightmapsNBT.contains(heightmap.NBTName())) return;
         ImmutableLongArray currentHeights = heightmapsNBT.getLongArray(heightmap.NBTName());
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        heightmap.loadFrom(currentHeights, bitsForHeight);
+        heightmap.loadFrom(currentHeights);
     }
 
     @Override
@@ -67,12 +65,9 @@ public class HeightMapContainerImpl implements HeightMapContainer {
     @Override
     public NBTCompound getNBT() {
         if (needsCompleteRefresh) calculateInitial();
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-
         return NBT.Compound(Map.of(
-                motionBlocking.NBTName(), motionBlocking.getNBT(bitsForHeight),
-                worldSurface.NBTName(), worldSurface.getNBT(bitsForHeight)
+                motionBlocking.NBTName(), motionBlocking.getNBT(),
+                worldSurface.NBTName(), worldSurface.getNBT()
         ));
     }
 }

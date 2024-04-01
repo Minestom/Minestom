@@ -2,6 +2,7 @@ package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -26,19 +27,22 @@ public abstract class Heightmap {
 
     public void refresh(int x, int y, int z, Block block) {
         if (checkBlock(block)) {
-            if (getHeightY(x, z) < y) {
+            if (getHeight(x, z) < y) {
                 setHeightY(x, z, y);
             }
-        } else if (y == getHeightY(x, z)) {
+        } else if (y == getHeight(x, z)) {
             refresh(x, z, y - 1);
         }
     }
 
     public void refresh(int startY) {
         if (!needsRefresh) return;
-        for (int x = 0; x < CHUNK_SIZE_X; x++) {
-            for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                refresh(x, z, startY);
+
+        synchronized (chunk) {
+            for (int x = 0; x < CHUNK_SIZE_X; x++) {
+                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+                    refresh(x, z, startY);
+                }
             }
         }
         needsRefresh = false;
@@ -55,11 +59,16 @@ public abstract class Heightmap {
         setHeightY(x, z, y);
     }
 
-    public NBTLongArray getNBT(int bitsForHeight) {
+    public NBTLongArray getNBT() {
+        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
+        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
         return NBT.LongArray(encode(heights, bitsForHeight));
     }
 
-    public void loadFrom(ImmutableLongArray data, int bitsPerEntry) {
+    public void loadFrom(ImmutableLongArray data) {
+        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
+        final int bitsPerEntry = MathUtils.bitsToRepresent(dimensionHeight);
+
         final int entriesPerLong = 64 / bitsPerEntry;
 
         final int maxPossibleIndexInContainer = entriesPerLong - 1;
@@ -78,7 +87,8 @@ public abstract class Heightmap {
     }
 
     // highest breaking block in section
-    private int getHeightY(int x, int z) {
+    public int getHeight(int x, int z) {
+        if (needsRefresh) refresh(getStartY(chunk));
         return heights[z << 4 | x] + minHeight;
     }
 
