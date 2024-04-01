@@ -28,6 +28,7 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,8 +161,14 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void loadHeightmapsFromNBT(NBTCompound heightmaps) {
-        this.heightmaps.loadFromNBT(heightmaps);
+    public void loadHeightmapsFromNBT(NBTCompound heightmapsNBT) {
+        if (heightmapsNBT.contains(motionBlockingHeightmap().NBTName())) {
+            motionBlockingHeightmap().loadFrom(heightmapsNBT.getLongArray(motionBlockingHeightmap().NBTName()));
+        }
+
+        if (heightmapsNBT.contains(worldSurfaceHeightmap().NBTName())) {
+            worldSurfaceHeightmap().loadFrom(heightmapsNBT.getLongArray(worldSurfaceHeightmap().NBTName()));
+        }
     }
 
     @Override

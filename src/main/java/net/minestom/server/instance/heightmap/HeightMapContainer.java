@@ -4,8 +4,6 @@ import net.minestom.server.instance.block.Block;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public interface HeightMapContainer {
-    void loadFromNBT(NBTCompound compound);
-
     NBTCompound getNBT();
 
     Heightmap getWorldSurface();

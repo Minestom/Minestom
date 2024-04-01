@@ -33,18 +33,6 @@ public class HeightMapContainerImpl implements HeightMapContainer {
         needsCompleteRefresh = false;
     }
 
-    private void loadFromNBT(Heightmap heightmap, NBTCompound heightmapsNBT) {
-        if (!heightmapsNBT.contains(heightmap.NBTName())) return;
-        ImmutableLongArray currentHeights = heightmapsNBT.getLongArray(heightmap.NBTName());
-        heightmap.loadFrom(currentHeights);
-    }
-
-    @Override
-    public void loadFromNBT(NBTCompound heightmapsNBT) {
-        loadFromNBT(motionBlocking, heightmapsNBT);
-        loadFromNBT(worldSurface, heightmapsNBT);
-    }
-
     @Override
     public void refreshAt(int x, int y, int z, Block block) {
         if (needsCompleteRefresh) calculateInitial();
