@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.HeightMapContainer;
 import net.minestom.server.instance.heightmap.HeightMapContainerImpl;
+import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -149,8 +150,18 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull HeightMapContainer getHeightmaps() {
-        return heightmaps;
+    public @NotNull Heightmap motionBlockingHeightmap() {
+        return heightmaps.getMotionBlocking();
+    }
+
+    @Override
+    public @NotNull Heightmap worldSurfaceHeightmap() {
+        return heightmaps.getWorldSurface();
+    }
+
+    @Override
+    public void loadHeightmapsFromNBT(NBTCompound heightmaps) {
+        this.heightmaps.loadFromNBT(heightmaps);
     }
 
     @Override

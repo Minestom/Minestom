@@ -128,7 +128,7 @@ public class AnvilLoader implements IChunkLoader {
             // Block entities
             loadBlockEntities(chunk, chunkReader);
 
-            chunk.getHeightmaps().loadFromNBT(chunkReader.getHeightmaps());
+            chunk.loadHeightmapsFromNBT(chunkReader.getHeightmaps());
         }
         synchronized (perRegionLoadedChunks) {
             int regionX = CoordinatesKt.chunkToRegion(chunkX);
@@ -439,8 +439,8 @@ public class AnvilLoader implements IChunkLoader {
         chunkWriter.setBlockEntityData(NBT.List(NBTType.TAG_Compound, blockEntities));
 
         // Save heightmaps
-        chunkWriter.setMotionBlockingHeightMap(chunk.getHeightmaps().getMotionBlocking().getNBT());
-        chunkWriter.setWorldSurfaceHeightMap(chunk.getHeightmaps().getWorldSurface().getNBT());
+        chunkWriter.setMotionBlockingHeightMap(chunk.motionBlockingHeightmap().getNBT());
+        chunkWriter.setWorldSurfaceHeightMap(chunk.worldSurfaceHeightmap().getNBT());
     }
 
     /**

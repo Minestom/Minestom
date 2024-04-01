@@ -8,7 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.HeightMapContainer;
+import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
@@ -20,6 +20,7 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 import java.util.Set;
@@ -102,7 +103,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     public abstract @NotNull Section getSection(int section);
 
-    public abstract @NotNull HeightMapContainer getHeightmaps();
+    public abstract @NotNull Heightmap motionBlockingHeightmap();
+    public abstract @NotNull Heightmap worldSurfaceHeightmap();
+    public abstract void loadHeightmapsFromNBT(NBTCompound heightmaps);
 
     public @NotNull Section getSectionAt(int blockY) {
         return getSection(ChunkUtils.getChunkCoordinate(blockY));
