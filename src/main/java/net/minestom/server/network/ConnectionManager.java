@@ -3,6 +3,7 @@ package net.minestom.server.network;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventDispatcher;
@@ -17,12 +18,11 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
-import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.network.plugin.LoginPluginMessageBox;
+import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.debug.DebugUtils;
@@ -33,8 +33,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -47,13 +45,7 @@ import java.util.function.Function;
  * Manages the connected clients.
  */
 public final class ConnectionManager {
-    private static final Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
-
-    private static final long KEEP_ALIVE_DELAY = 10_000;
-    private static final long KEEP_ALIVE_KICK = 30_000;
-    private static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = 5_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
-
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -230,7 +222,8 @@ public final class ConnectionManager {
             }
 
             // Call pre login event
-            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
+            LoginPluginMessageProcessor pluginMessageProcessor = playerConnection.loginPluginMessageProcessor();
+            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, pluginMessageProcessor);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
             if (!player.isOnline())
                 return; // Player has been kicked
@@ -247,18 +240,12 @@ public final class ConnectionManager {
                 }
             }
 
-            // Login plugin messages
-            if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-                LoginPluginMessageBox messageBox = socketConnection.getLoginPluginMessageBox();
-
-                asyncPlayerPreLoginEvent.getLoginPluginMessageRequests().forEach(messageBox::request);
-
-                try {
-                    messageBox.getFutureForAllReplies().get(LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
-                } catch (Throwable t) {
-                    player.kick(LoginListener.INVALID_PROXY_RESPONSE);
-                    throw new RuntimeException("Error getting replies for login plugin messages", t);
-                }
+            // Wait for pending login plugin messages
+            try {
+                pluginMessageProcessor.awaitReplies(ServerFlag.LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
+            } catch (Throwable t) {
+                player.kick(LoginListener.INVALID_PROXY_RESPONSE);
+                throw new RuntimeException("Error getting replies for login plugin messages", t);
             }
 
             // Send login success packet (and switch to configuration phase)
@@ -386,10 +373,10 @@ public final class ConnectionManager {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : playerGroup) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
-            if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+            if (lastKeepAlive > ServerFlag.KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
                 player.refreshKeepAlive(tickStart);
                 player.sendPacket(keepAlivePacket);
-            } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+            } else if (lastKeepAlive >= ServerFlag.KEEP_ALIVE_KICK) {
                 player.kick(TIMEOUT_TEXT);
             }
         }

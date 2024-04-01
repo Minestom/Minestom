@@ -2,11 +2,11 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
-import net.minestom.server.network.plugin.LoginPluginRequest;
+import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.network.plugin.LoginPluginResponse;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -16,14 +16,14 @@ import java.util.concurrent.CompletableFuture;
 public class AsyncPlayerPreLoginEvent implements PlayerEvent {
 
     private final Player player;
-
-    private final List<LoginPluginRequest> loginPluginMessageRequests = new ArrayList<>();
+    private final LoginPluginMessageProcessor pluginMessageProcessor;
 
     private String username;
     private UUID playerUuid;
 
-    public AsyncPlayerPreLoginEvent(@NotNull Player player) {
+    public AsyncPlayerPreLoginEvent(@NotNull Player player, @NotNull LoginPluginMessageProcessor pluginMessageProcessor) {
         this.player = player;
+        this.pluginMessageProcessor = pluginMessageProcessor;
         this.username = player.getUsername();
         this.playerUuid = player.getUuid();
     }
@@ -67,22 +67,16 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
     }
 
     /**
-     * Adds a plugin message request to be sent during the Login connection state.
-     * Can be useful to negotiate with modded clients or proxies before moving on to the Configuration state.
+     * Sends a login plugin message request. Can be useful to negotiate with modded clients or
+     * proxies before moving on to the Configuration state.
      *
      * @param channel the plugin message channel
      * @param requestPayload the contents of the plugin message, can be null for empty
      *
      * @return a CompletableFuture for the response. The thread on which it completes is asynchronous.
      */
-    public CompletableFuture<LoginPluginResponse> addPluginRequest(String channel, byte[] requestPayload) {
-        LoginPluginRequest request = new LoginPluginRequest(channel, requestPayload);
-        loginPluginMessageRequests.add(request);
-        return request.getResponseFuture();
-    }
-
-    public Collection<LoginPluginRequest> getLoginPluginMessageRequests() {
-        return Collections.unmodifiableCollection(loginPluginMessageRequests);
+    public @NotNull CompletableFuture<LoginPluginResponse> sendPluginRequest(String channel, byte[] requestPayload) {
+        return pluginMessageProcessor.request(channel, requestPayload);
     }
 
     @Override
