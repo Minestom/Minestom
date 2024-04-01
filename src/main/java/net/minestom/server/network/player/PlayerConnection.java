@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A PlayerConnection is an object needed for all created {@link Player}.
@@ -23,6 +25,8 @@ public abstract class PlayerConnection {
     private volatile ConnectionState connectionState;
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
+
+    private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
     public PlayerConnection() {
         this.online = true;
@@ -141,6 +145,10 @@ public abstract class PlayerConnection {
 
     public void setConnectionState(@NotNull ConnectionState connectionState) {
         this.connectionState = connectionState;
+        if (connectionState == ConnectionState.CONFIGURATION) {
+            // Clear the plugin request map (it is not used beyond login)
+            this.loginPluginMessageProcessor = null;
+        }
     }
 
     /**
@@ -158,6 +166,15 @@ public abstract class PlayerConnection {
 
     public void setPlayerPublicKey(PlayerPublicKey playerPublicKey) {
         this.playerPublicKey = playerPublicKey;
+    }
+
+    /**
+     * Gets the login plugin message processor, only available during the login state.
+     */
+    @ApiStatus.Internal
+    public @NotNull LoginPluginMessageProcessor loginPluginMessageProcessor() {
+        return Objects.requireNonNull(this.loginPluginMessageProcessor,
+                "Login plugin message processor is only available during the login state.");
     }
 
     @Override

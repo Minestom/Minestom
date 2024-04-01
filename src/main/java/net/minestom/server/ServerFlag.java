@@ -25,6 +25,9 @@ public final class ServerFlag {
     public static final int PLAYER_PACKET_PER_TICK = Integer.getInteger("minestom.packet-per-tick", 20);
     public static final int PLAYER_PACKET_QUEUE_SIZE = Integer.getInteger("minestom.packet-queue-size", 1000);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = Integer.getInteger("minestom.send-light-after-block-placement-delay", 100);
+    public static final long KEEP_ALIVE_DELAY = Long.getLong("minestom.keep-alive-delay", 10_000);
+    public static final long KEEP_ALIVE_KICK = Long.getLong("minestom.keep-alive-kick", 30_000);
+    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = Long.getLong("minestom.login-plugin-message-timeout", 5_000);
 
     // Packet sending optimizations
     public static final boolean GROUPED_PACKET = PropertyUtils.getBoolean("minestom.grouped-packet", true);
