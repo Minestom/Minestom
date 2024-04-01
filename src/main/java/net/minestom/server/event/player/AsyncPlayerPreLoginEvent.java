@@ -67,7 +67,8 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
     }
 
     /**
-     * Changes the player uuid.
+     * Adds a plugin message request to be sent during the Login connection state.
+     * Can be useful to negotiate with modded clients or proxies before moving on to the Configuration state.
      *
      * @param channel the plugin message channel
      * @param requestPayload the contents of the plugin message, can be null for empty
