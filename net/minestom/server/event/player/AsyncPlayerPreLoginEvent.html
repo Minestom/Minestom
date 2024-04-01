@@ -110,7 +110,8 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player)" class="member-name-link">AsyncPlayerPreLoginEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.network.plugin.LoginPluginMessageProcessor)" class="member-name-link">AsyncPlayerPreLoginEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ @NotNull <a href="../../network/plugin/LoginPluginMessageProcessor.html" title="class in net.minestom.server.network.plugin">LoginPluginMessageProcessor</a>&nbsp;pluginMessageProcessor)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -141,14 +142,20 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player username.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPlayerUuid(java.util.UUID)" class="member-name-link">setPlayerUuid</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;playerUuid)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="../../network/plugin/LoginPluginResponse.html" title="class in net.minestom.server.network.plugin">LoginPluginResponse</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendPluginRequest(java.lang.String,byte%5B%5D)" class="member-name-link">sendPluginRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;channel,
+ byte[]&nbsp;requestPayload)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the player uuid.</div>
+<div class="block">Sends a login plugin message request.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUsername(java.lang.String)" class="member-name-link">setUsername</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPlayerUuid(java.util.UUID)" class="member-name-link">setPlayerUuid</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;playerUuid)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Changes the player uuid.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUsername(java.lang.String)" class="member-name-link">setUsername</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the player username.</div>
 </div>
 </div>
@@ -172,10 +179,12 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.network.plugin.LoginPluginMessageProcessor)">
 <h3>AsyncPlayerPreLoginEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AsyncPlayerPreLoginEvent</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+ @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ @NotNull
+ @NotNull <a href="../../network/plugin/LoginPluginMessageProcessor.html" title="class in net.minestom.server.network.plugin">LoginPluginMessageProcessor</a>&nbsp;pluginMessageProcessor)</span></div>
 </section>
 </li>
 </ul>
@@ -231,6 +240,23 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>playerUuid</code> - the new player uuid</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="sendPluginRequest(java.lang.String,byte[])">
+<h3>sendPluginRequest</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;<a href="../../network/plugin/LoginPluginResponse.html" title="class in net.minestom.server.network.plugin">LoginPluginResponse</a>&gt;</span>&nbsp;<span class="element-name">sendPluginRequest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;channel,
+ byte[]&nbsp;requestPayload)</span></div>
+<div class="block">Sends a login plugin message request. Can be useful to negotiate with modded clients or
+ proxies before moving on to the Configuration state.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>channel</code> - the plugin message channel</dd>
+<dd><code>requestPayload</code> - the contents of the plugin message, can be null for empty</dd>
+<dt>Returns:</dt>
+<dd>a CompletableFuture for the response. The thread on which it completes is asynchronous.</dd>
 </dl>
 </section>
 </li>
