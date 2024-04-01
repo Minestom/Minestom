@@ -439,11 +439,8 @@ public class AnvilLoader implements IChunkLoader {
         chunkWriter.setBlockEntityData(NBT.List(NBTType.TAG_Compound, blockEntities));
 
         // Save heightmaps
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-
-        chunkWriter.setMotionBlockingHeightMap(chunk.getHeightmaps().getMotionBlocking().getNBT(bitsForHeight));
-        chunkWriter.setWorldSurfaceHeightMap(chunk.getHeightmaps().getWorldSurface().getNBT(bitsForHeight));
+        chunkWriter.setMotionBlockingHeightMap(chunk.getHeightmaps().getMotionBlocking().getNBT());
+        chunkWriter.setWorldSurfaceHeightMap(chunk.getHeightmaps().getWorldSurface().getNBT());
     }
 
     /**
