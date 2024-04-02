@@ -44,6 +44,7 @@ public class TestRay
     @Test
     public void intersectionDistance(Env env) {
         var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
         Ray ray = new Ray(new Vec(0, 42.01, 0), new Vec(0, -1, 0), 10);
         ray.cast(instance).blockCollisions().forEach(collision -> {
             assertTrue(collision.entry().distance(ray.origin()) <= 10);
@@ -53,6 +54,7 @@ public class TestRay
     @Test
     public void blockLimit(Env env) {
         var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
         Ray ray = new Ray(new Vec(0, 42, 0), new Vec(0, -1, 1), 20, config -> {
             config.blockCollisionLimit(8);
         });
