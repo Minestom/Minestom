@@ -62,7 +62,7 @@ public final class Metadata {
     }
 
     public static Entry<Point> Rotation(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.ROTATION);
+        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.VECTOR3);
     }
 
     public static Entry<Point> Position(@NotNull Point value) {
@@ -128,7 +128,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
     }
 
-    public static Entry<float[]> Quaternion(float @NotNull[] value) {
+    public static Entry<float[]> Quaternion(float @NotNull [] value) {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
     }
 
