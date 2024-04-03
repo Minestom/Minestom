@@ -88,7 +88,7 @@ public abstract class Heightmap {
 
     // highest breaking block in section
     public int getHeight(int x, int z) {
-        if (needsRefresh) refresh(getStartY(chunk));
+        if (needsRefresh) refresh(getHighestBlockSection(chunk));
         return heights[z << 4 | x] + minHeight;
     }
 
@@ -96,7 +96,7 @@ public abstract class Heightmap {
         heights[z << 4 | x] = (short) (height - minHeight);
     }
 
-    public static int getStartY(Chunk chunk) {
+    public static int getHighestBlockSection(Chunk chunk) {
         int y = chunk.getInstance().getDimensionType().getMaxY();
 
         final int sectionsCount = chunk.getMaxSection() - chunk.getMinSection();

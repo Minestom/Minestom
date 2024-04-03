@@ -2,12 +2,9 @@ package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.MathUtils;
-import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class HeightMapContainerImpl implements HeightMapContainer {
@@ -25,7 +22,7 @@ public class HeightMapContainerImpl implements HeightMapContainer {
     }
 
     private void calculateInitial() {
-        int startY = Heightmap.getStartY(chunk);
+        int startY = Heightmap.getHighestBlockSection(chunk);
 
         motionBlocking.refresh(startY);
         worldSurface.refresh(startY);

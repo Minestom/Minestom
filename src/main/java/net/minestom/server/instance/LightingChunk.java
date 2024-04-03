@@ -208,7 +208,7 @@ public class LightingChunk extends DynamicChunk {
         highestBlock = minY - 1;
 
         synchronized (this) {
-            int startY = Heightmap.getStartY(this);
+            int startY = Heightmap.getHighestBlockSection(this);
 
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
