@@ -54,6 +54,7 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
         if (owner != value) {
             throw new IllegalArgumentException("Cannot map an object to an already mapped node.");
         }
+        //noinspection unchecked
         return (EventNode<E1>) this;
     }
 
@@ -65,9 +66,13 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
 
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
-            synchronized (GLOBAL_CHILD_LOCK) {
+            GLOBAL_CHILD_LOCK.lock();
+            try {
+                //noinspection unchecked,RedundantClassCall
                 var previous = this.holder.registeredMappedNode.putIfAbsent(retrieveOwner(), EventNodeImpl.class.cast(this));
                 if (previous == null) invalidateEventsFor(holder);
+            } finally {
+                GLOBAL_CHILD_LOCK.unlock();
             }
         }
     }
