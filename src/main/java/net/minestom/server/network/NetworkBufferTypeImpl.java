@@ -28,10 +28,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Boolean value) {
+        public void write(@NotNull NetworkBuffer buffer, Boolean value) {
             buffer.ensureSize(1);
             buffer.nioBuffer.put(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
-            return 1;
+            buffer.writeIndex += 1;
         }
 
         @Override
@@ -44,10 +44,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ByteType() implements NetworkBufferTypeImpl<Byte> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Byte value) {
+        public void write(@NotNull NetworkBuffer buffer, Byte value) {
             buffer.ensureSize(1);
             buffer.nioBuffer.put(buffer.writeIndex(), value);
-            return 1;
+            buffer.writeIndex += 1;
         }
 
         @Override
@@ -60,10 +60,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ShortType() implements NetworkBufferTypeImpl<Short> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Short value) {
+        public void write(@NotNull NetworkBuffer buffer, Short value) {
             buffer.ensureSize(2);
             buffer.nioBuffer.putShort(buffer.writeIndex(), value);
-            return 2;
+            buffer.writeIndex += 2;
         }
 
         @Override
@@ -76,10 +76,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record UnsignedShortType() implements NetworkBufferTypeImpl<Integer> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Integer value) {
+        public void write(@NotNull NetworkBuffer buffer, Integer value) {
             buffer.ensureSize(2);
             buffer.nioBuffer.putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
-            return 2;
+            buffer.writeIndex += 2;
         }
 
         @Override
@@ -92,10 +92,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record IntType() implements NetworkBufferTypeImpl<Integer> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Integer value) {
+        public void write(@NotNull NetworkBuffer buffer, Integer value) {
             buffer.ensureSize(4);
             buffer.nioBuffer.putInt(buffer.writeIndex(), value);
-            return 4;
+            buffer.writeIndex += 4;
         }
 
         @Override
@@ -108,10 +108,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record LongType() implements NetworkBufferTypeImpl<Long> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Long value) {
+        public void write(@NotNull NetworkBuffer buffer, Long value) {
             buffer.ensureSize(8);
             buffer.nioBuffer.putLong(buffer.writeIndex(), value);
-            return 8;
+            buffer.writeIndex += 8;
         }
 
         @Override
@@ -124,10 +124,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record FloatType() implements NetworkBufferTypeImpl<Float> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Float value) {
+        public void write(@NotNull NetworkBuffer buffer, Float value) {
             buffer.ensureSize(4);
             buffer.nioBuffer.putFloat(buffer.writeIndex(), value);
-            return 4;
+            buffer.writeIndex += 4;
         }
 
         @Override
@@ -140,10 +140,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record DoubleType() implements NetworkBufferTypeImpl<Double> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Double value) {
+        public void write(@NotNull NetworkBuffer buffer, Double value) {
             buffer.ensureSize(8);
             buffer.nioBuffer.putDouble(buffer.writeIndex(), value);
-            return 8;
+            buffer.writeIndex += 8;
         }
 
         @Override
@@ -156,37 +156,37 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record VarIntType() implements NetworkBufferTypeImpl<Integer> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Integer boxed) {
+        public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
             final int value = boxed;
             final int index = buffer.writeIndex();
             if ((value & (0xFFFFFFFF << 7)) == 0) {
                 buffer.ensureSize(1);
                 buffer.nioBuffer.put(index, (byte) value);
-                return 1;
+                buffer.writeIndex += 1;
             } else if ((value & (0xFFFFFFFF << 14)) == 0) {
                 buffer.ensureSize(2);
                 buffer.nioBuffer.putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
-                return 2;
+                buffer.writeIndex += 2;
             } else if ((value & (0xFFFFFFFF << 21)) == 0) {
                 buffer.ensureSize(3);
                 var nio = buffer.nioBuffer;
                 nio.put(index, (byte) (value & 0x7F | 0x80));
                 nio.put(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
                 nio.put(index + 2, (byte) (value >>> 14));
-                return 3;
+                buffer.writeIndex += 3;
             } else if ((value & (0xFFFFFFFF << 28)) == 0) {
                 buffer.ensureSize(4);
                 var nio = buffer.nioBuffer;
                 nio.putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
                         | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
-                return 4;
+                buffer.writeIndex += 4;
             } else {
                 buffer.ensureSize(5);
                 var nio = buffer.nioBuffer;
                 nio.putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
                         | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
                 nio.put(index + 4, (byte) (value >>> 28));
-                return 5;
+                buffer.writeIndex += 5;
             }
         }
 
@@ -208,13 +208,14 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record VarLongType() implements NetworkBufferTypeImpl<Long> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Long value) {
+        public void write(@NotNull NetworkBuffer buffer, Long value) {
             buffer.ensureSize(10);
             int size = 0;
             while (true) {
                 if ((value & ~((long) SEGMENT_BITS)) == 0) {
                     buffer.nioBuffer.put(buffer.writeIndex() + size, (byte) value.intValue());
-                    return size + 1;
+                    buffer.writeIndex += size + 1;
+                    return;
                 }
                 buffer.nioBuffer.put(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
                 size++;
@@ -244,10 +245,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record RawBytesType() implements NetworkBufferTypeImpl<byte[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, byte[] value) {
+        public void write(@NotNull NetworkBuffer buffer, byte[] value) {
             buffer.ensureSize(value.length);
             buffer.nioBuffer.put(buffer.writeIndex(), value);
-            return value.length;
+            buffer.writeIndex += value.length;
         }
 
         @Override
@@ -264,11 +265,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record StringType() implements NetworkBufferTypeImpl<String> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, String value) {
+        public void write(@NotNull NetworkBuffer buffer, String value) {
             final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
             buffer.write(VAR_INT, bytes.length);
             buffer.write(RAW_BYTES, bytes);
-            return -1;
         }
 
         @Override
@@ -285,7 +285,7 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record NbtType() implements NetworkBufferTypeImpl<NBT> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, org.jglrxavpok.hephaistos.nbt.NBT value) {
+        public void write(@NotNull NetworkBuffer buffer, org.jglrxavpok.hephaistos.nbt.NBT value) {
             NBTWriter nbtWriter = buffer.nbtWriter;
             if (nbtWriter == null) {
                 nbtWriter = new NBTWriter(new OutputStream() {
@@ -307,7 +307,6 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return -1;
         }
 
         @Override
@@ -340,7 +339,7 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record BlockPositionType() implements NetworkBufferTypeImpl<Point> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Point value) {
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
             final int blockX = value.blockX();
             final int blockY = value.blockY();
             final int blockZ = value.blockZ();
@@ -348,7 +347,6 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                     (((long) blockZ & 0x3FFFFFF) << 12) |
                     ((long) blockY & 0xFFF);
             buffer.write(LONG, longPos);
-            return -1;
         }
 
         @Override
@@ -363,10 +361,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Component value) {
+        public void write(@NotNull NetworkBuffer buffer, Component value) {
             final NBT nbt = NbtComponentSerializer.nbt().serialize(value);
             buffer.write(NBT, nbt);
-            return -1;
         }
 
         @Override
@@ -378,10 +375,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Component value) {
+        public void write(@NotNull NetworkBuffer buffer, Component value) {
             final String json = GsonComponentSerializer.gson().serialize(value);
             buffer.write(STRING, json);
-            return -1;
         }
 
         @Override
@@ -393,10 +389,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record UUIDType() implements NetworkBufferTypeImpl<UUID> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, java.util.UUID value) {
+        public void write(@NotNull NetworkBuffer buffer, java.util.UUID value) {
             buffer.write(LONG, value.getMostSignificantBits());
             buffer.write(LONG, value.getLeastSignificantBits());
-            return -1;
         }
 
         @Override
@@ -409,10 +404,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ItemType() implements NetworkBufferTypeImpl<ItemStack> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, ItemStack value) {
+        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
             if (value.isAir()) {
                 buffer.write(BOOLEAN, false);
-                return -1;
+                return;
             }
             buffer.write(BOOLEAN, true);
             buffer.write(VAR_INT, value.material().id());
@@ -420,7 +415,6 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             // Vanilla does not write an empty object, just an end tag.
             NBTCompound nbt = value.meta().toNBT();
             buffer.write(NBT, nbt.isEmpty() ? NBTEnd.INSTANCE : nbt);
-            return -1;
         }
 
         @Override
@@ -443,10 +437,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ByteArrayType() implements NetworkBufferTypeImpl<byte[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, byte[] value) {
+        public void write(@NotNull NetworkBuffer buffer, byte[] value) {
             buffer.write(VAR_INT, value.length);
             buffer.write(RAW_BYTES, value);
-            return -1;
         }
 
         @Override
@@ -461,10 +454,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record LongArrayType() implements NetworkBufferTypeImpl<long[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, long[] value) {
+        public void write(@NotNull NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
             for (long l : value) buffer.write(LONG, l);
-            return -1;
         }
 
         @Override
@@ -478,10 +470,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record VarIntArrayType() implements NetworkBufferTypeImpl<int[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, int[] value) {
+        public void write(@NotNull NetworkBuffer buffer, int[] value) {
             buffer.write(VAR_INT, value.length);
             for (int i : value) buffer.write(VAR_INT, i);
-            return -1;
         }
 
         @Override
@@ -495,10 +486,9 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record VarLongArrayType() implements NetworkBufferTypeImpl<long[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, long[] value) {
+        public void write(@NotNull NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
             for (long l : value) buffer.write(VAR_LONG, l);
-            return -1;
         }
 
         @Override
@@ -514,9 +504,8 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record BlockStateType() implements NetworkBufferTypeImpl<Integer> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Integer value) {
+        public void write(@NotNull NetworkBuffer buffer, Integer value) {
             buffer.write(VAR_INT, value);
-            return -1;
         }
 
         @Override
@@ -527,11 +516,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record VillagerDataType() implements NetworkBufferTypeImpl<int[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, int[] value) {
+        public void write(@NotNull NetworkBuffer buffer, int[] value) {
             buffer.write(VAR_INT, value[0]);
             buffer.write(VAR_INT, value[1]);
             buffer.write(VAR_INT, value[2]);
-            return -1;
         }
 
         @Override
@@ -546,12 +534,11 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record DeathLocationType() implements NetworkBufferTypeImpl<DeathLocation> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, DeathLocation value) {
+        public void write(@NotNull NetworkBuffer buffer, DeathLocation value) {
             buffer.writeOptional(writer -> {
                 writer.write(STRING, value.dimension());
                 writer.write(BLOCK_POSITION, value.position());
             });
-            return -1;
         }
 
         @Override
@@ -566,11 +553,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record Vector3Type() implements NetworkBufferTypeImpl<Point> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Point value) {
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
             buffer.write(FLOAT, (float) value.x());
             buffer.write(FLOAT, (float) value.y());
             buffer.write(FLOAT, (float) value.z());
-            return -1;
         }
 
         @Override
@@ -584,11 +570,10 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record Vector3DType() implements NetworkBufferTypeImpl<Point> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Point value) {
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
             buffer.write(DOUBLE, value.x());
             buffer.write(DOUBLE, value.y());
             buffer.write(DOUBLE, value.z());
-            return -1;
         }
 
         @Override
@@ -602,12 +587,11 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, float[] value) {
+        public void write(@NotNull NetworkBuffer buffer, float[] value) {
             buffer.write(FLOAT, value[0]);
             buffer.write(FLOAT, value[1]);
             buffer.write(FLOAT, value[2]);
             buffer.write(FLOAT, value[3]);
-            return -1;
         }
 
         @Override
@@ -622,12 +606,11 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ParticleType() implements NetworkBufferTypeImpl<Particle> {
         @Override
-        public long write(@NotNull NetworkBuffer buffer, Particle value) {
+        public void write(@NotNull NetworkBuffer buffer, Particle value) {
             Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data {0} is not valid for this particle type {1}", value.data(), value.namespace());
             Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type {0}", value.namespace());
             buffer.write(VAR_INT, value.id());
             if (value.data() != null) value.data().write(buffer);
-            return -1;
         }
 
         @Override
@@ -639,9 +622,8 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     static <T extends Enum<?>> NetworkBufferTypeImpl<T> fromEnum(Class<T> enumClass) {
         return new NetworkBufferTypeImpl<>() {
             @Override
-            public long write(@NotNull NetworkBuffer buffer, T value) {
+            public void write(@NotNull NetworkBuffer buffer, T value) {
                 buffer.writeEnum(enumClass, value);
-                return -1;
             }
 
             @Override
@@ -654,9 +636,8 @@ non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     static <T> NetworkBufferTypeImpl<T> fromOptional(Type<T> optionalType) {
         return new NetworkBufferTypeImpl<>() {
             @Override
-            public long write(@NotNull NetworkBuffer buffer, T value) {
+            public void write(@NotNull NetworkBuffer buffer, T value) {
                 buffer.writeOptional(optionalType, value);
-                return -1;
             }
 
             @Override

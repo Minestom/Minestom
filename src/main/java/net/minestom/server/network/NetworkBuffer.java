@@ -105,8 +105,7 @@ public final class NetworkBuffer {
     }
 
     public <T> void write(@NotNull Type<T> type, @NotNull T value) {
-        final long length = type.write(this, value);
-        if (length != -1) this.writeIndex += length;
+        type.write(this, value);
     }
 
     public <T> void write(@NotNull Writer writer) {
@@ -293,7 +292,7 @@ public final class NetworkBuffer {
 
 
     public sealed interface Type<T> permits NetworkBufferTypeImpl {
-        long write(@NotNull NetworkBuffer buffer, T value);
+        void write(@NotNull NetworkBuffer buffer, T value);
 
         T read(@NotNull NetworkBuffer buffer);
     }
