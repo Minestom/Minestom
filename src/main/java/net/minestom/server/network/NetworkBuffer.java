@@ -53,7 +53,6 @@ public final class NetworkBuffer {
     public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
     // METADATA
-    public static final Type<Direction> DIRECTION = NetworkBufferTypeImpl.fromEnum(Direction.class);
     public static final Type<Integer> BLOCK_STATE = new NetworkBufferTypeImpl.BlockStateType();
     public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
     public static final Type<DeathLocation> DEATH_LOCATION = new NetworkBufferTypeImpl.DeathLocationType();
@@ -68,6 +67,7 @@ public final class NetworkBuffer {
     public static final Type<Integer> OPT_BLOCK_STATE = NetworkBufferTypeImpl.fromOptional(BLOCK_STATE);
     public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypeImpl.fromOptional(VAR_INT);
 
+    public static final Type<Direction> DIRECTION = NetworkBufferTypeImpl.fromEnum(Direction.class);
     public static final Type<Entity.Pose> POSE = NetworkBufferTypeImpl.fromEnum(Entity.Pose.class);
 
     public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypeImpl.fromEnum(CatMeta.Variant.class);
