@@ -14,13 +14,14 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
-    static final Object GLOBAL_CHILD_LOCK = new Object();
+    static final ReentrantLock GLOBAL_CHILD_LOCK = new ReentrantLock();
 
     private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
@@ -55,17 +56,21 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return List.of();
             List<EventNode<E>> result = new ArrayList<>();
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
+                    //noinspection unchecked
                     result.add((EventNode<E>) child);
                 }
                 result.addAll(child.findChildren(name, eventType));
             }
             return result;
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
@@ -76,7 +81,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
@@ -87,12 +93,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                 }
                 child.replaceChildren(name, eventType, eventNode);
             }
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
     @Override
     public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final Set<EventNode<T>> children = getChildren();
             if (children.isEmpty()) return;
             for (EventNode<T> child : children) {
@@ -102,52 +111,68 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                 }
                 child.removeChildren(name, eventType);
             }
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
     @Override
     public @NotNull EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final var childImpl = (EventNodeImpl<? extends T>) child;
             Check.stateCondition(!ServerFlag.EVENT_NODE_ALLOW_MULTIPLE_PARENTS && childImpl.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
+            //noinspection unchecked
             if (!children.add((EventNodeImpl<T>) childImpl)) return this; // Couldn't add the child (already present?)
             childImpl.parent = this;
             childImpl.invalidateEventsFor(this);
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
         return this;
     }
 
     @Override
     public @NotNull EventNode<T> removeChild(@NotNull EventNode<? extends T> child) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final var childImpl = (EventNodeImpl<? extends T>) child;
             final boolean result = this.children.remove(childImpl);
             if (!result) return this; // Child not found
             childImpl.parent = null;
             childImpl.invalidateEventsFor(this);
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
         return this;
     }
 
     @Override
     public @NotNull EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final var eventType = listener.eventType();
             ListenerEntry<T> entry = getEntry(eventType);
+            //noinspection unchecked
             entry.listeners.add((EventListener<T>) listener);
             invalidateEvent(eventType);
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
         return this;
     }
 
     @Override
     public @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final var eventType = listener.eventType();
             ListenerEntry<T> entry = listenerMap.get(eventType);
             if (entry == null) return this; // There is no listener with such type
             if (entry.listeners.remove(listener)) invalidateEvent(eventType);
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
         return this;
     }
@@ -155,45 +180,65 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public @NotNull <E extends T, H> EventNode<E> map(@NotNull H value, @NotNull EventFilter<E, H> filter) {
         EventNodeImpl<E> node;
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             node = new EventNodeLazyImpl<>(this, value, filter);
             Check.stateCondition(node.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, node), "Cannot map to self");
+            //noinspection unchecked
             EventNodeImpl<T> previous = this.mappedNodeCache.putIfAbsent(value, (EventNodeImpl<T>) node);
-            if (previous != null) return (EventNode<E>) previous;
+            if (previous != null) {
+                //noinspection unchecked
+                return (EventNode<E>) previous;
+            }
             node.parent = this;
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
         return node;
     }
 
     @Override
     public void unmap(@NotNull Object value) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             final var mappedNode = this.registeredMappedNode.remove(value);
             if (mappedNode != null) mappedNode.invalidateEventsFor(this);
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void register(@NotNull EventBinding<? extends T> binding) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             for (var eventType : binding.eventTypes()) {
                 ListenerEntry<T> entry = getEntry((Class<? extends T>) eventType);
                 final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
                 if (added) invalidateEvent((Class<? extends T>) eventType);
             }
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
     @Override
     public void unregister(@NotNull EventBinding<? extends T> binding) {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             for (var eventType : binding.eventTypes()) {
                 ListenerEntry<T> entry = listenerMap.get(eventType);
                 if (entry == null) return;
                 final boolean removed = entry.bindingConsumers.remove(binding.consumer(eventType));
-                if (removed) invalidateEvent((Class<? extends T>) eventType);
+                if (removed) {
+                    //noinspection unchecked
+                    invalidateEvent((Class<? extends T>) eventType);
+                }
             }
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
@@ -230,9 +275,12 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     Graph createGraph() {
-        synchronized (GLOBAL_CHILD_LOCK) {
+        GLOBAL_CHILD_LOCK.lock();
+        try {
             List<Graph> children = this.children.stream().map(EventNodeImpl::createGraph).toList();
             return new Graph(getName(), getEventType().getSimpleName(), getPriority(), children);
+        } finally {
+            GLOBAL_CHILD_LOCK.unlock();
         }
     }
 
@@ -265,7 +313,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     void invalidateEventsFor(EventNodeImpl<? super T> node) {
-        assert Thread.holdsLock(GLOBAL_CHILD_LOCK);
+        assert GLOBAL_CHILD_LOCK.isHeldByCurrentThread();
         for (Class<? extends T> eventType : listenerMap.keySet()) {
             node.invalidateEvent(eventType);
         }
@@ -277,6 +325,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
+            //noinspection unchecked
             Handle<T> handle = handleMap.computeIfAbsent(type,
                     aClass -> new Handle<>((Class<T>) aClass));
             handle.invalidate();
@@ -341,12 +390,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         @Nullable Consumer<E> updatedListener() {
             if (updated) return listener;
-            synchronized (GLOBAL_CHILD_LOCK) {
+            GLOBAL_CHILD_LOCK.lock();
+            try {
                 if (updated) return listener;
                 final Consumer<E> listener = createConsumer();
                 this.listener = listener;
                 this.updated = true;
                 return listener;
+            } finally {
+                GLOBAL_CHILD_LOCK.unlock();
             }
         }
 
