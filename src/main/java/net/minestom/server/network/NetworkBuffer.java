@@ -291,7 +291,7 @@ public final class NetworkBuffer {
     }
 
 
-    public sealed interface Type<T> permits NetworkBufferTypeImpl {
+    public interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
 
         T read(@NotNull NetworkBuffer buffer);

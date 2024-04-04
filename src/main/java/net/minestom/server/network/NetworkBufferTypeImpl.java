@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-non-sealed interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
+interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
 
