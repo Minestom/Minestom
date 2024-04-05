@@ -1556,7 +1556,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected @NotNull Vec getVelocityForPacket() {
-        return this.velocity.mul(8000f / MinecraftServer.TICK_PER_SECOND);
+        return this.velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND);
     }
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {
@@ -1666,9 +1666,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void takeKnockback(float strength, final double x, final double z) {
         if (strength > 0) {
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
-            strength *= MinecraftServer.TICK_PER_SECOND;
+            strength *= ServerFlag.SERVER_TICKS_PER_SECOND;
             final Vec velocityModifier = new Vec(x, z).normalize().mul(strength);
-            final double verticalLimit = .4d * MinecraftServer.TICK_PER_SECOND;
+            final double verticalLimit = .4d * ServerFlag.SERVER_TICKS_PER_SECOND;
 
             setVelocity(new Vec(velocity.x() / 2d - velocityModifier.x(),
                     onGround ? Math.min(verticalLimit, velocity.y() / 2d + strength) : velocity.y(),
