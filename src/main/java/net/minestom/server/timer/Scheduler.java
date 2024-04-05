@@ -68,6 +68,10 @@ public sealed interface Scheduler extends Executor permits SchedulerImpl, Schedu
         return scheduleTask(task, delay, repeat, ExecutionType.TICK_START);
     }
 
+    default @NotNull Task scheduleTask(@NotNull Supplier<TaskSchedule> task, @NotNull TaskSchedule delay) {
+        return new Task.Builder(this, task).delay(delay).schedule();
+    }
+
     default @NotNull Task scheduleNextTick(@NotNull Runnable task, @NotNull ExecutionType executionType) {
         return buildTask(task).delay(TaskSchedule.nextTick()).executionType(executionType).schedule();
     }
