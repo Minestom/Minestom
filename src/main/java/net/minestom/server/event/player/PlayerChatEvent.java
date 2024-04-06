@@ -37,7 +37,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     /**
      * Changes the chat format.
      *
-     * @param chatFormat the custom chat format, null to use the default one
+     * @param chatFormat the custom chat format
      */
     public void setChatFormat(@NotNull Function<PlayerChatEvent, Component> chatFormat) {
         this.chatFormat = chatFormat;
