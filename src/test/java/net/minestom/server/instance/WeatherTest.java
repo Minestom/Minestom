@@ -23,7 +23,7 @@ public class WeatherTest {
         assertEquals(0, weather.rainLevel());
         assertEquals(0, weather.thunderLevel());
 
-        instance.setWeather(new Weather(true, 1, 0.5f), 1);
+        instance.setWeather(new Weather(1, 0.5f), 1);
         instance.tick(0);
 
         // Weather sent on instance join
@@ -45,7 +45,7 @@ public class WeatherTest {
 
         // Weather change while inside instance
         var tracker2 = connection.trackIncoming(ChangeGameStatePacket.class);
-        instance.setWeather(new Weather(false, 0, 0), 2);
+        instance.setWeather(new Weather(0, 0), 2);
         instance.tick(0);
         state = tracker2.collect().get(0);
         assertEquals(ChangeGameStatePacket.Reason.RAIN_LEVEL_CHANGE, state.reason());
