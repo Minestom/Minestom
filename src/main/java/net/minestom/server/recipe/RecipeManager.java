@@ -57,7 +57,7 @@ public class RecipeManager {
                 case SMITHING_TRIM -> RecipeConversion.smithingTrim((SmithingTrimRecipe) recipe);
             });
         }
-        return new DeclareRecipesPacket(entries);
+        return new DeclareRecipesPacket(List.of());
     }
 
 }

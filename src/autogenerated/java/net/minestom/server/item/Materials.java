@@ -175,6 +175,8 @@ interface Materials {
 
     Material RAW_GOLD_BLOCK = MaterialImpl.get("minecraft:raw_gold_block");
 
+    Material HEAVY_CORE = MaterialImpl.get("minecraft:heavy_core");
+
     Material AMETHYST_BLOCK = MaterialImpl.get("minecraft:amethyst_block");
 
     Material BUDDING_AMETHYST = MaterialImpl.get("minecraft:budding_amethyst");
@@ -1593,7 +1595,11 @@ interface Materials {
 
     Material TURTLE_HELMET = MaterialImpl.get("minecraft:turtle_helmet");
 
-    Material SCUTE = MaterialImpl.get("minecraft:scute");
+    Material TURTLE_SCUTE = MaterialImpl.get("minecraft:turtle_scute");
+
+    Material ARMADILLO_SCUTE = MaterialImpl.get("minecraft:armadillo_scute");
+
+    Material WOLF_ARMOR = MaterialImpl.get("minecraft:wolf_armor");
 
     Material FLINT_AND_STEEL = MaterialImpl.get("minecraft:flint_and_steel");
 
@@ -2015,6 +2021,8 @@ interface Materials {
 
     Material GLISTERING_MELON_SLICE = MaterialImpl.get("minecraft:glistering_melon_slice");
 
+    Material ARMADILLO_SPAWN_EGG = MaterialImpl.get("minecraft:armadillo_spawn_egg");
+
     Material ALLAY_SPAWN_EGG = MaterialImpl.get("minecraft:allay_spawn_egg");
 
     Material AXOLOTL_SPAWN_EGG = MaterialImpl.get("minecraft:axolotl_spawn_egg");
@@ -2024,6 +2032,8 @@ interface Materials {
     Material BEE_SPAWN_EGG = MaterialImpl.get("minecraft:bee_spawn_egg");
 
     Material BLAZE_SPAWN_EGG = MaterialImpl.get("minecraft:blaze_spawn_egg");
+
+    Material BOGGED_SPAWN_EGG = MaterialImpl.get("minecraft:bogged_spawn_egg");
 
     Material BREEZE_SPAWN_EGG = MaterialImpl.get("minecraft:breeze_spawn_egg");
 
@@ -2175,9 +2185,13 @@ interface Materials {
 
     Material FIRE_CHARGE = MaterialImpl.get("minecraft:fire_charge");
 
+    Material WIND_CHARGE = MaterialImpl.get("minecraft:wind_charge");
+
     Material WRITABLE_BOOK = MaterialImpl.get("minecraft:writable_book");
 
     Material WRITTEN_BOOK = MaterialImpl.get("minecraft:written_book");
+
+    Material MACE = MaterialImpl.get("minecraft:mace");
 
     Material ITEM_FRAME = MaterialImpl.get("minecraft:item_frame");
 
@@ -2387,6 +2401,10 @@ interface Materials {
 
     Material PIGLIN_BANNER_PATTERN = MaterialImpl.get("minecraft:piglin_banner_pattern");
 
+    Material FLOW_BANNER_PATTERN = MaterialImpl.get("minecraft:flow_banner_pattern");
+
+    Material GUSTER_BANNER_PATTERN = MaterialImpl.get("minecraft:guster_banner_pattern");
+
     Material GOAT_HORN = MaterialImpl.get("minecraft:goat_horn");
 
     Material COMPOSTER = MaterialImpl.get("minecraft:composter");
@@ -2553,6 +2571,10 @@ interface Materials {
 
     Material HOST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:host_armor_trim_smithing_template");
 
+    Material FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:flow_armor_trim_smithing_template");
+
+    Material BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:bolt_armor_trim_smithing_template");
+
     Material ANGLER_POTTERY_SHERD = MaterialImpl.get("minecraft:angler_pottery_sherd");
 
     Material ARCHER_POTTERY_SHERD = MaterialImpl.get("minecraft:archer_pottery_sherd");
@@ -2569,7 +2591,11 @@ interface Materials {
 
     Material EXPLORER_POTTERY_SHERD = MaterialImpl.get("minecraft:explorer_pottery_sherd");
 
+    Material FLOW_POTTERY_SHERD = MaterialImpl.get("minecraft:flow_pottery_sherd");
+
     Material FRIEND_POTTERY_SHERD = MaterialImpl.get("minecraft:friend_pottery_sherd");
+
+    Material GUSTER_POTTERY_SHERD = MaterialImpl.get("minecraft:guster_pottery_sherd");
 
     Material HEART_POTTERY_SHERD = MaterialImpl.get("minecraft:heart_pottery_sherd");
 
@@ -2584,6 +2610,8 @@ interface Materials {
     Material PLENTY_POTTERY_SHERD = MaterialImpl.get("minecraft:plenty_pottery_sherd");
 
     Material PRIZE_POTTERY_SHERD = MaterialImpl.get("minecraft:prize_pottery_sherd");
+
+    Material SCRAPE_POTTERY_SHERD = MaterialImpl.get("minecraft:scrape_pottery_sherd");
 
     Material SHEAF_POTTERY_SHERD = MaterialImpl.get("minecraft:sheaf_pottery_sherd");
 
@@ -2628,4 +2656,12 @@ interface Materials {
     Material TRIAL_SPAWNER = MaterialImpl.get("minecraft:trial_spawner");
 
     Material TRIAL_KEY = MaterialImpl.get("minecraft:trial_key");
+
+    Material OMINOUS_TRIAL_KEY = MaterialImpl.get("minecraft:ominous_trial_key");
+
+    Material VAULT = MaterialImpl.get("minecraft:vault");
+
+    Material OMINOUS_BOTTLE = MaterialImpl.get("minecraft:ominous_bottle");
+
+    Material BREEZE_ROD = MaterialImpl.get("minecraft:breeze_rod");
 }

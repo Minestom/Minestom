@@ -42,8 +42,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.writeCollection(recipes, (bWriter, recipe) -> {
-            bWriter.write(STRING, recipe.type());
             bWriter.write(STRING, recipe.recipeId());
+            bWriter.write(STRING, recipe.type());
             bWriter.write(recipe);
         });
     }

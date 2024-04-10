@@ -1,8 +1,8 @@
 package net.minestom.server.world;
 
-import net.kyori.adventure.nbt.BinaryTagTypes;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
+import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class DimensionTypeManager {
 
+    private final CachedPacket registryDataPacket = new CachedPacket(this::createRegistryDataPacket);
     private final List<DimensionType> dimensionTypes = new CopyOnWriteArrayList<>();
 
     public DimensionTypeManager() {
@@ -32,6 +33,7 @@ public final class DimensionTypeManager {
     public void addDimension(@NotNull DimensionType dimensionType) {
         dimensionType.registered = true;
         this.dimensionTypes.add(dimensionType);
+        registryDataPacket.invalidate();
     }
 
     /**
@@ -42,7 +44,9 @@ public final class DimensionTypeManager {
      */
     public boolean removeDimension(@NotNull DimensionType dimensionType) {
         dimensionType.registered = false;
-        return dimensionTypes.remove(dimensionType);
+        boolean removed = dimensionTypes.remove(dimensionType);
+        if (removed) registryDataPacket.invalidate();
+        return removed;
     }
 
     /**
@@ -80,20 +84,16 @@ public final class DimensionTypeManager {
         return Collections.unmodifiableList(dimensionTypes);
     }
 
-    /**
-     * Creates the {@link CompoundBinaryTag} containing all the registered dimensions.
-     * <p>
-     * Used when a player connects.
-     *
-     * @return an nbt compound containing the registered dimensions
-     */
-    public @NotNull CompoundBinaryTag toNBT() {
-        ListBinaryTag.Builder<CompoundBinaryTag> entries = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
-        for (DimensionType dimensionType : dimensionTypes)
-            entries.add(dimensionType.toIndexedNBT());
-        return CompoundBinaryTag.builder()
-                .putString("type", "minecraft:dimension_type")
-                .put("value", entries.build())
-                .build();
+    public @NotNull SendablePacket registryDataPacket() {
+        return registryDataPacket;
+    }
+
+    private @NotNull RegistryDataPacket createRegistryDataPacket() {
+        return new RegistryDataPacket(
+                "minecraft:dimension_type",
+                dimensionTypes.stream()
+                        .map(DimensionType::toRegistryEntry)
+                        .toList()
+        );
     }
 }
