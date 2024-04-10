@@ -12,13 +12,13 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -80,8 +80,8 @@ public final class NetworkBuffer {
     int writeIndex;
     int readIndex;
 
-    DataOutput nbtWriter;
-    DataInput nbtReader;
+    BinaryTagWriter nbtWriter;
+    BinaryTagReader nbtReader;
 
     public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
