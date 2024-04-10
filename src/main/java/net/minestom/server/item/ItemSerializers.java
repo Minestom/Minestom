@@ -1,7 +1,7 @@
 package net.minestom.server.item;
 
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
@@ -57,7 +57,7 @@ public final class ItemSerializers {
             final int operation = reader.getTag(OPERATION);
             final String name = reader.getTag(NAME);
 
-            final Attribute attribute = Attribute.fromKey(attributeName.toLowerCase(Locale.ROOT));
+            final Attribute attribute = Attribute.fromNamespaceId(attributeName.toLowerCase(Locale.ROOT));
             // Wrong attribute name, stop here
             if (attribute == null) return null;
             final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);
@@ -79,7 +79,7 @@ public final class ItemSerializers {
             writer.setTag(ID, value.uuid());
             writer.setTag(AMOUNT, value.amount());
             writer.setTag(SLOT, value.slot().name().toLowerCase(Locale.ROOT));
-            writer.setTag(ATTRIBUTE_NAME, value.attribute().key());
+            writer.setTag(ATTRIBUTE_NAME, value.attribute().name());
             writer.setTag(OPERATION, value.operation().getId());
             writer.setTag(NAME, value.name());
         }

@@ -20,7 +20,7 @@ public class DolphinMeta extends WaterAnimalMeta {
     }
 
     public void setTreasurePosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.Position(value));
+        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
     }
 
     public boolean isHasFish() {

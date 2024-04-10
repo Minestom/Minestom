@@ -5,8 +5,6 @@ package net.minestom.server.particle;
  */
 @SuppressWarnings("unused")
 interface Particles {
-    Particle AMBIENT_ENTITY_EFFECT = ParticleImpl.get("minecraft:ambient_entity_effect");
-
     Particle ANGRY_VILLAGER = ParticleImpl.get("minecraft:angry_villager");
 
     Particle BLOCK = ParticleImpl.get("minecraft:block");
@@ -55,7 +53,11 @@ interface Particles {
 
     Particle GUST = ParticleImpl.get("minecraft:gust");
 
-    Particle GUST_EMITTER = ParticleImpl.get("minecraft:gust_emitter");
+    Particle SMALL_GUST = ParticleImpl.get("minecraft:small_gust");
+
+    Particle GUST_EMITTER_LARGE = ParticleImpl.get("minecraft:gust_emitter_large");
+
+    Particle GUST_EMITTER_SMALL = ParticleImpl.get("minecraft:gust_emitter_small");
 
     Particle SONIC_BOOM = ParticleImpl.get("minecraft:sonic_boom");
 
@@ -66,6 +68,8 @@ interface Particles {
     Particle FISHING = ParticleImpl.get("minecraft:fishing");
 
     Particle FLAME = ParticleImpl.get("minecraft:flame");
+
+    Particle INFESTED = ParticleImpl.get("minecraft:infested");
 
     Particle CHERRY_LEAVES = ParticleImpl.get("minecraft:cherry_leaves");
 
@@ -94,6 +98,8 @@ interface Particles {
     Particle VIBRATION = ParticleImpl.get("minecraft:vibration");
 
     Particle ITEM_SLIME = ParticleImpl.get("minecraft:item_slime");
+
+    Particle ITEM_COBWEB = ParticleImpl.get("minecraft:item_cobweb");
 
     Particle ITEM_SNOWBALL = ParticleImpl.get("minecraft:item_snowball");
 
@@ -203,7 +209,17 @@ interface Particles {
 
     Particle DUST_PLUME = ParticleImpl.get("minecraft:dust_plume");
 
-    Particle GUST_DUST = ParticleImpl.get("minecraft:gust_dust");
-
     Particle TRIAL_SPAWNER_DETECTION = ParticleImpl.get("minecraft:trial_spawner_detection");
+
+    Particle TRIAL_SPAWNER_DETECTION_OMINOUS = ParticleImpl.get("minecraft:trial_spawner_detection_ominous");
+
+    Particle VAULT_CONNECTION = ParticleImpl.get("minecraft:vault_connection");
+
+    Particle DUST_PILLAR = ParticleImpl.get("minecraft:dust_pillar");
+
+    Particle OMINOUS_SPAWNING = ParticleImpl.get("minecraft:ominous_spawning");
+
+    Particle RAID_OMEN = ParticleImpl.get("minecraft:raid_omen");
+
+    Particle TRIAL_OMEN = ParticleImpl.get("minecraft:trial_omen");
 }
