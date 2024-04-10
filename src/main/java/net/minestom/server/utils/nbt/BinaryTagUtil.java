@@ -1,4 +1,4 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.nbt;
 
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.utils.validate.Check;
@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
-public final class NBTUtils {
+public final class BinaryTagUtil {
     private static final BinaryTagType<?>[] TYPES = new BinaryTagType[]{
             BinaryTagTypes.END,
             BinaryTagTypes.BYTE,
@@ -54,6 +54,6 @@ public final class NBTUtils {
         }
     }
 
-    private NBTUtils() {
+    private BinaryTagUtil() {
     }
 }
