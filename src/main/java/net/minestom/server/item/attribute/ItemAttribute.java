@@ -1,7 +1,7 @@
 package net.minestom.server.item.attribute;
 
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;

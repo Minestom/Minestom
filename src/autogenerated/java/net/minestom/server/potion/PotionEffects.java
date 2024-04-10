@@ -70,4 +70,16 @@ interface PotionEffects {
     PotionEffect HERO_OF_THE_VILLAGE = PotionEffectImpl.get("minecraft:hero_of_the_village");
 
     PotionEffect DARKNESS = PotionEffectImpl.get("minecraft:darkness");
+
+    PotionEffect TRIAL_OMEN = PotionEffectImpl.get("minecraft:trial_omen");
+
+    PotionEffect RAID_OMEN = PotionEffectImpl.get("minecraft:raid_omen");
+
+    PotionEffect WIND_CHARGED = PotionEffectImpl.get("minecraft:wind_charged");
+
+    PotionEffect WEAVING = PotionEffectImpl.get("minecraft:weaving");
+
+    PotionEffect OOZING = PotionEffectImpl.get("minecraft:oozing");
+
+    PotionEffect INFESTED = PotionEffectImpl.get("minecraft:infested");
 }

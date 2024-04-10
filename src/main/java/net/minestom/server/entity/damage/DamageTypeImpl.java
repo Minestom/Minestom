@@ -1,8 +1,7 @@
 package net.minestom.server.entity.damage;
 
-import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,13 +29,14 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements Dama
         return CONTAINER.getId(id);
     }
 
+
     @Override
-    public CompoundBinaryTag asNBT() {
-        return CompoundBinaryTag.builder()
+    public @NotNull RegistryDataPacket.Entry toRegistryEntry() {
+        return new RegistryDataPacket.Entry(name(), CompoundBinaryTag.builder()
                 .putFloat("exhaustion", registry.exhaustion())
                 .putString("message_id", registry.messageId())
                 .putString("scaling", registry.scaling())
-                .build();
+                .build());
     }
 
     static Collection<DamageType> values() {
@@ -53,24 +53,15 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements Dama
         return id;
     }
 
-    private static CompoundBinaryTag lazyNbt = null;
+    private static RegistryDataPacket lazyRegistryDataPacket = null;
 
-    static CompoundBinaryTag getNBT() {
-        if (lazyNbt == null) {
-            var entries = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
-            for (var damageType : values()) {
-                entries.add(CompoundBinaryTag.builder()
-                        .putInt("id", damageType.id())
-                        .putString("name", damageType.name())
-                        .put("element", damageType.asNBT())
-                        .build());
-            }
-
-            lazyNbt = CompoundBinaryTag.builder()
-                    .putString("type", "minecraft:damage_type")
-                    .put("value", entries.build())
-                    .build();
-        }
-        return lazyNbt;
+    static @NotNull RegistryDataPacket registryDataPacket() {
+        if (lazyRegistryDataPacket != null) return lazyRegistryDataPacket;
+        return lazyRegistryDataPacket = new RegistryDataPacket(
+                "minecraft:damage_type",
+                values().stream()
+                        .map(DamageType::toRegistryEntry)
+                        .toList()
+        );
     }
 }

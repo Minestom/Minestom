@@ -5,8 +5,6 @@ package net.minestom.server.potion;
  */
 @SuppressWarnings("unused")
 interface PotionTypes {
-    PotionType EMPTY = PotionTypeImpl.get("minecraft:empty");
-
     PotionType WATER = PotionTypeImpl.get("minecraft:water");
 
     PotionType MUNDANE = PotionTypeImpl.get("minecraft:mundane");
@@ -90,4 +88,12 @@ interface PotionTypes {
     PotionType SLOW_FALLING = PotionTypeImpl.get("minecraft:slow_falling");
 
     PotionType LONG_SLOW_FALLING = PotionTypeImpl.get("minecraft:long_slow_falling");
+
+    PotionType WIND_CHARGED = PotionTypeImpl.get("minecraft:wind_charged");
+
+    PotionType WEAVING = PotionTypeImpl.get("minecraft:weaving");
+
+    PotionType OOZING = PotionTypeImpl.get("minecraft:oozing");
+
+    PotionType INFESTED = PotionTypeImpl.get("minecraft:infested");
 }
