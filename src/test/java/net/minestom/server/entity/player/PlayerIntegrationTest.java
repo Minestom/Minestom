@@ -23,7 +23,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minestom.server.entity.Player.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -119,7 +118,7 @@ public class PlayerIntegrationTest {
 
         final var packets = List.of(
                 JoinGamePacket.class, ServerDifficultyPacket.class, SpawnPositionPacket.class,
-                DeclareCommandsPacket.class, EntityPropertiesPacket.class, EntityStatusPacket.class,
+                DeclareCommandsPacket.class, EntityAttributesPacket.class, EntityStatusPacket.class,
                 UpdateHealthPacket.class, PlayerAbilitiesPacket.class
         );
         final List<Collector<?>> trackers = new ArrayList<>();

@@ -2,6 +2,7 @@ package net.minestom.server.world.biomes;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -51,6 +52,10 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         default @NotNull Biome getBiome(@NotNull Point point) {
             return getBiome(point.blockX(), point.blockY(), point.blockZ());
         }
+    }
+
+    default @NotNull RegistryDataPacket.Entry toRegistryEntry() {
+        return new RegistryDataPacket.Entry(namespace().toString(), toNbt());
     }
 
     default @NotNull CompoundBinaryTag toNbt() {

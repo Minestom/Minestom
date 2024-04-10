@@ -75,7 +75,7 @@ public final class LoginListener {
             byte[] nonce = new byte[4];
             ThreadLocalRandom.current().nextBytes(nonce);
             socketConnection.setNonce(nonce);
-            socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce));
+            socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce, true));
         } else {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline

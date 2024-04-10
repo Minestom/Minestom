@@ -1,6 +1,7 @@
 package net.minestom.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,13 +110,8 @@ public class DimensionType {
                 .build();
     }
 
-    @NotNull
-    public CompoundBinaryTag toIndexedNBT() {
-        return CompoundBinaryTag.builder()
-                .putString("name", name.toString())
-                .putInt("id", id)
-                .put("element", toNBT())
-                .build();
+    public @NotNull RegistryDataPacket.Entry toRegistryEntry() {
+        return new RegistryDataPacket.Entry(name.toString(), toNBT());
     }
 
     @NotNull
