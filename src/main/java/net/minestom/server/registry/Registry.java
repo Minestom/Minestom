@@ -79,6 +79,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
+        return new AttributeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -223,7 +228,8 @@ public final class Registry {
         FLUID_TAGS("tags/fluid_tags.json"),
         GAMEPLAY_TAGS("tags/gameplay_tags.json"),
         ITEM_TAGS("tags/item_tags.json"),
-        BIOMES("biomes.json");
+        BIOMES("biomes.json"),
+        ATTRIBUTES("attributes.json");
 
         private final String name;
 
@@ -675,6 +681,23 @@ public final class Registry {
                     main.getString("translationKey"),
                     main.getInt("color"),
                     main.getBoolean("instantaneous"),
+                    custom);
+        }
+    }
+
+    public record AttributeEntry(NamespaceID namespace, int id,
+                                 String translationKey, double defaultValue,
+                                 boolean clientSync,
+                                 double maxValue, double minValue,
+                                 Properties custom) implements Entry {
+        public AttributeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getString("translationKey"),
+                    main.getDouble("defaultValue"),
+                    main.getBoolean("clientSync"),
+                    main.getDouble("maxValue"),
+                    main.getDouble("minValue"),
                     custom);
         }
     }

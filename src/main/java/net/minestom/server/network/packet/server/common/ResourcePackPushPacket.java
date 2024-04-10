@@ -42,7 +42,7 @@ public record ResourcePackPushPacket(
 
     @Override
     public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_PUSH_PACKET;
+        return ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_PUSH;
     }
 
     @Override
