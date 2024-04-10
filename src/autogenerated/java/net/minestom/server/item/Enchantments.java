@@ -43,7 +43,7 @@ interface Enchantments {
 
     Enchantment LOOTING = EnchantmentImpl.get("minecraft:looting");
 
-    Enchantment SWEEPING = EnchantmentImpl.get("minecraft:sweeping");
+    Enchantment SWEEPING_EDGE = EnchantmentImpl.get("minecraft:sweeping_edge");
 
     Enchantment EFFICIENCY = EnchantmentImpl.get("minecraft:efficiency");
 
@@ -78,6 +78,12 @@ interface Enchantments {
     Enchantment QUICK_CHARGE = EnchantmentImpl.get("minecraft:quick_charge");
 
     Enchantment PIERCING = EnchantmentImpl.get("minecraft:piercing");
+
+    Enchantment DENSITY = EnchantmentImpl.get("minecraft:density");
+
+    Enchantment BREACH = EnchantmentImpl.get("minecraft:breach");
+
+    Enchantment WIND_BURST = EnchantmentImpl.get("minecraft:wind_burst");
 
     Enchantment MENDING = EnchantmentImpl.get("minecraft:mending");
 

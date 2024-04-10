@@ -1,10 +1,10 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -105,7 +105,7 @@ public class EntityMetaIntegrationTest {
         //This is first test, and it is not related to "custom name" bug. Therefore, it should work.
         var packets = incomingPackets.collect();
         validMetaDataPackets(packets, entity.getEntityId(), entry -> {
-            if (entry.type() != Metadata.TYPE_OPTCHAT) return;
+            if (entry.type() != Metadata.TYPE_OPT_CHAT) return;
             assertEquals(Component.text("Custom Name"), entry.value());
         });
 
@@ -127,7 +127,7 @@ public class EntityMetaIntegrationTest {
         //Listen packets to check if entity name is "Custom Name 2".
         packets = incomingPackets.collect();
         validMetaDataPackets(packets, entity.getEntityId(), entry -> {
-            if (entry.type() != Metadata.TYPE_OPTCHAT) return;
+            if (entry.type() != Metadata.TYPE_OPT_CHAT) return;
             assertEquals(Component.text("Custom Name 2"), entry.value());
         });
     }

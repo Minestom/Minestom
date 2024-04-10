@@ -33,6 +33,8 @@ interface DamageTypes {
 
     DamageType PLAYER_EXPLOSION = DamageTypeImpl.get("minecraft:player_explosion");
 
+    DamageType SPIT = DamageTypeImpl.get("minecraft:spit");
+
     DamageType STING = DamageTypeImpl.get("minecraft:sting");
 
     DamageType UNATTRIBUTED_FIREBALL = DamageTypeImpl.get("minecraft:unattributed_fireball");

@@ -1,6 +1,6 @@
 package net.minestom.server.entity.damage;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
@@ -36,7 +36,7 @@ public sealed interface DamageType extends StaticProtocolObject, DamageTypes per
         return registry().scaling();
     }
 
-    CompoundBinaryTag asNBT();
+    @NotNull RegistryDataPacket.Entry toRegistryEntry();
 
     static @NotNull Collection<@NotNull DamageType> values() {
         return DamageTypeImpl.values();
@@ -54,7 +54,7 @@ public sealed interface DamageType extends StaticProtocolObject, DamageTypes per
         return DamageTypeImpl.getId(id);
     }
 
-    static CompoundBinaryTag getNBT() {
-        return DamageTypeImpl.getNBT();
+    static @NotNull RegistryDataPacket registryDataPacket() {
+        return DamageTypeImpl.registryDataPacket();
     }
 }

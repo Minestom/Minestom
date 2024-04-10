@@ -1,12 +1,13 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.AttributeModifier;
-import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeInstance;
+import net.minestom.server.entity.attribute.AttributeModifier;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -14,16 +15,19 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityPropertiesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket.Play {
+public record EntityAttributesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket.Play {
     public static final int MAX_ENTRIES = 1024;
 
-    public EntityPropertiesPacket {
+    public EntityAttributesPacket {
         properties = List.copyOf(properties);
     }
 
-    public EntityPropertiesPacket(@NotNull NetworkBuffer reader) {
+    public EntityAttributesPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.readCollection(r -> {
-            final Attribute attribute = Attribute.fromKey(reader.read(STRING));
+            int id = reader.read(VAR_INT);
+            final Attribute attribute = Attribute.fromId(id);
+            Check.notNull(attribute, "Unknown attribute id: " + id);
+
             final double value = reader.read(DOUBLE);
             int modifierCount = reader.read(VAR_INT);
             AttributeInstance instance = new AttributeInstance(attribute, null);
@@ -42,8 +46,8 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
         for (AttributeInstance instance : properties) {
             final Attribute attribute = instance.getAttribute();
 
-            writer.write(STRING, attribute.key());
-            writer.write(DOUBLE, (double) instance.getBaseValue());
+            writer.write(VAR_INT, attribute.id());
+            writer.write(DOUBLE, instance.getBaseValue());
 
             {
                 Collection<AttributeModifier> modifiers = instance.getModifiers();
@@ -60,6 +64,6 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
 
     @Override
     public int playId() {
-        return ServerPacketIdentifier.ENTITY_PROPERTIES;
+        return ServerPacketIdentifier.ENTITY_ATTRIBUTES;
     }
 }

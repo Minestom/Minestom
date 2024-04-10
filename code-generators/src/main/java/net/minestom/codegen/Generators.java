@@ -18,10 +18,8 @@ public class Generators {
         }
         File outputFolder = new File(args[0]);
 
-
         // Generate DyeColors
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
-
 
         var generator = new CodeGenerator(outputFolder);
         generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
@@ -37,16 +35,11 @@ public class Generators {
         generator.generate(resource("damage_types.json"), "net.minestom.server.entity.damage", "DamageType", "DamageTypeImpl", "DamageTypes");
         generator.generate(resource("trim_materials.json"), "net.minestom.server.item.armor", "TrimMaterial", "TrimMaterialImpl", "TrimMaterials");
         generator.generate(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatternImpl", "TrimPatterns");
-
+        generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
 
-        // TODO: Generate attributes
-//        new AttributeGenerator(
-//                new File(inputFolder, targetVersion + "_attributes.json"),
-//                outputFolder
-//        ).generate();
         // TODO: Generate villager professions
 //        new VillagerProfessionGenerator(
 //                new File(inputFolder, targetVersion + "_villager_professions.json"),
