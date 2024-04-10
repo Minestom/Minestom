@@ -47,28 +47,36 @@ public class LivingEntityMeta extends EntityMeta {
         setMaskBit(OFFSET, IS_IN_SPIN_ATTACK_BIT, value);
     }
 
+    public float getHealth() {
+        return super.metadata.getIndex(OFFSET + 1, 1F);
+    }
+
+    public void setHealth(float value) {
+        super.metadata.setIndex(OFFSET + 1, Metadata.Float(value));
+    }
+
     public @NotNull List<Particle> getEffectParticles() {
-        return super.metadata.getIndex(OFFSET + 1, List.of());
+        return super.metadata.getIndex(OFFSET + 2, List.of());
     }
 
     public void setEffectParticles(@NotNull List<Particle> value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.ParticleList(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.ParticleList(value));
     }
 
     public boolean isPotionEffectAmbient() {
-        return super.metadata.getIndex(OFFSET + 2, false);
+        return super.metadata.getIndex(OFFSET + 3, false);
     }
 
     public void setPotionEffectAmbient(boolean value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 3, Metadata.Boolean(value));
     }
 
     public int getArrowCount() {
-        return super.metadata.getIndex(OFFSET + 3, 0);
+        return super.metadata.getIndex(OFFSET + 4, 0);
     }
 
     public void setArrowCount(int value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
     }
 
     /**
@@ -76,7 +84,7 @@ public class LivingEntityMeta extends EntityMeta {
      * @return The amount of bee stingers
      */
     public int getBeeStingerCount() {
-        return super.metadata.getIndex(OFFSET + 4, 0);
+        return super.metadata.getIndex(OFFSET + 5, 0);
     }
 
     /**
@@ -84,15 +92,7 @@ public class LivingEntityMeta extends EntityMeta {
      * @param value The amount of bee stingers to set, use 0 to clear all stingers
      */
     public void setBeeStingerCount(int value) {
-        super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
-    }
-
-    public float getHealth() {
-        return super.metadata.getIndex(OFFSET + 5, 1F);
-    }
-
-    public void setHealth(float value) {
-        super.metadata.setIndex(OFFSET + 5, Metadata.Float(value));
+        super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
     }
 
     @Nullable
