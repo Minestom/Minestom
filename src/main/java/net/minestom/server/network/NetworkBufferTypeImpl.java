@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.EndBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
@@ -420,7 +419,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             buffer.read(VAR_INT); // Added components
             buffer.read(VAR_INT); // Removed components
 
-            return ItemStack.fromNBT(material, new NBTCompound(), count);
+            return ItemStack.fromNBT(material, CompoundBinaryTag.empty(), count);
         }
     }
 
