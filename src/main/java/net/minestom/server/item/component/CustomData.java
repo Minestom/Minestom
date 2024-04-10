@@ -1,11 +1,11 @@
 package net.minestom.server.item.component;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public record CustomData(@NotNull NBTCompound nbt) implements ItemComponent {
+public record CustomData(@NotNull CompoundBinaryTag nbt) implements ItemComponent {
     static final Tag<CustomData> TAG = Tag.Structure("ab", CustomData.class);
 
     static final NetworkBuffer.Type<CustomData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
@@ -16,7 +16,7 @@ public record CustomData(@NotNull NBTCompound nbt) implements ItemComponent {
 
         @Override
         public CustomData read(@NotNull NetworkBuffer buffer) {
-            return new CustomData((NBTCompound) buffer.read(NetworkBuffer.NBT));
+            return new CustomData((CompoundBinaryTag) buffer.read(NetworkBuffer.NBT));
         }
     };
 
