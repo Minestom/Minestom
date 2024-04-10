@@ -14,11 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Allows servers to register custom dimensions. Also used during player joining to send the list of all existing dimensions.
- * <p>
  */
 public final class BiomeManager {
     private final CachedPacket registryDataPacket = new CachedPacket(this::createRegistryDataPacket);
