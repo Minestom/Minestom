@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
@@ -72,6 +73,7 @@ public final class NetworkBuffer {
     public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypeImpl.fromEnum(FrogMeta.Variant.class);
     public static final Type<PaintingMeta.Variant> PAINTING_VARIANT = NetworkBufferTypeImpl.fromEnum(PaintingMeta.Variant.class);
     public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
+    public static final Type<ArmadilloMeta.State> ARMADILLO_STATE = NetworkBufferTypeImpl.fromEnum(ArmadilloMeta.State.class);
 
 
     ByteBuffer nioBuffer;
@@ -298,6 +300,11 @@ public final class NetworkBuffer {
     @FunctionalInterface
     public interface Writer {
         void write(@NotNull NetworkBuffer writer);
+    }
+
+    @FunctionalInterface
+    public interface Reader<T> {
+        @NotNull T read(@NotNull NetworkBuffer reader);
     }
 
     public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {

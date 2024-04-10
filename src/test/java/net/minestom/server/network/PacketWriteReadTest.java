@@ -1,12 +1,8 @@
 package net.minestom.server.network;
 
 import com.google.gson.JsonObject;
-
-import java.io.PrintStream;
-
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
@@ -140,7 +136,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new EntityMetaDataPacket(5, Map.of(1, Metadata.VarInt(5))));
         SERVER_PACKETS.add(new EntityPositionAndRotationPacket(5, (short) 0, (short) 0, (short) 0, 45f, 45f, false));
         SERVER_PACKETS.add(new EntityPositionPacket(5, (short) 0, (short) 0, (short) 0, true));
-        SERVER_PACKETS.add(new EntityPropertiesPacket(5, List.of()));
+        SERVER_PACKETS.add(new EntityAttributesPacket(5, List.of()));
         SERVER_PACKETS.add(new EntityRotationPacket(5, 45f, 45f, false));
 
         final PlayerSkin skin = new PlayerSkin("hh", "hh");

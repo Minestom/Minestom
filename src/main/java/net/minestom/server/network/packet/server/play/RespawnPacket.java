@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(
-        String dimensionType, String worldName,
+        int dimensionType, String worldName,
         long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, WorldPos deathLocation,
         int portalCooldown, int copyData
@@ -21,7 +21,7 @@ public record RespawnPacket(
     public static final int COPY_ALL = COPY_ATTRIBUTES | COPY_METADATA;
 
     public RespawnPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(STRING),
+        this(reader.read(VAR_INT), reader.read(STRING),
                 reader.read(LONG), GameMode.fromId(reader.read(BYTE)),
                 GameMode.fromId(reader.read(BYTE)),
                 reader.read(BOOLEAN), reader.read(BOOLEAN),
@@ -31,7 +31,7 @@ public record RespawnPacket(
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, dimensionType);
+        writer.write(VAR_INT, dimensionType);
         writer.write(STRING, worldName);
         writer.write(LONG, hashedSeed);
         writer.write(BYTE, gameMode.id());

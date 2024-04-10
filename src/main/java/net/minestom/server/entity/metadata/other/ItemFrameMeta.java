@@ -25,7 +25,7 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public void setItem(@NotNull ItemStack value) {
-        super.metadata.setIndex(OFFSET, Metadata.Slot(value));
+        super.metadata.setIndex(OFFSET, Metadata.ItemStack(value));
     }
 
     @NotNull

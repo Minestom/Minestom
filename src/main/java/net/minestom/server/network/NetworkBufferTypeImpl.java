@@ -399,32 +399,28 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
             if (value.isAir()) {
-                buffer.write(BOOLEAN, false);
+                buffer.write(VAR_INT, 0); // 0 count always
                 return;
             }
-            buffer.write(BOOLEAN, true);
+            buffer.write(VAR_INT, value.amount());
             buffer.write(VAR_INT, value.material().id());
-            buffer.write(BYTE, (byte) value.amount());
-            // Vanilla does not write an empty object, just an end tag.
-            CompoundBinaryTag nbt = value.meta().toNBT();
-            buffer.write(NBT, nbt.size() == 0 ? EndBinaryTag.endBinaryTag() : nbt);
+            buffer.write(VAR_INT, 0); // Added components
+            buffer.write(VAR_INT, 0); // Removed components
         }
 
         @Override
         public ItemStack read(@NotNull NetworkBuffer buffer) {
-            final boolean present = buffer.read(BOOLEAN);
-            if (!present) return ItemStack.AIR;
+            int count = buffer.read(VAR_INT);
+            if (count <= 0) return ItemStack.AIR;
 
             final int id = buffer.read(VAR_INT);
             final Material material = Material.fromId(id);
             if (material == null) throw new RuntimeException("Unknown material id: " + id);
 
-            final int amount = buffer.read(BYTE);
-            final BinaryTag nbt = buffer.read(NBT);
-            if (!(nbt instanceof CompoundBinaryTag compound)) {
-                return ItemStack.of(material, amount);
-            }
-            return ItemStack.fromNBT(material, compound, amount);
+            buffer.read(VAR_INT); // Added components
+            buffer.read(VAR_INT); // Removed components
+
+            return ItemStack.fromNBT(material, new NBTCompound(), count);
         }
     }
 
