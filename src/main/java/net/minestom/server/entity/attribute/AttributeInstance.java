@@ -1,4 +1,4 @@
-package net.minestom.server.attribute;
+package net.minestom.server.entity.attribute;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,8 +16,8 @@ public final class AttributeInstance {
     private final Attribute attribute;
     private final Map<UUID, AttributeModifier> modifiers = new HashMap<>();
     private final Consumer<AttributeInstance> propertyChangeListener;
-    private float baseValue;
-    private float cachedValue = 0.0f;
+    private double baseValue;
+    private double cachedValue = 0.0f;
 
     public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
         this.attribute = attribute;
@@ -39,9 +39,9 @@ public final class AttributeInstance {
      * The base value of this instance without modifiers
      *
      * @return the instance base value
-     * @see #setBaseValue(float)
+     * @see #setBaseValue(double)
      */
-    public float getBaseValue() {
+    public double getBaseValue() {
         return baseValue;
     }
 
@@ -51,7 +51,7 @@ public final class AttributeInstance {
      * @param baseValue the new base value
      * @see #getBaseValue()
      */
-    public void setBaseValue(float baseValue) {
+    public void setBaseValue(double baseValue) {
         if (this.baseValue != baseValue) {
             this.baseValue = baseValue;
             refreshCachedValue();
@@ -104,7 +104,7 @@ public final class AttributeInstance {
      *
      * @return the attribute value
      */
-    public float getValue() {
+    public double getValue() {
         return cachedValue;
     }
 
@@ -113,13 +113,13 @@ public final class AttributeInstance {
      */
     private void refreshCachedValue() {
         final Collection<AttributeModifier> modifiers = getModifiers();
-        float base = getBaseValue();
+        double base = getBaseValue();
 
         for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.ADDITION).toArray(AttributeModifier[]::new)) {
             base += modifier.getAmount();
         }
 
-        float result = base;
+        double result = base;
 
         for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_BASE).toArray(AttributeModifier[]::new)) {
             result += (base * modifier.getAmount());

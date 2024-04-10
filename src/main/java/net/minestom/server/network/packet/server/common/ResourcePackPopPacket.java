@@ -20,7 +20,7 @@ public record ResourcePackPopPacket(@Nullable UUID id) implements ServerPacket.C
 
     @Override
     public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_POP_PACKET;
+        return ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_POP;
     }
 
     @Override

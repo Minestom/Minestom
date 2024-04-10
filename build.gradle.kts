@@ -24,6 +24,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
         maven(url = "https://jitpack.io")
     }
 
