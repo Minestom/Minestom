@@ -4,7 +4,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public record JoinGamePacket(
         int viewDistance, int simulationDistance, boolean reducedDebugInfo, boolean enableRespawnScreen,
         boolean doLimitedCrafting,
         String dimensionType, String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-        boolean isDebug, boolean isFlat, DeathLocation deathLocation, int portalCooldown
+        boolean isDebug, boolean isFlat, WorldPos deathLocation, int portalCooldown
 ) implements ServerPacket.Play {
     public static final int MAX_WORLDS = Short.MAX_VALUE;
 

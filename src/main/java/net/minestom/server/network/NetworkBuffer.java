@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.validate.Check;
@@ -55,7 +55,7 @@ public final class NetworkBuffer {
     // METADATA
     public static final Type<Integer> BLOCK_STATE = new NetworkBufferTypeImpl.BlockStateType();
     public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
-    public static final Type<DeathLocation> DEATH_LOCATION = new NetworkBufferTypeImpl.DeathLocationType();
+    public static final Type<WorldPos> DEATH_LOCATION = new NetworkBufferTypeImpl.DeathLocationType();
     public static final Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
     public static final Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
     public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();

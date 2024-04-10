@@ -4,7 +4,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record RespawnPacket(
         String dimensionType, String worldName,
         long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-        boolean isDebug, boolean isFlat, DeathLocation deathLocation,
+        boolean isDebug, boolean isFlat, WorldPos deathLocation,
         int portalCooldown, int copyData
 ) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;

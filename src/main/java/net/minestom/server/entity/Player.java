@@ -64,7 +64,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -88,7 +88,6 @@ import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -145,7 +144,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Instance pendingInstance = null;
     private DimensionType dimensionType;
     private GameMode gameMode;
-    private DeathLocation deathLocation;
+    private WorldPos deathLocation;
 
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
@@ -1218,10 +1217,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     public void setDeathLocation(@NotNull DimensionType type, @NotNull Pos position) {
-        this.deathLocation = new DeathLocation(type.getName().asString(), position);
+        this.deathLocation = new WorldPos(type.getName().asString(), position);
     }
 
-    public @Nullable DeathLocation getDeathLocation() {
+    public @Nullable WorldPos getDeathLocation() {
         return this.deathLocation;
     }
 

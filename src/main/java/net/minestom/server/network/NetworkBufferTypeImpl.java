@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.validate.Check;
@@ -532,22 +532,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record DeathLocationType() implements NetworkBufferTypeImpl<DeathLocation> {
+    record DeathLocationType() implements NetworkBufferTypeImpl<WorldPos> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, DeathLocation value) {
-            buffer.writeOptional(writer -> {
-                writer.write(STRING, value.dimension());
-                writer.write(BLOCK_POSITION, value.position());
-            });
+        public void write(@NotNull NetworkBuffer buffer, WorldPos value) {
+            buffer.writeOptional(value);
         }
 
         @Override
-        public DeathLocation read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(networkBuffer -> {
-                final String dimension = networkBuffer.read(STRING);
-                final Point position = networkBuffer.read(BLOCK_POSITION);
-                return new DeathLocation(dimension, position);
-            });
+        public WorldPos read(@NotNull NetworkBuffer buffer) {
+            return buffer.readOptional(WorldPos::new);
         }
     }
 
