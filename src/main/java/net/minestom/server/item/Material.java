@@ -1,8 +1,6 @@
 package net.minestom.server.item;
 
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.component.ItemComponent;
-import net.minestom.server.item.component.ItemComponentMap;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
