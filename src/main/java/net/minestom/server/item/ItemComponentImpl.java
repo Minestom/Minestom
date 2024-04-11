@@ -1,4 +1,4 @@
-package net.minestom.server.item.component;
+package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.network.NetworkBuffer;
