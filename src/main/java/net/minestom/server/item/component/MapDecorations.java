@@ -13,7 +13,7 @@ public record MapDecorations(@NotNull Map<String, Entry> decorations) {
     public record Entry(@NotNull String type, double x, double z, float rotation) {
     }
 
-    static final BinaryTagSerializer<MapDecorations> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    public static final BinaryTagSerializer<MapDecorations> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 Map<String, Entry> map = new HashMap<>(tag.size());
                 for (Map.Entry<String, ? extends BinaryTag> entry : tag) {
