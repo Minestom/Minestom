@@ -1,18 +1,27 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.Pair;
+import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionOperator;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.Map.entry;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
  * Provides standard implementations of most click functions.
@@ -151,14 +160,17 @@ public final class ClickProcessors {
      * @param shiftClickSlots  the shift click slot supplier
      * @param doubleClickSlots the double click slot supplier
      */
-    public static @NotNull BiFunction<Click.@NotNull Info, Click.@NotNull Getter, Click.@NotNull Result> standard(@NotNull SlotSuggestor shiftClickSlots, @NotNull SlotSuggestor doubleClickSlots) {
+    public static ClickProcessors.@NotNull InventoryProcessor standard(@NotNull SlotSuggestor shiftClickSlots, @NotNull SlotSuggestor doubleClickSlots) {
         return (info, getter) -> switch (info) {
             case Click.Info.Left(int slot) -> leftClick(slot, getter);
             case Click.Info.Right(int slot) -> rightClick(slot, getter);
             case Click.Info.Middle(int slot) -> middleClick(slot, getter);
-            case Click.Info.LeftShift(int slot) -> shiftClick(slot, shiftClickSlots.getList(getter, getter.get(slot), slot), getter);
-            case Click.Info.RightShift(int slot) -> shiftClick(slot, shiftClickSlots.getList(getter, getter.get(slot), slot), getter);
-            case Click.Info.Double(int slot) -> doubleClick(doubleClickSlots.getList(getter, getter.get(slot), slot), getter);
+            case Click.Info.LeftShift(int slot) ->
+                    shiftClick(slot, shiftClickSlots.getList(getter, getter.get(slot), slot), getter);
+            case Click.Info.RightShift(int slot) ->
+                    shiftClick(slot, shiftClickSlots.getList(getter, getter.get(slot), slot), getter);
+            case Click.Info.Double(int slot) ->
+                    doubleClick(doubleClickSlots.getList(getter, getter.get(slot), slot), getter);
             case Click.Info.LeftDrag(List<Integer> slots) -> {
                 int cursorAmount = RULE.getAmount(getter.cursor());
                 int amount = (int) Math.floor(cursorAmount / (double) slots.size());
@@ -166,7 +178,8 @@ public final class ClickProcessors {
             }
             case Click.Info.RightDrag(List<Integer> slots) -> dragClick(1, slots, getter);
             case Click.Info.MiddleDrag(List<Integer> slots) -> middleDragClick(slots, getter);
-            case Click.Info.DropSlot(int slot, boolean all) -> dropFromSlot(slot, all ? RULE.getAmount(getter.get(slot)) : 1, getter);
+            case Click.Info.DropSlot(int slot, boolean all) ->
+                    dropFromSlot(slot, all ? RULE.getAmount(getter.get(slot)) : 1, getter);
             case Click.Info.LeftDropCursor() -> dropFromCursor(getter.cursor().amount(), getter);
             case Click.Info.RightDropCursor() -> dropFromCursor(1, getter);
             case Click.Info.MiddleDropCursor() -> Click.Result.NOTHING;
@@ -185,8 +198,12 @@ public final class ClickProcessors {
                 yield getter.setter().setPlayer(PlayerInventoryUtils.OFF_HAND_SLOT, selectedItem).set(slot, offhandItem).build();
             }
             case Click.Info.CreativeSetItem(int slot, ItemStack item) -> getter.setter().set(slot, item).build();
-            case Click.Info.CreativeDropItem(ItemStack item) -> getter.setter().sideEffects(new Click.SideEffect.DropFromPlayer(item)).build();
+            case Click.Info.CreativeDropItem(ItemStack item) ->
+                    getter.setter().sideEffects(new Click.SideEffect.DropFromPlayer(item)).build();
         };
+    }
+
+    public interface InventoryProcessor extends BiFunction<Click.Info, Click.Getter, Click.Result> {
     }
 
     /**
@@ -213,4 +230,89 @@ public final class ClickProcessors {
             return get(builder, item, slot).boxed().toList();
         }
     }
+
+    /**
+     * Handle player inventory (without any container open).
+     */
+    public static final InventoryProcessor PLAYER_PROCESSOR = ClickProcessors.standard(
+            (getter, item, slot) -> {
+                List<Integer> slots = new ArrayList<>();
+
+                final EquipmentSlot equipmentSlot = item.material().registry().equipmentSlot();
+                if (equipmentSlot != null && slot != equipmentSlot.armorSlot()) {
+                    slots.add(equipmentSlot.armorSlot());
+                }
+
+                if (item.material() == Material.SHIELD && slot != OFF_HAND_SLOT) {
+                    slots.add(OFF_HAND_SLOT);
+                }
+
+                if (slot < 9 || slot > 35) IntStream.range(9, 36).forEach(slots::add);
+                if (slot < 0 || slot > 8) IntStream.range(0, 9).forEach(slots::add);
+
+                if (slot == CRAFT_RESULT) {
+                    Collections.reverse(slots);
+                }
+
+                return slots.stream().mapToInt(i -> i);
+            },
+            (getter, item, slot) -> Stream.of(
+                    IntStream.range(CRAFT_SLOT_1, CRAFT_SLOT_4 + 1), // 1-4
+                    IntStream.range(HELMET_SLOT, BOOTS_SLOT + 1), // 5-8
+                    IntStream.range(9, 36), // 9-35
+                    IntStream.range(0, 9), // 36-44
+                    IntStream.of(OFF_HAND_SLOT) // 45
+            ).flatMapToInt(i -> i)
+    );
+
+    /**
+     * Assumes all the container's slots to be accessible.
+     */
+    public static final InventoryProcessor GENERIC_PROCESSOR = ClickProcessors.standard(
+            (builder, item, slot) -> {
+                final int size = builder.mainSize();
+                return slot >= size ?
+                        IntStream.range(0, size) :
+                        PlayerInventory.getInnerShiftClickSlots(size);
+            },
+            (builder, item, slot) -> {
+                final int size = builder.mainSize();
+                return IntStream.concat(
+                        IntStream.range(0, size),
+                        PlayerInventory.getInnerDoubleClickSlots(size)
+                );
+            });
+
+
+    // SPECIALIZED PROCESSORS DEFINITIONS
+
+    /**
+     * Client prediction appears to disallow shift clicking into furnace inventories.<br>
+     * Instead:
+     * - Shift clicks in the inventory go to the player inventory like normal
+     * - Shift clicks in the hotbar go to the storage
+     * - Shift clicks in the storage go to the hotbar
+     */
+    public static final InventoryProcessor FURNACE_PROCESSOR = ClickProcessors.standard(
+            (builder, item, slot) -> {
+                final int size = builder.mainSize();
+                if (slot < size) {
+                    return PlayerInventory.getInnerShiftClickSlots(size);
+                } else if (slot < size + 27) {
+                    return IntStream.range(27, 36).map(i -> i + size);
+                } else {
+                    return IntStream.range(0, 27).map(i -> i + size);
+                }
+            },
+            (builder, item, slot) -> {
+                final int size = builder.mainSize();
+                return IntStream.concat(
+                        IntStream.range(0, size),
+                        PlayerInventory.getInnerDoubleClickSlots(size)
+                );
+            });
+
+    public static final Map<InventoryType, InventoryProcessor> PROCESSORS_MAP = Map.ofEntries(
+            entry(InventoryType.FURNACE, FURNACE_PROCESSOR)
+    );
 }
