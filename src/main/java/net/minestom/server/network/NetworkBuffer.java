@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
@@ -29,6 +30,7 @@ import java.util.function.Function;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
+    public static final Type<Void> NOTHING = new NetworkBufferTypeImpl.NothingType();
     public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     public static final Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
     public static final Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
@@ -75,6 +77,7 @@ public final class NetworkBuffer {
     public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
     public static final Type<ArmadilloMeta.State> ARMADILLO_STATE = NetworkBufferTypeImpl.fromEnum(ArmadilloMeta.State.class);
 
+    public static final Type<Color> COLOR = new NetworkBufferTypeImpl.ColorType();
 
     ByteBuffer nioBuffer;
     final boolean resizable;
@@ -293,8 +296,21 @@ public final class NetworkBuffer {
 
     public interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
-
         T read(@NotNull NetworkBuffer buffer);
+
+        default @NotNull Type<List<T>> list(int maxSize) {
+            return new NetworkBuffer.Type<>() {
+                @Override
+                public void write(@NotNull NetworkBuffer buffer, List<T> value) {
+                    buffer.writeCollection(Type.this, value);
+                }
+
+                @Override
+                public List<T> read(@NotNull NetworkBuffer buffer) {
+                    return buffer.readCollection(Type.this, maxSize);
+                }
+            };
+        }
     }
 
     @FunctionalInterface

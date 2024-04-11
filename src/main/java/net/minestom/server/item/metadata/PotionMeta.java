@@ -2,17 +2,24 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.color.Color;
 import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentMap;
+import net.minestom.server.item.component.ItemComponentPatch;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.tag.*;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.TagSerializer;
+import net.minestom.server.tag.TagWritable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
 
-public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMeta.Builder> {
+public record PotionMeta(@NotNull ItemComponentPatch components) implements ItemMetaView<PotionMeta.Builder> {
     private static final Tag<PotionType> POTION_TYPE = Tag.String("Potion").map(PotionType::fromNamespaceId, StaticProtocolObject::name).defaultValue(PotionType.WATER);
     private static final Tag<List<CustomPotionEffect>> CUSTOM_POTION_EFFECTS = Tag.Structure("CustomPotionEffects", new TagSerializer<CustomPotionEffect>() {
         @Override
@@ -55,13 +62,10 @@ public record PotionMeta(TagReadable readable) implements ItemMetaView<PotionMet
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return readable.getTag(tag);
+        return components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
-    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
-        public Builder() {
-            this(TagHandler.newHandler());
-        }
+    public record Builder(@NotNull ItemComponentMap.Builder components) implements ItemMetaView.Builder {
 
         public Builder potionType(@NotNull PotionType potionType) {
             setTag(POTION_TYPE, potionType);

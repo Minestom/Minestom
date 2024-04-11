@@ -3,66 +3,58 @@ package net.minestom.server.item.metadata;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemMetaView;
-import net.minestom.server.tag.*;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentPatch;
+import net.minestom.server.item.component.LodestoneTracker;
+import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-public record CompassMeta(TagReadable readable) implements ItemMetaView<CompassMeta.Builder> {
-    private static final Tag<Boolean> LODESTONE_TRACKED = Tag.Boolean("LodestoneTracked").defaultValue(false);
-    private static final Tag<String> LODESTONE_DIMENSION = Tag.String("LodestoneDimension");
-    private static final Tag<Point> LODESTONE_POSITION = Tag.Structure("LodestonePos", new TagSerializer<>() {
-        @Override
-        public @Nullable Point read(@NotNull TagReadable reader) {
-            final Integer x = reader.getTag(Tag.Integer("X"));
-            final Integer y = reader.getTag(Tag.Integer("Y"));
-            final Integer z = reader.getTag(Tag.Integer("Z"));
-            if (x == null || y == null || z == null) return null;
-            return new Vec(x, y, z);
-        }
-
-        @Override
-        public void write(@NotNull TagWritable writer, @NotNull Point value) {
-            writer.setTag(Tag.Integer("X"), value.blockX());
-            writer.setTag(Tag.Integer("Y"), value.blockY());
-            writer.setTag(Tag.Integer("Z"), value.blockZ());
-        }
-    });
+@Deprecated
+public record CompassMeta(@NotNull ItemComponentPatch components) implements ItemMetaView<CompassMeta.Builder> {
 
     public boolean isLodestoneTracked() {
-        return getTag(LODESTONE_TRACKED);
+        LodestoneTracker tracker = components.get(ItemComponent.LODESTONE_TRACKER);
+        return tracker != null && tracker.tracked();
     }
 
     public @Nullable String getLodestoneDimension() {
-        return getTag(LODESTONE_DIMENSION);
+        LodestoneTracker tracker = components.get(ItemComponent.LODESTONE_TRACKER);
+        return tracker == null ? null : tracker.dimension();
     }
 
     public @Nullable Point getLodestonePosition() {
-        return getTag(LODESTONE_POSITION);
+        LodestoneTracker tracker = components.get(ItemComponent.LODESTONE_TRACKER);
+        return tracker == null ? null : tracker.blockPosition();
     }
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return readable.getTag(tag);
+        return components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
-    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
-        public Builder() {
-            this(TagHandler.newHandler());
-        }
+    @Deprecated
+    public record Builder(@NotNull ItemComponentPatch.Builder components) implements ItemMetaView.Builder {
+        // The empty state isnt really valid because the dimension is empty (invalid), but these functions need to set each so its simpler.
+        private static final LodestoneTracker EMPTY = new LodestoneTracker("", Vec.ZERO, false);
 
         public Builder lodestoneTracked(boolean lodestoneTracked) {
-            setTag(LODESTONE_TRACKED, lodestoneTracked);
+            LodestoneTracker tracker = components.get(ItemComponent.LODESTONE_TRACKER, EMPTY);
+            components.set(ItemComponent.LODESTONE_TRACKER, tracker.withTracked(lodestoneTracked));
             return this;
         }
 
         public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
-            setTag(LODESTONE_DIMENSION, lodestoneDimension);
+            LodestoneTracker tracker = components.get(ItemComponent.LODESTONE_TRACKER, EMPTY);
+            components.set(ItemComponent.LODESTONE_TRACKER, tracker.withDimension(lodestoneDimension));
             return this;
         }
 
         public Builder lodestonePosition(@Nullable Point lodestonePosition) {
-            setTag(LODESTONE_POSITION, lodestonePosition);
+            LodestoneTracker tracker = components.get(ItemComponent.LODESTONE_TRACKER, EMPTY);
+            components.set(ItemComponent.LODESTONE_TRACKER, tracker.withBlockPosition(lodestonePosition));
             return this;
         }
     }

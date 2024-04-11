@@ -5,10 +5,12 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.ItemComponent;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
@@ -26,6 +28,17 @@ import static net.minestom.server.network.NetworkBuffer.*;
 interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
+
+    record NothingType() implements NetworkBufferTypeImpl<Void> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Void value) {
+        }
+
+        @Override
+        public Void read(@NotNull NetworkBuffer buffer) {
+            return null;
+        }
+    }
 
     record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
         @Override
@@ -403,8 +416,11 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             }
             buffer.write(VAR_INT, value.amount());
             buffer.write(VAR_INT, value.material().id());
-            buffer.write(VAR_INT, 0); // Added components
+            buffer.write(VAR_INT, 1); // Added components
             buffer.write(VAR_INT, 0); // Removed components
+            var component = ItemComponent.MAX_STACK_SIZE;
+            buffer.write(VAR_INT, component.id());
+            buffer.write(VAR_INT, 16);
         }
 
         @Override
@@ -597,6 +613,18 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public Particle read(@NotNull NetworkBuffer buffer) {
             throw new UnsupportedOperationException("Cannot read a particle from the network buffer");
+        }
+    }
+
+    record ColorType() implements NetworkBufferTypeImpl<Color> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Color value) {
+            buffer.write(NetworkBuffer.INT, value.asRGB());
+        }
+
+        @Override
+        public Color read(@NotNull NetworkBuffer buffer) {
+            return new Color(buffer.read(NetworkBuffer.INT));
         }
     }
 

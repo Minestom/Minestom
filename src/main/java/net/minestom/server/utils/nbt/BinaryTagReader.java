@@ -33,5 +33,4 @@ public class BinaryTagReader {
         String name = input.readUTF();
         return Map.entry(name, type.read(input));
     }
-
 }
