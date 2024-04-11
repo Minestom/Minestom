@@ -2,11 +2,13 @@ package net.minestom.server.item.firework;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.color.Color;
+import net.minestom.server.item.component.FireworkExplosion;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public record FireworkEffect(boolean flicker, boolean trail,
                              @NotNull FireworkEffectType type,
                              @NotNull List<Color> colors,
@@ -14,6 +16,12 @@ public record FireworkEffect(boolean flicker, boolean trail,
     public FireworkEffect {
         colors = List.copyOf(colors);
         fadeColors = List.copyOf(fadeColors);
+    }
+
+    public FireworkEffect(@NotNull FireworkExplosion explosion) {
+        this(explosion.hasTwinkle(), explosion.hasTrail(),
+                FireworkEffectType.fromExplosionShape(explosion.shape()),
+                explosion.colors(), explosion.fadeColors());
     }
 
     /**
@@ -51,5 +59,12 @@ public record FireworkEffect(boolean flicker, boolean trail,
                 .putIntArray("Colors", colors.stream().mapToInt(Color::asRGB).toArray())
                 .putIntArray("FadeColors", fadeColors.stream().mapToInt(Color::asRGB).toArray())
                 .build();
+    }
+
+    public @NotNull FireworkExplosion toExplosion() {
+        return new FireworkExplosion(
+                type.toExplosionShape(),
+                colors, fadeColors,
+                trail, flicker);
     }
 }
