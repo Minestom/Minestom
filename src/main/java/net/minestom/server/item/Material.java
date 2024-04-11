@@ -1,12 +1,15 @@
 package net.minestom.server.item;
 
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentMap;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 
@@ -62,24 +65,22 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         return registry().id();
     }
 
-    default int maxStackSize() {
-        return registry().maxStackSize();
-    }
-
-    default boolean isFood() {
-        return registry().isFood();
-    }
-
     default boolean isBlock() {
         return registry().block() != null;
     }
 
-    default Block block() {
+    default @UnknownNullability Block block() {
         return registry().block();
     }
 
+    default @NotNull ItemComponentMap prototype() {
+        return registry().prototype();
+    }
+
     default boolean isArmor() {
-        return registry().isArmor();
+        //todo how does armor work nowadays
+        return false;
+//        return registry().isArmor();
     }
 
     default boolean hasState() {
@@ -88,6 +89,16 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         } else {
             return isFood();
         }
+    }
+
+    @Deprecated(forRemoval = true)
+    default int maxStackSize() {
+        return prototype().getOrDefault(ItemComponent.MAX_STACK_SIZE, 64);
+    }
+
+    @Deprecated(forRemoval = true)
+    default boolean isFood() {
+        return prototype().has(ItemComponent.FOOD);
     }
 
     static @NotNull Collection<@NotNull Material> values() {

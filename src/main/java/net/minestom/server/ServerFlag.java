@@ -42,7 +42,6 @@ public final class ServerFlag {
     public static final @NotNull String AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined");
 
     // World
-    public static final @Nullable String STACKING_RULE = System.getProperty("minestom.stacking-rule");
     public static final int WORLD_BORDER_SIZE = Integer.getInteger("minestom.world-border-size", 29999984);
 
     // Maps

@@ -6,7 +6,14 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.item.ItemMetaView;
-import net.minestom.server.tag.*;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentMap;
+import net.minestom.server.item.component.ItemComponentPatch;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.TagSerializer;
+import net.minestom.server.tag.TagWritable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -15,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<PlayerHeadMeta.Builder> {
+public record PlayerHeadMeta(@NotNull ItemComponentPatch components) implements ItemMetaView<PlayerHeadMeta.Builder> {
     public static final Tag<UUID> SKULL_OWNER = Tag.UUID("Id").path("SkullOwner");
     public static final Tag<PlayerSkin> SKIN = Tag.Structure("Properties", new TagSerializer<PlayerSkin>() {
         private static final Tag<BinaryTag> TEXTURES = Tag.NBT("textures");
@@ -50,13 +57,10 @@ public record PlayerHeadMeta(TagReadable readable) implements ItemMetaView<Playe
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return readable.getTag(tag);
+        return components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
-    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
-        public Builder() {
-            this(TagHandler.newHandler());
-        }
+    public record Builder(@NotNull ItemComponentMap.Builder components) implements ItemMetaView.Builder {
 
         public Builder skullOwner(@Nullable UUID skullOwner) {
             setTag(SKULL_OWNER, skullOwner);
