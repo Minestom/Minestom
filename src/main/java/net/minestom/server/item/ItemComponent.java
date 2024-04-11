@@ -1,9 +1,9 @@
-package net.minestom.server.item.component;
+package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.color.Color;
-import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.minestom.server.item.component.ItemComponentImpl.declare;
+import static net.minestom.server.item.ItemComponentImpl.declare;
 
 public sealed interface ItemComponent<T> extends StaticProtocolObject permits ItemComponentImpl {
     // Note that even non-networked components are declared here as they still contribute to the component ID counter.

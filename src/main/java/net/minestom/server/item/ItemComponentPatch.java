@@ -1,27 +1,18 @@
-package net.minestom.server.item.component;
+package net.minestom.server.item;
 
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface ItemComponentPatch extends ItemComponentMap {
+public sealed interface ItemComponentPatch extends ItemComponentMap permits ItemComponentPatchImpl {
 
-    static ItemComponentPatch EMPTY = new ItemComponentPatch() {
-        @Override public boolean has(@NotNull ItemComponent<?> component) {
-            return false;
-        }
-
-        @Override public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
-            return null;
-        }
-    }; //todo
-
+    @NotNull NetworkBuffer.Type<ItemComponentPatch> NETWORK_TYPE = null;
+    @NotNull BinaryTagSerializer<ItemComponentPatch> NBT_TYPE = null;
 
     <T> @NotNull ItemComponentPatch with(@NotNull ItemComponent<T> component, T value);
 
     @NotNull ItemComponentPatch without(@NotNull ItemComponent<?> component);
-
-    @NotNull Builder builder();
 
     interface Builder extends ItemComponentMap {
 
