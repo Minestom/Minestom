@@ -23,15 +23,6 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
 public non-sealed class PlayerInventory extends InventoryImpl {
-
-    public static @NotNull IntStream getInnerShiftClickSlots(int size) {
-        return IntStream.range(0, 36).map(i -> i + size);
-    }
-
-    public static @NotNull IntStream getInnerDoubleClickSlots(int size) {
-        return IntStream.range(0, 36).map(i -> i + size);
-    }
-
     private static int getSlotIndex(@NotNull EquipmentSlot slot, int heldSlot) {
         return switch (slot) {
             case HELMET, CHESTPLATE, LEGGINGS, BOOTS -> slot.armorSlot();
