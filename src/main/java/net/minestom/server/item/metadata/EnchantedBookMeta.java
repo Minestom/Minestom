@@ -2,55 +2,49 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMetaView;
-import net.minestom.server.item.ItemSerializers;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.EnchantmentList;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentPatch;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static net.minestom.server.item.ItemSerializers.ENCHANTMENT_SERIALIZER;
-
-public record EnchantedBookMeta(TagReadable readable) implements ItemMetaView<EnchantedBookMeta.Builder> {
-    static final Tag<Map<Enchantment, Short>> ENCHANTMENTS = Tag.Structure("StoredEnchantments", ENCHANTMENT_SERIALIZER).list().map(enchantmentEntry -> {
-        Map<Enchantment, Short> map = new HashMap<>();
-        for (var entry : enchantmentEntry) map.put(entry.enchantment(), entry.level());
-        return Map.copyOf(map);
-    }, o -> {
-        List<ItemSerializers.EnchantmentEntry> entries = new ArrayList<>();
-        for (var entry : o.entrySet())
-            entries.add(new ItemSerializers.EnchantmentEntry(entry.getKey(), entry.getValue()));
-        return List.copyOf(entries);
-    }).defaultValue(Map.of());
+@Deprecated
+public record EnchantedBookMeta(@NotNull ItemComponentPatch components) implements ItemMetaView<EnchantedBookMeta.Builder> {
 
     public @NotNull Map<Enchantment, Short> getStoredEnchantmentMap() {
-        return getTag(ENCHANTMENTS);
+        EnchantmentList value = components.get(ItemComponent.STORED_ENCHANTMENTS, EnchantmentList.EMPTY);
+        Map<Enchantment, Short> map = new HashMap<>();
+        for (var entry : value.enchantments().entrySet())
+            map.put(entry.getKey(), entry.getValue().shortValue());
+        return map;
     }
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return readable.getTag(tag);
+        return components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
-    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
-        public Builder() {
-            this(TagHandler.newHandler());
-        }
+    @Deprecated
+    public record Builder(@NotNull ItemComponentPatch.Builder components) implements ItemMetaView.Builder {
 
         public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
-            setTag(ENCHANTMENTS, Map.copyOf(enchantments));
+            Map<Enchantment, Integer> map = new HashMap<>();
+            enchantments.forEach((enchantment, level) -> map.put(enchantment, (int) level));
+            // Fetch existing to preserve the showInTooltip value.
+            EnchantmentList existing = components.get(ItemComponent.STORED_ENCHANTMENTS, EnchantmentList.EMPTY);
+            components.set(ItemComponent.STORED_ENCHANTMENTS, new EnchantmentList(map, existing.showInTooltip()));
             return this;
         }
 
         public @NotNull Builder enchantment(@NotNull Enchantment enchantment, short level) {
-            var enchantments = new HashMap<>(getTag(ENCHANTMENTS));
-            enchantments.put(enchantment, level);
-            return enchantments(enchantments);
+            EnchantmentList value = components.get(ItemComponent.STORED_ENCHANTMENTS, EnchantmentList.EMPTY);
+            components.set(ItemComponent.STORED_ENCHANTMENTS, value.with(enchantment, level));
+            return this;
         }
     }
 }
