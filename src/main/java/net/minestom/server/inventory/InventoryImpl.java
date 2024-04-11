@@ -3,8 +3,6 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
-import net.minestom.server.inventory.click.Click;
-import net.minestom.server.inventory.click.ClickProcessors;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
@@ -13,7 +11,6 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
@@ -111,19 +108,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     }
 
     @Override
-    public @Nullable Click.Result handleClick(@NotNull Player player, @NotNull Click.Info info) {
-        var processor = ClickProcessors.standard(
-                (builder, item, slot) -> slot >= getSize() ?
-                        IntStream.range(0, getSize()) :
-                        PlayerInventory.getInnerShiftClickSlots(getSize()),
-                (builder, item, slot) -> IntStream.concat(
-                        IntStream.range(0, getSize()),
-                        PlayerInventory.getInnerDoubleClickSlots(getSize())
-                ));
-        return ContainerInventory.handleClick(this, player, info, processor);
-    }
-
-    @Override
     public @NotNull ItemStack getItemStack(int slot) {
         return (ItemStack) ITEM_UPDATER.getVolatile(itemStacks, slot);
     }
@@ -168,7 +152,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
      */
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
         lock.lock();
-
         try {
             ItemStack previous = itemStacks[slot];
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
@@ -189,7 +172,6 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     @Override
     public void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
         lock.lock();
-
         try {
             var currentItem = getItemStack(slot);
             setItemStack(slot, operator.apply(currentItem));
@@ -201,12 +183,10 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
     @Override
     public void clear() {
         lock.lock();
-
         try {
             for (Player viewer : getViewers()) {
                 viewer.getInventory().setCursorItem(ItemStack.AIR, false);
             }
-
             // Clear the item array
             for (int i = 0; i < size; i++) {
                 safeItemInsert(i, ItemStack.AIR, false);
@@ -294,5 +274,4 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
         }
         return result;
     }
-
 }
