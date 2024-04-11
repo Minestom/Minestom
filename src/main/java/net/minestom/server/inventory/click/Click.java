@@ -1,7 +1,5 @@
 package net.minestom.server.inventory.click;
 
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -74,9 +72,9 @@ public final class Click {
         private final List<Integer> middleDrag = new ArrayList<>();
 
         public void clearCache() {
-            leftDrag.clear();
-            rightDrag.clear();
-            middleDrag.clear();
+            this.leftDrag.clear();
+            this.rightDrag.clear();
+            this.middleDrag.clear();
         }
 
         /**
@@ -87,23 +85,28 @@ public final class Click {
          * @param isCreative whether the player is in creative mode (used for ignoring some actions)
          * @return the information about the click, or nothing if there was no immediately usable information
          */
-        public @Nullable Click.Info process(@NotNull ClientClickWindowPacket packet, @NotNull Inventory inventory, boolean isCreative) {
-            final int originalSlot = packet.slot();
+        public @Nullable Click.Info processPlayerClick(@NotNull ClientClickWindowPacket packet, boolean isCreative) {
+            if (requireCreative(packet) && !isCreative) return null;
+            final int slot = packet.slot() != -999 ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : -999;
+            final int maxSize = PlayerInventoryUtils.INNER_SIZE;
+            return process(packet.clickType(), slot, packet.button(), slot >= 0 && slot < maxSize);
+        }
+
+        public @Nullable Click.Info processContainerClick(@NotNull ClientClickWindowPacket packet, int inventorySize, boolean isCreative) {
+            if (requireCreative(packet) && !isCreative) return null;
+            final int slot = packet.slot();
+            final int maxSize = inventorySize + PlayerInventoryUtils.INNER_SIZE;
+            return process(packet.clickType(), slot, packet.button(), slot >= 0 && slot < maxSize);
+        }
+
+        private boolean requireCreative(ClientClickWindowPacket packet) {
             final byte button = packet.button();
             final ClientClickWindowPacket.ClickType type = packet.clickType();
-
-            int slot = inventory instanceof PlayerInventory ? PlayerInventoryUtils.protocolToMinestom(originalSlot) : originalSlot;
-            if (originalSlot == -999) slot = -999;
-
-            final boolean creativeRequired = switch (type) {
+            return switch (type) {
                 case CLONE -> true;
                 case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
                 default -> false;
             };
-            if (creativeRequired && !isCreative) return null;
-
-            final int maxSize = inventory.getSize() + (inventory instanceof PlayerInventory ? 0 : PlayerInventoryUtils.INNER_SIZE);
-            return process(type, slot, button, slot >= 0 && slot < maxSize);
         }
 
         /**
@@ -115,7 +118,7 @@ public final class Click {
          * @param valid  whether {@code slot} fits within the inventory (may be unused, depending on click)
          * @return the information about the click, or nothing if there was no immediately usable information
          */
-        public @Nullable Click.Info process(@NotNull ClientClickWindowPacket.ClickType type,
+        private @Nullable Click.Info process(@NotNull ClientClickWindowPacket.ClickType type,
                                             int slot, byte button, boolean valid) {
             return switch (type) {
                 case PICKUP -> {
@@ -190,7 +193,6 @@ public final class Click {
                 case PICKUP_ALL -> valid ? new Info.Double(slot) : null;
             };
         }
-
     }
 
     public record Getter(@NotNull IntFunction<ItemStack> main, @NotNull IntFunction<ItemStack> player,
