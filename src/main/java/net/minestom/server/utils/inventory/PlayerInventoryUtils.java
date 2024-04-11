@@ -5,11 +5,10 @@ package net.minestom.server.utils.inventory;
  * Minestom uses different slot IDs for player inventories as the Minecraft protocol uses a strange system (e.g. the
  * crafting result is the first slot).<br>
  * These can be mapped 1:1 to and from protocol slots using {@link #minestomToProtocol(int)} and {@link #protocolToMinestom(int)}.<br>
- *
+ * <p>
  * Read about protocol slot IDs <a href="https://wiki.vg/Inventory">here</a>.
  */
 public final class PlayerInventoryUtils {
-
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_SIZE = 36;
 
@@ -28,12 +27,12 @@ public final class PlayerInventoryUtils {
     public static final int OFF_HAND_SLOT = 45;
 
     private PlayerInventoryUtils() {
-
     }
 
     /**
      * Converts a Minestom slot ID to a Minecraft protocol slot ID.<br>
      * This is the inverse of {@link #protocolToMinestom(int)}.
+     *
      * @param slot the internal slot ID to convert
      * @return the protocol slot ID, or -1 if the given slot could not be converted
      */
@@ -64,6 +63,7 @@ public final class PlayerInventoryUtils {
     /**
      * Converts a Minecraft protocol slot ID to a Minestom slot ID.<br>
      * This is the inverse of {@link #minestomToProtocol(int)}.
+     *
      * @param slot the protocol slot ID to convert
      * @return the Minestom slot ID, or -1 if the given slot could not be converted
      */
@@ -97,7 +97,7 @@ public final class PlayerInventoryUtils {
      * open.<br>
      * This is the inverse of {@link #protocolToMinestom(int, int)}.
      *
-     * @param slot the player slot that was interacted with
+     * @param slot              the player slot that was interacted with
      * @param openInventorySize the size of the inventory opened by the player (not the player's inventory)
      * @return the protocol slot ID
      */
@@ -111,14 +111,12 @@ public final class PlayerInventoryUtils {
      * open.<br>
      * This is the inverse of {@link #minestomToProtocol(int, int)}.
      *
-     * @param slot the protocol slot ID, situated directly after the slot IDs for the open inventory
+     * @param slot              the protocol slot ID, situated directly after the slot IDs for the open inventory
      * @param openInventorySize the size of the inventory opened by the player (not the player's inventory)
      * @return the player slot ID
      */
     public static int protocolToMinestom(int slot, int openInventorySize) {
         if (slot < openInventorySize) return -1;
-
         return PlayerInventoryUtils.protocolToMinestom(slot - openInventorySize + PROTOCOL_OFFSET);
     }
-
 }
