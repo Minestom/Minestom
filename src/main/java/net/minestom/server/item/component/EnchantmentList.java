@@ -14,7 +14,7 @@ import java.util.Map;
 public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, boolean showInTooltip) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of(), true);
 
-    static NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    public static NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, @NotNull EnchantmentList value) {
             buffer.write(NetworkBuffer.VAR_INT, value.enchantments.size());
@@ -40,7 +40,7 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
         }
     };
 
-    static BinaryTagSerializer<EnchantmentList> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    public static BinaryTagSerializer<EnchantmentList> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 // We have two variants of the enchantment list, one with {levels: {...}, show_in_tooltip: boolean} and one with {...}.
                 CompoundBinaryTag levels = tag.keySet().contains("levels") ? tag.getCompound("levels") : tag;
