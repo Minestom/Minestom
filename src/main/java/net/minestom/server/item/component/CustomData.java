@@ -11,7 +11,7 @@ import org.jetbrains.annotations.UnknownNullability;
 public record CustomData(@NotNull CompoundBinaryTag nbt) implements TagReadable {
     public static final CustomData EMPTY = new CustomData(CompoundBinaryTag.empty());
 
-    static final NetworkBuffer.Type<CustomData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    public static final NetworkBuffer.Type<CustomData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, CustomData value) {
             buffer.write(NetworkBuffer.NBT, value.nbt);
@@ -23,7 +23,7 @@ public record CustomData(@NotNull CompoundBinaryTag nbt) implements TagReadable 
         }
     };
 
-    static final BinaryTagSerializer<CustomData> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(CustomData::new, CustomData::nbt);
+    public static final BinaryTagSerializer<CustomData> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(CustomData::new, CustomData::nbt);
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {

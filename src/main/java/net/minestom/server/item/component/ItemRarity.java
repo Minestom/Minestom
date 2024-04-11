@@ -17,7 +17,7 @@ public enum ItemRarity {
 
     private static final ItemRarity[] VALUES = values();
 
-    static final NetworkBuffer.Type<ItemRarity> NETWORK_TYPE = new NetworkBuffer.Type<ItemRarity>() {
+    public static final NetworkBuffer.Type<ItemRarity> NETWORK_TYPE = new NetworkBuffer.Type<ItemRarity>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, ItemRarity value) {
             buffer.writeEnum(ItemRarity.class, value);
@@ -29,7 +29,7 @@ public enum ItemRarity {
         }
     };
 
-    static final BinaryTagSerializer<ItemRarity> NBT_TYPE = new BinaryTagSerializer<>() {
+    public static final BinaryTagSerializer<ItemRarity> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull ItemRarity value) {
             return IntBinaryTag.intBinaryTag(value.ordinal());

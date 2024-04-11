@@ -2,10 +2,7 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.component.CustomData;
-import net.minestom.server.item.component.ItemComponent;
-import net.minestom.server.item.component.ItemComponentPatch;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +17,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     }
 
     static ItemStack create(Material material, int amount) {
-        return create(material, amount, ItemComponentPatch.EMPTY);
+        return create(material, amount, ItemComponentPatch.builder(material).build());
     }
 
     @Override
@@ -85,34 +82,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, new ItemMetaImpl.Builder(meta.tagHandler().copy()));
-    }
-
-    // BEGIN DEPRECATED PRE-COMPONENT METHODS
-
-    @Override public @NotNull ItemMeta meta() {
-        return new ItemMetaImpl(components);
-    }
-
-    @Override
-    public <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass) {
-        return ItemMetaViewImpl.construct(metaClass, meta);
-    }
-
-    @Override
-    public @NotNull <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                                                   @NotNull Consumer<V> consumer) {
-        return builder().meta(metaType, consumer).build();
-    }
-
-    @Override
-    public @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer) {
-        return builder().meta(consumer).build();
-    }
-
-    @Override
-    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return new ItemStackImpl(material, amount, (ItemMetaImpl) meta);
+        return new Builder(material, amount, components.builder());
     }
 
     static final class Builder implements ItemStack.Builder {
@@ -124,6 +94,12 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
             this.material = material;
             this.amount = amount;
             this.components = components;
+        }
+
+        Builder(Material material, int amount) {
+            this.material = material;
+            this.amount = amount;
+            this.components = ItemComponentPatch.builder(material);
         }
 
         @Override
@@ -154,35 +130,5 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
             return ItemStackImpl.create(material, amount, components.build());
         }
 
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull TagHandler tagHandler) {
-            return meta(tagHandler.asCompound());
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull CompoundBinaryTag compound) {
-            components.set(ItemComponent.CUSTOM_DATA, new CustomData(compound));
-            return this;
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull ItemMeta itemMeta) {
-            this.components = itemMeta.components().builder();
-            return this;
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull Consumer<ItemMeta.Builder> consumer) {
-            consumer.accept(new ItemMetaImpl.Builder(components));
-            return this;
-        }
-
-        @Override
-        public <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack.@NotNull Builder meta(@NotNull Class<T> metaType,
-                                                                                                           @NotNull Consumer<@NotNull V> itemMetaConsumer) {
-            V view = ItemMetaViewImpl.constructBuilder(metaType, components);
-            itemMetaConsumer.accept(view);
-            return this;
-        }
     }
 }
