@@ -263,7 +263,6 @@ public class Tag<T> {
         return tag(key, Serializers.STRING);
     }
 
-    @ApiStatus.Experimental
     public static @NotNull Tag<UUID> UUID(@NotNull String key) {
         return tag(key, Serializers.UUID);
     }

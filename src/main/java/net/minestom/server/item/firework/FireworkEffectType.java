@@ -2,10 +2,13 @@ package net.minestom.server.item.firework;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import net.minestom.server.item.component.FireworkExplosion;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An enumeration that representing all available firework types.
  */
+@Deprecated
 public enum FireworkEffectType {
     SMALL_BALL((byte) 0),
     LARGE_BALL((byte) 1),
@@ -37,6 +40,16 @@ public enum FireworkEffectType {
         return BY_ID.get(id);
     }
 
+    public static FireworkEffectType fromExplosionShape(@NotNull FireworkExplosion.Shape shape) {
+        return switch (shape) {
+            case SMALL_BALL -> SMALL_BALL;
+            case LARGE_BALL -> LARGE_BALL;
+            case STAR -> STAR_SHAPED;
+            case CREEPER -> CREEPER_SHAPED;
+            case BURST -> BURST;
+        };
+    }
+
     /**
      * Retrieves the type of the firework effect.
      *
@@ -44,6 +57,16 @@ public enum FireworkEffectType {
      */
     public byte getType() {
         return type;
+    }
+
+    public FireworkExplosion.Shape toExplosionShape() {
+        return switch (this) {
+            case SMALL_BALL -> FireworkExplosion.Shape.SMALL_BALL;
+            case LARGE_BALL -> FireworkExplosion.Shape.LARGE_BALL;
+            case STAR_SHAPED -> FireworkExplosion.Shape.STAR;
+            case CREEPER_SHAPED -> FireworkExplosion.Shape.CREEPER;
+            case BURST -> FireworkExplosion.Shape.BURST;
+        };
     }
 }
 
