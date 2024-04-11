@@ -1,23 +1,20 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.ItemComponent;
 import net.minestom.server.item.component.ItemComponentMap;
 import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagWritable;
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -30,6 +27,7 @@ import java.util.function.UnaryOperator;
  */
 public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
+
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
@@ -48,19 +46,6 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     @Contract(value = "_ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material) {
         return of(material, 1);
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, _, _ -> new", pure = true)
-    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable CompoundBinaryTag nbtCompound, int amount) {
-        if (nbtCompound == null) return of(material, amount);
-        return builder(material).amount(amount).meta(nbtCompound).build();
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, _ -> new", pure = true)
-    static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable CompoundBinaryTag nbtCompound) {
-        return fromNBT(material, nbtCompound, 1);
     }
 
     /**
@@ -135,78 +120,16 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
      */
     @NotNull CompoundBinaryTag toItemNBT();
 
-    // BEGIN DEPRECATED PRE-COMPONENT METHODS
-
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    @NotNull ItemMeta meta();
-
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    @ApiStatus.Experimental
-    <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass);
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, _ -> new", pure = true)
-    @ApiStatus.Experimental
-    <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                                            @NotNull Consumer<V> consumer);
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_ -> new", pure = true)
-    @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
-
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    default @Nullable Component getDisplayName() {
-        return meta().getDisplayName();
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    default @NotNull List<@NotNull Component> getLore() {
-        return meta().getLore();
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_ -> new", pure = true)
-    @NotNull ItemStack withMeta(@NotNull ItemMeta meta);
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, -> new", pure = true)
-    default @NotNull ItemStack withDisplayName(@Nullable Component displayName) {
-        return withMeta(builder -> builder.displayName(displayName));
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, -> new", pure = true)
-    default @NotNull ItemStack withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
-        return withDisplayName(componentUnaryOperator.apply(getDisplayName()));
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, -> new", pure = true)
-    default @NotNull ItemStack withLore(@NotNull List<? extends Component> lore) {
-        return withMeta(builder -> builder.lore(lore));
-    }
-
-    @Deprecated(forRemoval = true)
-    @Contract(value = "_, -> new", pure = true)
-    default @NotNull ItemStack withLore(@NotNull UnaryOperator<@NotNull List<@NotNull Component>> loreUnaryOperator) {
-        return withLore(loreUnaryOperator.apply(getLore()));
-    }
-
-    // END DEPRECATED PRE-COMPONENT METHODS
-
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        try {
-            final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
-            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
-        } catch (IOException e) {
-            //todo(matt): revisit,
-            throw new RuntimeException(e);
-        }
+        //todo
+//        try {
+//            final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
+//            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
+//        } catch (IOException e) {
+//            //todo(matt): revisit,
+//            throw new RuntimeException(e);
+//        }
     }
 
     sealed interface Builder extends TagWritable
@@ -230,45 +153,5 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
         @Contract(value = "-> new", pure = true)
         @NotNull ItemStack build();
 
-        // BEGIN DEPRECATED PRE-COMPONENT METHODS
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        @NotNull Builder meta(@NotNull TagHandler tagHandler);
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        @NotNull Builder meta(@NotNull CompoundBinaryTag compound);
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        @NotNull Builder meta(@NotNull ItemMeta itemMeta);
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        @NotNull Builder meta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer);
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_, _ -> this")
-        <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> @NotNull Builder meta(@NotNull Class<T> metaType,
-                                                                                          @NotNull Consumer<@NotNull V> itemMetaConsumer);
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        default @NotNull Builder displayName(@Nullable Component displayName) {
-            return meta(builder -> builder.displayName(displayName));
-        }
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        default @NotNull Builder lore(@NotNull List<? extends Component> lore) {
-            return meta(builder -> builder.lore(lore));
-        }
-
-        @Deprecated(forRemoval = true)
-        @Contract(value = "_ -> this")
-        default @NotNull Builder lore(Component... lore) {
-            return meta(builder -> builder.lore(lore));
-        }
     }
 }

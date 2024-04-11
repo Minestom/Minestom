@@ -1,6 +1,5 @@
-package net.minestom.server.item.component;
+package net.minestom.server.item;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,8 +17,6 @@ public interface ItemComponentMap {
         T value = get(component);
         return value != null ? value : defaultValue;
     }
-
-    @NotNull CompoundBinaryTag asCompound();
 
     interface Builder {
 
