@@ -97,7 +97,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     /**
      * Sets the cursor item for all viewers of this inventory.
      * @param cursorItem the new item (will not update if same as current)
-     * @param sendPacket whether or not to send a packet
+     * @param sendPacket whether to send a packet
      */
     public void setCursorItem(@NotNull ItemStack cursorItem, boolean sendPacket) {
         if (this.cursorItem.equals(cursorItem)) return;
