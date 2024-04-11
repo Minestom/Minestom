@@ -1,7 +1,6 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.inventory.TransactionOperator;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
@@ -11,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
@@ -70,7 +70,7 @@ public final class ClickProcessors {
         slots = new ArrayList<>(slots);
         slots.removeIf(i -> i == slot);
 
-        Pair<ItemStack, Int2ObjectMap<ItemStack>> result = TransactionType.add(slots, slots).process(clicked, getter::get);
+        Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.add(slots, slots).process(clicked, getter::get);
         Click.Setter setter = getter.setter();
         result.right().forEach(setter::set);
 
@@ -86,7 +86,7 @@ public final class ClickProcessors {
         var unstacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (left, right) -> RULE.getAmount(left) < RULE.getMaxSize(left)), slots);
         var stacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (left, right) -> RULE.getAmount(left) == RULE.getMaxSize(left)), slots);
 
-        Pair<ItemStack, Int2ObjectMap<ItemStack>> result = TransactionType.join(unstacked, stacked).process(cursor, getter::get);
+        Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.join(unstacked, stacked).process(cursor, getter::get);
         Click.Setter setter = getter.setter();
         result.right().forEach(setter::set);
 
@@ -99,7 +99,7 @@ public final class ClickProcessors {
         var cursor = getter.cursor();
         if (cursor.isAir()) return Click.Result.nothing();
 
-        Pair<ItemStack, Int2ObjectMap<ItemStack>> result = TransactionType.general(TransactionOperator.stackLeftN(countPerSlot), slots).process(cursor, getter::get);
+        Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.general(TransactionOperator.stackLeftN(countPerSlot), slots).process(cursor, getter::get);
         Click.Setter setter = getter.setter();
         result.right().forEach(setter::set);
 
