@@ -5,6 +5,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryButtonClickEvent;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
@@ -15,15 +16,17 @@ public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
-        final Inventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
+        final boolean playerInventory = windowId == 0;
+        final Inventory inventory = playerInventory ? player.getInventory() : player.getOpenInventory();
 
         // Prevent some invalid packets
         if (inventory == null || packet.slot() == -1) return;
 
-        var info = player.clickPreprocessor().process(packet, inventory, player.isCreative());
-        if (info != null) {
-            inventory.handleClick(player, info);
-        }
+        Click.Preprocessor preprocessor = player.clickPreprocessor();
+        final Click.Info info = playerInventory ?
+                preprocessor.processPlayerClick(packet, player.isCreative()) :
+                preprocessor.processContainerClick(packet, inventory.getSize(), player.isCreative());
+        if (info != null) inventory.handleClick(player, info);
 
         // (Why is the ping packet necessary?)
         player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
@@ -55,5 +58,4 @@ public class WindowListener {
         InventoryButtonClickEvent event = new InventoryButtonClickEvent(openInventory, player, packet.buttonId());
         EventDispatcher.call(event);
     }
-
 }
