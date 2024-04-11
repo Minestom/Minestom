@@ -4,8 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.item.component.ItemComponentPatch;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.Taggable;
@@ -17,8 +16,10 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.*;
 import java.util.function.Consumer;
 
-public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
-        permits ItemMetaImpl {
+@Deprecated
+public sealed interface ItemMeta extends TagReadable permits ItemMetaImpl {
+
+    @NotNull ItemComponentPatch components();
 
     @Override
     <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
@@ -31,68 +32,47 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
     @NotNull String toSNBT();
 
     @Contract(pure = true)
-    default int getDamage() {
-        return getTag(ItemTags.DAMAGE);
-    }
+    int getDamage();
 
     @Contract(pure = true)
-    default boolean isUnbreakable() {
-        return getTag(ItemTags.UNBREAKABLE);
-    }
+    boolean isUnbreakable();
 
     @Contract(pure = true)
-    default int getHideFlag() {
-        return getTag(ItemTags.HIDE_FLAGS);
-    }
+    int getHideFlag();
 
     @Contract(pure = true)
-    default @Nullable Component getDisplayName() {
-        return getTag(ItemTags.NAME);
-    }
+    @Nullable Component getDisplayName();
 
     @Contract(pure = true)
-    default @NotNull List<@NotNull Component> getLore() {
-        return getTag(ItemTags.LORE);
-    }
+    @NotNull List<@NotNull Component> getLore();
 
     @Contract(pure = true)
-    default @NotNull Map<Enchantment, Short> getEnchantmentMap() {
-        return getTag(ItemTags.ENCHANTMENTS);
-    }
+    @NotNull Map<Enchantment, Short> getEnchantmentMap();
 
     @Contract(pure = true)
-    default @NotNull List<@NotNull ItemAttribute> getAttributes() {
-        return getTag(ItemTags.ATTRIBUTES);
-    }
+    @NotNull List<@NotNull ItemAttribute> getAttributes();
 
     @Contract(pure = true)
-    default int getCustomModelData() {
-        return getTag(ItemTags.CUSTOM_MODEL_DATA);
-    }
+    int getCustomModelData();
 
     @Contract(pure = true)
-    default @NotNull Set<@NotNull String> getCanDestroy() {
-        return Set.copyOf(getTag(ItemTags.CAN_DESTROY));
-    }
+    @NotNull Set<@NotNull String> getCanDestroy();
 
     @Contract(pure = true)
-    default boolean canDestroy(@NotNull Block block) {
-        return getCanDestroy().contains(block.name());
-    }
+    boolean canDestroy(@NotNull Block block);
 
     @Contract(pure = true)
-    default @NotNull Set<@NotNull String> getCanPlaceOn() {
-        return Set.copyOf(getTag(ItemTags.CAN_PLACE_ON));
-    }
+    @NotNull Set<@NotNull String> getCanPlaceOn();
 
     @Contract(pure = true)
-    default boolean canPlaceOn(@NotNull Block block) {
-        return getCanPlaceOn().contains(block.name());
-    }
+    boolean canPlaceOn(@NotNull Block block);
 
+    @Deprecated
     sealed interface Builder extends Taggable
             permits ItemMetaImpl.Builder, ItemMetaView.Builder {
         @NotNull ItemMeta build();
+
+        @NotNull ItemComponentPatch.Builder components();
 
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
             setTag(tag, value);

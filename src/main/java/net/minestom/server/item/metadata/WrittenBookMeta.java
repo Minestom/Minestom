@@ -4,9 +4,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemMetaView;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentMap;
+import net.minestom.server.item.component.ItemComponentPatch;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.Arrays;
 import java.util.List;
 
-public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<WrittenBookMeta.Builder> {
+public record WrittenBookMeta(@NotNull ItemComponentPatch components) implements ItemMetaView<WrittenBookMeta.Builder> {
     private static final Tag<Boolean> RESOLVED = Tag.Boolean("resolved").defaultValue(false);
     private static final Tag<WrittenBookGeneration> GENERATION = Tag.Integer("resolved").map(integer -> WrittenBookGeneration.values()[integer], Enum::ordinal);
     private static final Tag<String> AUTHOR = Tag.String("author");
@@ -45,17 +47,14 @@ public record WrittenBookMeta(TagReadable readable) implements ItemMetaView<Writ
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return readable.getTag(tag);
+        return components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
     public enum WrittenBookGeneration {
         ORIGINAL, COPY_OF_ORIGINAL, COPY_OF_COPY, TATTERED
     }
 
-    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
-        public Builder() {
-            this(TagHandler.newHandler());
-        }
+    public record Builder(@NotNull ItemComponentMap.Builder components) implements ItemMetaView.Builder {
 
         public Builder resolved(boolean resolved) {
             setTag(RESOLVED, resolved);
