@@ -80,6 +80,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     /**
      * Gets the cursor item of this inventory
+     *
      * @return the cursor item that is shared between all viewers
      */
     public @NotNull ItemStack getCursorItem() {
@@ -88,6 +89,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     /**
      * Sets the cursor item for all viewers of this inventory.
+     *
      * @param cursorItem the new item (will not update if same as current)
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
@@ -96,6 +98,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
 
     /**
      * Sets the cursor item for all viewers of this inventory.
+     *
      * @param cursorItem the new item (will not update if same as current)
      * @param sendPacket whether to send a packet
      */
@@ -109,14 +112,12 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             lock.unlock();
         }
 
-        if (!sendPacket) return;
-        sendPacketToViewers(SetSlotPacket.createCursorPacket(cursorItem));
+        if (sendPacket) sendPacketToViewers(SetSlotPacket.createCursorPacket(cursorItem));
     }
 
     @Override
     public void updateSlot(int slot, @NotNull ItemStack itemStack) {
         SetSlotPacket defaultPacket = new SetSlotPacket(getWindowId(), 0, (short) PlayerInventoryUtils.minestomToProtocol(slot), itemStack);
-
         for (Player player : getViewers()) {
             Inventory open = player.getOpenInventory();
             if (open != null && slot >= 0 && slot < INNER_SIZE) {
@@ -136,11 +137,9 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     public void update(@NotNull Player player) {
         ItemStack[] local = getItemStacks();
         ItemStack[] mapped = new ItemStack[getSize()];
-
         for (int slot = 0; slot < getSize(); slot++) {
             mapped[PlayerInventoryUtils.minestomToProtocol(slot)] = local[slot];
         }
-
         player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(mapped), getCursorItem()));
     }
 
@@ -154,7 +153,6 @@ public non-sealed class PlayerInventory extends InventoryImpl {
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
         }
-
         super.UNSAFE_itemInsert(slot, itemStack);
     }
 
@@ -163,8 +161,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
         lock.lock();
         try {
             super.clear();
-
-            for (var player : getViewers()) {
+            for (Player player : getViewers()) {
                 player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
             }
         } finally {
@@ -178,7 +175,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
                 (getter, item, slot) -> {
                     List<Integer> slots = new ArrayList<>();
 
-                    var equipmentSlot = item.material().registry().equipmentSlot();
+                    final EquipmentSlot equipmentSlot = item.material().registry().equipmentSlot();
                     if (equipmentSlot != null && slot != equipmentSlot.armorSlot()) {
                         slots.add(equipmentSlot.armorSlot());
                     }
@@ -229,5 +226,4 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
         return processItemStack(itemStack, TransactionType.take(TAKE_SLOTS), option);
     }
-
 }
