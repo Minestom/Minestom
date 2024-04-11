@@ -3,7 +3,6 @@ package net.minestom.server.inventory.click;
 import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionOperator;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
@@ -273,13 +272,13 @@ public final class ClickProcessors {
                 final int size = builder.mainSize();
                 return slot >= size ?
                         IntStream.range(0, size) :
-                        PlayerInventory.getInnerShiftClickSlots(size);
+                        PlayerInventoryUtils.getInnerShiftClickSlots(size);
             },
             (builder, item, slot) -> {
                 final int size = builder.mainSize();
                 return IntStream.concat(
                         IntStream.range(0, size),
-                        PlayerInventory.getInnerDoubleClickSlots(size)
+                        PlayerInventoryUtils.getInnerDoubleClickSlots(size)
                 );
             });
 
@@ -297,7 +296,7 @@ public final class ClickProcessors {
             (builder, item, slot) -> {
                 final int size = builder.mainSize();
                 if (slot < size) {
-                    return PlayerInventory.getInnerShiftClickSlots(size);
+                    return PlayerInventoryUtils.getInnerShiftClickSlots(size);
                 } else if (slot < size + 27) {
                     return IntStream.range(27, 36).map(i -> i + size);
                 } else {
@@ -308,7 +307,7 @@ public final class ClickProcessors {
                 final int size = builder.mainSize();
                 return IntStream.concat(
                         IntStream.range(0, size),
-                        PlayerInventory.getInnerDoubleClickSlots(size)
+                        PlayerInventoryUtils.getInnerDoubleClickSlots(size)
                 );
             });
 
