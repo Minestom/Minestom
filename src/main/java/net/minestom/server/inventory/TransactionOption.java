@@ -19,7 +19,7 @@ public interface TransactionOption<T> {
     };
 
     /**
-     * Performs the operation atomically (only if the operation resulted in air), returning whether or not the operation
+     * Performs the operation atomically (only if the operation resulted in air), returning whether the operation
      * was performed.
      */
     TransactionOption<Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
@@ -34,7 +34,7 @@ public interface TransactionOption<T> {
     };
 
     /**
-     * Discards the result of the operation, returning whether or not the operation could have finished.
+     * Discards the result of the operation, returning whether the operation could have finished.
      */
     TransactionOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
 

@@ -36,23 +36,20 @@ public non-sealed class ContainerInventory extends InventoryImpl {
 
         InventoryPreClickEvent preClickEvent = new InventoryPreClickEvent(playerInventory, inventory, player, info);
         EventDispatcher.call(preClickEvent);
-
-        Click.Info newInfo = preClickEvent.getClickInfo();
-
         if (!preClickEvent.isCancelled()) {
+            final Click.Info newInfo = preClickEvent.getClickInfo();
             Click.Getter getter = new Click.Getter(inventory::getItemStack, playerInventory::getItemStack, playerInventory.getCursorItem(), inventory.getSize());
-            Click.Result changes = processor.apply(newInfo, getter);
+            final Click.Result changes = processor.apply(newInfo, getter);
 
             InventoryClickEvent clickEvent = new InventoryClickEvent(playerInventory, inventory, player, newInfo, changes);
             EventDispatcher.call(clickEvent);
 
             if (!clickEvent.isCancelled()) {
-                Click.Result newChanges = clickEvent.getChanges();
+                final Click.Result newChanges = clickEvent.getChanges();
 
                 apply(newChanges, player, inventory);
 
-                var postClickEvent = new InventoryPostClickEvent(player, inventory, newInfo, newChanges);
-                EventDispatcher.call(postClickEvent);
+                EventDispatcher.call(new InventoryPostClickEvent(player, inventory, newInfo, newChanges));
 
                 if (!info.equals(newInfo) || !changes.equals(newChanges)) {
                     inventory.update(player);
@@ -168,5 +165,4 @@ public non-sealed class ContainerInventory extends InventoryImpl {
     protected void sendProperty(@NotNull InventoryProperty property, short value) {
         sendPacketToViewers(new WindowPropertyPacket(getWindowId(), property.getProperty(), value));
     }
-
 }
