@@ -22,19 +22,35 @@ public final class Click {
      * The inventory used should be known from context.
      */
     public sealed interface Info {
-
         record Left(int slot) implements Info {}
         record Right(int slot) implements Info {}
-        record Middle(int slot) implements Info {} // Creative only
+        record Middle(int slot) implements Info {
+            // Creative only
+        }
 
         record LeftShift(int slot) implements Info {}
         record RightShift(int slot) implements Info {}
 
         record Double(int slot) implements Info {}
 
-        record LeftDrag(List<Integer> slots) implements Info {}
-        record RightDrag(List<Integer> slots) implements Info {}
-        record MiddleDrag(List<Integer> slots) implements Info {} // Creative only
+        record LeftDrag(List<Integer> slots) implements Info {
+            public LeftDrag {
+                slots = List.copyOf(slots);
+            }
+        }
+
+        record RightDrag(List<Integer> slots) implements Info {
+            public RightDrag {
+                slots = List.copyOf(slots);
+            }
+        }
+
+        record MiddleDrag(List<Integer> slots) implements Info {
+            // Creative only
+            public MiddleDrag {
+                slots = List.copyOf(slots);
+            }
+        }
 
         record LeftDropCursor() implements Info {}
         record RightDropCursor() implements Info {}
@@ -47,14 +63,12 @@ public final class Click {
 
         record CreativeSetItem(int slot, @NotNull ItemStack item) implements Info {}
         record CreativeDropItem(@NotNull ItemStack item) implements Info {}
-
     }
 
     /**
      * Preprocesses click packets, turning them into {@link Info} instances for further processing.
      */
     public static final class Preprocessor {
-
         private final List<Integer> leftDrag = new ArrayList<>();
         private final List<Integer> rightDrag = new ArrayList<>();
         private final List<Integer> middleDrag = new ArrayList<>();
@@ -69,8 +83,8 @@ public final class Click {
          * Processes the provided click packet, turning it into a {@link Info}.
          * This will do simple verification of the packet before sending it to {@link #process(ClientClickWindowPacket.ClickType, int, byte, boolean)}.
          *
-         * @param packet the raw click packet
-         * @param isCreative whether or not the player is in creative mode (used for ignoring some actions)
+         * @param packet     the raw click packet
+         * @param isCreative whether the player is in creative mode (used for ignoring some actions)
          * @return the information about the click, or nothing if there was no immediately usable information
          */
         public @Nullable Click.Info process(@NotNull ClientClickWindowPacket packet, @NotNull Inventory inventory, boolean isCreative) {
@@ -81,25 +95,24 @@ public final class Click {
             int slot = inventory instanceof PlayerInventory ? PlayerInventoryUtils.protocolToMinestom(originalSlot) : originalSlot;
             if (originalSlot == -999) slot = -999;
 
-            boolean creativeRequired = switch (type) {
+            final boolean creativeRequired = switch (type) {
                 case CLONE -> true;
                 case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
                 default -> false;
             };
-
             if (creativeRequired && !isCreative) return null;
 
-            int maxSize = inventory.getSize() + (inventory instanceof PlayerInventory ? 0 : PlayerInventoryUtils.INNER_SIZE);
+            final int maxSize = inventory.getSize() + (inventory instanceof PlayerInventory ? 0 : PlayerInventoryUtils.INNER_SIZE);
             return process(type, slot, button, slot >= 0 && slot < maxSize);
         }
 
         /**
          * Processes a packet into click info.
          *
-         * @param type     the type of the click
-         * @param slot     the clicked slot
-         * @param button   the sent button
-         * @param valid    whether or not {@code slot} fits within the inventory (may be unused, depending on click)
+         * @param type   the type of the click
+         * @param slot   the clicked slot
+         * @param button the sent button
+         * @param valid  whether {@code slot} fits within the inventory (may be unused, depending on click)
          * @return the information about the click, or nothing if there was no immediately usable information
          */
         public @Nullable Click.Info process(@NotNull ClientClickWindowPacket.ClickType type,
@@ -182,7 +195,6 @@ public final class Click {
 
     public record Getter(@NotNull IntFunction<ItemStack> main, @NotNull IntFunction<ItemStack> player,
                          @NotNull ItemStack cursor, int mainSize) {
-
         public @NotNull ItemStack get(int slot) {
             if (slot < mainSize()) {
                 return main.apply(slot);
@@ -196,8 +208,7 @@ public final class Click {
         }
     }
 
-    public static class Setter {
-
+    public static final class Setter {
         private final Map<Integer, ItemStack> main = new HashMap<>();
         private final Map<Integer, ItemStack> player = new HashMap<>();
         private @Nullable ItemStack cursor;
@@ -237,37 +248,32 @@ public final class Click {
         public @NotNull Click.Result build() {
             return new Result(main, player, cursor, sideEffect);
         }
-
     }
 
     /**
      * Stores changes that occurred or will occur as the result of a click.
-     * @param changes the map of changes that will occur to the inventory
+     *
+     * @param changes                the map of changes that will occur to the inventory
      * @param playerInventoryChanges the map of changes that will occur to the player inventory
-     * @param newCursorItem the player's cursor item after this click. Null indicates no change
-     * @param sideEffects the side effects of this click
+     * @param newCursorItem          the player's cursor item after this click. Null indicates no change
+     * @param sideEffects            the side effects of this click
      */
-    public record Result(@NotNull Map<Integer, ItemStack> changes, @NotNull Map<Integer, ItemStack> playerInventoryChanges,
+    public record Result(@NotNull Map<Integer, ItemStack> changes,
+                         @NotNull Map<Integer, ItemStack> playerInventoryChanges,
                          @Nullable ItemStack newCursorItem, @Nullable Click.SideEffect sideEffects) {
-
-        public static @NotNull Result nothing() {
-            return new Result(Map.of(), Map.of(), null, null);
-        }
+        public static final Result NOTHING = new Result(Map.of(), Map.of(), null, null);
 
         public Result {
             changes = Map.copyOf(changes);
             playerInventoryChanges = Map.copyOf(playerInventoryChanges);
         }
-
     }
 
     /**
      * Represents side effects that may occur as the result of an inventory click.
      */
     public sealed interface SideEffect {
-
-        record DropFromPlayer(@NotNull List<ItemStack> items) implements SideEffect {
-
+        record DropFromPlayer(@NotNull List<@NotNull ItemStack> items) implements SideEffect {
             public DropFromPlayer {
                 items = List.copyOf(items);
             }
