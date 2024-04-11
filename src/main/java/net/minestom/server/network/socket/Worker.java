@@ -57,7 +57,7 @@ public final class Worker extends MinestomThread {
         try {
             this.selector.close();
         } catch (IOException e) {
-            LOGGER.error("Worker Socket Sector could not be closed", e);
+            LOGGER.error("Worker Socket Selector could not be closed", e);
             System.exit(-1);
         }
     }
