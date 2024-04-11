@@ -18,8 +18,7 @@ import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ClickUtils {
-
+public final class ClickUtils {
     public static final @NotNull InventoryType TYPE = InventoryType.HOPPER;
 
     public static final int SIZE = TYPE.getSize(); // Default hopper size
@@ -35,7 +34,8 @@ public class ClickUtils {
     public static @NotNull Player createPlayer() {
         return new Player(UUID.randomUUID(), "TestPlayer", new PlayerConnection() {
             @Override
-            public void sendPacket(@NotNull SendablePacket packet) {}
+            public void sendPacket(@NotNull SendablePacket packet) {
+            }
 
             @Override
             public @NotNull SocketAddress getRemoteAddress() {
@@ -43,7 +43,8 @@ public class ClickUtils {
             }
 
             @Override
-            public void disconnect() {}
+            public void disconnect() {
+            }
         });
     }
 
@@ -66,7 +67,7 @@ public class ClickUtils {
     }
 
     public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
-        assertEquals(info, preprocessor.process(packet, createInventory(), player.isCreative()));
+        assertEquals(info, preprocessor.processContainerClick(packet, createInventory().getSize(), player.isCreative()));
     }
 
     public static void assertProcessed(@NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
@@ -80,5 +81,4 @@ public class ClickUtils {
     public static @NotNull ClientClickWindowPacket clickPacket(@NotNull ClientClickWindowPacket.ClickType type, int windowId, int button, int slot) {
         return new ClientClickWindowPacket((byte) windowId, 0, (short) slot, (byte) button, type, List.of(), ItemStack.AIR);
     }
-
 }
