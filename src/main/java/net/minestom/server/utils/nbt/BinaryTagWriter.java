@@ -36,5 +36,4 @@ public class BinaryTagWriter {
         output.writeUTF(name);
         type.write(tag, output);
     }
-
 }
