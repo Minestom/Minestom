@@ -7,6 +7,7 @@ import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.IntFunction;
 
 /**
@@ -42,11 +43,11 @@ public interface TransactionType {
     static @NotNull TransactionType join(@NotNull TransactionType first, @NotNull TransactionType second) {
         return (item, getter) -> {
             // Calculate results
-            Pair<ItemStack, Int2ObjectMap<ItemStack>> f = first.process(item, getter);
-            Pair<ItemStack, Int2ObjectMap<ItemStack>> s = second.process(f.left(), getter);
+            Pair<ItemStack, Map<Integer, ItemStack>> f = first.process(item, getter);
+            Pair<ItemStack, Map<Integer, ItemStack>> s = second.process(f.left(), getter);
 
             // Join results
-            Int2ObjectMap<ItemStack> map = new Int2ObjectArrayMap<>();
+            Map<Integer, ItemStack> map = new Int2ObjectArrayMap<>();
             map.putAll(f.right());
             map.putAll(s.right());
             return Pair.of(s.left(), map);
@@ -78,9 +79,9 @@ public interface TransactionType {
     /**
      * Processes the provided item into the given inventory.
      * @param itemStack the item to process
-     * @param inventory the inventory function; must support #get and #put operations.
-     * @return the remaining portion of the processed item
+     * @param inventory the inventory function
+     * @return the remaining portion of the processed item, as well as the changes
      */
-    @NotNull Pair<ItemStack, Int2ObjectMap<ItemStack>> process(@NotNull ItemStack itemStack, @NotNull IntFunction<ItemStack> inventory);
+    @NotNull Pair<ItemStack, Map<Integer, ItemStack>> process(@NotNull ItemStack itemStack, @NotNull IntFunction<ItemStack> inventory);
 
 }
