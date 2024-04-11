@@ -1,6 +1,10 @@
 package net.minestom.server.utils.inventory;
 
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.stream.IntStream;
+
 /**
  * Minestom uses different slot IDs for player inventories as the Minecraft protocol uses a strange system (e.g. the
  * crafting result is the first slot).<br>
@@ -25,6 +29,14 @@ public final class PlayerInventoryUtils {
     public static final int LEGGINGS_SLOT = 43;
     public static final int BOOTS_SLOT = 44;
     public static final int OFF_HAND_SLOT = 45;
+
+    public static @NotNull IntStream getInnerShiftClickSlots(int size) {
+        return IntStream.range(0, 36).map(i -> i + size);
+    }
+
+    public static @NotNull IntStream getInnerDoubleClickSlots(int size) {
+        return IntStream.range(0, 36).map(i -> i + size);
+    }
 
     private PlayerInventoryUtils() {
     }
