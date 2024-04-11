@@ -120,7 +120,7 @@ public final class Server {
             this.selector.wakeup();
             this.selector.close();
         } catch (IOException e) {
-            LOGGER.error("Server socket sector could not be closed", e);
+            LOGGER.error("Server socket selector could not be closed", e);
             System.exit(-1);
         }
         this.workers.forEach(Worker::close);
