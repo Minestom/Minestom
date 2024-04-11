@@ -7,6 +7,7 @@ import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPostClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.ClickProcessors;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiFunction;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -26,12 +26,14 @@ public non-sealed class ContainerInventory extends InventoryImpl {
 
     /**
      * Processes a click, returning a result. This will call events for the click.
+     *
      * @param inventory the clicked inventory (could be a player inventory)
-     * @param player the player who clicked
-     * @param info the click info describing the click
+     * @param player    the player who clicked
+     * @param info      the click info describing the click
      * @return the click result, or null if the click did not occur
      */
-    public static @Nullable Click.Result handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull Click.Info info, @NotNull BiFunction<Click.@NotNull Info, Click.@NotNull Getter, Click.@NotNull Result> processor) {
+    public static @Nullable Click.Result handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull Click.Info info,
+                                                     @NotNull ClickProcessors.InventoryProcessor processor) {
         PlayerInventory playerInventory = player.getInventory();
 
         InventoryPreClickEvent preClickEvent = new InventoryPreClickEvent(playerInventory, inventory, player, info);
@@ -139,6 +141,12 @@ public non-sealed class ContainerInventory extends InventoryImpl {
         // Reopen and update this inventory with the new title
         sendPacketToViewers(new OpenWindowPacket(getWindowId(), getInventoryType().getWindowType(), title));
         update();
+    }
+
+    @Override
+    public @Nullable Click.Result handleClick(@NotNull Player player, Click.@NotNull Info info) {
+        return ContainerInventory.handleClick(this, player, info,
+                ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
     }
 
     @Override
