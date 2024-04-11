@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 import java.util.UUID;
 
+@Deprecated
 @ApiStatus.Internal
 public final class ItemSerializers {
     public static final TagSerializer<EnchantmentEntry> ENCHANTMENT_SERIALIZER = new TagSerializer<>() {

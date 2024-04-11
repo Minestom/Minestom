@@ -2,14 +2,21 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.color.Color;
 import net.minestom.server.item.ItemMetaView;
-import net.minestom.server.tag.*;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentMap;
+import net.minestom.server.item.component.ItemComponentPatch;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
+import net.minestom.server.tag.TagSerializer;
+import net.minestom.server.tag.TagWritable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
 
-public record MapMeta(TagReadable readable) implements ItemMetaView<MapMeta.Builder> {
+public record MapMeta(@NotNull ItemComponentPatch components) implements ItemMetaView<MapMeta.Builder> {
     private static final Tag<Integer> MAP_ID = Tag.Integer("map").defaultValue(0);
     private static final Tag<Integer> MAP_SCALE_DIRECTION = Tag.Integer("map_scale_direction").defaultValue(0);
     private static final Tag<List<Decoration>> DECORATIONS = Tag.Structure("Decorations", new TagSerializer<Decoration>() {
@@ -53,13 +60,10 @@ public record MapMeta(TagReadable readable) implements ItemMetaView<MapMeta.Buil
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return readable.getTag(tag);
+        return components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
-    public record Builder(TagHandler tagHandler) implements ItemMetaView.Builder {
-        public Builder() {
-            this(TagHandler.newHandler());
-        }
+    public record Builder(@NotNull ItemComponentMap.Builder components) implements ItemMetaView.Builder {
 
         public Builder mapId(int value) {
             setTag(MAP_ID, value);

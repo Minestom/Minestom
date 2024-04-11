@@ -9,20 +9,19 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.ItemComponent;
+import net.minestom.server.item.component.ItemComponentMap;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
+import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -475,12 +474,11 @@ public final class Registry {
         private final NamespaceID namespace;
         private final int id;
         private final String translationKey;
-        private final int maxStackSize;
-        private final int maxDamage;
-        private final boolean isFood;
         private final Supplier<Block> blockSupplier;
-        private final EquipmentSlot equipmentSlot;
-        private final EntityType entityType;
+        private final ItemComponentMap prototype;
+
+//        private final EquipmentSlot equipmentSlot; //todo
+//        private final EntityType entityType; //todo
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -488,35 +486,47 @@ public final class Registry {
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
-            this.maxStackSize = main.getInt("maxStackSize", 64);
-            this.maxDamage = main.getInt("maxDamage", 0);
-            this.isFood = main.getBoolean("edible", false);
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
             }
-            {
-                final Properties armorProperties = main.section("armorProperties");
-                if (armorProperties != null) {
-                    switch (armorProperties.getString("slot")) {
-                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
-                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
-                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
-                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
-                        default -> this.equipmentSlot = null;
-                    }
-                } else {
-                    this.equipmentSlot = null;
+            try {
+                ItemComponentMap.Builder builder = ItemComponentMap.builder();
+                for (Map.Entry<String, Object> entry : main.section("components")) {
+                    //noinspection unchecked
+                    ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
+                    Check.notNull(component, "Unknown component: " + entry.getKey());
+
+                    byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
+                    BinaryTagReader reader = new BinaryTagReader(new DataInputStream(new ByteArrayInputStream(rawValue)));
+                    builder.set(component, component.read(reader.readNameless()));
                 }
+                this.prototype = builder.build();
+            } catch (IOException e) {
+                throw new RuntimeException("failed to parse material registry: " + namespace, e);
             }
-            {
-                final Properties spawnEggProperties = main.section("spawnEggProperties");
-                if (spawnEggProperties != null) {
-                    this.entityType = EntityType.fromNamespaceId(spawnEggProperties.getString("entityType"));
-                } else {
-                    this.entityType = null;
-                }
-            }
+//            {
+//                final Properties armorProperties = main.section("armorProperties");
+//                if (armorProperties != null) {
+//                    switch (armorProperties.getString("slot")) {
+//                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
+//                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
+//                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
+//                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
+//                        default -> this.equipmentSlot = null;
+//                    }
+//                } else {
+//                    this.equipmentSlot = null;
+//                }
+//            }
+//            {
+//                final Properties spawnEggProperties = main.section("spawnEggProperties");
+//                if (spawnEggProperties != null) {
+//                    this.entityType = EntityType.fromNamespaceId(spawnEggProperties.getString("entityType"));
+//                } else {
+//                    this.entityType = null;
+//                }
+//            }
         }
 
         public @NotNull NamespaceID namespace() {
@@ -527,41 +537,33 @@ public final class Registry {
             return id;
         }
 
-        public String translationKey() {
+        public @NotNull String translationKey() {
             return translationKey;
-        }
-
-        public int maxStackSize() {
-            return maxStackSize;
-        }
-
-        public int maxDamage() {
-            return maxDamage;
-        }
-
-        public boolean isFood() {
-            return isFood;
         }
 
         public @Nullable Block block() {
             return blockSupplier.get();
         }
 
-        public boolean isArmor() {
-            return equipmentSlot != null;
+        public @NotNull ItemComponentMap prototype() {
+            return prototype;
         }
 
-        public @Nullable EquipmentSlot equipmentSlot() {
-            return equipmentSlot;
-        }
-
-        /**
-         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
-         * @return The entity type it can spawn, or null if it is not a spawn egg
-         */
-        public @Nullable EntityType spawnEntityType() {
-            return entityType;
-        }
+        //        public boolean isArmor() {
+//            return equipmentSlot != null;
+//        }
+//
+//        public @Nullable EquipmentSlot equipmentSlot() {
+//            return equipmentSlot;
+//        }
+//
+//        /**
+//         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+//         * @return The entity type it can spawn, or null if it is not a spawn egg
+//         */
+//        public @Nullable EntityType spawnEntityType() {
+//            return entityType;
+//        }
 
         @Override
         public Properties custom() {
