@@ -7,9 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
@@ -204,36 +202,28 @@ public final class Click {
                 return player.apply(PlayerInventoryUtils.protocolToMinestom(slot, mainSize()));
             }
         }
+    }
 
-        public @NotNull Click.Setter setter() {
-            return new Setter(mainSize);
-        }
+    public sealed interface Change {
+        record Main(int slot, @NotNull ItemStack item) implements Change {}
+        record Player(int slot, @NotNull ItemStack item) implements Change {}
     }
 
     public static final class Setter {
-        private final Map<Integer, ItemStack> main = new HashMap<>();
-        private final Map<Integer, ItemStack> player = new HashMap<>();
+        private final List<Change> changes = new ArrayList<>();
         private @Nullable ItemStack cursor;
         private @Nullable SideEffect sideEffect;
 
-        private final int clickedSize;
-
-        Setter(int clickedSize) {
-            this.clickedSize = clickedSize;
+        Setter() {
         }
 
         public @NotNull Setter set(int slot, @NotNull ItemStack item) {
-            if (slot >= clickedSize) {
-                int converted = PlayerInventoryUtils.protocolToMinestom(slot, clickedSize);
-                return setPlayer(converted, item);
-            } else {
-                main.put(slot, item);
-                return this;
-            }
+            changes.add(new Change.Main(slot, item));
+            return this;
         }
 
         public @NotNull Setter setPlayer(int slot, @NotNull ItemStack item) {
-            player.put(slot, item);
+            changes.add(new Change.Player(slot, item));
             return this;
         }
 
@@ -248,26 +238,22 @@ public final class Click {
         }
 
         public @NotNull Click.Result build() {
-            return new Result(main, player, cursor, sideEffect);
+            return new Result(changes, cursor, sideEffect);
         }
     }
 
     /**
      * Stores changes that occurred or will occur as the result of a click.
      *
-     * @param changes                the map of changes that will occur to the inventory
-     * @param playerInventoryChanges the map of changes that will occur to the player inventory
+     * @param changes                the list of changes that will occur
      * @param newCursorItem          the player's cursor item after this click. Null indicates no change
      * @param sideEffects            the side effects of this click
      */
-    public record Result(@NotNull Map<Integer, ItemStack> changes,
-                         @NotNull Map<Integer, ItemStack> playerInventoryChanges,
-                         @Nullable ItemStack newCursorItem, @Nullable Click.SideEffect sideEffects) {
-        public static final Result NOTHING = new Result(Map.of(), Map.of(), null, null);
+    public record Result(@NotNull List<Change> changes, @Nullable ItemStack newCursorItem, @Nullable Click.SideEffect sideEffects) {
+        public static final Result NOTHING = new Result(List.of(), null, null);
 
         public Result {
-            changes = Map.copyOf(changes);
-            playerInventoryChanges = Map.copyOf(playerInventoryChanges);
+            changes = List.copyOf(changes);
         }
     }
 
