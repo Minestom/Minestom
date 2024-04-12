@@ -18,6 +18,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
@@ -48,10 +49,11 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.WrittenBookMeta;
+import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
@@ -1004,13 +1006,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             closeInventory();
         }
 
+        // TODO: when adventure updates, delete this
+        String title = PlainTextComponentSerializer.plainText().serialize(book.title());
+        String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
-                        .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
-                        .author(book.author())
-                        .title(book.title())
-                        .pages(book.pages()))
+                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(book.pages(), title, author, 0, false))
                 .build();
+
         // Set book in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, writtenBook));
         // Open the book
