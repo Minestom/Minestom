@@ -7,7 +7,6 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -137,15 +136,34 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         return new ItemComponentPatch(newPatch);
     }
 
-    interface Builder extends ItemComponentMap {
+    public @NotNull Builder builder() {
+        return new Builder(new Int2ObjectArrayMap<>(patch));
+    }
 
-        @Contract(value = "_, _ -> this", pure = true)
-        <T> @NotNull Builder set(@NotNull ItemComponent<T> component, @NotNull T value);
+    record Builder(@NotNull Int2ObjectMap<Object> patch) implements ItemComponentMap {
 
-        @Contract(value = "_ -> this", pure = true)
-        @NotNull Builder remove(@NotNull ItemComponent<?> component);
+        @Override
+        public boolean has(@NotNull ItemComponent<?> component) {
+            return patch.get(component.id()) != null;
+        }
 
-        @Contract(value = "-> new", pure = true)
-        @NotNull ItemComponentPatch build();
+        @Override
+        public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
+            return (T) patch.get(component.id());
+        }
+
+        public <T> ItemComponentPatch.@NotNull Builder set(@NotNull ItemComponent<T> component, @NotNull T value) {
+            patch.put(component.id(), value);
+            return this;
+        }
+
+        public ItemComponentPatch.@NotNull Builder remove(@NotNull ItemComponent<?> component) {
+            patch.put(component.id(), null);
+            return this;
+        }
+
+        public @NotNull ItemComponentPatch build() {
+            return new ItemComponentPatch(patch);
+        }
     }
 }

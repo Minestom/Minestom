@@ -53,7 +53,7 @@ public final class Metadata {
     }
 
     public static Entry<ItemStack> ItemStack(@NotNull ItemStack value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ITEM_STACK, value, NetworkBuffer.ITEM);
+        return new MetadataImpl.EntryImpl<>(TYPE_ITEM_STACK, value, ItemStack.NETWORK_TYPE);
     }
 
     public static Entry<Boolean> Boolean(boolean value) {

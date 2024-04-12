@@ -46,11 +46,11 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
@@ -447,7 +447,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.material().isFood();
+                final boolean isFood = foodItem.has(ItemComponent.FOOD);
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
@@ -2196,7 +2196,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.material().isFood();
+        final boolean isFood = updatedItem.has(ItemComponent.FOOD);
 
         if (isFood && !allowFood)
             return null;

@@ -3,11 +3,9 @@ package net.minestom.server.item;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.item.component.ItemComponent;
-import net.minestom.server.item.component.ItemComponentMap;
-import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagWritable;
@@ -57,15 +55,7 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
      * @param nbtCompound The nbt representation of the item
      */
     static @NotNull ItemStack fromItemNBT(@NotNull CompoundBinaryTag nbtCompound) {
-//        String id = nbtCompound.getString("id");
-//        Check.notNull(id, "Item NBT must contain an id field.");
-//        Material material = Material.fromNamespaceId(id);
-//        Check.notNull(material, "Unknown material: {0}", id);
-//
-//        Byte amount = nbtCompound.getByte("Count");
-//        if (amount == null) amount = 1;
-//        final CompoundBinaryTag tag = nbtCompound.getCompound("tag");
-//        return tag != null ? fromNBT(material, tag, amount) : of(material, amount);
+        return ItemStackImpl.NBT_TYPE.read(nbtCompound);
     }
 
     @Contract(pure = true)
@@ -91,6 +81,12 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     @Contract(value = "_, _ -> new", pure = true)
     <T> @NotNull ItemStack with(@NotNull ItemComponent<T> component, T value);
 
+    default <T> @NotNull ItemStack with(@NotNull ItemComponent<T> component, @NotNull UnaryOperator<T> operator) {
+        T value = get(component);
+        if (value == null) return this;
+        return with(component, operator.apply(value));
+    }
+
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack without(@NotNull ItemComponent<?> component);
 
@@ -102,7 +98,12 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     @Override
     @Contract(pure = true)
     default <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return getOrDefault(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
+        return get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
+    }
+
+    @Contract(pure = true)
+    default int maxStackSize() {
+        return get(ItemComponent.MAX_STACK_SIZE, 64);
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -133,6 +134,7 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
 //            //todo(matt): revisit,
 //            throw new RuntimeException(e);
 //        }
+        throw new UnsupportedOperationException("todo");
     }
 
     sealed interface Builder extends TagWritable

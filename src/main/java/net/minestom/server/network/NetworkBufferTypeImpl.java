@@ -1,16 +1,12 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.item.ItemComponent;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
@@ -404,38 +400,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final long mostSignificantBits = buffer.read(LONG);
             final long leastSignificantBits = buffer.read(LONG);
             return new UUID(mostSignificantBits, leastSignificantBits);
-        }
-    }
-
-    record ItemType() implements NetworkBufferTypeImpl<ItemStack> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
-            if (value.isAir()) {
-                buffer.write(VAR_INT, 0); // 0 count always
-                return;
-            }
-            buffer.write(VAR_INT, value.amount());
-            buffer.write(VAR_INT, value.material().id());
-            buffer.write(VAR_INT, 1); // Added components
-            buffer.write(VAR_INT, 0); // Removed components
-            var component = ItemComponent.MAX_STACK_SIZE;
-            buffer.write(VAR_INT, component.id());
-            buffer.write(VAR_INT, 16);
-        }
-
-        @Override
-        public ItemStack read(@NotNull NetworkBuffer buffer) {
-            int count = buffer.read(VAR_INT);
-            if (count <= 0) return ItemStack.AIR;
-
-            final int id = buffer.read(VAR_INT);
-            final Material material = Material.fromId(id);
-            if (material == null) throw new RuntimeException("Unknown material id: " + id);
-
-            buffer.read(VAR_INT); // Added components
-            buffer.read(VAR_INT); // Removed components
-
-            return ItemStack.fromNBT(material, CompoundBinaryTag.empty(), count);
         }
     }
 

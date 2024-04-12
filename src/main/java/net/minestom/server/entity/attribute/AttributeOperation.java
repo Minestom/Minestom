@@ -3,11 +3,11 @@ package net.minestom.server.entity.attribute;
 import org.jetbrains.annotations.Nullable;
 
 public enum AttributeOperation {
-    ADDITION(0),
+    ADD_VALUE(0),
     MULTIPLY_BASE(1),
     MULTIPLY_TOTAL(2);
 
-    private static final AttributeOperation[] VALUES = new AttributeOperation[]{ADDITION, MULTIPLY_BASE, MULTIPLY_TOTAL};
+    private static final AttributeOperation[] VALUES = new AttributeOperation[]{ADD_VALUE, MULTIPLY_BASE, MULTIPLY_TOTAL};
     private final int id;
 
     AttributeOperation(int id) {

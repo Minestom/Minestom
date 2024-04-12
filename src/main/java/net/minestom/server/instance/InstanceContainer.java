@@ -159,7 +159,7 @@ public class InstanceContainer extends Instance {
                             this, block, pp.getBlockFace(), blockPosition,
                             new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
                             pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()).meta(),
+                            pp.getPlayer().getItemInHand(pp.getHand()),
                             pp.getPlayer().isSneaking()
                     );
                 } else {
