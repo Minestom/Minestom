@@ -22,7 +22,7 @@ public record ClientClickWindowPacket(byte windowId, int stateId,
     public ClientClickWindowPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(VAR_INT),
                 reader.read(SHORT), reader.read(BYTE), reader.readEnum(ClickType.class),
-                reader.readCollection(ChangedSlot::new, MAX_CHANGED_SLOTS), reader.read(ITEM));
+                reader.readCollection(ChangedSlot::new, MAX_CHANGED_SLOTS), reader.read(ItemStack.NETWORK_TYPE));
     }
 
     @Override
@@ -33,18 +33,18 @@ public record ClientClickWindowPacket(byte windowId, int stateId,
         writer.write(BYTE, button);
         writer.write(VAR_INT, clickType.ordinal());
         writer.writeCollection(changedSlots);
-        writer.write(ITEM, clickedItem);
+        writer.write(ItemStack.NETWORK_TYPE, clickedItem);
     }
 
     public record ChangedSlot(short slot, @NotNull ItemStack item) implements NetworkBuffer.Writer {
         public ChangedSlot(@NotNull NetworkBuffer reader) {
-            this(reader.read(SHORT), reader.read(ITEM));
+            this(reader.read(SHORT), reader.read(ItemStack.NETWORK_TYPE));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(SHORT, slot);
-            writer.write(ITEM, item);
+            writer.write(ItemStack.NETWORK_TYPE, item);
         }
     }
 

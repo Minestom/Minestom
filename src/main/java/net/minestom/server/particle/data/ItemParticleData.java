@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record ItemParticleData(ItemStack item) implements ParticleData {
     ItemParticleData(NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.ITEM));
+        this(reader.read(ItemStack.NETWORK_TYPE));
     }
 
     ItemParticleData() {
@@ -17,7 +17,7 @@ public record ItemParticleData(ItemStack item) implements ParticleData {
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.ITEM, item);
+        writer.write(ItemStack.NETWORK_TYPE, item);
     }
 
     @Override

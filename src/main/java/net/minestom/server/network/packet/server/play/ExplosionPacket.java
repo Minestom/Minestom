@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -53,7 +54,7 @@ public record ExplosionPacket(double x, double y, double z, float radius,
             return writer.toByteArray();
         }
         else if (particle.equals(Particle.ITEM)) {
-            writer.writeItemStack(reader.read(ITEM));
+            writer.writeItemStack(reader.read(ItemStack.NETWORK_TYPE));
         }
         else if (particle.equals(Particle.DUST_COLOR_TRANSITION)) {
             for (int i = 0; i < 7; i++) writer.writeFloat(reader.read(FLOAT));

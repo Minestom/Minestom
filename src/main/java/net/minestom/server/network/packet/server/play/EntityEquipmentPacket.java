@@ -2,9 +2,9 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,8 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityEquipmentPacket(int entityId,
                                     @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket.Play, ServerPacket.ComponentHolding {
@@ -39,7 +40,7 @@ public record EntityEquipmentPacket(int entityId,
             byte slotEnum = (byte) entry.getKey().ordinal();
             if (!last) slotEnum |= 0x80;
             writer.write(BYTE, slotEnum);
-            writer.write(ITEM, entry.getValue());
+            writer.write(ItemStack.NETWORK_TYPE, entry.getValue());
         }
     }
 
@@ -52,7 +53,7 @@ public record EntityEquipmentPacket(int entityId,
     public @NotNull Collection<Component> components() {
         return this.equipments.values()
                 .stream()
-                .map(ItemStack::getDisplayName)
+                .map(item -> item.get(ItemComponent.CUSTOM_NAME))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
@@ -60,7 +61,7 @@ public record EntityEquipmentPacket(int entityId,
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         final var map = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
-        this.equipments.forEach((key, value) -> map.put(key, value.withDisplayName(operator)));
+        this.equipments.forEach((key, value) -> map.put(key, value.with(ItemComponent.CUSTOM_NAME, operator)));
 
         return new EntityEquipmentPacket(this.entityId, map);
     }
@@ -70,7 +71,7 @@ public record EntityEquipmentPacket(int entityId,
         byte slot;
         do {
             slot = reader.read(BYTE);
-            equipments.put(EquipmentSlot.values()[slot & 0x7F], reader.read(ITEM));
+            equipments.put(EquipmentSlot.values()[slot & 0x7F], reader.read(ItemStack.NETWORK_TYPE));
         } while ((slot & 0x80) == 0x80);
         return equipments;
     }
