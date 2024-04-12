@@ -71,7 +71,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }
 
-            return ItemStack.fromNBT(material, compound);
+//            return ItemStack.fromNBT(material, compound); //todo
+            return ItemStack.of(material);
         }
     }
 

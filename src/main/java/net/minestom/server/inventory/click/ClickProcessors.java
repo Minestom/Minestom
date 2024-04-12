@@ -10,7 +10,6 @@ import net.minestom.server.inventory.click.Click.Change.Container;
 import net.minestom.server.inventory.click.Click.Change.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +28,6 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
  * Provides standard implementations of most click functions.
  */
 public final class ClickProcessors {
-    private static final @NotNull StackingRule RULE = StackingRule.get();
 
     public static @NotNull List<Click.Change> leftClick(int slot, @NotNull Click.Getter getter) {
         final ItemStack cursor = getter.cursor();
@@ -38,7 +36,7 @@ public final class ClickProcessors {
         final TransactionOperator.Entry pair = TransactionOperator.STACK_LEFT.apply(clickedItem, cursor);
         if (pair != null) { // Stackable items, combine their counts
             return List.of(new Container(slot, pair.left()), new Cursor(pair.right()));
-        } else if (!RULE.canBeStacked(cursor, clickedItem)) { // If they're unstackable, switch them
+        } else if (!cursor.isSimilar(clickedItem)) { // If they're unstackable, switch them
             return List.of(new Container(slot, cursor), new Cursor(clickedItem));
         } else {
             return List.of();
@@ -172,14 +170,14 @@ public final class ClickProcessors {
             case Click.Info.Double(int slot) ->
                     doubleClick(doubleClickSlots.getList(getter, getter.get(slot), slot), getter);
             case Click.Info.LeftDrag(List<Integer> slots) -> {
-                int cursorAmount = RULE.getAmount(getter.cursor());
+                int cursorAmount = getter.cursor().amount();
                 int amount = (int) Math.floor(cursorAmount / (double) slots.size());
                 yield dragClick(amount, slots, getter);
             }
             case Click.Info.RightDrag(List<Integer> slots) -> dragClick(1, slots, getter);
             case Click.Info.MiddleDrag(List<Integer> slots) -> middleDragClick(slots, getter);
             case Click.Info.DropSlot(int slot, boolean all) ->
-                    dropFromSlot(slot, all ? RULE.getAmount(getter.get(slot)) : 1, getter);
+                    dropFromSlot(slot, all ? getter.get(slot).amount() : 1, getter);
             case Click.Info.LeftDropCursor() -> dropFromCursor(getter.cursor().amount(), getter);
             case Click.Info.RightDropCursor() -> dropFromCursor(1, getter);
             case Click.Info.MiddleDropCursor() -> List.of();

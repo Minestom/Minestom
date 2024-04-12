@@ -35,9 +35,21 @@ record ItemComponentImpl<T>(
     }
 
     @Override
+    public @NotNull BinaryTag write(@NotNull T value) {
+        Check.notNull(nbt, "{0} cannot be serialized to NBT", this);
+        return nbt.write(value);
+    }
+
+    @Override
     public @NotNull T read(@NotNull NetworkBuffer reader) {
         Check.notNull(network, "{0} cannot be deserialized from network", this);
         return network.read(reader);
+    }
+
+    @Override
+    public void write(@NotNull NetworkBuffer writer, @NotNull T value) {
+        Check.notNull(network, "{0} cannot be serialized to network", this);
+        network.write(writer, value);
     }
 
     @Override
