@@ -27,8 +27,6 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
@@ -89,7 +87,9 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-            canPlaceBlock = usedItem.meta().canPlaceOn(interactedBlock);
+//            canPlaceBlock = usedItem.meta().canPlaceOn(interactedBlock);
+            canPlaceBlock = false;
+            //todo
         }
 
 

@@ -47,8 +47,8 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<Integer> MAP_ID = declare("map_id", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     ItemComponent<MapDecorations> MAP_DECORATIONS = declare("map_decorations", null, MapDecorations.NBT_TYPE);
     ItemComponent<MapPostProcessing> MAP_POST_PROCESSING = declare("map_post_processing", MapPostProcessing.NETWORK_TYPE, null);
-    ItemComponent<List<ItemStack>> CHARGED_PROJECTILES = declare("charged_projectiles", NetworkBuffer.ITEM.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
-    ItemComponent<List<ItemStack>> BUNDLE_CONTENTS = declare("bundle_contents", NetworkBuffer.ITEM.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
+    ItemComponent<List<ItemStack>> CHARGED_PROJECTILES = declare("charged_projectiles", ItemStack.NETWORK_TYPE.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
+    ItemComponent<List<ItemStack>> BUNDLE_CONTENTS = declare("bundle_contents", ItemStack.NETWORK_TYPE.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
     ItemComponent<Void> POTION_CONTENTS = declare("potion_contents", null, null); //todo
     ItemComponent<Void> SUSPICIOUS_STEW_EFFECTS = declare("suspicious_stew_effects", null, null); //todo
     ItemComponent<WritableBookContent> WRITABLE_BOOK_CONTENT = declare("writable_book_content", WritableBookContent.NETWORK_TYPE, WritableBookContent.NBT_TYPE);
@@ -69,7 +69,7 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<Void> BANNER_PATTERNS = declare("banner_patterns", null, null); //todo
     ItemComponent<Void> BASE_COLOR = declare("base_color", null, null); //todo dyecolor is the same stringrepresentable as item rarity
     ItemComponent<Void> POT_DECORATIONS = declare("pot_decorations", null, null); //todo
-    ItemComponent<List<ItemStack>> CONTAINER = declare("container", NetworkBuffer.ITEM.list(256), BinaryTagSerializer.ITEM.list());
+    ItemComponent<List<ItemStack>> CONTAINER = declare("container", ItemStack.NETWORK_TYPE.list(256), BinaryTagSerializer.ITEM.list());
     ItemComponent<Void> BLOCK_STATE = declare("block_state", null, null); //todo
     ItemComponent<Void> BEES = declare("bees", null, null); //todo
     ItemComponent<String> LOCK = declare("lock", null, BinaryTagSerializer.STRING);

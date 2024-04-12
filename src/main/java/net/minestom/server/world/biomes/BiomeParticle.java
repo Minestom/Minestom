@@ -58,9 +58,10 @@ public record BiomeParticle(float probability, Option option) {
 
         @Override
         public CompoundBinaryTag toNbt() {
-            //todo test count might be wrong type
-            return item.meta().toNBT()
-                    .putString("type", type);
+            //todo
+//            return item.meta().toNBT()
+//                    .putString("type", type);
+            return CompoundBinaryTag.empty();
         }
     }
 

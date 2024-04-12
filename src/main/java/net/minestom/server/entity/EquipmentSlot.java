@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,14 +39,4 @@ public enum EquipmentSlot {
         return ARMORS;
     }
 
-    public static @NotNull EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
-        return switch (attributeSlot) {
-            case MAINHAND -> MAIN_HAND;
-            case OFFHAND -> OFF_HAND;
-            case FEET -> BOOTS;
-            case LEGS -> LEGGINGS;
-            case CHEST -> CHESTPLATE;
-            case HEAD -> HELMET;
-        };
-    }
 }

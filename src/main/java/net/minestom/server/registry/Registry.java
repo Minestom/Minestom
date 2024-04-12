@@ -9,6 +9,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemComponentMap;
@@ -477,8 +478,8 @@ public final class Registry {
         private final Supplier<Block> blockSupplier;
         private final ItemComponentMap prototype;
 
-//        private final EquipmentSlot equipmentSlot; //todo
-//        private final EntityType entityType; //todo
+        private final EquipmentSlot equipmentSlot;
+        //        private final EntityType entityType; //todo
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -493,32 +494,38 @@ public final class Registry {
             try {
                 ItemComponentMap.Builder builder = ItemComponentMap.builder();
                 for (Map.Entry<String, Object> entry : main.section("components")) {
-                    //noinspection unchecked
-                    ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
-                    Check.notNull(component, "Unknown component: " + entry.getKey());
+                    try {
+                        //noinspection unchecked
+                        ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
+                        Check.notNull(component, "Unknown component: " + entry.getKey());
 
-                    byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
-                    BinaryTagReader reader = new BinaryTagReader(new DataInputStream(new ByteArrayInputStream(rawValue)));
-                    builder.set(component, component.read(reader.readNameless()));
+                        byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
+                        BinaryTagReader reader = new BinaryTagReader(new DataInputStream(new ByteArrayInputStream(rawValue)));
+
+                        //todo remove this try/catch, just so i dont need to impl all comps yet
+                        builder.set(component, component.read(reader.readNameless()));
+                    } catch (NullPointerException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
                 this.prototype = builder.build();
             } catch (IOException e) {
                 throw new RuntimeException("failed to parse material registry: " + namespace, e);
             }
-//            {
-//                final Properties armorProperties = main.section("armorProperties");
-//                if (armorProperties != null) {
-//                    switch (armorProperties.getString("slot")) {
-//                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
-//                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
-//                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
-//                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
-//                        default -> this.equipmentSlot = null;
-//                    }
-//                } else {
-//                    this.equipmentSlot = null;
-//                }
-//            }
+            {
+                final Properties armorProperties = main.section("armorProperties");
+                if (armorProperties != null) {
+                    switch (armorProperties.getString("slot")) {
+                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
+                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
+                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
+                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
+                        default -> this.equipmentSlot = null;
+                    }
+                } else {
+                    this.equipmentSlot = null;
+                }
+            }
 //            {
 //                final Properties spawnEggProperties = main.section("spawnEggProperties");
 //                if (spawnEggProperties != null) {
@@ -549,14 +556,14 @@ public final class Registry {
             return prototype;
         }
 
-        //        public boolean isArmor() {
-//            return equipmentSlot != null;
-//        }
-//
-//        public @Nullable EquipmentSlot equipmentSlot() {
-//            return equipmentSlot;
-//        }
-//
+        public boolean isArmor() {
+            return equipmentSlot != null;
+        }
+
+        public @Nullable EquipmentSlot equipmentSlot() {
+            return equipmentSlot;
+        }
+
 //        /**
 //         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
 //         * @return The entity type it can spawn, or null if it is not a spawn egg
@@ -612,11 +619,12 @@ public final class Registry {
                     custom);
         }
     }
+
     public record TrimMaterialEntry(@NotNull NamespaceID namespace,
                                     @NotNull String assetName,
                                     @NotNull Material ingredient,
                                     float itemModelIndex,
-                                    @NotNull Map<String,String> overrideArmorMaterials,
+                                    @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
         public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
@@ -625,7 +633,7 @@ public final class Registry {
                     main.getString("asset_name"),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
                     (float) main.getDouble("item_model_index"),
-                    Objects.requireNonNullElse(main.section("override_armor_materials"),new PropertiesMap(Map.of()))
+                    Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
                     custom
@@ -803,7 +811,7 @@ public final class Registry {
         public String toString() {
             AtomicReference<String> string = new AtomicReference<>("{ ");
             this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
-            return string.updateAndGet(s -> s.replaceFirst(" , ","") + "}");
+            return string.updateAndGet(s -> s.replaceFirst(" , ", "") + "}");
         }
 
     }
