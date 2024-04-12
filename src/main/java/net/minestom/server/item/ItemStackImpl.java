@@ -2,7 +2,10 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.component.CustomData;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,23 +14,26 @@ import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, ItemComponentPatch components) implements ItemStack {
 
+    static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = null;
+    static final BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
+
     static ItemStack create(Material material, int amount, ItemComponentPatch components) {
         if (amount <= 0) return AIR;
         return new ItemStackImpl(material, amount, components);
     }
 
     static ItemStack create(Material material, int amount) {
-        return create(material, amount, ItemComponentPatch.builder(material).build());
+        return create(material, amount, ItemComponentPatch.EMPTY);
     }
 
     @Override
     public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
-        return components.get(component);
+        return components.get(material.prototype(), component);
     }
 
     @Override
     public boolean has(@NotNull ItemComponent<?> component) {
-        return components.has(component);
+        return components.has(material.prototype(), component);
     }
 
     @Override
@@ -71,6 +77,8 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
 
     @Override
     public @NotNull CompoundBinaryTag toItemNBT() {
+        return (CompoundBinaryTag) NBT_TYPE.write(this);
+
 //        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
 //                .putString("id", material.name())
 //                .putByte("Count", (byte) amount);
@@ -83,6 +91,23 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
         return new Builder(material, amount, components.builder());
+    }
+
+    private static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
+        String id = tag.getString("id");
+        Material material = Material.fromNamespaceId(id);
+        Check.notNull(material, "Unknown material: {0}", id);
+        int count = tag.getInt("count", 1);
+        ItemComponentPatch patch = ItemComponentPatch.NBT_TYPE.read(tag.getCompound("components"));
+        return new ItemStackImpl(material, count, patch);
+    }
+
+    private static @NotNull CompoundBinaryTag toCompound(@NotNull ItemStack itemStack) {
+        return CompoundBinaryTag.builder()
+                .putString("id", itemStack.material().name())
+                .putInt("count", itemStack.amount())
+                .put("components", ItemComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components))
+                .build();
     }
 
     static final class Builder implements ItemStack.Builder {
