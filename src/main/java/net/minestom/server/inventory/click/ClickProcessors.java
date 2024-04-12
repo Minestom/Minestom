@@ -34,9 +34,9 @@ public final class ClickProcessors {
 
         Pair<ItemStack, ItemStack> pair = TransactionOperator.STACK_LEFT.apply(clickedItem, cursor);
         if (pair != null) { // Stackable items, combine their counts
-            return getter.setter().set(slot, pair.left()).cursor(pair.right()).build();
+            return new Click.Setter().set(slot, pair.left()).cursor(pair.right()).build();
         } else if (!RULE.canBeStacked(cursor, clickedItem)) { // If they're unstackable, switch them
-            return getter.setter().set(slot, cursor).cursor(clickedItem).build();
+            return new Click.Setter().set(slot, cursor).cursor(clickedItem).build();
         } else {
             return Click.Result.NOTHING;
         }
@@ -51,20 +51,20 @@ public final class ClickProcessors {
             int newAmount = (int) Math.ceil(RULE.getAmount(clickedItem) / 2d);
             Pair<ItemStack, ItemStack> cursorSlot = TransactionOperator.stackLeftN(newAmount).apply(cursor, clickedItem);
             return cursorSlot == null ? Click.Result.NOTHING :
-                    getter.setter().cursor(cursorSlot.left()).set(slot, cursorSlot.right()).build();
+                    new Click.Setter().cursor(cursorSlot.left()).set(slot, cursorSlot.right()).build();
         } else if (clickedItem.isAir() || RULE.canBeStacked(clickedItem, cursor)) { // Can add, transfer one over
             Pair<ItemStack, ItemStack> slotCursor = TransactionOperator.stackLeftN(1).apply(clickedItem, cursor);
             return slotCursor == null ? Click.Result.NOTHING :
-                    getter.setter().set(slot, slotCursor.left()).cursor(slotCursor.right()).build();
+                    new Click.Setter().set(slot, slotCursor.left()).cursor(slotCursor.right()).build();
         } else { // Two existing of items of different types, so switch
-            return getter.setter().cursor(clickedItem).set(slot, cursor).build();
+            return new Click.Setter().cursor(clickedItem).set(slot, cursor).build();
         }
     }
 
     public static @NotNull Click.Result middleClick(int slot, @NotNull Click.Getter getter) {
         var item = getter.get(slot);
         if (getter.cursor().isAir() && !item.isAir()) {
-            return getter.setter().cursor(RULE.apply(item, RULE.getMaxSize(item))).build();
+            return new Click.Setter().cursor(RULE.apply(item, RULE.getMaxSize(item))).build();
         } else {
             return Click.Result.NOTHING;
         }
@@ -77,7 +77,7 @@ public final class ClickProcessors {
         slots.removeIf(i -> i == slot);
 
         Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.add(slots, slots).process(clicked, getter::get);
-        Click.Setter setter = getter.setter();
+        Click.Setter setter = new Click.Setter();
         result.right().forEach(setter::set);
 
         return !result.left().equals(clicked) ?
@@ -93,7 +93,7 @@ public final class ClickProcessors {
         var stacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (left, right) -> RULE.getAmount(left) == RULE.getMaxSize(left)), slots);
 
         Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.join(unstacked, stacked).process(cursor, getter::get);
-        Click.Setter setter = getter.setter();
+        Click.Setter setter = new Click.Setter();
         result.right().forEach(setter::set);
 
         return !result.left().equals(cursor) ?
@@ -106,7 +106,7 @@ public final class ClickProcessors {
         if (cursor.isAir()) return Click.Result.NOTHING;
 
         Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.general(TransactionOperator.stackLeftN(countPerSlot), slots).process(cursor, getter::get);
-        Click.Setter setter = getter.setter();
+        Click.Setter setter = new Click.Setter();
         result.right().forEach(setter::set);
 
         return !result.left().equals(cursor) ?
@@ -116,7 +116,7 @@ public final class ClickProcessors {
 
     public static @NotNull Click.Result middleDragClick(@NotNull List<Integer> slots, @NotNull Click.Getter getter) {
         final ItemStack cursor = getter.cursor();
-        Click.Setter setter = getter.setter();
+        Click.Setter setter = new Click.Setter();
         for (int slot : slots) {
             if (getter.get(slot).isAir()) {
                 setter.set(slot, cursor);
@@ -132,7 +132,7 @@ public final class ClickProcessors {
         var pair = TransactionOperator.stackLeftN(amount).apply(ItemStack.AIR, cursor);
         if (pair == null) return Click.Result.NOTHING;
 
-        return getter.setter().cursor(pair.right())
+        return new Click.Setter().cursor(pair.right())
                 .sideEffects(new Click.SideEffect.DropFromPlayer(pair.left()))
                 .build();
     }
@@ -144,7 +144,7 @@ public final class ClickProcessors {
         var pair = TransactionOperator.stackLeftN(amount).apply(ItemStack.AIR, item);
         if (pair == null) return Click.Result.NOTHING;
 
-        return getter.setter().set(slot, pair.right())
+        return new Click.Setter().set(slot, pair.right())
                 .sideEffects(new Click.SideEffect.DropFromPlayer(pair.left()))
                 .build();
     }
@@ -187,18 +187,18 @@ public final class ClickProcessors {
                 var selectedItem = getter.get(clickedSlot);
                 if (hotbarItem.equals(selectedItem)) yield Click.Result.NOTHING;
 
-                yield getter.setter().setPlayer(hotbarSlot, selectedItem).set(clickedSlot, hotbarItem).build();
+                yield new Click.Setter().set(clickedSlot, hotbarItem).setPlayer(hotbarSlot, selectedItem).build();
             }
             case Click.Info.OffhandSwap(int slot) -> {
                 var offhandItem = getter.player().apply(PlayerInventoryUtils.OFF_HAND_SLOT);
                 var selectedItem = getter.get(slot);
                 if (offhandItem.equals(selectedItem)) yield Click.Result.NOTHING;
 
-                yield getter.setter().setPlayer(PlayerInventoryUtils.OFF_HAND_SLOT, selectedItem).set(slot, offhandItem).build();
+                yield new Click.Setter().set(slot, offhandItem).setPlayer(PlayerInventoryUtils.OFF_HAND_SLOT, selectedItem).build();
             }
-            case Click.Info.CreativeSetItem(int slot, ItemStack item) -> getter.setter().set(slot, item).build();
+            case Click.Info.CreativeSetItem(int slot, ItemStack item) -> new Click.Setter().set(slot, item).build();
             case Click.Info.CreativeDropItem(ItemStack item) ->
-                    getter.setter().sideEffects(new Click.SideEffect.DropFromPlayer(item)).build();
+                    new Click.Setter().sideEffects(new Click.SideEffect.DropFromPlayer(item)).build();
         };
     }
 

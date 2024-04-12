@@ -11,6 +11,7 @@ import net.minestom.server.inventory.click.ClickProcessors;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,16 +73,23 @@ public non-sealed class ContainerInventory extends InventoryImpl {
     }
 
     public static void apply(@NotNull Click.Result result, @NotNull Player player, @NotNull Inventory inventory) {
-        for (var entry : result.changes().entrySet()) {
-            inventory.setItemStack(entry.getKey(), entry.getValue());
-        }
+        PlayerInventory playerInventory = player.getInventory();
 
-        for (var entry : result.playerInventoryChanges().entrySet()) {
-            player.getInventory().setItemStack(entry.getKey(), entry.getValue());
+        for (var change : result.changes()) {
+            if (change instanceof Click.Change.Main(int slot, ItemStack item)) {
+                if (slot < inventory.getSize()) {
+                    inventory.setItemStack(slot, item);
+                } else {
+                    int converted = PlayerInventoryUtils.protocolToMinestom(slot, inventory.getSize());
+                    playerInventory.setItemStack(converted, item);
+                }
+            } else if (change instanceof Click.Change.Player(int slot, ItemStack item)) {
+                playerInventory.setItemStack(slot, item);
+            }
         }
 
         if (result.newCursorItem() != null) {
-            player.getInventory().setCursorItem(result.newCursorItem());
+            playerInventory.setCursorItem(result.newCursorItem());
         }
 
         if (result.sideEffects() instanceof Click.SideEffect.DropFromPlayer drop) {
