@@ -8,12 +8,12 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,18 +52,63 @@ public final class ClickUtils {
         var player = createPlayer();
         var inventory = createInventory();
 
-        ContainerInventory.apply(initialChanges.apply(new Click.Setter(inventory.getSize())).build(), player, inventory);
-        var changes = inventory.handleClick(player, info);
-        assertEquals(expectedChanges.apply(new Click.Setter(inventory.getSize())).build(), changes);
+        var expected = expectedChanges.apply(new Click.Setter()).build();
+
+        ContainerInventory.apply(initialChanges.apply(new Click.Setter()).build(), player, inventory);
+        var actual = inventory.handleClick(player, info);
+
+        assertChanges(expected, actual, inventory.getSize());
     }
 
     public static void assertPlayerClick(@NotNull UnaryOperator<Click.Setter> initialChanges, @NotNull Click.Info info, @NotNull UnaryOperator<Click.Setter> expectedChanges) {
         var player = createPlayer();
         var inventory = player.getInventory();
 
-        ContainerInventory.apply(initialChanges.apply(new Click.Setter(inventory.getSize())).build(), player, inventory);
-        var changes = inventory.handleClick(player, info);
-        assertEquals(expectedChanges.apply(new Click.Setter(inventory.getSize())).build(), changes);
+        var expected = expectedChanges.apply(new Click.Setter()).build();
+
+        ContainerInventory.apply(initialChanges.apply(new Click.Setter()).build(), player, inventory);
+        var actual = inventory.handleClick(player, info);
+
+        assertChanges(expected, actual, inventory.getSize());
+    }
+
+    public static void assertChanges(Click.Result expected, Click.Result actual, int size) {
+        if (expected == null || actual == null) {
+            assertEquals(expected, actual);
+            return;
+        }
+
+        assertEquals(foldMain(expected.changes(), size), foldMain(actual.changes(), size));
+        assertEquals(foldPlayer(expected.changes(), size), foldPlayer(actual.changes(), size));
+
+        assertEquals(expected.newCursorItem(), actual.newCursorItem());
+        assertEquals(expected.sideEffects(), actual.sideEffects());
+    }
+
+    private static Map<Integer, ItemStack> foldMain(List<Click.Change> changes, int size) {
+        Map<Integer, ItemStack> map = new HashMap<>();
+
+        for (var change : changes) {
+            if (change instanceof Click.Change.Main(int slot, ItemStack item) && slot < size) {
+                map.put(slot, item);
+            }
+        }
+
+        return map;
+    }
+
+    private static Map<Integer, ItemStack> foldPlayer(List<Click.Change> changes, int size) {
+        Map<Integer, ItemStack> map = new HashMap<>();
+
+        for (var change : changes) {
+            if (change instanceof Click.Change.Main(int slot, ItemStack item) && slot >= size) {
+                map.put(PlayerInventoryUtils.protocolToMinestom(slot, size), item);
+            } else if (change instanceof Click.Change.Player(int slot, ItemStack item)) {
+                map.put(slot, item);
+            }
+        }
+
+        return map;
     }
 
     public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
