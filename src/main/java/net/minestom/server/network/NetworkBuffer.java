@@ -10,7 +10,6 @@ import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
@@ -48,7 +47,6 @@ public final class NetworkBuffer {
     public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
     public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
     public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
-    public static final Type<ItemStack> ITEM = new NetworkBufferTypeImpl.ItemType();
 
     public static final Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
     public static final Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();

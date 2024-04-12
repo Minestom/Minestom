@@ -115,7 +115,7 @@ public final class AttributeInstance {
         final Collection<AttributeModifier> modifiers = getModifiers();
         double base = getBaseValue();
 
-        for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.ADDITION).toArray(AttributeModifier[]::new)) {
+        for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.ADD_VALUE).toArray(AttributeModifier[]::new)) {
             base += modifier.getAmount();
         }
 

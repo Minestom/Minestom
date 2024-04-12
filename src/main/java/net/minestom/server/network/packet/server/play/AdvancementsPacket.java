@@ -5,7 +5,6 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -164,7 +163,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         private static DisplayData read(@NotNull NetworkBuffer reader) {
             var title = reader.read(COMPONENT);
             var description = reader.read(COMPONENT);
-            var icon = reader.read(ITEM);
+            var icon = reader.read(ItemStack.NETWORK_TYPE);
             var frameType = FrameType.values()[reader.read(VAR_INT)];
             var flags = reader.read(INT);
             var backgroundTexture = (flags & 0x1) != 0 ? reader.read(STRING) : null;
@@ -180,7 +179,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(COMPONENT, title);
             writer.write(COMPONENT, description);
-            writer.write(ITEM, icon);
+            writer.write(ItemStack.NETWORK_TYPE, icon);
             writer.writeEnum(FrameType.class, frameType);
             writer.write(INT, flags);
             if ((flags & 0x1) != 0) {

@@ -7,6 +7,7 @@ import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
@@ -54,7 +55,7 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SHIELD;
         } else if (material == Material.TRIDENT) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.TRIDENT;
-        } else if (material.isFood()) {
+        } else if (itemStack.has(ItemComponent.FOOD)) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
