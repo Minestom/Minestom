@@ -443,7 +443,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.material().isFood();
+                final boolean isFood = foodItem.has(ItemComponent.FOOD);
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
@@ -1805,6 +1805,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * Used internally to determine when sending the close inventory packet should be skipped.
+     */
+    public boolean skipClosePacket() {
+        return skipClosePacket;
+    }
+
+    /**
      * Used internally to reset the skipClosePacket field, which determines when sending the close inventory packet
      * should be skipped.
      * <p>
@@ -2210,7 +2217,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.material().isFood();
+        final boolean isFood = updatedItem.has(ItemComponent.FOOD);
 
         if (isFood && !allowFood)
             return null;

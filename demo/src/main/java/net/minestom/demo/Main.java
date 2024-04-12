@@ -32,6 +32,15 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        try {
+
+            Class.forName("net.minestom.server.item.ItemComponent");
+            Class.forName("net.minestom.server.item.ItemStack");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Failed to load Minestom classes, make sure you are using the correct dependencies");
+            return;
+        }
         System.setProperty("minestom.experiment.pose-updates", "true");
 
         MinecraftServer.setCompressionThreshold(0);
