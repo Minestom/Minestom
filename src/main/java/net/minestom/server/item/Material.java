@@ -76,27 +76,11 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
     }
 
     default boolean isArmor() {
-        //todo how does armor work nowadays
-        return false;
-//        return registry().isArmor();
+        return registry().isArmor();
     }
 
-    default boolean hasState() {
-        if (this == BOW || this == TRIDENT || this == CROSSBOW || this == SHIELD) {
-            return true;
-        } else {
-            return isFood();
-        }
-    }
-
-    @Deprecated(forRemoval = true)
     default int maxStackSize() {
-        return prototype().getOrDefault(ItemComponent.MAX_STACK_SIZE, 64);
-    }
-
-    @Deprecated(forRemoval = true)
-    default boolean isFood() {
-        return prototype().has(ItemComponent.FOOD);
+        return prototype().get(ItemComponent.MAX_STACK_SIZE, 64);
     }
 
     static @NotNull Collection<@NotNull Material> values() {

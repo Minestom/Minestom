@@ -187,7 +187,7 @@ public class BinaryReader extends InputStream {
     }
 
     public ItemStack readItemStack() {
-        return buffer.read(ITEM);
+        return buffer.read(ItemStack.NETWORK_TYPE);
     }
 
     public Component readComponent(int maxLength) {

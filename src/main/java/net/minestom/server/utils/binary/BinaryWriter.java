@@ -164,7 +164,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeItemStack(@NotNull ItemStack itemStack) {
-        this.buffer.write(ITEM, itemStack);
+        this.buffer.write(ItemStack.NETWORK_TYPE, itemStack);
     }
 
     public void writeNBT(@NotNull String name, @NotNull BinaryTag tag) {

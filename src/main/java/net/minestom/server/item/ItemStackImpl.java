@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
@@ -14,7 +15,22 @@ import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, ItemComponentPatch components) implements ItemStack {
 
-    static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = null;
+    static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+            buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+            buffer.write(NetworkBuffer.VAR_INT, value.amount());
+            buffer.write(ItemComponentPatch.NETWORK_TYPE, ((ItemStackImpl) value).components);
+        }
+
+        @Override
+        public ItemStack read(@NotNull NetworkBuffer buffer) {
+            Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+            int amount = buffer.read(NetworkBuffer.VAR_INT);
+            ItemComponentPatch components = buffer.read(ItemComponentPatch.NETWORK_TYPE);
+            return new ItemStackImpl(material, amount, components);
+        }
+    };
     static final BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
     static ItemStack create(Material material, int amount, ItemComponentPatch components) {
@@ -24,6 +40,10 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
 
     static ItemStack create(Material material, int amount) {
         return create(material, amount, ItemComponentPatch.EMPTY);
+    }
+
+    public ItemStackImpl {
+        Check.notNull(material, "Material cannot be null");
     }
 
     @Override
@@ -50,6 +70,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
 
     @Override
     public @NotNull ItemStack withAmount(int amount) {
+        if (amount <= 0) return ItemStack.AIR;
         return create(material, amount, components);
     }
 
@@ -65,9 +86,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
 
     @Override
     public @NotNull ItemStack consume(int amount) {
-        int newAmount = amount() - amount;
-        if (newAmount <= 0) return AIR;
-        return withAmount(newAmount);
+        return withAmount(amount() - amount);
     }
 
     @Override
@@ -78,14 +97,6 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     @Override
     public @NotNull CompoundBinaryTag toItemNBT() {
         return (CompoundBinaryTag) NBT_TYPE.write(this);
-
-//        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
-//                .putString("id", material.name())
-//                .putByte("Count", (byte) amount);
-//        CompoundBinaryTag nbt = meta.toNBT();
-//        if (nbt.size() > 0) builder.put("tag", nbt);
-//        return builder.build();
-        //todo
     }
 
     @Contract(value = "-> new", pure = true)
@@ -124,7 +135,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
         Builder(Material material, int amount) {
             this.material = material;
             this.amount = amount;
-            this.components = ItemComponentPatch.builder(material);
+            this.components = new ItemComponentPatch.Builder(new Int2ObjectArrayMap<>());
         }
 
         @Override
