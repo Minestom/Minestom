@@ -51,8 +51,8 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<List<ItemStack>> BUNDLE_CONTENTS = declare("bundle_contents", NetworkBuffer.ITEM.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
     ItemComponent<Void> POTION_CONTENTS = declare("potion_contents", null, null); //todo
     ItemComponent<Void> SUSPICIOUS_STEW_EFFECTS = declare("suspicious_stew_effects", null, null); //todo
-    ItemComponent<Void> WRITABLE_BOOK_CONTENT = declare("writable_book_content", null, null); //todo
-    ItemComponent<Void> WRITTEN_BOOK_CONTENT = declare("written_book_content", null, null); //todo
+    ItemComponent<WritableBookContent> WRITABLE_BOOK_CONTENT = declare("writable_book_content", WritableBookContent.NETWORK_TYPE, WritableBookContent.NBT_TYPE);
+    ItemComponent<WrittenBookContent> WRITTEN_BOOK_CONTENT = declare("written_book_content", WrittenBookContent.NETWORK_TYPE, WrittenBookContent.NBT_TYPE);
     ItemComponent<Void> TRIM = declare("trim", null, null); //todo
     ItemComponent<Void> DEBUG_STICK_STATE = declare("debug_stick_state", null, null); //todo
     ItemComponent<CustomData> ENTITY_DATA = declare("entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
@@ -76,8 +76,11 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<SeededContainerLoot> CONTAINER_LOOT = declare("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
     @NotNull T read(@NotNull BinaryTag tag);
+    @NotNull BinaryTag write(@NotNull T value);
 
     @NotNull T read(@NotNull NetworkBuffer reader);
+    void write(@NotNull NetworkBuffer writer, @NotNull T value);
+
 
     static @Nullable ItemComponent<?> fromNamespaceId(@NotNull String namespaceId) {
         return ItemComponentImpl.NAMESPACES.get(namespaceId);
