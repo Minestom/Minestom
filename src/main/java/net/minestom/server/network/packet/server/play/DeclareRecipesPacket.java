@@ -70,7 +70,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         private DeclaredShapelessCraftingRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
                     reader.readEnum(RecipeCategory.Crafting.class),
-                    reader.readCollection(Ingredient::new, MAX_INGREDIENTS), reader.read(ITEM));
+                    reader.readCollection(Ingredient::new, MAX_INGREDIENTS), reader.read(ItemStack.NETWORK_TYPE));
         }
 
         @Override
@@ -78,7 +78,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             writer.write(STRING, group);
             writer.writeEnum(RecipeCategory.Crafting.class, crafting);
             writer.writeCollection(ingredients);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
         }
 
         @Override
@@ -114,7 +114,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             for (int slot = 0; slot < width * height; slot++) {
                 ingredients.add(new Ingredient(reader));
             }
-            ItemStack result = reader.read(ITEM);
+            ItemStack result = reader.read(ItemStack.NETWORK_TYPE);
             boolean showNotification = reader.read(BOOLEAN);
             return new DeclaredShapedCraftingRecipe(recipeId, group, category, width, height, ingredients, result, showNotification);
         }
@@ -128,7 +128,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             for (Ingredient ingredient : ingredients) {
                 ingredient.write(writer);
             }
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
             writer.write(BOOLEAN, showNotification);
         }
 
@@ -145,7 +145,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         public DeclaredSmeltingRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
-                    new Ingredient(reader), reader.read(ITEM),
+                    new Ingredient(reader), reader.read(ItemStack.NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
         }
 
@@ -154,7 +154,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             writer.write(STRING, group);
             writer.writeEnum(RecipeCategory.Cooking.class, category);
             writer.write(ingredient);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
             writer.write(FLOAT, experience);
             writer.write(VAR_INT, cookingTime);
         }
@@ -172,7 +172,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         public DeclaredBlastingRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
-                    new Ingredient(reader), reader.read(ITEM),
+                    new Ingredient(reader), reader.read(ItemStack.NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
         }
 
@@ -181,7 +181,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             writer.write(STRING, group);
             writer.writeEnum(RecipeCategory.Cooking.class, category);
             writer.write(ingredient);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
             writer.write(FLOAT, experience);
             writer.write(VAR_INT, cookingTime);
         }
@@ -199,7 +199,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         public DeclaredSmokingRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
-                    new Ingredient(reader), reader.read(ITEM),
+                    new Ingredient(reader), reader.read(ItemStack.NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
         }
 
@@ -208,7 +208,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             writer.write(STRING, group);
             writer.writeEnum(RecipeCategory.Cooking.class, category);
             writer.write(ingredient);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
             writer.write(FLOAT, experience);
             writer.write(VAR_INT, cookingTime);
         }
@@ -226,7 +226,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         public DeclaredCampfireCookingRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
-                    new Ingredient(reader), reader.read(ITEM),
+                    new Ingredient(reader), reader.read(ItemStack.NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
         }
 
@@ -235,7 +235,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             writer.write(STRING, group);
             writer.writeEnum(RecipeCategory.Cooking.class, category);
             writer.write(ingredient);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
             writer.write(FLOAT, experience);
             writer.write(VAR_INT, cookingTime);
         }
@@ -250,14 +250,14 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                             Ingredient ingredient, ItemStack result) implements DeclaredRecipe {
         public DeclaredStonecutterRecipe(@NotNull NetworkBuffer reader) {
             this(reader.read(STRING), reader.read(STRING),
-                    new Ingredient(reader), reader.read(ITEM));
+                    new Ingredient(reader), reader.read(ItemStack.NETWORK_TYPE));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(STRING, group);
             writer.write(ingredient);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
         }
 
         @Override
@@ -270,7 +270,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                                   Ingredient base, Ingredient addition,
                                                   ItemStack result) implements DeclaredRecipe {
         public DeclaredSmithingTransformRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new Ingredient(reader), new Ingredient(reader), new Ingredient(reader), reader.read(ITEM));
+            this(reader.read(STRING), new Ingredient(reader), new Ingredient(reader), new Ingredient(reader), reader.read(ItemStack.NETWORK_TYPE));
         }
 
         @Override
@@ -278,7 +278,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             writer.write(template);
             writer.write(base);
             writer.write(addition);
-            writer.write(ITEM, result);
+            writer.write(ItemStack.NETWORK_TYPE, result);
         }
 
         @Override
@@ -312,11 +312,11 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         public Ingredient(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(ITEM, MAX_INGREDIENTS));
+            this(reader.readCollection(ItemStack.NETWORK_TYPE, MAX_INGREDIENTS));
         }
 
         public void write(@NotNull NetworkBuffer writer) {
-            writer.writeCollection(ITEM, items);
+            writer.writeCollection(ItemStack.NETWORK_TYPE, items);
         }
     }
 }
