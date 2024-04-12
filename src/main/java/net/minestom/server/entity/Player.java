@@ -18,6 +18,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
@@ -48,9 +49,10 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.WrittenBookMeta;
+import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
@@ -181,7 +183,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected PlayerInventory inventory;
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
-    private boolean didCloseInventory;
+    private boolean skipClosePacket;
 
     private byte heldSlot;
 
@@ -1000,13 +1002,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             closeInventory();
         }
 
+        // TODO: when adventure updates, delete this
+        String title = PlainTextComponentSerializer.plainText().serialize(book.title());
+        String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
-                        .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
-                        .author(book.author())
-                        .title(book.title())
-                        .pages(book.pages()))
+                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(book.pages(), title, author, 0, false))
                 .build();
+
         // Set book in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
         // Open the book
@@ -1726,6 +1728,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return openInventory;
     }
 
+    private void tryCloseInventory(boolean skipClosePacket) {
+        var closedInventory = getOpenInventory();
+        if (closedInventory == null) return;
+
+        this.skipClosePacket = skipClosePacket;
+
+        if (closedInventory.removeViewer(this)) {
+            if (closedInventory == getOpenInventory()) {
+                this.openInventory = null;
+            }
+        }
+    }
+
     /**
      * Opens the specified Inventory, close the previous inventory if existing.
      *
@@ -1736,21 +1751,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            Inventory openInventory = getOpenInventory();
-            if (openInventory != null) {
-                openInventory.removeViewer(this);
-            }
+            tryCloseInventory(true);
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory == null) {
-                // just close the inventory
-                return;
+            if (newInventory.addViewer(this)) {
+                this.openInventory = newInventory;
             }
-
-            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
-                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
-            newInventory.addViewer(this);
-            this.openInventory = newInventory;
         });
         return !inventoryOpenEvent.isCancelled();
     }
@@ -1799,27 +1805,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used internally to prevent an inventory click to be processed
-     * when the inventory listeners closed the inventory.
-     * <p>
-     * Should only be used within an inventory listener (event or condition).
-     *
-     * @return true if the inventory has been closed, false otherwise
-     */
-    public boolean didCloseInventory() {
-        return didCloseInventory;
-    }
-
-    /**
-     * Used internally to reset the didCloseInventory field.
+     * Used internally to reset the skipClosePacket field, which determines when sending the close inventory packet
+     * should be skipped.
      * <p>
      * Shouldn't be used externally without proper understanding of its consequence.
      *
-     * @param didCloseInventory the new didCloseInventory field
+     * @param skipClosePacket the new skipClosePacket field
      */
     @ApiStatus.Internal
-    public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
-        this.didCloseInventory = didCloseInventory;
+    public void UNSAFE_changeSkipClosePacket(boolean skipClosePacket) {
+        this.skipClosePacket = skipClosePacket;
     }
 
     public int getNextTeleportId() {

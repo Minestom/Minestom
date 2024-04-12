@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.item.component.CustomData;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.item.component.ItemComponent;
 import net.minestom.server.item.component.ItemComponentMap;
 import net.minestom.server.inventory.ContainerInventory;
@@ -32,6 +33,8 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
      * Constant AIR item. Should be used instead of 'null'.
      */
     @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
+
+    @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
 
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Builder builder(@NotNull Material material) {
@@ -93,7 +96,7 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
 
     @Contract(value = "_, _ -> new", pure = true)
     default <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        return withMeta(builder -> builder.set(tag, value));
+        return with(ItemComponent.CUSTOM_DATA, get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
     }
 
     @Override
