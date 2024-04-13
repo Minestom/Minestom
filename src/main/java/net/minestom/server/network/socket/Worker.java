@@ -12,6 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -102,8 +103,10 @@ public final class Worker extends MinestomThread {
                             readBuffer.readChannel(channel);
                             connection.processPackets(readBuffer, server.packetProcessor());
                         }
+                    } catch (EOFException e) {
+                        connection.disconnect();
                     } catch (IOException e) {
-                        // TODO print exception? (should ignore disconnection)
+                        e.printStackTrace();
                         connection.disconnect();
                     } catch (Throwable t) {
                         MinecraftServer.getExceptionManager().handleException(t);
