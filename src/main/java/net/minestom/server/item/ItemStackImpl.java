@@ -18,15 +18,21 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+            if (value.isAir()) {
+                buffer.write(NetworkBuffer.VAR_INT, 0);
+                return;
+            }
+
             buffer.write(NetworkBuffer.VAR_INT, value.amount());
+            buffer.write(NetworkBuffer.VAR_INT, value.material().id());
             buffer.write(ItemComponentPatch.NETWORK_TYPE, ((ItemStackImpl) value).components);
         }
 
         @Override
         public ItemStack read(@NotNull NetworkBuffer buffer) {
-            Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
             int amount = buffer.read(NetworkBuffer.VAR_INT);
+            if (amount <= 0) return ItemStack.AIR;
+            Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
             ItemComponentPatch components = buffer.read(ItemComponentPatch.NETWORK_TYPE);
             return new ItemStackImpl(material, amount, components);
         }

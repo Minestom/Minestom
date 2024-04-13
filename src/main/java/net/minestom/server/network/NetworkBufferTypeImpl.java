@@ -25,13 +25,13 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
 
-    record NothingType() implements NetworkBufferTypeImpl<Void> {
+    record NothingType<T>() implements NetworkBufferTypeImpl<T> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, Void value) {
+        public void write(@NotNull NetworkBuffer buffer, T value) {
         }
 
         @Override
-        public Void read(@NotNull NetworkBuffer buffer) {
+        public T read(@NotNull NetworkBuffer buffer) {
             return null;
         }
     }
