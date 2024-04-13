@@ -10,20 +10,20 @@ public interface ItemComponentMap {
         return new ItemComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
     }
 
-    boolean has(@NotNull ItemComponent<?> component);
+    boolean has(@NotNull ItemComponentType<?> component);
 
-    <T> @Nullable T get(@NotNull ItemComponent<T> component);
+    <T> @Nullable T get(@NotNull ItemComponentType<T> component);
 
-    default <T> @NotNull T get(@NotNull ItemComponent<T> component, @NotNull T defaultValue) {
+    default <T> @NotNull T get(@NotNull ItemComponentType<T> component, @NotNull T defaultValue) {
         T value = get(component);
         return value != null ? value : defaultValue;
     }
 
     interface Builder extends ItemComponentMap {
 
-        @NotNull Builder set(@NotNull ItemComponent<?> component, @Nullable Object value);
+        @NotNull Builder set(@NotNull ItemComponentType<?> component, @Nullable Object value);
 
-        @NotNull Builder remove(@NotNull ItemComponent<?> component);
+        @NotNull Builder remove(@NotNull ItemComponentType<?> component);
 
         @NotNull ItemComponentMap build();
     }
