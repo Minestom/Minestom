@@ -40,7 +40,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                     //noinspection unchecked
                     ItemComponentType<Object> type = (ItemComponentType<Object>) ItemComponentType.fromId(entry.getIntKey());
                     assert type != null;
-                    type.write(entry.getValue());
+                    type.write(buffer, entry.getValue());
                 }
             }
             for (Int2ObjectMap.Entry<Object> entry : value.patch.int2ObjectEntrySet()) {

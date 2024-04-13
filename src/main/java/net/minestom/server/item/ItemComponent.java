@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.color.Color;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public final class ItemComponent {
     public static final ItemComponentType<Void> HIDE_ADDITIONAL_TOOLTIP = declare("hide_additional_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
     public static final ItemComponentType<Void> HIDE_TOOLTIP = declare("hide_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
     public static final ItemComponentType<Integer> REPAIR_COST = declare("repair_cost", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
-    public static final ItemComponentType<Void> CREATIVE_SLOT_LOCK = declare("creative_slot_lock", NetworkBuffer.NOTHING, null);
+    public static final ItemComponentType<Unit> CREATIVE_SLOT_LOCK = declare("creative_slot_lock", NetworkBuffer.NOTHING_V2, null);
     public static final ItemComponentType<Boolean> ENCHANTMENT_GLINT_OVERRIDE = declare("enchantment_glint_override", NetworkBuffer.BOOLEAN, BinaryTagSerializer.BOOLEAN);
     public static final ItemComponentType<Void> INTANGIBLE_PROJECTILE = declare("intangible_projectile", null, BinaryTagSerializer.NOTHING);
     public static final ItemComponentType<Void> FOOD = declare("food", null, null); //todo

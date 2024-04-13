@@ -11,7 +11,6 @@ import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemComponentMap;
 import net.minestom.server.item.ItemComponentType;
 import net.minestom.server.item.Material;
@@ -474,16 +473,18 @@ public final class Registry {
 
     public static final class MaterialEntry implements Entry {
         private final NamespaceID namespace;
+        private final Properties main;
         private final int id;
         private final String translationKey;
         private final Supplier<Block> blockSupplier;
-        private final ItemComponentMap prototype;
+        private ItemComponentMap prototype;
 
         private final EquipmentSlot equipmentSlot;
         //        private final EntityType entityType; //todo
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
+            this.main = main;
             this.custom = custom;
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
@@ -491,34 +492,6 @@ public final class Registry {
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
-            }
-            try {
-
-                try {
-                    Class.forName(ItemComponent.class.getName());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-                ItemComponentMap.Builder builder = ItemComponentMap.builder();
-                for (Map.Entry<String, Object> entry : main.section("components")) {
-                    try {
-                        //noinspection unchecked
-                        ItemComponentType<Object> component = (ItemComponentType<Object>) ItemComponentType.fromNamespaceId(entry.getKey());
-                        Check.notNull(component, "Unknown component: " + entry.getKey());
-
-                        byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
-                        BinaryTagReader reader = new BinaryTagReader(new DataInputStream(new ByteArrayInputStream(rawValue)));
-
-                        //todo remove this try/catch, just so i dont need to impl all comps yet
-                        builder.set(component, component.read(reader.readNameless()));
-                    } catch (NullPointerException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-                this.prototype = builder.build();
-            } catch (IOException e) {
-                throw new RuntimeException("failed to parse material registry: " + namespace, e);
             }
             {
                 final Properties armorProperties = main.section("armorProperties");
@@ -561,6 +534,30 @@ public final class Registry {
         }
 
         public @NotNull ItemComponentMap prototype() {
+            if (prototype == null) {
+                try {
+                    ItemComponentMap.Builder builder = ItemComponentMap.builder();
+                    for (Map.Entry<String, Object> entry : main.section("components")) {
+                        try {
+                            //noinspection unchecked
+                            ItemComponentType<Object> component = (ItemComponentType<Object>) ItemComponentType.fromNamespaceId(entry.getKey());
+                            Check.notNull(component, "Unknown component: " + entry.getKey());
+
+                            byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
+                            BinaryTagReader reader = new BinaryTagReader(new DataInputStream(new ByteArrayInputStream(rawValue)));
+
+                            //todo remove this try/catch, just so i dont need to impl all comps yet
+                            builder.set(component, component.read(reader.readNameless()));
+                        } catch (NullPointerException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                    this.prototype = builder.build();
+                } catch (IOException e) {
+                    throw new RuntimeException("failed to parse material registry: " + namespace, e);
+                }
+            }
+
             return prototype;
         }
 
