@@ -15,6 +15,7 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
@@ -32,13 +33,9 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-
-            Class.forName("net.minestom.server.item.ItemComponent");
-            Class.forName("net.minestom.server.item.ItemStack");
+            Class.forName(ItemComponent.class.getName());
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Failed to load Minestom classes, make sure you are using the correct dependencies");
-            return;
+            throw new RuntimeException(e);
         }
         System.setProperty("minestom.experiment.pose-updates", "true");
 
