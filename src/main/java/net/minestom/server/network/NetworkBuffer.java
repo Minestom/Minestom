@@ -13,6 +13,7 @@ import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
@@ -29,7 +30,8 @@ import java.util.function.Function;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
-    public static final Type<Void> NOTHING = new NetworkBufferTypeImpl.NothingType();
+    public static final Type<Void> NOTHING = new NetworkBufferTypeImpl.NothingType<>();
+    public static final Type<Unit> NOTHING_V2 = new NetworkBufferTypeImpl.NothingType<>();
     public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     public static final Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
     public static final Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
