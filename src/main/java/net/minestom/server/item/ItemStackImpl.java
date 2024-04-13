@@ -47,12 +47,12 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     }
 
     @Override
-    public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
+    public <T> @Nullable T get(@NotNull ItemComponentType<T> component) {
         return components.get(material.prototype(), component);
     }
 
     @Override
-    public boolean has(@NotNull ItemComponent<?> component) {
+    public boolean has(@NotNull ItemComponentType<?> component) {
         return components.has(material.prototype(), component);
     }
 
@@ -75,12 +75,12 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     }
 
     @Override
-    public @NotNull <T> ItemStack with(@NotNull ItemComponent<T> component, T value) {
+    public @NotNull <T> ItemStack with(@NotNull ItemComponentType<T> component, T value) {
         return new ItemStackImpl(material, amount, components.with(component, value));
     }
 
     @Override
-    public @NotNull ItemStack without(@NotNull ItemComponent<?> component) {
+    public @NotNull ItemStack without(@NotNull ItemComponentType<?> component) {
         return new ItemStackImpl(material, amount, components.without(component));
     }
 
@@ -145,13 +145,13 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
         }
 
         @Override
-        public <T> ItemStack.@NotNull Builder set(@NotNull ItemComponent<T> component, T value) {
+        public <T> ItemStack.@NotNull Builder set(@NotNull ItemComponentType<T> component, T value) {
             components.set(component, value);
             return this;
         }
 
         @Override
-        public ItemStack.@NotNull Builder remove(@NotNull ItemComponent<?> component) {
+        public ItemStack.@NotNull Builder remove(@NotNull ItemComponentType<?> component) {
             components.remove(component);
             return this;
         }
