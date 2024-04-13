@@ -13,6 +13,7 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemComponentMap;
+import net.minestom.server.item.ItemComponentType;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -492,11 +493,18 @@ public final class Registry {
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
             }
             try {
+
+                try {
+                    Class.forName(ItemComponent.class.getName());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
                 ItemComponentMap.Builder builder = ItemComponentMap.builder();
                 for (Map.Entry<String, Object> entry : main.section("components")) {
                     try {
                         //noinspection unchecked
-                        ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
+                        ItemComponentType<Object> component = (ItemComponentType<Object>) ItemComponentType.fromNamespaceId(entry.getKey());
                         Check.notNull(component, "Unknown component: " + entry.getKey());
 
                         byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
