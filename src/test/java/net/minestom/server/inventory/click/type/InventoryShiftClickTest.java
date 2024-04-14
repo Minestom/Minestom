@@ -2,10 +2,13 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.Click.Change.*;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static net.minestom.server.inventory.click.ClickUtils.*;
 
@@ -17,132 +20,133 @@ public class InventoryShiftClickTest {
     
     @Test
     public void testNoChanges() {
-        assertClick(builder -> builder, new Click.Info.LeftShift(0), builder -> builder);
-        assertClick(builder -> builder, new Click.Info.RightShift(0), builder -> builder);
+        assertClick(List.of(), new Click.Info.LeftShift(0), List.of());
+        assertClick(List.of(), new Click.Info.RightShift(0), List.of());
     }
 
     @Test
     public void testSimpleTransfer() {
         assertClick(
-                builder -> builder.setPlayer(9, ItemStack.of(Material.STONE, 32)),
+                List.of(new Player(9, magic(32))),
                 new Click.Info.LeftShift(SIZE),
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 32)).setPlayer(9, ItemStack.AIR)
+                List.of(new Main(0, magic(32)), new Player(9, ItemStack.AIR))
         );
     }
 
     @Test
     public void testSeparatedTransfer() {
         assertClick(
-                builder -> builder
-                        .setPlayer(9, ItemStack.of(Material.STONE, 64))
-                        .set(0, ItemStack.of(Material.STONE, 32))
-                        .set(1, ItemStack.of(Material.STONE, 32))
-                        ,
+                List.of(
+                        new Player(9, magic(64)),
+                        new Main(0, magic(32)),
+                        new Main(1, magic(32))
+                ),
                 new Click.Info.LeftShift(SIZE),
-                builder -> builder
-                        .setPlayer(9, ItemStack.AIR)
-                        .set(0, ItemStack.of(Material.STONE, 64))
-                        .set(1, ItemStack.of(Material.STONE, 64))
-                        
+                List.of(
+                        new Player(9, ItemStack.AIR),
+                        new Main(0, magic(64)),
+                        new Main(1, magic(64))
+                )
         );
     }
 
     @Test
     public void testSeparatedAndNewTransfer() {
         assertClick(
-                builder -> builder
-                        .setPlayer(9, ItemStack.of(Material.STONE, 64))
-                        .set(0, ItemStack.of(Material.STONE, 32)),
+                List.of(
+                        new Player(9, magic(64)),
+                        new Main(0, magic(32))
+                ),
                 new Click.Info.LeftShift(SIZE),
-                builder -> builder
-                        .setPlayer(9, ItemStack.AIR)
-                        .set(0, ItemStack.of(Material.STONE, 64))
-                        .set(1, ItemStack.of(Material.STONE, 32))
-                        
+                List.of(
+                        new Player(9, ItemStack.AIR),
+                        new Main(0, magic(64)),
+                        new Main(1, magic(32))
+                )
         );
     }
 
     @Test
     public void testPartialTransfer() {
         assertClick(
-                builder -> builder
-                        .setPlayer(9, ItemStack.of(Material.STONE, 64))
-                        .set(0, ItemStack.of(Material.STONE, 32))
-                        .set(1, ItemStack.of(Material.DIRT))
-                        .set(2, ItemStack.of(Material.DIRT))
-                        .set(3, ItemStack.of(Material.DIRT))
-                        .set(4, ItemStack.of(Material.DIRT)),
+                List.of(
+                        new Player(9, magic(64)),
+                        new Main(0, magic(32)),
+                        new Main(1, magic2(1)),
+                        new Main(2, magic2(1)),
+                        new Main(3, magic2(1)),
+                        new Main(4, magic2(1))
+                ),
                 new Click.Info.LeftShift(SIZE),
-                builder -> builder
-                        .setPlayer(9, ItemStack.of(Material.STONE, 32))
-                        .set(0, ItemStack.of(Material.STONE, 64))
-                        
+                List.of(new Player(9, magic(32)), new Main(0, magic(64)))
         );
     }
 
     @Test
     public void testCannotTransfer() {
         assertClick(
-                builder -> builder
-                        .setPlayer(9, ItemStack.of(Material.STONE, 64))
-                        .set(0, ItemStack.of(Material.STONE, 64))
-                        .set(1, ItemStack.of(Material.DIRT))
-                        .set(2, ItemStack.of(Material.DIRT))
-                        .set(3, ItemStack.of(Material.DIRT))
-                        .set(4, ItemStack.of(Material.DIRT)),
+                List.of(
+                        new Player(9, magic(64)),
+                        new Main(0, magic(64)),
+                        new Main(1, magic2(1)),
+                        new Main(2, magic2(1)),
+                        new Main(3, magic2(1)),
+                        new Main(4, magic2(1))
+                ),
                 new Click.Info.LeftShift(SIZE), // Equivalent to player slot 9
-                builder -> builder
+                List.of()
         );
 
         assertClick(
-                builder -> builder
-                        .setPlayer(9, ItemStack.of(Material.STONE, 64))
-                        .set(0, ItemStack.of(Material.DIRT))
-                        .set(1, ItemStack.of(Material.DIRT))
-                        .set(2, ItemStack.of(Material.DIRT))
-                        .set(3, ItemStack.of(Material.DIRT))
-                        .set(4, ItemStack.of(Material.DIRT)),
+                List.of(
+                        new Player(9, magic(64)),
+                        new Main(0, magic2(1)),
+                        new Main(1, magic2(1)),
+                        new Main(2, magic2(1)),
+                        new Main(3, magic2(1)),
+                        new Main(4, magic2(1))
+                ),
                 new Click.Info.LeftShift(SIZE), // Equivalent to player slot 9
-                builder -> builder
+                List.of()
         );
     }
 
     @Test
     public void testPlayerInteraction() {
         assertPlayerClick(
-                builder -> builder.set(9, ItemStack.of(Material.STONE, 32)),
+                List.of(new Main(9, magic(32))),
                 new Click.Info.LeftShift(9),
-                builder -> builder.set(9, ItemStack.AIR).set(0, ItemStack.of(Material.STONE, 32))
+                List.of(new Main(9, ItemStack.AIR), new Main(0, magic(32)))
         );
 
         assertPlayerClick(
-                builder -> builder.set(8, ItemStack.of(Material.STONE, 32)),
+                List.of(new Main(8, magic(32))),
                 new Click.Info.LeftShift(8),
-                builder -> builder.set(8, ItemStack.AIR).set(9, ItemStack.of(Material.STONE, 32))
+                List.of(new Main(8, ItemStack.AIR), new Main(9, magic(32)))
         );
 
         assertPlayerClick(
-                builder -> builder.set(9, ItemStack.of(Material.IRON_CHESTPLATE)),
+                List.of(new Main(9, ItemStack.of(Material.IRON_CHESTPLATE))),
                 new Click.Info.LeftShift(9),
-                builder -> builder.set(9, ItemStack.AIR).set(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE))
+                List.of(new Main(9, ItemStack.AIR), new Main(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE)))
         );
 
         assertPlayerClick(
-                builder -> builder.set(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE)),
+                List.of(new Main(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE))),
                 new Click.Info.LeftShift(PlayerInventoryUtils.CHESTPLATE_SLOT),
-                builder -> builder.set(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.AIR).set(9, ItemStack.of(Material.IRON_CHESTPLATE))
+                List.of(new Main(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.AIR), new Main(9, ItemStack.of(Material.IRON_CHESTPLATE)))
         );
 
         assertPlayerClick(
-                builder -> builder.set(9, ItemStack.of(Material.SHIELD)),
+                List.of(new Main(9, ItemStack.of(Material.SHIELD))),
                 new Click.Info.LeftShift(9),
-                builder -> builder.set(9, ItemStack.AIR).set(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))
+                List.of(new Main(9, ItemStack.AIR), new Main(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)))
         );
 
         assertPlayerClick(
-                builder -> builder.set(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)),
+                List.of(new Main(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))),
                 new Click.Info.LeftShift(PlayerInventoryUtils.OFF_HAND_SLOT),
-                builder -> builder.set(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.AIR).set(9, ItemStack.of(Material.SHIELD))
+                List.of(new Main(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.AIR), new Main(9, ItemStack.of(Material.SHIELD)))
         );
     }
 
