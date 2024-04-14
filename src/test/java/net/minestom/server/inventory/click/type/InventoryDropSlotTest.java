@@ -2,11 +2,15 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.Click.Change.DropFromPlayer;
+import net.minestom.server.inventory.click.Click.Change.Main;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static net.minestom.server.inventory.click.ClickUtils.assertClick;
+import static net.minestom.server.inventory.click.ClickUtils.magic;
 
 public class InventoryDropSlotTest {
 
@@ -16,25 +20,25 @@ public class InventoryDropSlotTest {
 
     @Test
     public void testNoChanges() {
-        assertClick(builder -> builder, new Click.Info.DropSlot(0, false), builder -> builder);
-        assertClick(builder -> builder, new Click.Info.DropSlot(0, true), builder -> builder);
+        assertClick(List.of(), new Click.Info.DropSlot(0, false), List.of());
+        assertClick(List.of(), new Click.Info.DropSlot(0, true), List.of());
     }
 
     @Test
     public void testDropEntireStack() {
         assertClick(
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 32)),
+                List.of(new Main(0, magic(32))),
                 new Click.Info.DropSlot(0, true),
-                builder -> builder.set(0, ItemStack.AIR).sideEffects(new Click.SideEffect.DropFromPlayer(ItemStack.of(Material.STONE, 32)))
+                List.of(new Main(0, ItemStack.AIR), new DropFromPlayer(magic(32)))
         );
     }
 
     @Test
     public void testDropSingleItem() {
         assertClick(
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 32)),
+                List.of(new Main(0, magic(32))),
                 new Click.Info.DropSlot(0, false),
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 31)).sideEffects(new Click.SideEffect.DropFromPlayer(ItemStack.of(Material.STONE, 1)))
+                List.of(new Main(0, magic(31)), new DropFromPlayer(magic(1)))
         );
     }
 
