@@ -15,6 +15,7 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -33,7 +34,7 @@ public non-sealed class ContainerInventory extends InventoryImpl {
      * @param info      the click info describing the click
      * @return the click result, or null if the click did not occur
      */
-    public static @Nullable Click.Result handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull Click.Info info,
+    public static @Nullable List<Click.Change> handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull Click.Info info,
                                                      @NotNull ClickProcessors.InventoryProcessor processor) {
         PlayerInventory playerInventory = player.getInventory();
 
@@ -42,13 +43,13 @@ public non-sealed class ContainerInventory extends InventoryImpl {
         if (!preClickEvent.isCancelled()) {
             final Click.Info newInfo = preClickEvent.getClickInfo();
             Click.Getter getter = new Click.Getter(inventory::getItemStack, playerInventory::getItemStack, playerInventory.getCursorItem(), inventory.getSize());
-            final Click.Result changes = processor.apply(newInfo, getter);
+            final List<Click.Change> changes = processor.apply(newInfo, getter);
 
             InventoryClickEvent clickEvent = new InventoryClickEvent(playerInventory, inventory, player, newInfo, changes);
             EventDispatcher.call(clickEvent);
 
             if (!clickEvent.isCancelled()) {
-                final Click.Result newChanges = clickEvent.getChanges();
+                final List<Click.Change> newChanges = clickEvent.getChanges();
 
                 apply(newChanges, player, inventory);
 
@@ -72,29 +73,22 @@ public non-sealed class ContainerInventory extends InventoryImpl {
         return null;
     }
 
-    public static void apply(@NotNull Click.Result result, @NotNull Player player, @NotNull Inventory inventory) {
+    public static void apply(@NotNull List<Click.Change> changes, @NotNull Player player, @NotNull Inventory inventory) {
         PlayerInventory playerInventory = player.getInventory();
 
-        for (var change : result.changes()) {
-            if (change instanceof Click.Change.Main(int slot, ItemStack item)) {
-                if (slot < inventory.getSize()) {
-                    inventory.setItemStack(slot, item);
-                } else {
-                    int converted = PlayerInventoryUtils.protocolToMinestom(slot, inventory.getSize());
-                    playerInventory.setItemStack(converted, item);
+        for (var change : changes) {
+            switch (change) {
+                case Click.Change.Main(int slot, ItemStack item) -> {
+                    if (slot < inventory.getSize()) {
+                        inventory.setItemStack(slot, item);
+                    } else {
+                        int converted = PlayerInventoryUtils.protocolToMinestom(slot, inventory.getSize());
+                        playerInventory.setItemStack(converted, item);
+                    }
                 }
-            } else if (change instanceof Click.Change.Player(int slot, ItemStack item)) {
-                playerInventory.setItemStack(slot, item);
-            }
-        }
-
-        if (result.newCursorItem() != null) {
-            playerInventory.setCursorItem(result.newCursorItem());
-        }
-
-        if (result.sideEffects() instanceof Click.SideEffect.DropFromPlayer drop) {
-            for (ItemStack item : drop.items()) {
-                player.dropItem(item);
+                case Click.Change.Player(int slot, ItemStack item) -> playerInventory.setItemStack(slot, item);
+                case Click.Change.Cursor(ItemStack item) -> playerInventory.setCursorItem(item);
+                case Click.Change.DropFromPlayer(ItemStack item) -> player.dropItem(item);
             }
         }
     }
@@ -152,7 +146,7 @@ public non-sealed class ContainerInventory extends InventoryImpl {
     }
 
     @Override
-    public @Nullable Click.Result handleClick(@NotNull Player player, Click.@NotNull Info info) {
+    public @Nullable List<Click.Change> handleClick(@NotNull Player player, Click.@NotNull Info info) {
         return ContainerInventory.handleClick(this, player, info,
                 ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
     }

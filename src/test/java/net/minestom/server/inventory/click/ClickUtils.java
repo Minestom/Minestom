@@ -5,6 +5,7 @@ import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.*;
-import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,6 +29,14 @@ public final class ClickUtils {
 
     public static @NotNull Click.Preprocessor createPreprocessor() {
         return new Click.Preprocessor();
+    }
+
+    public static @NotNull ItemStack magic(int amount) {
+        return ItemStack.of(Material.STONE, amount);
+    }
+
+    public static @NotNull ItemStack magic2(int amount) {
+        return ItemStack.of(Material.DIRT, amount);
     }
 
     public static @NotNull Player createPlayer() {
@@ -48,67 +56,56 @@ public final class ClickUtils {
         });
     }
 
-    public static void assertClick(@NotNull UnaryOperator<Click.Setter> initialChanges, @NotNull Click.Info info, @NotNull UnaryOperator<Click.Setter> expectedChanges) {
+    public static void assertClick(@NotNull List<Click.Change> initial, @NotNull Click.Info info, @NotNull List<Click.Change> expected) {
         var player = createPlayer();
         var inventory = createInventory();
 
-        var expected = expectedChanges.apply(new Click.Setter()).build();
-
-        ContainerInventory.apply(initialChanges.apply(new Click.Setter()).build(), player, inventory);
+        ContainerInventory.apply(initial, player, inventory);
         var actual = inventory.handleClick(player, info);
 
         assertChanges(expected, actual, inventory.getSize());
     }
 
-    public static void assertPlayerClick(@NotNull UnaryOperator<Click.Setter> initialChanges, @NotNull Click.Info info, @NotNull UnaryOperator<Click.Setter> expectedChanges) {
+    public static void assertPlayerClick(@NotNull List<Click.Change> initial, @NotNull Click.Info info, @NotNull List<Click.Change> expected) {
         var player = createPlayer();
         var inventory = player.getInventory();
 
-        var expected = expectedChanges.apply(new Click.Setter()).build();
-
-        ContainerInventory.apply(initialChanges.apply(new Click.Setter()).build(), player, inventory);
+        ContainerInventory.apply(initial, player, inventory);
         var actual = inventory.handleClick(player, info);
 
         assertChanges(expected, actual, inventory.getSize());
     }
 
-    public static void assertChanges(Click.Result expected, Click.Result actual, int size) {
-        if (expected == null || actual == null) {
-            assertEquals(expected, actual);
-            return;
-        }
-
-        assertEquals(foldMain(expected.changes(), size), foldMain(actual.changes(), size));
-        assertEquals(foldPlayer(expected.changes(), size), foldPlayer(actual.changes(), size));
-
-        assertEquals(expected.newCursorItem(), actual.newCursorItem());
-        assertEquals(expected.sideEffects(), actual.sideEffects());
+    public static void assertChanges(List<Click.Change> expected, List<Click.Change> actual, int size) {
+        assertEquals(ChangeResult.make(expected, size), ChangeResult.make(actual, size));
     }
 
-    private static Map<Integer, ItemStack> foldMain(List<Click.Change> changes, int size) {
-        Map<Integer, ItemStack> map = new HashMap<>();
+    private record ChangeResult(Map<Integer, ItemStack> main, Map<Integer, ItemStack> player,
+                                @Nullable ItemStack cursor, List<ItemStack> drops) {
+        private static ChangeResult make(@NotNull List<Click.Change> changes, int size) {
+            Map<Integer, ItemStack> main = new HashMap<>();
+            Map<Integer, ItemStack> player = new HashMap<>();
+            @Nullable ItemStack cursor = null;
+            List<ItemStack> drops = new ArrayList<>();
 
-        for (var change : changes) {
-            if (change instanceof Click.Change.Main(int slot, ItemStack item) && slot < size) {
-                map.put(slot, item);
+            for (var change : changes) {
+                switch (change) {
+                    case Click.Change.Main(int slot, ItemStack item) -> {
+                        if (slot < size) {
+                            main.put(slot, item);
+                        } else {
+                            player.put(PlayerInventoryUtils.protocolToMinestom(slot, size), item);
+                        }
+                    }
+                    case Click.Change.Player(int slot, ItemStack item) -> player.put(slot, item);
+                    case Click.Change.Cursor(ItemStack item) -> cursor = item;
+                    case Click.Change.DropFromPlayer(ItemStack item) -> drops.add(item);
+                }
             }
+
+            return new ChangeResult(main, player, cursor, drops);
         }
 
-        return map;
-    }
-
-    private static Map<Integer, ItemStack> foldPlayer(List<Click.Change> changes, int size) {
-        Map<Integer, ItemStack> map = new HashMap<>();
-
-        for (var change : changes) {
-            if (change instanceof Click.Change.Main(int slot, ItemStack item) && slot >= size) {
-                map.put(PlayerInventoryUtils.protocolToMinestom(slot, size), item);
-            } else if (change instanceof Click.Change.Player(int slot, ItemStack item)) {
-                map.put(slot, item);
-            }
-        }
-
-        return map;
     }
 
     public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
