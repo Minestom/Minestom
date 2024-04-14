@@ -86,7 +86,7 @@ public final class Click {
         public @Nullable Click.Info processPlayerClick(@NotNull ClientClickWindowPacket packet, boolean isCreative) {
             if (requireCreative(packet) && !isCreative) return null;
             final int slot = packet.slot() != -999 ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : -999;
-            final int maxSize = PlayerInventoryUtils.INNER_SIZE;
+            final int maxSize = PlayerInventoryUtils.INVENTORY_SIZE;
             return process(packet.clickType(), slot, packet.button(), slot >= 0 && slot < maxSize);
         }
 
