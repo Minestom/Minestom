@@ -18,16 +18,24 @@ public final class Click {
      * The inventory used should be known from context.
      */
     public sealed interface Info {
-        record Left(int slot) implements Info {}
-        record Right(int slot) implements Info {}
+        record Left(int slot) implements Info {
+        }
+
+        record Right(int slot) implements Info {
+        }
+
         record Middle(int slot) implements Info {
             // Creative only
         }
 
-        record LeftShift(int slot) implements Info {}
-        record RightShift(int slot) implements Info {}
+        record LeftShift(int slot) implements Info {
+        }
 
-        record Double(int slot) implements Info {}
+        record RightShift(int slot) implements Info {
+        }
+
+        record Double(int slot) implements Info {
+        }
 
         record LeftDrag(List<Integer> slots) implements Info {
             public LeftDrag {
@@ -48,17 +56,29 @@ public final class Click {
             }
         }
 
-        record LeftDropCursor() implements Info {}
-        record RightDropCursor() implements Info {}
-        record MiddleDropCursor() implements Info {}
+        record LeftDropCursor() implements Info {
+        }
 
-        record DropSlot(int slot, boolean all) implements Info {}
+        record RightDropCursor() implements Info {
+        }
 
-        record HotbarSwap(int hotbarSlot, int clickedSlot) implements Info {}
-        record OffhandSwap(int slot) implements Info {}
+        record MiddleDropCursor() implements Info {
+        }
 
-        record CreativeSetItem(int slot, @NotNull ItemStack item) implements Info {}
-        record CreativeDropItem(@NotNull ItemStack item) implements Info {}
+        record DropSlot(int slot, boolean all) implements Info {
+        }
+
+        record HotbarSwap(int hotbarSlot, int clickedSlot) implements Info {
+        }
+
+        record OffhandSwap(int slot) implements Info {
+        }
+
+        record CreativeSetItem(int slot, @NotNull ItemStack item) implements Info {
+        }
+
+        record CreativeDropItem(@NotNull ItemStack item) implements Info {
+        }
     }
 
     /**
@@ -85,27 +105,24 @@ public final class Click {
          * @return the information about the click, or nothing if there was no immediately usable information
          */
         public @Nullable Click.Info processClick(@NotNull ClientClickWindowPacket packet, boolean isCreative, @Nullable Integer containerSize) {
-            if (requireCreative(packet) && !isCreative) return null;
-            final int slot = packet.slot() == -999 ? -999 :
-                    containerSize == null ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : packet.slot();
-            final int maxSize = containerSize != null ? containerSize + PlayerInventoryUtils.INNER_SIZE : PlayerInventoryUtils.INVENTORY_SIZE;
-            if (packet.clickType() == ClientClickWindowPacket.ClickType.PICKUP && slot == -999) {
-                if (packet.button() == 0) return new Info.LeftDropCursor();
-                if (packet.button() == 1) return new Info.RightDropCursor();
-                if (packet.button() == 2) return new Info.MiddleDropCursor();
-            }
-            final boolean valid = slot >= 0 && slot < maxSize;
-            if (!valid) return null;
-            return process(packet.clickType(), slot, packet.button());
-        }
-
-        private boolean requireCreative(ClientClickWindowPacket packet) {
             final byte button = packet.button();
-            return switch (packet.clickType()) {
+            final boolean requireCreative = switch (packet.clickType()) {
                 case CLONE -> true;
                 case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
                 default -> false;
             };
+            if (requireCreative && !isCreative) return null;
+            final int slot = packet.slot() == -999 ? -999 :
+                    containerSize == null ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : packet.slot();
+            final int maxSize = containerSize != null ? containerSize + PlayerInventoryUtils.INNER_SIZE : PlayerInventoryUtils.INVENTORY_SIZE;
+            if (packet.clickType() == ClientClickWindowPacket.ClickType.PICKUP && slot == -999) {
+                if (button == 0) return new Info.LeftDropCursor();
+                if (button == 1) return new Info.RightDropCursor();
+                if (button == 2) return new Info.MiddleDropCursor();
+            }
+            final boolean valid = slot >= 0 && slot < maxSize;
+            if (!valid) return null;
+            return process(packet.clickType(), slot, button);
         }
 
         /**
