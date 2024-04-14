@@ -2,11 +2,13 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
+import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Player;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.inventory.click.ClickUtils.assertClick;
+import java.util.List;
+
+import static net.minestom.server.inventory.click.ClickUtils.*;
 
 public class InventoryHotbarSwapTest {
 
@@ -17,16 +19,16 @@ public class InventoryHotbarSwapTest {
     @Test
     public void testNoChanges() {
         for (int i = 0; i < 9; i++) {
-            assertClick(builder -> builder, new Click.Info.HotbarSwap(i, 9), builder -> builder);
+            assertClick(List.of(), new Click.Info.HotbarSwap(i, 9), List.of());
         }
     }
 
     @Test
     public void testSwappedItems() {
         assertClick(
-                builder -> builder.set(0, ItemStack.of(Material.DIRT)).setPlayer(0, ItemStack.of(Material.STONE)),
+                List.of(new Main(0, magic2(1)), new Player(0, magic(1))),
                 new Click.Info.HotbarSwap(0, 0),
-                builder -> builder.set(0, ItemStack.of(Material.STONE)).setPlayer(0, ItemStack.of(Material.DIRT))
+                List.of(new Main(0, magic(1)), new Player(0, magic2(1)))
         );
     }
 

@@ -158,7 +158,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     }
 
     @Override
-    public @Nullable Click.Result handleClick(@NotNull Player player, @NotNull Click.Info info) {
+    public @Nullable List<Click.Change> handleClick(@NotNull Player player, @NotNull Click.Info info) {
         return ContainerInventory.handleClick(this, player, info, ClickProcessors.PLAYER_PROCESSOR);
     }
 
