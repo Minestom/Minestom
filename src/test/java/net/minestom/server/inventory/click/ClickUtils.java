@@ -105,11 +105,10 @@ public final class ClickUtils {
 
             return new ChangeResult(main, player, cursor, drops);
         }
-
     }
 
     public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
-        assertEquals(info, preprocessor.processContainerClick(packet, createInventory().getSize(), player.isCreative()));
+        assertEquals(info, preprocessor.processClick(packet, player.isCreative(), createInventory().getSize()));
     }
 
     public static void assertProcessed(@NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
