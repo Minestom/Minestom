@@ -9,6 +9,8 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.Click;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Called after {@link InventoryPreClickEvent} and before {@link InventoryPostClickEvent}.
  */
@@ -18,12 +20,12 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent,
     private final Inventory inventory;
     private final Player player;
     private final Click.Info info;
-    private Click.Result changes;
+    private List<Click.Change> changes;
 
     private boolean cancelled;
 
     public InventoryClickEvent(@NotNull PlayerInventory playerInventory, @NotNull Inventory inventory,
-                               @NotNull Player player, @NotNull Click.Info info, @NotNull Click.Result changes) {
+                               @NotNull Player player, @NotNull Click.Info info, @NotNull List<Click.Change> changes) {
         this.playerInventory = playerInventory;
         this.inventory = inventory;
         this.player = player;
@@ -54,7 +56,7 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent,
      *
      * @return the changes
      */
-    public @NotNull Click.Result getChanges() {
+    public @NotNull List<Click.Change> getChanges() {
         return changes;
     }
 
@@ -63,7 +65,7 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent,
      *
      * @param changes the new results
      */
-    public void setChanges(@NotNull Click.Result changes) {
+    public void setChanges(@NotNull List<Click.Change> changes) {
         this.changes = changes;
     }
 

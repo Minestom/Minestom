@@ -205,70 +205,16 @@ public final class Click {
     }
 
     public sealed interface Change {
-        record Main(int slot, @NotNull ItemStack item) implements Change {}
-        record Player(int slot, @NotNull ItemStack item) implements Change {}
-    }
-
-    public static final class Setter {
-        private final List<Change> changes = new ArrayList<>();
-        private @Nullable ItemStack cursor;
-        private @Nullable SideEffect sideEffect;
-
-        Setter() {
+        record Main(int slot, @NotNull ItemStack item) implements Change {
         }
 
-        public @NotNull Setter set(int slot, @NotNull ItemStack item) {
-            changes.add(new Change.Main(slot, item));
-            return this;
+        record Player(int slot, @NotNull ItemStack item) implements Change {
         }
 
-        public @NotNull Setter setPlayer(int slot, @NotNull ItemStack item) {
-            changes.add(new Change.Player(slot, item));
-            return this;
+        record Cursor(@NotNull ItemStack item) implements Change {
         }
 
-        public @NotNull Setter cursor(@Nullable ItemStack newCursorItem) {
-            this.cursor = newCursorItem;
-            return this;
-        }
-
-        public @NotNull Setter sideEffects(@Nullable SideEffect sideEffect) {
-            this.sideEffect = sideEffect;
-            return this;
-        }
-
-        public @NotNull Click.Result build() {
-            return new Result(changes, cursor, sideEffect);
-        }
-    }
-
-    /**
-     * Stores changes that occurred or will occur as the result of a click.
-     *
-     * @param changes                the list of changes that will occur
-     * @param newCursorItem          the player's cursor item after this click. Null indicates no change
-     * @param sideEffects            the side effects of this click
-     */
-    public record Result(@NotNull List<Change> changes, @Nullable ItemStack newCursorItem, @Nullable Click.SideEffect sideEffects) {
-        public static final Result NOTHING = new Result(List.of(), null, null);
-
-        public Result {
-            changes = List.copyOf(changes);
-        }
-    }
-
-    /**
-     * Represents side effects that may occur as the result of an inventory click.
-     */
-    public sealed interface SideEffect {
-        record DropFromPlayer(@NotNull List<@NotNull ItemStack> items) implements SideEffect {
-            public DropFromPlayer {
-                items = List.copyOf(items);
-            }
-
-            public DropFromPlayer(@NotNull ItemStack @NotNull ... items) {
-                this(List.of(items));
-            }
+        record DropFromPlayer(@NotNull ItemStack item) implements Change {
         }
     }
 }
