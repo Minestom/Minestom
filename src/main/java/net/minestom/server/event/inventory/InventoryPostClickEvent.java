@@ -7,6 +7,8 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.Click;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Called after {@link InventoryClickEvent}, this event cannot be cancelled and items related to the click
  * are already moved.
@@ -16,9 +18,9 @@ public class InventoryPostClickEvent implements InventoryEvent, PlayerInstanceEv
     private final Player player;
     private final Inventory inventory;
     private final Click.Info info;
-    private final Click.Result changes;
+    private final List<Click.Change> changes;
 
-    public InventoryPostClickEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull Click.Info info, @NotNull Click.Result changes) {
+    public InventoryPostClickEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull Click.Info info, @NotNull List<Click.Change> changes) {
         this.player = player;
         this.inventory = inventory;
         this.info = info;
@@ -49,7 +51,7 @@ public class InventoryPostClickEvent implements InventoryEvent, PlayerInstanceEv
      *
      * @return the changes
      */
-    public @NotNull Click.Result getChanges() {
+    public @NotNull List<Click.Change> getChanges() {
         return changes;
     }
 

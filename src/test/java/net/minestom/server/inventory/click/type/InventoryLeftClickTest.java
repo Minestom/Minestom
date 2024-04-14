@@ -2,11 +2,14 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.Click.Change.Cursor;
+import net.minestom.server.inventory.click.Click.Change.Main;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.inventory.click.ClickUtils.assertClick;
+import java.util.List;
+
+import static net.minestom.server.inventory.click.ClickUtils.*;
 
 public class InventoryLeftClickTest {
 
@@ -16,33 +19,33 @@ public class InventoryLeftClickTest {
 
     @Test
     public void testNoChanges() {
-        assertClick(builder -> builder, new Click.Info.Left(0), builder -> builder);
+        assertClick(List.of(), new Click.Info.Left(0), List.of());
     }
 
     @Test
     public void testInsertEntireStack() {
         assertClick(
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 32)),
+                List.of(new Main(0, magic(32)), new Click.Change.Cursor(magic(32))),
                 new Click.Info.Left(0),
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.AIR)
+                List.of(new Main(0, magic(64)), new Cursor(ItemStack.AIR))
         );
     }
 
     @Test
     public void testInsertPartialStack() {
         assertClick(
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 32)).cursor(ItemStack.of(Material.STONE, 48)),
+                List.of(new Main(0, magic(32)), new Cursor(magic(48))),
                 new Click.Info.Left(0),
-                builder -> builder.set(0, ItemStack.of(Material.STONE, 64)).cursor(ItemStack.of(Material.STONE, 16))
+                List.of(new Main(0, magic(64)), new Cursor(magic(16)))
         );
     }
 
     @Test
     public void testSwitchItems() {
         assertClick(
-                builder -> builder.set(0, ItemStack.of(Material.STONE)).cursor(ItemStack.of(Material.DIRT)),
+                List.of(new Main(0, magic(1)), new Cursor(magic2(1))),
                 new Click.Info.Left(0),
-                builder -> builder.set(0, ItemStack.of(Material.DIRT)).cursor(ItemStack.of(Material.STONE))
+                List.of(new Main(0, magic2(1)), new Cursor(magic(1)))
         );
     }
 
