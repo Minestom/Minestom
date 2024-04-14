@@ -6,9 +6,9 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Set;
 import java.util.function.IntFunction;
 
 public final class Click {
@@ -65,9 +65,9 @@ public final class Click {
      * Preprocesses click packets, turning them into {@link Info} instances for further processing.
      */
     public static final class Preprocessor {
-        private final List<Integer> leftDrag = new ArrayList<>();
-        private final List<Integer> rightDrag = new ArrayList<>();
-        private final List<Integer> middleDrag = new ArrayList<>();
+        private final Set<Integer> leftDrag = new LinkedHashSet<>();
+        private final Set<Integer> rightDrag = new LinkedHashSet<>();
+        private final Set<Integer> middleDrag = new LinkedHashSet<>();
 
         public void clearCache() {
             this.leftDrag.clear();
@@ -77,30 +77,31 @@ public final class Click {
 
         /**
          * Processes the provided click packet, turning it into a {@link Info}.
-         * This will do simple verification of the packet before sending it to {@link #process(ClientClickWindowPacket.ClickType, int, byte, boolean)}.
+         * This will do simple verification of the packet before sending it to {@link #process(ClientClickWindowPacket.ClickType, int, byte)}.
          *
-         * @param packet     the raw click packet
-         * @param isCreative whether the player is in creative mode (used for ignoring some actions)
+         * @param packet        the raw click packet
+         * @param isCreative    whether the player is in creative mode (used for ignoring some actions)
+         * @param containerSize the size of the open container, or null if the player inventory is open
          * @return the information about the click, or nothing if there was no immediately usable information
          */
-        public @Nullable Click.Info processPlayerClick(@NotNull ClientClickWindowPacket packet, boolean isCreative) {
+        public @Nullable Click.Info processClick(@NotNull ClientClickWindowPacket packet, boolean isCreative, @Nullable Integer containerSize) {
             if (requireCreative(packet) && !isCreative) return null;
-            final int slot = packet.slot() != -999 ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : -999;
-            final int maxSize = PlayerInventoryUtils.INVENTORY_SIZE;
-            return process(packet.clickType(), slot, packet.button(), slot >= 0 && slot < maxSize);
-        }
-
-        public @Nullable Click.Info processContainerClick(@NotNull ClientClickWindowPacket packet, int inventorySize, boolean isCreative) {
-            if (requireCreative(packet) && !isCreative) return null;
-            final int slot = packet.slot();
-            final int maxSize = inventorySize + PlayerInventoryUtils.INNER_SIZE;
-            return process(packet.clickType(), slot, packet.button(), slot >= 0 && slot < maxSize);
+            final int slot = packet.slot() == -999 ? -999 :
+                    containerSize == null ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : packet.slot();
+            final int maxSize = containerSize != null ? containerSize + PlayerInventoryUtils.INNER_SIZE : PlayerInventoryUtils.INVENTORY_SIZE;
+            if (packet.clickType() == ClientClickWindowPacket.ClickType.PICKUP && slot == -999) {
+                if (packet.button() == 0) return new Info.LeftDropCursor();
+                if (packet.button() == 1) return new Info.RightDropCursor();
+                if (packet.button() == 2) return new Info.MiddleDropCursor();
+            }
+            final boolean valid = slot >= 0 && slot < maxSize;
+            if (!valid) return null;
+            return process(packet.clickType(), slot, packet.button());
         }
 
         private boolean requireCreative(ClientClickWindowPacket packet) {
             final byte button = packet.button();
-            final ClientClickWindowPacket.ClickType type = packet.clickType();
-            return switch (type) {
+            return switch (packet.clickType()) {
                 case CLONE -> true;
                 case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
                 default -> false;
@@ -113,38 +114,18 @@ public final class Click {
          * @param type   the type of the click
          * @param slot   the clicked slot
          * @param button the sent button
-         * @param valid  whether {@code slot} fits within the inventory (may be unused, depending on click)
          * @return the information about the click, or nothing if there was no immediately usable information
          */
-        private @Nullable Click.Info process(@NotNull ClientClickWindowPacket.ClickType type,
-                                            int slot, byte button, boolean valid) {
+        private @Nullable Click.Info process(@NotNull ClientClickWindowPacket.ClickType type, int slot, byte button) {
             return switch (type) {
-                case PICKUP -> {
-                    if (slot == -999) {
-                        yield switch (button) {
-                            case 0 -> new Info.LeftDropCursor();
-                            case 1 -> new Info.RightDropCursor();
-                            case 2 -> new Info.MiddleDropCursor();
-                            default -> null;
-                        };
-                    }
-
-                    if (!valid) yield null;
-
-                    yield switch (button) {
-                        case 0 -> new Info.Left(slot);
-                        case 1 -> new Info.Right(slot);
-                        default -> null;
-                    };
-                }
-                case QUICK_MOVE -> {
-                    if (!valid) yield null;
-                    yield button == 0 ? new Info.LeftShift(slot) : new Info.RightShift(slot);
-                }
+                case PICKUP -> switch (button) {
+                    case 0 -> new Info.Left(slot);
+                    case 1 -> new Info.Right(slot);
+                    default -> null;
+                };
+                case QUICK_MOVE -> button == 0 ? new Info.LeftShift(slot) : new Info.RightShift(slot);
                 case SWAP -> {
-                    if (!valid) {
-                        yield null;
-                    } else if (button >= 0 && button < 9) {
+                    if (button >= 0 && button < 9) {
                         yield new Info.HotbarSwap(button, slot);
                     } else if (button == 40) {
                         yield new Info.OffhandSwap(slot);
@@ -152,8 +133,8 @@ public final class Click {
                         yield null;
                     }
                 }
-                case CLONE -> valid ? new Info.Middle(slot) : null;
-                case THROW -> valid ? new Info.DropSlot(slot, button == 1) : null;
+                case CLONE -> new Info.Middle(slot);
+                case THROW -> new Info.DropSlot(slot, button == 1);
                 case QUICK_CRAFT -> {
                     // Handle drag finishes
                     if (button == 2) {
@@ -170,25 +151,18 @@ public final class Click {
                         yield new Info.MiddleDrag(list);
                     }
 
-                    Consumer<List<Integer>> tryAdd = list -> {
-                        if (valid && !list.contains(slot)) {
-                            list.add(slot);
-                        }
-                    };
-
                     switch (button) {
                         case 0 -> leftDrag.clear();
                         case 4 -> rightDrag.clear();
                         case 8 -> middleDrag.clear();
 
-                        case 1 -> tryAdd.accept(leftDrag);
-                        case 5 -> tryAdd.accept(rightDrag);
-                        case 9 -> tryAdd.accept(middleDrag);
+                        case 1 -> leftDrag.add(slot);
+                        case 5 -> rightDrag.add(slot);
+                        case 9 -> middleDrag.add(slot);
                     }
-
                     yield null;
                 }
-                case PICKUP_ALL -> valid ? new Info.Double(slot) : null;
+                case PICKUP_ALL -> new Info.Double(slot);
             };
         }
     }
