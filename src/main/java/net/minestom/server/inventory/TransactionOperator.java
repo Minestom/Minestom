@@ -1,12 +1,11 @@
 package net.minestom.server.inventory;
 
-import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiPredicate;
+import java.util.function.UnaryOperator;
 
 /**
  * A transaction operator is a simpler operation that takes two items and returns two items.
@@ -14,22 +13,26 @@ import java.util.function.BiPredicate;
  * This allows a significant amount of logic reuse, since many operations are just the {@link #flip(TransactionOperator) flipped}
  * version of others.
  */
-public interface TransactionOperator {
+public interface TransactionOperator extends UnaryOperator<TransactionOperator.Entry> {
 
     /**
      * Creates a new operator that filters the given one using the provided predicate
      */
     static @NotNull TransactionOperator filter(@NotNull TransactionOperator operator, @NotNull BiPredicate<ItemStack, ItemStack> predicate) {
-        return (left, right) -> predicate.test(left, right) ? operator.apply(left, right) : null;
+        return (entry) -> {
+            final ItemStack left = entry.left();
+            final ItemStack right = entry.right();
+            return predicate.test(left, right) ? operator.apply(entry) : null;
+        };
     }
 
     /**
      * Creates a new operator that flips the left and right before providing it to the given operator.
      */
     static @NotNull TransactionOperator flip(@NotNull TransactionOperator operator) {
-        return (left, right) -> {
-            var pair = operator.apply(right, left);
-            return pair != null ? Pair.of(pair.right(), pair.left()) : null;
+        return (entry) -> {
+            final Entry pair = operator.apply(entry.reverse());
+            return pair != null ? new Entry(pair.right(), pair.left()) : null;
         };
     }
 
@@ -37,7 +40,9 @@ public interface TransactionOperator {
      * Provides operators that try to stack up to the provided number of items to the left.
      */
     static @NotNull TransactionOperator stackLeftN(int count) {
-        return (left, right) -> {
+        return (entry) -> {
+            final ItemStack left = entry.left();
+            final ItemStack right = entry.right();
             final StackingRule rule = StackingRule.get();
 
             // Quick exit if the right is air (nothing can be transferred anyway)
@@ -54,7 +59,7 @@ public interface TransactionOperator {
 
             if (addedAmount == 0) return null;
 
-            return Pair.of(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
+            return new Entry(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
         };
     }
 
@@ -62,7 +67,9 @@ public interface TransactionOperator {
      * Stacks as many items to the left as possible, including if the left is an air item.<br>
      * This will not swap the items if they are of different types.
      */
-    TransactionOperator STACK_LEFT = (left, right) -> {
+    TransactionOperator STACK_LEFT = (entry) -> {
+        final ItemStack left = entry.left();
+        final ItemStack right = entry.right();
         final StackingRule rule = StackingRule.get();
 
         // Quick exit if the right is air (nothing can be transferred anyway)
@@ -77,7 +84,7 @@ public interface TransactionOperator {
 
         int addedAmount = Math.min(rightAmount, rule.getMaxSize(left) - leftAmount);
 
-        return Pair.of(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
+        return new Entry(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
     };
 
     /**
@@ -89,28 +96,26 @@ public interface TransactionOperator {
      * Takes as many items as possible from both stacks, if the given items are stackable.
      * This is a symmetric operation.
      */
-    TransactionOperator TAKE = (left, right) -> {
+    TransactionOperator TAKE = (entry) -> {
+        final ItemStack left = entry.left();
+        final ItemStack right = entry.right();
         final StackingRule rule = StackingRule.get();
-
         if (right.isAir() || !rule.canBeStacked(left, right)) {
             return null;
         }
-
-        int leftAmount = rule.getAmount(left);
-        int rightAmount = rule.getAmount(right);
-
-        int subtracted = Math.min(leftAmount, rightAmount);
-
-        return Pair.of(rule.apply(left, leftAmount - subtracted), rule.apply(right, rightAmount - subtracted));
+        final int leftAmount = rule.getAmount(left);
+        final int rightAmount = rule.getAmount(right);
+        final int subtracted = Math.min(leftAmount, rightAmount);
+        return new Entry(rule.apply(left, leftAmount - subtracted), rule.apply(right, rightAmount - subtracted));
     };
 
-    /**
-     * Applies this operation to the two given items.
-     * They are unnamed as to abstract the operations performed from inventories.
-     * @param left the "left" item
-     * @param right the "right" item
-     * @return the resulting pair, or null to indicate no changes
-     */
-    @Nullable Pair<ItemStack, ItemStack> apply(@NotNull ItemStack left, @NotNull ItemStack right);
+    default Entry apply(@NotNull ItemStack left, @NotNull ItemStack right) {
+        return apply(new Entry(left, right));
+    }
 
+    record Entry(@NotNull ItemStack left, @NotNull ItemStack right) {
+        public Entry reverse() {
+            return new Entry(right, left);
+        }
+    }
 }
