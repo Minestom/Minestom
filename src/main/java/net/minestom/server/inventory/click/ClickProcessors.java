@@ -1,14 +1,16 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.TransactionOperator;
 import net.minestom.server.inventory.TransactionType;
+import net.minestom.server.inventory.click.Click.Change.Cursor;
+import net.minestom.server.inventory.click.Click.Change.DropFromPlayer;
+import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.StackingRule;
-import net.minestom.server.inventory.click.Click.Change.*;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +35,7 @@ public final class ClickProcessors {
         final ItemStack cursor = getter.cursor();
         final ItemStack clickedItem = getter.get(slot);
 
-        Pair<ItemStack, ItemStack> pair = TransactionOperator.STACK_LEFT.apply(clickedItem, cursor);
+        final TransactionOperator.Entry pair = TransactionOperator.STACK_LEFT.apply(clickedItem, cursor);
         if (pair != null) { // Stackable items, combine their counts
             return List.of(new Main(slot, pair.left()), new Cursor(pair.right()));
         } else if (!RULE.canBeStacked(cursor, clickedItem)) { // If they're unstackable, switch them
@@ -50,11 +52,11 @@ public final class ClickProcessors {
 
         if (cursor.isAir()) { // Take half (rounded up) of the clicked item
             int newAmount = (int) Math.ceil(RULE.getAmount(clickedItem) / 2d);
-            Pair<ItemStack, ItemStack> cursorSlot = TransactionOperator.stackLeftN(newAmount).apply(cursor, clickedItem);
+            final TransactionOperator.Entry cursorSlot = TransactionOperator.stackLeftN(newAmount).apply(cursor, clickedItem);
             if (cursorSlot == null) return List.of();
             return List.of(new Main(slot, cursorSlot.right()), new Cursor(cursorSlot.left()));
         } else if (clickedItem.isAir() || RULE.canBeStacked(clickedItem, cursor)) { // Can add, transfer one over
-            Pair<ItemStack, ItemStack> slotCursor = TransactionOperator.stackLeftN(1).apply(clickedItem, cursor);
+            final TransactionOperator.Entry slotCursor = TransactionOperator.stackLeftN(1).apply(clickedItem, cursor);
             if (slotCursor == null) return List.of();
             return List.of(new Main(slot, slotCursor.left()), new Cursor(slotCursor.right()));
         } else { // Two existing of items of different types, so switch
@@ -63,9 +65,8 @@ public final class ClickProcessors {
     }
 
     public static @NotNull List<Click.Change> middleClick(int slot, @NotNull Click.Getter getter) {
-        var item = getter.get(slot);
+        final ItemStack item = getter.get(slot);
         if (!getter.cursor().isAir() || item.isAir()) return List.of();
-
         return List.of(new Cursor(RULE.apply(item, RULE.getMaxSize(item))));
     }
 
@@ -75,12 +76,12 @@ public final class ClickProcessors {
         slots = new ArrayList<>(slots);
         slots.removeIf(i -> i == slot);
 
-        Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.add(slots, slots).process(clicked, getter::get);
+        final TransactionType.Entry result = TransactionType.add(slots, slots).apply(clicked, getter::get);
         List<Click.Change> changes = new ArrayList<>();
-        result.right().forEach((slotId, item) -> changes.add(new Main(slotId, item)));
+        result.changes().forEach((slotId, item) -> changes.add(new Main(slotId, item)));
 
-        if (!result.left().equals(clicked)) {
-            changes.add(new Main(slot, result.left()));
+        if (!result.remaining().equals(clicked)) {
+            changes.add(new Main(slot, result.remaining()));
         }
 
         return changes;
@@ -90,15 +91,17 @@ public final class ClickProcessors {
         final ItemStack cursor = getter.cursor();
         if (cursor.isAir()) return List.of();
 
-        var unstacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (left, right) -> RULE.getAmount(left) < RULE.getMaxSize(left)), slots);
-        var stacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT, (left, right) -> RULE.getAmount(left) == RULE.getMaxSize(left)), slots);
+        final TransactionType unstacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT,
+                (left, right) -> RULE.getAmount(left) < RULE.getMaxSize(left)), slots);
+        final TransactionType stacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT,
+                (left, right) -> RULE.getAmount(left) == RULE.getMaxSize(left)), slots);
 
-        Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.join(unstacked, stacked).process(cursor, getter::get);
+        final TransactionType.Entry result = TransactionType.join(unstacked, stacked).apply(cursor, getter::get);
         List<Click.Change> changes = new ArrayList<>();
-        result.right().forEach((slotId, item) -> changes.add(new Main(slotId, item)));
+        result.changes().forEach((slotId, item) -> changes.add(new Main(slotId, item)));
 
-        if (!result.left().equals(cursor)) {
-            changes.add(new Cursor(result.left()));
+        if (!result.remaining().equals(cursor)) {
+            changes.add(new Cursor(result.remaining()));
         }
 
         return changes;
@@ -108,12 +111,12 @@ public final class ClickProcessors {
         final ItemStack cursor = getter.cursor();
         if (cursor.isAir()) return List.of();
 
-        Pair<ItemStack, Map<Integer, ItemStack>> result = TransactionType.general(TransactionOperator.stackLeftN(countPerSlot), slots).process(cursor, getter::get);
+        final TransactionType.Entry result = TransactionType.general(TransactionOperator.stackLeftN(countPerSlot), slots).apply(cursor, getter::get);
         List<Click.Change> changes = new ArrayList<>();
-        result.right().forEach((slotId, item) -> changes.add(new Main(slotId, item)));
+        result.changes().forEach((slotId, item) -> changes.add(new Main(slotId, item)));
 
-        if (!result.left().equals(cursor)) {
-            changes.add(new Cursor(result.left()));
+        if (!result.remaining().equals(cursor)) {
+            changes.add(new Cursor(result.remaining()));
         }
 
         return changes;
@@ -121,7 +124,6 @@ public final class ClickProcessors {
 
     public static @NotNull List<Click.Change> middleDragClick(@NotNull List<Integer> slots, @NotNull Click.Getter getter) {
         final ItemStack cursor = getter.cursor();
-
         return slots.stream()
                 .filter(slot -> getter.get(slot).isAir())
                 .map(slot -> (Click.Change) new Main(slot, cursor))
@@ -132,7 +134,7 @@ public final class ClickProcessors {
         final ItemStack cursor = getter.cursor();
         if (cursor.isAir()) return List.of(); // Do nothing
 
-        var pair = TransactionOperator.stackLeftN(amount).apply(ItemStack.AIR, cursor);
+        final TransactionOperator.Entry pair = TransactionOperator.stackLeftN(amount).apply(ItemStack.AIR, cursor);
         if (pair == null) return List.of();
 
         return List.of(new Cursor(pair.right()), new DropFromPlayer(pair.left()));
@@ -142,7 +144,7 @@ public final class ClickProcessors {
         final ItemStack item = getter.get(slot);
         if (item.isAir()) return List.of(); // Do nothing
 
-        var pair = TransactionOperator.stackLeftN(amount).apply(ItemStack.AIR, item);
+        final TransactionOperator.Entry pair = TransactionOperator.stackLeftN(amount).apply(ItemStack.AIR, item);
         if (pair == null) return List.of();
 
         return List.of(new Main(slot, pair.right()), new DropFromPlayer(pair.left()));
@@ -196,8 +198,7 @@ public final class ClickProcessors {
                 yield List.of(new Main(slot, offhandItem), new Player(OFF_HAND_SLOT, selectedItem));
             }
             case Click.Info.CreativeSetItem(int slot, ItemStack item) -> List.of(new Main(slot, item));
-            case Click.Info.CreativeDropItem(ItemStack item) ->
-                    List.of(new DropFromPlayer(item));
+            case Click.Info.CreativeDropItem(ItemStack item) -> List.of(new DropFromPlayer(item));
         };
     }
 
