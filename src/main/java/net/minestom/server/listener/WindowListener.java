@@ -23,9 +23,7 @@ public class WindowListener {
         if (inventory == null || packet.slot() == -1) return;
 
         Click.Preprocessor preprocessor = player.clickPreprocessor();
-        final Click.Info info = playerInventory ?
-                preprocessor.processPlayerClick(packet, player.isCreative()) :
-                preprocessor.processContainerClick(packet, inventory.getSize(), player.isCreative());
+        final Click.Info info = preprocessor.processClick(packet, player.isCreative(), playerInventory ? null : inventory.getSize());
         if (info != null) inventory.handleClick(player, info);
 
         // (Why is the ping packet necessary?)
