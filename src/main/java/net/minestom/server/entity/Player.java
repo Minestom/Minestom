@@ -995,6 +995,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void openBook(@NotNull Book book) {
+        // Close the open inventory if there is one because the book will replace it.
+        if (getOpenInventory() != null) {
+            closeInventory();
+        }
+
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
                 .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
                         .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
