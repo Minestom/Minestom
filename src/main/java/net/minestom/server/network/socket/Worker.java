@@ -16,6 +16,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -103,10 +104,7 @@ public final class Worker extends MinestomThread {
                             readBuffer.readChannel(channel);
                             connection.processPackets(readBuffer, server.packetProcessor());
                         }
-                    } catch (EOFException e) {
-                        connection.disconnect();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (EOFException | SocketException e) {
                         connection.disconnect();
                     } catch (Throwable t) {
                         MinecraftServer.getExceptionManager().handleException(t);
