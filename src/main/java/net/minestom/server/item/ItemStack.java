@@ -79,16 +79,16 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    <T> @NotNull ItemStack with(@NotNull ItemComponentType<T> component, T value);
+    <T> @NotNull ItemStack with(@NotNull ItemComponent<T> component, T value);
 
-    default <T> @NotNull ItemStack with(@NotNull ItemComponentType<T> component, @NotNull UnaryOperator<T> operator) {
+    default <T> @NotNull ItemStack with(@NotNull ItemComponent<T> component, @NotNull UnaryOperator<T> operator) {
         T value = get(component);
         if (value == null) return this;
         return with(component, operator.apply(value));
     }
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack without(@NotNull ItemComponentType<?> component);
+    @NotNull ItemStack without(@NotNull ItemComponent<?> component);
 
     @Contract(value = "_, _ -> new", pure = true)
     default <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
@@ -144,10 +144,10 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
         @NotNull Builder amount(int amount);
 
         @Contract(value = "_, _ -> this")
-        <T> @NotNull Builder set(@NotNull ItemComponentType<T> component, T value);
+        <T> @NotNull Builder set(@NotNull ItemComponent<T> component, T value);
 
         @Contract(value = "_ -> this")
-        @NotNull Builder remove(@NotNull ItemComponentType<?> component);
+        @NotNull Builder remove(@NotNull ItemComponent<?> component);
 
         @Contract(value = "_, _ -> this")
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {

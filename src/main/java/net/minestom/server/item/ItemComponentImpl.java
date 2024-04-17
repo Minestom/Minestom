@@ -12,17 +12,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-record ItemComponentTypeImpl<T>(
+record ItemComponentImpl<T>(
         int id,
         @NotNull NamespaceID namespace,
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable BinaryTagSerializer<T> nbt
-) implements ItemComponentType<T> {
-    static final Map<String, ItemComponentType<?>> NAMESPACES = new HashMap<>(32);
-    static final ObjectArray<ItemComponentType<?>> IDS = ObjectArray.singleThread(32);
+) implements ItemComponent<T> {
+    static final Map<String, ItemComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final ObjectArray<ItemComponent<?>> IDS = ObjectArray.singleThread(32);
 
-    static <T> ItemComponentType<T> declare(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        ItemComponentType<T> impl = new ItemComponentTypeImpl<>(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
+    static <T> ItemComponent<T> declare(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
+        ItemComponent<T> impl = new ItemComponentImpl<>(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
