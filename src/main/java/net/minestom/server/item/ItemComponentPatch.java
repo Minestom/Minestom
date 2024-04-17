@@ -38,7 +38,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                 if (entry.getValue() != null) {
                     buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
                     //noinspection unchecked
-                    ItemComponentType<Object> type = (ItemComponentType<Object>) ItemComponentType.fromId(entry.getIntKey());
+                    ItemComponent<Object> type = (ItemComponent<Object>) ItemComponent.fromId(entry.getIntKey());
                     assert type != null;
                     type.write(buffer, entry.getValue());
                 }
@@ -58,7 +58,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 //noinspection unchecked
-                ItemComponentType<Object> type = (ItemComponentType<Object>) ItemComponentType.fromId(id);
+                ItemComponent<Object> type = (ItemComponent<Object>) ItemComponent.fromId(id);
                 Check.notNull(type, "Unknown item component id: {0}", id);
                 patch.put(id, type.read(buffer));
             }
@@ -80,7 +80,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                         key = key.substring(1);
                         remove = true;
                     }
-                    ItemComponentType<?> type = ItemComponentType.fromNamespaceId(key);
+                    ItemComponent<?> type = ItemComponent.fromNamespaceId(key);
                     Check.notNull(type, "Unknown item component: {0}", key);
                     if (remove) {
                         patch.put(type.id(), null);
@@ -96,7 +96,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
                 for (Int2ObjectMap.Entry<Object> entry : patch.patch.int2ObjectEntrySet()) {
                     //noinspection unchecked
-                    ItemComponentType<Object> type = (ItemComponentType<Object>) ItemComponentType.fromId(entry.getIntKey());
+                    ItemComponent<Object> type = (ItemComponent<Object>) ItemComponent.fromId(entry.getIntKey());
                     Check.notNull(type, "Unknown item component id: {0}", entry.getIntKey());
                     if (entry.getValue() == null) {
                         builder.put(REMOVAL_PREFIX + type.name(), CompoundBinaryTag.empty());
@@ -108,7 +108,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
             }
     );
 
-    public boolean has(@NotNull ItemComponentMap prototype, @NotNull ItemComponentType<?> component) {
+    public boolean has(@NotNull ItemComponentMap prototype, @NotNull ItemComponent<?> component) {
         if (patch.containsKey(component.id())) {
             return patch.get(component.id()) != null;
         } else {
@@ -116,7 +116,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         }
     }
 
-    public <T> @Nullable T get(@NotNull ItemComponentMap prototype, @NotNull ItemComponentType<T> component) {
+    public <T> @Nullable T get(@NotNull ItemComponentMap prototype, @NotNull ItemComponent<T> component) {
         if (patch.containsKey(component.id())) {
             return (T) patch.get(component.id());
         } else {
@@ -124,13 +124,13 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         }
     }
 
-    public <T> @NotNull ItemComponentPatch with(@NotNull ItemComponentType<T> component, @NotNull T value) {
+    public <T> @NotNull ItemComponentPatch with(@NotNull ItemComponent<T> component, @NotNull T value) {
         Int2ObjectMap<Object> newPatch = new Int2ObjectArrayMap<>(patch);
         newPatch.put(component.id(), value);
         return new ItemComponentPatch(newPatch);
     }
 
-    public <T> @NotNull ItemComponentPatch without(@NotNull ItemComponentType<T> component) {
+    public <T> @NotNull ItemComponentPatch without(@NotNull ItemComponent<T> component) {
         Int2ObjectMap<Object> newPatch = new Int2ObjectArrayMap<>(patch);
         newPatch.put(component.id(), null);
         return new ItemComponentPatch(newPatch);
@@ -143,21 +143,21 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
     record Builder(@NotNull Int2ObjectMap<Object> patch) implements ItemComponentMap {
 
         @Override
-        public boolean has(@NotNull ItemComponentType<?> component) {
+        public boolean has(@NotNull ItemComponent<?> component) {
             return patch.get(component.id()) != null;
         }
 
         @Override
-        public <T> @Nullable T get(@NotNull ItemComponentType<T> component) {
+        public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
             return (T) patch.get(component.id());
         }
 
-        public <T> ItemComponentPatch.@NotNull Builder set(@NotNull ItemComponentType<T> component, @NotNull T value) {
+        public <T> ItemComponentPatch.@NotNull Builder set(@NotNull ItemComponent<T> component, @NotNull T value) {
             patch.put(component.id(), value);
             return this;
         }
 
-        public ItemComponentPatch.@NotNull Builder remove(@NotNull ItemComponentType<?> component) {
+        public ItemComponentPatch.@NotNull Builder remove(@NotNull ItemComponent<?> component) {
             patch.put(component.id(), null);
             return this;
         }
