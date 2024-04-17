@@ -1385,13 +1385,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     /**
      * Gets the entity eye height.
-     * <p>
-     * Default to {@link BoundingBox#height()}x0.85
      *
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return getPose() == Pose.SLEEPING ? 0.2 : (boundingBox.height() * 0.85);
+        return getPose() == Pose.SLEEPING ? 0.2 : entityType.registry().eyeHeight();
     }
 
     /**

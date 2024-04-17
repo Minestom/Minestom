@@ -2,6 +2,8 @@ package net.minestom.server.registry;
 
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
@@ -9,20 +11,22 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemComponentMap;
-import net.minestom.server.item.ItemComponentType;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
-import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -480,7 +484,7 @@ public final class Registry {
         private ItemComponentMap prototype;
 
         private final EquipmentSlot equipmentSlot;
-        //        private final EntityType entityType; //todo
+        private final EntityType entityType;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -507,14 +511,14 @@ public final class Registry {
                     this.equipmentSlot = null;
                 }
             }
-//            {
-//                final Properties spawnEggProperties = main.section("spawnEggProperties");
-//                if (spawnEggProperties != null) {
-//                    this.entityType = EntityType.fromNamespaceId(spawnEggProperties.getString("entityType"));
-//                } else {
-//                    this.entityType = null;
-//                }
-//            }
+            {
+                final Properties spawnEggProperties = main.section("spawnEggProperties");
+                if (spawnEggProperties != null) {
+                    this.entityType = EntityType.fromNamespaceId(spawnEggProperties.getString("entityType"));
+                } else {
+                    this.entityType = null;
+                }
+            }
         }
 
         public @NotNull NamespaceID namespace() {
@@ -540,14 +544,12 @@ public final class Registry {
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         try {
                             //noinspection unchecked
-                            ItemComponentType<Object> component = (ItemComponentType<Object>) ItemComponentType.fromNamespaceId(entry.getKey());
+                            ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
                             Check.notNull(component, "Unknown component: " + entry.getKey());
 
-                            byte[] rawValue = Base64.getDecoder().decode((String) entry.getValue());
-                            BinaryTagReader reader = new BinaryTagReader(new DataInputStream(new ByteArrayInputStream(rawValue)));
-
+                            BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
+                            builder.set(component, component.read(tag));
                             //todo remove this try/catch, just so i dont need to impl all comps yet
-                            builder.set(component, component.read(reader.readNameless()));
                         } catch (NullPointerException e) {
                             System.out.println(e.getMessage());
                         }
@@ -569,13 +571,14 @@ public final class Registry {
             return equipmentSlot;
         }
 
-//        /**
-//         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
-//         * @return The entity type it can spawn, or null if it is not a spawn egg
-//         */
-//        public @Nullable EntityType spawnEntityType() {
-//            return entityType;
-//        }
+        /**
+         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+         *
+         * @return The entity type it can spawn, or null if it is not a spawn egg
+         */
+        public @Nullable EntityType spawnEntityType() {
+            return entityType;
+        }
 
         @Override
         public Properties custom() {
@@ -583,28 +586,85 @@ public final class Registry {
         }
     }
 
-    public record EntityEntry(NamespaceID namespace, int id,
-                              String translationKey,
-                              double width, double height,
-                              double drag, double acceleration,
-                              EntitySpawnType spawnType,
-                              BoundingBox boundingBox,
-                              Properties custom) implements Entry {
+    public static final class EntityEntry implements Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final String translationKey;
+        private final double drag;
+        private final double acceleration;
+        private final EntitySpawnType spawnType;
+        private final double width;
+        private final double height;
+        private final double eyeHeight;
+        private final BoundingBox boundingBox;
+        private final Properties custom;
+
         public EntityEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    main.getString("translationKey"),
-                    main.getDouble("width"),
-                    main.getDouble("height"),
-                    main.getDouble("drag", 0.02),
-                    main.getDouble("acceleration", 0.08),
-                    EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    new BoundingBox(
-                            main.getDouble("width"),
-                            main.getDouble("height"),
-                            main.getDouble("width")),
-                    custom
-            );
+            this.namespace = NamespaceID.from(namespace);
+            this.id = main.getInt("id");
+            this.translationKey = main.getString("translationKey");
+            this.drag = main.getDouble("drag", 0.02);
+            this.acceleration = main.getDouble("acceleration", 0.08);
+            this.spawnType = EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT));
+
+            // Dimensions
+            this.width = main.getDouble("width");
+            this.height = main.getDouble("height");
+            this.eyeHeight = main.getDouble("eyeHeight");
+            this.boundingBox = new BoundingBox(this.width, this.height, this.width);
+
+            // Attachments
+            Properties attachments = main.section("attachments");
+            if (attachments != null) {
+                //todo
+            }
+
+            this.custom = custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
+        }
+
+        public double drag() {
+            return drag;
+        }
+
+        public double acceleration() {
+            return acceleration;
+        }
+
+        public @NotNull EntitySpawnType spawnType() {
+            return spawnType;
+        }
+
+        public double width() {
+            return width;
+        }
+
+        public double height() {
+            return height;
+        }
+
+        public double eyeHeight() {
+            return eyeHeight;
+        }
+
+        public @NotNull BoundingBox boundingBox() {
+            return boundingBox;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
         }
     }
 
