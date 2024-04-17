@@ -399,7 +399,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        this.health = Math.min(health, getMaxHealth());
+        this.health = Math.min(health, (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
         if (this.health <= 0 && !isDead) {
             kill();
         }
@@ -416,15 +416,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public @Nullable Damage getLastDamageSource() {
         return lastDamage;
-    }
-
-    /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#GENERIC_MAX_HEALTH}.
-     *
-     * @return the entity max health
-     */
-    public float getMaxHealth() {
-        return (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH);
     }
 
     /**
