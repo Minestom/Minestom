@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.*;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public final class BinaryTagUtil {
@@ -53,10 +52,6 @@ public final class BinaryTagUtil {
         } else {
             throw new UnsupportedOperationException("Unsupported NBT type: " + tag.getClass());
         }
-    }
-
-    public static @Nullable String getStringOrNull(@NotNull CompoundBinaryTag tag, @NotNull String key) {
-        return tag.keySet().contains(key) ? tag.getString(key) : null;
     }
 
     private BinaryTagUtil() {
