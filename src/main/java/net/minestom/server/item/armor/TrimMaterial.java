@@ -8,6 +8,7 @@ import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -50,6 +51,14 @@ public interface TrimMaterial extends StaticProtocolObject {
                         null
                 )
         );
+    }
+
+    static @Nullable TrimMaterial fromId(int id) {
+        return TrimMaterialImpl.fromId(id);
+    }
+
+    static @Nullable TrimMaterial fromNamespaceId(@NotNull String id) {
+        return TrimMaterialImpl.fromNamespaceId(id);
     }
 
     static Collection<TrimMaterial> values() {

@@ -4,6 +4,8 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.registry.Registry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -25,6 +27,14 @@ record TrimMaterialImpl(Registry.TrimMaterialEntry registry, int id) implements 
 
     public static TrimMaterial get(String namespace) {
         return CONTAINER.get(namespace);
+    }
+
+    static @Nullable TrimMaterial fromId(int id) {
+        return CONTAINER.getId(id);
+    }
+
+    static @Nullable TrimMaterial fromNamespaceId(@NotNull String id) {
+        return CONTAINER.get(id);
     }
 
     static Collection<TrimMaterial> values() {
