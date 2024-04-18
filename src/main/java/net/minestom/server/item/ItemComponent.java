@@ -18,6 +18,7 @@ import static net.minestom.server.item.ItemComponentImpl.declare;
 
 public sealed interface ItemComponent<T> extends StaticProtocolObject permits ItemComponentImpl {
     // Note that even non-networked components are declared here as they still contribute to the component ID counter.
+    // The order in this file determines the component protocol IDs, so it is important to match the client.
 
     ItemComponent<CustomData> CUSTOM_DATA = declare("custom_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     ItemComponent<Integer> MAX_STACK_SIZE = declare("max_stack_size", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);

@@ -83,6 +83,7 @@ public class Main {
         commandManager.register(new KillCommand());
         commandManager.register(new WeatherCommand());
         commandManager.register(new PotionCommand());
+        commandManager.register(new CookieCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
