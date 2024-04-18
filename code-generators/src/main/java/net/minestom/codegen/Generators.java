@@ -26,7 +26,7 @@ public class Generators {
         generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "Materials");
         generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypes");
         generator.generate(resource("biomes.json"), "net.minestom.server.world.biomes", "Biome", "BiomeImpl", "Biomes");
-        generator.generate(resource("enchantments.json"), "net.minestom.server.item", "Enchantment", "EnchantmentImpl", "Enchantments");
+        generator.generate(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "EnchantmentImpl", "Enchantments");
         generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffects");
         generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypes");
         generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleImpl", "Particles");

@@ -1,9 +1,11 @@
 package net.minestom.server.item;
 
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,6 +46,9 @@ import java.util.Collection;
  */
 
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
+
+    NetworkBuffer.Type<Material> NETWORK_TYPE = MaterialImpl.NETWORK_TYPE;
+    BinaryTagSerializer<Material> NBT_TYPE = MaterialImpl.NBT_TYPE;
 
     /**
      * Returns the material registry.
