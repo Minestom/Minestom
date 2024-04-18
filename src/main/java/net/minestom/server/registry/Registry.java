@@ -544,7 +544,7 @@ public final class Registry {
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
                         ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
-                        Check.notNull(component, "Unknown component: " + entry.getKey());
+                        Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
                         builder.set(component, component.read(tag));
