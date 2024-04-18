@@ -9,9 +9,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.HeightMapContainer;
-import net.minestom.server.instance.heightmap.HeightMapContainerImpl;
-import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.heightmap.*;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -28,7 +26,7 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +44,11 @@ public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
-    protected HeightMapContainer heightmaps = new HeightMapContainerImpl(this);
+
+    private boolean needsCompleteHeightmapRefresh = true;
+
+    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
+    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -84,10 +86,14 @@ public class DynamicChunk extends Chunk {
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = getSectionAt(y);
+
+        int sectionRelativeX = toSectionRelativeCoordinate(x);
+        int sectionRelativeZ = toSectionRelativeCoordinate(z);
+
         section.blockPalette().set(
-                toSectionRelativeCoordinate(x),
+                sectionRelativeX,
                 toSectionRelativeCoordinate(y),
-                toSectionRelativeCoordinate(z),
+                sectionRelativeZ,
                 block.stateId()
         );
 
@@ -122,7 +128,9 @@ public class DynamicChunk extends Chunk {
         }
 
         // UpdateHeightMaps
-        heightmaps.refreshAt(toSectionRelativeCoordinate(x), y, toSectionRelativeCoordinate(z), block);
+        if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
+        motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+        worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
     }
 
     @Override
@@ -152,12 +160,12 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Heightmap motionBlockingHeightmap() {
-        return heightmaps.getMotionBlocking();
+        return motionBlocking;
     }
 
     @Override
     public @NotNull Heightmap worldSurfaceHeightmap() {
-        return heightmaps.getWorldSurface();
+        return worldSurface;
     }
 
     @Override
@@ -253,7 +261,7 @@ public class DynamicChunk extends Chunk {
         final byte[] data;
         final NBTCompound heightmapsNBT;
         synchronized (this) {
-            heightmapsNBT = heightmaps.getNBT();
+            heightmapsNBT = getHeightmapNBT();
 
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) networkBuffer.write(section);
@@ -301,6 +309,23 @@ public class DynamicChunk extends Chunk {
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights
         );
+    }
+
+    private NBTCompound getHeightmapNBT() {
+        if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
+        return NBT.Compound(Map.of(
+                motionBlocking.NBTName(), motionBlocking.getNBT(),
+                worldSurface.NBTName(), worldSurface.getNBT()
+        ));
+    }
+
+    private void calculateFullHeightmap() {
+        int startY = Heightmap.getHighestBlockSection(this);
+
+        motionBlocking.refresh(startY);
+        worldSurface.refresh(startY);
+
+        needsCompleteHeightmapRefresh = false;
     }
 
     @Override
