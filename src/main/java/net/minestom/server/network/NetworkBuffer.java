@@ -80,6 +80,10 @@ public final class NetworkBuffer {
 
     public static final Type<Color> COLOR = new NetworkBufferTypeImpl.ColorType();
 
+    public static <E extends Enum<E>> Type<E> fromEnum(@NotNull Class<E> enumClass) {
+        return NetworkBufferTypeImpl.fromEnum(enumClass);
+    }
+
     ByteBuffer nioBuffer;
     final boolean resizable;
     int writeIndex;
@@ -298,6 +302,20 @@ public final class NetworkBuffer {
     public interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
         T read(@NotNull NetworkBuffer buffer);
+
+        default <S> @NotNull Type<S> map(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
+            return new Type<S>() {
+                @Override
+                public void write(@NotNull NetworkBuffer buffer, S value) {
+                    Type.this.write(buffer, from.apply(value));
+                }
+
+                @Override
+                public S read(@NotNull NetworkBuffer buffer) {
+                    return to.apply(Type.this.read(buffer));
+                }
+            };
+        }
 
         default @NotNull Type<List<T>> list(int maxSize) {
             return new NetworkBuffer.Type<>() {

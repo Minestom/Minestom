@@ -1,4 +1,4 @@
-package net.minestom.server.item;
+package net.minestom.server.item.enchant;
 
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
