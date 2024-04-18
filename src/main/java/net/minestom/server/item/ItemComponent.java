@@ -29,8 +29,8 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<List<Component>> LORE = declare("lore", NetworkBuffer.COMPONENT.list(256), BinaryTagSerializer.JSON_COMPONENT.list());
     ItemComponent<ItemRarity> RARITY = declare("rarity", ItemRarity.NETWORK_TYPE, ItemRarity.NBT_TYPE);
     ItemComponent<EnchantmentList> ENCHANTMENTS = declare("enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
-    ItemComponent<Void> CAN_PLACE_ON = declare("can_place_on", null, null); //todo
-    ItemComponent<Void> CAN_BREAK = declare("can_break", null, null); //todo
+    ItemComponent<BlockPredicates> CAN_PLACE_ON = declare("can_place_on", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
+    ItemComponent<BlockPredicates> CAN_BREAK = declare("can_break", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
     ItemComponent<AttributeList> ATTRIBUTE_MODIFIERS = declare("attribute_modifiers", AttributeList.NETWORK_TYPE, AttributeList.NBT_TYPE);
     ItemComponent<Integer> CUSTOM_MODEL_DATA = declare("custom_model_data", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     ItemComponent<Void> HIDE_ADDITIONAL_TOOLTIP = declare("hide_additional_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
@@ -41,7 +41,7 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<Void> INTANGIBLE_PROJECTILE = declare("intangible_projectile", null, BinaryTagSerializer.NOTHING);
     ItemComponent<Food> FOOD = declare("food", Food.NETWORK_TYPE, Food.NBT_TYPE);
     ItemComponent<Void> FIRE_RESISTANT = declare("fire_resistant", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
-    ItemComponent<Void> TOOL = declare("tool", null, null); //todo
+    ItemComponent<Tool> TOOL = declare("tool", Tool.NETWORK_TYPE, Tool.NBT_TYPE);
     ItemComponent<EnchantmentList> STORED_ENCHANTMENTS = declare("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
     ItemComponent<DyedItemColor> DYED_COLOR = declare("dyed_color", DyedItemColor.NETWORK_TYPE, DyedItemColor.NBT_TYPE);
     ItemComponent<Color> MAP_COLOR = declare("map_color", NetworkBuffer.COLOR, BinaryTagSerializer.INT.map(Color::new, Color::asRGB));

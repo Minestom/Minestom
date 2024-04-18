@@ -27,10 +27,13 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.instance.block.predicate.BlockPredicate;
+import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
@@ -102,9 +105,8 @@ public class PlayerInit {
                 player.setPermissionLevel(4);
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
-//                        .meta(itemMetaBuilder ->
-//                                itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
-//                                        .canDestroy(Set.of(Block.DIAMOND_ORE)))
+                        .set(ItemComponent.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
+                        .set(ItemComponent.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
 

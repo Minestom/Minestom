@@ -17,8 +17,11 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.Click;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -118,10 +121,8 @@ public final class PlayerDiggingListener {
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             // Check if the item can break the block with the current item
             final ItemStack itemInMainHand = player.getItemInMainHand();
-            //todo
-//            if (!itemInMainHand.meta().canDestroy(block)) {
-//                return true;
-//            }
+            final BlockPredicates breakPredicate = itemInMainHand.get(ItemComponent.CAN_BREAK, BlockPredicates.NEVER);
+            return !breakPredicate.test(block);
         }
         return false;
     }

@@ -6,6 +6,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,6 +30,37 @@ public interface BinaryTagSerializer<T> {
             private BinaryTagSerializer<T> serializer() {
                 if (serializer == null) serializer = self.apply(this);
                 return serializer;
+            }
+        };
+    }
+
+    static <T extends BinaryTag> @NotNull BinaryTagSerializer<T> coerced(@NotNull BinaryTagType<T> type) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull T value) {
+                return value;
+            }
+
+            @Override
+            public @NotNull T read(@NotNull BinaryTag tag) {
+                if (tag.type() == type) {
+                    //noinspection unchecked
+                    return (T) tag;
+                }
+
+                if (tag instanceof StringBinaryTag string) {
+                    try {
+                        tag = TagStringIOExt.readTag(string.value());
+                        if (tag.type() == type) {
+                            //noinspection unchecked
+                            return (T) tag;
+                        }
+                    } catch (IOException e) {
+                        // Ignored, we'll throw a more useful exception below
+                    }
+                }
+
+                throw new IllegalArgumentException("Expected " + type + " but got " + tag);
             }
         };
     }
@@ -114,6 +146,7 @@ public interface BinaryTagSerializer<T> {
             return tag instanceof CompoundBinaryTag compoundBinaryTag ? compoundBinaryTag : CompoundBinaryTag.empty();
         }
     };
+    BinaryTagSerializer<CompoundBinaryTag> COMPOUND_COERCED = coerced(BinaryTagTypes.COMPOUND);
 
     BinaryTagSerializer<Component> JSON_COMPONENT = STRING.map(
             s -> GsonComponentSerializer.gson().deserialize(s),
