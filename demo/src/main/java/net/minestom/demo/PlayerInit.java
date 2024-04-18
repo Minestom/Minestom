@@ -31,15 +31,16 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
@@ -115,13 +116,9 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                try {
-                    player.getInventory().addItemStack(ItemStack.builder(Material.STICK)
-                            .set(ItemComponent.CREATIVE_SLOT_LOCK, Unit.INSTANCE)
-                            .build());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_STAIRS)
+                        .set(ItemComponent.BLOCK_STATE, new ItemBlockState(Map.of("facing", "west", "half", "top")))
+                        .build());
 
                 if (event.isFirstSpawn()) {
                     Notification notification = new Notification(

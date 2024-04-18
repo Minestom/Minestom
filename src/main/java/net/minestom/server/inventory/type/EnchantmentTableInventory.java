@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.enchant.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 public class EnchantmentTableInventory extends Inventory {
