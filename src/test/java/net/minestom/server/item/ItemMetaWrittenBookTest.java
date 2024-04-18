@@ -15,7 +15,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ItemMetaWrittenBookTest {
@@ -150,7 +149,7 @@ public class ItemMetaWrittenBookTest {
         }
     }
 
-    // TODO: Compare to vanilla snbt. This depends on a modern serializer that defaults to legacy in some cases.
+    // TODO: Compare to vanilla snbt. This depends on a modern serializer that defaults to legacy in some properties.
 //    @Test
 //    public void compareToVanilla() {
 //    String vanillaSNBT = """

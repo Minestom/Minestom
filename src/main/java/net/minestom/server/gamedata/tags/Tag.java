@@ -3,6 +3,7 @@ package net.minestom.server.gamedata.tags;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -19,14 +20,14 @@ import java.util.function.Function;
  * Represents a group of items, blocks, fluids, entity types or function.
  * Immutable by design
  */
-public final class Tag {
+public final class Tag implements ProtocolObject {
     private final NamespaceID name;
     private final Set<NamespaceID> values;
 
     /**
      * Creates a new empty tag. This does not cache the tag.
      */
-    public Tag(NamespaceID name) {
+    public Tag(@NotNull NamespaceID name) {
         this.name = name;
         this.values = new HashSet<>();
     }
@@ -34,7 +35,7 @@ public final class Tag {
     /**
      * Creates a new tag with the given values. This does not cache the tag.
      */
-    public Tag(NamespaceID name, Set<NamespaceID> values) {
+    public Tag(@NotNull NamespaceID name, @NotNull Set<NamespaceID> values) {
         this.name = name;
         this.values = new HashSet<>(values);
     }
@@ -45,7 +46,7 @@ public final class Tag {
      * @param id the id to check against
      * @return 'true' iif this tag contains the given id
      */
-    public boolean contains(NamespaceID id) {
+    public boolean contains(@NotNull NamespaceID id) {
         return values.contains(id);
     }
 
@@ -54,13 +55,19 @@ public final class Tag {
      *
      * @return immutable set of values present in this tag
      */
-    public Set<NamespaceID> getValues() {
+    public @NotNull Set<NamespaceID> getValues() {
         return Collections.unmodifiableSet(values);
+    }
+
+    @Override
+    public @NotNull NamespaceID namespace() {
+        return name;
     }
 
     /**
      * Returns the name of this tag
      */
+    @Deprecated
     public NamespaceID getName() {
         return name;
     }

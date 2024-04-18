@@ -35,7 +35,7 @@ public interface TransactionType extends BiFunction<@NotNull ItemStack, @NotNull
 
     /**
      * Joins two transaction types consecutively.
-     * This will use the same getter in both cases, so ensure that any potential overlap between the transaction types
+     * This will use the same getter in both properties, so ensure that any potential overlap between the transaction types
      * will not result in unexpected behaviour (e.g. item duping).
      */
     static @NotNull TransactionType join(@NotNull TransactionType first, @NotNull TransactionType second) {

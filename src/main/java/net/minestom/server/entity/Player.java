@@ -1822,7 +1822,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
-     * in cases where a {@link PlayerPositionAndLookPacket} is required
+     * in properties where a {@link PlayerPositionAndLookPacket} is required
      *
      * @param position the position used by {@link PlayerPositionAndLookPacket}
      *                 this may not be the same as the {@link Entity#position}
