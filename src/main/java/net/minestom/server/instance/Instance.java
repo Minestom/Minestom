@@ -205,7 +205,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
     /**
-     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
+     * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -317,17 +317,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return future called when the chunks are done saving
      */
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
-
-    /**
-     * Changes the instance {@link ChunkGenerator}.
-     *
-     * @param chunkGenerator the new {@link ChunkGenerator} of the instance
-     * @deprecated Use {@link #setGenerator(Generator)}
-     */
-    @Deprecated
-    public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
-        setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
-    }
 
     public abstract void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier);
 

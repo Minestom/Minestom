@@ -542,17 +542,12 @@ public final class Registry {
                 try {
                     ItemComponentMap.Builder builder = ItemComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
-                        try {
-                            //noinspection unchecked
-                            ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
-                            Check.notNull(component, "Unknown component: " + entry.getKey());
+                        //noinspection unchecked
+                        ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
+                        Check.notNull(component, "Unknown component: " + entry.getKey());
 
-                            BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
-                            builder.set(component, component.read(tag));
-                            //todo remove this try/catch, just so i dont need to impl all comps yet
-                        } catch (NullPointerException e) {
-                            System.out.println(e.getMessage());
-                        }
+                        BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
+                        builder.set(component, component.read(tag));
                     }
                     this.prototype = builder.build();
                 } catch (IOException e) {
