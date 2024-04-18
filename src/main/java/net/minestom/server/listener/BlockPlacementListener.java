@@ -22,6 +22,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
@@ -89,9 +90,8 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-//            canPlaceBlock = usedItem.meta().canPlaceOn(interactedBlock);
-            canPlaceBlock = false;
-            //todo
+            BlockPredicates placePredicate = usedItem.get(ItemComponent.CAN_PLACE_ON, BlockPredicates.NEVER);
+            canPlaceBlock = placePredicate.test(interactedBlock);
         }
 
 
@@ -149,7 +149,7 @@ public class BlockPlacementListener {
             // If a player is trying to place a block on themselves, the client will send a block change but will not set the block on the client
             // For this reason, the block doesn't need to be updated for the client
 
-            // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
+            // Client also doesn't predict placement of blocks on entities, but we need to refresh for properties where bounding boxes on the server don't match the client
             if (collisionEntity != player)
                 refresh(player, chunk);
             
