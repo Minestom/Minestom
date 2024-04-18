@@ -20,6 +20,14 @@ record TrimPatternImpl(Registry.TrimPatternEntry registry, int id) implements Tr
         this(registry, i.getAndIncrement());
     }
 
+    public static TrimPattern fromId(int id) {
+        return CONTAINER.getId(id);
+    }
+
+    public static TrimPattern fromNamespaceId(String namespace) {
+        return CONTAINER.getSafe(namespace);
+    }
+
     public static TrimPattern get(String namespace) {
         return CONTAINER.get(namespace);
     }

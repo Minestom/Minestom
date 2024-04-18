@@ -1,6 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.enchant.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 /**

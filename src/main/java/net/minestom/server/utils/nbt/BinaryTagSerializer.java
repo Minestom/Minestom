@@ -6,11 +6,52 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public interface BinaryTagSerializer<T> {
+
+    static <T> @NotNull BinaryTagSerializer<T> recursive(@NotNull Function<BinaryTagSerializer<T>, BinaryTagSerializer<T>> self) {
+        return new BinaryTagSerializer<>() {
+            private BinaryTagSerializer<T> serializer = null;
+
+            @Override
+            public @NotNull BinaryTag write(@NotNull T value) {
+                return serializer().write(value);
+            }
+
+            @Override
+            public @NotNull T read(@NotNull BinaryTag tag) {
+                return serializer().read(tag);
+            }
+
+            private BinaryTagSerializer<T> serializer() {
+                if (serializer == null) serializer = self.apply(this);
+                return serializer;
+            }
+        };
+    }
+
+    static <E extends Enum<E>> @NotNull BinaryTagSerializer<E> fromEnumStringable(@NotNull Class<E> enumClass) {
+        final E[] values = enumClass.getEnumConstants();
+        final Map<String, E> nameMap = Arrays.stream(values).collect(Collectors.toMap(e -> e.name().toLowerCase(Locale.ROOT), Function.identity()));
+        return new BinaryTagSerializer<E>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull E value) {
+                return StringBinaryTag.stringBinaryTag(value.name().toLowerCase(Locale.ROOT));
+            }
+
+            @Override
+            public @NotNull E read(@NotNull BinaryTag tag) {
+                return switch (tag) {
+                    case IntBinaryTag intBinaryTag -> values[intBinaryTag.value()];
+                    case StringBinaryTag string -> nameMap.getOrDefault(string.value().toLowerCase(Locale.ROOT), values[0]);
+                    default -> values[0];
+                };
+            }
+        };
+    }
 
     BinaryTagSerializer<Void> NOTHING = new BinaryTagSerializer<>() {
         @Override

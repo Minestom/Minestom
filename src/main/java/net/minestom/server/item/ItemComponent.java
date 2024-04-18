@@ -3,11 +3,11 @@ package net.minestom.server.item;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.color.Color;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,10 +36,10 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<Void> HIDE_ADDITIONAL_TOOLTIP = declare("hide_additional_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
     ItemComponent<Void> HIDE_TOOLTIP = declare("hide_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
     ItemComponent<Integer> REPAIR_COST = declare("repair_cost", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
-    ItemComponent<Unit> CREATIVE_SLOT_LOCK = declare("creative_slot_lock", NetworkBuffer.NOTHING_V2, null);
+    ItemComponent<Void> CREATIVE_SLOT_LOCK = declare("creative_slot_lock", NetworkBuffer.NOTHING, null);
     ItemComponent<Boolean> ENCHANTMENT_GLINT_OVERRIDE = declare("enchantment_glint_override", NetworkBuffer.BOOLEAN, BinaryTagSerializer.BOOLEAN);
     ItemComponent<Void> INTANGIBLE_PROJECTILE = declare("intangible_projectile", null, BinaryTagSerializer.NOTHING);
-    ItemComponent<Void> FOOD = declare("food", null, null); //todo
+    ItemComponent<Food> FOOD = declare("food", Food.NETWORK_TYPE, Food.NBT_TYPE);
     ItemComponent<Void> FIRE_RESISTANT = declare("fire_resistant", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
     ItemComponent<Void> TOOL = declare("tool", null, null); //todo
     ItemComponent<EnchantmentList> STORED_ENCHANTMENTS = declare("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
@@ -50,16 +50,16 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<MapPostProcessing> MAP_POST_PROCESSING = declare("map_post_processing", MapPostProcessing.NETWORK_TYPE, null);
     ItemComponent<List<ItemStack>> CHARGED_PROJECTILES = declare("charged_projectiles", ItemStack.NETWORK_TYPE.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
     ItemComponent<List<ItemStack>> BUNDLE_CONTENTS = declare("bundle_contents", ItemStack.NETWORK_TYPE.list(Short.MAX_VALUE), BinaryTagSerializer.ITEM.list());
-    ItemComponent<Void> POTION_CONTENTS = declare("potion_contents", null, null); //todo
-    ItemComponent<Void> SUSPICIOUS_STEW_EFFECTS = declare("suspicious_stew_effects", null, null); //todo
+    ItemComponent<PotionContents> POTION_CONTENTS = declare("potion_contents", PotionContents.NETWORK_TYPE, PotionContents.NBT_TYPE);
+    ItemComponent<SuspiciousStewEffects> SUSPICIOUS_STEW_EFFECTS = declare("suspicious_stew_effects", SuspiciousStewEffects.NETWORK_TYPE, SuspiciousStewEffects.NBT_TYPE);
     ItemComponent<WritableBookContent> WRITABLE_BOOK_CONTENT = declare("writable_book_content", WritableBookContent.NETWORK_TYPE, WritableBookContent.NBT_TYPE);
     ItemComponent<WrittenBookContent> WRITTEN_BOOK_CONTENT = declare("written_book_content", WrittenBookContent.NETWORK_TYPE, WrittenBookContent.NBT_TYPE);
-    ItemComponent<Void> TRIM = declare("trim", null, null); //todo
-    ItemComponent<Void> DEBUG_STICK_STATE = declare("debug_stick_state", null, null); //todo
+    ItemComponent<ArmorTrim> TRIM = declare("trim", ArmorTrim.NETWORK_TYPE, ArmorTrim.NBT_TYPE);
+    ItemComponent<DebugStickState> DEBUG_STICK_STATE = declare("debug_stick_state", null, DebugStickState.NBT_TYPE);
     ItemComponent<CustomData> ENTITY_DATA = declare("entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     ItemComponent<CustomData> BUCKET_ENTITY_DATA = declare("bucket_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     ItemComponent<CustomData> BLOCK_ENTITY_DATA = declare("block_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
-    ItemComponent<Void> INSTRUMENT = declare("instrument", null, null); //todo
+    ItemComponent<String> INSTRUMENT = declare("instrument", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     ItemComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = declare("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     ItemComponent<List<String>> RECIPES = declare("recipes", NetworkBuffer.STRING.list(Short.MAX_VALUE), BinaryTagSerializer.STRING.list());
     ItemComponent<LodestoneTracker> LODESTONE_TRACKER = declare("lodestone_tracker", LodestoneTracker.NETWORK_TYPE, LodestoneTracker.NBT_TYPE);
@@ -68,11 +68,11 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<Void> PROFILE = declare("profile", null, null); //todo
     ItemComponent<String> NOTE_BLOCK_SOUND = declare("note_block_sound", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     ItemComponent<Void> BANNER_PATTERNS = declare("banner_patterns", null, null); //todo
-    ItemComponent<Void> BASE_COLOR = declare("base_color", null, null); //todo dyecolor is the same stringrepresentable as item rarity
-    ItemComponent<Void> POT_DECORATIONS = declare("pot_decorations", null, null); //todo
+    ItemComponent<DyeColor> BASE_COLOR = declare("base_color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
+    ItemComponent<PotDecorations> POT_DECORATIONS = declare("pot_decorations", PotDecorations.NETWORK_TYPE, PotDecorations.NBT_TYPE);
     ItemComponent<List<ItemStack>> CONTAINER = declare("container", ItemStack.NETWORK_TYPE.list(256), BinaryTagSerializer.ITEM.list());
-    ItemComponent<Void> BLOCK_STATE = declare("block_state", null, null); //todo
-    ItemComponent<Void> BEES = declare("bees", null, null); //todo
+    ItemComponent<ItemBlockState> BLOCK_STATE = declare("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.NBT_TYPE);
+    ItemComponent<List<Bee>> BEES = declare("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.NBT_TYPE.list());
     ItemComponent<String> LOCK = declare("lock", null, BinaryTagSerializer.STRING);
     ItemComponent<SeededContainerLoot> CONTAINER_LOOT = declare("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
