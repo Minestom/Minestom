@@ -6,7 +6,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.CookieRequestPacket;
+import net.minestom.server.network.packet.server.common.CookieStorePacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +17,10 @@ import org.jetbrains.annotations.Nullable;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A PlayerConnection is an object needed for all created {@link Player}.
@@ -27,6 +33,8 @@ public abstract class PlayerConnection {
     volatile boolean online;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
+
+    private final Map<NamespaceID, CompletableFuture<byte @Nullable []>> pendingCookieRequests = new ConcurrentHashMap<>();
 
     public PlayerConnection() {
         this.online = true;
@@ -166,6 +174,25 @@ public abstract class PlayerConnection {
 
     public void setPlayerPublicKey(PlayerPublicKey playerPublicKey) {
         this.playerPublicKey = playerPublicKey;
+    }
+
+    public void storeCookie(@NotNull String key, byte @NotNull [] data) {
+        sendPacket(new CookieStorePacket(key, data));
+    }
+
+    public CompletableFuture<byte @Nullable []> fetchCookie(@NotNull String key) {
+        CompletableFuture<byte[]> future = new CompletableFuture<>();
+        pendingCookieRequests.put(NamespaceID.from(key), future);
+        sendPacket(new CookieRequestPacket(key));
+        return future;
+    }
+
+    @ApiStatus.Internal
+    public void receiveCookieResponse(@NotNull String key, byte @Nullable [] data) {
+        CompletableFuture<byte[]> future = pendingCookieRequests.remove(NamespaceID.from(key));
+        if (future != null) {
+            future.complete(data);
+        }
     }
 
     /**
