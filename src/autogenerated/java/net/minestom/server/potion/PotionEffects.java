@@ -49,7 +49,7 @@ interface PotionEffects {
 
     PotionEffect ABSORPTION = PotionEffectImpl.get("minecraft:absorption");
 
-    PotionEffect SATURATION = PotionEffectImpl.get("minecraft:saturationModifier");
+    PotionEffect SATURATION = PotionEffectImpl.get("minecraft:saturation");
 
     PotionEffect GLOWING = PotionEffectImpl.get("minecraft:glowing");
 

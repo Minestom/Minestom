@@ -66,7 +66,7 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<LodestoneTracker> LODESTONE_TRACKER = declare("lodestone_tracker", LodestoneTracker.NETWORK_TYPE, LodestoneTracker.NBT_TYPE);
     ItemComponent<FireworkExplosion> FIREWORK_EXPLOSION = declare("firework_explosion", FireworkExplosion.NETWORK_TYPE, FireworkExplosion.NBT_TYPE);
     ItemComponent<FireworkList> FIREWORKS = declare("fireworks", FireworkList.NETWORK_TYPE, FireworkList.NBT_TYPE);
-    ItemComponent<Void> PROFILE = declare("profile", null, null); //todo
+    ItemComponent<HeadProfile> PROFILE = declare("profile", HeadProfile.NETWORK_TYPE, HeadProfile.NBT_TYPE);
     ItemComponent<String> NOTE_BLOCK_SOUND = declare("note_block_sound", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     ItemComponent<Void> BANNER_PATTERNS = declare("banner_patterns", null, null); //todo
     ItemComponent<DyeColor> BASE_COLOR = declare("base_color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
