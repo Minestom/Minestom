@@ -17,7 +17,7 @@ public abstract class SmithingTransformRecipe extends Recipe {
             @NotNull DeclareRecipesPacket.Ingredient additionIngredient,
             @NotNull ItemStack result
     ) {
-        super(Type.SMITHING_TRANSFORM, recipeId);
+        super(RecipeType.SMITHING_TRANSFORM, recipeId);
         this.template = template;
         this.baseIngredient = baseIngredient;
         this.additionIngredient = additionIngredient;

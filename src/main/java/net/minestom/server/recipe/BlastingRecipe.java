@@ -20,7 +20,7 @@ public abstract class BlastingRecipe extends Recipe {
             float experience,
             int cookingTime
     ) {
-        super(Type.BLASTING, recipeId);
+        super(RecipeType.BLASTING, recipeId);
         this.group = group;
         this.category = category;
         this.result = result;
