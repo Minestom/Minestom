@@ -52,6 +52,17 @@ public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEven
     }
 
     /**
+     * Create a custom sound event. The namespace should match a sound provided in the resource pack.
+     *
+     * @param namespaceID the namespace ID of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
+     * @return the custom sound event
+     */
+    static @NotNull SoundEvent of(@NotNull String namespaceID, @Nullable Float range) {
+        return new CustomSoundEvent(NamespaceID.from(namespaceID), range);
+    }
+
+    /**
      * Create a custom sound event. The {@link NamespaceID} should match a sound provided in the resource pack.
      * @param namespaceID the namespace ID of the custom sound event
      * @param range the range of the sound event, or null for (legacy) dynamic range

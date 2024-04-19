@@ -2,6 +2,7 @@ package net.minestom.codegen;
 
 import net.minestom.codegen.color.DyeColorGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
+import net.minestom.codegen.recipe.RecipeTypeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +19,11 @@ public class Generators {
         }
         File outputFolder = new File(args[0]);
 
-        // Generate DyeColors
+        // Special generators
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
+        new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
 
+        // Generic protocol object
         var generator = new CodeGenerator(outputFolder);
         generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
         generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "Materials");
