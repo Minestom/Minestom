@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -233,11 +234,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     /**
-     * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}.
+     * Gets if this chunk will or had been loaded with a {@link Generator}.
      * <p>
      * If false, the chunk will be entirely empty when loaded.
      *
-     * @return true if this chunk is affected by a {@link ChunkGenerator}
+     * @return true if this chunk is affected by a {@link Generator}
      */
     public boolean shouldGenerate() {
         return shouldGenerate;
@@ -247,7 +248,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Gets if this chunk is read-only.
      * <p>
      * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link ChunkGenerator}.
+     * It does not affect {@link IChunkLoader} and {@link Generator}.
      *
      * @return true if the chunk is read-only
      */
@@ -259,7 +260,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Changes the read state of the chunk.
      * <p>
      * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
-     * It does not affect {@link IChunkLoader} and {@link ChunkGenerator}.
+     * It does not affect {@link IChunkLoader} and {@link Generator}.
      *
      * @param readOnly true to make the chunk read-only, false otherwise
      */
