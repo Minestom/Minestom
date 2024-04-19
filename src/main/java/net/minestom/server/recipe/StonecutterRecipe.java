@@ -15,7 +15,7 @@ public abstract class StonecutterRecipe extends Recipe {
             @NotNull DeclareRecipesPacket.Ingredient ingredient,
             @NotNull ItemStack result
     ) {
-        super(Type.STONECUTTING, recipeId);
+        super(RecipeType.STONECUTTING, recipeId);
         this.group = group;
         this.ingredient = ingredient;
         this.result = result;

@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.recipe.RecipeCategory;
+import net.minestom.server.recipe.RecipeType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +44,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public void write(@NotNull NetworkBuffer writer) {
         writer.writeCollection(recipes, (bWriter, recipe) -> {
             bWriter.write(STRING, recipe.recipeId());
-            bWriter.write(STRING, recipe.type());
+            bWriter.write(RecipeType.NETWORK_TYPE, recipe.type());
             bWriter.write(recipe);
         });
     }
@@ -58,7 +59,7 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             DeclaredSmeltingRecipe, DeclaredBlastingRecipe, DeclaredSmokingRecipe,
             DeclaredCampfireCookingRecipe, DeclaredStonecutterRecipe,
             DeclaredSmithingTrimRecipe, DeclaredSmithingTransformRecipe {
-        @NotNull String type();
+        @NotNull RecipeType type();
 
         @NotNull String recipeId();
     }
@@ -82,8 +83,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "crafting_shapeless";
+        public @NotNull RecipeType type() {
+            return RecipeType.SHAPELESS;
         }
     }
 
@@ -133,8 +134,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "crafting_shaped";
+        public @NotNull RecipeType type() {
+            return RecipeType.SHAPED;
         }
     }
 
@@ -160,8 +161,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "smelting";
+        public @NotNull RecipeType type() {
+            return RecipeType.SMELTING;
         }
     }
 
@@ -187,8 +188,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "blasting";
+        public @NotNull RecipeType type() {
+            return RecipeType.BLASTING;
         }
     }
 
@@ -214,8 +215,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "smoking";
+        public @NotNull RecipeType type() {
+            return RecipeType.SMOKING;
         }
     }
 
@@ -241,8 +242,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "campfire_cooking";
+        public @NotNull RecipeType type() {
+            return RecipeType.CAMPFIRE_COOKING;
         }
     }
 
@@ -261,8 +262,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "stonecutting";
+        public @NotNull RecipeType type() {
+            return RecipeType.STONECUTTING;
         }
     }
 
@@ -282,8 +283,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "smithing_transform";
+        public @NotNull RecipeType type() {
+            return RecipeType.SMITHING_TRANSFORM;
         }
     }
 
@@ -301,8 +302,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
         }
 
         @Override
-        public @NotNull String type() {
-            return "smithing_trim";
+        public @NotNull RecipeType type() {
+            return RecipeType.SMITHING_TRIM;
         }
     }
 
