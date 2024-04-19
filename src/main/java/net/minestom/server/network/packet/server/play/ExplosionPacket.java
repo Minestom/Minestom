@@ -17,23 +17,23 @@ public record ExplosionPacket(double x, double y, double z, float radius,
                               @NotNull BlockInteraction blockInteraction,
                               int smallParticleId, byte @NotNull [] smallParticleData,
                               int largeParticleId, byte @NotNull [] largeParticleData,
-                              @NotNull String soundName, boolean hasFixedSoundRange, float soundRange) implements ServerPacket.Play {
+                              @NotNull SoundEvent sound) implements ServerPacket.Play {
+    public static final SoundEvent DEFAULT_SOUND = SoundEvent.ENTITY_GENERIC_EXPLODE;
+
     private static @NotNull ExplosionPacket fromReader(@NotNull NetworkBuffer reader) {
         double x = reader.read(DOUBLE), y = reader.read(DOUBLE), z = reader.read(DOUBLE);
         float radius = reader.read(FLOAT);
         byte[] records = reader.readBytes(reader.read(VAR_INT) * 3);
         float playerMotionX = reader.read(FLOAT), playerMotionY = reader.read(FLOAT), playerMotionZ = reader.read(FLOAT);
-        BlockInteraction blockInteraction = BlockInteraction.values()[reader.read(VAR_INT)];
+        BlockInteraction blockInteraction = reader.readEnum(BlockInteraction.class);
         int smallParticleId = reader.read(VAR_INT);
         byte[] smallParticleData = readParticleData(reader, Particle.fromId(smallParticleId));
         int largeParticleId = reader.read(VAR_INT);
         byte[] largeParticleData = readParticleData(reader, Particle.fromId(largeParticleId));
-        String soundName = reader.read(STRING);
-        boolean hasFixedSoundRange = reader.read(BOOLEAN);
-        float soundRange = hasFixedSoundRange ? reader.read(FLOAT) : 0;
+        SoundEvent sound = reader.read(SoundEvent.NETWORK_TYPE);
         return new ExplosionPacket(x, y, z, radius, records, playerMotionX, playerMotionY, playerMotionZ,
                 blockInteraction, smallParticleId, smallParticleData, largeParticleId, largeParticleData,
-                soundName, hasFixedSoundRange, soundRange);
+                sound);
     }
 
     private static byte @NotNull [] readParticleData(@NotNull NetworkBuffer reader, Particle particle) {
@@ -75,13 +75,13 @@ public record ExplosionPacket(double x, double y, double z, float radius,
         this(x, y, z, radius, records, playerMotionX, playerMotionY, playerMotionZ,
                 BlockInteraction.DESTROY, Particle.EXPLOSION.id(), new byte[] {},
                 Particle.EXPLOSION_EMITTER.id(), new byte[] {},
-                SoundEvent.ENTITY_GENERIC_EXPLODE.name(), false, 0);
+                DEFAULT_SOUND);
     }
 
     private ExplosionPacket(@NotNull ExplosionPacket packet) {
         this(packet.x, packet.y, packet.z, packet.radius, packet.records, packet.playerMotionX, packet.playerMotionY, packet.playerMotionZ,
                 packet.blockInteraction, packet.smallParticleId, packet.smallParticleData, packet.largeParticleId, packet.largeParticleData,
-                packet.soundName, packet.hasFixedSoundRange, packet.soundRange);
+                packet.sound);
     }
 
     @Override
@@ -100,9 +100,7 @@ public record ExplosionPacket(double x, double y, double z, float radius,
         writer.write(RAW_BYTES, smallParticleData);
         writer.write(VAR_INT, largeParticleId);
         writer.write(RAW_BYTES, largeParticleData);
-        writer.write(STRING, soundName);
-        writer.write(BOOLEAN, hasFixedSoundRange);
-        if (hasFixedSoundRange) writer.write(FLOAT, soundRange);
+        writer.write(SoundEvent.NETWORK_TYPE, sound);
     }
 
     @Override
