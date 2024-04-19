@@ -27,7 +27,7 @@ public interface IChunkLoader {
     }
 
     /**
-     * Loads a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied.
+     * Loads a {@link Chunk}, all blocks should be set since the {@link net.minestom.server.instance.generator.Generator} is not applied.
      *
      * @param instance the {@link Instance} where the {@link Chunk} belong
      * @param chunkX   the chunk X
