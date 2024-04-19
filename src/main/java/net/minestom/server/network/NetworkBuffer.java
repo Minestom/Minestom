@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
@@ -81,6 +82,24 @@ public final class NetworkBuffer {
 
     public static <E extends Enum<E>> Type<E> fromEnum(@NotNull Class<E> enumClass) {
         return NetworkBufferTypeImpl.fromEnum(enumClass);
+    }
+
+    public static <T> Type<T> lazy(@NotNull Supplier<Type<T>> supplier) {
+        return new NetworkBuffer.Type<>() {
+            private Type<T> type;
+
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, T value) {
+                if (type == null) type = supplier.get();
+                type.write(buffer, value);
+            }
+
+            @Override
+            public T read(@NotNull NetworkBuffer buffer) {
+                if (type == null) type = supplier.get();
+                return null;
+            }
+        };
     }
 
     ByteBuffer nioBuffer;

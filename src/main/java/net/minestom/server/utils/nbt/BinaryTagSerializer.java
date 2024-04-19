@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.UniqueIdUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -153,6 +154,21 @@ public interface BinaryTagSerializer<T> {
             c -> GsonComponentSerializer.gson().serialize(c)
     );
     BinaryTagSerializer<ItemStack> ITEM = COMPOUND.map(ItemStack::fromItemNBT, ItemStack::toItemNBT);
+
+    BinaryTagSerializer<UUID> UUID = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(java.util.@NotNull UUID value) {
+            return UniqueIdUtils.toNbt(value);
+        }
+
+        @Override
+        public java.util.@NotNull UUID read(@NotNull BinaryTag tag) {
+            if (!(tag instanceof IntArrayBinaryTag intArrayTag)) {
+                throw new IllegalArgumentException("unexpected uuid type: " + tag.type());
+            }
+            return UniqueIdUtils.fromNbt(intArrayTag);
+        }
+    };
 
     @NotNull BinaryTag write(@NotNull T value);
     @NotNull T read(@NotNull BinaryTag tag);

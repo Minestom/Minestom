@@ -42,6 +42,7 @@ public enum DyeColor implements RGBLike {
     BLACK(new Color(0x1d1d21), new Color(0x0), new Color(0x1e1b1b), 29);
 
     public static final NetworkBuffer.Type<DyeColor> NETWORK_TYPE = NetworkBuffer.fromEnum(DyeColor.class);
+
     public static final BinaryTagSerializer<DyeColor> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(DyeColor.class);
 
     private final Color textureDiffuseColor;
