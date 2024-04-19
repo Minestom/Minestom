@@ -1,7 +1,6 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiPredicate;
@@ -43,26 +42,25 @@ public interface TransactionOperator extends UnaryOperator<TransactionOperator.E
         return (entry) -> {
             final ItemStack left = entry.left();
             final ItemStack right = entry.right();
-            final StackingRule rule = StackingRule.get();
 
             // Quick exit if the right is air (nothing can be transferred anyway)
             // If the left is air then we know it can be transferred, but it can also be transferred if they're stackable
             // and left isn't full, even if left isn't air.
-            if (right.isAir() || (!left.isAir() && !(rule.canBeStacked(left, right) && rule.getAmount(left) < rule.getMaxSize(left)))) {
+            if (right.isAir() || (!left.isAir() && !(left.isSimilar(right) && left.amount() < left.maxStackSize()))) {
                 return null;
             }
 
-            int leftAmount = left.isAir() ? 0 : rule.getAmount(left);
-            int rightAmount = rule.getAmount(right);
+            int leftAmount = left.isAir() ? 0 : left.amount();
+            int rightAmount = right.amount();
 
             int addedAmount = Math.min(rightAmount, count);
             if (!left.isAir()) {
-                addedAmount = Math.min(addedAmount, rule.getMaxSize(left) - leftAmount);
+                addedAmount = Math.min(addedAmount, left.maxStackSize() - leftAmount);
             }
 
             if (addedAmount == 0) return null;
 
-            return new Entry(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
+            return new Entry((left.isAir() ? right : left).withAmount(leftAmount + addedAmount), right.withAmount(rightAmount - addedAmount));
         };
     }
 
@@ -73,24 +71,23 @@ public interface TransactionOperator extends UnaryOperator<TransactionOperator.E
     TransactionOperator STACK_LEFT = (entry) -> {
         final ItemStack left = entry.left();
         final ItemStack right = entry.right();
-        final StackingRule rule = StackingRule.get();
 
         // Quick exit if the right is air (nothing can be transferred anyway)
         // If the left is air then we know it can be transferred, but it can also be transferred if they're stackable
         // and left isn't full, even if left isn't air.
-        if (right.isAir() || (!left.isAir() && !(rule.canBeStacked(left, right) && rule.getAmount(left) < rule.getMaxSize(left)))) {
+        if (right.isAir() || (!left.isAir() && !(left.isSimilar(right) && left.amount() < left.maxStackSize()))) {
             return null;
         }
 
-        int leftAmount = left.isAir() ? 0 : rule.getAmount(left);
-        int rightAmount = rule.getAmount(right);
+        int leftAmount = left.isAir() ? 0 : left.amount();
+        int rightAmount = right.amount();
 
         int addedAmount = rightAmount;
         if (!left.isAir()) {
-            addedAmount = Math.min(rightAmount, rule.getMaxSize(left) - leftAmount);
+            addedAmount = Math.min(rightAmount, left.maxStackSize() - leftAmount);
         }
 
-        return new Entry(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
+        return new Entry((left.isAir() ? right : left).withAmount(leftAmount + addedAmount), right.withAmount(rightAmount - addedAmount));
     };
 
     /**
@@ -105,14 +102,13 @@ public interface TransactionOperator extends UnaryOperator<TransactionOperator.E
     TransactionOperator TAKE = (entry) -> {
         final ItemStack left = entry.left();
         final ItemStack right = entry.right();
-        final StackingRule rule = StackingRule.get();
-        if (right.isAir() || !rule.canBeStacked(left, right)) {
+        if (right.isAir() || !left.isSimilar(right)) {
             return null;
         }
-        final int leftAmount = rule.getAmount(left);
-        final int rightAmount = rule.getAmount(right);
+        final int leftAmount = left.amount();
+        final int rightAmount = right.amount();
         final int subtracted = Math.min(leftAmount, rightAmount);
-        return new Entry(rule.apply(left, leftAmount - subtracted), rule.apply(right, rightAmount - subtracted));
+        return new Entry(left.withAmount(leftAmount - subtracted), right.withAmount(rightAmount - subtracted));
     };
 
     default Entry apply(@NotNull ItemStack left, @NotNull ItemStack right) {
