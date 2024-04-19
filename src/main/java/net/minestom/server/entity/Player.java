@@ -131,13 +131,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
 
     private long lastKeepAlive;
-    private boolean answerKeepAlive;
+    private volatile boolean answerKeepAlive;
 
     private String username;
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
 
-    private int latency;
+    private volatile int latency;
     private Component displayName;
     private PlayerSkin skin;
 
