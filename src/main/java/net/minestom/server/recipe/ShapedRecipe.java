@@ -25,7 +25,7 @@ public abstract class ShapedRecipe extends Recipe {
                             @NotNull RecipeCategory.Crafting category,
                            @Nullable List<DeclareRecipesPacket.Ingredient> ingredients,
                            @NotNull ItemStack result, boolean showNotification) {
-        super(Type.SHAPED, recipeId);
+        super(RecipeType.SHAPED, recipeId);
         this.width = width;
         this.height = height;
         this.group = group;
