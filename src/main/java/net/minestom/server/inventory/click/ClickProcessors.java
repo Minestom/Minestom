@@ -49,11 +49,11 @@ public final class ClickProcessors {
         if (cursor.isAir() && clickedItem.isAir()) return List.of(); // Both are air, no changes
 
         if (cursor.isAir()) { // Take half (rounded up) of the clicked item
-            int newAmount = (int) Math.ceil(RULE.getAmount(clickedItem) / 2d);
+            int newAmount = (int) Math.ceil(clickedItem.amount() / 2d);
             final TransactionOperator.Entry cursorSlot = TransactionOperator.stackLeftN(newAmount).apply(cursor, clickedItem);
             if (cursorSlot == null) return List.of();
             return List.of(new Container(slot, cursorSlot.right()), new Cursor(cursorSlot.left()));
-        } else if (clickedItem.isAir() || RULE.canBeStacked(clickedItem, cursor)) { // Can add, transfer one over
+        } else if (clickedItem.isAir() || clickedItem.isSimilar(cursor)) { // Can add, transfer one over
             final TransactionOperator.Entry slotCursor = TransactionOperator.stackLeftN(1).apply(clickedItem, cursor);
             if (slotCursor == null) return List.of();
             return List.of(new Container(slot, slotCursor.left()), new Cursor(slotCursor.right()));
@@ -65,7 +65,7 @@ public final class ClickProcessors {
     public static @NotNull List<Click.Change> middleClick(int slot, @NotNull Click.Getter getter) {
         final ItemStack item = getter.get(slot);
         if (!getter.cursor().isAir() || item.isAir()) return List.of();
-        return List.of(new Cursor(RULE.apply(item, RULE.getMaxSize(item))));
+        return List.of(new Cursor(item.withAmount(item.maxStackSize())));
     }
 
     public static @NotNull List<Click.Change> shiftClick(int slot, @NotNull List<Integer> slots, @NotNull Click.Getter getter) {
@@ -90,9 +90,9 @@ public final class ClickProcessors {
         if (cursor.isAir()) return List.of();
 
         final TransactionType unstacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT,
-                (left, right) -> RULE.getAmount(left) < RULE.getMaxSize(left)), slots);
+                (left, right) -> left.amount() < left.maxStackSize()), slots);
         final TransactionType stacked = TransactionType.general(TransactionOperator.filter(TransactionOperator.STACK_RIGHT,
-                (left, right) -> RULE.getAmount(left) == RULE.getMaxSize(left)), slots);
+                (left, right) -> left.amount() == left.maxStackSize()), slots);
 
         final TransactionType.Entry result = TransactionType.join(unstacked, stacked).apply(cursor, getter::get);
         List<Click.Change> changes = new ArrayList<>();
