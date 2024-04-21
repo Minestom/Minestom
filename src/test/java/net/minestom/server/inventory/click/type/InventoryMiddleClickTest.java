@@ -3,7 +3,7 @@ package net.minestom.server.inventory.click.type;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.Click.Change.Cursor;
-import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Container;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class InventoryMiddleClickTest {
     @Test
     public void testCopy() {
         assertClick(
-                List.of(new Main(0, magic(64))),
+                List.of(new Container(0, magic(64))),
                 new Click.Info.Middle(0),
                 List.of(new Cursor(magic(64)))
         );
@@ -34,7 +34,7 @@ public class InventoryMiddleClickTest {
     @Test
     public void testCopyNotFull() {
         assertClick(
-                List.of(new Main(0, magic(32))),
+                List.of(new Container(0, magic(32))),
                 new Click.Info.Middle(0),
                 List.of(new Cursor(magic(64)))
         );
