@@ -3,7 +3,7 @@ package net.minestom.server.inventory.click.type;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.Click.Change.DropFromPlayer;
-import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Container;
 import net.minestom.server.item.ItemStack;
 import org.junit.jupiter.api.Test;
 
@@ -27,18 +27,18 @@ public class InventoryDropSlotTest {
     @Test
     public void testDropEntireStack() {
         assertClick(
-                List.of(new Main(0, magic(32))),
+                List.of(new Container(0, magic(32))),
                 new Click.Info.DropSlot(0, true),
-                List.of(new Main(0, ItemStack.AIR), new DropFromPlayer(magic(32)))
+                List.of(new Container(0, ItemStack.AIR), new DropFromPlayer(magic(32)))
         );
     }
 
     @Test
     public void testDropSingleItem() {
         assertClick(
-                List.of(new Main(0, magic(32))),
+                List.of(new Container(0, magic(32))),
                 new Click.Info.DropSlot(0, false),
-                List.of(new Main(0, magic(31)), new DropFromPlayer(magic(1)))
+                List.of(new Container(0, magic(31)), new DropFromPlayer(magic(1)))
         );
     }
 

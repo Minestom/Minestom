@@ -3,7 +3,7 @@ package net.minestom.server.inventory.click.type;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.Click.Change.Cursor;
-import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Container;
 import net.minestom.server.item.ItemStack;
 import org.junit.jupiter.api.Test;
 
@@ -35,46 +35,46 @@ public class InventoryDoubleClickTest {
     @Test
     public void testPartialTake() {
         assertClick(
-                List.of(new Main(1, magic(48)), new Cursor(magic(32))),
+                List.of(new Container(1, magic(48)), new Cursor(magic(32))),
                 new Click.Info.Double(0),
-                List.of(new Main(1, magic(16)), new Cursor(magic(64)))
+                List.of(new Container(1, magic(16)), new Cursor(magic(64)))
         );
     }
 
     @Test
     public void testTakeAll() {
         assertClick(
-                List.of(new Main(1, magic(32)), new Cursor(magic(32))),
+                List.of(new Container(1, magic(32)), new Cursor(magic(32))),
                 new Click.Info.Double(0),
-                List.of(new Main(1, ItemStack.AIR), new Cursor(magic(64)))
+                List.of(new Container(1, ItemStack.AIR), new Cursor(magic(64)))
         );
 
         assertClick(
-                List.of(new Main(1, magic(16)), new Cursor(magic(32))),
+                List.of(new Container(1, magic(16)), new Cursor(magic(32))),
                 new Click.Info.Double(0),
-                List.of(new Main(1, ItemStack.AIR), new Cursor(magic(48)))
+                List.of(new Container(1, ItemStack.AIR), new Cursor(magic(48)))
         );
     }
 
     @Test
     public void testTakeSeparated() {
         assertClick(
-                List.of(new Main(1, magic(16)), new Main(2, magic(16)), new Cursor(magic(32))),
+                List.of(new Container(1, magic(16)), new Container(2, magic(16)), new Cursor(magic(32))),
                 new Click.Info.Double(0),
-                List.of(new Main(1, ItemStack.AIR), new Main(2, ItemStack.AIR), new Cursor(magic(64)))
+                List.of(new Container(1, ItemStack.AIR), new Container(2, ItemStack.AIR), new Cursor(magic(64)))
         );
 
         assertClick(
-                List.of(new Main(1, magic(16)), new Main(2, magic(32)), new Cursor(magic(32))),
+                List.of(new Container(1, magic(16)), new Container(2, magic(32)), new Cursor(magic(32))),
                 new Click.Info.Double(0),
-                List.of(new Main(1, ItemStack.AIR), new Main(2, magic(16)), new Cursor(magic(64)))
+                List.of(new Container(1, ItemStack.AIR), new Container(2, magic(16)), new Cursor(magic(64)))
         );
     }
 
     @Test
     public void testCursorFull() {
         assertClick(
-                List.of(new Main(1, magic(48)), new Cursor(magic(64))),
+                List.of(new Container(1, magic(48)), new Cursor(magic(64))),
                 new Click.Info.Double(0),
                 List.of()
         );

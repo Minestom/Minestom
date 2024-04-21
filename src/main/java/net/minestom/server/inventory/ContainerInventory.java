@@ -78,7 +78,7 @@ public non-sealed class ContainerInventory extends InventoryImpl {
 
         for (var change : changes) {
             switch (change) {
-                case Click.Change.Main(int slot, ItemStack item) -> {
+                case Click.Change.Container(int slot, ItemStack item) -> {
                     if (slot < inventory.getSize()) {
                         inventory.setItemStack(slot, item);
                     } else {

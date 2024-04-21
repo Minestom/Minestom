@@ -37,7 +37,7 @@ public class InventoryRightDragTest {
         assertClick(
                 List.of(new Cursor(magic(32))),
                 new Click.Info.RightDrag(IntList.of(0)),
-                List.of(new Main(0, magic(1)), new Cursor(magic(31)))
+                List.of(new Container(0, magic(1)), new Cursor(magic(31)))
         );
     }
 
@@ -46,7 +46,7 @@ public class InventoryRightDragTest {
         assertClick(
                 List.of(new Cursor(magic(2))),
                 new Click.Info.RightDrag(IntList.of(0, 1)),
-                List.of(new Main(0, magic(1)), new Main(1, magic(1)), new Cursor(ItemStack.AIR))
+                List.of(new Container(0, magic(1)), new Container(1, magic(1)), new Cursor(ItemStack.AIR))
         );
     }
 
@@ -55,23 +55,23 @@ public class InventoryRightDragTest {
         assertClick(
                 List.of(new Cursor(magic(2))),
                 new Click.Info.RightDrag(IntList.of(0, 1, 2)),
-                List.of(new Main(0, magic(1)), new Main(1, magic(1)), new Cursor(ItemStack.AIR))
+                List.of(new Container(0, magic(1)), new Container(1, magic(1)), new Cursor(ItemStack.AIR))
         );
     }
 
     @Test
     public void testDistributeOverExisting() {
         assertClick(
-                List.of(new Main(0, magic(16)), new Cursor(magic(32))),
+                List.of(new Container(0, magic(16)), new Cursor(magic(32))),
                 new Click.Info.RightDrag(IntList.of(0)),
-                List.of(new Main(0, magic(17)), new Cursor(magic(31)))
+                List.of(new Container(0, magic(17)), new Cursor(magic(31)))
         );
     }
 
     @Test
     public void testDistributeOverFull() {
         assertClick(
-                List.of(new Main(0, magic(64)), new Cursor(magic(32))),
+                List.of(new Container(0, magic(64)), new Cursor(magic(32))),
                 new Click.Info.RightDrag(IntList.of(0)),
                 List.of()
         );
