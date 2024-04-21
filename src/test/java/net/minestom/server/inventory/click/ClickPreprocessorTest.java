@@ -13,7 +13,7 @@ public class ClickPreprocessorTest {
     public void testPickupType() {
         assertProcessed(new Click.Info.LeftDropCursor(), clickPacket(PICKUP, 1, 0, -999));
         assertProcessed(new Click.Info.RightDropCursor(), clickPacket(PICKUP, 1, 1, -999));
-        assertProcessed(new Click.Info.MiddleDropCursor(), clickPacket(PICKUP, 1, 2, -999));
+        assertProcessed(new Click.Info.MiddleDropCursor(), clickPacket(CLONE, 1, 2, -999));
 
         assertProcessed(new Click.Info.Left(0), clickPacket(PICKUP, 1, 0, 0));
         assertProcessed(new Click.Info.Left(SIZE), clickPacket(PICKUP, 1, 0, 5));
