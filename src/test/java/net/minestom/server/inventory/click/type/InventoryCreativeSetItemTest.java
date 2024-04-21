@@ -2,7 +2,7 @@ package net.minestom.server.inventory.click.type;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
-import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Container;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,14 +21,14 @@ public class InventoryCreativeSetItemTest {
         assertClick(
                 List.of(),
                 new Click.Info.CreativeSetItem(0, magic(64)),
-                List.of(new Main(0, magic(64)))
+                List.of(new Container(0, magic(64)))
         );
 
         // Make sure it doesn't set a full stack
         assertClick(
                 List.of(),
                 new Click.Info.CreativeSetItem(0, magic(1)),
-                List.of(new Main(0, magic(1)))
+                List.of(new Container(0, magic(1)))
         );
     }
 
