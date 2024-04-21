@@ -29,7 +29,7 @@ public class InventoryShiftClickTest {
         assertClick(
                 List.of(new Player(9, magic(32))),
                 new Click.Info.LeftShift(SIZE),
-                List.of(new Main(0, magic(32)), new Player(9, ItemStack.AIR))
+                List.of(new Container(0, magic(32)), new Player(9, ItemStack.AIR))
         );
     }
 
@@ -38,14 +38,14 @@ public class InventoryShiftClickTest {
         assertClick(
                 List.of(
                         new Player(9, magic(64)),
-                        new Main(0, magic(32)),
-                        new Main(1, magic(32))
+                        new Container(0, magic(32)),
+                        new Container(1, magic(32))
                 ),
                 new Click.Info.LeftShift(SIZE),
                 List.of(
                         new Player(9, ItemStack.AIR),
-                        new Main(0, magic(64)),
-                        new Main(1, magic(64))
+                        new Container(0, magic(64)),
+                        new Container(1, magic(64))
                 )
         );
     }
@@ -55,13 +55,13 @@ public class InventoryShiftClickTest {
         assertClick(
                 List.of(
                         new Player(9, magic(64)),
-                        new Main(0, magic(32))
+                        new Container(0, magic(32))
                 ),
                 new Click.Info.LeftShift(SIZE),
                 List.of(
                         new Player(9, ItemStack.AIR),
-                        new Main(0, magic(64)),
-                        new Main(1, magic(32))
+                        new Container(0, magic(64)),
+                        new Container(1, magic(32))
                 )
         );
     }
@@ -71,14 +71,14 @@ public class InventoryShiftClickTest {
         assertClick(
                 List.of(
                         new Player(9, magic(64)),
-                        new Main(0, magic(32)),
-                        new Main(1, magic2(1)),
-                        new Main(2, magic2(1)),
-                        new Main(3, magic2(1)),
-                        new Main(4, magic2(1))
+                        new Container(0, magic(32)),
+                        new Container(1, magic2(1)),
+                        new Container(2, magic2(1)),
+                        new Container(3, magic2(1)),
+                        new Container(4, magic2(1))
                 ),
                 new Click.Info.LeftShift(SIZE),
-                List.of(new Player(9, magic(32)), new Main(0, magic(64)))
+                List.of(new Player(9, magic(32)), new Container(0, magic(64)))
         );
     }
 
@@ -87,11 +87,11 @@ public class InventoryShiftClickTest {
         assertClick(
                 List.of(
                         new Player(9, magic(64)),
-                        new Main(0, magic(64)),
-                        new Main(1, magic2(1)),
-                        new Main(2, magic2(1)),
-                        new Main(3, magic2(1)),
-                        new Main(4, magic2(1))
+                        new Container(0, magic(64)),
+                        new Container(1, magic2(1)),
+                        new Container(2, magic2(1)),
+                        new Container(3, magic2(1)),
+                        new Container(4, magic2(1))
                 ),
                 new Click.Info.LeftShift(SIZE), // Equivalent to player slot 9
                 List.of()
@@ -100,11 +100,11 @@ public class InventoryShiftClickTest {
         assertClick(
                 List.of(
                         new Player(9, magic(64)),
-                        new Main(0, magic2(1)),
-                        new Main(1, magic2(1)),
-                        new Main(2, magic2(1)),
-                        new Main(3, magic2(1)),
-                        new Main(4, magic2(1))
+                        new Container(0, magic2(1)),
+                        new Container(1, magic2(1)),
+                        new Container(2, magic2(1)),
+                        new Container(3, magic2(1)),
+                        new Container(4, magic2(1))
                 ),
                 new Click.Info.LeftShift(SIZE), // Equivalent to player slot 9
                 List.of()
@@ -114,39 +114,39 @@ public class InventoryShiftClickTest {
     @Test
     public void testPlayerInteraction() {
         assertPlayerClick(
-                List.of(new Main(9, magic(32))),
+                List.of(new Container(9, magic(32))),
                 new Click.Info.LeftShift(9),
-                List.of(new Main(9, ItemStack.AIR), new Main(0, magic(32)))
+                List.of(new Container(9, ItemStack.AIR), new Container(0, magic(32)))
         );
 
         assertPlayerClick(
-                List.of(new Main(8, magic(32))),
+                List.of(new Container(8, magic(32))),
                 new Click.Info.LeftShift(8),
-                List.of(new Main(8, ItemStack.AIR), new Main(9, magic(32)))
+                List.of(new Container(8, ItemStack.AIR), new Container(9, magic(32)))
         );
 
         assertPlayerClick(
-                List.of(new Main(9, ItemStack.of(Material.IRON_CHESTPLATE))),
+                List.of(new Container(9, ItemStack.of(Material.IRON_CHESTPLATE))),
                 new Click.Info.LeftShift(9),
-                List.of(new Main(9, ItemStack.AIR), new Main(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE)))
+                List.of(new Container(9, ItemStack.AIR), new Container(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE)))
         );
 
         assertPlayerClick(
-                List.of(new Main(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE))),
+                List.of(new Container(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.of(Material.IRON_CHESTPLATE))),
                 new Click.Info.LeftShift(PlayerInventoryUtils.CHESTPLATE_SLOT),
-                List.of(new Main(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.AIR), new Main(9, ItemStack.of(Material.IRON_CHESTPLATE)))
+                List.of(new Container(PlayerInventoryUtils.CHESTPLATE_SLOT, ItemStack.AIR), new Container(9, ItemStack.of(Material.IRON_CHESTPLATE)))
         );
 
         assertPlayerClick(
-                List.of(new Main(9, ItemStack.of(Material.SHIELD))),
+                List.of(new Container(9, ItemStack.of(Material.SHIELD))),
                 new Click.Info.LeftShift(9),
-                List.of(new Main(9, ItemStack.AIR), new Main(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)))
+                List.of(new Container(9, ItemStack.AIR), new Container(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD)))
         );
 
         assertPlayerClick(
-                List.of(new Main(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))),
+                List.of(new Container(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.of(Material.SHIELD))),
                 new Click.Info.LeftShift(PlayerInventoryUtils.OFF_HAND_SLOT),
-                List.of(new Main(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.AIR), new Main(9, ItemStack.of(Material.SHIELD)))
+                List.of(new Container(PlayerInventoryUtils.OFF_HAND_SLOT, ItemStack.AIR), new Container(9, ItemStack.of(Material.SHIELD)))
         );
     }
 
