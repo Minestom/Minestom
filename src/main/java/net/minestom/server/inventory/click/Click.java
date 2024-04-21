@@ -107,7 +107,7 @@ public final class Click {
         public @Nullable Click.Info processClick(@NotNull ClientClickWindowPacket packet, boolean isCreative, @Nullable Integer containerSize) {
             final byte button = packet.button();
             final boolean requireCreative = switch (packet.clickType()) {
-                case CLONE -> true;
+                case CLONE -> packet.slot() != -999; // Permit middle click dropping
                 case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
                 default -> false;
             };
@@ -115,10 +115,13 @@ public final class Click {
             final int slot = packet.slot() == -999 ? -999 :
                     containerSize == null ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : packet.slot();
             final int maxSize = containerSize != null ? containerSize + PlayerInventoryUtils.INNER_SIZE : PlayerInventoryUtils.INVENTORY_SIZE;
-            if (packet.clickType() == ClientClickWindowPacket.ClickType.PICKUP && slot == -999) {
-                if (button == 0) return new Info.LeftDropCursor();
-                if (button == 1) return new Info.RightDropCursor();
-                if (button == 2) return new Info.MiddleDropCursor();
+            if (slot == -999) {
+                if (packet.clickType() == ClientClickWindowPacket.ClickType.PICKUP) {
+                    if (button == 0) return new Info.LeftDropCursor();
+                    if (button == 1) return new Info.RightDropCursor();
+                } else if (packet.clickType() == ClientClickWindowPacket.ClickType.CLONE) { // Why Mojang, why?
+                    if (button == 2) return new Info.MiddleDropCursor();
+                }
             }
             final boolean valid = slot >= 0 && slot < maxSize;
             if (!valid) return null;
