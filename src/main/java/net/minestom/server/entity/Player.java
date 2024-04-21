@@ -1775,12 +1775,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * It closes the player inventory (when opened) if {@link #getOpenInventory()} returns null.
      */
     public void closeInventory() {
-        closeInventory(false);
+        closeInventory(true);
     }
 
     @ApiStatus.Internal
-    public void closeInventory(boolean fromClient) {
-        tryCloseInventory(fromClient);
+    public void closeInventory(boolean sendClosePacket) {
+        tryCloseInventory(sendClosePacket);
         inventory.update();
     }
 
