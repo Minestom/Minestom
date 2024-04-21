@@ -67,7 +67,9 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         } else {
             // Try to infer the type from the fields present.
             Set<String> keys = compound.keySet();
-            if (keys.contains("text")) {
+            if (keys.isEmpty()) {
+                return Component.empty();
+            } else if (keys.contains("text")) {
                 builder = deserializeTextComponent(compound);
             } else if (keys.contains("translate")) {
                 builder = deserializeTranslatableComponent(compound);
@@ -79,6 +81,9 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
                 builder = deserializeKeybindComponent(compound);
             } else if (keys.contains("nbt")) {
                 builder = deserializeNbtComponent(compound);
+            } else if (keys.contains("")) {
+                //todo This feels like a bug, im not sure why this is created.
+                builder = Component.text().content(compound.getString(""));
             } else throw new UnsupportedOperationException("Unable to infer component type");
         }
 
