@@ -79,8 +79,8 @@ sealed abstract class InventoryImpl implements Inventory permits ContainerInvent
         }
 
         player.clickPreprocessor().clearCache();
-        if (player.didCloseInventory()) {
-            player.UNSAFE_changeDidCloseInventory(false);
+        if (player.skipClosePacket()) {
+            player.UNSAFE_changeSkipClosePacket(false);
         } else {
             player.sendPacket(new CloseWindowPacket(getWindowId()));
         }
