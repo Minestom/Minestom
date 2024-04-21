@@ -198,16 +198,39 @@ public final class Click {
         }
     }
 
+    /**
+     * Represents an individual change that occurred to an inventory.
+     */
     public sealed interface Change {
-        record Main(int slot, @NotNull ItemStack item) implements Change {
+
+        /**
+         * A change to the open container. If the click was in the player inventory, this could indicate a change there,
+         * despite the existence of {@link Player}
+         * @param slot the changed slot
+         * @param item the new item in the slot
+         */
+        record Container(int slot, @NotNull ItemStack item) implements Change {
         }
 
+        /**
+         * A change that must have occurred in the player's inventory, even if they have another one open.
+         * @param slot the changed player slot
+         * @param item the new item in the slot
+         */
         record Player(int slot, @NotNull ItemStack item) implements Change {
         }
 
+        /**
+         * A new cursor item. The cursor item is stored in the player's {@link net.minestom.server.inventory.PlayerInventory}.
+         * @param item the new cursor item
+         */
         record Cursor(@NotNull ItemStack item) implements Change {
         }
 
+        /**
+         * An item that was dropped from the player during the click.
+         * @param item the item to drop
+         */
         record DropFromPlayer(@NotNull ItemStack item) implements Change {
         }
     }

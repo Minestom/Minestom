@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.Click.Change.Cursor;
-import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Container;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class InventoryMiddleDragTest {
     @Test
     public void testExistingSlots() {
         assertClick(
-                List.of(new Main(0, magic(1)), new Cursor(magic2(1))),
+                List.of(new Container(0, magic(1)), new Cursor(magic2(1))),
                 new Click.Info.MiddleDrag(IntList.of(0)),
                 List.of()
         );
@@ -34,9 +34,9 @@ public class InventoryMiddleDragTest {
     @Test
     public void testPartialExistingSlots() {
         assertClick(
-                List.of(new Main(0, magic(1)), new Cursor(magic2(1))),
+                List.of(new Container(0, magic(1)), new Cursor(magic2(1))),
                 new Click.Info.MiddleDrag(IntList.of(0, 1)),
-                List.of(new Main(1, magic2(1)))
+                List.of(new Container(1, magic2(1)))
         );
     }
 
@@ -45,7 +45,7 @@ public class InventoryMiddleDragTest {
         assertClick(
                 List.of(new Cursor(magic(1))),
                 new Click.Info.MiddleDrag(IntList.of(0, 1)),
-                List.of(new Main(0, magic(1)), new Main(1, magic(1)))
+                List.of(new Container(0, magic(1)), new Container(1, magic(1)))
         );
     }
 

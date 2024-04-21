@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.Click.Change.Cursor;
-import net.minestom.server.inventory.click.Click.Change.Main;
+import net.minestom.server.inventory.click.Click.Change.Container;
 import net.minestom.server.item.ItemStack;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +38,7 @@ public class InventoryLeftDragTest {
         assertClick(
                 List.of(new Cursor(magic(32))),
                 new Click.Info.LeftDrag(IntList.of(0)),
-                List.of(new Main(0, magic(32)), new Cursor(ItemStack.AIR))
+                List.of(new Container(0, magic(32)), new Cursor(ItemStack.AIR))
         );
     }
 
@@ -47,16 +47,16 @@ public class InventoryLeftDragTest {
         assertClick(
                 List.of(new Cursor(magic(32))),
                 new Click.Info.LeftDrag(IntList.of(0, 1)),
-                List.of(new Main(0, magic(16)), new Main(1, magic(16)), new Cursor(ItemStack.AIR))
+                List.of(new Container(0, magic(16)), new Container(1, magic(16)), new Cursor(ItemStack.AIR))
         );
 
         assertClick(
                 List.of(new Cursor(magic(30))),
                 new Click.Info.LeftDrag(IntList.of(0, 1, 2)),
                 List.of(
-                        new Main(0, magic(10)),
-                        new Main(1, magic(10)),
-                        new Main(2, magic(10)),
+                        new Container(0, magic(10)),
+                        new Container(1, magic(10)),
+                        new Container(2, magic(10)),
                         new Cursor(ItemStack.AIR)
                 )
         );
@@ -68,9 +68,9 @@ public class InventoryLeftDragTest {
                 List.of(new Cursor(magic(32))),
                 new Click.Info.LeftDrag(IntList.of(0, 1, 2)),
                 List.of(
-                        new Main(0, magic(10)),
-                        new Main(1, magic(10)),
-                        new Main(2, magic(10)),
+                        new Container(0, magic(10)),
+                        new Container(1, magic(10)),
+                        new Container(2, magic(10)),
                         new Cursor(magic(2))
                 )
         );
@@ -79,10 +79,10 @@ public class InventoryLeftDragTest {
                 List.of(new Cursor(magic(25))),
                 new Click.Info.LeftDrag(IntList.of(0, 1, 2, 3)),
                 List.of(
-                        new Main(0, magic(6)),
-                        new Main(1, magic(6)),
-                        new Main(2, magic(6)),
-                        new Main(3, magic(6)),
+                        new Container(0, magic(6)),
+                        new Container(1, magic(6)),
+                        new Container(2, magic(6)),
+                        new Container(3, magic(6)),
                         new Cursor(magic(1))
                 )
         );
@@ -91,16 +91,16 @@ public class InventoryLeftDragTest {
     @Test
     public void testDistributeOverExisting() {
         assertClick(
-                List.of(new Main(0, magic(16)), new Cursor(magic(32))),
+                List.of(new Container(0, magic(16)), new Cursor(magic(32))),
                 new Click.Info.LeftDrag(IntList.of(0)),
-                List.of(new Main(0, magic(48)), new Cursor(ItemStack.AIR))
+                List.of(new Container(0, magic(48)), new Cursor(ItemStack.AIR))
         );
     }
 
     @Test
     public void testDistributeOverFull() {
         assertClick(
-                List.of(new Main(0, magic(64)), new Cursor(magic(32))),
+                List.of(new Container(0, magic(64)), new Cursor(magic(32))),
                 new Click.Info.LeftDrag(IntList.of(0)),
                 List.of()
         );

@@ -90,7 +90,7 @@ public final class ClickUtils {
 
             for (var change : changes) {
                 switch (change) {
-                    case Click.Change.Main(int slot, ItemStack item) -> {
+                    case Click.Change.Container(int slot, ItemStack item) -> {
                         if (slot < size) {
                             main.put(slot, item);
                         } else {
