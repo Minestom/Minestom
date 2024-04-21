@@ -183,7 +183,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected PlayerInventory inventory;
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
-    private boolean didCloseInventory;
+    private boolean skipClosePacket;
 
     private byte heldSlot;
 
@@ -1734,11 +1734,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return openInventory;
     }
 
-    private void tryCloseInventory(boolean fromClient) {
+    private void tryCloseInventory(boolean skipClosePacket) {
         var closedInventory = getOpenInventory();
         if (closedInventory == null) return;
 
-        didCloseInventory = fromClient;
+        this.skipClosePacket = skipClosePacket;
 
         if (closedInventory.removeViewer(this)) {
             if (closedInventory == getOpenInventory()) {
@@ -1757,7 +1757,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            tryCloseInventory(false);
+            tryCloseInventory(true);
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
             if (newInventory.addViewer(this)) {
@@ -1782,27 +1782,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used internally to prevent an inventory click to be processed
-     * when the inventory listeners closed the inventory.
-     * <p>
-     * Should only be used within an inventory listener (event or condition).
-     *
-     * @return true if the inventory has been closed, false otherwise
+     * Used internally to determine when sending the close inventory packet should be skipped.
      */
-    public boolean didCloseInventory() {
-        return didCloseInventory;
+    public boolean skipClosePacket() {
+        return skipClosePacket;
     }
 
     /**
-     * Used internally to reset the didCloseInventory field.
+     * Used internally to reset the skipClosePacket field, which determines when sending the close inventory packet
+     * should be skipped.
      * <p>
      * Shouldn't be used externally without proper understanding of its consequence.
      *
-     * @param didCloseInventory the new didCloseInventory field
+     * @param skipClosePacket the new skipClosePacket field
      */
     @ApiStatus.Internal
-    public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
-        this.didCloseInventory = didCloseInventory;
+    public void UNSAFE_changeSkipClosePacket(boolean skipClosePacket) {
+        this.skipClosePacket = skipClosePacket;
     }
 
     public int getNextTeleportId() {
