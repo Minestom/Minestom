@@ -10,7 +10,7 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potionEffect) implements ServerPacket {
+public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potionEffect) implements ServerPacket.Play {
     public RemoveEntityEffectPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))));
     }
@@ -22,7 +22,7 @@ public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potio
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.REMOVE_ENTITY_EFFECT;
     }
 }

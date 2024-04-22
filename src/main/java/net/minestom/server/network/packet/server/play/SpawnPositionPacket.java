@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record SpawnPositionPacket(@NotNull Point position, float angle) implements ServerPacket {
+public record SpawnPositionPacket(@NotNull Point position, float angle) implements ServerPacket.Play {
     public SpawnPositionPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BLOCK_POSITION), reader.read(FLOAT));
     }
@@ -21,7 +21,7 @@ public record SpawnPositionPacket(@NotNull Point position, float angle) implemen
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SPAWN_POSITION;
     }
 }

@@ -1,28 +1,23 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.crypto.LastSeenMessages;
-import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.BitSet;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientChatMessagePacket(@NotNull String message,
-                                      long timestamp, long salt, @NotNull MessageSignature signature,
-                                      boolean signedPreview,
-                                      @NotNull LastSeenMessages.Update lastSeenMessages) implements ClientPacket {
-    public ClientChatMessagePacket {
-        if (message.length() > 256) {
-            throw new IllegalArgumentException("Message cannot be more than 256 characters long.");
-        }
-    }
+public record ClientChatMessagePacket(String message, long timestamp,
+                                      long salt, byte @Nullable [] signature,
+                                      int ackOffset, BitSet ackList) implements ClientPacket {
 
     public ClientChatMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING),
-                reader.read(LONG), reader.read(LONG), new MessageSignature(reader),
-                reader.read(BOOLEAN),
-                new LastSeenMessages.Update(reader));
+        this(reader.read(STRING), reader.read(LONG),
+                reader.read(LONG), reader.readOptional(r -> r.readBytes(256)),
+                reader.read(VAR_INT), BitSet.valueOf(reader.readBytes(3)));
     }
 
     @Override
@@ -30,8 +25,8 @@ public record ClientChatMessagePacket(@NotNull String message,
         writer.write(STRING, message);
         writer.write(LONG, timestamp);
         writer.write(LONG, salt);
-        writer.write(signature);
-        writer.write(BOOLEAN, signedPreview);
-        writer.write(lastSeenMessages);
+        writer.writeOptional(BYTE_ARRAY, signature);
+        writer.write(VAR_INT, ackOffset);
+        writer.write(RAW_BYTES, Arrays.copyOf(ackList.toByteArray(), 3));
     }
 }

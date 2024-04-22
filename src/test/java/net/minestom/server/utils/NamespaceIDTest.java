@@ -29,6 +29,15 @@ public class NamespaceIDTest {
     }
 
     @Test
+    public void hashCodeConsistentWithEquals() {
+        var namespace = NamespaceID.from("minecraft:any");
+        var key = Key.key("minecraft:any");
+
+        assertEquals(namespace, key);
+        assertEquals(namespace.hashCode(), key.hashCode());
+    }
+
+    @Test
     public void atMostOneColon() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:block:wool"));
     }

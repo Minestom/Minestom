@@ -3,8 +3,10 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,18 +27,18 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
-        this.instanceContainer.setBlock(x, y, z, block);
+    public void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates) {
+        this.instanceContainer.setBlock(x, y, z, block, doBlockUpdates);
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
-        return instanceContainer.placeBlock(placement);
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
+        return instanceContainer.placeBlock(placement, doBlockUpdates);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
-        return instanceContainer.breakBlock(player, blockPosition);
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+        return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
     }
 
     @Override
@@ -72,6 +74,16 @@ public class SharedInstance extends Instance {
     @Override
     public @NotNull CompletableFuture<Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
+    }
+
+    @Override
+    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
+        instanceContainer.setChunkSupplier(chunkSupplier);
+    }
+
+    @Override
+    public ChunkSupplier getChunkSupplier() {
+        return instanceContainer.getChunkSupplier();
     }
 
     @Override

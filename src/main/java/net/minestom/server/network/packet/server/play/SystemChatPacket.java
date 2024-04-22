@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record SystemChatPacket(@NotNull Component message, boolean overlay) implements ComponentHoldingServerPacket {
+public record SystemChatPacket(@NotNull Component message, boolean overlay) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public SystemChatPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(COMPONENT), reader.read(BOOLEAN));
     }
@@ -26,7 +26,7 @@ public record SystemChatPacket(@NotNull Component message, boolean overlay) impl
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SYSTEM_CHAT;
     }
 

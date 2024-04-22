@@ -7,19 +7,30 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket {
+public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket.Play {
     public UnloadChunkPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(INT), reader.read(INT));
+        this(read(reader));
+    }
+
+    private UnloadChunkPacket(@NotNull UnloadChunkPacket other) {
+        this(other.chunkX(), other.chunkZ());
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(INT, chunkX);
+        // Client reads this as a single long in big endian, so we have to write it backwards
         writer.write(INT, chunkZ);
+        writer.write(INT, chunkX);
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UNLOAD_CHUNK;
+    }
+
+    private static UnloadChunkPacket read(@NotNull NetworkBuffer reader) {
+        int z = reader.read(INT);
+        int x = reader.read(INT);
+        return new UnloadChunkPacket(x, z);
     }
 }

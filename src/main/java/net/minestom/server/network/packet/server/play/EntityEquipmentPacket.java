@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityEquipmentPacket(int entityId,
-                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ComponentHoldingServerPacket {
+                                    @NotNull Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public EntityEquipmentPacket {
         equipments = Map.copyOf(equipments);
         if (equipments.isEmpty())
@@ -44,7 +44,7 @@ public record EntityEquipmentPacket(int entityId,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
 

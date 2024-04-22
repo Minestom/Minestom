@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record DisplayScoreboardPacket(byte position, String scoreName) implements ServerPacket {
+public record DisplayScoreboardPacket(byte position, String scoreName) implements ServerPacket.Play {
     public DisplayScoreboardPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(STRING));
     }
@@ -20,7 +20,7 @@ public record DisplayScoreboardPacket(byte position, String scoreName) implement
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.DISPLAY_SCOREBOARD;
     }
 }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record CloseWindowPacket(byte windowId) implements ServerPacket {
+public record CloseWindowPacket(byte windowId) implements ServerPacket.Play {
     public CloseWindowPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE));
     }
@@ -18,7 +18,7 @@ public record CloseWindowPacket(byte windowId) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.CLOSE_WINDOW;
     }
 }

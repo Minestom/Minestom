@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record UpdateHealthPacket(float health, int food, float foodSaturation) implements ServerPacket {
+public record UpdateHealthPacket(float health, int food, float foodSaturation) implements ServerPacket.Play {
     public UpdateHealthPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(FLOAT), reader.read(VAR_INT), reader.read(FLOAT));
     }
@@ -21,7 +21,7 @@ public record UpdateHealthPacket(float health, int food, float foodSaturation) i
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UPDATE_HEALTH;
     }
 }

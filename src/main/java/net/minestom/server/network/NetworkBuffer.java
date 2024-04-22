@@ -3,9 +3,15 @@ package net.minestom.server.network;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.SnifferMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.Either;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,48 +21,60 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
-    public static final Type<Boolean> BOOLEAN = NetworkBufferTypes.BOOLEAN;
-    public static final Type<Byte> BYTE = NetworkBufferTypes.BYTE;
-    public static final Type<Short> SHORT = NetworkBufferTypes.SHORT;
-    public static final Type<Integer> UNSIGNED_SHORT = NetworkBufferTypes.UNSIGNED_SHORT;
-    public static final Type<Integer> INT = NetworkBufferTypes.INT;
-    public static final Type<Long> LONG = NetworkBufferTypes.LONG;
-    public static final Type<Float> FLOAT = NetworkBufferTypes.FLOAT;
-    public static final Type<Double> DOUBLE = NetworkBufferTypes.DOUBLE;
-    public static final Type<Integer> VAR_INT = NetworkBufferTypes.VAR_INT;
-    public static final Type<Long> VAR_LONG = NetworkBufferTypes.VAR_LONG;
-    public static final Type<byte[]> RAW_BYTES = NetworkBufferTypes.RAW_BYTES;
-    public static final Type<String> STRING = NetworkBufferTypes.STRING;
-    public static final Type<NBT> NBT = NetworkBufferTypes.NBT;
-    public static final Type<Point> BLOCK_POSITION = NetworkBufferTypes.BLOCK_POSITION;
-    public static final Type<Component> COMPONENT = NetworkBufferTypes.COMPONENT;
-    public static final Type<UUID> UUID = NetworkBufferTypes.UUID;
-    public static final Type<ItemStack> ITEM = NetworkBufferTypes.ITEM;
+    public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
+    public static final Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
+    public static final Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
+    public static final Type<Integer> UNSIGNED_SHORT = new NetworkBufferTypeImpl.UnsignedShortType();
+    public static final Type<Integer> INT = new NetworkBufferTypeImpl.IntType();
+    public static final Type<Long> LONG = new NetworkBufferTypeImpl.LongType();
+    public static final Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
+    public static final Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
+    public static final Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
+    public static final Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
+    public static final Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType();
+    public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
+    public static final Type<NBT> NBT = new NetworkBufferTypeImpl.NbtType();
+    public static final Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
+    public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
+    public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
+    public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
+    public static final Type<ItemStack> ITEM = new NetworkBufferTypeImpl.ItemType();
 
-    public static final Type<byte[]> BYTE_ARRAY = NetworkBufferTypes.BYTE_ARRAY;
-    public static final Type<long[]> LONG_ARRAY = NetworkBufferTypes.LONG_ARRAY;
-    public static final Type<int[]> VAR_INT_ARRAY = NetworkBufferTypes.VAR_INT_ARRAY;
-    public static final Type<long[]> VAR_LONG_ARRAY = NetworkBufferTypes.VAR_LONG_ARRAY;
+    public static final Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
+    public static final Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();
+    public static final Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
+    public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
     // METADATA
-    public static final Type<Component> OPT_CHAT = NetworkBufferTypes.OPT_CHAT;
-    public static final Type<Point> ROTATION = NetworkBufferTypes.ROTATION;
-    public static final Type<Point> OPT_BLOCK_POSITION = NetworkBufferTypes.OPT_BLOCK_POSITION;
-    public static final Type<Direction> DIRECTION = NetworkBufferTypes.DIRECTION;
-    public static final Type<UUID> OPT_UUID = NetworkBufferTypes.OPT_UUID;
-    public static final Type<Integer> OPT_BLOCK_ID = NetworkBufferTypes.OPT_BLOCK_ID;
-    public static final Type<int[]> VILLAGER_DATA = NetworkBufferTypes.VILLAGER_DATA;
-    public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypes.OPT_VAR_INT;
-    public static final Type<Entity.Pose> POSE = NetworkBufferTypes.POSE;
+    public static final Type<Integer> BLOCK_STATE = new NetworkBufferTypeImpl.BlockStateType();
+    public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
+    public static final Type<WorldPos> DEATH_LOCATION = new NetworkBufferTypeImpl.DeathLocationType();
+    public static final Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
+    public static final Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
+    public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
+    public static final Type<Particle> PARTICLE = new NetworkBufferTypeImpl.ParticleType();
+
+    public static final Type<Component> OPT_CHAT = NetworkBufferTypeImpl.fromOptional(COMPONENT);
+    public static final Type<Point> OPT_BLOCK_POSITION = NetworkBufferTypeImpl.fromOptional(BLOCK_POSITION);
+    public static final Type<UUID> OPT_UUID = NetworkBufferTypeImpl.fromOptional(UUID);
+    public static final Type<Integer> OPT_BLOCK_STATE = NetworkBufferTypeImpl.fromOptional(BLOCK_STATE);
+    public static final Type<Integer> OPT_VAR_INT = NetworkBufferTypeImpl.fromOptional(VAR_INT);
+
+    public static final Type<Direction> DIRECTION = NetworkBufferTypeImpl.fromEnum(Direction.class);
+    public static final Type<Entity.Pose> POSE = NetworkBufferTypeImpl.fromEnum(Entity.Pose.class);
+
+    public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypeImpl.fromEnum(CatMeta.Variant.class);
+    public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypeImpl.fromEnum(FrogMeta.Variant.class);
+    public static final Type<PaintingMeta.Variant> PAINTING_VARIANT = NetworkBufferTypeImpl.fromEnum(PaintingMeta.Variant.class);
+    public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
+
 
     ByteBuffer nioBuffer;
     final boolean resizable;
@@ -87,9 +105,7 @@ public final class NetworkBuffer {
     }
 
     public <T> void write(@NotNull Type<T> type, @NotNull T value) {
-        var impl = (NetworkBufferTypes.TypeImpl<T>) type;
-        final long length = impl.writer().write(this, value);
-        if (length != -1) this.writeIndex += length;
+        type.write(this, value);
     }
 
     public <T> void write(@NotNull Writer writer) {
@@ -97,8 +113,7 @@ public final class NetworkBuffer {
     }
 
     public <T> @NotNull T read(@NotNull Type<T> type) {
-        var impl = (NetworkBufferTypes.TypeImpl<T>) type;
-        return impl.reader().read(this);
+        return type.read(this);
     }
 
     public <T> void writeOptional(@NotNull Type<T> type, @Nullable T value) {
@@ -125,9 +140,7 @@ public final class NetworkBuffer {
             return;
         }
         write(VAR_INT, values.size());
-        for (T value : values) {
-            write(type, value);
-        }
+        for (T value : values) write(type, value);
     }
 
     @SafeVarargs
@@ -141,9 +154,7 @@ public final class NetworkBuffer {
             return;
         }
         write(VAR_INT, values.size());
-        for (T value : values) {
-            write(value);
-        }
+        for (T value : values) write(value);
     }
 
     public <T> void writeCollection(@Nullable Collection<@NotNull T> values,
@@ -153,45 +164,23 @@ public final class NetworkBuffer {
             return;
         }
         write(VAR_INT, values.size());
-        for (T value : values) {
-            consumer.accept(this, value);
-        }
+        for (T value : values) consumer.accept(this, value);
     }
 
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type) {
+    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type, int maxSize) {
         final int size = read(VAR_INT);
+        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
         final List<T> values = new java.util.ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            values.add(read(type));
-        }
+        for (int i = 0; i < size; i++) values.add(read(type));
         return values;
     }
 
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
+    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function, int maxSize) {
         final int size = read(VAR_INT);
+        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
         final List<T> values = new java.util.ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            values.add(function.apply(this));
-        }
+        for (int i = 0; i < size; i++) values.add(function.apply(this));
         return values;
-    }
-
-    public <L, R> void writeEither(Either<L, R> either, BiConsumer<NetworkBuffer, L> leftWriter, BiConsumer<NetworkBuffer, R> rightWriter) {
-        if (either.isLeft()) {
-            write(BOOLEAN, true);
-            leftWriter.accept(this, either.left());
-        } else {
-            write(BOOLEAN, false);
-            rightWriter.accept(this, either.right());
-        }
-    }
-
-    public <L, R> @NotNull Either<L, R> readEither(@NotNull Function<NetworkBuffer, L> leftReader, Function<NetworkBuffer, R> rightReader) {
-        if (read(BOOLEAN)) {
-            return Either.left(leftReader.apply(this));
-        } else {
-            return Either.right(rightReader.apply(this));
-        }
     }
 
     public <E extends Enum<?>> void writeEnum(@NotNull Class<E> enumClass, @NotNull E value) {
@@ -200,6 +189,43 @@ public final class NetworkBuffer {
 
     public <E extends Enum<?>> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
         return enumClass.getEnumConstants()[read(VAR_INT)];
+    }
+
+    public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> enumType) {
+        final E[] values = enumType.getEnumConstants();
+        BitSet bitSet = new BitSet(values.length);
+        for (int i = 0; i < values.length; ++i) {
+            bitSet.set(i, enumSet.contains(values[i]));
+        }
+        writeFixedBitSet(bitSet, values.length);
+    }
+
+    public <E extends Enum<E>> @NotNull EnumSet<E> readEnumSet(Class<E> enumType) {
+        final E[] values = enumType.getEnumConstants();
+        BitSet bitSet = readFixedBitSet(values.length);
+        EnumSet<E> enumSet = EnumSet.noneOf(enumType);
+        for (int i = 0; i < values.length; ++i) {
+            if (bitSet.get(i)) {
+                enumSet.add(values[i]);
+            }
+        }
+        return enumSet;
+    }
+
+    public void writeFixedBitSet(BitSet set, int length) {
+        final int setLength = set.length();
+        if (setLength > length) {
+            throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
+        } else {
+            final byte[] array = set.toByteArray();
+            write(RAW_BYTES, array);
+        }
+    }
+
+    @NotNull
+    public BitSet readFixedBitSet(int length) {
+        final byte[] array = readBytes((length + 7) / 8);
+        return BitSet.valueOf(array);
     }
 
     public byte[] readBytes(int length) {
@@ -265,7 +291,10 @@ public final class NetworkBuffer {
     }
 
 
-    public sealed interface Type<T> permits NetworkBufferTypes.TypeImpl {
+    public interface Type<T> {
+        void write(@NotNull NetworkBuffer buffer, T value);
+
+        T read(@NotNull NetworkBuffer buffer);
     }
 
     @FunctionalInterface

@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +31,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
     @NotNull
     @Override
-    public E parse(@NotNull String input) throws ArgumentSyntaxException {
+    public E parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         for (E value : this.values) {
             if (this.format.formatter.apply(value.name()).equals(input)) {
                 return value;

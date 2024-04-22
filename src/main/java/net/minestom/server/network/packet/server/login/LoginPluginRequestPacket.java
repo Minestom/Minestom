@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record LoginPluginRequestPacket(int messageId, @NotNull String channel,
-                                       byte @Nullable [] data) implements ServerPacket {
+                                       byte @Nullable [] data) implements ServerPacket.Login {
     public LoginPluginRequestPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(STRING),
                 reader.read(RAW_BYTES));
@@ -25,7 +25,7 @@ public record LoginPluginRequestPacket(int messageId, @NotNull String channel,
     }
 
     @Override
-    public int getId() {
+    public int loginId() {
         return ServerPacketIdentifier.LOGIN_PLUGIN_REQUEST;
     }
 }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
-                              @Nullable String sound) implements ServerPacket {
+                              @Nullable String sound) implements ServerPacket.Play {
     public StopSoundPacket(@NotNull NetworkBuffer reader) {
         this(read(reader));
     }
@@ -41,7 +41,7 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.STOP_SOUND;
     }
 }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record SetCompressionPacket(int threshold) implements ServerPacket {
+public record SetCompressionPacket(int threshold) implements ServerPacket.Login {
     public SetCompressionPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
     }
@@ -18,7 +18,7 @@ public record SetCompressionPacket(int threshold) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int loginId() {
         return ServerPacketIdentifier.LOGIN_SET_COMPRESSION;
     }
 }

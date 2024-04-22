@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record WorldBorderWarningReachPacket(int warningBlocks) implements ServerPacket {
+public record WorldBorderWarningReachPacket(int warningBlocks) implements ServerPacket.Play {
     public WorldBorderWarningReachPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
     }
@@ -18,7 +18,7 @@ public record WorldBorderWarningReachPacket(int warningBlocks) implements Server
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.WORLD_BORDER_WARNING_REACH;
     }
 }

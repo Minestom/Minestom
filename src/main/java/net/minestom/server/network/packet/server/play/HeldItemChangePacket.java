@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record HeldItemChangePacket(byte slot) implements ServerPacket {
+public record HeldItemChangePacket(byte slot) implements ServerPacket.Play {
     public HeldItemChangePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE));
     }
@@ -18,7 +18,7 @@ public record HeldItemChangePacket(byte slot) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.HELD_ITEM_CHANGE;
     }
 }

@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public class ArgumentColor extends Argument<Style> {
 
     @NotNull
     @Override
-    public Style parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Style parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
 
         // check for colour
         NamedTextColor color = NamedTextColor.NAMES.value(input);

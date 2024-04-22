@@ -1,6 +1,6 @@
 package net.minestom.server.tag;
 
-import net.minestom.server.utils.PropertyUtils;
+import net.minestom.server.ServerFlag;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
-    private static final boolean CACHE_ENABLE = PropertyUtils.getBoolean("minestom.tag-handler-cache", true);
     static final Serializers.Entry<Node, NBTCompound> NODE_SERIALIZER = new Serializers.Entry<>(NBTType.TAG_Compound, entries -> fromCompound(entries).root, Node::compound, true);
 
     private final Node root;
@@ -276,12 +275,12 @@ final class TagHandlerImpl implements TagHandler {
 
         NBTCompound compound() {
             NBTCompound compound;
-            if (!CACHE_ENABLE || (compound = this.compound) == null) {
+            if (!ServerFlag.TAG_HANDLER_CACHE_ENABLED || (compound = this.compound) == null) {
                 MutableNBTCompound tmp = new MutableNBTCompound();
                 this.entries.forValues(entry -> {
                     final Tag tag = entry.tag;
                     final NBT nbt = entry.updatedNbt();
-                    if (!tag.entry.isPath() || !((NBTCompound) nbt).isEmpty()) {
+                    if (nbt != null && (!tag.entry.isPath() || (!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && !((NBTCompound) nbt).isEmpty())) {
                         tmp.put(tag.getKey(), nbt);
                     }
                 });
@@ -310,10 +309,11 @@ final class TagHandlerImpl implements TagHandler {
                     nbt = entry.updatedNbt();
                 }
 
-                tmp.put(tag.getKey(), nbt);
+                if (nbt != null)
+                    tmp.put(tag.getKey(), nbt);
                 entries.put(tag.index, valueToEntry(result, tag, value));
             });
-            if (tmp.isEmpty() && parent != null)
+            if ((!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && tmp.isEmpty() && parent != null)
                 return null; // Empty child node
             result.compound = tmp.toCompound();
             return result;

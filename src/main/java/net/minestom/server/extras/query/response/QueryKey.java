@@ -1,6 +1,7 @@
 package net.minestom.server.extras.query.response;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.ConnectionState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,8 +19,8 @@ public enum QueryKey {
     VERSION(() -> MinecraftServer.VERSION_NAME),
     PLUGINS(FullQueryResponse::generatePluginsValue),
     MAP(() -> "world"),
-    NUM_PLAYERS("numplayers", () -> String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayers().size())),
-    MAX_PLAYERS("maxplayers", () -> String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayers().size() + 1)),
+    NUM_PLAYERS("numplayers", () -> String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayerCount())),
+    MAX_PLAYERS("maxplayers", () -> String.valueOf(MinecraftServer.getConnectionManager().getOnlinePlayerCount() + 1)),
     HOST_PORT("hostport", () -> String.valueOf(MinecraftServer.getServer().getPort())),
     HOST_IP("hostip", () -> Objects.requireNonNullElse(MinecraftServer.getServer().getAddress(), "localhost"));
 

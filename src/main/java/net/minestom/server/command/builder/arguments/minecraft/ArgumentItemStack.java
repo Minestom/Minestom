@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
@@ -30,7 +31,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
     @NotNull
     @Override
-    public ItemStack parse(@NotNull String input) throws ArgumentSyntaxException {
+    public ItemStack parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
@@ -40,7 +41,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     }
 
     /**
-     * @deprecated use {@link Argument#parse(Argument)}
+     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
     public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {

@@ -85,6 +85,10 @@ public class GraphConversionTest {
         final Command main = new Command("main");
         final Command sub = new Command("sub");
 
+        var baz = Literal("baz");
+
+        main.addSyntax(GraphConversionTest::dummyExecutor, baz); // Check that subcommands are added to graph first
+
         var bar = Literal("bar");
         var number = Integer("number");
 
@@ -97,6 +101,7 @@ public class GraphConversionTest {
         var graph = Graph.builder(Literal("main"))
                 .append(Literal("sub"), builder ->
                         builder.append(bar, builder1 -> builder1.append(number)))
+                .append(Literal("baz"))
                 .build();
         assertEqualsGraph(graph, main);
     }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityRotationPacket(int entityId, float yaw, float pitch, boolean onGround) implements ServerPacket {
+public record EntityRotationPacket(int entityId, float yaw, float pitch, boolean onGround) implements ServerPacket.Play {
     public EntityRotationPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(BYTE) * 360f / 256f, reader.read(BYTE) * 360f / 256f, reader.read(BOOLEAN));
     }
@@ -21,7 +21,7 @@ public record EntityRotationPacket(int entityId, float yaw, float pitch, boolean
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_ROTATION;
     }
 }

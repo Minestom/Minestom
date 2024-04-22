@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record UpdateLightPacket(int chunkX, int chunkZ,
-                                @NotNull LightData lightData) implements ServerPacket {
+                                @NotNull LightData lightData) implements ServerPacket.Play {
     public UpdateLightPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT), new LightData(reader));
     }
@@ -22,7 +22,7 @@ public record UpdateLightPacket(int chunkX, int chunkZ,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UPDATE_LIGHT;
     }
 }

@@ -4,7 +4,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.metadata.ProjectileMeta;
+import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEvent;
@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 public class EntityProjectile extends Entity {
 
     private final Entity shooter;
+    private boolean wasStuck;
 
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
         super(entityType);
@@ -99,12 +100,12 @@ public class EntityProjectile extends Entity {
             this.velocity = Vec.ZERO;
             sendPacketToViewersAndSelf(getVelocityPacket());
             setNoGravity(true);
+            wasStuck = true;
         } else {
-            if (!super.onGround) {
-                return;
-            }
+            if (!wasStuck) return;
+            wasStuck = false;
+            setNoGravity(super.onGround);
             super.onGround = false;
-            setNoGravity(false);
             EventDispatcher.call(new ProjectileUncollideEvent(this));
         }
     }

@@ -34,7 +34,7 @@ public class FollowTargetGoal extends GoalSelector {
         Entity target = entityCreature.getTarget();
         if (target == null) target = findTarget();
         if (target == null) return false;
-        final boolean result = target.getPosition().distance(entityCreature.getPosition()) >= 2;
+        final boolean result = target.getPosition().distanceSquared(entityCreature.getPosition()) >= 2 * 2;
         if (result) {
             this.target = target;
         }
@@ -54,7 +54,7 @@ public class FollowTargetGoal extends GoalSelector {
         this.entityCreature.setTarget(target);
         Navigator navigator = entityCreature.getNavigator();
         this.lastTargetPos = target.getPosition();
-        if (lastTargetPos.distance(entityCreature.getPosition()) < 2) {
+        if (lastTargetPos.distanceSquared(entityCreature.getPosition()) < 2 * 2) {
             // Target is too far
             this.forceEnd = true;
             navigator.setPathTo(null);
@@ -88,7 +88,7 @@ public class FollowTargetGoal extends GoalSelector {
         return forceEnd ||
                 target == null ||
                 target.isRemoved() ||
-                target.getPosition().distance(entityCreature.getPosition()) < 2;
+                target.getPosition().distanceSquared(entityCreature.getPosition()) < 2 * 2;
     }
 
     @Override

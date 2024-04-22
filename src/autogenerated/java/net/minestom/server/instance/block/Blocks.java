@@ -41,9 +41,15 @@ interface Blocks {
 
     Block ACACIA_PLANKS = BlockImpl.get("minecraft:acacia_planks");
 
+    Block CHERRY_PLANKS = BlockImpl.get("minecraft:cherry_planks");
+
     Block DARK_OAK_PLANKS = BlockImpl.get("minecraft:dark_oak_planks");
 
     Block MANGROVE_PLANKS = BlockImpl.get("minecraft:mangrove_planks");
+
+    Block BAMBOO_PLANKS = BlockImpl.get("minecraft:bamboo_planks");
+
+    Block BAMBOO_MOSAIC = BlockImpl.get("minecraft:bamboo_mosaic");
 
     Block OAK_SAPLING = BlockImpl.get("minecraft:oak_sapling");
 
@@ -54,6 +60,8 @@ interface Blocks {
     Block JUNGLE_SAPLING = BlockImpl.get("minecraft:jungle_sapling");
 
     Block ACACIA_SAPLING = BlockImpl.get("minecraft:acacia_sapling");
+
+    Block CHERRY_SAPLING = BlockImpl.get("minecraft:cherry_sapling");
 
     Block DARK_OAK_SAPLING = BlockImpl.get("minecraft:dark_oak_sapling");
 
@@ -67,9 +75,13 @@ interface Blocks {
 
     Block SAND = BlockImpl.get("minecraft:sand");
 
+    Block SUSPICIOUS_SAND = BlockImpl.get("minecraft:suspicious_sand");
+
     Block RED_SAND = BlockImpl.get("minecraft:red_sand");
 
     Block GRAVEL = BlockImpl.get("minecraft:gravel");
+
+    Block SUSPICIOUS_GRAVEL = BlockImpl.get("minecraft:suspicious_gravel");
 
     Block GOLD_ORE = BlockImpl.get("minecraft:gold_ore");
 
@@ -95,6 +107,8 @@ interface Blocks {
 
     Block ACACIA_LOG = BlockImpl.get("minecraft:acacia_log");
 
+    Block CHERRY_LOG = BlockImpl.get("minecraft:cherry_log");
+
     Block DARK_OAK_LOG = BlockImpl.get("minecraft:dark_oak_log");
 
     Block MANGROVE_LOG = BlockImpl.get("minecraft:mangrove_log");
@@ -102,6 +116,8 @@ interface Blocks {
     Block MANGROVE_ROOTS = BlockImpl.get("minecraft:mangrove_roots");
 
     Block MUDDY_MANGROVE_ROOTS = BlockImpl.get("minecraft:muddy_mangrove_roots");
+
+    Block BAMBOO_BLOCK = BlockImpl.get("minecraft:bamboo_block");
 
     Block STRIPPED_SPRUCE_LOG = BlockImpl.get("minecraft:stripped_spruce_log");
 
@@ -111,11 +127,15 @@ interface Blocks {
 
     Block STRIPPED_ACACIA_LOG = BlockImpl.get("minecraft:stripped_acacia_log");
 
+    Block STRIPPED_CHERRY_LOG = BlockImpl.get("minecraft:stripped_cherry_log");
+
     Block STRIPPED_DARK_OAK_LOG = BlockImpl.get("minecraft:stripped_dark_oak_log");
 
     Block STRIPPED_OAK_LOG = BlockImpl.get("minecraft:stripped_oak_log");
 
     Block STRIPPED_MANGROVE_LOG = BlockImpl.get("minecraft:stripped_mangrove_log");
+
+    Block STRIPPED_BAMBOO_BLOCK = BlockImpl.get("minecraft:stripped_bamboo_block");
 
     Block OAK_WOOD = BlockImpl.get("minecraft:oak_wood");
 
@@ -126,6 +146,8 @@ interface Blocks {
     Block JUNGLE_WOOD = BlockImpl.get("minecraft:jungle_wood");
 
     Block ACACIA_WOOD = BlockImpl.get("minecraft:acacia_wood");
+
+    Block CHERRY_WOOD = BlockImpl.get("minecraft:cherry_wood");
 
     Block DARK_OAK_WOOD = BlockImpl.get("minecraft:dark_oak_wood");
 
@@ -141,6 +163,8 @@ interface Blocks {
 
     Block STRIPPED_ACACIA_WOOD = BlockImpl.get("minecraft:stripped_acacia_wood");
 
+    Block STRIPPED_CHERRY_WOOD = BlockImpl.get("minecraft:stripped_cherry_wood");
+
     Block STRIPPED_DARK_OAK_WOOD = BlockImpl.get("minecraft:stripped_dark_oak_wood");
 
     Block STRIPPED_MANGROVE_WOOD = BlockImpl.get("minecraft:stripped_mangrove_wood");
@@ -154,6 +178,8 @@ interface Blocks {
     Block JUNGLE_LEAVES = BlockImpl.get("minecraft:jungle_leaves");
 
     Block ACACIA_LEAVES = BlockImpl.get("minecraft:acacia_leaves");
+
+    Block CHERRY_LEAVES = BlockImpl.get("minecraft:cherry_leaves");
 
     Block DARK_OAK_LEAVES = BlockImpl.get("minecraft:dark_oak_leaves");
 
@@ -225,7 +251,7 @@ interface Blocks {
 
     Block COBWEB = BlockImpl.get("minecraft:cobweb");
 
-    Block GRASS = BlockImpl.get("minecraft:grass");
+    Block SHORT_GRASS = BlockImpl.get("minecraft:short_grass");
 
     Block FERN = BlockImpl.get("minecraft:fern");
 
@@ -275,6 +301,8 @@ interface Blocks {
 
     Block DANDELION = BlockImpl.get("minecraft:dandelion");
 
+    Block TORCHFLOWER = BlockImpl.get("minecraft:torchflower");
+
     Block POPPY = BlockImpl.get("minecraft:poppy");
 
     Block BLUE_ORCHID = BlockImpl.get("minecraft:blue_orchid");
@@ -312,6 +340,8 @@ interface Blocks {
     Block TNT = BlockImpl.get("minecraft:tnt");
 
     Block BOOKSHELF = BlockImpl.get("minecraft:bookshelf");
+
+    Block CHISELED_BOOKSHELF = BlockImpl.get("minecraft:chiseled_bookshelf");
 
     Block MOSSY_COBBLESTONE = BlockImpl.get("minecraft:mossy_cobblestone");
 
@@ -355,11 +385,15 @@ interface Blocks {
 
     Block ACACIA_SIGN = BlockImpl.get("minecraft:acacia_sign");
 
+    Block CHERRY_SIGN = BlockImpl.get("minecraft:cherry_sign");
+
     Block JUNGLE_SIGN = BlockImpl.get("minecraft:jungle_sign");
 
     Block DARK_OAK_SIGN = BlockImpl.get("minecraft:dark_oak_sign");
 
     Block MANGROVE_SIGN = BlockImpl.get("minecraft:mangrove_sign");
+
+    Block BAMBOO_SIGN = BlockImpl.get("minecraft:bamboo_sign");
 
     Block OAK_DOOR = BlockImpl.get("minecraft:oak_door");
 
@@ -377,11 +411,59 @@ interface Blocks {
 
     Block ACACIA_WALL_SIGN = BlockImpl.get("minecraft:acacia_wall_sign");
 
+    Block CHERRY_WALL_SIGN = BlockImpl.get("minecraft:cherry_wall_sign");
+
     Block JUNGLE_WALL_SIGN = BlockImpl.get("minecraft:jungle_wall_sign");
 
     Block DARK_OAK_WALL_SIGN = BlockImpl.get("minecraft:dark_oak_wall_sign");
 
     Block MANGROVE_WALL_SIGN = BlockImpl.get("minecraft:mangrove_wall_sign");
+
+    Block BAMBOO_WALL_SIGN = BlockImpl.get("minecraft:bamboo_wall_sign");
+
+    Block OAK_HANGING_SIGN = BlockImpl.get("minecraft:oak_hanging_sign");
+
+    Block SPRUCE_HANGING_SIGN = BlockImpl.get("minecraft:spruce_hanging_sign");
+
+    Block BIRCH_HANGING_SIGN = BlockImpl.get("minecraft:birch_hanging_sign");
+
+    Block ACACIA_HANGING_SIGN = BlockImpl.get("minecraft:acacia_hanging_sign");
+
+    Block CHERRY_HANGING_SIGN = BlockImpl.get("minecraft:cherry_hanging_sign");
+
+    Block JUNGLE_HANGING_SIGN = BlockImpl.get("minecraft:jungle_hanging_sign");
+
+    Block DARK_OAK_HANGING_SIGN = BlockImpl.get("minecraft:dark_oak_hanging_sign");
+
+    Block CRIMSON_HANGING_SIGN = BlockImpl.get("minecraft:crimson_hanging_sign");
+
+    Block WARPED_HANGING_SIGN = BlockImpl.get("minecraft:warped_hanging_sign");
+
+    Block MANGROVE_HANGING_SIGN = BlockImpl.get("minecraft:mangrove_hanging_sign");
+
+    Block BAMBOO_HANGING_SIGN = BlockImpl.get("minecraft:bamboo_hanging_sign");
+
+    Block OAK_WALL_HANGING_SIGN = BlockImpl.get("minecraft:oak_wall_hanging_sign");
+
+    Block SPRUCE_WALL_HANGING_SIGN = BlockImpl.get("minecraft:spruce_wall_hanging_sign");
+
+    Block BIRCH_WALL_HANGING_SIGN = BlockImpl.get("minecraft:birch_wall_hanging_sign");
+
+    Block ACACIA_WALL_HANGING_SIGN = BlockImpl.get("minecraft:acacia_wall_hanging_sign");
+
+    Block CHERRY_WALL_HANGING_SIGN = BlockImpl.get("minecraft:cherry_wall_hanging_sign");
+
+    Block JUNGLE_WALL_HANGING_SIGN = BlockImpl.get("minecraft:jungle_wall_hanging_sign");
+
+    Block DARK_OAK_WALL_HANGING_SIGN = BlockImpl.get("minecraft:dark_oak_wall_hanging_sign");
+
+    Block MANGROVE_WALL_HANGING_SIGN = BlockImpl.get("minecraft:mangrove_wall_hanging_sign");
+
+    Block CRIMSON_WALL_HANGING_SIGN = BlockImpl.get("minecraft:crimson_wall_hanging_sign");
+
+    Block WARPED_WALL_HANGING_SIGN = BlockImpl.get("minecraft:warped_wall_hanging_sign");
+
+    Block BAMBOO_WALL_HANGING_SIGN = BlockImpl.get("minecraft:bamboo_wall_hanging_sign");
 
     Block LEVER = BlockImpl.get("minecraft:lever");
 
@@ -399,9 +481,13 @@ interface Blocks {
 
     Block ACACIA_PRESSURE_PLATE = BlockImpl.get("minecraft:acacia_pressure_plate");
 
+    Block CHERRY_PRESSURE_PLATE = BlockImpl.get("minecraft:cherry_pressure_plate");
+
     Block DARK_OAK_PRESSURE_PLATE = BlockImpl.get("minecraft:dark_oak_pressure_plate");
 
     Block MANGROVE_PRESSURE_PLATE = BlockImpl.get("minecraft:mangrove_pressure_plate");
+
+    Block BAMBOO_PRESSURE_PLATE = BlockImpl.get("minecraft:bamboo_pressure_plate");
 
     Block REDSTONE_ORE = BlockImpl.get("minecraft:redstone_ore");
 
@@ -428,8 +514,6 @@ interface Blocks {
     Block JUKEBOX = BlockImpl.get("minecraft:jukebox");
 
     Block OAK_FENCE = BlockImpl.get("minecraft:oak_fence");
-
-    Block PUMPKIN = BlockImpl.get("minecraft:pumpkin");
 
     Block NETHERRACK = BlockImpl.get("minecraft:netherrack");
 
@@ -499,9 +583,13 @@ interface Blocks {
 
     Block ACACIA_TRAPDOOR = BlockImpl.get("minecraft:acacia_trapdoor");
 
+    Block CHERRY_TRAPDOOR = BlockImpl.get("minecraft:cherry_trapdoor");
+
     Block DARK_OAK_TRAPDOOR = BlockImpl.get("minecraft:dark_oak_trapdoor");
 
     Block MANGROVE_TRAPDOOR = BlockImpl.get("minecraft:mangrove_trapdoor");
+
+    Block BAMBOO_TRAPDOOR = BlockImpl.get("minecraft:bamboo_trapdoor");
 
     Block STONE_BRICKS = BlockImpl.get("minecraft:stone_bricks");
 
@@ -538,6 +626,8 @@ interface Blocks {
     Block CHAIN = BlockImpl.get("minecraft:chain");
 
     Block GLASS_PANE = BlockImpl.get("minecraft:glass_pane");
+
+    Block PUMPKIN = BlockImpl.get("minecraft:pumpkin");
 
     Block MELON = BlockImpl.get("minecraft:melon");
 
@@ -627,6 +717,8 @@ interface Blocks {
 
     Block FLOWER_POT = BlockImpl.get("minecraft:flower_pot");
 
+    Block POTTED_TORCHFLOWER = BlockImpl.get("minecraft:potted_torchflower");
+
     Block POTTED_OAK_SAPLING = BlockImpl.get("minecraft:potted_oak_sapling");
 
     Block POTTED_SPRUCE_SAPLING = BlockImpl.get("minecraft:potted_spruce_sapling");
@@ -636,6 +728,8 @@ interface Blocks {
     Block POTTED_JUNGLE_SAPLING = BlockImpl.get("minecraft:potted_jungle_sapling");
 
     Block POTTED_ACACIA_SAPLING = BlockImpl.get("minecraft:potted_acacia_sapling");
+
+    Block POTTED_CHERRY_SAPLING = BlockImpl.get("minecraft:potted_cherry_sapling");
 
     Block POTTED_DARK_OAK_SAPLING = BlockImpl.get("minecraft:potted_dark_oak_sapling");
 
@@ -691,9 +785,13 @@ interface Blocks {
 
     Block ACACIA_BUTTON = BlockImpl.get("minecraft:acacia_button");
 
+    Block CHERRY_BUTTON = BlockImpl.get("minecraft:cherry_button");
+
     Block DARK_OAK_BUTTON = BlockImpl.get("minecraft:dark_oak_button");
 
     Block MANGROVE_BUTTON = BlockImpl.get("minecraft:mangrove_button");
+
+    Block BAMBOO_BUTTON = BlockImpl.get("minecraft:bamboo_button");
 
     Block SKELETON_SKULL = BlockImpl.get("minecraft:skeleton_skull");
 
@@ -718,6 +816,10 @@ interface Blocks {
     Block DRAGON_HEAD = BlockImpl.get("minecraft:dragon_head");
 
     Block DRAGON_WALL_HEAD = BlockImpl.get("minecraft:dragon_wall_head");
+
+    Block PIGLIN_HEAD = BlockImpl.get("minecraft:piglin_head");
+
+    Block PIGLIN_WALL_HEAD = BlockImpl.get("minecraft:piglin_wall_head");
 
     Block ANVIL = BlockImpl.get("minecraft:anvil");
 
@@ -819,9 +921,15 @@ interface Blocks {
 
     Block ACACIA_STAIRS = BlockImpl.get("minecraft:acacia_stairs");
 
+    Block CHERRY_STAIRS = BlockImpl.get("minecraft:cherry_stairs");
+
     Block DARK_OAK_STAIRS = BlockImpl.get("minecraft:dark_oak_stairs");
 
     Block MANGROVE_STAIRS = BlockImpl.get("minecraft:mangrove_stairs");
+
+    Block BAMBOO_STAIRS = BlockImpl.get("minecraft:bamboo_stairs");
+
+    Block BAMBOO_MOSAIC_STAIRS = BlockImpl.get("minecraft:bamboo_mosaic_stairs");
 
     Block SLIME_BLOCK = BlockImpl.get("minecraft:slime_block");
 
@@ -985,9 +1093,15 @@ interface Blocks {
 
     Block ACACIA_SLAB = BlockImpl.get("minecraft:acacia_slab");
 
+    Block CHERRY_SLAB = BlockImpl.get("minecraft:cherry_slab");
+
     Block DARK_OAK_SLAB = BlockImpl.get("minecraft:dark_oak_slab");
 
     Block MANGROVE_SLAB = BlockImpl.get("minecraft:mangrove_slab");
+
+    Block BAMBOO_SLAB = BlockImpl.get("minecraft:bamboo_slab");
+
+    Block BAMBOO_MOSAIC_SLAB = BlockImpl.get("minecraft:bamboo_mosaic_slab");
 
     Block STONE_SLAB = BlockImpl.get("minecraft:stone_slab");
 
@@ -1033,9 +1147,13 @@ interface Blocks {
 
     Block ACACIA_FENCE_GATE = BlockImpl.get("minecraft:acacia_fence_gate");
 
+    Block CHERRY_FENCE_GATE = BlockImpl.get("minecraft:cherry_fence_gate");
+
     Block DARK_OAK_FENCE_GATE = BlockImpl.get("minecraft:dark_oak_fence_gate");
 
     Block MANGROVE_FENCE_GATE = BlockImpl.get("minecraft:mangrove_fence_gate");
+
+    Block BAMBOO_FENCE_GATE = BlockImpl.get("minecraft:bamboo_fence_gate");
 
     Block SPRUCE_FENCE = BlockImpl.get("minecraft:spruce_fence");
 
@@ -1045,9 +1163,13 @@ interface Blocks {
 
     Block ACACIA_FENCE = BlockImpl.get("minecraft:acacia_fence");
 
+    Block CHERRY_FENCE = BlockImpl.get("minecraft:cherry_fence");
+
     Block DARK_OAK_FENCE = BlockImpl.get("minecraft:dark_oak_fence");
 
     Block MANGROVE_FENCE = BlockImpl.get("minecraft:mangrove_fence");
+
+    Block BAMBOO_FENCE = BlockImpl.get("minecraft:bamboo_fence");
 
     Block SPRUCE_DOOR = BlockImpl.get("minecraft:spruce_door");
 
@@ -1057,9 +1179,13 @@ interface Blocks {
 
     Block ACACIA_DOOR = BlockImpl.get("minecraft:acacia_door");
 
+    Block CHERRY_DOOR = BlockImpl.get("minecraft:cherry_door");
+
     Block DARK_OAK_DOOR = BlockImpl.get("minecraft:dark_oak_door");
 
     Block MANGROVE_DOOR = BlockImpl.get("minecraft:mangrove_door");
+
+    Block BAMBOO_DOOR = BlockImpl.get("minecraft:bamboo_door");
 
     Block END_ROD = BlockImpl.get("minecraft:end_rod");
 
@@ -1074,6 +1200,12 @@ interface Blocks {
     Block PURPUR_STAIRS = BlockImpl.get("minecraft:purpur_stairs");
 
     Block END_STONE_BRICKS = BlockImpl.get("minecraft:end_stone_bricks");
+
+    Block TORCHFLOWER_CROP = BlockImpl.get("minecraft:torchflower_crop");
+
+    Block PITCHER_CROP = BlockImpl.get("minecraft:pitcher_crop");
+
+    Block PITCHER_PLANT = BlockImpl.get("minecraft:pitcher_plant");
 
     Block BEETROOTS = BlockImpl.get("minecraft:beetroots");
 
@@ -1236,6 +1368,8 @@ interface Blocks {
     Block DRIED_KELP_BLOCK = BlockImpl.get("minecraft:dried_kelp_block");
 
     Block TURTLE_EGG = BlockImpl.get("minecraft:turtle_egg");
+
+    Block SNIFFER_EGG = BlockImpl.get("minecraft:sniffer_egg");
 
     Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get("minecraft:dead_tube_coral_block");
 
@@ -1691,6 +1825,32 @@ interface Blocks {
 
     Block TUFF = BlockImpl.get("minecraft:tuff");
 
+    Block TUFF_SLAB = BlockImpl.get("minecraft:tuff_slab");
+
+    Block TUFF_STAIRS = BlockImpl.get("minecraft:tuff_stairs");
+
+    Block TUFF_WALL = BlockImpl.get("minecraft:tuff_wall");
+
+    Block POLISHED_TUFF = BlockImpl.get("minecraft:polished_tuff");
+
+    Block POLISHED_TUFF_SLAB = BlockImpl.get("minecraft:polished_tuff_slab");
+
+    Block POLISHED_TUFF_STAIRS = BlockImpl.get("minecraft:polished_tuff_stairs");
+
+    Block POLISHED_TUFF_WALL = BlockImpl.get("minecraft:polished_tuff_wall");
+
+    Block CHISELED_TUFF = BlockImpl.get("minecraft:chiseled_tuff");
+
+    Block TUFF_BRICKS = BlockImpl.get("minecraft:tuff_bricks");
+
+    Block TUFF_BRICK_SLAB = BlockImpl.get("minecraft:tuff_brick_slab");
+
+    Block TUFF_BRICK_STAIRS = BlockImpl.get("minecraft:tuff_brick_stairs");
+
+    Block TUFF_BRICK_WALL = BlockImpl.get("minecraft:tuff_brick_wall");
+
+    Block CHISELED_TUFF_BRICKS = BlockImpl.get("minecraft:chiseled_tuff_bricks");
+
     Block CALCITE = BlockImpl.get("minecraft:calcite");
 
     Block TINTED_GLASS = BlockImpl.get("minecraft:tinted_glass");
@@ -1698,6 +1858,8 @@ interface Blocks {
     Block POWDER_SNOW = BlockImpl.get("minecraft:powder_snow");
 
     Block SCULK_SENSOR = BlockImpl.get("minecraft:sculk_sensor");
+
+    Block CALIBRATED_SCULK_SENSOR = BlockImpl.get("minecraft:calibrated_sculk_sensor");
 
     Block SCULK = BlockImpl.get("minecraft:sculk");
 
@@ -1707,13 +1869,13 @@ interface Blocks {
 
     Block SCULK_SHRIEKER = BlockImpl.get("minecraft:sculk_shrieker");
 
-    Block OXIDIZED_COPPER = BlockImpl.get("minecraft:oxidized_copper");
-
-    Block WEATHERED_COPPER = BlockImpl.get("minecraft:weathered_copper");
+    Block COPPER_BLOCK = BlockImpl.get("minecraft:copper_block");
 
     Block EXPOSED_COPPER = BlockImpl.get("minecraft:exposed_copper");
 
-    Block COPPER_BLOCK = BlockImpl.get("minecraft:copper_block");
+    Block WEATHERED_COPPER = BlockImpl.get("minecraft:weathered_copper");
+
+    Block OXIDIZED_COPPER = BlockImpl.get("minecraft:oxidized_copper");
 
     Block COPPER_ORE = BlockImpl.get("minecraft:copper_ore");
 
@@ -1726,6 +1888,22 @@ interface Blocks {
     Block EXPOSED_CUT_COPPER = BlockImpl.get("minecraft:exposed_cut_copper");
 
     Block CUT_COPPER = BlockImpl.get("minecraft:cut_copper");
+
+    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get("minecraft:oxidized_chiseled_copper");
+
+    Block WEATHERED_CHISELED_COPPER = BlockImpl.get("minecraft:weathered_chiseled_copper");
+
+    Block EXPOSED_CHISELED_COPPER = BlockImpl.get("minecraft:exposed_chiseled_copper");
+
+    Block CHISELED_COPPER = BlockImpl.get("minecraft:chiseled_copper");
+
+    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_oxidized_chiseled_copper");
+
+    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_weathered_chiseled_copper");
+
+    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_exposed_chiseled_copper");
+
+    Block WAXED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_chiseled_copper");
 
     Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:oxidized_cut_copper_stairs");
 
@@ -1775,6 +1953,70 @@ interface Blocks {
 
     Block WAXED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_cut_copper_slab");
 
+    Block COPPER_DOOR = BlockImpl.get("minecraft:copper_door");
+
+    Block EXPOSED_COPPER_DOOR = BlockImpl.get("minecraft:exposed_copper_door");
+
+    Block OXIDIZED_COPPER_DOOR = BlockImpl.get("minecraft:oxidized_copper_door");
+
+    Block WEATHERED_COPPER_DOOR = BlockImpl.get("minecraft:weathered_copper_door");
+
+    Block WAXED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_copper_door");
+
+    Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_exposed_copper_door");
+
+    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_oxidized_copper_door");
+
+    Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_weathered_copper_door");
+
+    Block COPPER_TRAPDOOR = BlockImpl.get("minecraft:copper_trapdoor");
+
+    Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:exposed_copper_trapdoor");
+
+    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:oxidized_copper_trapdoor");
+
+    Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:weathered_copper_trapdoor");
+
+    Block WAXED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_copper_trapdoor");
+
+    Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_exposed_copper_trapdoor");
+
+    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_oxidized_copper_trapdoor");
+
+    Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_weathered_copper_trapdoor");
+
+    Block COPPER_GRATE = BlockImpl.get("minecraft:copper_grate");
+
+    Block EXPOSED_COPPER_GRATE = BlockImpl.get("minecraft:exposed_copper_grate");
+
+    Block WEATHERED_COPPER_GRATE = BlockImpl.get("minecraft:weathered_copper_grate");
+
+    Block OXIDIZED_COPPER_GRATE = BlockImpl.get("minecraft:oxidized_copper_grate");
+
+    Block WAXED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_copper_grate");
+
+    Block WAXED_EXPOSED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_exposed_copper_grate");
+
+    Block WAXED_WEATHERED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_weathered_copper_grate");
+
+    Block WAXED_OXIDIZED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_oxidized_copper_grate");
+
+    Block COPPER_BULB = BlockImpl.get("minecraft:copper_bulb");
+
+    Block EXPOSED_COPPER_BULB = BlockImpl.get("minecraft:exposed_copper_bulb");
+
+    Block WEATHERED_COPPER_BULB = BlockImpl.get("minecraft:weathered_copper_bulb");
+
+    Block OXIDIZED_COPPER_BULB = BlockImpl.get("minecraft:oxidized_copper_bulb");
+
+    Block WAXED_COPPER_BULB = BlockImpl.get("minecraft:waxed_copper_bulb");
+
+    Block WAXED_EXPOSED_COPPER_BULB = BlockImpl.get("minecraft:waxed_exposed_copper_bulb");
+
+    Block WAXED_WEATHERED_COPPER_BULB = BlockImpl.get("minecraft:waxed_weathered_copper_bulb");
+
+    Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get("minecraft:waxed_oxidized_copper_bulb");
+
     Block LIGHTNING_ROD = BlockImpl.get("minecraft:lightning_rod");
 
     Block POINTED_DRIPSTONE = BlockImpl.get("minecraft:pointed_dripstone");
@@ -1792,6 +2034,8 @@ interface Blocks {
     Block FLOWERING_AZALEA = BlockImpl.get("minecraft:flowering_azalea");
 
     Block MOSS_CARPET = BlockImpl.get("minecraft:moss_carpet");
+
+    Block PINK_PETALS = BlockImpl.get("minecraft:pink_petals");
 
     Block MOSS_BLOCK = BlockImpl.get("minecraft:moss_block");
 
@@ -1870,4 +2114,10 @@ interface Blocks {
     Block FROGSPAWN = BlockImpl.get("minecraft:frogspawn");
 
     Block REINFORCED_DEEPSLATE = BlockImpl.get("minecraft:reinforced_deepslate");
+
+    Block DECORATED_POT = BlockImpl.get("minecraft:decorated_pot");
+
+    Block CRAFTER = BlockImpl.get("minecraft:crafter");
+
+    Block TRIAL_SPAWNER = BlockImpl.get("minecraft:trial_spawner");
 }

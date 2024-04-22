@@ -2,9 +2,14 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.metadata.animal.FrogMeta;
+import net.minestom.server.entity.metadata.animal.SnifferMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +31,10 @@ public final class Metadata {
 
     public static Entry<Integer> VarInt(int value) {
         return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, NetworkBuffer.VAR_INT);
+    }
+
+    public static Entry<Long> Long(long value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.VAR_LONG);
     }
 
     public static Entry<Float> Float(float value) {
@@ -53,7 +62,7 @@ public final class Metadata {
     }
 
     public static Entry<Point> Rotation(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.ROTATION);
+        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.VECTOR3);
     }
 
     public static Entry<Point> Position(@NotNull Point value) {
@@ -72,8 +81,12 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Integer> OptBlockID(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKID, value, NetworkBuffer.OPT_BLOCK_ID);
+    public static Entry<Integer> BlockState(@Nullable Integer value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, NetworkBuffer.BLOCK_STATE);
+    }
+
+    public static Entry<Integer> OptBlockState(@Nullable Integer value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKSTATE, value, NetworkBuffer.OPT_BLOCK_STATE);
     }
 
     public static Entry<NBT> NBT(@NotNull NBT nbt) {
@@ -95,25 +108,64 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
+    public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, NetworkBuffer.CAT_VARIANT);
+    }
+
+    public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+    }
+
+    public static Entry<PaintingMeta.Variant> PaintingVariant(@NotNull PaintingMeta.Variant value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PAINTINGVARIANT, value, NetworkBuffer.PAINTING_VARIANT);
+    }
+
+    public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, NetworkBuffer.SNIFFER_STATE);
+    }
+
+    public static Entry<Point> Vector3(@NotNull Point value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
+    }
+
+    public static Entry<float[]> Quaternion(float @NotNull [] value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
+    }
+
+    public static Entry<Particle> Particle(@NotNull Particle particle) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, NetworkBuffer.PARTICLE);
+    }
+
     public static final byte TYPE_BYTE = 0;
     public static final byte TYPE_VARINT = 1;
-    public static final byte TYPE_FLOAT = 2;
-    public static final byte TYPE_STRING = 3;
-    public static final byte TYPE_CHAT = 4;
-    public static final byte TYPE_OPTCHAT = 5;
-    public static final byte TYPE_SLOT = 6;
-    public static final byte TYPE_BOOLEAN = 7;
-    public static final byte TYPE_ROTATION = 8;
-    public static final byte TYPE_POSITION = 9;
-    public static final byte TYPE_OPTPOSITION = 10;
-    public static final byte TYPE_DIRECTION = 11;
-    public static final byte TYPE_OPTUUID = 12;
-    public static final byte TYPE_OPTBLOCKID = 13;
-    public static final byte TYPE_NBT = 14;
-    public static final byte TYPE_PARTICLE = 15;
-    public static final byte TYPE_VILLAGERDATA = 16;
-    public static final byte TYPE_OPTVARINT = 17;
-    public static final byte TYPE_POSE = 18;
+    public static final byte TYPE_LONG = 2;
+    public static final byte TYPE_FLOAT = 3;
+    public static final byte TYPE_STRING = 4;
+    public static final byte TYPE_CHAT = 5;
+    public static final byte TYPE_OPTCHAT = 6;
+    public static final byte TYPE_SLOT = 7;
+    public static final byte TYPE_BOOLEAN = 8;
+    public static final byte TYPE_ROTATION = 9;
+    public static final byte TYPE_POSITION = 10;
+    public static final byte TYPE_OPTPOSITION = 11;
+    public static final byte TYPE_DIRECTION = 12;
+    public static final byte TYPE_OPTUUID = 13;
+    public static final byte TYPE_BLOCKSTATE = 14;
+    public static final byte TYPE_OPTBLOCKSTATE = 15;
+    public static final byte TYPE_NBT = 16;
+    public static final byte TYPE_PARTICLE = 17;
+    public static final byte TYPE_VILLAGERDATA = 18;
+    public static final byte TYPE_OPTVARINT = 19;
+    public static final byte TYPE_POSE = 20;
+    public static final byte TYPE_CAT_VARIANT = 21;
+    public static final byte TYPE_FROG_VARIANT = 22;
+    public static final byte TYPE_OPTGLOBALPOS = 23;
+    public static final byte TYPE_PAINTINGVARIANT = 24;
+    public static final byte TYPE_SNIFFER_STATE = 25;
+    public static final byte TYPE_VECTOR3 = 26;
+    public static final byte TYPE_QUATERNION = 27;
+
+    // Impl Note: Adding an entry here requires that a default value entry is added in MetadataImpl.EMPTY_VALUES
 
     private static final VarHandle NOTIFIED_CHANGES;
 

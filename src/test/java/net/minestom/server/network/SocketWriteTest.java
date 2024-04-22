@@ -16,26 +16,26 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SocketWriteTest {
 
-    record IntPacket(int value) implements ServerPacket {
+    record IntPacket(int value) implements ServerPacket.Play {
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(INT, value);
         }
 
         @Override
-        public int getId() {
+        public int playId() {
             return 1;
         }
     }
 
-    record CompressiblePacket(String value) implements ServerPacket {
+    record CompressiblePacket(String value) implements ServerPacket.Play {
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.write(STRING, value);
         }
 
         @Override
-        public int getId() {
+        public int playId() {
             return 1;
         }
     }
@@ -45,7 +45,7 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, packet, false);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, false);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -57,8 +57,8 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, packet, false);
-        PacketUtils.writeFramedPacket(buffer, packet, false);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, false);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, false);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -74,7 +74,7 @@ public class SocketWriteTest {
         var packet = new CompressiblePacket(string);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, packet, true);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + payload
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -86,7 +86,7 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, packet, true);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -98,8 +98,8 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, packet, true);
-        PacketUtils.writeFramedPacket(buffer, packet, true);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future

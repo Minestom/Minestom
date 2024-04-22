@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket {
+public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket.Play {
     public DeleteChatPacket(@NotNull NetworkBuffer reader) {
         this(new MessageSignature(reader));
     }
@@ -17,7 +17,7 @@ public record DeleteChatPacket(@NotNull MessageSignature signature) implements S
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.DELETE_CHAT_MESSAGE;
     }
 }

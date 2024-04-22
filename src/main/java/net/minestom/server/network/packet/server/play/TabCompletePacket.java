@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -17,13 +17,15 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record TabCompletePacket(int transactionId, int start, int length,
-                                @NotNull List<Match> matches) implements ComponentHoldingServerPacket {
+                                @NotNull List<Match> matches) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+    public static final int MAX_ENTRIES = Short.MAX_VALUE;
+
     public TabCompletePacket {
         matches = List.copyOf(matches);
     }
 
     public TabCompletePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readCollection(Match::new));
+        this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readCollection(Match::new, MAX_ENTRIES));
     }
 
     @Override
@@ -35,7 +37,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.TAB_COMPLETE;
     }
 

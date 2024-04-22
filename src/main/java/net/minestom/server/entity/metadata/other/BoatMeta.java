@@ -76,7 +76,10 @@ public class BoatMeta extends EntityMeta {
         BIRCH,
         JUNGLE,
         ACACIA,
-        DARK_OAK;
+        CHERRY,
+        DARK_OAK,
+        MANGROVE,
+        BAMBOO;
 
         private final static Type[] VALUES = values();
     }

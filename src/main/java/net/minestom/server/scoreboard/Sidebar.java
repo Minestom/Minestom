@@ -4,10 +4,8 @@ import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
-import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
-import net.minestom.server.network.packet.server.play.TeamsPacket;
-import net.minestom.server.network.packet.server.play.UpdateScorePacket;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,7 +96,7 @@ public class Sidebar implements Scoreboard {
     public void setTitle(@NotNull Component title) {
         this.title = title;
         sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
-                ScoreboardObjectivePacket.Type.INTEGER));
+                ScoreboardObjectivePacket.Type.INTEGER, null));
     }
 
     /**
@@ -260,6 +258,10 @@ public class Sidebar implements Scoreboard {
          * The score of the line
          */
         private int line;
+        /**
+         * The number format of the line
+         */
+        private NumberFormat numberFormat;
 
         private final String teamName;
         /**
@@ -273,9 +275,14 @@ public class Sidebar implements Scoreboard {
         private SidebarTeam sidebarTeam;
 
         public ScoreboardLine(@NotNull String id, @NotNull Component content, int line) {
+            this(id, content, line, null);
+        }
+
+        public ScoreboardLine(@NotNull String id, @NotNull Component content, int line, @Nullable NumberFormat numberFormat) {
             this.id = id;
             this.content = content;
             this.line = line;
+            this.numberFormat = numberFormat;
 
             this.teamName = TEAM_PREFIX + COUNTER.incrementAndGet();
         }
@@ -335,7 +342,8 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getScoreCreationPacket(String objectiveName) {
-            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, line);
+            //TODO displayName acts as a suffix to the objective name, find way to handle elegantly
+            return new UpdateScorePacket(entityName, objectiveName, line, Component.empty(), numberFormat);
         }
 
         /**
@@ -344,8 +352,8 @@ public class Sidebar implements Scoreboard {
          * @param objectiveName The objective name to be destroyed
          * @return a {@link UpdateScorePacket}
          */
-        private UpdateScorePacket getScoreDestructionPacket(String objectiveName) {
-            return new UpdateScorePacket(entityName, (byte) 1, objectiveName, 0);
+        private ResetScorePacket getScoreDestructionPacket(String objectiveName) {
+            return new ResetScorePacket(entityName, objectiveName);
         }
 
         /**
@@ -356,7 +364,8 @@ public class Sidebar implements Scoreboard {
          * @return a {@link UpdateScorePacket}
          */
         private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
-            return new UpdateScorePacket(entityName, (byte) 0, objectiveName, score);
+            //TODO displayName acts as a suffix to the objective name, find way to handle elegantly
+            return new UpdateScorePacket(entityName, objectiveName, score, Component.empty(), numberFormat);
         }
 
         /**
@@ -458,6 +467,72 @@ public class Sidebar implements Scoreboard {
          */
         private void refreshPrefix(@NotNull Component prefix) {
             this.prefix = prefix;
+        }
+    }
+
+
+    public static class NumberFormat implements NetworkBuffer.Writer {
+        private final FormatType formatType;
+        private final Component content;
+
+        private NumberFormat() {
+            this.content = null;
+            this.formatType = FormatType.BLANK;
+        }
+
+        private NumberFormat(@NotNull Component content, @NotNull FormatType formatType) {
+            this.content = content;
+            this.formatType = formatType;
+        }
+
+        public NumberFormat(NetworkBuffer reader) {
+            this.formatType = FormatType.values()[reader.read(NetworkBuffer.VAR_INT)];
+            if (formatType != FormatType.BLANK) this.content = reader.read(NetworkBuffer.COMPONENT);
+            else this.content = null;
+        }
+
+        @Override
+        public void write(@NotNull NetworkBuffer writer) {
+            writer.write(NetworkBuffer.VAR_INT, formatType.ordinal());
+            if (formatType == FormatType.STYLED) {
+                assert content != null;
+                writer.write(NetworkBuffer.COMPONENT, content);
+            }
+            else if (formatType == FormatType.FIXED) {
+                assert content != null;
+                writer.write(NetworkBuffer.COMPONENT, content);
+            }
+        }
+
+        /**
+         * A number format which has no sidebar score displayed
+         *
+         * @return a blank number format
+         */
+        public static @NotNull NumberFormat blank() {
+            return new NumberFormat();
+        }
+
+        /**
+         * A number format which lets the sidebar scores be styled
+         *
+         * @param style a styled component
+         */
+        public static @NotNull NumberFormat styled(@NotNull Component style) {
+            return new NumberFormat(style, FormatType.STYLED);
+        }
+
+        /**
+         * A number format which lets the sidebar scores be styled with explicit text
+         *
+         * @param content the fixed component
+         */
+        public static @NotNull NumberFormat fixed(@NotNull Component content) {
+            return new NumberFormat(content, FormatType.FIXED);
+        }
+
+        private enum FormatType {
+            BLANK, STYLED, FIXED
         }
     }
 }

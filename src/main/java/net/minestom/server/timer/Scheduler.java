@@ -2,6 +2,7 @@ package net.minestom.server.timer;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 /**
@@ -10,7 +11,7 @@ import java.util.function.Supplier;
  * <p>
  * Tasks are by default executed in the caller thread.
  */
-public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
+public sealed interface Scheduler extends Executor permits SchedulerImpl, SchedulerManager {
     static @NotNull Scheduler newScheduler() {
         return new SchedulerImpl();
     }
@@ -30,6 +31,13 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     void processTick();
 
     /**
+     * Execute tasks set to run at the end of this tick.
+     * <p>
+     * This method is not thread-safe.
+     */
+    void processTickEnd();
+
+    /**
      * Submits a new task with custom scheduling logic.
      * <p>
      * This is the primitive method used by all scheduling shortcuts,
@@ -43,7 +51,7 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task, @NotNull ExecutionType executionType);
 
     default @NotNull Task submitTask(@NotNull Supplier<TaskSchedule> task) {
-        return submitTask(task, ExecutionType.SYNC);
+        return submitTask(task, ExecutionType.TICK_START);
     }
 
     default @NotNull Task.Builder buildTask(@NotNull Runnable task) {
@@ -57,7 +65,11 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     }
 
     default @NotNull Task scheduleTask(@NotNull Runnable task, @NotNull TaskSchedule delay, @NotNull TaskSchedule repeat) {
-        return scheduleTask(task, delay, repeat, ExecutionType.SYNC);
+        return scheduleTask(task, delay, repeat, ExecutionType.TICK_START);
+    }
+
+    default @NotNull Task scheduleTask(@NotNull Supplier<TaskSchedule> task, @NotNull TaskSchedule delay) {
+        return new Task.Builder(this, task).delay(delay).schedule();
     }
 
     default @NotNull Task scheduleNextTick(@NotNull Runnable task, @NotNull ExecutionType executionType) {
@@ -65,7 +77,11 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     }
 
     default @NotNull Task scheduleNextTick(@NotNull Runnable task) {
-        return scheduleNextTick(task, ExecutionType.SYNC);
+        return scheduleNextTick(task, ExecutionType.TICK_START);
+    }
+
+    default @NotNull Task scheduleEndOfTick(@NotNull Runnable task) {
+        return scheduleNextProcess(task, ExecutionType.TICK_END);
     }
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task, @NotNull ExecutionType executionType) {
@@ -73,6 +89,15 @@ public sealed interface Scheduler permits SchedulerImpl, SchedulerManager {
     }
 
     default @NotNull Task scheduleNextProcess(@NotNull Runnable task) {
-        return scheduleNextProcess(task, ExecutionType.SYNC);
+        return scheduleNextProcess(task, ExecutionType.TICK_START);
+    }
+
+    /**
+     * Implementation of {@link Executor}, proxies to {@link #scheduleNextTick(Runnable)}.
+     * @param command the task to execute on the next tick
+     */
+    @Override
+    default void execute(@NotNull Runnable command) {
+        scheduleNextTick(command);
     }
 }

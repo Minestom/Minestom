@@ -4,7 +4,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,7 +13,9 @@ import java.util.function.Function;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record DeclareCommandsPacket(@NotNull List<Node> nodes,
-                                    int rootIndex) implements ServerPacket {
+                                    int rootIndex) implements ServerPacket.Play {
+    public static final int MAX_NODES = Short.MAX_VALUE;
+
     public DeclareCommandsPacket {
         nodes = List.copyOf(nodes);
     }
@@ -23,7 +25,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             Node node = new Node();
             node.read(r);
             return node;
-        }), reader.read(VAR_INT));
+        }, MAX_NODES), reader.read(VAR_INT));
     }
 
     @Override
@@ -33,7 +35,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
@@ -88,7 +90,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             }
 
             if (isArgument()) {
-                final ProtocolObject object = Argument.CONTAINER.getId(reader.read(VAR_INT));
+                final StaticProtocolObject object = Argument.CONTAINER.getId(reader.read(VAR_INT));
                 parser = object.name();
                 properties = getProperties(reader, parser);
             }

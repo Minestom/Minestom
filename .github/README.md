@@ -5,7 +5,7 @@
 
 [![license](https://img.shields.io/github/license/Minestom/Minestom?style=for-the-badge&color=b2204c)](../LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)  
-[![javadocs](https://img.shields.io/badge/documentation-javadocs-4d7a97?style=for-the-badge)](https://minestom.github.io/Minestom/)
+[![javadocs](https://img.shields.io/badge/documentation-javadocs-4d7a97?style=for-the-badge)](https://javadoc.minestom.net)
 [![wiki](https://img.shields.io/badge/documentation-wiki-74aad6?style=for-the-badge)](https://wiki.minestom.net/)
 [![discord-banner](https://img.shields.io/discord/706185253441634317?label=discord&style=for-the-badge&color=7289da)](https://discord.gg/pkFRvqB)
 
@@ -31,11 +31,19 @@ Minestom is not installed like Bukkit/Forge/Sponge.
 As Minestom is a Java library, it must be loaded the same way any other Java library may be loaded.
 This means you need to add Minestom as a dependency, add your code and compile by yourself.
 
-For adding the required repositories and dependencies, [check this out](https://wiki.minestom.net/setup/dependencies)
+Minestom is available on [Maven Central](https://central.sonatype.com/artifact/net.minestom/minestom-snapshots),
+and can be installed like the following (Gradle/Groovy):
 
-The newest version can be found [here: ![](https://jitpack.io/v/Minestom/Minestom.svg)](https://jitpack.io/#Minestom/Minestom)
+```groovy
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
 
-> Our own WIP implementation for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
+dependencies {
+    implementation 'net.minestom:minestom-snapshots:<???>'
+}
+```
 
 # Usage
 An example of how to use the Minestom library is available [here](/demo).
@@ -93,7 +101,7 @@ Commands are the simplest way of communication between clients and server. Since
 * The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project
 * [The Minecraft Coalition](https://wiki.vg/) and [`#mcdevs`](https://github.com/mcdevs) -
    protocol and file formats research.
-* [The Minecraft Wiki](https://minecraft.gamepedia.com/Minecraft_Wiki) for all their useful info
+* [The Minecraft Wiki](https://minecraft.wiki) for all their useful info
 * [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) for their amazing Java profiler
 
 # Contributing
@@ -102,5 +110,3 @@ All WIP features are previewed as Draft PRs
 
 # License
 This project is licensed under the [Apache License Version 2.0](../LICENSE).
-
-

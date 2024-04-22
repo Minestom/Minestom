@@ -57,7 +57,7 @@ public final class ItemSerializers {
             final int operation = reader.getTag(OPERATION);
             final String name = reader.getTag(NAME);
 
-            final Attribute attribute = Attribute.fromKey(attributeName.toUpperCase(Locale.ROOT));
+            final Attribute attribute = Attribute.fromKey(attributeName.toLowerCase(Locale.ROOT));
             // Wrong attribute name, stop here
             if (attribute == null) return null;
             final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);

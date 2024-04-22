@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * Represents a namespaced ID
- * https://minecraft.gamepedia.com/Namespaced_ID
+ * https://minecraft.wiki/w/Namespaced_ID
  */
 public final class NamespaceID implements CharSequence, Key {
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
@@ -67,12 +67,14 @@ public final class NamespaceID implements CharSequence, Key {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof final Key that)) return false;
-        return Objects.equals(this.full, that.asString());
+        return Objects.equals(this.domain, that.namespace()) && Objects.equals(this.path, that.value());
     }
 
     @Override
     public int hashCode() {
-        return full.hashCode();
+        int result = this.domain.hashCode();
+        result = (31 * result) + this.path.hashCode();
+        return result;
     }
 
     @Override

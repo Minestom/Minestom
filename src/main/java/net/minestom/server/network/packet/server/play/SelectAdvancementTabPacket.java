@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record SelectAdvancementTabPacket(@Nullable String identifier) implements ServerPacket {
+public record SelectAdvancementTabPacket(@Nullable String identifier) implements ServerPacket.Play {
     public SelectAdvancementTabPacket(@NotNull NetworkBuffer reader) {
         this(reader.readOptional(STRING));
     }
@@ -19,7 +19,7 @@ public record SelectAdvancementTabPacket(@Nullable String identifier) implements
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
     }
 }

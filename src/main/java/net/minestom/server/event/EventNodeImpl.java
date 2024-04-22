@@ -2,12 +2,14 @@ package net.minestom.server.event;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -17,6 +19,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
+
     static final Object GLOBAL_CHILD_LOCK = new Object();
 
     private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
@@ -106,7 +109,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     public @NotNull EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var childImpl = (EventNodeImpl<? extends T>) child;
-            Check.stateCondition(childImpl.parent != null, "Node already has a parent");
+            Check.stateCondition(!ServerFlag.EVENT_NODE_ALLOW_MULTIPLE_PARENTS && childImpl.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
             if (!children.add((EventNodeImpl<T>) childImpl)) return this; // Couldn't add the child (already present?)
             childImpl.parent = this;
@@ -217,6 +220,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public @Nullable EventNode<? super T> getParent() {
+        Check.stateCondition(ServerFlag.EVENT_NODE_ALLOW_MULTIPLE_PARENTS, "Cannot use getParent when multiple parents are allowed");
         return parent;
     }
 
@@ -442,14 +446,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var mappedNodeCache = node.registeredMappedNode;
             if (mappedNodeCache.isEmpty()) return null;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
-            Map<Object, Handle<E>> handlers = new WeakHashMap<>(mappedNodeCache.size());
+            Map<Object, WeakReference<Handle<E>>> handlers = new WeakHashMap<>(mappedNodeCache.size());
+
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
                 final Handle<E> handle = (Handle<E>) mappedNode.getHandle(eventType);
                 if (!handle.hasListener()) continue; // Implicit update
                 filters.add(mappedNode.filter);
-                handlers.put(mappedEntry.getKey(), handle);
+                handlers.put(mappedEntry.getKey(), new WeakReference<>(handle));
             }
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
@@ -457,7 +462,8 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final EventFilter<E, ?>[] filterList = filters.toArray(EventFilter[]::new);
             final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                 final Object handler = filter.castHandler(event);
-                final Handle<E> handle = handlers.get(handler);
+                final WeakReference<Handle<E>> handleRef = handlers.get(handler);
+                final Handle<E> handle = handleRef != null ? handleRef.get() : null;
                 if (handle != null) handle.call(event);
             };
             // Specialize the consumer depending on the number of filters to avoid looping

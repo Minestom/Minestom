@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean locked) implements ServerPacket {
+public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean locked) implements ServerPacket.Play {
     public ServerDifficultyPacket(@NotNull NetworkBuffer reader) {
         this(reader.readEnum(Difficulty.class), reader.read(BOOLEAN));
     }
@@ -20,7 +20,7 @@ public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean loc
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SERVER_DIFFICULTY;
     }
 }

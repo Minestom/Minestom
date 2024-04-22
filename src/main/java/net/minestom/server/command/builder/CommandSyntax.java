@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -20,14 +22,14 @@ public class CommandSyntax {
     private CommandCondition commandCondition;
     private CommandExecutor executor;
 
-    private final Map<String, Supplier<Object>> defaultValuesMap;
+    private final Map<String, Function<CommandSender, Object>> defaultValuesMap;
     private final Argument<?>[] args;
 
     private final boolean suggestion;
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
                             @NotNull CommandExecutor commandExecutor,
-                            @Nullable Map<String, Supplier<Object>> defaultValuesMap,
+                            @Nullable Map<String, Function<CommandSender, Object>> defaultValuesMap,
                             @NotNull Argument<?>... args) {
         this.commandCondition = commandCondition;
         this.executor = commandExecutor;
@@ -87,7 +89,7 @@ public class CommandSyntax {
     }
 
     @Nullable
-    protected Map<String, Supplier<Object>> getDefaultValuesMap() {
+    protected Map<String, Function<CommandSender, Object>> getDefaultValuesMap() {
         return defaultValuesMap;
     }
 

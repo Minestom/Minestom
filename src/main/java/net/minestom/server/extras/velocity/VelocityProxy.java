@@ -1,6 +1,8 @@
 package net.minestom.server.extras.velocity;
 
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
@@ -32,6 +34,9 @@ public final class VelocityProxy {
      *               be sure to do not hardcode it in your code but to retrieve it from a file or anywhere else safe
      */
     public static void enable(@NotNull String secret) {
+        Check.stateCondition(enabled, "Velocity modern forwarding is already enabled");
+        Check.stateCondition(MojangAuth.isEnabled(), "Velocity modern forwarding should not be enabled with MojangAuth");
+
         VelocityProxy.enabled = true;
         VelocityProxy.key = new SecretKeySpec(secret.getBytes(), MAC_ALGORITHM);
     }

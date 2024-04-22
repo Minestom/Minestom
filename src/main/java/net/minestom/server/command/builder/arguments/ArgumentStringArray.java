@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public class ArgumentStringArray extends Argument<String[]> {
 
     @NotNull
     @Override
-    public String[] parse(@NotNull String input) {
+    public String[] parse(@NotNull CommandSender sender, @NotNull String input) {
         return input.split(Pattern.quote(StringUtils.SPACE));
     }
 

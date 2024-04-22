@@ -30,7 +30,6 @@ public class ArgumentParserTest {
         assertParserEquals("Enchantment<example>", ArgumentType.Enchantment("example"));
         assertParserEquals("Particle<example>", ArgumentType.Particle("example"));
         assertParserEquals("ResourceLocation<example>", ArgumentType.ResourceLocation("example"));
-        assertParserEquals("Potion<example>", ArgumentType.Potion("example"));
         assertParserEquals("EntityType<example>", ArgumentType.EntityType("example"));
         assertParserEquals("BlockState<example>", ArgumentType.BlockState("example"));
         assertParserEquals("IntRange<example>", ArgumentType.IntRange("example"));

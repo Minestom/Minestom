@@ -7,10 +7,10 @@ import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.client.play.ClientPongPacket;
-import net.minestom.server.network.packet.server.play.PingPacket;
+import net.minestom.server.network.packet.server.common.PingPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 
 public class WindowListener {
@@ -26,8 +26,6 @@ public class WindowListener {
         final short slot = packet.slot();
         final byte button = packet.button();
         final ClientClickWindowPacket.ClickType clickType = packet.clickType();
-
-        //System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | clickType: " + clickType);
 
         boolean successful = false;
 
@@ -90,7 +88,7 @@ public class WindowListener {
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
         EventDispatcher.call(inventoryCloseEvent);
 
-        player.closeInventory();
+        player.closeInventory(true);
 
         Inventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
@@ -103,10 +101,10 @@ public class WindowListener {
      */
     private static void refreshCursorItem(Player player, AbstractInventory inventory) {
         ItemStack cursorItem;
-        if (inventory instanceof PlayerInventory) {
-            cursorItem = ((PlayerInventory) inventory).getCursorItem();
-        } else if (inventory instanceof Inventory) {
-            cursorItem = ((Inventory) inventory).getCursorItem(player);
+        if (inventory instanceof PlayerInventory playerInventory) {
+            cursorItem = playerInventory.getCursorItem();
+        } else if (inventory instanceof Inventory standardInventory) {
+            cursorItem = standardInventory.getCursorItem(player);
         } else {
             throw new RuntimeException("Invalid inventory: " + inventory.getClass());
         }
@@ -115,10 +113,10 @@ public class WindowListener {
     }
 
     private static void setCursor(Player player, AbstractInventory inventory, ItemStack itemStack) {
-        if (inventory instanceof PlayerInventory) {
-            ((PlayerInventory) inventory).setCursorItem(itemStack);
-        } else if (inventory instanceof Inventory) {
-            ((Inventory) inventory).setCursorItem(player, itemStack);
+        if (inventory instanceof PlayerInventory playerInventory) {
+            playerInventory.setCursorItem(itemStack);
+        } else if (inventory instanceof Inventory standardInventory) {
+            standardInventory.setCursorItem(player, itemStack);
         } else {
             throw new RuntimeException("Invalid inventory: " + inventory.getClass());
         }

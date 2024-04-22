@@ -23,20 +23,19 @@ public class DolphinMeta extends WaterAnimalMeta {
         super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 
-    public boolean isCanFindTreasure() {
+    public boolean isHasFish() {
         return super.metadata.getIndex(OFFSET + 1, false);
     }
 
-    public void setCanFindTreasure(boolean value) {
+    public void setHasFish(boolean value) {
         super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
     }
 
-    public boolean isHasFish() {
-        return super.metadata.getIndex(OFFSET + 2, false);
+    public int getMoistureLevel() {
+        return super.metadata.getIndex(OFFSET + 2, 2400);
     }
 
-    public void setHasFish(boolean value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
+    public void setMoistureLevel(int value) {
+        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
     }
-
 }

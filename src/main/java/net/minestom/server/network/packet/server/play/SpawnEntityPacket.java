@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
                                 @NotNull Pos position, float headRot, int data,
-                                short velocityX, short velocityY, short velocityZ) implements ServerPacket {
+                                short velocityX, short velocityY, short velocityZ) implements ServerPacket.Play {
     public SpawnEntityPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(UUID), reader.read(VAR_INT),
                 new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
@@ -42,7 +42,7 @@ public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SPAWN_ENTITY;
     }
 }

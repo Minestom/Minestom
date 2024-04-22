@@ -8,7 +8,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record NbtQueryResponsePacket(int transactionId, NBTCompound data) implements ServerPacket {
+public record NbtQueryResponsePacket(int transactionId, NBTCompound data) implements ServerPacket.Play {
     public NbtQueryResponsePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), (NBTCompound) reader.read(NBT));
     }
@@ -25,7 +25,7 @@ public record NbtQueryResponsePacket(int transactionId, NBTCompound data) implem
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.NBT_QUERY_RESPONSE;
     }
 }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EffectPacket(int effectId, Point position, int data,
-                           boolean disableRelativeVolume) implements ServerPacket {
+                           boolean disableRelativeVolume) implements ServerPacket.Play {
     public EffectPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(BLOCK_POSITION), reader.read(INT), reader.read(BOOLEAN));
     }
@@ -23,7 +23,7 @@ public record EffectPacket(int effectId, Point position, int data,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.EFFECT;
     }
 }

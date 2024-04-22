@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 
-public record WorldBorderSizePacket(double diameter) implements ServerPacket {
+public record WorldBorderSizePacket(double diameter) implements ServerPacket.Play {
     public WorldBorderSizePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(DOUBLE));
     }
@@ -18,7 +18,7 @@ public record WorldBorderSizePacket(double diameter) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.WORLD_BORDER_SIZE;
     }
 }

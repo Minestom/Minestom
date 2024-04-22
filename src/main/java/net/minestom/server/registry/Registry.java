@@ -2,11 +2,14 @@ package net.minestom.server.registry;
 
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.entity.EntitySpawnType;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -21,16 +24,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
- * Handles registry data, used by {@link ProtocolObject} implementations and is strictly internal.
+ * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
  */
 public final class Registry {
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Properties main) {
         return new BlockEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static BiomeEntry biome(String namespace, Properties properties) {
+        return new BiomeEntry(namespace, properties, null);
     }
 
     @ApiStatus.Internal
@@ -54,6 +64,21 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static DamageTypeEntry damageType(String namespace, @NotNull Properties main) {
+        return new DamageTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static TrimMaterialEntry trimMaterial(String namespace, @NotNull Properties main) {
+        return new TrimMaterialEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static TrimPatternEntry trimPattern(String namespace, @NotNull Properties main) {
+        return new TrimPatternEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -70,7 +95,7 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends ProtocolObject> Container<T> createContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
@@ -85,9 +110,9 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public record Container<T extends ProtocolObject>(Resource resource,
-                                                      Map<String, T> namespaces,
-                                                      ObjectArray<T> ids) {
+    public record Container<T extends StaticProtocolObject>(Resource resource,
+                                                            Map<String, T> namespaces,
+                                                            ObjectArray<T> ids) {
         public Container {
             namespaces = Map.copyOf(namespaces);
             ids.trim();
@@ -131,6 +156,54 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
+        var entries = Registry.load(resource);
+        Map<String, T> namespaces = new HashMap<>(entries.size());
+        for (var entry : entries.entrySet()) {
+            final String namespace = entry.getKey();
+            final Properties properties = Properties.fromMap(entry.getValue());
+            final T value = loader.get(namespace, properties);
+            namespaces.put(value.name(), value);
+        }
+        return new DynamicContainer<>(resource, namespaces);
+    }
+
+    @ApiStatus.Internal
+    public record DynamicContainer<T>(Resource resource, Map<String, T> namespaces) {
+        public DynamicContainer {
+            namespaces = Map.copyOf(namespaces);
+        }
+
+        public T get(@NotNull String namespace) {
+            return namespaces.get(namespace);
+        }
+
+        public T getSafe(@NotNull String namespace) {
+            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
+        }
+
+        public Collection<T> values() {
+            return namespaces.values();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Container<?> container)) return false;
+            return resource == container.resource;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(resource);
+        }
+
+        public interface Loader<T extends ProtocolObject> {
+            T get(String namespace, Properties properties);
+        }
+    }
+
+    @ApiStatus.Internal
     public enum Resource {
         BLOCKS("blocks.json"),
         ITEMS("items.json"),
@@ -142,12 +215,15 @@ public final class Registry {
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
-
+        DAMAGE_TYPES("damage_types.json"),
+        TRIM_MATERIALS("trim_materials.json"),
+        TRIM_PATTERNS("trim_patterns.json"),
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
         FLUID_TAGS("tags/fluid_tags.json"),
         GAMEPLAY_TAGS("tags/gameplay_tags.json"),
-        ITEM_TAGS("tags/item_tags.json");
+        ITEM_TAGS("tags/item_tags.json"),
+        BIOMES("biomes.json");
 
         private final String name;
 
@@ -169,10 +245,15 @@ public final class Registry {
         private final boolean air;
         private final boolean solid;
         private final boolean liquid;
+        private final boolean occludes;
+        private final int lightEmission;
+        private final boolean replaceable;
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
         private final Shape shape;
+        private final boolean redstoneConductor;
+        private final boolean signalSource;
         private final Properties custom;
 
         private BlockEntry(String namespace, Properties main, Properties custom) {
@@ -189,6 +270,9 @@ public final class Registry {
             this.air = main.getBoolean("air", false);
             this.solid = main.getBoolean("solid");
             this.liquid = main.getBoolean("liquid", false);
+            this.occludes = main.getBoolean("occludes", true);
+            this.lightEmission = main.getInt("lightEmission", 0);
+            this.replaceable = main.getBoolean("replaceable", false);
             {
                 Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
@@ -204,9 +288,12 @@ public final class Registry {
                 this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
             }
             {
-                final String string = main.getString("collisionShape");
-                this.shape = CollisionUtils.parseBlockShape(string, this);
+                final String collision = main.getString("collisionShape");
+                final String occlusion = main.getString("occlusionShape");
+                this.shape = CollisionUtils.parseBlockShape(collision, occlusion, this);
             }
+            this.redstoneConductor = main.getBoolean("redstoneConductor");
+            this.signalSource = main.getBoolean("signalSource", false);
         }
 
         public @NotNull NamespaceID namespace() {
@@ -257,6 +344,18 @@ public final class Registry {
             return liquid;
         }
 
+        public boolean occludes() {
+            return occludes;
+        }
+
+        public int lightEmission() {
+            return lightEmission;
+        }
+
+        public boolean isReplaceable() {
+            return replaceable;
+        }
+
         public boolean isBlockEntity() {
             return blockEntity != null;
         }
@@ -273,6 +372,14 @@ public final class Registry {
             return materialSupplier.get();
         }
 
+        public boolean isRedstoneConductor() {
+            return redstoneConductor;
+        }
+
+        public boolean isSignalSource() {
+            return signalSource;
+        }
+
         public Shape collisionShape() {
             return shape;
         }
@@ -280,6 +387,81 @@ public final class Registry {
         @Override
         public Properties custom() {
             return custom;
+        }
+    }
+
+    public static final class BiomeEntry implements Entry {
+        private final Properties custom;
+        private final NamespaceID namespace;
+        private final Integer foliageColor;
+        private final Integer grassColor;
+        private final Integer skyColor;
+        private final Integer waterColor;
+        private final Integer waterFogColor;
+        private final Integer fogColor;
+        private final float temperature;
+        private final float downfall;
+        private final boolean hasPrecipitation;
+
+        private BiomeEntry(String namespace, Properties main, Properties custom) {
+            this.custom = custom;
+            this.namespace = NamespaceID.from(namespace);
+
+            this.foliageColor = main.containsKey("foliageColor") ? main.getInt("foliageColor") : null;
+            this.grassColor = main.containsKey("grassColor") ? main.getInt("grassColor") : null;
+            this.skyColor = main.containsKey("skyColor") ? main.getInt("skyColor") : null;
+            this.waterColor = main.containsKey("waterColor") ? main.getInt("waterColor") : null;
+            this.waterFogColor = main.containsKey("waterFogColor") ? main.getInt("waterFogColor") : null;
+            this.fogColor = main.containsKey("fogColor") ? main.getInt("fogColor") : null;
+
+            this.temperature = (float) main.getDouble("temperature", 0.5F);
+            this.downfall = (float) main.getDouble("downfall", 0.5F);
+            this.hasPrecipitation = main.getBoolean("has_precipitation", true);
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public @Nullable Integer foliageColor() {
+            return foliageColor;
+        }
+
+        public @Nullable Integer grassColor() {
+            return grassColor;
+        }
+
+        public @Nullable Integer skyColor() {
+            return skyColor;
+        }
+
+        public @Nullable Integer waterColor() {
+            return waterColor;
+        }
+
+        public @Nullable Integer waterFogColor() {
+            return waterFogColor;
+        }
+
+        public @Nullable Integer fogColor() {
+            return fogColor;
+        }
+
+        public float temperature() {
+            return temperature;
+        }
+
+        public float downfall() {
+            return downfall;
+        }
+
+        public boolean hasPrecipitation() {
+            return hasPrecipitation;
         }
     }
 
@@ -292,6 +474,7 @@ public final class Registry {
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
+        private final EntityType entityType;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
@@ -318,6 +501,14 @@ public final class Registry {
                     }
                 } else {
                     this.equipmentSlot = null;
+                }
+            }
+            {
+                final Properties spawnEggProperties = main.section("spawnEggProperties");
+                if (spawnEggProperties != null) {
+                    this.entityType = EntityType.fromNamespaceId(spawnEggProperties.getString("entityType"));
+                } else {
+                    this.entityType = null;
                 }
             }
         }
@@ -358,6 +549,14 @@ public final class Registry {
             return equipmentSlot;
         }
 
+        /**
+         * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+         * @return The entity type it can spawn, or null if it is not a spawn egg
+         */
+        public @Nullable EntityType spawnEntityType() {
+            return entityType;
+        }
+
         @Override
         public Properties custom() {
             return custom;
@@ -389,6 +588,61 @@ public final class Registry {
         }
     }
 
+    public record DamageTypeEntry(NamespaceID namespace, float exhaustion,
+                                  String messageId,
+                                  String scaling,
+                                  @Nullable String effects,
+                                  @Nullable String deathMessageType,
+                                  Properties custom) implements Entry {
+        public DamageTypeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    (float) main.getDouble("exhaustion"),
+                    main.getString("message_id"),
+                    main.getString("scaling"),
+                    main.getString("effects"),
+                    main.getString("death_message_type"),
+                    custom);
+        }
+    }
+    public record TrimMaterialEntry(@NotNull NamespaceID namespace,
+                                    @NotNull String assetName,
+                                    @NotNull Material ingredient,
+                                    float itemModelIndex,
+                                    @NotNull Map<String,String> overrideArmorMaterials,
+                                    @NotNull Component description,
+                                    Properties custom) implements Entry {
+        public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
+            this(
+                    NamespaceID.from(namespace),
+                    main.getString("asset_name"),
+                    Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
+                    (float) main.getDouble("item_model_index"),
+                    Objects.requireNonNullElse(main.section("override_armor_materials"),new PropertiesMap(Map.of()))
+                            .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
+                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
+                    custom
+            );
+        }
+    }
+
+    public record TrimPatternEntry(@NotNull NamespaceID namespace,
+                                   @NotNull NamespaceID assetID,
+                                   @NotNull Material template,
+                                   @NotNull Component description,
+                                   boolean decal,
+                                   Properties custom) implements Entry {
+        public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
+            this(
+                    NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    Objects.requireNonNull(Material.fromNamespaceId(main.getString("template_item"))),
+                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
+                    main.getBoolean("decal"),
+                    custom
+            );
+        }
+    }
+
     public record EnchantmentEntry(NamespaceID namespace, int id,
                                    String translationKey,
                                    double maxLevel,
@@ -402,10 +656,10 @@ public final class Registry {
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getDouble("maxLevel"),
-                    main.getBoolean("isCursed", false),
-                    main.getBoolean("isDiscoverable", true),
-                    main.getBoolean("isTradeable", true),
-                    main.getBoolean("isTreasureOnly", false),
+                    main.getBoolean("curse", false),
+                    main.getBoolean("discoverable", true),
+                    main.getBoolean("tradeable", true),
+                    main.getBoolean("treasureOnly", false),
                     custom);
         }
     }
@@ -506,6 +760,11 @@ public final class Registry {
         }
 
         @Override
+        public boolean containsKey(String name) {
+            return map.containsKey(name);
+        }
+
+        @Override
         public Map<String, Object> asMap() {
             return map;
         }
@@ -514,6 +773,14 @@ public final class Registry {
             //noinspection unchecked
             return (T) map.get(name);
         }
+
+        @Override
+        public String toString() {
+            AtomicReference<String> string = new AtomicReference<>("{ ");
+            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
+            return string.updateAndGet(s -> s.replaceFirst(" , ","") + "}");
+        }
+
     }
 
     public interface Properties extends Iterable<Map.Entry<String, Object>> {
@@ -538,6 +805,8 @@ public final class Registry {
         boolean getBoolean(String name);
 
         Properties section(String name);
+
+        boolean containsKey(String name);
 
         Map<String, Object> asMap();
 

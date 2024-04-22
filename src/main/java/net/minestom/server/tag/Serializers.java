@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.item.ItemStack;
 import org.jglrxavpok.hephaistos.nbt.*;
 
@@ -28,10 +29,12 @@ final class Serializers {
     static final Entry<Component, NBTString> COMPONENT = new Entry<>(NBTType.TAG_String, input -> GsonComponentSerializer.gson().deserialize(input.getValue()),
             component -> NBT.String(GsonComponentSerializer.gson().serialize(component)));
 
+    static final Entry<Object, NBTByte> EMPTY = new Entry<>(NBTType.TAG_Byte, unused -> null, component -> null);
+
     static <T> Entry<T, NBTCompound> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(NBTType.TAG_Compound,
                 (NBTCompound compound) -> {
-                    if (compound.isEmpty()) return null;
+                    if ((!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && compound.isEmpty()) return null;
                     return serializer.read(TagHandler.fromCompound(compound));
                 },
                 (value) -> {
@@ -57,18 +60,14 @@ final class Serializers {
     }
 
     private static int[] uuidToIntArray(UUID uuid) {
-        int[] array = new int[4];
-
         final long uuidMost = uuid.getMostSignificantBits();
         final long uuidLeast = uuid.getLeastSignificantBits();
-
-        array[0] = (int) (uuidMost >> 32);
-        array[1] = (int) uuidMost;
-
-        array[2] = (int) (uuidLeast >> 32);
-        array[3] = (int) uuidLeast;
-
-        return array;
+        return new int[]{
+                (int) (uuidMost >> 32),
+                (int) uuidMost,
+                (int) (uuidLeast >> 32),
+                (int) uuidLeast
+        };
     }
 
     private static UUID intArrayToUuid(int[] array) {

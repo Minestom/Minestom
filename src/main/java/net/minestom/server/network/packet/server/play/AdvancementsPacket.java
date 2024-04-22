@@ -5,7 +5,7 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,9 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
                                  @NotNull List<String> identifiersToRemove,
-                                 @NotNull List<ProgressMapping> progressMappings) implements ComponentHoldingServerPacket {
+                                 @NotNull List<ProgressMapping> progressMappings) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+    public static final int MAX_ADVANCEMENTS = Short.MAX_VALUE;
+
     public AdvancementsPacket {
         advancementMappings = List.copyOf(advancementMappings);
         identifiersToRemove = List.copyOf(identifiersToRemove);
@@ -28,9 +30,9 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     public AdvancementsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BOOLEAN), reader.readCollection(AdvancementMapping::new),
-                reader.readCollection(STRING),
-                reader.readCollection(ProgressMapping::new));
+        this(reader.read(BOOLEAN), reader.readCollection(AdvancementMapping::new, MAX_ADVANCEMENTS),
+                reader.readCollection(STRING, MAX_ADVANCEMENTS),
+                reader.readCollection(ProgressMapping::new, MAX_ADVANCEMENTS));
     }
 
     @Override
@@ -42,7 +44,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ADVANCEMENTS;
     }
 
@@ -98,26 +100,23 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
-                              @NotNull List<String> criteria,
-                              @NotNull List<Requirement> requirements) implements NetworkBuffer.Writer, ComponentHolder<Advancement> {
+                              @NotNull List<Requirement> requirements,
+                              boolean sendTelemetryData) implements NetworkBuffer.Writer, ComponentHolder<Advancement> {
         public Advancement {
-            criteria = List.copyOf(criteria);
             requirements = List.copyOf(requirements);
         }
 
         public Advancement(@NotNull NetworkBuffer reader) {
-            this(reader.read(BOOLEAN) ? reader.read(STRING) : null,
-                    reader.read(BOOLEAN) ? new DisplayData(reader) : null,
-                    reader.readCollection(STRING),
-                    reader.readCollection(Requirement::new));
+            this(reader.readOptional(STRING), reader.readOptional(DisplayData::new),
+                    reader.readCollection(Requirement::new, MAX_ADVANCEMENTS), reader.read(BOOLEAN));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
             writer.writeOptional(STRING, parentIdentifier);
             writer.writeOptional(displayData);
-            writer.writeCollection(STRING, criteria);
             writer.writeCollection(requirements);
+            writer.write(BOOLEAN, sendTelemetryData);
         }
 
         @Override
@@ -127,7 +126,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
         @Override
         public @NotNull Advancement copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-            return this.displayData == null ? this : new Advancement(this.parentIdentifier, this.displayData.copyWithOperator(operator), this.criteria, this.requirements);
+            return this.displayData == null ? this : new Advancement(this.parentIdentifier, this.displayData.copyWithOperator(operator), this.requirements, this.sendTelemetryData);
         }
     }
 
@@ -137,7 +136,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
 
         public Requirement(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING));
+            this(reader.readCollection(STRING, MAX_ADVANCEMENTS));
         }
 
         @Override
@@ -181,7 +180,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
             writer.write(COMPONENT, title);
             writer.write(COMPONENT, description);
             writer.write(ITEM, icon);
-            writer.write(VAR_INT, frameType.ordinal());
+            writer.writeEnum(FrameType.class, frameType);
             writer.write(INT, flags);
             if ((flags & 0x1) != 0) {
                 assert backgroundTexture != null;
@@ -221,7 +220,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
 
         public AdvancementProgress(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(Criteria::new));
+            this(reader.readCollection(Criteria::new, MAX_ADVANCEMENTS));
         }
 
         @Override

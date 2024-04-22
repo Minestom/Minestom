@@ -1,15 +1,21 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.testing.Collector;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.*;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.player.PlayerGameModeChangeEvent;
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
+import net.minestom.testing.Collector;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,14 +23,15 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static net.minestom.server.entity.Player.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class PlayerIntegrationTest {
 
     /**
-     * Test to see whether player abilities are updated correctly when changing gamemodes
+     * Test to see whether player abilities are updated correctly and events
+     * are handled properly when changing gamemode.
      */
     @Test
     public void gamemodeTest(Env env) {
@@ -33,16 +40,68 @@ public class PlayerIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        player.setGameMode(GameMode.CREATIVE);
-        assertAbilities(player, true, false, true, true);
-        player.setGameMode(GameMode.SPECTATOR);
-        assertAbilities(player, true, true, true, false);
-        player.setGameMode(GameMode.CREATIVE);
-        assertAbilities(player, true, true, true, true);
-        player.setGameMode(GameMode.ADVENTURE);
-        assertAbilities(player, false, false, false, false);
-        player.setGameMode(GameMode.SURVIVAL);
-        assertAbilities(player, false, false, false, false);
+        // Abilities
+        {
+            player.setGameMode(GameMode.CREATIVE);
+            assertAbilities(player, true, false, true, true);
+            player.setGameMode(GameMode.SPECTATOR);
+            assertAbilities(player, true, true, true, false);
+            player.setGameMode(GameMode.CREATIVE);
+            assertAbilities(player, true, true, true, true);
+            player.setGameMode(GameMode.ADVENTURE);
+            assertAbilities(player, false, false, false, false);
+            player.setGameMode(GameMode.SURVIVAL);
+            assertAbilities(player, false, false, false, false);
+        }
+
+        var listener = env.listen(PlayerGameModeChangeEvent.class);
+        // Normal change
+        {
+            listener.followup();
+            assertTrue(player.setGameMode(GameMode.ADVENTURE));
+        }
+        // Change target gamemode event
+        {
+            listener.followup(event -> event.setNewGameMode(GameMode.SPECTATOR));
+            assertTrue(player.setGameMode(GameMode.CREATIVE));
+            assertEquals(GameMode.SPECTATOR, player.getGameMode());
+        }
+        // Cancel event
+        {
+            listener.followup(event -> event.setCancelled(true));
+            assertFalse(player.setGameMode(GameMode.CREATIVE));
+            assertEquals(GameMode.SPECTATOR, player.getGameMode());
+        }
+    }
+
+    @Test
+    public void handSwapTest(Env env) {
+        ClientSettingsPacket packet = new ClientSettingsPacket("en_us", (byte) 16, ChatMessageType.FULL,
+                true, (byte) 127, Player.MainHand.LEFT, true, true);
+
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, player.getInstance());
+        env.tick();
+        env.tick();
+
+        player.addPacketToQueue(packet);
+        var collector = connection.trackIncoming();
+        env.tick();
+        env.tick();
+        assertEquals(Player.MainHand.LEFT, player.getSettings().getMainHand());
+
+        boolean found = false;
+        for (ServerPacket serverPacket : collector.collect()) {
+            if (!(serverPacket instanceof EntityMetaDataPacket metaDataPacket)) {
+                continue;
+            }
+            assertEquals((byte) 0, metaDataPacket.entries().get(18).value(),
+                    "EntityMetaDataPacket has the incorrect hand after client settings update.");
+            found = true;
+        }
+        Assertions.assertTrue(found, "EntityMetaDataPacket not sent after client settings update.");
     }
 
     private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
@@ -120,4 +179,92 @@ public class PlayerIntegrationTest {
         }
     }
 
+    @Test
+    public void deathLocationTest(Env env) {
+        String dimensionNamespace = "minestom:test_dimension";
+        final var testDimension = DimensionType.builder(NamespaceID.from(dimensionNamespace)).build();
+        env.process().dimension().addDimension(testDimension);
+
+        var instance = env.process().instance().createInstanceContainer(testDimension);
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(5, 42, 2)).join();
+
+        assertNull(player.getDeathLocation());
+        player.damage(DamageType.OUT_OF_WORLD, 30);
+
+        assertNotNull(player.getDeathLocation());
+        assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
+        assertEquals(5, player.getDeathLocation().position().x());
+    }
+
+    @Test
+    public void displayNameTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+
+        player.setDisplayName(Component.text("Display Name!"));
+
+        var connection2 = env.createConnection();
+        var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
+        connection2.connect(instance, new Pos(0, 42, 0)).join();
+
+        var displayNamePackets = tracker2.collect().stream().filter((packet) ->
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                .count();
+        assertEquals(1, displayNamePackets);
+
+        var tracker3 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
+
+        player.setDisplayName(Component.text("Other Name!"));
+
+        var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                .count();
+        assertEquals(1, displayNamePackets2);
+
+        var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
+                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                .count();
+        assertEquals(2, displayNamePackets3);
+    }
+
+    @Test
+    public void setView(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos).join();
+
+        var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
+        player.setView(30, 20);
+
+        assertEquals(startingPlayerPos.withView(30, 20), player.getPosition());
+        tracker.assertSingle(PlayerPositionAndLookPacket.class, packet -> {
+            assertEquals(RelativeFlags.COORD, packet.flags());
+            assertEquals(packet.position(), new Pos(0, 0, 0, 30, 20));
+        });
+    }
+
+    @Test
+    public void lookAt(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(FacePlayerPacket.class);
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos).join();
+
+        Point pointLookAt = new Vec(3, 3, 3);
+        player.lookAt(pointLookAt);
+        tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(pointLookAt, packet.target()));
+
+        tracker = connection.trackIncoming(FacePlayerPacket.class);
+        Entity entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(player.getInstance(), new Pos(9, 9, 9));
+        player.lookAt(entity);
+        tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(entity.getEntityId(), packet.entityId()));
+
+        assertEquals(startingPlayerPos, player.getPosition());
+    }
 }

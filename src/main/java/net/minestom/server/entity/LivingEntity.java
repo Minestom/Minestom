@@ -6,6 +6,7 @@ import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
@@ -48,7 +49,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     protected boolean isDead;
 
-    protected DamageType lastDamageSource;
+    protected Damage lastDamage;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
@@ -62,11 +63,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Time at which this entity must be extinguished
      */
     private long fireExtinguishTime;
-
-    /**
-     * Last time the fire damage was applied
-     */
-    private long lastFireDamageTime;
 
     /**
      * Period, in ms, between two fire damage applications
@@ -189,15 +185,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void update(long time) {
-        if (isOnFire()) {
-            if (time > fireExtinguishTime) {
-                setOnFire(false);
-            } else {
-                if (time - lastFireDamageTime > fireDamagePeriod) {
-                    damage(DamageType.ON_FIRE, 1.0f);
-                    lastFireDamageTime = time;
-                }
-            }
+        if (isOnFire() && time > fireExtinguishTime) {
+            setOnFire(false);
         }
 
         // Items picking
@@ -322,26 +311,29 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    public boolean damage(@NotNull DamageType type, float amount) {
+        return damage(new Damage(type, null, null, null, amount));
+    }
+
     /**
      * Damages the entity by a value, the type of the damage also has to be specified.
      *
-     * @param type  the damage type
-     * @param value the amount of damage
+     * @param damage  the damage to be applied
      * @return true if damage has been applied, false if it didn't
      */
-    public boolean damage(@NotNull DamageType type, float value) {
+    public boolean damage(@NotNull Damage damage) {
         if (isDead())
             return false;
-        if (isInvulnerable() || isImmune(type)) {
+        if (isInvulnerable() || isImmune(damage.getType())) {
             return false;
         }
 
-        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value, type.getSound(this));
+        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, damage, damage.getSound(this));
         EventDispatcher.callCancellable(entityDamageEvent, () -> {
             // Set the last damage type since the event is not cancelled
-            this.lastDamageSource = entityDamageEvent.getDamageType();
+            this.lastDamage = entityDamageEvent.getDamage();
 
-            float remainingDamage = entityDamageEvent.getDamage();
+            float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
             if (entityDamageEvent.shouldAnimate()) {
                 sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
@@ -374,8 +366,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory,
-                        getPosition(), 1.0f, 1.0f));
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, null, soundCategory,
+                        getPosition(), 1.0f, 1.0f, 0));
             }
         });
 
@@ -422,9 +414,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return the last damage source, null if not any
      */
-    @Nullable
-    public DamageType getLastDamageSource() {
-        return lastDamageSource;
+    public @Nullable Damage getLastDamageSource() {
+        return lastDamage;
     }
 
     /**
@@ -519,7 +510,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         super.updateNewViewer(player);
         player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
         player.sendPacket(new LazyPacket(this::getPropertiesPacket));
-        if (getTeam() != null) player.sendPacket(getTeam().createTeamsCreationPacket());
     }
 
     @Override
@@ -584,14 +574,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
     }
 
-    @Override
-    protected void handleVoid() {
-        // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
-            damage(DamageType.VOID, 10f);
-        }
-    }
-
     /**
      * Gets the time in ms between two fire damage applications.
      *
@@ -626,7 +608,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param team The new team
      */
-    public void setTeam(Team team) {
+    public void setTeam(@Nullable Team team) {
         if (this.team == team) return;
         String member = this instanceof Player player ? player.getUsername() : uuid.toString();
         if (this.team != null) {
@@ -643,7 +625,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return the {@link Team}
      */
-    public Team getTeam() {
+    public @Nullable Team getTeam() {
         return team;
     }
 
@@ -653,7 +635,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param maxDistance The max distance to scan before returning null
      * @return The block position targeted by this entity, null if non are found
      */
-    public Point getTargetBlockPosition(int maxDistance) {
+    public @Nullable Point getTargetBlockPosition(int maxDistance) {
         Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
@@ -667,7 +649,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return null if meta of this entity does not inherit {@link LivingEntityMeta}, casted value otherwise.
      */
-    public LivingEntityMeta getLivingEntityMeta() {
+    public @Nullable LivingEntityMeta getLivingEntityMeta() {
         if (this.entityMeta instanceof LivingEntityMeta) {
             return (LivingEntityMeta) this.entityMeta;
         }

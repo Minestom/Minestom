@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 
 public record ChunkDataPacket(int chunkX, int chunkZ,
                               @NotNull ChunkData chunkData,
-                              @NotNull LightData lightData) implements ServerPacket {
+                              @NotNull LightData lightData) implements ServerPacket.Play {
     public ChunkDataPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(INT),
                 new ChunkData(reader),
@@ -27,7 +27,7 @@ public record ChunkDataPacket(int chunkX, int chunkZ,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.CHUNK_DATA;
     }
 }

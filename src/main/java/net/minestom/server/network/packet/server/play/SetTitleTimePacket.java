@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements ServerPacket {
+public record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements ServerPacket.Play {
     public SetTitleTimePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(INT), reader.read(INT));
     }
@@ -20,7 +20,7 @@ public record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements S
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SET_TITLE_TIME;
     }
 }

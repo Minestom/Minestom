@@ -2,6 +2,10 @@ package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.FrameType;
+import net.minestom.server.advancements.notifications.Notification;
+import net.minestom.server.advancements.notifications.NotificationCenter;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -9,7 +13,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -20,6 +24,7 @@ import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -29,12 +34,10 @@ import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
-import java.util.Collection;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -53,7 +56,7 @@ public class PlayerInit {
 
                 if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    target.damage(DamageType.fromEntity(source), 5);
+                    target.damage(Damage.fromEntity(source, 5));
                 }
 
                 if (source instanceof Player) {
@@ -81,7 +84,7 @@ public class PlayerInit {
                 itemEntity.setVelocity(velocity);
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
-            .addListener(PlayerLoginEvent.class, event -> {
+            .addListener(AsyncPlayerConfigurationEvent.class, event -> {
                 final Player player = event.getPlayer();
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -89,7 +92,7 @@ public class PlayerInit {
                 event.setSpawningInstance(instance);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                player.setRespawnPoint(new Pos(0, 42f, 0));
+                player.setRespawnPoint(new Pos(0, 40f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
@@ -110,25 +113,79 @@ public class PlayerInit {
                         })
                         .build();
                 player.getInventory().addItemStack(bundle);
+
+                if (event.isFirstSpawn()) {
+                    Notification notification = new Notification(
+                            Component.text("Welcome!"),
+                            FrameType.TASK,
+                            Material.IRON_SWORD
+                    );
+                    NotificationCenter.send(notification, event.getPlayer());
+                }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerPacketEvent.class, event -> {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(PlayerUseItemOnBlockEvent.class, event -> {
+                if (event.getHand() != Player.Hand.MAIN) return;
+
+                var itemStack = event.getItemStack();
+                var block = event.getInstance().getBlock(event.getPosition());
+
+                if ("false" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
+                    block = block.withProperty("waterlogged", "true");
+                } else if ("true" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
+                    block = block.withProperty("waterlogged", "false");
+                } else return;
+
+                event.getInstance().setBlock(event.getPosition(), block);
+
+            })
+            .addListener(PlayerBlockPlaceEvent.class, event -> {
+//                event.setDoBlockUpdates(false);
+            })
+            .addListener(PlayerBlockInteractEvent.class, event -> {
+                var block = event.getBlock();
+                var rawOpenProp = block.getProperty("open");
+                if (rawOpenProp == null) return;
+
+                block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
+                event.getInstance().setBlock(event.getBlockPosition(), block);
             });
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        instanceContainer.setGenerator(unit -> {
+            unit.modifier().fillHeight(0, 40, Block.STONE);
 
-        if (false) {
-            System.out.println("start");
-            ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> instanceContainer.loadChunk(x, z).join());
-            System.out.println("load end");
-        }
+            if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
+                unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
+            }
+        });
+        instanceContainer.setChunkSupplier(LightingChunk::new);
+        instanceContainer.setTimeRate(0);
+        instanceContainer.setTime(12000);
+
+//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
+//        instanceManager.registerInstance(i2);
+//        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+//        i2.setChunkSupplier(LightingChunk::new);
+
+        // System.out.println("start");
+        // var chunks = new ArrayList<CompletableFuture<Chunk>>();
+        // ChunkUtils.forChunksInRange(0, 0, 32, (x, z) -> chunks.add(instanceContainer.loadChunk(x, z)));
+
+        // CompletableFuture.runAsync(() -> {
+        //     CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
+        //     System.out.println("load end");
+        //     LightingChunk.relight(instanceContainer, instanceContainer.getChunks());
+        //     System.out.println("light end");
+        // });
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
@@ -140,12 +197,14 @@ public class PlayerInit {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
 
+        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        MinestomAdventure.COMPONENT_TRANSLATOR = (c, l) -> c;
+
         eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.getTickMonitor()));
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            if (players.isEmpty())
+            if (MinecraftServer.getConnectionManager().getOnlinePlayerCount() != 0)
                 return;
 
             long ramUsage = benchmarkManager.getUsedMemory();
@@ -159,6 +218,6 @@ public class PlayerInit {
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+        }).repeat(10, TimeUnit.SERVER_TICK); //.schedule();
     }
 }

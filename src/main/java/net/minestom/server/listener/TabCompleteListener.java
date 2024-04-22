@@ -35,6 +35,6 @@ public class TabCompleteListener {
             // it works as intended :)
             text = text + '\00';
         }
-        return MinecraftServer.getCommandManager().parseCommand(text).suggestion(commandSender);
+        return MinecraftServer.getCommandManager().parseCommand(commandSender, text).suggestion(commandSender);
     }
 }

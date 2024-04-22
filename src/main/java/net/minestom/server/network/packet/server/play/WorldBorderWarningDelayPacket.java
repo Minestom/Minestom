@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record WorldBorderWarningDelayPacket(int warningTime) implements ServerPacket {
+public record WorldBorderWarningDelayPacket(int warningTime) implements ServerPacket.Play {
     public WorldBorderWarningDelayPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
     }
@@ -18,7 +18,7 @@ public record WorldBorderWarningDelayPacket(int warningTime) implements ServerPa
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.WORLD_BORDER_WARNING_DELAY;
     }
 }

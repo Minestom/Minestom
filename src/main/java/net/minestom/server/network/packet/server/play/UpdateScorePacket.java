@@ -1,40 +1,42 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record UpdateScorePacket(@NotNull String entityName, byte action,
-                                @NotNull String objectiveName, int value) implements ServerPacket {
+// public record ClientboundSetScorePacket(String owner, String objectiveName,
+// int score, @Nullable Component display, @Nullable NumberFormat numberFormat) implements Packet<ClientGamePacketListener>
+//{
+
+public record UpdateScorePacket(
+        @NotNull String entityName,
+        @NotNull String objectiveName,
+        int score,
+        @Nullable Component displayName,
+        @Nullable Sidebar.NumberFormat numberFormat
+) implements ServerPacket.Play {
     public UpdateScorePacket(@NotNull NetworkBuffer reader) {
-        this(read(reader));
-    }
-
-    private UpdateScorePacket(UpdateScorePacket packet) {
-        this(packet.entityName, packet.action, packet.objectiveName, packet.value);
-    }
-
-    private static UpdateScorePacket read(@NotNull NetworkBuffer reader) {
-        var entityName = reader.read(STRING);
-        var action = reader.read(BYTE);
-        var objectiveName = reader.read(STRING);
-        var value = action != 1 ? reader.read(VAR_INT) : 0;
-        return new UpdateScorePacket(entityName, action, objectiveName, value);
+        this(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
+                reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(STRING, entityName);
-        writer.write(BYTE, action);
         writer.write(STRING, objectiveName);
-        if (action != 1) writer.write(VAR_INT, value);
+        writer.write(VAR_INT, score);
+        writer.writeOptional(COMPONENT, displayName);
+        writer.writeOptional(numberFormat);
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UPDATE_SCORE;
     }
 }

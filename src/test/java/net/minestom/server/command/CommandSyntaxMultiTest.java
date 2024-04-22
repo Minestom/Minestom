@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.String;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
@@ -25,6 +26,25 @@ public class CommandSyntaxMultiTest {
         );
         assertSyntax(args, "integer 5", ExpectedExecution.FIRST_SYNTAX, Map.of("integer", "integer", "number", 5));
         assertSyntax(args, "float 5.5", ExpectedExecution.SECOND_SYNTAX, Map.of("float", "float", "number", 5.5f));
+    }
+
+    @Test
+    public void argPriority() {
+        List<List<Argument<?>>> args = List.of(
+                List.of(Word("word")),
+                List.of(Literal("literal"))
+        );
+        assertSyntax(args, "literal", ExpectedExecution.SECOND_SYNTAX);
+    }
+
+    @Test
+    public void similarArgs() {
+        List<List<Argument<?>>> args = List.of(
+                List.of(Word("a")),
+                List.of(Word("b"), Word("a"))
+        );
+        assertSyntax(args, "baz", ExpectedExecution.FIRST_SYNTAX);
+        assertSyntax(args, "bar baz", ExpectedExecution.SECOND_SYNTAX);
     }
 
     private static void assertSyntax(List<List<Argument<?>>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {

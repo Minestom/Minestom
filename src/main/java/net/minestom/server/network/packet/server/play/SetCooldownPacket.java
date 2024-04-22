@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record SetCooldownPacket(int itemId, int cooldownTicks) implements ServerPacket {
+public record SetCooldownPacket(int itemId, int cooldownTicks) implements ServerPacket.Play {
     public SetCooldownPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT));
     }
@@ -19,7 +19,7 @@ public record SetCooldownPacket(int itemId, int cooldownTicks) implements Server
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SET_COOLDOWN;
     }
 }

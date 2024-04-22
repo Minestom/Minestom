@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record UpdateViewDistancePacket(int viewDistance) implements ServerPacket {
+public record UpdateViewDistancePacket(int viewDistance) implements ServerPacket.Play {
     public UpdateViewDistancePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
     }
@@ -18,7 +18,7 @@ public record UpdateViewDistancePacket(int viewDistance) implements ServerPacket
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UPDATE_VIEW_DISTANCE;
     }
 }

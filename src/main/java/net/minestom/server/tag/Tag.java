@@ -319,4 +319,9 @@ public class Tag<T> {
     public static <T extends Record> @NotNull Tag<T> View(@NotNull Class<T> type) {
         return View(TagRecord.serializer(type));
     }
+
+    public static <T> @NotNull Tag<T> Transient(@NotNull String key) {
+        //noinspection unchecked
+        return (Tag<T>) tag(key, Serializers.EMPTY);
+    }
 }

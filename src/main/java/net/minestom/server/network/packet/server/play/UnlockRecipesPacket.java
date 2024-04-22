@@ -16,7 +16,7 @@ public record UnlockRecipesPacket(int mode,
                                   boolean blastFurnaceRecipeBookOpen, boolean blastFurnaceRecipeBookFilterActive,
                                   boolean smokerRecipeBookOpen, boolean smokerRecipeBookFilterActive,
                                   @NotNull List<String> recipeIds,
-                                  @UnknownNullability List<String> initRecipeIds) implements ServerPacket {
+                                  @UnknownNullability List<String> initRecipeIds) implements ServerPacket.Play {
     public UnlockRecipesPacket {
         recipeIds = List.copyOf(recipeIds);
         if (initRecipeIds != null) {
@@ -47,8 +47,8 @@ public record UnlockRecipesPacket(int mode,
         var blastFurnaceRecipeBookFilterActive = reader.read(BOOLEAN);
         var smokerRecipeBookOpen = reader.read(BOOLEAN);
         var smokerRecipeBookFilterActive = reader.read(BOOLEAN);
-        var recipeIds = reader.readCollection(STRING);
-        var initRecipeIds = mode == 0 ? reader.readCollection(STRING) : null;
+        var recipeIds = reader.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES);
+        var initRecipeIds = mode == 0 ? reader.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES) : null;
         return new UnlockRecipesPacket(mode,
                 craftingRecipeBookOpen, craftingRecipeBookFilterActive,
                 smeltingRecipeBookOpen, smeltingRecipeBookFilterActive,
@@ -76,7 +76,7 @@ public record UnlockRecipesPacket(int mode,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UNLOCK_RECIPES;
     }
 }

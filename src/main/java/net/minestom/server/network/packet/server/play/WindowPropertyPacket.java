@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 
-public record WindowPropertyPacket(byte windowId, short property, short value) implements ServerPacket {
+public record WindowPropertyPacket(byte windowId, short property, short value) implements ServerPacket.Play {
     public WindowPropertyPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(SHORT), reader.read(SHORT));
     }
@@ -21,7 +21,7 @@ public record WindowPropertyPacket(byte windowId, short property, short value) i
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.WINDOW_PROPERTY;
     }
 }

@@ -103,19 +103,32 @@ public class Team implements PacketGroupingAudience {
     /**
      * Adds a member to the {@link Team}.
      * <br>
-     * This member can be a {@link Player} or an {@link LivingEntity}.
+     * This member collection can contain {@link Player} or {@link LivingEntity}.
+     * For players use their username, for entities use their UUID
      *
      * @param member The member to be added
      */
     public void addMember(@NotNull String member) {
+        addMembers(List.of(member));
+    }
+
+    /**
+     * Adds a members to the {@link Team}.
+     * <br>
+     * This member collection can contain {@link Player} or {@link LivingEntity}.
+     * For players use their username, for entities use their UUID
+     *
+     * @param toAdd The members to be added
+     */
+    public void addMembers(@NotNull Collection<@NotNull String> toAdd) {
         // Adds a new member to the team
-        this.members.add(member);
+        this.members.addAll(toAdd);
 
         // Initializes add player packet
         final TeamsPacket addPlayerPacket = new TeamsPacket(teamName,
-                new TeamsPacket.AddEntitiesToTeamAction(members));
+                new TeamsPacket.AddEntitiesToTeamAction(toAdd));
         // Sends to all online players the add player packet
-        PacketUtils.broadcastPacket(addPlayerPacket);
+        PacketUtils.broadcastPlayPacket(addPlayerPacket);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
@@ -123,18 +136,33 @@ public class Team implements PacketGroupingAudience {
 
     /**
      * Removes a member from the {@link Team}.
+     * <br>
+     * This member collection can contain {@link Player} or {@link LivingEntity}.
+     * For players use their username, for entities use their UUID
      *
      * @param member The member to be removed
      */
     public void removeMember(@NotNull String member) {
+        removeMembers(List.of(member));
+    }
+
+    /**
+     * Removes members from the {@link Team}.
+     * <br>
+     * This member collection can contain {@link Player} or {@link LivingEntity}.
+     * For players use their username, for entities use their UUID
+     *
+     * @param toRemove The members to be removed
+     */
+    public void removeMembers(@NotNull Collection<@NotNull String> toRemove) {
         // Initializes remove player packet
         final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
-                new TeamsPacket.RemoveEntitiesToTeamAction(List.of(member)));
-        // Sends to all online player teh remove player packet
-        PacketUtils.broadcastPacket(removePlayerPacket);
+                new TeamsPacket.RemoveEntitiesToTeamAction(toRemove));
+        // Sends to all online player the remove player packet
+        PacketUtils.broadcastPlayPacket(removePlayerPacket);
 
         // Removes the member from the team
-        this.members.remove(member);
+        this.members.removeAll(toRemove);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
@@ -435,7 +463,7 @@ public class Team implements PacketGroupingAudience {
     public void sendUpdatePacket() {
         final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
                 nameTagVisibility, collisionRule, teamColor, prefix, suffix);
-        PacketUtils.broadcastPacket(new TeamsPacket(teamName, info));
+        PacketUtils.broadcastPlayPacket(new TeamsPacket(teamName, info));
     }
 
     @Override
@@ -444,7 +472,7 @@ public class Team implements PacketGroupingAudience {
             this.playerMembers.clear();
 
             for (String member : this.members) {
-                Player player = MinecraftServer.getConnectionManager().getPlayer(member);
+                Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(member);
 
                 if (player != null) {
                     this.playerMembers.add(player);

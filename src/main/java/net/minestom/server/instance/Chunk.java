@@ -7,6 +7,8 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
@@ -14,7 +16,9 @@ import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -49,7 +53,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    private final ChunkView viewers;
+    private final Viewable viewable;
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
@@ -65,7 +69,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.shouldGenerate = shouldGenerate;
         this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
-        this.viewers = new ChunkView(instance, toPosition());
+        final List<SharedInstance> shared = instance instanceof InstanceContainer instanceContainer ?
+                instanceContainer.getSharedInstances() : List.of();
+        this.viewable = instance.getEntityTracker().viewable(shared, chunkX, chunkZ);
     }
 
     /**
@@ -83,7 +89,13 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param block the block to place
      */
     @Override
-    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        setBlock(x, y, z, block, null, null);
+    }
+
+    protected abstract void setBlock(int x, int y, int z, @NotNull Block block,
+                                     @Nullable BlockHandler.Placement placement,
+                                     @Nullable BlockHandler.Destroy destroy);
 
     public abstract @NotNull List<Section> getSections();
 
@@ -121,9 +133,16 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @param player the player
      */
-    public abstract void sendChunk(@NotNull Player player);
+    public void sendChunk(@NotNull Player player) {
+        player.sendChunk(this);
+    }
 
-    public abstract void sendChunk();
+    public void sendChunk() {
+        getViewers().forEach(this::sendChunk);
+    }
+
+    @ApiStatus.Internal
+    public abstract @NotNull SendablePacket getFullDataPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -260,6 +279,16 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         return loaded;
     }
 
+    /**
+     * Called when the chunk has been successfully loaded.
+     */
+    protected void onLoad() {}
+
+    /**
+     * Called when the chunk generator has finished generating the chunk.
+     */
+    public void onGenerate() {}
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
@@ -267,17 +296,17 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        return viewable.addViewer(player);
     }
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        return viewable.removeViewer(player);
     }
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        return viewers.set;
+        return viewable.getViewers();
     }
 
     @Override
@@ -291,4 +320,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     protected void unload() {
         this.loaded = false;
     }
+
+    /**
+     * Invalidate the chunk caches
+     */
+    public abstract void invalidate();
 }

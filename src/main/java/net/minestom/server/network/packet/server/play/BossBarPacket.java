@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ComponentHoldingServerPacket {
+public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public BossBarPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(NetworkBuffer.UUID), switch (reader.read(VAR_INT)) {
             case 0 -> new AddAction(reader);
@@ -199,7 +199,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.BOSS_BAR;
     }
 }

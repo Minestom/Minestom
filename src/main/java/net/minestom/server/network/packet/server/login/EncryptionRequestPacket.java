@@ -10,7 +10,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record EncryptionRequestPacket(@NotNull String serverId,
                                       byte @NotNull [] publicKey,
-                                      byte @NotNull [] verifyToken) implements ServerPacket {
+                                      byte @NotNull [] verifyToken) implements ServerPacket.Login {
     public EncryptionRequestPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING),
                 reader.read(BYTE_ARRAY),
@@ -25,7 +25,7 @@ public record EncryptionRequestPacket(@NotNull String serverId,
     }
 
     @Override
-    public int getId() {
+    public int loginId() {
         return ServerPacketIdentifier.LOGIN_ENCRYPTION_REQUEST;
     }
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record EntityStatusPacket(int entityId, byte status) implements ServerPacket {
+public record EntityStatusPacket(int entityId, byte status) implements ServerPacket.Play {
     public EntityStatusPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(INT), reader.read(BYTE));
     }
@@ -20,7 +20,7 @@ public record EntityStatusPacket(int entityId, byte status) implements ServerPac
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_STATUS;
     }
 }

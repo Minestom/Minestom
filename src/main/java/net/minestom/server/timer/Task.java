@@ -26,14 +26,23 @@ public sealed interface Task permits TaskImpl {
 
     final class Builder {
         private final Scheduler scheduler;
-        private final Runnable runnable;
-        private ExecutionType executionType = ExecutionType.SYNC;
+        private final Supplier<TaskSchedule> innerTask;
+        private ExecutionType executionType = ExecutionType.TICK_START;
         private TaskSchedule delay = TaskSchedule.immediate();
         private TaskSchedule repeat = TaskSchedule.stop();
+        private boolean repeatOverride;
+
+        Builder(Scheduler scheduler, Supplier<TaskSchedule> innerTask) {
+            this.scheduler = scheduler;
+            this.innerTask = innerTask;
+        }
 
         Builder(Scheduler scheduler, Runnable runnable) {
             this.scheduler = scheduler;
-            this.runnable = runnable;
+            this.innerTask = () -> {
+                runnable.run();
+                return TaskSchedule.stop();
+            };
         }
 
         public @NotNull Builder executionType(@NotNull ExecutionType executionType) {
@@ -48,13 +57,15 @@ public sealed interface Task permits TaskImpl {
 
         public @NotNull Builder repeat(@NotNull TaskSchedule schedule) {
             this.repeat = schedule;
+            this.repeatOverride = true;
             return this;
         }
 
         public @NotNull Task schedule() {
-            var runnable = this.runnable;
+            var innerTask = this.innerTask;
             var delay = this.delay;
             var repeat = this.repeat;
+            var repeatOverride = this.repeatOverride;
             var executionType = this.executionType;
             return scheduler.submitTask(new Supplier<>() {
                 boolean first = true;
@@ -65,8 +76,11 @@ public sealed interface Task permits TaskImpl {
                         first = false;
                         return delay;
                     }
-                    runnable.run();
-                    return repeat;
+                    TaskSchedule schedule = innerTask.get();
+                    if (repeatOverride) {
+                        return repeat;
+                    }
+                    return schedule;
                 }
             }, executionType);
         }

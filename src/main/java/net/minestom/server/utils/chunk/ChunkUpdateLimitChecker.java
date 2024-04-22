@@ -3,6 +3,8 @@ package net.minestom.server.utils.chunk;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Arrays;
+
 @ApiStatus.Internal
 public final class ChunkUpdateLimitChecker {
     private final int historySize;
@@ -11,6 +13,7 @@ public final class ChunkUpdateLimitChecker {
     public ChunkUpdateLimitChecker(int historySize) {
         this.historySize = historySize;
         this.chunkHistory = new long[historySize];
+        this.clearHistory();
     }
 
     /**
@@ -31,5 +34,9 @@ public final class ChunkUpdateLimitChecker {
         }
         chunkHistory[lastIndex] = index;
         return result;
+    }
+
+    public void clearHistory() {
+        Arrays.fill(this.chunkHistory, Long.MAX_VALUE);
     }
 }

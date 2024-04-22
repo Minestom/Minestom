@@ -1,13 +1,13 @@
 package net.minestom.server.potion;
 
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface PotionType extends ProtocolObject, PotionTypes permits PotionTypeImpl {
+public sealed interface PotionType extends StaticProtocolObject, PotionTypes permits PotionTypeImpl {
 
     static @NotNull Collection<@NotNull PotionType> values() {
         return PotionTypeImpl.values();

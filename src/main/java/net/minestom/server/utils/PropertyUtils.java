@@ -21,12 +21,16 @@ public final class PropertyUtils {
 
     @Contract("_, null -> null; _, !null -> !null")
     public static String getString(@NotNull String name, @Nullable String defaultValue) {
-        final String value = System.getProperty(name);
+        return System.getProperty(name, defaultValue);
+    }
 
-        if (value == null) {
-            return defaultValue;
-        } else {
-            return value;
+    public static Float getFloat(String name, Float defaultValue) {
+        Float result = defaultValue;
+        try {
+            final String value = System.getProperty(name);
+            if (value != null) result = Float.parseFloat(value);
+        } catch (IllegalArgumentException | NullPointerException ignored) {
         }
+        return result;
     }
 }

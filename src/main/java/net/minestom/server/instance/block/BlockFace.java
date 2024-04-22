@@ -32,4 +32,49 @@ public enum BlockFace {
             case EAST -> WEST;
         };
     }
+
+    public boolean isSimilar(@NotNull BlockFace other) {
+        return this == other || this == other.getOppositeFace();
+    }
+
+    /**
+     * Gets the horizontal BlockFace from the given yaw angle
+     *
+     * @param yaw the yaw angle
+     * @return a horizontal BlockFace
+     */
+    public static BlockFace fromYaw(float yaw) {
+        float degrees = (yaw - 90) % 360;
+        if (degrees < 0) {
+            degrees += 360;
+        }
+        if (0 <= degrees && degrees < 45) {
+            return BlockFace.WEST;
+        } else if (45 <= degrees && degrees < 135) {
+            return BlockFace.NORTH;
+        } else if (135 <= degrees && degrees < 225) {
+            return BlockFace.EAST;
+        } else if (225 <= degrees && degrees < 315) {
+            return BlockFace.SOUTH;
+        } else { // 315 <= degrees && degrees < 360
+            return BlockFace.WEST;
+        }
+    }
+
+    /**
+     * Get the BlockFace corresponding to the given {@link Direction}.
+     *
+     * @param direction the direction
+     * @return the corresponding BlockFace
+     */
+    public static BlockFace fromDirection(Direction direction) {
+        return switch (direction) {
+            case UP -> TOP;
+            case DOWN -> BOTTOM;
+            case NORTH -> NORTH;
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            case EAST -> EAST;
+        };
+    }
 }

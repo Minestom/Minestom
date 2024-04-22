@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket {
+public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket.Play {
     public ChangeGameStatePacket(@NotNull NetworkBuffer reader) {
         this(Reason.values()[reader.read(BYTE)], reader.read(FLOAT));
     }
@@ -20,7 +20,7 @@ public record ChangeGameStatePacket(@NotNull Reason reason, float value) impleme
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.CHANGE_GAME_STATE;
     }
 
@@ -36,6 +36,8 @@ public record ChangeGameStatePacket(@NotNull Reason reason, float value) impleme
         THUNDER_LEVEL_CHANGE,
         PLAY_PUFFERFISH_STING_SOUND,
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
-        ENABLE_RESPAWN_SCREEN
+        ENABLE_RESPAWN_SCREEN,
+        LIMITED_CRAFTING,
+        LEVEL_CHUNKS_LOAD_START
     }
 }

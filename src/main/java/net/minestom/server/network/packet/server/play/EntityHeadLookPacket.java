@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record EntityHeadLookPacket(int entityId, float yaw) implements ServerPacket {
+public record EntityHeadLookPacket(int entityId, float yaw) implements ServerPacket.Play {
     public EntityHeadLookPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), (reader.read(BYTE) * 360f) / 256f);
     }
@@ -20,7 +20,7 @@ public record EntityHeadLookPacket(int entityId, float yaw) implements ServerPac
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_HEAD_LOOK;
     }
 }

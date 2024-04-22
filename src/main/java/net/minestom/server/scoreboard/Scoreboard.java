@@ -6,7 +6,6 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
-import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -38,7 +37,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @return the creation objective packet
      */
     default @NotNull ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
-        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type);
+        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type, null);
     }
 
     /**
@@ -47,7 +46,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @return the destruction objective packet
      */
     default @NotNull ScoreboardObjectivePacket getDestructionObjectivePacket() {
-        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 1, null, null);
+        return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 1, null, null, null);
     }
 
     /**
@@ -67,7 +66,8 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param score  The new score
      */
     default void updateScore(Player player, int score) {
-        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), (byte) 0, getObjectiveName(), score));
+        //todo
+//        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), (byte) 0, getObjectiveName(), score));
     }
 
     /**

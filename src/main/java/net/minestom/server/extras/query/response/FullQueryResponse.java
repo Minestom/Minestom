@@ -1,8 +1,7 @@
 package net.minestom.server.extras.query.response;
 
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extensions.Extension;
 import net.minestom.server.extras.query.Query;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
@@ -14,7 +13,7 @@ import java.util.*;
  * A full query response containing a dynamic set of responses.
  */
 public class FullQueryResponse implements Writeable {
-    private static final PlainComponentSerializer PLAIN = PlainComponentSerializer.plain();
+    private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
     private static final byte[] PADDING_10 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
             PADDING_11 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -122,17 +121,6 @@ public class FullQueryResponse implements Writeable {
         StringBuilder builder = new StringBuilder(MinecraftServer.getBrandName())
                 .append(' ')
                 .append(MinecraftServer.VERSION_NAME);
-
-        if (!MinecraftServer.getExtensionManager().getExtensions().isEmpty()) {
-            for (Extension extension : MinecraftServer.getExtensionManager().getExtensions()) {
-                builder.append(extension.getOrigin().getName())
-                        .append(' ')
-                        .append(extension.getOrigin().getVersion())
-                        .append("; ");
-            }
-
-            builder.delete(builder.length() - 2, builder.length());
-        }
 
         return builder.toString();
     }

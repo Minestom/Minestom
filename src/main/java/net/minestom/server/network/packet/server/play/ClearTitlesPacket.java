@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record ClearTitlesPacket(boolean reset) implements ServerPacket {
+public record ClearTitlesPacket(boolean reset) implements ServerPacket.Play {
     public ClearTitlesPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BOOLEAN));
     }
@@ -18,7 +18,7 @@ public record ClearTitlesPacket(boolean reset) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.CLEAR_TITLES;
     }
 }

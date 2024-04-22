@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityPositionPacket(int entityId, short deltaX, short deltaY, short deltaZ, boolean onGround)
-        implements ServerPacket {
+        implements ServerPacket.Play {
 
     public EntityPositionPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT), reader.read(BOOLEAN));
@@ -25,7 +25,7 @@ public record EntityPositionPacket(int entityId, short deltaX, short deltaY, sho
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_POSITION;
     }
 

@@ -3,6 +3,7 @@ package net.minestom.server.entity.ai.target;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.TargetSelector;
+import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.damage.EntityDamage;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +22,8 @@ public class LastEntityDamagerTarget extends TargetSelector {
 
     @Override
     public Entity findTarget() {
-        final DamageType damageType = entityCreature.getLastDamageSource();
-        if (!(damageType instanceof EntityDamage entityDamage)) {
+        final Damage damage = entityCreature.getLastDamageSource();
+        if (!(damage instanceof EntityDamage entityDamage)) {
             // No damager recorded, return null
             return null;
         }
@@ -32,6 +33,6 @@ public class LastEntityDamagerTarget extends TargetSelector {
             return null;
         }
         // Check range
-        return entityCreature.getDistance(entity) < range ? entity : null;
+        return entityCreature.getDistanceSquared(entity) < range * range ? entity : null;
     }
 }

@@ -5,29 +5,42 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.minestom.demo.block.TestBlockHandler;
+import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
-import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.ping.ResponseData;
+import net.minestom.server.recipe.RecipeCategory;
+import net.minestom.server.recipe.ShapedRecipe;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
+        System.setProperty("minestom.experiment.pose-updates", "true");
+
+        MinecraftServer.setCompressionThreshold(0);
+
         MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer.getBiomeManager().loadVanillaBiomes();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
-
-        blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
+        blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
+        blockManager.registerHandler(TestBlockHandler.INSTANCE.getNamespaceId(), () -> TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
@@ -39,7 +52,6 @@ public class Main {
         commandManager.register(new TeleportCommand());
         commandManager.register(new PlayersCommand());
         commandManager.register(new FindCommand());
-        commandManager.register(new PotionCommand());
         commandManager.register(new TitleCommand());
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
@@ -54,7 +66,16 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new ExecuteCommand());
         commandManager.register(new RedirectTestCommand());
-
+        commandManager.register(new DebugGridCommand());
+        commandManager.register(new DisplayCommand());
+        commandManager.register(new NotificationCommand());
+        commandManager.register(new TestCommand2());
+        commandManager.register(new ConfigCommand());
+        commandManager.register(new SidebarCommand());
+        commandManager.register(new SetEntityType());
+        commandManager.register(new RelightCommand());
+        commandManager.register(new KillCommand());
+        commandManager.register(new WeatherCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
@@ -96,11 +117,25 @@ public class Main {
             //responseData.setPlayersHidden(true);
         });
 
+        var ironBlockRecipe = new ShapedRecipe(
+                "minestom:test", 2, 2, "",
+                RecipeCategory.Crafting.MISC,
+                List.of(
+                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT)))
+                ), ItemStack.of(Material.IRON_BLOCK), true) {
+            @Override
+            public boolean shouldShow(@NotNull Player player) {
+                return true;
+            }
+        };
+        MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
+
         PlayerInit.init();
 
-        OptifineSupport.enable();
-
-        //VelocityProxy.enable("rBeJJ79W4MVU");
+//        VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
         //MojangAuth.init();

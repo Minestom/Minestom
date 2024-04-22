@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record UpdateViewPositionPacket(int chunkX, int chunkZ) implements ServerPacket {
+public record UpdateViewPositionPacket(int chunkX, int chunkZ) implements ServerPacket.Play {
     public UpdateViewPositionPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT));
     }
@@ -19,7 +19,7 @@ public record UpdateViewPositionPacket(int chunkX, int chunkZ) implements Server
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.UPDATE_VIEW_POSITION;
     }
 }

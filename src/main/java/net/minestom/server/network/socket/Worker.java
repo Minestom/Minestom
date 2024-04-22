@@ -1,6 +1,7 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
 import net.minestom.server.utils.ObjectPool;
@@ -8,6 +9,8 @@ import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,7 +26,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class Worker extends MinestomThread {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    final Selector selector;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+
+    private final Selector selector;
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
     private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
@@ -35,6 +40,25 @@ public final class Worker extends MinestomThread {
             this.selector = Selector.open();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void tick() {
+        this.selector.wakeup();
+    }
+
+    public void close() {
+        try {
+            this.queue.drain(Runnable::run);
+        } catch (Exception e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
+        this.selector.wakeup();
+        try {
+            this.selector.close();
+        } catch (IOException e) {
+            LOGGER.error("Worker Socket Selector could not be closed", e);
+            System.exit(-1);
         }
     }
 
@@ -85,7 +109,7 @@ public final class Worker extends MinestomThread {
                         MinecraftServer.getExceptionManager().handleException(t);
                         connection.disconnect();
                     }
-                }, MinecraftServer.TICK_MS);
+                });
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -112,12 +136,11 @@ public final class Worker extends MinestomThread {
         channel.register(selector, SelectionKey.OP_READ);
         if (channel.getLocalAddress() instanceof InetSocketAddress) {
             Socket socket = channel.socket();
-            socket.setSendBufferSize(Server.SOCKET_SEND_BUFFER_SIZE);
-            socket.setReceiveBufferSize(Server.SOCKET_RECEIVE_BUFFER_SIZE);
+            socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);
+            socket.setReceiveBufferSize(ServerFlag.SOCKET_RECEIVE_BUFFER_SIZE);
             socket.setTcpNoDelay(Server.NO_DELAY);
             socket.setSoTimeout(30 * 1000); // 30 seconds
         }
-        this.selector.wakeup();
     }
 
     public MessagePassingQueue<Runnable> queue() {

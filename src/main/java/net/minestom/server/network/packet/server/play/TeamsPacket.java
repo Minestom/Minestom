@@ -5,7 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.validate.Check;
@@ -20,7 +20,9 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * The packet creates or updates teams
  */
-public record TeamsPacket(String teamName, Action action) implements ComponentHoldingServerPacket {
+public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+    public static final int MAX_MEMBERS = 16384;
+
     public TeamsPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(STRING), switch (reader.read(BYTE)) {
             case 0 -> new CreateTeamAction(reader);
@@ -71,7 +73,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
             this(reader.read(COMPONENT), reader.read(BYTE),
                     NameTagVisibility.fromIdentifier(reader.read(STRING)), CollisionRule.fromIdentifier(reader.read(STRING)),
                     NamedTextColor.namedColor(reader.read(VAR_INT)), reader.read(COMPONENT), reader.read(COMPONENT),
-                    reader.readCollection(STRING));
+                    reader.readCollection(STRING, MAX_MEMBERS));
         }
 
         @Override
@@ -170,13 +172,13 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
         }
     }
 
-    public record AddEntitiesToTeamAction(Collection<String> entities) implements Action {
+    public record AddEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
         public AddEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
 
         public AddEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING));
+            this(reader.readCollection(STRING, MAX_MEMBERS));
         }
 
         @Override
@@ -190,13 +192,13 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
         }
     }
 
-    public record RemoveEntitiesToTeamAction(@NotNull List<@NotNull String> entities) implements Action {
+    public record RemoveEntitiesToTeamAction(@NotNull Collection<@NotNull String> entities) implements Action {
         public RemoveEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
 
         public RemoveEntitiesToTeamAction(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(STRING));
+            this(reader.readCollection(STRING, MAX_MEMBERS));
         }
 
         @Override
@@ -216,7 +218,7 @@ public record TeamsPacket(String teamName, Action action) implements ComponentHo
      * @return the identifier
      */
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.TEAMS;
     }
 

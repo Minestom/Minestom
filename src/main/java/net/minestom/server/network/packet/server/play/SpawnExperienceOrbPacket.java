@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SpawnExperienceOrbPacket(int entityId,
-                                       @NotNull Pos position, short expCount) implements ServerPacket {
+                                       @NotNull Pos position, short expCount) implements ServerPacket.Play {
     public SpawnExperienceOrbPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT),
                 new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE)), reader.read(SHORT));
@@ -25,7 +25,7 @@ public record SpawnExperienceOrbPacket(int entityId,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SPAWN_EXPERIENCE_ORB;
     }
 }

@@ -82,7 +82,7 @@ public class GeneratorForkConsumerIntegrationTest {
                 assertEquals(0, dynamic.height);
                 assertEquals(0, dynamic.depth);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
-                setter.setBlock(unit.absoluteStart().add(0, 0, 16), Block.GRASS);
+                setter.setBlock(unit.absoluteStart().add(0, 0, 16), Block.GRASS_BLOCK);
                 assertEquals(unit.absoluteStart(), dynamic.minSection);
                 assertEquals(1, dynamic.width);
                 assertEquals(1, dynamic.height);
@@ -93,7 +93,7 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.setGenerator(null);
         instance.loadChunk(0, 1).join();
         assertEquals(Block.STONE, instance.getBlock(0, -64, 0));
-        assertEquals(Block.GRASS, instance.getBlock(0, -64, 16));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, -64, 16));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class GeneratorForkConsumerIntegrationTest {
                 assertEquals(0, dynamic.height);
                 assertEquals(0, dynamic.depth);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
-                setter.setBlock(unit.absoluteStart().add(16, 0, 0), Block.GRASS);
+                setter.setBlock(unit.absoluteStart().add(16, 0, 0), Block.GRASS_BLOCK);
                 assertEquals(unit.absoluteStart(), dynamic.minSection);
                 assertEquals(2, dynamic.width);
                 assertEquals(1, dynamic.height);
@@ -119,7 +119,7 @@ public class GeneratorForkConsumerIntegrationTest {
         instance.setGenerator(null);
         instance.loadChunk(1, 0).join();
         assertEquals(Block.STONE, instance.getBlock(0, -64, 0));
-        assertEquals(Block.GRASS, instance.getBlock(16, -64, 0));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(16, -64, 0));
     }
 
     @Test
@@ -134,7 +134,7 @@ public class GeneratorForkConsumerIntegrationTest {
                 assertEquals(0, dynamic.height);
                 assertEquals(0, dynamic.depth);
                 setter.setBlock(unit.absoluteStart(), Block.STONE);
-                setter.setBlock(unit.absoluteStart().add(0, 16, 0), Block.GRASS);
+                setter.setBlock(unit.absoluteStart().add(0, 16, 0), Block.GRASS_BLOCK);
                 assertEquals(unit.absoluteStart(), dynamic.minSection);
                 assertEquals(1, dynamic.width);
                 assertEquals(2, dynamic.height);
@@ -143,7 +143,7 @@ public class GeneratorForkConsumerIntegrationTest {
         });
         instance.loadChunk(0, 0).join();
         assertEquals(Block.STONE, instance.getBlock(0, -64, 0));
-        assertEquals(Block.GRASS, instance.getBlock(0, -48, 0));
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, -48, 0));
     }
 
     @Test

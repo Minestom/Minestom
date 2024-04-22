@@ -14,7 +14,9 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityPropertiesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket {
+public record EntityPropertiesPacket(int entityId, List<AttributeInstance> properties) implements ServerPacket.Play {
+    public static final int MAX_ENTRIES = 1024;
+
     public EntityPropertiesPacket {
         properties = List.copyOf(properties);
     }
@@ -30,7 +32,7 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
                 instance.addModifier(modifier);
             }
             return instance;
-        }));
+        }, MAX_ENTRIES));
     }
 
     @Override
@@ -57,7 +59,7 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_PROPERTIES;
     }
 }

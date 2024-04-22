@@ -4,9 +4,12 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
@@ -22,7 +25,7 @@ public final class BoundingBox implements Shape {
     private final Point offset;
     private Point relativeEnd;
 
-    BoundingBox(double width, double height, double depth, Point offset) {
+    public BoundingBox(double width, double height, double depth, Point offset) {
         this.width = width;
         this.height = height;
         this.depth = depth;
@@ -31,6 +34,11 @@ public final class BoundingBox implements Shape {
 
     public BoundingBox(double width, double height, double depth) {
         this(width, height, depth, new Vec(-width / 2, 0, -depth / 2));
+    }
+
+    @Override
+    public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
+        return false;
     }
 
     @Override
@@ -45,22 +53,12 @@ public final class BoundingBox implements Shape {
     @ApiStatus.Experimental
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
-            finalResult.collidedShapePosition = shapePos;
+            finalResult.collidedPosition = rayStart.add(rayDirection.mul(finalResult.res));
             finalResult.collidedShape = this;
-            finalResult.blockType = null;
+            return true;
         }
-        return true;
-    }
 
-    /**
-     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
-     *
-     * @param entity the entity to check the bounding box
-     * @return true if this bounding box intersects with the entity, false otherwise
-     */
-    @ApiStatus.Experimental
-    public boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
-        return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
+        return false;
     }
 
     @ApiStatus.Experimental
@@ -93,7 +91,7 @@ public final class BoundingBox implements Shape {
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
+     * Creates a new {@link BoundingBox} with an expanded size.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -105,7 +103,7 @@ public final class BoundingBox implements Shape {
     }
 
     /**
-     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with contracted size.
+     * Creates a new {@link BoundingBox} with a contracted size.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -114,6 +112,16 @@ public final class BoundingBox implements Shape {
      */
     public @NotNull BoundingBox contract(double x, double y, double z) {
         return new BoundingBox(this.width - x, this.height - y, this.depth - z);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an offset.
+     *
+     * @param offset the offset
+     * @return a new bounding box with an offset.
+     */
+    public @NotNull BoundingBox withOffset(Point offset) {
+        return new BoundingBox(this.width, this.height, this.depth, offset);
     }
 
     public double width() {
@@ -150,6 +158,79 @@ public final class BoundingBox implements Shape {
 
     public double maxZ() {
         return relativeEnd().z();
+    }
+
+    public enum AxisMask {
+        X,
+        Y,
+        Z,
+        NONE
+    }
+
+    public Iterator<Point> getBlocks(Point point) {
+        return new PointIterator(this, point, AxisMask.NONE, 0);
+    }
+
+    public Iterator<Point> getBlocks(Point point, AxisMask axisMask, double axis) {
+        return new PointIterator(this, point, axisMask, axis);
+    }
+
+    static class PointIterator implements Iterator<Point> {
+        private final double sx, sy, sz;
+        double x, y, z;
+        private double minX, minY, minZ, maxX, maxY, maxZ;
+
+        public PointIterator(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
+            minX = (int) Math.floor(boundingBox.minX() + p.x());
+            minY = (int) Math.floor(boundingBox.minY() + p.y());
+            minZ = (int) Math.floor(boundingBox.minZ() + p.z());
+            maxX = (int) Math.floor(boundingBox.maxX() + p.x());
+            maxY = (int) Math.floor(boundingBox.maxY() + p.y());
+            maxZ = (int) Math.floor(boundingBox.maxZ() + p.z());
+
+            x = minX;
+            y = minY;
+            z = minZ;
+
+            sx = boundingBox.minX() + p.x() - minX;
+            sy = boundingBox.minY() + p.y() - minY;
+            sz = boundingBox.minZ() + p.z() - minZ;
+
+            if (axisMask == AxisMask.X) {
+                x = axis + p.x();
+                minX = x;
+                maxX = x;
+            } else if (axisMask == AxisMask.Y) {
+                y = axis + p.y();
+                minY = y;
+                maxY = y;
+            } else if (axisMask == AxisMask.Z) {
+                z = axis + p.z();
+                minZ = z;
+                maxZ = z;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return x <= maxX && y <= maxY && z <= maxZ;
+        }
+
+        @Override
+        public Point next() {
+            var res = new Vec(x + sx, y + sy, z + sz);
+
+            x++;
+            if (x > maxX) {
+                x = minX;
+                y++;
+                if (y > maxY) {
+                    y = minY;
+                    z++;
+                }
+            }
+            return res;
+        }
     }
 
     @Override

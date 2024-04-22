@@ -5,9 +5,10 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -35,17 +36,21 @@ final class TestConnectionImpl implements TestConnection {
 
     @Override
     public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
-        Player player = new Player(UUID.randomUUID(), "RandName", playerConnection);
-        player.eventNode().addListener(PlayerLoginEvent.class, event -> {
+        // Use player provider to disable queued chunk sending
+        process.connection().setPlayerProvider(TestPlayerImpl::new);
+
+        playerConnection.setConnectionState(ConnectionState.LOGIN);
+        var player = process.connection().createPlayer(playerConnection, UUID.randomUUID(), "RandName");
+        player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(instance);
             event.getPlayer().setRespawnPoint(pos);
         });
 
-        return process.connection().startPlayState(player, true)
-                .thenApply(unused -> {
-                    process.connection().updateWaitingPlayers();
-                    return player;
-                });
+        // Force the player through the entirety of the login process manually
+        process.connection().doConfiguration(player, true);
+        process.connection().transitionConfigToPlay(player);
+        process.connection().updateWaitingPlayers();
+        return CompletableFuture.completedFuture(player);
     }
 
     @Override
@@ -65,13 +70,13 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         private ServerPacket extractPacket(final SendablePacket packet) {
-            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(packet);
+            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getConnectionState(), packet);
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;
 
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ComponentHoldingServerPacket) {
-                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
+            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ServerPacket.ComponentHolding) {
+                serverPacket = ((ServerPacket.ComponentHolding) serverPacket).copyWithOperator(component ->
                         GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
 

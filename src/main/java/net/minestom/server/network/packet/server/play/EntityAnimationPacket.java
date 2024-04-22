@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record EntityAnimationPacket(int entityId, @NotNull Animation animation) implements ServerPacket {
+public record EntityAnimationPacket(int entityId, @NotNull Animation animation) implements ServerPacket.Play {
     public EntityAnimationPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), Animation.values()[reader.read(BYTE)]);
     }
@@ -20,7 +20,7 @@ public record EntityAnimationPacket(int entityId, @NotNull Animation animation) 
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_ANIMATION;
     }
 

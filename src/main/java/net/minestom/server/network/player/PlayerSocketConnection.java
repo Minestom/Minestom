@@ -1,6 +1,5 @@
 package net.minestom.server.network.player;
 
-import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.Player;
@@ -8,9 +7,9 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Worker;
@@ -34,7 +33,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.DataFormatException;
 
@@ -65,10 +63,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     private String serverAddress;
     private int serverPort;
     private int protocolVersion;
-
-    // Used for the login plugin request packet, to retrieve the channel from a message id,
-    // cleared once the player enters the play state
-    private final Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
 
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(POOL.get());
@@ -112,7 +106,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
                             if (payload.position() != payload.limit()) {
-                                LOGGER.warn("WARNING: Packet 0x{} not fully read ({}) {}", Integer.toHexString(id), payload, packet);
+                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", getConnectionState(), Integer.toHexString(id), payload, packet);
                             }
                         }
                     });
@@ -275,7 +269,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     /**
-     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
+     * Used in {@link ClientHandshakePacket} to change the internal fields.
      *
      * @param serverAddress   the server address which the client used
      * @param serverPort      the server port which the client used
@@ -285,44 +279,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.protocolVersion = protocolVersion;
-    }
-
-    /**
-     * Adds an entry to the plugin request map.
-     * <p>
-     * Only working if {@link #getConnectionState()} is {@link net.minestom.server.network.ConnectionState#LOGIN}.
-     *
-     * @param messageId the message id
-     * @param channel   the packet channel
-     * @throws IllegalStateException if a messageId with the value {@code messageId} already exists for this connection
-     */
-    public void addPluginRequestEntry(int messageId, @NotNull String channel) {
-        if (!getConnectionState().equals(ConnectionState.LOGIN)) {
-            return;
-        }
-        Check.stateCondition(pluginRequestMap.containsKey(messageId), "You cannot have two messageId with the same value");
-        this.pluginRequestMap.put(messageId, channel);
-    }
-
-    /**
-     * Gets a request channel from a message id, previously cached using {@link #addPluginRequestEntry(int, String)}.
-     * <p>
-     * Be aware that the internal map is cleared once the player enters the play state.
-     *
-     * @param messageId the message id
-     * @return the channel linked to the message id, null if not found
-     */
-    public @Nullable String getPluginRequestChannel(int messageId) {
-        return pluginRequestMap.get(messageId);
-    }
-
-    @Override
-    public void setConnectionState(@NotNull ConnectionState connectionState) {
-        super.setConnectionState(connectionState);
-        // Clear the plugin request map (since it is not used anymore)
-        if (connectionState.equals(ConnectionState.PLAY)) {
-            this.pluginRequestMap.clear();
-        }
     }
 
     public byte[] getNonce() {
@@ -338,7 +294,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         final Player player = getPlayer();
         // Outgoing event
         if (player != null && outgoing.hasListener()) {
-            final ServerPacket serverPacket = SendablePacket.extractServerPacket(packet);
+            final ServerPacket serverPacket = SendablePacket.extractServerPacket(getConnectionState(), packet);
             PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
             outgoing.call(event);
             if (event.isCancelled()) return;
@@ -350,9 +306,9 @@ public class PlayerSocketConnection extends PlayerConnection {
             var buffer = framedPacket.body();
             writeBufferSync(buffer, 0, buffer.limit());
         } else if (packet instanceof CachedPacket cachedPacket) {
-            var buffer = cachedPacket.body();
+            var buffer = cachedPacket.body(getConnectionState());
             if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
-            else writeServerPacketSync(cachedPacket.packet(), compressed);
+            else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
         } else if (packet instanceof LazyPacket lazyPacket) {
             writeServerPacketSync(lazyPacket.packet(), compressed);
         } else {
@@ -363,13 +319,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     private void writeServerPacketSync(ServerPacket serverPacket, boolean compressed) {
         final Player player = getPlayer();
         if (player != null) {
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ComponentHoldingServerPacket) {
-                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
-                        GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
+            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ServerPacket.ComponentHolding) {
+                serverPacket = ((ServerPacket.ComponentHolding) serverPacket).copyWithOperator(component ->
+                        MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
         }
         try (var hold = ObjectPool.PACKET_POOL.hold()) {
-            var buffer = PacketUtils.createFramedPacket(hold.get(), serverPacket, compressed);
+            var buffer = PacketUtils.createFramedPacket(getConnectionState(), hold.get(), serverPacket, compressed);
             writeBufferSync(buffer, 0, buffer.limit());
         }
     }

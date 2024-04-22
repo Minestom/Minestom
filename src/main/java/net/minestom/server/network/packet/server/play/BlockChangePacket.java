@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record BlockChangePacket(@NotNull Point blockPosition, int blockStateId) implements ServerPacket {
+public record BlockChangePacket(@NotNull Point blockPosition, int blockStateId) implements ServerPacket.Play {
     public BlockChangePacket(@NotNull Point blockPosition, @NotNull Block block) {
         this(blockPosition, block.stateId());
     }
@@ -26,7 +26,7 @@ public record BlockChangePacket(@NotNull Point blockPosition, int blockStateId) 
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.BLOCK_CHANGE;
     }
 }

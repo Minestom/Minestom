@@ -1,11 +1,11 @@
 package net.minestom.server.command.builder.parser;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -45,7 +45,6 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("enchantment", ArgumentEnchantment::new);
         ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
         ARGUMENT_FUNCTION_MAP.put("resourcelocation", ArgumentResourceLocation::new);
-        ARGUMENT_FUNCTION_MAP.put("potion", ArgumentPotionEffect::new);
         ARGUMENT_FUNCTION_MAP.put("entitytype", ArgumentEntityType::new);
         ARGUMENT_FUNCTION_MAP.put("blockstate", ArgumentBlockState::new);
         ARGUMENT_FUNCTION_MAP.put("intrange", ArgumentIntRange::new);
@@ -141,7 +140,8 @@ public class ArgumentParser {
     }
 
     @Nullable
-    public static ArgumentResult validate(@NotNull Argument<?> argument,
+    public static ArgumentResult validate(@NotNull CommandSender sender,
+                                          @NotNull Argument<?> argument,
                                           @NotNull Argument<?>[] arguments, int argIndex,
                                           @NotNull String[] inputArguments, int inputIndex) {
         final boolean end = inputIndex == inputArguments.length;
@@ -173,7 +173,7 @@ public class ArgumentParser {
                 rawArg = builder.toString();
 
                 try {
-                    parsedValue = argument.parse(rawArg);
+                    parsedValue = argument.parse(sender, rawArg);
                     correct = true;
                 } catch (ArgumentSyntaxException exception) {
                     argumentSyntaxException = exception;
@@ -188,7 +188,7 @@ public class ArgumentParser {
                 rawArg = builder.toString();
 
                 try {
-                    parsedValue = argument.parse(rawArg);
+                    parsedValue = argument.parse(sender, rawArg);
 
                     // Prevent quitting the parsing too soon if the argument
                     // does not allow space

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityTeleportPacket(int entityId, Pos position, boolean onGround) implements ServerPacket {
+public record EntityTeleportPacket(int entityId, Pos position, boolean onGround) implements ServerPacket.Play {
     public EntityTeleportPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
                         reader.read(BYTE) * 360f / 256f, reader.read(BYTE) * 360f / 256f),
@@ -27,7 +27,7 @@ public record EntityTeleportPacket(int entityId, Pos position, boolean onGround)
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.ENTITY_TELEPORT;
     }
 }

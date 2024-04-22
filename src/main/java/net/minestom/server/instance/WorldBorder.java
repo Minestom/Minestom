@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -27,7 +28,7 @@ public class WorldBorder {
     private long lerpStartTime;
 
     private long speed;
-    private int portalTeleportBoundary;
+    private final int portalTeleportBoundary;
     private int warningTime;
     private int warningBlocks;
 
@@ -39,8 +40,10 @@ public class WorldBorder {
 
         this.speed = 0;
 
-        this.portalTeleportBoundary = 29999984;
+        this.portalTeleportBoundary = ServerFlag.WORLD_BORDER_SIZE;
 
+        // Update immediately so the current size is present on init
+        update();
     }
 
     /**

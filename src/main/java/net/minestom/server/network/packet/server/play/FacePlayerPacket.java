@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record FacePlayerPacket(FacePosition facePosition,
-                               Point target, int entityId, FacePosition entityFacePosition) implements ServerPacket {
+                               Point target, int entityId, FacePosition entityFacePosition) implements ServerPacket.Play {
     public FacePlayerPacket(@NotNull NetworkBuffer reader) {
         this(FacePosition.values()[reader.read(VAR_INT)],
                 new Vec(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE)),
@@ -33,7 +33,7 @@ public record FacePlayerPacket(FacePosition facePosition,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.FACE_PLAYER;
     }
 

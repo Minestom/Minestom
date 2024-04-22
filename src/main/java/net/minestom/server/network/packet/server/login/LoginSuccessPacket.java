@@ -10,7 +10,8 @@ import java.util.UUID;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, int properties) implements ServerPacket {
+public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username,
+                                 int properties) implements ServerPacket.Login {
     public LoginSuccessPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(NetworkBuffer.UUID), reader.read(STRING), reader.read(VAR_INT));
     }
@@ -23,7 +24,7 @@ public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username, i
     }
 
     @Override
-    public int getId() {
+    public int loginId() {
         return ServerPacketIdentifier.LOGIN_SUCCESS;
     }
 }

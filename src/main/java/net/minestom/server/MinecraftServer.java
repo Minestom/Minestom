@@ -6,22 +6,21 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.packet.server.play.PluginMessagePacket;
+import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -45,8 +44,8 @@ public final class MinecraftServer {
 
     public static final ComponentLogger LOGGER = ComponentLogger.logger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.19.2";
-    public static final int PROTOCOL_VERSION = 760;
+    public static final String VERSION_NAME = "1.20.4";
+    public static final int PROTOCOL_VERSION = 765;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -56,16 +55,14 @@ public final class MinecraftServer {
 
     // Config
     // Can be modified at performance cost when increased
-    public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
+    @Deprecated
+    public static final int TICK_PER_SECOND = ServerFlag.SERVER_TICKS_PER_SECOND;
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
 
-    private static int chunkViewDistance = Integer.getInteger("minestom.chunk-view-distance", 8);
-    private static int entityViewDistance = Integer.getInteger("minestom.entity-view-distance", 5);
     private static int compressionThreshold = 256;
-    private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
@@ -104,7 +101,7 @@ public final class MinecraftServer {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketUtils.broadcastPacket(PluginMessagePacket.getBrandPacket());
+        PacketUtils.broadcastPlayPacket(PluginMessagePacket.getBrandPacket());
     }
 
     /**
@@ -124,7 +121,7 @@ public final class MinecraftServer {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        PacketUtils.broadcastPacket(new ServerDifficultyPacket(difficulty, true));
+        PacketUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     @ApiStatus.Experimental
@@ -199,50 +196,26 @@ public final class MinecraftServer {
 
     /**
      * Gets the chunk view distance of the server.
+     * <p>
+     * Deprecated in favor of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
      *
      * @return the chunk view distance
      */
-    public static int getChunkViewDistance() {
-        return chunkViewDistance;
-    }
-
-    /**
-     * Changes the chunk view distance of the server.
-     *
-     * @param chunkViewDistance the new chunk view distance
-     * @throws IllegalArgumentException if {@code chunkViewDistance} is not between 2 and 32
-     * @deprecated should instead be defined with a java property
-     */
     @Deprecated
-    public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.stateCondition(serverProcess.isAlive(), "You cannot change the chunk view distance after the server has been started.");
-        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
-                "The chunk view distance must be between 2 and 32");
-        MinecraftServer.chunkViewDistance = chunkViewDistance;
+    public static int getChunkViewDistance() {
+        return ServerFlag.CHUNK_VIEW_DISTANCE;
     }
 
     /**
      * Gets the entity view distance of the server.
+     * <p>
+     * Deprecated in favor of {@link ServerFlag#ENTITY_VIEW_DISTANCE}
      *
      * @return the entity view distance
      */
-    public static int getEntityViewDistance() {
-        return entityViewDistance;
-    }
-
-    /**
-     * Changes the entity view distance of the server.
-     *
-     * @param entityViewDistance the new entity view distance
-     * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
-     * @deprecated should instead be defined with a java property
-     */
     @Deprecated
-    public static void setEntityViewDistance(int entityViewDistance) {
-        Check.stateCondition(serverProcess.isAlive(), "You cannot change the entity view distance after the server has been started.");
-        Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
-                "The entity view distance must be between 0 and 32");
-        MinecraftServer.entityViewDistance = entityViewDistance;
+    public static int getEntityViewDistance() {
+        return ServerFlag.ENTITY_VIEW_DISTANCE;
     }
 
     /**
@@ -263,27 +236,8 @@ public final class MinecraftServer {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
+        Check.stateCondition(serverProcess != null && serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
-    }
-
-    /**
-     * Gets if the built in Minestom terminal is enabled.
-     *
-     * @return true if the terminal is enabled
-     */
-    public static boolean isTerminalEnabled() {
-        return terminalEnabled;
-    }
-
-    /**
-     * Enabled/disables the built in Minestom terminal.
-     *
-     * @param enabled true to enable, false to disable
-     */
-    public static void setTerminalEnabled(boolean enabled) {
-        Check.stateCondition(serverProcess.isAlive(), "Terminal settings may not be changed after starting the server.");
-        MinecraftServer.terminalEnabled = enabled;
     }
 
     public static DimensionTypeManager getDimensionTypeManager() {
@@ -298,12 +252,12 @@ public final class MinecraftServer {
         return serverProcess.advancement();
     }
 
-    public static ExtensionManager getExtensionManager() {
-        return serverProcess.extension();
-    }
-
     public static TagManager getTagManager() {
         return serverProcess.tag();
+    }
+
+    public static TrimManager getTrimManager() {
+        return serverProcess.trim();
     }
 
     public static Server getServer() {

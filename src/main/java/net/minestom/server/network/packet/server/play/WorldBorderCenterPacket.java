@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 
-public record WorldBorderCenterPacket(double x, double z) implements ServerPacket {
+public record WorldBorderCenterPacket(double x, double z) implements ServerPacket.Play {
     public WorldBorderCenterPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(DOUBLE), reader.read(DOUBLE));
     }
@@ -19,7 +19,7 @@ public record WorldBorderCenterPacket(double x, double z) implements ServerPacke
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.WORLD_BORDER_CENTER;
     }
 }

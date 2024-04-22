@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.LONG;
 
-public record TimeUpdatePacket(long worldAge, long timeOfDay) implements ServerPacket {
+public record TimeUpdatePacket(long worldAge, long timeOfDay) implements ServerPacket.Play {
     public TimeUpdatePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(LONG), reader.read(LONG));
     }
@@ -19,7 +19,7 @@ public record TimeUpdatePacket(long worldAge, long timeOfDay) implements ServerP
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.TIME_UPDATE;
     }
 }

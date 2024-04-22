@@ -130,12 +130,12 @@ public class CommandSyntaxSingleTest {
         // enchant block block enchant
         {
             var context1 = new CommandContext("minecraft:sharpness minecraft:stone");
-            var context2 = new CommandContext("minecraft:grass minecraft:efficiency");
+            var context2 = new CommandContext("minecraft:grass_block minecraft:efficiency");
 
             context1.setArg("enchant", Enchantment.SHARPNESS, "minecraft:sharpness");
             context1.setArg("block", Block.STONE, "minecraft:stone");
 
-            context2.setArg("block", Block.GRASS, "minecraft:grass");
+            context2.setArg("block", Block.GRASS_BLOCK, "minecraft:grass_block");
             context2.setArg("enchant", Enchantment.EFFICIENCY, "minecraft:efficiency");
 
             var input = context1.getInput() + " " + context2.getInput();

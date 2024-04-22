@@ -9,23 +9,22 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ServerDataPacket(@Nullable Component motd, @Nullable String iconBase64,
-                               boolean previewsChat, boolean enforcesSecureChat) implements ServerPacket {
+public record ServerDataPacket(@Nullable Component motd, byte @Nullable [] iconBase64,
+                               boolean enforcesSecureChat) implements ServerPacket.Play {
     public ServerDataPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readOptional(COMPONENT), reader.readOptional(STRING),
-                reader.read(BOOLEAN), reader.read(BOOLEAN));
+        this(reader.read(COMPONENT), reader.readOptional(BYTE_ARRAY),
+                reader.read(BOOLEAN));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.writeOptional(COMPONENT, this.motd);
-        writer.writeOptional(STRING, this.iconBase64);
-        writer.write(BOOLEAN, previewsChat);
+        writer.write(COMPONENT, this.motd);
+        writer.writeOptional(BYTE_ARRAY, this.iconBase64);
         writer.write(BOOLEAN, enforcesSecureChat);
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SERVER_DATA;
     }
 }

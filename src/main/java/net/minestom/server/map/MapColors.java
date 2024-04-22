@@ -1,6 +1,9 @@
 package net.minestom.server.map;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -70,44 +73,35 @@ public enum MapColors {
     private final int green;
     private final int blue;
 
+    private static final Logger logger = LoggerFactory.getLogger(MapColors.class);
     private static final ConcurrentHashMap<Integer, PreciseMapColor> rgbMap = new ConcurrentHashMap<>();
     // only used if mappingStrategy == ColorMappingStrategy.PRECISE
     private static volatile PreciseMapColor[] rgbArray = null;
 
     private static final ColorMappingStrategy mappingStrategy;
-    private static final String MAPPING_ARGUMENT = "minestom.map.rgbmapping";
-    // only used if MAPPING_ARGUMENT is "approximate"
-    private static final String REDUCTION_ARGUMENT = "minestom.map.rgbreduction";
     private static final int colorReduction;
 
     static {
         ColorMappingStrategy strategy;
-        String strategyStr = System.getProperty(MAPPING_ARGUMENT);
-        if (strategyStr == null) {
+        try {
+            strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerFlag.MAP_RGB_MAPPING);
             strategy = ColorMappingStrategy.LAZY;
-        } else {
-            try {
-                strategy = ColorMappingStrategy.valueOf(strategyStr.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.err.println("Unknown color mapping strategy: " + strategyStr);
-                System.err.println("Defaulting to LAZY.");
-                strategy = ColorMappingStrategy.LAZY;
-            }
         }
         mappingStrategy = strategy;
 
         int reduction = 10;
-        String reductionStr = System.getProperty(REDUCTION_ARGUMENT);
-        if (reductionStr != null) {
+        if (ServerFlag.MAP_RGB_REDUCTION != null) {
             try {
-                reduction = Integer.parseInt(reductionStr);
+                reduction = Integer.parseInt(ServerFlag.MAP_RGB_REDUCTION);
             } catch (NumberFormatException e) {
-                System.err.println("Invalid integer in reduction argument: " + reductionStr);
+                logger.error("Invalid integer in reduction argument: {}", ServerFlag.MAP_RGB_REDUCTION);
                 MinecraftServer.getExceptionManager().handleException(e);
             }
 
             if (reduction < 0 || reduction >= 255) {
-                System.err.println("Reduction was found to be invalid: " + reduction + ". Must in 0-255, defaulting to 10.");
+                logger.warn("Reduction was found to be invalid: {}. Must in 0-255, defaulting to 10.", reduction);
                 reduction = 10;
             }
         }
@@ -120,7 +114,7 @@ public enum MapColors {
         this.blue = blue;
     }
 
-    // From the wiki: https://minecraft.gamepedia.com/Map_item_format
+    // From the wiki: https://minecraft.wiki/w/Map_item_format
     // Map Color ID 	Multiply R,G,B By 	= Multiplier
     //Base Color ID*4 + 0 	180 	0.71
     //Base Color ID*4 + 1 	220 	0.86

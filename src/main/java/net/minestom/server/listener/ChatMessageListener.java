@@ -10,6 +10,7 @@ import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import org.jetbrains.annotations.NotNull;
@@ -39,21 +40,12 @@ public class ChatMessageListener {
         }
 
         final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
-        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, message), message);
+        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, (e) -> buildDefaultChatMessage(e.getPlayer(), e.getMessage()), message);
 
         // Call the event
         EventDispatcher.callCancellable(playerChatEvent, () -> {
             final Function<PlayerChatEvent, Component> formatFunction = playerChatEvent.getChatFormatFunction();
-
-            Component textObject;
-
-            if (formatFunction != null) {
-                // Custom format
-                textObject = formatFunction.apply(playerChatEvent);
-            } else {
-                // Default format
-                textObject = playerChatEvent.getDefaultChatFormat().get();
-            }
+            Component textObject = formatFunction.apply(playerChatEvent);
 
             final Collection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {

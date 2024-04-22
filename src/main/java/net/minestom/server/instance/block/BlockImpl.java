@@ -31,7 +31,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
     // Block id -> Map<PropertiesValues, Block>
     private static final ObjectArray<Map<PropertiesHolder, BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    private static final Registry.Container<Block> CONTAINER = Registry.createContainer(Registry.Resource.BLOCKS,
+    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS,
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
                 final Registry.Properties stateObject = properties.section("states");

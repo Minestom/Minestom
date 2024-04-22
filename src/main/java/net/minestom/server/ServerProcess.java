@@ -5,12 +5,12 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -97,14 +97,11 @@ public interface ServerProcess extends Snapshotable {
     @NotNull BossBarManager bossBar();
 
     /**
-     * Loads and handle extensions.
-     */
-    @NotNull ExtensionManager extension();
-
-    /**
      * Handles registry tags.
      */
     @NotNull TagManager tag();
+
+    @NotNull TrimManager trim();
 
     /**
      * Handles all thrown exceptions from the server.

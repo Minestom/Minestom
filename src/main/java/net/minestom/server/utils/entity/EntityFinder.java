@@ -11,6 +11,8 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.validate.Check;
@@ -27,6 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * It is based on the target selectors used in commands.
  */
 public class EntityFinder {
+    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     private TargetSelector targetSelector;
 
@@ -128,7 +131,7 @@ public class EntityFinder {
     public @NotNull List<@NotNull Entity> find(@Nullable Instance instance, @Nullable Entity self) {
         if (targetSelector == TargetSelector.MINESTOM_USERNAME) {
             Check.notNull(constantName, "The player name should not be null when searching for it");
-            final Player player = MinecraftServer.getConnectionManager().getPlayer(constantName);
+            final Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(constantName);
             return player != null ? List.of(player) : List.of();
         } else if (targetSelector == TargetSelector.MINESTOM_UUID) {
             Check.notNull(constantUuid, "The UUID should not be null when searching for it");
@@ -148,7 +151,7 @@ public class EntityFinder {
             final int minDistance = distance.getMinimum();
             final int maxDistance = distance.getMaximum();
             result = result.stream()
-                    .filter(entity -> MathUtils.isBetween(entity.getDistance(pos), minDistance, maxDistance))
+                    .filter(entity -> MathUtils.isBetween(entity.getPosition().distanceSquared(pos), minDistance * minDistance, maxDistance * maxDistance))
                     .toList();
         }
 
@@ -223,11 +226,11 @@ public class EntityFinder {
                         case ARBITRARY, RANDOM ->
                             // RANDOM is handled below
                                 1;
-                        case FURTHEST -> pos.distance(ent1.getPosition()) >
-                                pos.distance(ent2.getPosition()) ?
+                        case FURTHEST -> pos.distanceSquared(ent1.getPosition()) >
+                                pos.distanceSquared(ent2.getPosition()) ?
                                 1 : 0;
-                        case NEAREST -> pos.distance(ent1.getPosition()) <
-                                pos.distance(ent2.getPosition()) ?
+                        case NEAREST -> pos.distanceSquared(ent1.getPosition()) <
+                                pos.distanceSquared(ent2.getPosition()) ?
                                 1 : 0;
                     })
                     .limit(limit != null ? limit : Integer.MAX_VALUE)
@@ -307,11 +310,10 @@ public class EntityFinder {
     private static @NotNull List<@NotNull Entity> findTarget(@Nullable Instance instance,
                                                              @NotNull TargetSelector targetSelector,
                                                              @NotNull Point startPosition, @Nullable Entity self) {
-        final var players = instance != null ?
-                instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
+        final var players = instance != null ? instance.getPlayers() : CONNECTION_MANAGER.getOnlinePlayers();
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             return players.stream()
-                    .min(Comparator.comparingDouble(p -> p.getPosition().distance(startPosition)))
+                    .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
                     .<List<Entity>>map(Collections::singletonList).orElse(List.of());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
             final int index = ThreadLocalRandom.current().nextInt(players.size());

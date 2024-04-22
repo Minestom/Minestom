@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record SetSlotPacket(byte windowId, int stateId, short slot,
-                            @NotNull ItemStack itemStack) implements ComponentHoldingServerPacket {
+                            @NotNull ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public SetSlotPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(VAR_INT), reader.read(SHORT),
                 reader.read(ITEM));
@@ -31,7 +31,7 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.SET_SLOT;
     }
 

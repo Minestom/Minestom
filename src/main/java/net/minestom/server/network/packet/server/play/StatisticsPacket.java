@@ -10,13 +10,15 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record StatisticsPacket(@NotNull List<Statistic> statistics) implements ServerPacket {
+public record StatisticsPacket(@NotNull List<Statistic> statistics) implements ServerPacket.Play {
+    public static final int MAX_ENTRIES = 16384;
+
     public StatisticsPacket {
         statistics = List.copyOf(statistics);
     }
 
     public StatisticsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(Statistic::new));
+        this(reader.readCollection(Statistic::new, MAX_ENTRIES));
     }
 
     @Override
@@ -25,7 +27,7 @@ public record StatisticsPacket(@NotNull List<Statistic> statistics) implements S
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.STATISTICS;
     }
 

@@ -9,7 +9,9 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements ServerPacket {
+public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements ServerPacket.Play {
+    public static final int MAX_ENTRIES = Short.MAX_VALUE;
+
     public DestroyEntitiesPacket {
         entityIds = List.copyOf(entityIds);
     }
@@ -19,7 +21,7 @@ public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements
     }
 
     public DestroyEntitiesPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(VAR_INT));
+        this(reader.readCollection(VAR_INT, MAX_ENTRIES));
     }
 
     @Override
@@ -28,7 +30,7 @@ public record DestroyEntitiesPacket(@NotNull List<Integer> entityIds) implements
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.DESTROY_ENTITIES;
     }
 }

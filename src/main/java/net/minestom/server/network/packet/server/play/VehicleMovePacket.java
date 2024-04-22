@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
+public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket.Play {
     public VehicleMovePacket(@NotNull NetworkBuffer reader) {
         this(new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
                 reader.read(FLOAT), reader.read(FLOAT)));
@@ -25,7 +25,7 @@ public record VehicleMovePacket(@NotNull Pos position) implements ServerPacket {
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.VEHICLE_MOVE;
     }
 }

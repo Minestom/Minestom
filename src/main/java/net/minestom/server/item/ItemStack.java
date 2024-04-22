@@ -169,7 +169,7 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
         final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
-        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(material(), amount(), tagHolder)));
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
     }
 
     /**

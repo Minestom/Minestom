@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.VAR_LONG;
 
-public record WorldBorderLerpSizePacket(double oldDiameter, double newDiameter, long speed) implements ServerPacket {
+public record WorldBorderLerpSizePacket(double oldDiameter, double newDiameter, long speed) implements ServerPacket.Play {
     public WorldBorderLerpSizePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(VAR_LONG));
     }
@@ -21,7 +21,7 @@ public record WorldBorderLerpSizePacket(double oldDiameter, double newDiameter, 
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.WORLD_BORDER_LERP_SIZE;
     }
 }

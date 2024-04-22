@@ -60,6 +60,11 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsCheckSlab(Env env) {
         var instance = env.createFlatInstance();
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
         instance.setBlock(0, 42, 0, Block.STONE_SLAB);
 
         var entity = new Entity(EntityType.ZOMBIE);
@@ -101,6 +106,11 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsCheckFallHitCarpet(Env env) {
         var instance = env.createFlatInstance();
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
         instance.setBlock(0, 42, 0, Block.OAK_FENCE);
         instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
 
@@ -137,6 +147,37 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(2, 0, 0));
         assertEqualsPoint(new Pos(1.075, 43.25, 0.5), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckMultipleBlocksPassFirst(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(4, 40, -1, Block.SANDSTONE_STAIRS);
+        instance.setBlock(16, 40, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.0, 40.51, 0.0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(20, 0, 0));
+        assertEqualsPoint(new Pos(15.7, 40.51, 0), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckMultipleBlocksHitFirst(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(4, 40, 0, Block.GRASS_BLOCK);
+        instance.setBlock(16, 40, 0, Block.STONE);
+
+        instance.loadChunk(0, -1).join();
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0.0, 40.51, 0.0)).join();
+        assertEquals(instance, entity.getInstance());
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(20, 0, 0));
+
+        assertEqualsPoint(new Pos(3.7, 40.51, 0), res.newPosition());
     }
 
     @Test
@@ -369,12 +410,12 @@ public class EntityBlockPhysicsIntegrationTest {
 
         BoundingBox bb = new Entity(EntityType.ZOMBIE).getBoundingBox();
 
-        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, null);
 
         bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultFinal);
         bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultFinal);
 
-        assertEquals(new Pos(11, 0, 0), sweepResultFinal.collidedShapePosition);
+        assertEqualsPoint(new Pos(10.4, 0.52, 0), sweepResultFinal.collidedPosition);
         assertEquals(sweepResultFinal.collidedShape, bb);
     }
 
@@ -538,6 +579,10 @@ public class EntityBlockPhysicsIntegrationTest {
     public void entityPhysicsCheckNotOnGround(Env env) {
         var instance = env.createFlatInstance();
 
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 50, 0)).join();
         assertEquals(instance, entity.getInstance());
@@ -577,7 +622,7 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsSmallMoveCollide(Env env) {
         var instance = env.createFlatInstance();
-        instance.setBlock(1, 43, 1, Block.STONE);
+        instance.setBlock(1, 43, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0.6, 42, 0)).join();
@@ -758,6 +803,10 @@ public class EntityBlockPhysicsIntegrationTest {
     @Test
     public void entityPhysicsCheckNoCollision(Env env) {
         var instance = env.createFlatInstance();
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -966,6 +1015,10 @@ public class EntityBlockPhysicsIntegrationTest {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
+
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, entity.getInstance());
@@ -981,6 +1034,10 @@ public class EntityBlockPhysicsIntegrationTest {
     public void entityPhysicsCheckGravityCached(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
+
+        for (int i = -2; i <= 2; ++i)
+            for (int j = -2; j <= 2; ++j)
+                instance.loadChunk(i, j).join();
 
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -1002,5 +1059,35 @@ public class EntityBlockPhysicsIntegrationTest {
         }
 
         assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
+    }
+
+    @Test
+    public void entityBlockPositionTestSlightlyAbove(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.00001, 0));
+
+        var deltaPos = new Vec(0.0, -10, 0.0);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+
+        var newPos = physicsResult.newPosition();
+        assertEquals(43, newPos.blockY());
+    }
+
+    @Test
+    public void entityBlockPositionTestFarAbove(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.5, 0));
+
+        var deltaPos = new Vec(0.0, -10, 0.0);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+
+        var newPos = physicsResult.newPosition();
+        assertEquals(43, newPos.blockY());
     }
 }

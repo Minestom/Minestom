@@ -27,12 +27,17 @@ public class Generators {
         generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
         generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "Materials");
         generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypes");
+        generator.generate(resource("biomes.json"), "net.minestom.server.world.biomes", "Biome", "BiomeImpl", "Biomes");
         generator.generate(resource("enchantments.json"), "net.minestom.server.item", "Enchantment", "EnchantmentImpl", "Enchantments");
         generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffects");
         generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypes");
         generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleImpl", "Particles");
         generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "SoundEventImpl", "SoundEvents");
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
+        generator.generate(resource("damage_types.json"), "net.minestom.server.entity.damage", "DamageType", "DamageTypeImpl", "DamageTypes");
+        generator.generate(resource("trim_materials.json"), "net.minestom.server.item.armor", "TrimMaterial", "TrimMaterialImpl", "TrimMaterials");
+        generator.generate(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatternImpl", "TrimPatterns");
+
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();

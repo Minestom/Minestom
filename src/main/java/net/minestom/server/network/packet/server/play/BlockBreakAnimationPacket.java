@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockBreakAnimationPacket(int entityId, @NotNull Point blockPosition,
-                                        byte destroyStage) implements ServerPacket {
+                                        byte destroyStage) implements ServerPacket.Play {
     public BlockBreakAnimationPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(BLOCK_POSITION), reader.read(BYTE));
     }
@@ -22,7 +22,7 @@ public record BlockBreakAnimationPacket(int entityId, @NotNull Point blockPositi
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.BLOCK_BREAK_ANIMATION;
     }
 }

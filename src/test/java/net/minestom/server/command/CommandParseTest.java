@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CommandParseTest {
 
     @Test
+    public void emptyCommand() {
+        var graph = Graph.merge(Graph.builder(Literal("foo"), createExecutor(new AtomicBoolean())).build());
+        assertUnknown(graph, "");
+    }
+
+    @Test
     public void singleParameterlessCommand() {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Literal("foo"), createExecutor(b)).build());
@@ -137,7 +143,7 @@ public class CommandParseTest {
     }
 
     private static CommandParser.Result parseCommand(Graph graph, String input) {
-        return CommandParser.parser().parse(graph, input);
+        return CommandParser.parser().parse(new ServerSender(), graph, input);
     }
 
     @NotNull

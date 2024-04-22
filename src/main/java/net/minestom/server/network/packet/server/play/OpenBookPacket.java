@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-public record OpenBookPacket(@NotNull Player.Hand hand) implements ServerPacket {
+public record OpenBookPacket(@NotNull Player.Hand hand) implements ServerPacket.Play {
     public OpenBookPacket(@NotNull NetworkBuffer reader) {
         this(reader.readEnum(Player.Hand.class));
     }
@@ -17,7 +17,7 @@ public record OpenBookPacket(@NotNull Player.Hand hand) implements ServerPacket 
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.OPEN_BOOK;
     }
 }

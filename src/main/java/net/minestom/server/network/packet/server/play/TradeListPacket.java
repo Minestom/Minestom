@@ -12,13 +12,15 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
                               int villagerLevel, int experience,
-                              boolean regularVillager, boolean canRestock) implements ServerPacket {
+                              boolean regularVillager, boolean canRestock) implements ServerPacket.Play {
+    public static final int MAX_TRADES = Short.MAX_VALUE;
+
     public TradeListPacket {
         trades = List.copyOf(trades);
     }
 
     public TradeListPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.readCollection(Trade::new),
+        this(reader.read(VAR_INT), reader.readCollection(Trade::new, MAX_TRADES),
                 reader.read(VAR_INT), reader.read(VAR_INT),
                 reader.read(BOOLEAN), reader.read(BOOLEAN));
     }
@@ -34,7 +36,7 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.TRADE_LIST;
     }
 

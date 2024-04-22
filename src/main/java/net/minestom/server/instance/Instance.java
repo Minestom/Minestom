@@ -20,8 +20,10 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.*;
@@ -31,8 +33,10 @@ import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -66,6 +70,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private boolean registered;
 
     private final DimensionType dimensionType;
+    private final String dimensionName;
 
     private final WorldBorder worldBorder;
 
@@ -78,6 +83,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
 
+    // Weather of the instance
+    private Weather weather = Weather.CLEAR;
+    private Weather transitioningWeather = Weather.CLEAR;
+    private int remainingRainTransitionTicks;
+    private int remainingThunderTransitionTicks;
+
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
@@ -89,7 +100,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     protected UUID uniqueId;
 
     // instance custom data
-    private final TagHandler tagHandler = TagHandler.newHandler();
+    protected TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<InstanceEvent> eventNode;
 
@@ -109,10 +120,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+        this(uniqueId, dimensionType, dimensionType.getName());
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param uniqueId      the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
+     */
+    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
         Check.argCondition(!dimensionType.isRegistered(),
                 "The dimension " + dimensionType.getName() + " is not registered! Please use DimensionTypeManager#addDimension");
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;
+        this.dimensionName = dimensionName.asString();
 
         this.worldBorder = new WorldBorder(this);
 
@@ -138,8 +160,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
+    @Override
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        setBlock(x, y, z, block, true);
+    }
+
+    public void setBlock(@NotNull Point blockPosition, @NotNull Block block, boolean doBlockUpdates) {
+        setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block, doBlockUpdates);
+    }
+
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
+
     @ApiStatus.Internal
-    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement);
+    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
+        return placeBlock(placement, true);
+    }
+
+    @ApiStatus.Internal
+    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -150,7 +188,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
+        return breakBlock(player, blockPosition, blockFace, true);
+    }
+
+    /**
+     * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
+     * and send particle packets
+     *
+     * @param player        the {@link Player} who break the block
+     * @param blockPosition the position of the broken block
+     * @param doBlockUpdates true to do block updates, false otherwise
+     * @return true if the block has been broken, false if it has been cancelled
+     */
+    @ApiStatus.Internal
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
@@ -277,6 +329,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
     }
 
+    public abstract void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier);
+
+    /**
+     * Gets the chunk supplier of the instance.
+     * @return the chunk supplier of the instance
+     */
+    public abstract ChunkSupplier getChunkSupplier();
+
     /**
      * Gets the generator associated with the instance
      *
@@ -314,9 +374,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean hasEnabledAutoChunkLoad();
 
     /**
-     * Determines whether a position in the void. If true, entities should take damage and die.
-     * <p>
-     * Always returning false allow entities to survive in the void.
+     * Determines whether a position in the void.
      *
      * @param point the point in the world
      * @return true if the point is inside the void
@@ -350,6 +408,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public DimensionType getDimensionType() {
         return dimensionType;
+    }
+
+    /**
+     * Gets the instance dimension name.
+     * @return the dimension name of the instance
+     */
+    public @NotNull String getDimensionName() {
+        return dimensionName;
     }
 
     /**
@@ -608,6 +674,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             }
 
         }
+        // Weather
+        if (remainingRainTransitionTicks > 0 || remainingThunderTransitionTicks > 0) {
+            Weather previousWeather = transitioningWeather;
+            transitioningWeather = transitionWeather(remainingRainTransitionTicks, remainingThunderTransitionTicks);
+            sendWeatherPackets(previousWeather);
+            remainingRainTransitionTicks = Math.max(0, remainingRainTransitionTicks - 1);
+            remainingThunderTransitionTicks = Math.max(0, remainingThunderTransitionTicks - 1);
+        }
         // Tick event
         {
             // Process tick events
@@ -616,6 +690,56 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.lastTickAge = time;
         }
         this.worldBorder.update();
+        // End of tick scheduled tasks
+        this.scheduler.processTickEnd();
+    }
+
+    /**
+     * Gets the weather of this instance
+     *
+     * @return the instance weather
+     */
+    public @NotNull Weather getWeather() {
+        return weather;
+    }
+
+    /**
+     * Sets the weather on this instance, transitions over time
+     *
+     * @param weather the new weather
+     * @param transitionTicks the ticks to transition to new weather
+     */
+    public void setWeather(@NotNull Weather weather, int transitionTicks) {
+        Check.stateCondition(transitionTicks < 1, "Transition ticks cannot be lower than 0");
+        this.weather = weather;
+        remainingRainTransitionTicks = transitionTicks;
+        remainingThunderTransitionTicks = transitionTicks;
+    }
+
+    /**
+     * Sets the weather of this instance with a fixed transition
+     *
+     * @param weather the new weather
+     */
+    public void setWeather(@NotNull Weather weather) {
+        this.weather = weather;
+        remainingRainTransitionTicks = (int) Math.max(1, Math.abs((this.weather.rainLevel() - transitioningWeather.rainLevel()) / 0.01));
+        remainingThunderTransitionTicks = (int) Math.max(1, Math.abs((this.weather.thunderLevel() - transitioningWeather.thunderLevel()) / 0.01));
+    }
+
+    private void sendWeatherPackets(@NotNull Weather previousWeather) {
+        boolean toggledRain = (transitioningWeather.isRaining() != previousWeather.isRaining());
+        if (toggledRain) sendGroupedPacket(transitioningWeather.createIsRainingPacket());
+        if (transitioningWeather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(transitioningWeather.createRainLevelPacket());
+        if (transitioningWeather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
+    }
+
+    private @NotNull Weather transitionWeather(int remainingRainTransitionTicks, int remainingThunderTransitionTicks) {
+        Weather target = weather;
+        Weather current = transitioningWeather;
+        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)Math.max(1, remainingRainTransitionTicks));
+        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)Math.max(1, remainingThunderTransitionTicks));
+        return new Weather(rainLevel, thunderLevel);
     }
 
     @Override
@@ -708,5 +832,35 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    public int getBlockLight(int blockX, int blockY, int blockZ) {
+        var chunk = getChunkAt(blockX, blockZ);
+        if (chunk == null) return 0;
+        Section section = chunk.getSectionAt(blockY);
+        Light light = section.blockLight();
+        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+
+        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
+        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
+        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+
+        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+        return light.getLevel(coordX, coordY, coordZ);
+    }
+
+    public int getSkyLight(int blockX, int blockY, int blockZ) {
+        var chunk = getChunkAt(blockX, blockZ);
+        if (chunk == null) return 0;
+        Section section = chunk.getSectionAt(blockY);
+        Light light = section.skyLight();
+        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+
+        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
+        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
+        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+
+        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+        return light.getLevel(coordX, coordY, coordZ);
     }
 }

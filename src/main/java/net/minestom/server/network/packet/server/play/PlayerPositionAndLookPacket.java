@@ -8,11 +8,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId,
-                                          boolean dismountVehicle) implements ServerPacket {
+public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId) implements ServerPacket.Play {
     public PlayerPositionAndLookPacket(@NotNull NetworkBuffer reader) {
         this(new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE), reader.read(FLOAT), reader.read(FLOAT)),
-                reader.read(BYTE), reader.read(VAR_INT), reader.read(BOOLEAN));
+                reader.read(BYTE), reader.read(VAR_INT));
     }
 
     @Override
@@ -26,11 +25,10 @@ public record PlayerPositionAndLookPacket(Pos position, byte flags, int teleport
 
         writer.write(BYTE, flags);
         writer.write(VAR_INT, teleportId);
-        writer.write(BOOLEAN, dismountVehicle);
     }
 
     @Override
-    public int getId() {
+    public int playId() {
         return ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK;
     }
 }

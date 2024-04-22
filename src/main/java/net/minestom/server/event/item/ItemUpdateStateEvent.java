@@ -12,6 +12,7 @@ public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
     private final Player.Hand hand;
     private final ItemStack itemStack;
     private boolean handAnimation;
+    private boolean riptideSpinAttack;
 
     public ItemUpdateStateEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack) {
         this.player = player;
@@ -24,12 +25,30 @@ public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
         return hand;
     }
 
+    /**
+     * Sets whether the player should have a hand animation.
+     *
+     * @param handAnimation whether the player should have a hand animation
+     */
     public void setHandAnimation(boolean handAnimation) {
         this.handAnimation = handAnimation;
     }
 
     public boolean hasHandAnimation() {
         return handAnimation;
+    }
+
+    /**
+     * Sets whether the player should have a riptide spin attack animation.
+     *
+     * @param riptideSpinAttack whether the player should have a riptide spin attack animation
+     */
+    public void setRiptideSpinAttack(boolean riptideSpinAttack) {
+        this.riptideSpinAttack = riptideSpinAttack;
+    }
+
+    public boolean isRiptideSpinAttack() {
+        return riptideSpinAttack;
     }
 
     @Override

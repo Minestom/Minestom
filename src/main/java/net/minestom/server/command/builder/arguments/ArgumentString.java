@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -25,7 +26,7 @@ public class ArgumentString extends Argument<String> {
 
     @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
+    public String parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         return staticParse(input);
     }
 
@@ -42,7 +43,7 @@ public class ArgumentString extends Argument<String> {
     }
 
     /**
-     * @deprecated use {@link Argument#parse(Argument)}
+     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @Deprecated
     public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
