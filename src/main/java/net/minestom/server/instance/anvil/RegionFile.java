@@ -204,8 +204,8 @@ final class RegionFile implements AutoCloseable {
     }
 
     private void markLocation(int location, boolean free) {
-        int sectorCount = locations[location] & 0xFF;
-        int sectorStart = locations[location] >> 8;
+        int sectorCount = location & 0xFF;
+        int sectorStart = location >> 8;
         Check.stateCondition(sectorStart + sectorCount > freeSectors.size(), "Invalid sector count");
         for (int i = sectorStart; i < sectorStart + sectorCount; i++) {
             freeSectors.set(i, free);
