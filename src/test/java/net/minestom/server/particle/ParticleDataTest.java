@@ -41,14 +41,14 @@ public class ParticleDataTest {
 
     @Test
     public void testParticleValid() {
-        var particle = Particle.AMBIENT_ENTITY_EFFECT;
+        var particle = Particle.ENTITY_EFFECT;
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
         assertDoesNotThrow(() -> packet.write(new NetworkBuffer()));
     }
 
     @Test
     public void testParticleData() {
-        var particle = Particle.AMBIENT_ENTITY_EFFECT;
+        var particle = Particle.ENTITY_EFFECT;
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
         assertDoesNotThrow(() -> packet.write(new NetworkBuffer()));
     }
