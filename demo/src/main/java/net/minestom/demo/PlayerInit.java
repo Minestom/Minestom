@@ -26,7 +26,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
-import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
@@ -192,7 +191,7 @@ public class PlayerInit {
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD, new AnvilLoader("/Users/matt/dev/projects/hollowcube/minestom-ce/src/test/resources/net/minestom/server/instance/anvil_vanilla_sample"));
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.setGenerator(unit -> {
             unit.modifier().fillHeight(0, 40, Block.STONE);
 
