@@ -14,7 +14,6 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
@@ -102,21 +101,12 @@ public class AnvilLoader implements IChunkLoader {
         if (chunkData == null)
             return CompletableFuture.completedFuture(null);
 
-        // Ensure the chunk matches the expected Y range
-        DimensionType dimensionType = instance.getDimensionType();
-        int minY = chunkData.getInt("yPos") * Chunk.CHUNK_SECTION_SIZE;
-        Check.stateCondition(minY != dimensionType.getMinY(), "Trying to load chunk with minY = {0}, but instance dimension type ({1}) has a minY of {2}",
-                minY, dimensionType.getName().asString(), dimensionType.getMinY());
-        int maxY = minY + (chunkData.getList("sections", BinaryTagTypes.COMPOUND).size() * Chunk.CHUNK_SECTION_SIZE);
-        Check.stateCondition(maxY != dimensionType.getMaxY(), "Trying to load chunk with maxY = {0}, but instance dimension type ({1}) has a maxY of {2}",
-                maxY, dimensionType.getName().asString(), dimensionType.getMaxY());
-
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
         synchronized (chunk) { // todo: boo, synchronized
             final String status = chunkData.getString("status");
 
-            // TODO: Should we handle other states?
+            // TODO: Should we handle other statuses?
             if (status.isEmpty() || "minecraft:full".equals(status)) {
                 // TODO: Parallelize block, block entities and biome loading
                 // Blocks + Biomes
@@ -171,6 +161,11 @@ public class AnvilLoader implements IChunkLoader {
             final int sectionY = sectionData.getInt("Y", Integer.MIN_VALUE);
             Check.stateCondition(sectionY == Integer.MIN_VALUE, "Missing section Y value");
             final int yOffset = Chunk.CHUNK_SECTION_SIZE * sectionY;
+
+            if (sectionY < chunk.getMinSection() || sectionY >= chunk.getMaxSection()) {
+                // Vanilla stores a section below and above the world for lighting, throw it out.
+                continue;
+            }
 
             final Section section = chunk.getSection(sectionY);
 
