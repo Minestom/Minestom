@@ -141,6 +141,22 @@ public class Main {
             }
         };
         MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
+//        var recipe = new ShapelessRecipe(
+//                "minestom:test2", "abc",
+//                RecipeCategory.Crafting.MISC,
+//                List.of(
+//                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.AIR))
+//                ),
+//                ItemStack.builder(Material.GOLD_BLOCK)
+//                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+//                        .build()
+//        ) {
+//            @Override
+//            public boolean shouldShow(@NotNull Player player) {
+//                return true;
+//            }
+//        };
+//        MinecraftServer.getRecipeManager().addRecipe(recipe);
 
         PlayerInit.init();
 
