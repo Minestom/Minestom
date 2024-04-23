@@ -51,7 +51,6 @@ public class AnvilLoaderIntegrationTest {
 
     @Test
     public void loadHouse(Env env) {
-        assumeTrue(false);
         // load a world that contains only a basic house and make sure it is loaded properly
 
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
