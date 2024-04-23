@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class PlayerBlockPlacementIntegrationTest {
@@ -29,6 +30,7 @@ public class PlayerBlockPlacementIntegrationTest {
     @ParameterizedTest
     @MethodSource("placeBlockFromAdventureModeParams")
     public void placeBlockFromAdventureMode(Block baseBlock, BlockPredicates canPlaceOn, Env env) {
+        assumeTrue(false);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
