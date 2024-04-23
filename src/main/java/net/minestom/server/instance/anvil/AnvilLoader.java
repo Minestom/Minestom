@@ -95,10 +95,10 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private @NotNull CompletableFuture<@Nullable Chunk> loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException {
-        final RegionFile mcaFile = getMCAFile(instance, chunkX, chunkZ);
+        final RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
         if (mcaFile == null)
             return CompletableFuture.completedFuture(null);
-        final CompoundBinaryTag chunkData = mcaFile.getChunk(chunkX, chunkZ);
+        final CompoundBinaryTag chunkData = mcaFile.readChunkData(chunkX, chunkZ);
         if (chunkData == null)
             return CompletableFuture.completedFuture(null);
 
@@ -142,7 +142,7 @@ public class AnvilLoader implements IChunkLoader {
         return CompletableFuture.completedFuture(chunk);
     }
 
-    private @Nullable RegionFile getMCAFile(Instance instance, int chunkX, int chunkZ) {
+    private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
         final int regionX = ChunkUtils.toRegionCoordinate(chunkX);
         final int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
         return alreadyLoaded.computeIfAbsent(RegionFile.getFileName(regionX, regionZ), n -> {
@@ -154,7 +154,7 @@ public class AnvilLoader implements IChunkLoader {
             try {
                 Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
                 assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
-                return new RegionFile(regionPath, regionX, regionZ, instance.getDimensionType());
+                return new RegionFile(regionPath);
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
                 return null;
@@ -322,49 +322,91 @@ public class AnvilLoader implements IChunkLoader {
 
     @Override
     public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
-//        final int chunkX = chunk.getChunkX();
-//        final int chunkZ = chunk.getChunkZ();
-//        RegionFile mcaFile;
-//        synchronized (alreadyLoaded) {
-//            mcaFile = getMCAFile(chunk.instance, chunkX, chunkZ);
-//            if (mcaFile == null) {
-//                final int regionX = CoordinatesKt.chunkToRegion(chunkX);
-//                final int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
-//                final String n = RegionFile.Companion.createFileName(regionX, regionZ);
-//                File regionFile = new File(regionPath.toFile(), n);
-//                try {
-//                    if (!regionFile.exists()) {
-//                        if (!regionFile.getParentFile().exists()) {
-//                            regionFile.getParentFile().mkdirs();
-//                        }
-//                        regionFile.createNewFile();
-//                    }
-//                    mcaFile = new RegionFile(new RandomAccessFile(regionFile, "rw"), regionX, regionZ);
-//                    alreadyLoaded.put(n, mcaFile);
-//                } catch (AnvilException | IOException e) {
-//                    LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
-//                    MinecraftServer.getExceptionManager().handleException(e);
-//                    return AsyncUtils.VOID_FUTURE;
-//                }
-//            }
-//        }
-//        ChunkWriter writer = new ChunkWriter(SupportedVersion.Companion.getLatest());
-//        save(chunk, writer);
-//        try {
-//            LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
-//            mcaFile.writeColumnData(writer.toNBT(), chunk.getChunkX(), chunk.getChunkZ());
-//        } catch (IOException e) {
-//            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
-//            MinecraftServer.getExceptionManager().handleException(e);
-//            return AsyncUtils.VOID_FUTURE;
-//        }
+        final int chunkX = chunk.getChunkX();
+        final int chunkZ = chunk.getChunkZ();
+
+        // Find the region file or create an empty one if missing
+        RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
+        if (mcaFile == null) {
+            final int regionX = ChunkUtils.toRegionCoordinate(chunkX);
+            final int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+            final String regionFileName = RegionFile.getFileName(regionX, regionZ);
+            try {
+                Path regionFile = regionPath.resolve(regionFileName);
+                if (!Files.exists(regionFile)) {
+                    Files.createDirectories(regionFile.getParent());
+                    Files.createFile(regionFile);
+                }
+
+                mcaFile = new RegionFile(regionFile);
+                alreadyLoaded.put(regionFileName, mcaFile);
+            } catch (IOException e) {
+                LOGGER.error("Failed to create region file for " + chunkX + ", " + chunkZ, e);
+                MinecraftServer.getExceptionManager().handleException(e);
+                return AsyncUtils.VOID_FUTURE;
+            }
+        }
+
+        try {
+            final CompoundBinaryTag.Builder chunkData = CompoundBinaryTag.builder();
+
+            chunkData.putInt("DataVersion", MinecraftServer.DATA_VERSION);
+            chunkData.putInt("xPos", chunkX);
+            chunkData.putInt("zPos", chunkZ);
+            chunkData.putInt("yPos", chunk.getMinSection());
+            chunkData.putString("status", "minecraft:full");
+            chunkData.putLong("LastUpdate", chunk.getInstance().getWorldAge());
+
+            saveSectionData(chunk, chunkData);
+
+            LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
+            mcaFile.writeChunkData(chunkX, chunkZ, chunkData.build());
+        } catch (IOException e) {
+            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
         return AsyncUtils.VOID_FUTURE;
     }
 
 //    private BlockState getBlockState(final Block block) {
 //        return blockStateId2ObjectCacheTLS.get().computeIfAbsent(block.stateId(), _unused -> new BlockState(block.name(), block.properties()));
 //    }
+
+    private void saveSectionData(@NotNull Chunk chunk, @NotNull CompoundBinaryTag.Builder chunkData) {
+
+
+        final int minY = chunk.getMinSection() * Chunk.CHUNK_SECTION_SIZE;
+        final int maxY = chunk.getMaxSection() * Chunk.CHUNK_SECTION_SIZE - 1;
+        for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
+            final Section section = chunk.getSection(sectionY);
+
+            final CompoundBinaryTag.Builder sectionData = CompoundBinaryTag.builder();
+            sectionData.putInt("Y", sectionY);
+
+            // Lighting
+            byte[] skyLight = section.skyLight().array();
+            if (skyLight != null && skyLight.length > 0)
+                sectionData.putByteArray("SkyLight", skyLight);
+            byte[] blockLight = section.blockLight().array();
+            if (blockLight != null && blockLight.length > 0)
+                sectionData.putByteArray("BlockLight", blockLight);
+
+            // Build block & biome palettes
+            //todo
+//            int[] blockStates = new int[Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE];
+//            int[] biomes = new int[64];
 //
+//            for (int localY = 0; localY < Chunk.CHUNK_SECTION_SIZE; localY++) {
+//                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+//                    for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+//
+//                    }
+//                }
+//            }
+            throw new UnsupportedOperationException("Not implemented");
+        }
+
+    }
 //    private void save(Chunk chunk, ChunkWriter chunkWriter) {
 //        final int minY = chunk.getMinSection() * Chunk.CHUNK_SECTION_SIZE;
 //        final int maxY = chunk.getMaxSection() * Chunk.CHUNK_SECTION_SIZE - 1;
@@ -376,14 +418,7 @@ public class AnvilLoader implements IChunkLoader {
 //        int[] palettedBiomes = new int[ChunkSection.Companion.getBiomeArraySize()];
 //        int[] palettedBlockStates = new int[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
 //        for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
-//            ChunkSectionWriter sectionWriter = new ChunkSectionWriter(SupportedVersion.Companion.getLatest(), (byte) sectionY);
-//
-//            Section section = chunk.getSection(sectionY);
-//            sectionWriter.setSkyLights(section.skyLight().array());
-//            sectionWriter.setBlockLights(section.blockLight().array());
-//
-//            BiomePalette biomePalette = new BiomePalette();
-//            BlockPalette blockPalette = new BlockPalette();
+
 //            for (int sectionLocalY = 0; sectionLocalY < Chunk.CHUNK_SECTION_SIZE; sectionLocalY++) {
 //                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
 //                    for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
@@ -437,38 +472,41 @@ public class AnvilLoader implements IChunkLoader {
 //        chunkWriter.setSectionsData(NBT.List(NBTType.TAG_Compound, sectionData));
 //        chunkWriter.setBlockEntityData(NBT.List(NBTType.TAG_Compound, blockEntities));
 //    }
-//
-//    /**
-//     * Unload a given chunk. Also unloads a region when no chunk from that region is loaded.
-//     *
-//     * @param chunk the chunk to unload
-//     */
-//    @Override
-//    public void unloadChunk(Chunk chunk) {
-//        final int regionX = CoordinatesKt.chunkToRegion(chunk.chunkX);
-//        final int regionZ = CoordinatesKt.chunkToRegion(chunk.chunkZ);
-//
-//        final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
-//        synchronized (perRegionLoadedChunks) {
-//            Set<IntIntImmutablePair> chunks = perRegionLoadedChunks.get(regionKey);
-//            if (chunks != null) { // if null, trying to unload a chunk from a region that was not created by the AnvilLoader
-//                // don't check return value, trying to unload a chunk not created by the AnvilLoader is valid
-//                chunks.remove(new IntIntImmutablePair(chunk.chunkX, chunk.chunkZ));
-//
-//                if (chunks.isEmpty()) {
-//                    perRegionLoadedChunks.remove(regionKey);
-//                    RegionFile regionFile = alreadyLoaded.remove(RegionFile.Companion.createFileName(regionX, regionZ));
-//                    if (regionFile != null) {
-//                        try {
-//                            regionFile.close();
-//                        } catch (IOException e) {
-//                            MinecraftServer.getExceptionManager().handleException(e);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+
+    /**
+     * Unload a given chunk. Also unloads a region when no chunk from that region is loaded.
+     *
+     * @param chunk the chunk to unload
+     */
+    @Override
+    public void unloadChunk(Chunk chunk) {
+        final int regionX = ChunkUtils.toRegionCoordinate(chunk.getChunkX());
+        final int regionZ = ChunkUtils.toRegionCoordinate(chunk.getChunkZ());
+        final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
+
+        perRegionLoadedChunksLock.lock();
+        try {
+            Set<IntIntImmutablePair> chunks = perRegionLoadedChunks.get(regionKey);
+            if (chunks != null) { // if null, trying to unload a chunk from a region that was not created by the AnvilLoader
+                // don't check return value, trying to unload a chunk not created by the AnvilLoader is valid
+                chunks.remove(new IntIntImmutablePair(chunk.getChunkX(), chunk.getChunkZ()));
+
+                if (chunks.isEmpty()) {
+                    perRegionLoadedChunks.remove(regionKey);
+                    RegionFile regionFile = alreadyLoaded.remove(RegionFile.getFileName(regionX, regionZ));
+                    if (regionFile != null) {
+                        try {
+                            regionFile.close();
+                        } catch (IOException e) {
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        }
+                    }
+                }
+            }
+        } finally {
+            perRegionLoadedChunksLock.unlock();
+        }
+    }
 
     @Override
     public boolean supportsParallelLoading() {
