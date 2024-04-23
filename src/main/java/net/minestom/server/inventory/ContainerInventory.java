@@ -66,9 +66,11 @@ public non-sealed class ContainerInventory extends InventoryImpl {
             }
         }
 
-        inventory.update(player);
-        if (inventory != playerInventory) {
-            playerInventory.update(player);
+        if (inventory.isViewer(player)) {
+            inventory.update(player);
+            if (inventory != playerInventory) {
+                playerInventory.update(player);
+            }
         }
         return null;
     }
