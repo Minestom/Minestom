@@ -37,6 +37,7 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
     @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
+    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = ItemStackImpl.STRICT_NETWORK_TYPE;
     @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = ItemStackImpl.NBT_TYPE;
 
     @Contract(value = "_ -> new", pure = true)

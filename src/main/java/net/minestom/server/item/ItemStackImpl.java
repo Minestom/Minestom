@@ -37,6 +37,13 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
             return new ItemStackImpl(material, amount, components);
         }
     };
+    static final NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
+        Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
+        return itemStack;
+    }, itemStack -> {
+        Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
+        return itemStack;
+    });
     static final BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
     static ItemStack create(Material material, int amount, ItemComponentPatch components) {

@@ -58,7 +58,7 @@ public class RecipeManager {
                 default -> throw new IllegalStateException("Unhandled recipe type : " + recipe.type);
             });
         }
-        return new DeclareRecipesPacket(List.of());
+        return new DeclareRecipesPacket(entries);
     }
 
 }
