@@ -120,11 +120,14 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     }
 
     private static @NotNull CompoundBinaryTag toCompound(@NotNull ItemStack itemStack) {
-        return CompoundBinaryTag.builder()
-                .putString("id", itemStack.material().name())
-                .putInt("count", itemStack.amount())
-                .put("components", ItemComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components))
-                .build();
+        CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
+        tag.putString("id", itemStack.material().name());
+        tag.putInt("count", itemStack.amount());
+
+        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        if (components.size() > 0) tag.put("components", components);
+
+        return tag.build();
     }
 
     static final class Builder implements ItemStack.Builder {

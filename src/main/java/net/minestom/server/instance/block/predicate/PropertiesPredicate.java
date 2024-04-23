@@ -50,6 +50,10 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
             }
     );
 
+    public static @NotNull PropertiesPredicate exact(@NotNull String key, @NotNull String value) {
+        return new PropertiesPredicate(Map.of(key, new ValuePredicate.Exact(value)));
+    }
+
     public PropertiesPredicate {
         properties = Map.copyOf(properties);
     }
