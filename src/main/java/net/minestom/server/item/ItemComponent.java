@@ -12,6 +12,7 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 import static net.minestom.server.item.ItemComponentImpl.declare;
@@ -94,5 +95,9 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
 
     static @Nullable ItemComponent<?> fromId(int id) {
         return ItemComponentImpl.IDS.get(id);
+    }
+
+    static @NotNull Collection<ItemComponent<?>> values() {
+        return ItemComponentImpl.NAMESPACES.values();
     }
 }
