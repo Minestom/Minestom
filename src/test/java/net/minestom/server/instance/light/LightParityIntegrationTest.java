@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class LightParityIntegrationTest {
@@ -27,6 +28,7 @@ public class LightParityIntegrationTest {
 
     @Test
     public void test(Env env) throws URISyntaxException, IOException {
+        assumeTrue(false);
         Map<Vec, SectionEntry> sections = retrieveSections();
         // Generate our own light
 

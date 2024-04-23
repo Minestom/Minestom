@@ -247,7 +247,7 @@ public final class ConnectionManager {
             }
 
             // Send login success packet (and switch to configuration phase)
-            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0, true);
             playerConnection.sendPacket(loginSuccessPacket);
         });
     }
