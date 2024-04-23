@@ -1,19 +1,23 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagWritable;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -33,6 +37,7 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
     @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
+    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = ItemStackImpl.NBT_TYPE;
 
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Builder builder(@NotNull Material material) {
@@ -55,7 +60,7 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
      * @param nbtCompound The nbt representation of the item
      */
     static @NotNull ItemStack fromItemNBT(@NotNull CompoundBinaryTag nbtCompound) {
-        return ItemStackImpl.NBT_TYPE.read(nbtCompound);
+        return NBT_TYPE.read(nbtCompound);
     }
 
     @Contract(pure = true)
@@ -126,15 +131,12 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
 
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        //todo
-//        try {
-//            final BinaryTagHolder tagHolder = BinaryTagHolder.encode(meta().toNBT(), MinestomAdventure.NBT_CODEC);
-//            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
-//        } catch (IOException e) {
-//            //todo(matt): revisit,
-//            throw new RuntimeException(e);
-//        }
-        throw new UnsupportedOperationException("todo");
+        try {
+            BinaryTagHolder tagHolder = BinaryTagHolder.encode((CompoundBinaryTag) NBT_TYPE.write(this), MinestomAdventure.NBT_CODEC);
+            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
+        } catch (IOException e) {
+            throw new RuntimeException("failed to encode itemstack nbt", e);
+        }
     }
 
     sealed interface Builder extends TagWritable

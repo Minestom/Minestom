@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public interface BinaryTagSerializer<T> {
@@ -30,6 +31,27 @@ public interface BinaryTagSerializer<T> {
 
             private BinaryTagSerializer<T> serializer() {
                 if (serializer == null) serializer = self.apply(this);
+                return serializer;
+            }
+        };
+    }
+
+    static <T> @NotNull BinaryTagSerializer<T> lazy(@NotNull Supplier<BinaryTagSerializer<T>> self) {
+        return new BinaryTagSerializer<>() {
+            private BinaryTagSerializer<T> serializer = null;
+
+            @Override
+            public @NotNull BinaryTag write(@NotNull T value) {
+                return serializer().write(value);
+            }
+
+            @Override
+            public @NotNull T read(@NotNull BinaryTag tag) {
+                return serializer().read(tag);
+            }
+
+            private BinaryTagSerializer<T> serializer() {
+                if (serializer == null) serializer = self.get();
                 return serializer;
             }
         };

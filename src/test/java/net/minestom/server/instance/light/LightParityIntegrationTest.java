@@ -1,7 +1,11 @@
 package net.minestom.server.instance.light;
 
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.*;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.LightingChunk;
+import net.minestom.server.instance.Section;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.testing.Env;
