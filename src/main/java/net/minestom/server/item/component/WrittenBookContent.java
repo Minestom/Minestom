@@ -66,6 +66,10 @@ public record WrittenBookContent(@NotNull List<FilteredText<Component>> pages, @
         pages = List.copyOf(pages);
     }
 
+    public WrittenBookContent(@NotNull List<Component> pages, @NotNull String title, @NotNull String author) {
+        this(pages, title, author, 0, true);
+    }
+
     public WrittenBookContent(@NotNull List<Component> pages, @NotNull String title, @NotNull String author, int generation, boolean resolved) {
         this(pages.stream().map(page -> new FilteredText<>(page, null)).toList(), new FilteredText<>(title, null), author, generation, resolved);
     }
