@@ -38,7 +38,6 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
     }
 
     private static ParticlePacket readPacket(NetworkBuffer reader) {
-        int particleId = reader.read(VAR_INT);
         Boolean longDistance = reader.read(BOOLEAN);
         Double x = reader.read(DOUBLE);
         Double y = reader.read(DOUBLE);
@@ -48,6 +47,8 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         Float offsetZ = reader.read(FLOAT);
         Float maxSpeed = reader.read(FLOAT);
         Integer particleCount = reader.read(INT);
+
+        int particleId = reader.read(VAR_INT);
         ParticleData data = ParticleData.read(particleId, reader);
 
         return new ParticlePacket(particleId, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, data);
@@ -58,7 +59,6 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         Check.stateCondition(data != null && !data.validate(particleId), "Particle data {0} is not valid for this particle type {1}", data, Particle.fromId(particleId));
         Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type {0}", Particle.fromId(particleId));
 
-        writer.write(VAR_INT, particleId);
         writer.write(BOOLEAN, longDistance);
         writer.write(DOUBLE, x);
         writer.write(DOUBLE, y);
@@ -69,6 +69,7 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         writer.write(FLOAT, maxSpeed);
         writer.write(INT, particleCount);
 
+        writer.write(VAR_INT, particleId);
         if (data != null) data.write(writer);
     }
 
