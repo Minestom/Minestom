@@ -42,11 +42,14 @@ public class EntityMetaIntegrationTest {
         assertEquals(2, packets.size());
         validMetaDataPackets(packets, player.getEntityId(), entry -> {
             final Object content = entry.value();
-            switch (entry.type()) {
-                case Metadata.TYPE_BYTE -> assertEquals((byte) 34, content);
-                case Metadata.TYPE_BOOLEAN -> assertTrue((boolean) content);
-                case Metadata.TYPE_POSE -> assertEquals(Entity.Pose.SNEAKING, content);
-                default -> Assertions.fail("Invalid MetaData entry");
+            if (entry.type() == Metadata.TYPE_BYTE) {
+                assertEquals((byte) 34, content);
+            } else if (entry.type() == Metadata.TYPE_BOOLEAN) {
+                assertTrue((boolean) content);
+            } else if (entry.type() == Metadata.TYPE_POSE) {
+                assertEquals(Entity.Pose.SNEAKING, content);
+            } else {
+                Assertions.fail("Invalid MetaData entry");
             }
         });
 
@@ -58,11 +61,14 @@ public class EntityMetaIntegrationTest {
         packets = incomingPackets.collect();
         validMetaDataPackets(packets, player.getEntityId(), entry -> {
             final Object content = entry.value();
-            switch (entry.type()) {
-                case Metadata.TYPE_BYTE -> assertTrue(content.equals((byte) 2) || content.equals((byte) 0));
-                case Metadata.TYPE_BOOLEAN -> assertFalse((boolean) content);
-                case Metadata.TYPE_POSE -> assertEquals(Entity.Pose.STANDING, content);
-                default -> Assertions.fail("Invalid MetaData entry");
+            if (entry.type() == Metadata.TYPE_BYTE) {
+                assertTrue(content.equals((byte) 2) || content.equals((byte) 0));
+            } else if (entry.type() == Metadata.TYPE_BOOLEAN) {
+                assertFalse((boolean) content);
+            } else if (entry.type() == Metadata.TYPE_POSE) {
+                assertEquals(Entity.Pose.STANDING, content);
+            } else {
+                Assertions.fail("Invalid MetaData entry");
             }
         });
         // 4 changes, for two viewers
