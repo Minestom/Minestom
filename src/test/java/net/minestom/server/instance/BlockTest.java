@@ -1,11 +1,10 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -21,7 +20,7 @@ public class BlockTest {
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
 
-        var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.builder().putInt("key", 5).build();
         block = block.withNbt(nbt);
         assertTrue(block.hasNbt());
         assertEquals(block.nbt(), nbt);
@@ -61,7 +60,7 @@ public class BlockTest {
 
     @Test
     public void testEquality() {
-        var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.builder().putInt("key", 5).build();
         Block b1 = Block.CHEST;
         Block b2 = Block.CHEST;
         assertEquals(b1.withNbt(nbt), b2.withNbt(nbt));

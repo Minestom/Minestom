@@ -2,19 +2,20 @@ package net.minestom.server.command;
 
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CommandSenderTest {
 
@@ -23,7 +24,7 @@ public class CommandSenderTest {
 
         CommandSender sender = new SenderTest();
 
-        Permission permission = new Permission("permission.test", new NBTCompound());
+        Permission permission = new Permission("permission.test", CompoundBinaryTag.empty());
 
         assertEquals(sender.getAllPermissions(), Set.of());
 
