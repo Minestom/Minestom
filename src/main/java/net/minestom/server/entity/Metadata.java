@@ -109,7 +109,8 @@ public final class Metadata {
 
             @Override
             public Integer read(@NotNull NetworkBuffer buffer) {
-                return buffer.read(NetworkBuffer.VAR_INT) - 1;
+                int value = buffer.read(NetworkBuffer.VAR_INT);
+                return value == 0 ? null : value - 1;
             }
         });
     }
