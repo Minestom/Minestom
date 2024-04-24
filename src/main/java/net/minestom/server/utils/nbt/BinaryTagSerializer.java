@@ -224,7 +224,7 @@ public interface BinaryTagSerializer<T> {
                 List<T> list = new ArrayList<>();
                 for (BinaryTag element : listBinaryTag)
                     list.add(BinaryTagSerializer.this.read(element));
-                return list;
+                return List.copyOf(list);
             }
         };
     }
