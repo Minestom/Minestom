@@ -29,7 +29,7 @@ public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataPr
 
     @Override
     public int getObjectData() {
-        return this.shooter == null ? 0 : this.shooter.getEntityId() + 1;
+        return this.shooter == null ? 0 : this.shooter.getEntityId();
     }
 
     @Override
