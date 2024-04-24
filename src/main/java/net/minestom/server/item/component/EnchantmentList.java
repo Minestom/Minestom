@@ -1,6 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.ByteBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.NetworkBuffer;
@@ -53,7 +54,11 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
                 }
 
                 // Doesnt matter which variant we chose, the default will work.
-                boolean showInTooltip = tag.getBoolean("show_in_tooltip", true);
+                // https://github.com/KyoriPowered/adventure/issues/1068
+                boolean showInTooltip = true;
+                if (tag.get("show_in_tooltip") instanceof ByteBinaryTag byteTag) {
+                    showInTooltip = byteTag.value() != 0;
+                }
                 return new EnchantmentList(enchantments, showInTooltip);
             },
             value -> {

@@ -3,6 +3,7 @@ package net.kyori.adventure.nbt;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Map;
 
 // Based on net.kyori.adventure.nbt.TagStringIO licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/TagStringIO.java
@@ -33,6 +34,27 @@ public final class TagStringIOExt {
                 throw new IOException("Document had trailing content after first tag");
             }
             return tag;
+        } catch (final StringTagParseException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    /**
+     * Reads a tag and returns the remainder of the input buffer.
+     */
+    public static Map.Entry<@NotNull BinaryTag, @NotNull String> readTagEmbedded(@NotNull String input) throws IOException {
+        try {
+            final CharBuffer buffer = new CharBuffer(input);
+            final TagStringReader parser = new TagStringReader(buffer);
+            final BinaryTag tag = parser.tag();
+
+            // Collect remaining (todo figure out a better way, probably need to just write an snbt parser)
+            final StringBuilder remainder = new StringBuilder();
+            while (buffer.hasMore()) {
+                remainder.append(buffer.take());
+            }
+
+            return Map.entry(tag, remainder.toString());
         } catch (final StringTagParseException ex) {
             throw new IOException(ex);
         }
