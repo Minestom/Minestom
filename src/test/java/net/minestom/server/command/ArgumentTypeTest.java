@@ -17,8 +17,10 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.tag.Tag;
@@ -33,7 +35,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class ArgumentTypeTest {
 
@@ -170,10 +171,13 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentItemStack() {
-        assumeTrue(false);
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5), "glass_pane[custom_model_data=5]");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).withTag(Tag.String("tag"), "value"), "glass_pane[custom_model_data=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).with(ItemComponent.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
+                "glass_pane[custom_model_data=5,minecraft:custom_data={hi:232}]{tag:value}");
     }
 
     @Test
@@ -192,7 +196,6 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentNbtTag() {
-        assumeTrue(false);
         var arg = ArgumentType.NBT("nbt");
         assertArg(arg, StringBinaryTag.stringBinaryTag("string"), "string");
         assertArg(arg, StringBinaryTag.stringBinaryTag("string"), "\"string\"");
