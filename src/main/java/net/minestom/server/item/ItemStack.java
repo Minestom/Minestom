@@ -45,18 +45,28 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
         return new ItemStackImpl.Builder(material, 1);
     }
 
-    @Contract(value = "_ ,_ -> new", pure = true)
-    static @NotNull ItemStack of(@NotNull Material material, int amount) {
-        return ItemStackImpl.create(material, amount);
-    }
-
     @Contract(value = "_ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material) {
         return of(material, 1);
     }
 
+    @Contract(value = "_ ,_ -> new", pure = true)
+    static @NotNull ItemStack of(@NotNull Material material, int amount) {
+        return ItemStackImpl.create(material, amount);
+    }
+
+    @Contract(value = "_ ,_ -> new", pure = true)
+    static @NotNull ItemStack of(@NotNull Material material, @NotNull ItemComponentMap components) {
+        return ItemStackImpl.create(material, 1, ItemComponentPatch.from(material.registry().prototype(), components));
+    }
+
+    @Contract(value = "_ ,_, _ -> new", pure = true)
+    static @NotNull ItemStack of(@NotNull Material material, int amount, @NotNull ItemComponentMap components) {
+        return ItemStackImpl.create(material, amount, ItemComponentPatch.from(material.registry().prototype(), components));
+    }
+
     /**
-     * Converts this item to an NBT tag containing the id (material), count (amount), and tag (meta).
+     * Converts this item to an NBT tag containing the id (material), count (amount), and components.
      *
      * @param nbtCompound The nbt representation of the item
      */

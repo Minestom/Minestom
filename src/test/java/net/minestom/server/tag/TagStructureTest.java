@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class TagStructureTest {
 
@@ -136,7 +135,6 @@ public class TagStructureTest {
 
     @Test
     public void pathOverride() {
-        assumeTrue(false);
         var handler = TagHandler.newHandler();
         Tag<UUID> uuidTag = Tag.UUID("Id").path("SkullOwner");
         Tag<PlayerSkin> skinTag = Tag.Structure("Properties", new TagSerializer<PlayerSkin>() {
@@ -164,16 +162,8 @@ public class TagStructureTest {
         assertEqualsSNBT("""
                 {
                    "SkullOwner":{
-                      "Id":[
-                         I;-1532365849,
-                         -122336370,
-                         -1958889287,
-                         -122029895
-                      ],
-                      "Properties":{
-                         "Signature":"signature",
-                         "Value":"textures"
-                      }
+                      "Id":[I;-1532365849,-122336370,-1958889287,-122029895],
+                      "Properties":{"Signature":"signature","Value":"textures"}
                    }
                 }
                 """, handler.asCompound());
