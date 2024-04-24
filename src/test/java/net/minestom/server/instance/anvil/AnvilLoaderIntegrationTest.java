@@ -1,15 +1,16 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.anvil;
 
-import net.minestom.server.instance.anvil.AnvilLoader;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import org.junit.jupiter.api.AfterAll;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,36 +24,40 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @EnvTest
 public class AnvilLoaderIntegrationTest {
 
-    private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "instance", "anvil_loader");
-    private static final Path worldFolder = Path.of("integration_test_world");
-
-
-    @BeforeAll
-    public static void prepareTest() throws IOException {
-        // https://stackoverflow.com/a/60621544
-        Files.walkFileTree(testRoot, new SimpleFileVisitor<>() {
-
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                    throws IOException {
-                Files.createDirectories(worldFolder.resolve(testRoot.relativize(dir)));
-                return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                    throws IOException {
-                Files.copy(file, worldFolder.resolve(testRoot.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
-                return FileVisitResult.CONTINUE;
-            }
-        });
-    }
-
+    private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "instance");
 
     @Test
-    public void loadHouse(Env env) {
+    public void loadVanillaRegion(Env env) throws IOException {
+        // load a full vanilla region, not checking any content just making sure it loads without issues.
+
+        var worldFolder = extractWorld("anvil_vanilla_sample");
+        AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
+            // Force loads inside current thread
+            @Override
+            public boolean supportsParallelLoading() {
+                return false;
+            }
+
+            @Override
+            public boolean supportsParallelSaving() {
+                return false;
+            }
+        };
+        Instance instance = env.createFlatInstance(chunkLoader);
+
+        for (int chunkX = 0; chunkX < 32; chunkX++) {
+            for (int chunkZ = 0; chunkZ < 32; chunkZ++) {
+                Chunk chunk = instance.loadChunk(chunkX, chunkZ).join();
+                instance.unloadChunk(chunk);
+            }
+        }
+    }
+
+    @Test
+    public void loadHouse(Env env) throws IOException {
         // load a world that contains only a basic house and make sure it is loaded properly
 
+        var worldFolder = extractWorld("anvil_loader");
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
@@ -145,8 +150,9 @@ public class AnvilLoaderIntegrationTest {
     }
 
     @Test
-    public void loadAndSaveChunk(Env env) throws InterruptedException {
+    public void loadAndSaveChunk(Env env) throws IOException, InterruptedException {
         assumeTrue(false);
+        var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
@@ -183,23 +189,27 @@ public class AnvilLoaderIntegrationTest {
         env.destroyInstance(instance);
     }
 
-    @AfterAll
-    public static void cleanupTest() throws IOException {
-        Files.walkFileTree(worldFolder, new SimpleFileVisitor<>() {
+    private static Path extractWorld(@NotNull String resourceName) throws IOException {
+        var worldFolder = Files.createTempDirectory("minestom-test-world-" + resourceName);
+
+        // https://stackoverflow.com/a/60621544
+        Files.walkFileTree(testRoot.resolve(resourceName), new SimpleFileVisitor<>() {
 
             @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException e)
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
                     throws IOException {
-                Files.delete(dir);
+                Files.createDirectories(worldFolder.resolve(testRoot.relativize(dir)));
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
                     throws IOException {
-                Files.delete(file);
+                Files.copy(file, worldFolder.resolve(testRoot.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
                 return FileVisitResult.CONTINUE;
             }
         });
+
+        return worldFolder.resolve(resourceName);
     }
 }
