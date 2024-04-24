@@ -108,6 +108,10 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
             }
     );
 
+    public static @NotNull ItemComponentPatch from(@NotNull ItemComponentMap prototype, @NotNull ItemComponentMap components) {
+        return new ItemComponentPatch(((ItemComponentMapImpl) components).components());
+    }
+
     public boolean has(@NotNull ItemComponentMap prototype, @NotNull ItemComponent<?> component) {
         if (patch.containsKey(component.id())) {
             return patch.get(component.id()) != null;
@@ -163,7 +167,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         }
 
         public @NotNull ItemComponentPatch build() {
-            return new ItemComponentPatch(patch);
+            return new ItemComponentPatch(new Int2ObjectArrayMap<>(this.patch));
         }
     }
 }
