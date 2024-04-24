@@ -52,21 +52,15 @@ public class PacketProcessor {
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
         final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
-
-        switch (connection.getConnectionState()) {
-            // Process all pre-config packets immediately
-            case HANDSHAKE, STATUS, LOGIN -> packetListenerManager.processClientPacket(packet, connection);
-            // Process config and play packets on the next tick
-            case CONFIGURATION, PLAY -> {
-                if (packet instanceof ClientKeepAlivePacket) {
-                    packetListenerManager.processClientPacket(packet, connection);
-                }
-                else {
-                    final Player player = connection.getPlayer();
-                    assert player != null;
-                    player.addPacketToQueue(packet);
-                }
-            }
+        if (packet.shouldProcessImmediately()) {
+            // All pre-config and keep alive packets process immediately
+            packetListenerManager.processClientPacket(packet, connection);
+        }
+        else {
+            // Delay until the next server tick
+            final Player player = connection.getPlayer();
+            assert player != null;
+            player.addPacketToQueue(packet);
         }
         return packet;
     }

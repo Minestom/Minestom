@@ -10,6 +10,11 @@ public record StatusRequestPacket() implements ClientPacket {
     }
 
     @Override
+    public boolean shouldProcessImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         // Empty
     }
