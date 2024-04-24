@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class EntityViewDirectionIntegrationTest {
@@ -50,7 +49,6 @@ public class EntityViewDirectionIntegrationTest {
 
     @Test
     public void lookAtPos(Env env) {
-        assumeTrue(false);
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
         double eyeHeight = entity.getEyeHeight(); // adding this to some position Y coordinates, to look horizontally
@@ -72,12 +70,12 @@ public class EntityViewDirectionIntegrationTest {
 
         entity.lookAt(new Pos(48, 36, 48));
         assertEquals(-45f, entity.getPosition().yaw(), EPSILON);
-        assertEquals(6.72f, entity.getPosition().pitch(), EPSILON);
+        assertEquals(6.81f, entity.getPosition().pitch(), EPSILON);
 
         entity.lookAt(new Pos(48, 36, -17));
         assertEquals(-109.50f, entity.getPosition().yaw(), EPSILON);
         // should have the same pitch as the previous position
-        assertEquals(6.72f, entity.getPosition().pitch(), EPSILON);
+        assertEquals(6.81f, entity.getPosition().pitch(), EPSILON);
 
         entity.lookAt(new Pos(0, 87, 0));
         // looking from below, not checking the yaw
@@ -85,7 +83,7 @@ public class EntityViewDirectionIntegrationTest {
 
         entity.lookAt(new Pos(-25, 42, 4));
         assertEquals(80.90f, entity.getPosition().yaw(), EPSILON);
-        assertEquals(-0.78f, entity.getPosition().pitch(), EPSILON);
+        assertEquals(-0.59f, entity.getPosition().pitch(), EPSILON);
     }
 
     @Test
@@ -124,7 +122,6 @@ public class EntityViewDirectionIntegrationTest {
 
     @Test
     public void lookAtEntityDifferentType(Env env) {
-        assumeTrue(false);
         var instance = env.createFlatInstance();
         // same type, same eye height
         var e1 = new Entity(EntityType.ZOMBIE);
@@ -157,16 +154,16 @@ public class EntityViewDirectionIntegrationTest {
         e2.teleport(new Pos(-16, 40, -16)).join();
         e1.lookAt(e2);
         assertEquals(135f, e1.getPosition().yaw(), EPSILON);
-        assertEquals(3.79f, e1.getPosition().pitch(), EPSILON);
+        assertEquals(3.91f, e1.getPosition().pitch(), EPSILON);
 
         e2.teleport(new Pos(8, 50, -32)).join();
         e1.lookAt(e2);
         assertEquals(-165.96f, e1.getPosition().yaw(), EPSILON);
-        assertEquals(-15.60f, e1.getPosition().pitch(), EPSILON);
+        assertEquals(-15.54f, e1.getPosition().pitch(), EPSILON);
 
         e2.teleport(new Pos(0, 30, -2)).join();
         e1.lookAt(e2);
         assertEquals(-180f, e1.getPosition().yaw(), EPSILON);
-        assertEquals(79.75f, e1.getPosition().pitch(), EPSILON);
+        assertEquals(79.78f, e1.getPosition().pitch(), EPSILON);
     }
 }

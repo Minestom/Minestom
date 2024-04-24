@@ -7,20 +7,19 @@ import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class LightParityIntegrationTest {
@@ -28,7 +27,6 @@ public class LightParityIntegrationTest {
 
     @Test
     public void test(Env env) throws URISyntaxException, IOException {
-        assumeTrue(false);
         Map<Vec, SectionEntry> sections = retrieveSections();
         // Generate our own light
 
@@ -127,47 +125,29 @@ public class LightParityIntegrationTest {
     }
 
     private static Map<Vec, SectionEntry> retrieveSections() throws IOException, URISyntaxException {
+        var worldDir = Files.createTempDirectory("minestom-light-parity-test");
+        var mcaFile = worldDir.resolve("region").resolve("r.0.0.mca");
+        Files.createDirectories(mcaFile.getParent());
+        try (var is = LightParityIntegrationTest.class.getResourceAsStream("/net/minestom/server/instance/lighting/region/r.0.0.mca")) {
+            Files.copy(Objects.requireNonNull(is), mcaFile);
+        }
 
-        //todo
-//        URL defaultImage = LightParityIntegrationTest.class.getResource("/net/minestom/server/instance/lighting/region/r.0.0.mca");
-//        assert defaultImage != null;
-//        File imageFile = new File(defaultImage.toURI());
-//        var regionFile = new RegionFile(new RandomAccessFile(imageFile, "rw"),
-//                0, 0, -64, 384);
-//
-//        Map<Vec, SectionEntry> sections = new HashMap<>();
-//        // Read from anvil
-//        for (int x = 1; x < REGION_SIZE - 1; x++) {
-//            for (int z = 1; z < REGION_SIZE - 1; z++) {
-//                var chunk = regionFile.getChunk(x, z);
-//                if (chunk == null) continue;
-//
-//                for (int yLevel = chunk.getMinY(); yLevel <= chunk.getMaxY(); yLevel += 16) {
-//                    var section = chunk.getSection((byte) (yLevel/16));
-//                    var palette = loadBlocks(section);
-//                    var sky = section.getSkyLights();
-//                    var block = section.getBlockLights();
-//                    sections.put(new Vec(x, section.getY(), z), new SectionEntry(palette, sky, block));
-//                }
-//            }
-//        }
-//        return sections;
-        throw new UnsupportedOperationException("todo");
+        var instance = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD); // Never registered
+        var anvilLoader = new AnvilLoader(worldDir);
+
+        Map<Vec, SectionEntry> sections = new HashMap<>();
+        // Read from anvil
+        for (int x = 1; x < REGION_SIZE - 1; x++) {
+            for (int z = 1; z < REGION_SIZE - 1; z++) {
+                var chunk = anvilLoader.loadChunk(instance, x, z).join();
+                if (chunk == null) continue;
+
+                for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {
+                    var section = chunk.getSection(sectionY);
+                    sections.put(new Vec(x, sectionY, z), new SectionEntry(section.blockPalette(), section.skyLight().array(), section.blockLight().array()));
+                }
+            }
+        }
+        return sections;
     }
-
-//    private static Palette loadBlocks(ChunkSection section) throws AnvilException {
-//        var palette = Palette.blocks();
-//        for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
-//            for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
-//                for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-//                    final BlockState blockState = section.get(x, y, z);
-//                    String blockName = blockState.getName();
-//                    Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName), blockName)
-//                            .withProperties(blockState.getProperties());
-//                    palette.set(x, y, z, block.stateId());
-//                }
-//            }
-//        }
-//        return palette;
-//    }
 }
