@@ -22,8 +22,6 @@ import java.util.Map;
 record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
     private static final char REMOVAL_PREFIX = '!';
 
-    static final int MAX_SIZE = ItemComponent.values().size() * 2;
-
     public static final ItemComponentPatch EMPTY = new ItemComponentPatch(new Int2ObjectArrayMap<>(0));
 
     public static final @NotNull NetworkBuffer.Type<ItemComponentPatch> NETWORK_TYPE = new NetworkBuffer.Type<>() {
@@ -56,7 +54,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         public ItemComponentPatch read(@NotNull NetworkBuffer buffer) {
             int added = buffer.read(NetworkBuffer.VAR_INT);
             int removed = buffer.read(NetworkBuffer.VAR_INT);
-            Check.stateCondition(added + removed > MAX_SIZE, "Item component patch too large: {0}", added + removed);
+            Check.stateCondition(added + removed > ItemComponent.values().size() * 2, "Item component patch too large: {0}", added + removed);
             Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(added + removed);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
