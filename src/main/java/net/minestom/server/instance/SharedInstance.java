@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
@@ -124,5 +125,15 @@ public class SharedInstance extends Instance {
      */
     public @NotNull InstanceContainer getInstanceContainer() {
         return instanceContainer;
+    }
+
+    @Override
+    public void trackBlocks(@NotNull Area area, Block.@NotNull Tracker tracker) {
+
+    }
+
+    @Override
+    public void trackAllBlocks(Block.@NotNull Tracker tracker) {
+
     }
 }
