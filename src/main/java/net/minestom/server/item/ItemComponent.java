@@ -69,7 +69,7 @@ public sealed interface ItemComponent<T> extends StaticProtocolObject permits It
     ItemComponent<FireworkList> FIREWORKS = declare("fireworks", FireworkList.NETWORK_TYPE, FireworkList.NBT_TYPE);
     ItemComponent<HeadProfile> PROFILE = declare("profile", HeadProfile.NETWORK_TYPE, HeadProfile.NBT_TYPE);
     ItemComponent<String> NOTE_BLOCK_SOUND = declare("note_block_sound", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
-    ItemComponent<Void> BANNER_PATTERNS = declare("banner_patterns", null, null); //todo
+    ItemComponent<BannerPatterns> BANNER_PATTERNS = declare("banner_patterns", BannerPatterns.NETWORK_TYPE, BannerPatterns.NBT_TYPE);
     ItemComponent<DyeColor> BASE_COLOR = declare("base_color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
     ItemComponent<PotDecorations> POT_DECORATIONS = declare("pot_decorations", PotDecorations.NETWORK_TYPE, PotDecorations.NBT_TYPE);
     ItemComponent<List<ItemStack>> CONTAINER = declare("container", ItemStack.NETWORK_TYPE.list(256), BinaryTagSerializer.ITEM.list());
