@@ -1,11 +1,7 @@
 package net.minestom.server.particle;
 
-import net.minestom.server.color.Color;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
-import net.minestom.server.particle.data.BlockParticleData;
-import net.minestom.server.particle.data.DustParticleData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -22,21 +18,9 @@ public class ParticleDataTest {
 
     @Test
     public void testDustParticleInvalid() {
-        var particle = Particle.DUST.withData(null);
+        var particle = Particle.DUST.withProperties(null, 1);
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertThrows(IllegalStateException.class, () -> packet.write(new NetworkBuffer()));
-    }
-
-    @Test
-    public void testDustParticleWrongData() {
-        var particle = Particle.DUST.withData(new BlockParticleData(Block.STONE));
-        ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertThrows(IllegalStateException.class, () -> packet.write(new NetworkBuffer()));
-    }
-
-    @Test
-    public void testDustParticleWrongParameters() {
-        assertThrows(IllegalArgumentException.class, () -> Particle.DUST.withData(new DustParticleData(new Color(255, 255, 255), 0)));
+        assertThrows(NullPointerException.class, () -> packet.write(new NetworkBuffer()));
     }
 
     @Test
@@ -55,7 +39,7 @@ public class ParticleDataTest {
 
     @Test
     public void invalidBlock() {
-        var particle = Particle.BLOCK.withData(new BlockParticleData(null));
+        var particle = Particle.BLOCK.withBlock(null);
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
         assertThrows(NullPointerException.class, () -> packet.write(new NetworkBuffer()));
     }

@@ -9,7 +9,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -600,10 +599,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ParticleType() implements NetworkBufferTypeImpl<Particle> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Particle value) {
-            Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data {0} is not valid for this particle type {1}", value.data(), value.namespace());
-            Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type {0}", value.namespace());
             buffer.write(VAR_INT, value.id());
-            if (value.data() != null) value.data().write(buffer);
+            value.writeData(buffer);
         }
 
         @Override
