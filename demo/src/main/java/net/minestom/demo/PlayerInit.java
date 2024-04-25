@@ -132,6 +132,9 @@ public class PlayerInit {
                         .set(ItemComponent.BLOCK_STATE, new ItemBlockState(Map.of("facing", "west", "half", "top")))
                         .build());
 
+                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
+                        .build());
+
                 if (event.isFirstSpawn()) {
                     Notification notification = new Notification(
                             Component.text("Welcome!"),
