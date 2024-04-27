@@ -14,17 +14,17 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
     public static final NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, CustomPotionEffect value) {
-            buffer.write(PotionEffect.NETWORK_TYPE, value.id);
+            buffer.write(NetworkBuffer.VAR_INT, value.id.id());
             buffer.write(Settings.NETWORK_TYPE, value.settings);
         }
 
         @Override
         public CustomPotionEffect read(@NotNull NetworkBuffer buffer) {
-            return new CustomPotionEffect(buffer.read(PotionEffect.NETWORK_TYPE), buffer.read(Settings.NETWORK_TYPE));
+            return new CustomPotionEffect(PotionEffect.fromId(buffer.read(NetworkBuffer.VAR_INT)), buffer.read(Settings.NETWORK_TYPE));
         }
     };
 
-    public static final BinaryTagSerializer<CustomPotionEffect> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    public static final BinaryTagSerializer<CustomPotionEffect> NBT_TYPE = BinaryTagSerializer.lazy(() -> BinaryTagSerializer.COMPOUND.map(
             tag -> new CustomPotionEffect(
                     PotionEffect.fromNamespaceId(tag.getString("id")),
                     Settings.NBT_TYPE.read(tag)),
@@ -32,7 +32,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
                     .putString("id", value.id.name())
                     .put((CompoundBinaryTag) Settings.NBT_TYPE.write(value.settings))
                     .build()
-    );
+    ));
 
     public CustomPotionEffect(@NotNull PotionEffect id, byte amplifier, int duration, boolean isAmbient, boolean showParticles, boolean showIcon) {
         this(id, new Settings(amplifier, duration, isAmbient, showParticles, showIcon, null));
