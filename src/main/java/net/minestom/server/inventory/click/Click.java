@@ -115,17 +115,51 @@ public final class Click {
             final int slot = packet.slot() == -999 ? -999 :
                     containerSize == null ? PlayerInventoryUtils.protocolToMinestom(packet.slot()) : packet.slot();
             final int maxSize = containerSize != null ? containerSize + PlayerInventoryUtils.INNER_SIZE : PlayerInventoryUtils.INVENTORY_SIZE;
-            if (slot == -999) {
-                if (packet.clickType() == ClientClickWindowPacket.ClickType.PICKUP) {
-                    if (button == 0) return new Info.LeftDropCursor();
-                    if (button == 1) return new Info.RightDropCursor();
-                } else if (packet.clickType() == ClientClickWindowPacket.ClickType.CLONE) { // Why Mojang, why?
-                    if (button == 2) return new Info.MiddleDropCursor();
-                }
-            }
             final boolean valid = slot >= 0 && slot < maxSize;
-            if (!valid) return null;
+
+            if (!valid) {
+                return slot == -999 ? processInvalidSlot(packet.clickType(), button) : null;
+            }
+
             return process(packet.clickType(), slot, button);
+        }
+
+        private @Nullable Click.Info processInvalidSlot(@NotNull ClientClickWindowPacket.ClickType type, byte button) {
+            return switch (type) {
+                case PICKUP -> {
+                    if (button == 0) yield new Info.LeftDropCursor();
+                    if (button == 1) yield new Info.RightDropCursor();
+                    yield null;
+                }
+                case CLONE -> {
+                    if (button == 2) yield new Info.MiddleDropCursor(); // Why Mojang, why?
+                    yield null;
+                }
+                case QUICK_CRAFT -> {
+                    // Trust me, a switch would not make this cleaner
+
+                    if (button == 2) {
+                        var list = List.copyOf(leftDrag);
+                        leftDrag.clear();
+                        yield new Info.LeftDrag(list);
+                    } else if (button == 6) {
+                        var list = List.copyOf(rightDrag);
+                        rightDrag.clear();
+                        yield new Info.RightDrag(list);
+                    } else if (button == 10) {
+                        var list = List.copyOf(middleDrag);
+                        middleDrag.clear();
+                        yield new Info.MiddleDrag(list);
+                    }
+
+                    if (button == 0) leftDrag.clear();
+                    if (button == 4) rightDrag.clear();
+                    if (button == 8) middleDrag.clear();
+
+                    yield null;
+                }
+                default -> null;
+            };
         }
 
         /**
@@ -156,26 +190,7 @@ public final class Click {
                 case CLONE -> new Info.Middle(slot);
                 case THROW -> new Info.DropSlot(slot, button == 1);
                 case QUICK_CRAFT -> {
-                    // Handle drag finishes
-                    if (button == 2) {
-                        var list = List.copyOf(leftDrag);
-                        leftDrag.clear();
-                        yield new Info.LeftDrag(list);
-                    } else if (button == 6) {
-                        var list = List.copyOf(rightDrag);
-                        rightDrag.clear();
-                        yield new Info.RightDrag(list);
-                    } else if (button == 10) {
-                        var list = List.copyOf(middleDrag);
-                        middleDrag.clear();
-                        yield new Info.MiddleDrag(list);
-                    }
-
                     switch (button) {
-                        case 0 -> leftDrag.clear();
-                        case 4 -> rightDrag.clear();
-                        case 8 -> middleDrag.clear();
-
                         case 1 -> leftDrag.add(slot);
                         case 5 -> rightDrag.add(slot);
                         case 9 -> middleDrag.add(slot);
