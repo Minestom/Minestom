@@ -10,6 +10,8 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Food;
+import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 
@@ -55,11 +57,13 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SHIELD;
         } else if (material == Material.TRIDENT) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.TRIDENT;
-        } else if (itemStack.has(ItemComponent.FOOD)) {
+        } else if (itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
-            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, player.getDefaultEatingTime());
+            final Food food = itemStack.get(ItemComponent.FOOD);
+            int defaultEatingTime = food != null ? food.eatDurationTicks() : PotionContents.POTION_DRINK_TIME;
+            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, defaultEatingTime);
             EventDispatcher.callCancellable(playerPreEatEvent, () -> player.refreshEating(hand, playerPreEatEvent.getEatingTime()));
 
             if (playerPreEatEvent.isCancelled()) {

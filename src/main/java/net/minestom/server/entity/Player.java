@@ -192,7 +192,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private int food;
     private float foodSaturation;
     private long startEatingTime;
-    private long defaultEatingTime = 1000L;
     private long eatingTime;
     private Hand eatingHand;
 
@@ -432,7 +431,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Eating animation
         if (isEating()) {
-            if (time - startEatingTime >= eatingTime) {
+            if (instance.getWorldAge() - startEatingTime >= eatingTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
 
@@ -444,8 +443,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
                 final boolean isFood = foodItem.has(ItemComponent.FOOD);
-
-                if (isFood) {
+                if (isFood || foodItem.material() == Material.POTION) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
                     EventDispatcher.call(playerEatEvent);
                 }
@@ -1122,24 +1120,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public @Nullable Hand getEatingHand() {
         return eatingHand;
-    }
-
-    /**
-     * Gets the player default eating time.
-     *
-     * @return the player default eating time
-     */
-    public long getDefaultEatingTime() {
-        return defaultEatingTime;
-    }
-
-    /**
-     * Used to change the default eating time animation.
-     *
-     * @param defaultEatingTime the default eating time in milliseconds
-     */
-    public void setDefaultEatingTime(long defaultEatingTime) {
-        this.defaultEatingTime = defaultEatingTime;
     }
 
     @Override
@@ -2189,18 +2169,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshEating(null);
     }
 
-    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
+    public void refreshEating(@Nullable Hand eatingHand, long eatingTimeTicks) {
         this.eatingHand = eatingHand;
         if (eatingHand != null) {
-            this.startEatingTime = System.currentTimeMillis();
-            this.eatingTime = eatingTime;
+            this.startEatingTime = instance.getWorldAge();
+            this.eatingTime = eatingTimeTicks;
         } else {
             this.startEatingTime = 0;
         }
     }
 
     public void refreshEating(@Nullable Hand eatingHand) {
-        refreshEating(eatingHand, defaultEatingTime);
+        refreshEating(eatingHand, 0);
     }
 
     /**
