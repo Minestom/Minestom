@@ -36,12 +36,15 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.ItemBlockState;
+import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.BlockParticleData;
+import net.minestom.server.potion.CustomPotionEffect;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
@@ -133,6 +136,13 @@ public class PlayerInit {
                         .build());
 
                 player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
+                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
+                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
+                                        45 * 20, false, true, true, null))
+                        )))
                         .build());
 
                 if (event.isFirstSpawn()) {
@@ -240,7 +250,8 @@ public class PlayerInit {
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            if (MinecraftServer.getConnectionManager().getOnlinePlayerCount() != 0)
+            if (LAST_TICK.get() == null) return;
+            if (MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
                 return;
 
             long ramUsage = benchmarkManager.getUsedMemory();
@@ -254,6 +265,6 @@ public class PlayerInit {
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.SERVER_TICK); //.schedule();
+        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
     }
 }
