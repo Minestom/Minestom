@@ -1,6 +1,7 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,10 @@ import static net.minestom.server.inventory.click.ClickUtils.*;
 import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.*;
 
 public class ClickPreprocessorTest {
+
+    static {
+        MinecraftServer.init();
+    }
 
     @Test
     public void testPickupType() {
@@ -80,17 +85,17 @@ public class ClickPreprocessorTest {
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 0, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 1, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 1, 1));
-        assertProcessed(processor, player, new Click.Info.LeftDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 2, 0));
+        assertProcessed(processor, player, new Click.Info.LeftDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 2, -999));
 
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 4, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 5, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 5, 1));
-        assertProcessed(processor, player, new Click.Info.RightDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 6, 0));
+        assertProcessed(processor, player, new Click.Info.RightDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 6, -999));
 
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 8, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 0));
         assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 1));
-        assertProcessed(processor, player, new Click.Info.MiddleDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 10, 0));
+        assertProcessed(processor, player, new Click.Info.MiddleDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 10, -999));
     }
 
 }
