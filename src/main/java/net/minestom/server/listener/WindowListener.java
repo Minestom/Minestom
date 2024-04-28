@@ -35,18 +35,27 @@ public class WindowListener {
     }
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
-        // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
         var openInventory = player.getOpenInventory();
-        if (openInventory == null) openInventory = player.getInventory();
+
+        // The client sends a packet if they close their own inventory, but this means nothing, it isn't cancellable,
+        // and we can't reopen their inventory for them. Essentially, it's useless, and is irrelevant here.
+        if (openInventory == null) return;
 
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, player);
         EventDispatcher.call(inventoryCloseEvent);
 
-        player.closeInventory(true);
+        // If an event listener opened an inventory, exit
+        if (player.getOpenInventory() != openInventory) return;
 
-        Inventory newInventory = inventoryCloseEvent.getNewInventory();
-        if (newInventory != null)
-            player.openInventory(newInventory);
+        if (inventoryCloseEvent.isCancelled()) {
+            // Fake an inventory close
+            player.UNSAFE_changeSkipClosePacket(true);
+            openInventory.removeViewer(player);
+            openInventory.addViewer(player);
+        } else {
+            player.closeInventory(true);
+        }
+
     }
 
     public static void buttonClickListener(ClientClickWindowButtonPacket packet, Player player) {
