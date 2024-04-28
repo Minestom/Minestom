@@ -77,8 +77,6 @@ public record EntityMetaDataPacket(int entityId,
             } else {
                 entries.put(key, value);
             }
-
-            entries.put(key, v instanceof Component c ? Metadata.Chat(operator.apply(c)) : value);
         });
 
         return new EntityMetaDataPacket(this.entityId, entries);
