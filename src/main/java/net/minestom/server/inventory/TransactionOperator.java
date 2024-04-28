@@ -55,7 +55,10 @@ public interface TransactionOperator extends UnaryOperator<TransactionOperator.E
             int leftAmount = left.isAir() ? 0 : rule.getAmount(left);
             int rightAmount = rule.getAmount(right);
 
-            int addedAmount = Math.min(Math.min(rightAmount, count), rule.getMaxSize(left) - leftAmount);
+            int addedAmount = Math.min(rightAmount, count);
+            if (!left.isAir()) {
+                addedAmount = Math.min(addedAmount, rule.getMaxSize(left) - leftAmount);
+            }
 
             if (addedAmount == 0) return null;
 
@@ -82,7 +85,10 @@ public interface TransactionOperator extends UnaryOperator<TransactionOperator.E
         int leftAmount = left.isAir() ? 0 : rule.getAmount(left);
         int rightAmount = rule.getAmount(right);
 
-        int addedAmount = Math.min(rightAmount, rule.getMaxSize(left) - leftAmount);
+        int addedAmount = rightAmount;
+        if (!left.isAir()) {
+            addedAmount = Math.min(rightAmount, rule.getMaxSize(left) - leftAmount);
+        }
 
         return new Entry(rule.apply(left.isAir() ? right : left, leftAmount + addedAmount), rule.apply(right, rightAmount - addedAmount));
     };
