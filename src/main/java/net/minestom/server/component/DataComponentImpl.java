@@ -1,4 +1,4 @@
-package net.minestom.server.item;
+package net.minestom.server.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.network.NetworkBuffer;
@@ -12,21 +12,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-record ItemComponentImpl<T>(
+record DataComponentImpl<T>(
         int id,
         @NotNull NamespaceID namespace,
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable BinaryTagSerializer<T> nbt
-) implements ItemComponent<T> {
-    static final Map<String, ItemComponent<?>> NAMESPACES = new HashMap<>(32);
-    static final ObjectArray<ItemComponent<?>> IDS = ObjectArray.singleThread(32);
+) implements DataComponent<T> {
+    static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
-    static <T> ItemComponent<T> declare(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        ItemComponent<T> impl = new ItemComponentImpl<>(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
-        NAMESPACES.put(impl.name(), impl);
-        IDS.set(impl.id(), impl);
-        return impl;
-    }
 
     @Override
     public @NotNull T read(@NotNull BinaryTag tag) {

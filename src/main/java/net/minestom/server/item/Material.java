@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
@@ -76,7 +77,7 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         return registry().block();
     }
 
-    default @NotNull ItemComponentMap prototype() {
+    default @NotNull DataComponentMap prototype() {
         return registry().prototype();
     }
 

@@ -6,8 +6,9 @@ import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.ItemComponent;
-import net.minestom.server.item.ItemComponentMap;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
@@ -59,14 +60,14 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             return ItemStack.of(material); // Nothing else, we have our item
         }
 
-        ItemComponentMap.Builder components = ItemComponentMap.builder();
+        DataComponentMap.Builder components = DataComponentMap.builder();
 
         // Parse the declared components
         if (reader.peek() == '[') {
             reader.consume('[');
             do {
                 final NamespaceID componentId = reader.readNamespaceId();
-                final ItemComponent<?> component = ItemComponent.fromNamespaceId(componentId);
+                final DataComponent<?> component = DataComponent.fromNamespaceId(componentId);
                 if (component == null)
                     throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
 

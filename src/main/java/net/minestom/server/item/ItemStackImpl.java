@@ -2,6 +2,8 @@ package net.minestom.server.item;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentPatch;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, ItemComponentPatch components) implements ItemStack {
+record ItemStackImpl(Material material, int amount, DataComponentPatch components) implements ItemStack {
 
     static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -25,7 +27,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
 
             buffer.write(NetworkBuffer.VAR_INT, value.amount());
             buffer.write(NetworkBuffer.VAR_INT, value.material().id());
-            buffer.write(ItemComponentPatch.NETWORK_TYPE, ((ItemStackImpl) value).components);
+            buffer.write(DataComponentPatch.NETWORK_TYPE, ((ItemStackImpl) value).components);
         }
 
         @Override
@@ -33,7 +35,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
             int amount = buffer.read(NetworkBuffer.VAR_INT);
             if (amount <= 0) return ItemStack.AIR;
             Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
-            ItemComponentPatch components = buffer.read(ItemComponentPatch.NETWORK_TYPE);
+            DataComponentPatch components = buffer.read(DataComponentPatch.NETWORK_TYPE);
             return new ItemStackImpl(material, amount, components);
         }
     };
@@ -46,13 +48,13 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     });
     static final BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
-    static ItemStack create(Material material, int amount, ItemComponentPatch components) {
+    static ItemStack create(Material material, int amount, DataComponentPatch components) {
         if (amount <= 0) return AIR;
         return new ItemStackImpl(material, amount, components);
     }
 
     static ItemStack create(Material material, int amount) {
-        return create(material, amount, ItemComponentPatch.EMPTY);
+        return create(material, amount, DataComponentPatch.EMPTY);
     }
 
     public ItemStackImpl {
@@ -60,12 +62,12 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     }
 
     @Override
-    public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
+    public <T> @Nullable T get(@NotNull DataComponent<T> component) {
         return components.get(material.prototype(), component);
     }
 
     @Override
-    public boolean has(@NotNull ItemComponent<?> component) {
+    public boolean has(@NotNull DataComponent<?> component) {
         return components.has(material.prototype(), component);
     }
 
@@ -88,12 +90,12 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     }
 
     @Override
-    public @NotNull <T> ItemStack with(@NotNull ItemComponent<T> component, T value) {
+    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, T value) {
         return new ItemStackImpl(material, amount, components.with(component, value));
     }
 
     @Override
-    public @NotNull ItemStack without(@NotNull ItemComponent<?> component) {
+    public @NotNull ItemStack without(@NotNull DataComponent<?> component) {
         return new ItemStackImpl(material, amount, components.without(component));
     }
 
@@ -122,7 +124,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
         Material material = Material.fromNamespaceId(id);
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
-        ItemComponentPatch patch = ItemComponentPatch.NBT_TYPE.read(tag.getCompound("components"));
+        DataComponentPatch patch = DataComponentPatch.NBT_TYPE.read(tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
 
@@ -131,7 +133,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
         tag.putString("id", itemStack.material().name());
         tag.putInt("count", itemStack.amount());
 
-        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        CompoundBinaryTag components = (CompoundBinaryTag) DataComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();
@@ -140,9 +142,9 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
     static final class Builder implements ItemStack.Builder {
         final Material material;
         int amount;
-        ItemComponentPatch.Builder components;
+        DataComponentPatch.Builder components;
 
-        Builder(Material material, int amount, ItemComponentPatch.Builder components) {
+        Builder(Material material, int amount, DataComponentPatch.Builder components) {
             this.material = material;
             this.amount = amount;
             this.components = components;
@@ -151,7 +153,7 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
         Builder(Material material, int amount) {
             this.material = material;
             this.amount = amount;
-            this.components = new ItemComponentPatch.Builder(new Int2ObjectArrayMap<>());
+            this.components = new DataComponentPatch.Builder(new Int2ObjectArrayMap<>());
         }
 
         @Override
@@ -161,13 +163,13 @@ record ItemStackImpl(Material material, int amount, ItemComponentPatch component
         }
 
         @Override
-        public <T> ItemStack.@NotNull Builder set(@NotNull ItemComponent<T> component, T value) {
+        public <T> ItemStack.@NotNull Builder set(@NotNull DataComponent<T> component, T value) {
             components.set(component, value);
             return this;
         }
 
         @Override
-        public ItemStack.@NotNull Builder remove(@NotNull ItemComponent<?> component) {
+        public ItemStack.@NotNull Builder remove(@NotNull DataComponent<?> component) {
             components.remove(component);
             return this;
         }
