@@ -50,6 +50,7 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
