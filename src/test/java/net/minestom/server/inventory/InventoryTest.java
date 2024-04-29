@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -82,5 +83,14 @@ public class InventoryTest {
             final byte windowId = new ContainerInventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
             assertTrue(windowId > 0);
         }
+    }
+
+    @Test
+    public void testStackSize99() {
+        var inventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
+        var item = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 99).amount(99).build();
+
+        assertTrue(inventory.addItemStack(item, TransactionOption.ALL_OR_NOTHING));
+        assertEquals(99, inventory.getItemStack(0).amount());
     }
 }
