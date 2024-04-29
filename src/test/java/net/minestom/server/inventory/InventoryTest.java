@@ -93,4 +93,17 @@ public class InventoryTest {
         assertTrue(inventory.addItemStack(item, TransactionOption.ALL_OR_NOTHING));
         assertEquals(99, inventory.getItemStack(0).amount());
     }
+
+    @Test
+    public void testStackSize99OnSmaller() {
+        var inventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
+        var item44 = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 44).amount(43).build();
+        var item99 = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 99).amount(99).build();
+
+        // Note this is vanilla behavior not to stack these two because they have different components.
+        assertTrue(inventory.addItemStack(item44, TransactionOption.ALL_OR_NOTHING));
+        assertTrue(inventory.addItemStack(item99, TransactionOption.ALL_OR_NOTHING));
+        assertEquals(43, inventory.getItemStack(0).amount());
+        assertEquals(99, inventory.getItemStack(1).amount());
+    }
 }
