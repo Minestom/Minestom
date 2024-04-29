@@ -22,7 +22,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class PlayerBlockPlacementIntegrationTest {
@@ -30,7 +29,6 @@ public class PlayerBlockPlacementIntegrationTest {
     @ParameterizedTest
     @MethodSource("placeBlockFromAdventureModeParams")
     public void placeBlockFromAdventureMode(Block baseBlock, BlockPredicates canPlaceOn, Env env) {
-        assumeTrue(false);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -55,7 +53,6 @@ public class PlayerBlockPlacementIntegrationTest {
     private static Stream<Arguments> placeBlockFromAdventureModeParams() {
         return Stream.of(
                 Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.ACACIA_STAIRS)))),
-                Arguments.of(Block.ACACIA_STAIRS, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.ACACIA_STAIRS), PropertiesPredicate.exact("facing", "south"), null))),
                 Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.ACACIA_STAIRS), PropertiesPredicate.exact("facing", "south"), null))),
                 Arguments.of(Block.AMETHYST_BLOCK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.AMETHYST_BLOCK))))
         );
