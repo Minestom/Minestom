@@ -102,7 +102,8 @@ final class RegionFile implements AutoCloseable {
         lock.lock();
         try {
             // We don't attempt to reuse the current allocation, just write it to a new position and free the old one.
-            int oldLocation = getChunkIndex(chunkX, chunkZ);
+            int chunkIndex = getChunkIndex(chunkX, chunkZ);
+            int oldLocation = locations[chunkIndex];
 
             // Find a new location
             int firstSector = findFreeSectors(sectorCount);
@@ -122,8 +123,8 @@ final class RegionFile implements AutoCloseable {
             file.write(dataBytes);
 
             // Update the header and write it
-            locations[oldLocation] = newLocation;
-            timestamps[oldLocation] = (int) (System.currentTimeMillis() / 1000);
+            locations[chunkIndex] = newLocation;
+            timestamps[chunkIndex] = (int) (System.currentTimeMillis() / 1000);
             writeHeader();
         } finally {
             lock.unlock();
@@ -150,6 +151,8 @@ final class RegionFile implements AutoCloseable {
 
         final long totalSectors = file.length() / SECTOR_SIZE;
         for (int i = 0; i < totalSectors; i++) freeSectors.add(true);
+        freeSectors.set(0, false); // First sector is locations
+        freeSectors.set(1, false); // Second sector is timestamps
 
         // Read locations
         file.seek(0);
