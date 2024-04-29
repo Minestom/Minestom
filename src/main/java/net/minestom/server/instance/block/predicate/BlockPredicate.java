@@ -3,13 +3,30 @@ package net.minestom.server.instance.block.predicate;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * <p>A predicate to filter blocks based on their name, properties, and/or nbt.</p>
+ *
+ * <p>Note: Inline with vanilla, providing none of the filters will match any block.</p>
+ *
+ * <p>Note: To match the vanilla behavior of comparing block NBT, the NBT predicate
+ * will ONLY match data which would be sent to the client eg with
+ * {@link BlockHandler#getBlockEntityTags()}. This is relevant because this structure
+ * is used for matching adventure mode blocks and must line up with client prediction.</p>
+ *
+ * @param blocks The block names/tags to match.
+ * @param state The block properties to match.
+ * @param nbt The block nbt to match.
+ */
 public record BlockPredicate(
         @Nullable BlockTypeFilter blocks,
         @Nullable PropertiesPredicate state,
@@ -82,7 +99,11 @@ public record BlockPredicate(
 
     @Override
     public boolean test(@NotNull Block block) {
-        throw new UnsupportedOperationException("not implemented");
+        if (blocks != null && !blocks.test(block))
+            return false;
+        if (state != null && !state.test(block))
+            return false;
+        return nbt == null || Objects.equals(nbt, BlockUtils.extractClientNbt(block));
     }
 
 }
