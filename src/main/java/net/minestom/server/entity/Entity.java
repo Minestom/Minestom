@@ -588,7 +588,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void movementTick() {
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-        if (vehicle != null) return;
+        if (!currentChunk.isLoaded() || vehicle != null) return;
 
         boolean entityIsPlayer = this instanceof Player;
         boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
