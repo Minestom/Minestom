@@ -59,6 +59,9 @@ public class BlockIterator implements Iterator<Point> {
     public BlockIterator() {}
 
     public void reset(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance, boolean smooth) {
+        extraPoints.clear();
+        foundEnd = false;
+
         start = start.add(0, yOffset, 0);
 
         if (maxDistance != 0) end = start.add(direction.normalize().mul(maxDistance));
