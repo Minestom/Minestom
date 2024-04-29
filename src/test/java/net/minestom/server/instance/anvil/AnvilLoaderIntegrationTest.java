@@ -19,7 +19,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class AnvilLoaderIntegrationTest {
@@ -151,7 +150,6 @@ public class AnvilLoaderIntegrationTest {
 
     @Test
     public void loadAndSaveChunk(Env env) throws IOException, InterruptedException {
-        assumeTrue(false);
         var worldFolder = extractWorld("anvil_loader");
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
