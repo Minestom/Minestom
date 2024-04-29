@@ -24,17 +24,18 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     public DeclareRecipesPacket(@NotNull NetworkBuffer reader) {
         this(reader.readCollection(r -> {
-            final String type = r.read(STRING);
+            final String recipeId = r.read(STRING);
+            final RecipeType type = r.read(RecipeType.NETWORK_TYPE);
             return switch (type) {
-                case "crafting_shapeless" -> new DeclaredShapelessCraftingRecipe(reader);
-                case "crafting_shaped" -> new DeclaredShapedCraftingRecipe(reader);
-                case "smelting" -> new DeclaredSmeltingRecipe(reader);
-                case "blasting" -> new DeclaredBlastingRecipe(reader);
-                case "smoking" -> new DeclaredSmokingRecipe(reader);
-                case "campfire_cooking" -> new DeclaredCampfireCookingRecipe(reader);
-                case "stonecutting" -> new DeclaredStonecutterRecipe(reader);
-                case "smithing_trim" -> new DeclaredSmithingTrimRecipe(reader);
-                case "smithing_transform" -> new DeclaredSmithingTransformRecipe(reader);
+                case RecipeType.SHAPELESS -> new DeclaredShapelessCraftingRecipe(recipeId, reader);
+                case RecipeType.SHAPED -> new DeclaredShapedCraftingRecipe(recipeId, reader);
+                case RecipeType.SMELTING -> new DeclaredSmeltingRecipe(recipeId, reader);
+                case RecipeType.BLASTING -> new DeclaredBlastingRecipe(recipeId, reader);
+                case RecipeType.SMOKING -> new DeclaredSmokingRecipe(recipeId, reader);
+                case RecipeType.CAMPFIRE_COOKING -> new DeclaredCampfireCookingRecipe(recipeId, reader);
+                case RecipeType.STONECUTTING -> new DeclaredStonecutterRecipe(recipeId, reader);
+                case RecipeType.SMITHING_TRIM -> new DeclaredSmithingTrimRecipe(recipeId, reader);
+                case RecipeType.SMITHING_TRANSFORM -> new DeclaredSmithingTransformRecipe(recipeId, reader);
                 default -> throw new UnsupportedOperationException("Unrecognized type: " + type);
             };
         }, MAX_RECIPES));
@@ -68,8 +69,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                                   @NotNull RecipeCategory.Crafting crafting,
                                                   @NotNull List<Ingredient> ingredients,
                                                   @NotNull ItemStack result) implements DeclaredRecipe {
-        private DeclaredShapelessCraftingRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
+        private DeclaredShapelessCraftingRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, reader.read(STRING),
                     reader.readEnum(RecipeCategory.Crafting.class),
                     reader.readCollection(Ingredient::new, MAX_INGREDIENTS), reader.read(ItemStack.STRICT_NETWORK_TYPE));
         }
@@ -100,12 +101,11 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
             this(packet.recipeId, packet.group, packet.category, packet.width, packet.height, packet.ingredients, packet.result, packet.showNotification);
         }
 
-        public DeclaredShapedCraftingRecipe(@NotNull NetworkBuffer reader) {
-            this(read(reader));
+        public DeclaredShapedCraftingRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(read(recipeId, reader));
         }
 
-        private static DeclaredShapedCraftingRecipe read(@NotNull NetworkBuffer reader) {
-            String recipeId = reader.read(STRING);
+        private static DeclaredShapedCraftingRecipe read(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
             String group = reader.read(STRING);
             RecipeCategory.Crafting category = reader.readEnum(RecipeCategory.Crafting.class);
             int width = reader.read(VAR_INT);
@@ -142,8 +142,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                          @NotNull RecipeCategory.Cooking category, @NotNull Ingredient ingredient,
                                          @NotNull ItemStack result, float experience,
                                          int cookingTime) implements DeclaredRecipe {
-        public DeclaredSmeltingRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
+        public DeclaredSmeltingRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
                     new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
@@ -169,8 +169,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                          @NotNull RecipeCategory.Cooking category, @NotNull Ingredient ingredient,
                                          @NotNull ItemStack result, float experience,
                                          int cookingTime) implements DeclaredRecipe {
-        public DeclaredBlastingRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
+        public DeclaredBlastingRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
                     new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
@@ -196,8 +196,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                         @NotNull RecipeCategory.Cooking category, @NotNull Ingredient ingredient,
                                         @NotNull ItemStack result, float experience,
                                         int cookingTime) implements DeclaredRecipe {
-        public DeclaredSmokingRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
+        public DeclaredSmokingRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
                     new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
@@ -223,8 +223,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
                                                 @NotNull RecipeCategory.Cooking category, @NotNull Ingredient ingredient,
                                                 @NotNull ItemStack result, float experience,
                                                 int cookingTime) implements DeclaredRecipe {
-        public DeclaredCampfireCookingRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
+        public DeclaredCampfireCookingRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, reader.read(STRING),
                     reader.readEnum(RecipeCategory.Cooking.class),
                     new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE),
                     reader.read(FLOAT), reader.read(VAR_INT));
@@ -248,8 +248,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     public record DeclaredStonecutterRecipe(String recipeId, String group,
                                             Ingredient ingredient, ItemStack result) implements DeclaredRecipe {
-        public DeclaredStonecutterRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
+        public DeclaredStonecutterRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, reader.read(STRING),
                     new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE));
         }
 
@@ -269,8 +269,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
     public record DeclaredSmithingTransformRecipe(String recipeId, Ingredient template,
                                                   Ingredient base, Ingredient addition,
                                                   ItemStack result) implements DeclaredRecipe {
-        public DeclaredSmithingTransformRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new Ingredient(reader), new Ingredient(reader), new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE));
+        public DeclaredSmithingTransformRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, new Ingredient(reader), new Ingredient(reader), new Ingredient(reader), reader.read(ItemStack.STRICT_NETWORK_TYPE));
         }
 
         @Override
@@ -289,8 +289,8 @@ public record DeclareRecipesPacket(@NotNull List<DeclaredRecipe> recipes) implem
 
     public record DeclaredSmithingTrimRecipe(String recipeId, Ingredient template,
                                              Ingredient base, Ingredient addition) implements DeclaredRecipe {
-        public DeclaredSmithingTrimRecipe(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new Ingredient(reader), new Ingredient(reader), new Ingredient(reader));
+        public DeclaredSmithingTrimRecipe(@NotNull String recipeId, @NotNull NetworkBuffer reader) {
+            this(recipeId, new Ingredient(reader), new Ingredient(reader), new Ingredient(reader));
         }
 
         @Override

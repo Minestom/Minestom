@@ -35,7 +35,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Ensures that packet can be written and read correctly.
@@ -163,7 +162,6 @@ public class PacketWriteReadTest {
 
     @Test
     public void serverTest() {
-        assumeTrue(false);
         SERVER_PACKETS.forEach(PacketWriteReadTest::testPacket);
     }
 
