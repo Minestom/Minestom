@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Necessary object for all {@link NavigableEntity}.
@@ -34,7 +35,7 @@ public final class Navigator {
 
     private double minimumDistance;
 
-    private NodeGenerator nodeGenerator = new GroundNodeGenerator();
+    private NodeGenerator nodeGenerator;
     private NodeFollower nodeFollower;
 
     public Navigator(@NotNull Entity entity) {
@@ -224,12 +225,12 @@ public final class Navigator {
         return goalPosition;
     }
 
-    public void setNodeFollower(@NotNull NodeFollower nodeFollower) {
-        this.nodeFollower = nodeFollower;
+    public void setNodeFollower(@NotNull Supplier<NodeFollower> nodeFollower) {
+        this.nodeFollower = nodeFollower.get();
     }
 
-    public void setNodeGenerator(@NotNull NodeGenerator nodeGenerator) {
-        this.nodeGenerator = nodeGenerator;
+    public void setNodeGenerator(@NotNull Supplier<NodeGenerator> nodeGenerator) {
+        this.nodeGenerator = nodeGenerator.get();
     }
 
     /**
