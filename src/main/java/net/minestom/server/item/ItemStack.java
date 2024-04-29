@@ -5,6 +5,9 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponentPatch;
 import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
@@ -28,7 +31,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEventSource<HoverEvent.ShowItem>
+public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 
     /**
@@ -56,13 +59,13 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     }
 
     @Contract(value = "_ ,_ -> new", pure = true)
-    static @NotNull ItemStack of(@NotNull Material material, @NotNull ItemComponentMap components) {
-        return ItemStackImpl.create(material, 1, ItemComponentPatch.from(material.registry().prototype(), components));
+    static @NotNull ItemStack of(@NotNull Material material, @NotNull DataComponentMap components) {
+        return ItemStackImpl.create(material, 1, DataComponentPatch.from(material.registry().prototype(), components));
     }
 
     @Contract(value = "_ ,_, _ -> new", pure = true)
-    static @NotNull ItemStack of(@NotNull Material material, int amount, @NotNull ItemComponentMap components) {
-        return ItemStackImpl.create(material, amount, ItemComponentPatch.from(material.registry().prototype(), components));
+    static @NotNull ItemStack of(@NotNull Material material, int amount, @NotNull DataComponentMap components) {
+        return ItemStackImpl.create(material, amount, DataComponentPatch.from(material.registry().prototype(), components));
     }
 
     /**
@@ -95,16 +98,16 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    <T> @NotNull ItemStack with(@NotNull ItemComponent<T> component, T value);
+    <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, T value);
 
-    default <T> @NotNull ItemStack with(@NotNull ItemComponent<T> component, @NotNull UnaryOperator<T> operator) {
+    default <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, @NotNull UnaryOperator<T> operator) {
         T value = get(component);
         if (value == null) return this;
         return with(component, operator.apply(value));
     }
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack without(@NotNull ItemComponent<?> component);
+    @NotNull ItemStack without(@NotNull DataComponent<?> component);
 
     @Contract(value = "_, _ -> new", pure = true)
     default <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
@@ -157,10 +160,10 @@ public sealed interface ItemStack extends TagReadable, ItemComponentMap, HoverEv
         @NotNull Builder amount(int amount);
 
         @Contract(value = "_, _ -> this")
-        <T> @NotNull Builder set(@NotNull ItemComponent<T> component, T value);
+        <T> @NotNull Builder set(@NotNull DataComponent<T> component, T value);
 
         @Contract(value = "_ -> this")
-        @NotNull Builder remove(@NotNull ItemComponent<?> component);
+        @NotNull Builder remove(@NotNull DataComponent<?> component);
 
         @Contract(value = "_, _ -> this")
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {

@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.component.DataComponent;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
@@ -27,7 +28,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (ItemComponent<?> component : ItemComponent.values()) {
+        for (DataComponent<?> component : DataComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -52,7 +53,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (ItemComponent<?> component : ItemComponent.values()) {
+        for (DataComponent<?> component : DataComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
