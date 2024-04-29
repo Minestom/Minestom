@@ -10,12 +10,12 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.ItemComponent;
-import net.minestom.server.item.ItemComponentMap;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -481,7 +481,7 @@ public final class Registry {
         private final int id;
         private final String translationKey;
         private final Supplier<Block> blockSupplier;
-        private ItemComponentMap prototype;
+        private DataComponentMap prototype;
 
         private final EquipmentSlot equipmentSlot;
         private final EntityType entityType;
@@ -537,13 +537,13 @@ public final class Registry {
             return blockSupplier.get();
         }
 
-        public @NotNull ItemComponentMap prototype() {
+        public @NotNull DataComponentMap prototype() {
             if (prototype == null) {
                 try {
-                    ItemComponentMap.Builder builder = ItemComponentMap.builder();
+                    DataComponentMap.Builder builder = DataComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
-                        ItemComponent<Object> component = (ItemComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
+                        DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromNamespaceId(entry.getKey());
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
