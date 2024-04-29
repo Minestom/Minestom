@@ -1,6 +1,7 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
@@ -46,7 +47,7 @@ public class EntityProjectileCollisionIntegrationTest {
         MinecraftServer.getGlobalEventHandler().addListener(ProjectileCollideWithBlockEvent.class, eventRef::set);
 
         final long tick = TimeUnit.SERVER_TICK.getDuration().toMillis();
-        for (int i = 0; i < MinecraftServer.TICK_PER_SECOND; ++i) {
+        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND; ++i) {
             projectile.tick(i * tick);
         }
 
@@ -60,8 +61,8 @@ public class EntityProjectileCollisionIntegrationTest {
         eventRef.set(null);
         instance.setBlock(blockPosition, Block.AIR);
 
-        for (int i = 0; i < MinecraftServer.TICK_PER_SECOND; ++i) {
-            projectile.tick((MinecraftServer.TICK_PER_SECOND + i) * tick);
+        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND; ++i) {
+            projectile.tick((ServerFlag.SERVER_TICKS_PER_SECOND + i) * tick);
         }
         event = eventRef.get();
         final var event2 = eventRef2.get();
@@ -105,7 +106,7 @@ public class EntityProjectileCollisionIntegrationTest {
         MinecraftServer.getGlobalEventHandler().addChild(eventNode);
 
         final long tick = TimeUnit.SERVER_TICK.getDuration().toMillis();
-        for (int i = 0; i < MinecraftServer.TICK_PER_SECOND; ++i) {
+        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND; ++i) {
             if (!projectile.isRemoved()) {
                 projectile.tick(i * tick);
             }
@@ -138,7 +139,7 @@ public class EntityProjectileCollisionIntegrationTest {
         });
 
         final long tick = TimeUnit.SERVER_TICK.getDuration().toMillis();
-        for (int i = 0; i < MinecraftServer.TICK_PER_SECOND * 5; ++i) {
+        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND * 5; ++i) {
             if (!projectile.isRemoved()) {
                 projectile.tick(i * tick);
             }

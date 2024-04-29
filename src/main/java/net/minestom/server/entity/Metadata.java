@@ -62,7 +62,7 @@ public final class Metadata {
     }
 
     public static Entry<Point> Rotation(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.ROTATION);
+        return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.VECTOR3);
     }
 
     public static Entry<Point> Position(@NotNull Point value) {
@@ -101,7 +101,18 @@ public final class Metadata {
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTVARINT, value, NetworkBuffer.OPT_VAR_INT);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTVARINT, value, new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+                buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value + 1);
+            }
+
+            @Override
+            public Integer read(@NotNull NetworkBuffer buffer) {
+                int value = buffer.read(NetworkBuffer.VAR_INT);
+                return value == 0 ? null : value - 1;
+            }
+        });
     }
 
     public static Entry<Entity.Pose> Pose(@NotNull Entity.Pose value) {
@@ -128,7 +139,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_VECTOR3, value, NetworkBuffer.VECTOR3);
     }
 
-    public static Entry<float[]> Quaternion(float @NotNull[] value) {
+    public static Entry<float[]> Quaternion(float @NotNull [] value) {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
     }
 

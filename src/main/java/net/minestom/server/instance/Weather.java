@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Represents the possible weather properties of an instance
  *
- * @param isRaining    true if the instance is raining, otherwise false
  * @param rainLevel    a percentage between 0 and 1
  *                     used to change how heavy the rain is
  *                     higher values darken the sky and increase rain opacity
@@ -22,7 +21,11 @@ import java.util.List;
  *                     used to change how heavy the thunder is
  *                     higher values further darken the sky
  */
-public record Weather(boolean isRaining, float rainLevel, float thunderLevel) {
+public record Weather(float rainLevel, float thunderLevel) {
+    public static final Weather CLEAR = new Weather(0, 0);
+    public static final Weather RAIN = new Weather(1, 0);
+    public static final Weather THUNDER = new Weather(1, 1);
+
     /**
      * @throws IllegalArgumentException if {@code rainLevel} is not between 0 and 1
      * @throws IllegalArgumentException if {@code thunderLevel} is not between 0 and 1
@@ -33,13 +36,15 @@ public record Weather(boolean isRaining, float rainLevel, float thunderLevel) {
     }
 
     @Contract(pure = true)
-    public @NotNull Weather withRain(boolean isRaining) {
-        return new Weather(isRaining, rainLevel, thunderLevel);
+    public @NotNull Weather withRainLevel(float rainLevel) {
+        return new Weather(rainLevel, thunderLevel);
     }
 
-    @Contract(pure = true)
-    public @NotNull Weather withRainLevel(float rainLevel) {
-        return new Weather(isRaining, rainLevel, thunderLevel);
+    /**
+     * @return true if {@code rainLevel} is > 0
+     */
+    public boolean isRaining() {
+        return rainLevel > 0;
     }
 
     @Contract(pure = true)
@@ -49,7 +54,7 @@ public record Weather(boolean isRaining, float rainLevel, float thunderLevel) {
 
     @Contract(pure = true)
     public @NotNull Weather withThunderLevel(float thunderLevel) {
-        return new Weather(isRaining, rainLevel, thunderLevel);
+        return new Weather(rainLevel, thunderLevel);
     }
 
     @Contract(pure = true)
@@ -58,7 +63,7 @@ public record Weather(boolean isRaining, float rainLevel, float thunderLevel) {
     }
 
     public ChangeGameStatePacket createIsRainingPacket() {
-        return new ChangeGameStatePacket(isRaining ? ChangeGameStatePacket.Reason.BEGIN_RAINING : ChangeGameStatePacket.Reason.END_RAINING, 0);
+        return new ChangeGameStatePacket(isRaining() ? ChangeGameStatePacket.Reason.BEGIN_RAINING : ChangeGameStatePacket.Reason.END_RAINING, 0);
     }
 
     public ChangeGameStatePacket createRainLevelPacket() {

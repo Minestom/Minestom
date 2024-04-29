@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
@@ -25,26 +26,23 @@ public class EntityTrackerIntegrationTest {
     @Test
     public void maxDistance(Env env) {
         final Instance instance = env.createFlatInstance();
-        final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = MinecraftServer.getEntityViewDistance();
+        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
 
-        final Player viewer = createTestPlayer();
+        final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
         final Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override
-            public void updateNewViewer(Player player) {
+            public void updateNewViewer(@NotNull Player player) {
                 viewersCount.incrementAndGet();
             }
 
             @Override
-            public void updateOldViewer(Player player) {
+            public void updateOldViewer(@NotNull Player player) {
                 viewersCount.decrementAndGet();
             }
         };
         entity.setInstance(instance, spawnPos).join();
-        assertEquals(0, viewersCount.get());
-        viewer.setInstance(instance, spawnPos).join(); // viewer at spawn
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
         assertEquals(1, viewersCount.get());
@@ -59,24 +57,22 @@ public class EntityTrackerIntegrationTest {
         final Instance instance = env.createFlatInstance();
         final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = MinecraftServer.getEntityViewDistance();
+        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
 
-        final Player viewer = createTestPlayer();
+        final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
         final Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override
-            public void updateNewViewer(Player player) {
+            public void updateNewViewer(@NotNull Player player) {
                 viewersCount.incrementAndGet();
             }
 
             @Override
-            public void updateOldViewer(Player player) {
+            public void updateOldViewer(@NotNull Player player) {
                 viewersCount.decrementAndGet();
             }
         };
         entity.setInstance(instance, spawnPos).join();
-        assertEquals(0, viewersCount.get());
-        viewer.setInstance(instance, spawnPos).join(); // viewer at spawn
         assertEquals(1, viewersCount.get());
         viewer.teleport(new Pos(viewDistanceInChunks * 16 + 15, 41, 0)).join(); // viewer at max chunk range
         assertEquals(1, viewersCount.get());
@@ -128,19 +124,4 @@ public class EntityTrackerIntegrationTest {
         player.setInstance(shared2, spawnPos).join();
         assertEquals(1, viewable.getViewers().size());
     }
-
-    private Player createTestPlayer() {
-        return new Player(UUID.randomUUID(), "TestPlayer", new PlayerConnection() {
-            @Override
-            public void sendPacket(@NotNull SendablePacket packet) {
-                // nothing
-            }
-
-            @Override
-            public @NotNull SocketAddress getRemoteAddress() {
-                return null;
-            }
-        });
-    }
-
 }

@@ -20,27 +20,26 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
 
     private final Player player;
     private final Collection<Player> recipients;
-    private final Supplier<Component> defaultChatFormat;
     private String message;
     private Function<PlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
-                           @NotNull Supplier<Component> defaultChatFormat,
+                           @NotNull Function<PlayerChatEvent, Component> defaultChatFormat,
                            @NotNull String message) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
-        this.defaultChatFormat = defaultChatFormat;
+        this.chatFormat = defaultChatFormat;
         this.message = message;
     }
 
     /**
      * Changes the chat format.
      *
-     * @param chatFormat the custom chat format, null to use the default one
+     * @param chatFormat the custom chat format
      */
-    public void setChatFormat(@Nullable Function<PlayerChatEvent, Component> chatFormat) {
+    public void setChatFormat(@NotNull Function<PlayerChatEvent, Component> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -76,16 +75,11 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     /**
      * Used to retrieve the chat format for this message.
      * <p>
-     * If null, the default format will be used.
      *
-     * @return the chat format which will be used, null if this is the default one
+     * @return the chat format which will be used
      */
-    public @Nullable Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
+    public @NotNull Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
         return chatFormat;
-    }
-
-    public @NotNull Supplier<@NotNull Component> getDefaultChatFormat() {
-        return defaultChatFormat;
     }
 
     @Override

@@ -36,8 +36,8 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
 
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     tasks.withType<Zip> {
@@ -50,6 +50,8 @@ allprojects {
         // Viewable packets make tracking harder. Could be re-enabled later.
         jvmArgs("-Dminestom.viewable-packet=false")
         jvmArgs("-Dminestom.inside-test=true")
+        minHeapSize = "512m"
+        maxHeapSize = "1024m"
     }
 
     tasks.withType<JavaCompile> {
@@ -98,9 +100,9 @@ tasks {
 
             // Custom options
             addBooleanOption("html5", true)
-            addStringOption("-release", "17")
+            addStringOption("-release", "21")
             // Links to external javadocs
-            links("https://docs.oracle.com/en/java/javase/17/docs/api/")
+            links("https://docs.oracle.com/en/java/javase/21/docs/api/")
             links("https://jd.adventure.kyori.net/api/${libs.versions.adventure.get()}/")
         }
     }

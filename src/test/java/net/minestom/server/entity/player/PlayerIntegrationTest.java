@@ -1,9 +1,10 @@
 package net.minestom.server.entity.player;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.minestom.server.message.ChatMessageType;
@@ -22,6 +23,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.minestom.server.entity.Player.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -226,5 +228,43 @@ public class PlayerIntegrationTest {
                 packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(2, displayNamePackets3);
+    }
+
+    @Test
+    public void setView(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos).join();
+
+        var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
+        player.setView(30, 20);
+
+        assertEquals(startingPlayerPos.withView(30, 20), player.getPosition());
+        tracker.assertSingle(PlayerPositionAndLookPacket.class, packet -> {
+            assertEquals(RelativeFlags.COORD, packet.flags());
+            assertEquals(packet.position(), new Pos(0, 0, 0, 30, 20));
+        });
+    }
+
+    @Test
+    public void lookAt(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(FacePlayerPacket.class);
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos).join();
+
+        Point pointLookAt = new Vec(3, 3, 3);
+        player.lookAt(pointLookAt);
+        tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(pointLookAt, packet.target()));
+
+        tracker = connection.trackIncoming(FacePlayerPacket.class);
+        Entity entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(player.getInstance(), new Pos(9, 9, 9));
+        player.lookAt(entity);
+        tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(entity.getEntityId(), packet.entityId()));
+
+        assertEquals(startingPlayerPos, player.getPosition());
     }
 }

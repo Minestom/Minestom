@@ -4,7 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.serializer.gson.LegacyHoverEventSerializer;
+import net.kyori.adventure.text.serializer.json.LegacyHoverEventSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -37,7 +37,7 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
             final NBTCompound tag = contents.getCompound(ITEM_TAG);
 
             // create the event
-            return HoverEvent.ShowItem.of(
+            return HoverEvent.ShowItem.showItem(
                     Key.key(Objects.requireNonNullElse(contents.getString(ITEM_TYPE), "")),
                     Objects.requireNonNullElse(contents.getByte(ITEM_COUNT), (byte) 1),
                     tag == null ? null : BinaryTagHolder.encode(tag, MinestomAdventure.NBT_CODEC)
@@ -54,7 +54,7 @@ final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer 
             final NBT nbt = MinestomAdventure.NBT_CODEC.decode(raw);
             if (!(nbt instanceof NBTCompound contents)) throw new IOException("contents were not a compound");
 
-            return HoverEvent.ShowEntity.of(
+            return HoverEvent.ShowEntity.showEntity(
                     Key.key(Objects.requireNonNullElse(contents.getString(ENTITY_TYPE), "")),
                     UUID.fromString(Objects.requireNonNullElse(contents.getString(ENTITY_ID), "")),
                     componentDecoder.decode(Objects.requireNonNullElse(contents.getString(ENTITY_NAME), ""))

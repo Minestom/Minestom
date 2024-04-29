@@ -31,7 +31,7 @@ Minestom is not installed like Bukkit/Forge/Sponge.
 As Minestom is a Java library, it must be loaded the same way any other Java library may be loaded.
 This means you need to add Minestom as a dependency, add your code and compile by yourself.
 
-Minestom is available on [Maven Central](https://central.sonatype.com/artifact/net.minestom/minestom-snapshots),
+Minestom is available on [Maven Central](https://mvnrepository.com/artifact/net.minestom/minestom-snapshots),
 and can be installed like the following (Gradle/Groovy):
 
 ```groovy

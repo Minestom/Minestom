@@ -64,7 +64,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.packet.server.play.data.DeathLocation;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -125,6 +125,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private static final float CHUNKS_PER_TICK_MULTIPLIER = PropertyUtils.getFloat("minestom.chunk-queue.multiplier", 1f);
 
     public static final boolean EXPERIMENT_PERFORM_POSE_UPDATES = Boolean.getBoolean("minestom.experiment.pose-updates");
+    // Magic values: https://wiki.vg/Entity_statuses#Player
+    private static final int STATUS_ENABLE_REDUCED_DEBUG_INFO = 22;
+    private static final int STATUS_DISABLE_REDUCED_DEBUG_INFO = 23;
+    private static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -140,11 +144,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Instance pendingInstance = null;
     private DimensionType dimensionType;
     private GameMode gameMode;
-    private DeathLocation deathLocation;
+    private WorldPos deathLocation;
 
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
-     * in the range of {@link MinecraftServer#getChunkViewDistance()}
+     * in the range of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
      */
     private Vec chunksLoadedByClient = Vec.ZERO;
     private final ReentrantLock chunkQueueLock = new ReentrantLock();
@@ -286,7 +290,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
-                MinecraftServer.getChunkViewDistance(), MinecraftServer.getChunkViewDistance(),
+                ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
                 false, true, false, dimensionType.toString(), spawnInstance.getDimensionName(),
                 0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
         sendPacket(joinGamePacket);
@@ -362,7 +366,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Some client updates
         sendPacket(getPropertiesPacket()); // Send default properties
-        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
+        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -530,7 +534,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ChunkUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
-        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, Math.min(MinecraftServer.getChunkViewDistance(), settings.getViewDistance()),
+        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getEffectiveViewDistance(),
                 EntityTracker.Target.ENTITIES, entity -> {
                     // Skip refreshing self with a new viewer
                     if (!entity.getUuid().equals(uuid) && entity.isViewer(this)) {
@@ -548,7 +552,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), false));
         sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         sendPacket(new SetExperiencePacket(exp, level, 0));
-        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
+        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
         refreshAbilities();
     }
 
@@ -593,7 +597,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(chunkX, chunkZ, MinecraftServer.getChunkViewDistance(), chunkRemover);
+        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketUtils.broadcastPlayPacket(getRemovePlayerToList());
 
@@ -645,7 +649,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), (chunkX, chunkZ) -> {
+        ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -718,7 +722,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
-                ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkRemover);
+                ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
@@ -733,10 +737,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
-            ChunkUtils.forChunksInRange(spawnPosition, MinecraftServer.getChunkViewDistance(), chunkAdder);
+            ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
         }
 
-        synchronizePosition(true); // So the player doesn't get stuck
+        synchronizePositionAfterTeleport(spawnPosition, 0); // So the player doesn't get stuck
 
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
@@ -898,7 +902,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPluginMessage(channel, message.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Deprecated, as the Adventure library has deprecated this method in the Audience class
+     * @param source the identity of the source of the message
+     * @param message a message
+     * @param type the type
+     */
     @Override
+    @Deprecated
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
     }
@@ -984,6 +995,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void openBook(@NotNull Book book) {
+        // Close the open inventory if there is one because the book will replace it.
+        if (getOpenInventory() != null) {
+            closeInventory();
+        }
+
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
                 .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
                         .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
@@ -1206,10 +1222,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     public void setDeathLocation(@NotNull DimensionType type, @NotNull Pos position) {
-        this.deathLocation = new DeathLocation(type.getName().asString(), position);
+        this.deathLocation = new WorldPos(type.getName().asString(), position);
     }
 
-    public @Nullable DeathLocation getDeathLocation() {
+    public @Nullable WorldPos getDeathLocation() {
         return this.deathLocation;
     }
 
@@ -1801,6 +1817,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param didCloseInventory the new didCloseInventory field
      */
+    @ApiStatus.Internal
     public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
         this.didCloseInventory = didCloseInventory;
     }
@@ -1822,15 +1839,56 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * @see Entity#synchronizePosition(boolean)
+     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
+     * in cases where a {@link PlayerPositionAndLookPacket} is required
+     *
+     * @param position the position used by {@link PlayerPositionAndLookPacket}
+     *                 this may not be the same as the {@link Entity#position}
+     * @param relativeFlags byte flags used by {@link PlayerPositionAndLookPacket}
+     */
+    @ApiStatus.Internal
+    void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags) {
+        sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, getNextTeleportId()));
+        super.synchronizePosition();
+    }
+
+    /**
+     * Forces the player's client to look towards the target yaw/pitch
+     *
+     * @param yaw   the new yaw
+     * @param pitch the new pitch
      */
     @Override
-    @ApiStatus.Internal
-    protected void synchronizePosition(boolean includeSelf) {
-        if (includeSelf) {
-            sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId()));
-        }
-        super.synchronizePosition(includeSelf);
+    public void setView(float yaw, float pitch) {
+        teleport(new Pos(0, 0, 0, yaw, pitch), null, RelativeFlags.COORD).join();
+    }
+
+    /**
+     * Forces the player's client to look towards the specified point
+     * <p>
+     * Note: the player's position is not updated on the server until
+     * the client receives this packet
+     *
+     * @param point the point to look at
+     */
+    @Override
+    public void lookAt(@NotNull Point point) {
+        // Let the player's client provide updated position values
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, point, 0, null));
+    }
+
+    /**
+     * Forces the player's client to look towards the specified entity
+     * <p>
+     * Note: the player's position is not updated on the server until
+     * the client receives this packet
+     *
+     * @param entity the entity to look at
+     */
+    @Override
+    public void lookAt(@NotNull Entity entity) {
+        // Let the player's client provide updated position values
+        sendPacket(new FacePlayerPacket(FacePlayerPacket.FacePosition.EYES, entity.getPosition(), entity.getEntityId(), FacePlayerPacket.FacePosition.EYES));
     }
 
     /**
@@ -1855,9 +1913,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
-            // Magic values: https://wiki.vg/Entity_statuses#Player
-            // TODO remove magic values
-            final byte permissionLevelStatus = (byte) (24 + permissionLevel);
+
+            final byte permissionLevelStatus = (byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel);
             triggerStatus(permissionLevelStatus);
         }
     }
@@ -1870,9 +1927,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setReducedDebugScreenInformation(boolean reduced) {
         this.reducedDebugScreenInformation = reduced;
 
-        // Magic values: https://wiki.vg/Entity_statuses#Player
-        // TODO remove magic values
-        final byte debugScreenStatus = (byte) (reduced ? 22 : 23);
+        final byte debugScreenStatus = (byte) (reduced ? STATUS_ENABLE_REDUCED_DEBUG_INFO : STATUS_DISABLE_REDUCED_DEBUG_INFO);
         triggerStatus(debugScreenStatus);
     }
 
@@ -2365,15 +2420,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
             ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
-                    MinecraftServer.getChunkViewDistance(), chunkAdder, chunkRemover);
+                    settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
 
+    /**
+     * @see #teleport(Pos, long[], int)
+     */
     @Override
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
         chunkUpdateLimitChecker.clearHistory();
-        return super.teleport(position, chunks);
+        return super.teleport(position, chunks, flags);
     }
 
     /**
@@ -2411,7 +2469,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private boolean allowServerListings;
 
         public PlayerSettings() {
-            viewDistance = 2;
+            viewDistance = (byte) ServerFlag.CHUNK_VIEW_DISTANCE;
         }
 
         /**
@@ -2433,7 +2491,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         public int getEffectiveViewDistance() {
-            return Math.min(getViewDistance(), MinecraftServer.getChunkViewDistance());
+            return Math.min(getViewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
         }
 
         /**
@@ -2499,12 +2557,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.enableTextFiltering = enableTextFiltering;
             this.allowServerListings = allowServerListings;
 
-            // TODO: Use the metadata object here
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-            if (isInPlayState) metadata.setNotifyAboutChanges(false);
-            metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
-            metadata.setIndex((byte) 18, Metadata.Byte((byte) (this.mainHand == MainHand.RIGHT ? 1 : 0)));
-            if (isInPlayState) metadata.setNotifyAboutChanges(true);
+            PlayerMeta playerMeta = getPlayerMeta();
+            if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
+            playerMeta.setDisplayedSkinParts(displayedSkinParts);
+            playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
+            if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
         }
 
     }

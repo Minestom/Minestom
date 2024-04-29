@@ -57,6 +57,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
         PacketUtils.sendGroupedPacket(getPlayers(), packet);
     }
 
+    @Deprecated
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         Messenger.sendMessage(this.getPlayers(), message, ChatPosition.fromMessageType(type), source.uuid());

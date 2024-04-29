@@ -83,9 +83,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private long lastTimeUpdate;
 
     // Weather of the instance
-    private Weather targetWeather = new Weather(false, 0, 0);
-    private Weather currentWeather = new Weather(false, 0, 0);
-    private int remainingWeatherTransitionTicks;
+    private Weather weather = Weather.CLEAR;
+    private Weather transitioningWeather = Weather.CLEAR;
+    private int remainingRainTransitionTicks;
+    private int remainingThunderTransitionTicks;
 
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
@@ -670,11 +671,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
         }
         // Weather
-        if (remainingWeatherTransitionTicks > 0) {
-            Weather previousWeather = currentWeather;
-            currentWeather = transitionWeather(remainingWeatherTransitionTicks);
+        if (remainingRainTransitionTicks > 0 || remainingThunderTransitionTicks > 0) {
+            Weather previousWeather = transitioningWeather;
+            transitioningWeather = transitionWeather(remainingRainTransitionTicks, remainingThunderTransitionTicks);
             sendWeatherPackets(previousWeather);
-            remainingWeatherTransitionTicks--;
+            remainingRainTransitionTicks = Math.max(0, remainingRainTransitionTicks - 1);
+            remainingThunderTransitionTicks = Math.max(0, remainingThunderTransitionTicks - 1);
         }
         // Tick event
         {
@@ -684,15 +686,17 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.lastTickAge = time;
         }
         this.worldBorder.update();
+        // End of tick scheduled tasks
+        this.scheduler.processTickEnd();
     }
 
     /**
-     * Gets the current weather on this instance
+     * Gets the weather of this instance
      *
-     * @return the current weather
+     * @return the instance weather
      */
     public @NotNull Weather getWeather() {
-        return currentWeather;
+        return weather;
     }
 
     /**
@@ -702,27 +706,36 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param transitionTicks the ticks to transition to new weather
      */
     public void setWeather(@NotNull Weather weather, int transitionTicks) {
-        Check.stateCondition(transitionTicks < 1, "Transition ticks cannot be lower than 1");
-        targetWeather = weather;
-        remainingWeatherTransitionTicks = transitionTicks;
+        Check.stateCondition(transitionTicks < 1, "Transition ticks cannot be lower than 0");
+        this.weather = weather;
+        remainingRainTransitionTicks = transitionTicks;
+        remainingThunderTransitionTicks = transitionTicks;
+    }
+
+    /**
+     * Sets the weather of this instance with a fixed transition
+     *
+     * @param weather the new weather
+     */
+    public void setWeather(@NotNull Weather weather) {
+        this.weather = weather;
+        remainingRainTransitionTicks = (int) Math.max(1, Math.abs((this.weather.rainLevel() - transitioningWeather.rainLevel()) / 0.01));
+        remainingThunderTransitionTicks = (int) Math.max(1, Math.abs((this.weather.thunderLevel() - transitioningWeather.thunderLevel()) / 0.01));
     }
 
     private void sendWeatherPackets(@NotNull Weather previousWeather) {
-        if (currentWeather.isRaining() != previousWeather.isRaining()) sendGroupedPacket(currentWeather.createIsRainingPacket());
-        if (currentWeather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(currentWeather.createRainLevelPacket());
-        if (currentWeather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(currentWeather.createThunderLevelPacket());
+        boolean toggledRain = (transitioningWeather.isRaining() != previousWeather.isRaining());
+        if (toggledRain) sendGroupedPacket(transitioningWeather.createIsRainingPacket());
+        if (transitioningWeather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(transitioningWeather.createRainLevelPacket());
+        if (transitioningWeather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
     }
 
-    private @NotNull Weather transitionWeather(int remainingTicks) {
-        Weather target = targetWeather;
-        Weather current = currentWeather;
-        if (remainingTicks <= 1) {
-            return new Weather(target.isRaining(), target.isRaining() ? target.rainLevel() : 0,
-                    target.isRaining() ? target.thunderLevel() : 0);
-        }
-        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)remainingTicks);
-        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)remainingTicks);
-        return new Weather(rainLevel > 0, rainLevel, thunderLevel);
+    private @NotNull Weather transitionWeather(int remainingRainTransitionTicks, int remainingThunderTransitionTicks) {
+        Weather target = weather;
+        Weather current = transitioningWeather;
+        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)Math.max(1, remainingRainTransitionTicks));
+        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)Math.max(1, remainingThunderTransitionTicks));
+        return new Weather(rainLevel, thunderLevel);
     }
 
     @Override
