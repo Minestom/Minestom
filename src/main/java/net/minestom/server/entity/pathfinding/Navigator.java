@@ -35,7 +35,7 @@ public final class Navigator {
 
     private double minimumDistance;
 
-    private NodeGenerator nodeGenerator;
+     NodeGenerator nodeGenerator = new GroundNodeGenerator();
     private NodeFollower nodeFollower;
 
     public Navigator(@NotNull Entity entity) {
