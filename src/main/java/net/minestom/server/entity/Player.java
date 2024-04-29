@@ -18,6 +18,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
@@ -25,13 +26,13 @@ import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -48,9 +49,11 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.Click;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.WrittenBookMeta;
+import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
@@ -178,10 +181,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private int level;
     private int portalCooldown = 0;
 
+    protected Click.Preprocessor clickPreprocessor = new Click.Preprocessor();
     protected PlayerInventory inventory;
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
-    private boolean didCloseInventory;
+    private boolean skipClosePacket;
 
     private byte heldSlot;
 
@@ -190,7 +194,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private int food;
     private float foodSaturation;
     private long startEatingTime;
-    private long defaultEatingTime = 1000L;
     private long eatingTime;
     private Hand eatingHand;
 
@@ -239,7 +242,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setRespawnPoint(Pos.ZERO);
 
         this.settings = new PlayerSettings();
-        this.inventory = new PlayerInventory(this);
+        this.inventory = new PlayerInventory();
 
         setCanPickupItem(true); // By default
 
@@ -249,7 +252,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -291,8 +294,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
-                false, true, false, dimensionType.toString(), spawnInstance.getDimensionName(),
-                0, gameMode, null, false, levelFlat, deathLocation, portalCooldown);
+                false, true, false, dimensionType.getId(), spawnInstance.getDimensionName(),
+                0, gameMode, null, false, levelFlat, deathLocation, portalCooldown, true);
         sendPacket(joinGamePacket);
 
         // Difficulty
@@ -350,7 +353,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             for (Recipe recipe : recipeManager.getRecipes()) {
                 if (!recipe.shouldShow(this))
                     continue;
-                recipesIdentifier.add(recipe.getRecipeId());
+                recipesIdentifier.add(recipe.id());
             }
             if (!recipesIdentifier.isEmpty()) {
                 UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
@@ -369,6 +372,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
+
+        inventory.addViewer(this);
 
         return setInstance(spawnInstance);
     }
@@ -430,7 +435,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Eating animation
         if (isEating()) {
-            if (time - startEatingTime >= eatingTime) {
+            if (instance.getWorldAge() - startEatingTime >= eatingTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
 
@@ -441,9 +446,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.material().isFood();
-
-                if (isFood) {
+                final boolean isFood = foodItem.has(ItemComponent.FOOD);
+                if (isFood || foodItem.material() == Material.POTION) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
                     EventDispatcher.call(playerEatEvent);
                 }
@@ -519,7 +523,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
+        sendPacket(new RespawnPacket(getDimensionType().getId(), instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
@@ -738,6 +742,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // Load the nearby chunks and queue them to be sent to them
             ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+            sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
         synchronizePositionAfterTeleport(spawnPosition, 0); // So the player doesn't get stuck
@@ -1000,19 +1005,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             closeInventory();
         }
 
+        // TODO: when adventure updates, delete this
+        String title = PlainTextComponentSerializer.plainText().serialize(book.title());
+        String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .meta(WrittenBookMeta.class, builder -> builder.resolved(false)
-                        .generation(WrittenBookMeta.WrittenBookGeneration.ORIGINAL)
-                        .author(book.author())
-                        .title(book.title())
-                        .pages(book.pages()))
+                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(book.pages(), title, author, 0, false))
                 .build();
+
         // Set book in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, writtenBook));
         // Open the book
         sendPacket(new OpenBookPacket(Hand.OFF));
         // Restore the item in offhand
-        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
+        sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, getItemInOffHand()));
     }
 
     @Override
@@ -1091,14 +1096,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Sets and refresh client food saturation.
+     * Sets and refresh client food saturationModifier.
      *
-     * @param foodSaturation the food saturation
+     * @param foodSaturation the food saturationModifier
      * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 20
      */
     public void setFoodSaturation(float foodSaturation) {
         Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 20),
-                "Food saturation has to be between 0 and 20");
+                "Food saturationModifier has to be between 0 and 20");
         this.foodSaturation = foodSaturation;
         sendPacket(new UpdateHealthPacket(getHealth(), food, foodSaturation));
     }
@@ -1119,24 +1124,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public @Nullable Hand getEatingHand() {
         return eatingHand;
-    }
-
-    /**
-     * Gets the player default eating time.
-     *
-     * @return the player default eating time
-     */
-    public long getDefaultEatingTime() {
-        return defaultEatingTime;
-    }
-
-    /**
-     * Used to change the default eating time animation.
-     *
-     * @param defaultEatingTime the default eating time in milliseconds
-     */
-    public void setDefaultEatingTime(long defaultEatingTime) {
-        this.defaultEatingTime = defaultEatingTime;
     }
 
     @Override
@@ -1198,7 +1185,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
+        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().getId(), instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL);
 
         sendPacket(removePlayerPacket);
@@ -1649,7 +1636,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType.toString(), dimensionName,
+        sendPacket(new RespawnPacket(dimensionType.getId(), dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
                 deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
@@ -1717,6 +1704,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.belowNameTag = belowNameTag;
     }
 
+    public @NotNull Click.Preprocessor clickPreprocessor() {
+        return clickPreprocessor;
+    }
+
     /**
      * Gets the player open inventory.
      *
@@ -1724,6 +1715,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public @Nullable Inventory getOpenInventory() {
         return openInventory;
+    }
+
+    private void tryCloseInventory(boolean skipClosePacket) {
+        var closedInventory = getOpenInventory();
+        if (closedInventory == null) return;
+
+        this.skipClosePacket = skipClosePacket;
+
+        if (closedInventory.removeViewer(this)) {
+            if (closedInventory == getOpenInventory()) {
+                this.openInventory = null;
+            }
+        }
     }
 
     /**
@@ -1736,21 +1740,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            Inventory openInventory = getOpenInventory();
-            if (openInventory != null) {
-                openInventory.removeViewer(this);
-            }
+            tryCloseInventory(true);
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory == null) {
-                // just close the inventory
-                return;
+            if (newInventory.addViewer(this)) {
+                this.openInventory = newInventory;
             }
-
-            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
-                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
-            newInventory.addViewer(this);
-            this.openInventory = newInventory;
         });
         return !inventoryOpenEvent.isCancelled();
     }
@@ -1764,62 +1759,29 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @ApiStatus.Internal
-    public void closeInventory(boolean fromClient) {
-        Inventory openInventory = getOpenInventory();
-
-        // Drop cursor item when closing inventory
-        ItemStack cursorItem;
-        if (openInventory == null) {
-            cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.AIR);
-        } else {
-            cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.AIR);
-        }
-        if (!cursorItem.isAir()) {
-            // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
-                getInventory().addItemStack(cursorItem);
-            }
-        }
-
-        if (openInventory == getOpenInventory()) {
-            CloseWindowPacket closeWindowPacket;
-            if (openInventory == null) {
-                closeWindowPacket = new CloseWindowPacket((byte) 0);
-            } else {
-                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-                openInventory.removeViewer(this); // Clear cache
-                this.openInventory = null;
-            }
-            if (!fromClient) sendPacket(closeWindowPacket);
-            inventory.update();
-            this.didCloseInventory = true;
-        }
+    public void closeInventory(boolean skipClosePacket) {
+        tryCloseInventory(skipClosePacket);
+        inventory.update();
     }
 
     /**
-     * Used internally to prevent an inventory click to be processed
-     * when the inventory listeners closed the inventory.
-     * <p>
-     * Should only be used within an inventory listener (event or condition).
-     *
-     * @return true if the inventory has been closed, false otherwise
+     * Used internally to determine when sending the close inventory packet should be skipped.
      */
-    public boolean didCloseInventory() {
-        return didCloseInventory;
+    public boolean skipClosePacket() {
+        return skipClosePacket;
     }
 
     /**
-     * Used internally to reset the didCloseInventory field.
+     * Used internally to reset the skipClosePacket field, which determines when sending the close inventory packet
+     * should be skipped.
      * <p>
      * Shouldn't be used externally without proper understanding of its consequence.
      *
-     * @param didCloseInventory the new didCloseInventory field
+     * @param skipClosePacket the new skipClosePacket field
      */
     @ApiStatus.Internal
-    public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
-        this.didCloseInventory = didCloseInventory;
+    public void UNSAFE_changeSkipClosePacket(boolean skipClosePacket) {
+        this.skipClosePacket = skipClosePacket;
     }
 
     public int getNextTeleportId() {
@@ -1840,7 +1802,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
-     * in cases where a {@link PlayerPositionAndLookPacket} is required
+     * in properties where a {@link PlayerPositionAndLookPacket} is required
      *
      * @param position the position used by {@link PlayerPositionAndLookPacket}
      *                 this may not be the same as the {@link Entity#position}
@@ -2186,18 +2148,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshEating(null);
     }
 
-    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
+    public void refreshEating(@Nullable Hand eatingHand, long eatingTimeTicks) {
         this.eatingHand = eatingHand;
         if (eatingHand != null) {
-            this.startEatingTime = System.currentTimeMillis();
-            this.eatingTime = eatingTime;
+            this.startEatingTime = instance.getWorldAge();
+            this.eatingTime = eatingTimeTicks;
         } else {
             this.startEatingTime = 0;
         }
     }
 
     public void refreshEating(@Nullable Hand eatingHand) {
-        refreshEating(eatingHand, defaultEatingTime);
+        refreshEating(eatingHand, 0);
     }
 
     /**
@@ -2215,7 +2177,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.material().isFood();
+        final boolean isFood = updatedItem.has(ItemComponent.FOOD);
 
         if (isFood && !allowFood)
             return null;
@@ -2304,62 +2266,62 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull ItemStack getItemInMainHand() {
-        return inventory.getItemInMainHand();
+        return inventory.getEquipment(EquipmentSlot.MAIN_HAND, getHeldSlot());
     }
 
     @Override
     public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInMainHand(itemStack);
+        inventory.setEquipment(EquipmentSlot.MAIN_HAND, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getItemInOffHand() {
-        return inventory.getItemInOffHand();
+        return inventory.getEquipment(EquipmentSlot.OFF_HAND, getHeldSlot());
     }
 
     @Override
     public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInOffHand(itemStack);
+        inventory.setEquipment(EquipmentSlot.OFF_HAND, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getHelmet() {
-        return inventory.getHelmet();
+        return inventory.getEquipment(EquipmentSlot.HELMET, getHeldSlot());
     }
 
     @Override
     public void setHelmet(@NotNull ItemStack itemStack) {
-        inventory.setHelmet(itemStack);
+        inventory.setEquipment(EquipmentSlot.HELMET, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getChestplate() {
-        return inventory.getChestplate();
+        return inventory.getEquipment(EquipmentSlot.CHESTPLATE, getHeldSlot());
     }
 
     @Override
     public void setChestplate(@NotNull ItemStack itemStack) {
-        inventory.setChestplate(itemStack);
+        inventory.setEquipment(EquipmentSlot.CHESTPLATE, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getLeggings() {
-        return inventory.getLeggings();
+        return inventory.getEquipment(EquipmentSlot.LEGGINGS, getHeldSlot());
     }
 
     @Override
     public void setLeggings(@NotNull ItemStack itemStack) {
-        inventory.setLeggings(itemStack);
+        inventory.setEquipment(EquipmentSlot.LEGGINGS, getHeldSlot(), itemStack);
     }
 
     @Override
     public @NotNull ItemStack getBoots() {
-        return inventory.getBoots();
+        return inventory.getEquipment(EquipmentSlot.BOOTS, getHeldSlot());
     }
 
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
-        inventory.setBoots(itemStack);
+        inventory.setEquipment(EquipmentSlot.BOOTS, getHeldSlot(), itemStack);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.sound.Sound.Source;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -20,10 +20,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
-import net.minestom.server.network.packet.server.play.CollectItemPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
@@ -339,6 +336,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
             }
 
+            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getType().id(), 0, 0, null));
+
             // Additional hearts support
             if (this instanceof Player player) {
                 final float additionalHearts = player.getAdditionalHearts();
@@ -366,8 +365,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, null, soundCategory,
-                        getPosition(), 1.0f, 1.0f, 0));
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory, getPosition(), 1.0f, 1.0f, 0));
             }
         });
 
@@ -399,7 +397,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        this.health = Math.min(health, getMaxHealth());
+        this.health = Math.min(health, (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
         if (this.health <= 0 && !isDead) {
             kill();
         }
@@ -419,21 +417,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}.
-     *
-     * @return the entity max health
-     */
-    public float getMaxHealth() {
-        return getAttributeValue(Attribute.MAX_HEALTH);
-    }
-
-    /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth((float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
     }
 
     /**
@@ -443,7 +432,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the attribute instance
      */
     public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        return attributeModifiers.computeIfAbsent(attribute.key(),
+        return attributeModifiers.computeIfAbsent(attribute.name(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
@@ -459,7 +448,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             // connection null during Player initialization (due to #super call)
             self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
         }
-        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket(getEntityId(), List.of(attributeInstance));
+        EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(attributeInstance));
         if (self) {
             sendPacketToViewersAndSelf(propertiesPacket);
         } else {
@@ -473,8 +462,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute value to get
      * @return the attribute value
      */
-    public float getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.key());
+    public double getAttributeValue(@NotNull Attribute attribute) {
+        AttributeInstance instance = attributeModifiers.get(attribute.name());
         return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
 
@@ -566,12 +555,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets an {@link EntityPropertiesPacket} for this entity with all of its attributes values.
+     * Gets an {@link EntityAttributesPacket} for this entity with all of its attributes values.
      *
-     * @return an {@link EntityPropertiesPacket} linked to this entity
+     * @return an {@link EntityAttributesPacket} linked to this entity
      */
-    protected @NotNull EntityPropertiesPacket getPropertiesPacket() {
-        return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
+    protected @NotNull EntityAttributesPacket getPropertiesPacket() {
+        return new EntityAttributesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
     }
 
     /**
@@ -667,7 +656,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
     }
 }

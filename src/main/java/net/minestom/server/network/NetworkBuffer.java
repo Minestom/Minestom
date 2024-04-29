@@ -1,23 +1,25 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTReader;
-import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -25,9 +27,12 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
+    public static final Type<Void> NOTHING = new NetworkBufferTypeImpl.NothingType<>();
+    public static final Type<Unit> NOTHING_V2 = new NetworkBufferTypeImpl.NothingType<>();
     public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     public static final Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
     public static final Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
@@ -40,12 +45,11 @@ public final class NetworkBuffer {
     public static final Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     public static final Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType();
     public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
-    public static final Type<NBT> NBT = new NetworkBufferTypeImpl.NbtType();
+    public static final Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     public static final Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
     public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
     public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
-    public static final Type<ItemStack> ITEM = new NetworkBufferTypeImpl.ItemType();
 
     public static final Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
     public static final Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();
@@ -73,15 +77,39 @@ public final class NetworkBuffer {
     public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypeImpl.fromEnum(FrogMeta.Variant.class);
     public static final Type<PaintingMeta.Variant> PAINTING_VARIANT = NetworkBufferTypeImpl.fromEnum(PaintingMeta.Variant.class);
     public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
+    public static final Type<ArmadilloMeta.State> ARMADILLO_STATE = NetworkBufferTypeImpl.fromEnum(ArmadilloMeta.State.class);
 
+    public static final Type<Color> COLOR = new NetworkBufferTypeImpl.ColorType();
+
+    public static <E extends Enum<E>> Type<E> fromEnum(@NotNull Class<E> enumClass) {
+        return NetworkBufferTypeImpl.fromEnum(enumClass);
+    }
+
+    public static <T> Type<T> lazy(@NotNull Supplier<Type<T>> supplier) {
+        return new NetworkBuffer.Type<>() {
+            private Type<T> type;
+
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, T value) {
+                if (type == null) type = supplier.get();
+                type.write(buffer, value);
+            }
+
+            @Override
+            public T read(@NotNull NetworkBuffer buffer) {
+                if (type == null) type = supplier.get();
+                return null;
+            }
+        };
+    }
 
     ByteBuffer nioBuffer;
     final boolean resizable;
     int writeIndex;
     int readIndex;
 
-    NBTWriter nbtWriter;
-    NBTReader nbtReader;
+    BinaryTagWriter nbtWriter;
+    BinaryTagReader nbtReader;
 
     public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
@@ -292,13 +320,45 @@ public final class NetworkBuffer {
 
     public interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
-
         T read(@NotNull NetworkBuffer buffer);
+
+        default <S> @NotNull Type<S> map(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
+            return new Type<S>() {
+                @Override
+                public void write(@NotNull NetworkBuffer buffer, S value) {
+                    Type.this.write(buffer, from.apply(value));
+                }
+
+                @Override
+                public S read(@NotNull NetworkBuffer buffer) {
+                    return to.apply(Type.this.read(buffer));
+                }
+            };
+        }
+
+        default @NotNull Type<List<T>> list(int maxSize) {
+            return new NetworkBuffer.Type<>() {
+                @Override
+                public void write(@NotNull NetworkBuffer buffer, List<T> value) {
+                    buffer.writeCollection(Type.this, value);
+                }
+
+                @Override
+                public List<T> read(@NotNull NetworkBuffer buffer) {
+                    return buffer.readCollection(Type.this, maxSize);
+                }
+            };
+        }
     }
 
     @FunctionalInterface
     public interface Writer {
         void write(@NotNull NetworkBuffer writer);
+    }
+
+    @FunctionalInterface
+    public interface Reader<T> {
+        @NotNull T read(@NotNull NetworkBuffer reader);
     }
 
     public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {

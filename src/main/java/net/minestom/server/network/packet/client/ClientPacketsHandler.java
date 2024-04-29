@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
+import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
@@ -13,28 +14,26 @@ import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.function.Function;
-
 /**
  * Contains registered packets and a way to instantiate them.
  * <p>
- * Packets are registered using {@link #register(int, Function)} and created using {@link #create(int, NetworkBuffer)}.
+ * Packets are registered using {@link #register(int, NetworkBuffer.Reader)} and created using {@link #create(int, NetworkBuffer)}.
  */
 public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, ClientPacketsHandler.Login, ClientPacketsHandler.Configuration, ClientPacketsHandler.Play {
-    private final ObjectArray<Function<NetworkBuffer, ClientPacket>> suppliers = ObjectArray.singleThread(0x10);
+    private final ObjectArray<NetworkBuffer.Reader<ClientPacket>> suppliers = ObjectArray.singleThread(0x10);
 
     private ClientPacketsHandler() {
     }
 
-    public void register(int id, @NotNull Function<@NotNull NetworkBuffer, @NotNull ClientPacket> packetSupplier) {
+    public void register(int id, @NotNull NetworkBuffer.Reader<ClientPacket> packetSupplier) {
         this.suppliers.set(id, packetSupplier);
     }
 
     public @UnknownNullability ClientPacket create(int packetId, @NotNull NetworkBuffer reader) {
-        final Function<NetworkBuffer, ClientPacket> supplier = suppliers.get(packetId);
+        final NetworkBuffer.Reader<ClientPacket> supplier = suppliers.get(packetId);
         if (supplier == null)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
-        return supplier.apply(reader);
+        return supplier.read(reader);
     }
 
     public static final class Status extends ClientPacketsHandler {
@@ -60,6 +59,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientEncryptionResponsePacket::new);
             register(nextId(), ClientLoginPluginResponsePacket::new);
             register(nextId(), ClientLoginAcknowledgedPacket::new);
+            register(nextId(), ClientCookieResponsePacket::new);
         }
     }
 
@@ -71,11 +71,13 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
 
         public Configuration() {
             register(nextId(), ClientSettingsPacket::new);
+            register(nextId(), ClientCookieResponsePacket::new);
             register(nextId(), ClientPluginMessagePacket::new);
             register(nextId(), ClientFinishConfigurationPacket::new);
             register(nextId(), ClientKeepAlivePacket::new);
             register(nextId(), ClientPongPacket::new);
             register(nextId(), ClientResourcePackStatusPacket::new);
+            register(nextId(), ClientSelectKnownPacksPacket::new);
         }
 
     }
@@ -93,6 +95,7 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             nextId(); // difficulty packet
             register(nextId(), ClientChatAckPacket::new);
             register(nextId(), ClientCommandChatPacket::new);
+            register(nextId(), ClientSignedCommandChatPacket::new);
             register(nextId(), ClientChatMessagePacket::new);
             register(nextId(), ClientChatSessionUpdatePacket::new);
             register(nextId(), ClientChunkBatchReceivedPacket::new);
@@ -104,7 +107,9 @@ public sealed class ClientPacketsHandler permits ClientPacketsHandler.Status, Cl
             register(nextId(), ClientClickWindowPacket::new);
             register(nextId(), ClientCloseWindowPacket::new);
             register(nextId(), ClientWindowSlotStatePacket::new);
+            register(nextId(), ClientCookieResponsePacket::new);
             register(nextId(), ClientPluginMessagePacket::new);
+            register(nextId(), ClientDebugSampleSubscriptionPacket::new);
             register(nextId(), ClientEditBookPacket::new);
             register(nextId(), ClientQueryEntityNbtPacket::new);
             register(nextId(), ClientInteractEntityPacket::new);

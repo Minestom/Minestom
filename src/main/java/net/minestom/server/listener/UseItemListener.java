@@ -7,16 +7,18 @@ import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Food;
+import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand();
-        ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        ItemStack itemStack = player.getItemInHand(hand);
         //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         EventDispatcher.call(useItemEvent);
@@ -33,10 +35,10 @@ public class UseItemListener {
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
         if (equipmentSlot != null) {
-            final ItemStack currentlyEquipped = playerInventory.getEquipment(equipmentSlot);
+            final ItemStack currentlyEquipped = player.getEquipment(equipmentSlot);
             if (currentlyEquipped.isAir()) {
-                playerInventory.setEquipment(equipmentSlot, itemStack);
-                playerInventory.setItemInHand(hand, currentlyEquipped);
+                player.setEquipment(equipmentSlot, itemStack);
+                player.setItemInHand(hand, currentlyEquipped);
             }
         }
 
@@ -52,11 +54,13 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SHIELD;
         } else if (material == Material.TRIDENT) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.TRIDENT;
-        } else if (material.isFood()) {
+        } else if (itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
-            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, player.getDefaultEatingTime());
+            final Food food = itemStack.get(ItemComponent.FOOD);
+            int defaultEatingTime = food != null ? food.eatDurationTicks() : PotionContents.POTION_DRINK_TIME;
+            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, defaultEatingTime);
             EventDispatcher.callCancellable(playerPreEatEvent, () -> player.refreshEating(hand, playerPreEatEvent.getEatingTime()));
 
             if (playerPreEatEvent.isCancelled()) {

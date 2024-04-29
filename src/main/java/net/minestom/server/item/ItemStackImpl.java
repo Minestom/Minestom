@@ -1,48 +1,74 @@
 package net.minestom.server.item;
 
-import net.minestom.server.ServerFlag;
-import net.minestom.server.item.rule.VanillaStackingRule;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentPatch;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagHandler;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTByte;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implements ItemStack {
-    static final @NotNull StackingRule DEFAULT_STACKING_RULE;
+record ItemStackImpl(Material material, int amount, DataComponentPatch components) implements ItemStack {
 
-    static {
-        if (ServerFlag.STACKING_RULE == null) {
-            DEFAULT_STACKING_RULE = new VanillaStackingRule();
-        } else {
-            try {
-                DEFAULT_STACKING_RULE = (StackingRule) ClassLoader.getSystemClassLoader()
-                        .loadClass(ServerFlag.STACKING_RULE).getConstructor().newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException("Could not instantiate default stacking rule", e);
+    static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+            if (value.isAir()) {
+                buffer.write(NetworkBuffer.VAR_INT, 0);
+                return;
             }
-        }
-    }
 
-    static ItemStack create(Material material, int amount, ItemMetaImpl meta) {
+            buffer.write(NetworkBuffer.VAR_INT, value.amount());
+            buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+            buffer.write(DataComponentPatch.NETWORK_TYPE, ((ItemStackImpl) value).components);
+        }
+
+        @Override
+        public ItemStack read(@NotNull NetworkBuffer buffer) {
+            int amount = buffer.read(NetworkBuffer.VAR_INT);
+            if (amount <= 0) return ItemStack.AIR;
+            Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+            DataComponentPatch components = buffer.read(DataComponentPatch.NETWORK_TYPE);
+            return new ItemStackImpl(material, amount, components);
+        }
+    };
+    static final NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
+        Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
+        return itemStack;
+    }, itemStack -> {
+        Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
+        return itemStack;
+    });
+    static final BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
+
+    static ItemStack create(Material material, int amount, DataComponentPatch components) {
         if (amount <= 0) return AIR;
-        return new ItemStackImpl(material, amount, meta);
+        return new ItemStackImpl(material, amount, components);
     }
 
     static ItemStack create(Material material, int amount) {
-        return create(material, amount, ItemMetaImpl.EMPTY);
+        return create(material, amount, DataComponentPatch.EMPTY);
+    }
+
+    public ItemStackImpl {
+        Check.notNull(material, "Material cannot be null");
     }
 
     @Override
-    public <T extends ItemMetaView<?>> @NotNull T meta(@NotNull Class<T> metaClass) {
-        return ItemMetaViewImpl.construct(metaClass, meta);
+    public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        return components.get(material.prototype(), component);
+    }
+
+    @Override
+    public boolean has(@NotNull DataComponent<?> component) {
+        return components.has(material.prototype(), component);
     }
 
     @Override
@@ -53,68 +79,81 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
     }
 
     @Override
-    public @NotNull <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack withMeta(@NotNull Class<T> metaType,
-                                                                                                   @NotNull Consumer<V> consumer) {
-        return builder().meta(metaType, consumer).build();
-    }
-
-    @Override
-    public @NotNull ItemStack withMeta(@NotNull Consumer<ItemMeta.@NotNull Builder> consumer) {
-        return builder().meta(consumer).build();
-    }
-
-    @Override
     public @NotNull ItemStack withMaterial(@NotNull Material material) {
-        return new ItemStackImpl(material, amount, meta);
+        return new ItemStackImpl(material, amount, components);
     }
 
     @Override
     public @NotNull ItemStack withAmount(int amount) {
-        return create(material, amount, meta);
+        if (amount <= 0) return ItemStack.AIR;
+        return create(material, amount, components);
+    }
+
+    @Override
+    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, T value) {
+        return new ItemStackImpl(material, amount, components.with(component, value));
+    }
+
+    @Override
+    public @NotNull ItemStack without(@NotNull DataComponent<?> component) {
+        return new ItemStackImpl(material, amount, components.without(component));
     }
 
     @Override
     public @NotNull ItemStack consume(int amount) {
-        return DEFAULT_STACKING_RULE.apply(this, currentAmount -> currentAmount - amount);
-    }
-
-    @Override
-    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
-        return new ItemStackImpl(material, amount, (ItemMetaImpl) meta);
+        return withAmount(amount() - amount);
     }
 
     @Override
     public boolean isSimilar(@NotNull ItemStack itemStack) {
-        return material == itemStack.material() && meta.equals(itemStack.meta());
+        return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
     }
 
     @Override
-    public @NotNull NBTCompound toItemNBT() {
-        final NBTString material = NBT.String(material().name());
-        final NBTByte amount = NBT.Byte(amount());
-        final NBTCompound nbt = meta().toNBT();
-        if (nbt.isEmpty()) return NBT.Compound(Map.of("id", material, "Count", amount));
-        return NBT.Compound(Map.of("id", material, "Count", amount, "tag", nbt));
+    public @NotNull CompoundBinaryTag toItemNBT() {
+        return (CompoundBinaryTag) NBT_TYPE.write(this);
     }
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, new ItemMetaImpl.Builder(meta.tagHandler().copy()));
+        return new Builder(material, amount, components.builder());
+    }
+
+    private static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
+        String id = tag.getString("id");
+        Material material = Material.fromNamespaceId(id);
+        Check.notNull(material, "Unknown material: {0}", id);
+        int count = tag.getInt("count", 1);
+        DataComponentPatch patch = DataComponentPatch.NBT_TYPE.read(tag.getCompound("components"));
+        return new ItemStackImpl(material, count, patch);
+    }
+
+    private static @NotNull CompoundBinaryTag toCompound(@NotNull ItemStack itemStack) {
+        CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
+        tag.putString("id", itemStack.material().name());
+        tag.putInt("count", itemStack.amount());
+
+        CompoundBinaryTag components = (CompoundBinaryTag) DataComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        if (components.size() > 0) tag.put("components", components);
+
+        return tag.build();
     }
 
     static final class Builder implements ItemStack.Builder {
         final Material material;
         int amount;
-        ItemMetaImpl.Builder metaBuilder;
+        DataComponentPatch.Builder components;
 
-        Builder(Material material, int amount, ItemMetaImpl.Builder metaBuilder) {
+        Builder(Material material, int amount, DataComponentPatch.Builder components) {
             this.material = material;
             this.amount = amount;
-            this.metaBuilder = metaBuilder;
+            this.components = components;
         }
 
         Builder(Material material, int amount) {
-            this(material, amount, new ItemMetaImpl.Builder(TagHandler.newHandler()));
+            this.material = material;
+            this.amount = amount;
+            this.components = new DataComponentPatch.Builder(new Int2ObjectArrayMap<>());
         }
 
         @Override
@@ -124,48 +163,26 @@ record ItemStackImpl(Material material, int amount, ItemMetaImpl meta) implement
         }
 
         @Override
-        public ItemStack.@NotNull Builder meta(@NotNull TagHandler tagHandler) {
-            return metaBuilder(new ItemMetaImpl.Builder(tagHandler.copy()));
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull NBTCompound compound) {
-            return metaBuilder(new ItemMetaImpl.Builder(TagHandler.fromCompound(compound)));
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull ItemMeta itemMeta) {
-            final TagHandler tagHandler = ((ItemMetaImpl) itemMeta).tagHandler();
-            return metaBuilder(new ItemMetaImpl.Builder(tagHandler.copy()));
-        }
-
-        @Override
-        public ItemStack.@NotNull Builder meta(@NotNull Consumer<ItemMeta.Builder> consumer) {
-            consumer.accept(metaBuilder);
+        public <T> ItemStack.@NotNull Builder set(@NotNull DataComponent<T> component, T value) {
+            components.set(component, value);
             return this;
         }
 
         @Override
-        public <V extends ItemMetaView.Builder, T extends ItemMetaView<V>> ItemStack.@NotNull Builder meta(@NotNull Class<T> metaType,
-                                                                                                           @NotNull Consumer<@NotNull V> itemMetaConsumer) {
-            V view = ItemMetaViewImpl.constructBuilder(metaType, metaBuilder.tagHandler());
-            itemMetaConsumer.accept(view);
+        public ItemStack.@NotNull Builder remove(@NotNull DataComponent<?> component) {
+            components.remove(component);
             return this;
         }
 
         @Override
         public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-            this.metaBuilder.setTag(tag, value);
+            components.set(ItemComponent.CUSTOM_DATA, components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
         }
 
         @Override
         public @NotNull ItemStack build() {
-            return ItemStackImpl.create(material, amount, metaBuilder.build());
+            return ItemStackImpl.create(material, amount, components.build());
         }
 
-        private ItemStack.@NotNull Builder metaBuilder(@NotNull ItemMetaImpl.Builder builder) {
-            this.metaBuilder = builder;
-            return this;
-        }
     }
 }

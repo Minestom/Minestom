@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerProcess;
@@ -44,7 +45,6 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
 import java.util.*;
@@ -201,7 +201,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
     /**
-     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
+     * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -313,17 +313,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return future called when the chunks are done saving
      */
     public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
-
-    /**
-     * Changes the instance {@link ChunkGenerator}.
-     *
-     * @param chunkGenerator the new {@link ChunkGenerator} of the instance
-     * @deprecated Use {@link #setGenerator(Generator)}
-     */
-    @Deprecated
-    public void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator) {
-        setGenerator(chunkGenerator != null ? new ChunkGeneratorCompatibilityLayer(chunkGenerator) : null);
-    }
 
     public abstract void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier);
 
@@ -788,7 +777,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param additionalData data to pass to the explosion supplier
      * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
-    public void explode(float centerX, float centerY, float centerZ, float strength, @Nullable NBTCompound additionalData) {
+    public void explode(float centerX, float centerY, float centerZ, float strength, @Nullable CompoundBinaryTag additionalData) {
         final ExplosionSupplier explosionSupplier = getExplosionSupplier();
         Check.stateCondition(explosionSupplier == null, "Tried to create an explosion with no explosion supplier");
         final Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);

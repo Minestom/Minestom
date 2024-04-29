@@ -5,7 +5,7 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
@@ -27,7 +27,7 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        ContainerInventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
@@ -51,20 +51,20 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        ContainerInventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        inventory.setCursorItem(player, MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        inventory.setCursorItem(player, MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
         packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        inventory.setCursorItem(player, ItemStack.AIR);
+        player.getInventory().setCursorItem(ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
 
@@ -75,7 +75,7 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        ContainerInventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
@@ -85,7 +85,7 @@ public class InventoryIntegrationTest {
         inventory.setItemStack(3, MAGIC_STACK);
         inventory.setItemStack(19, MAGIC_STACK);
         inventory.setItemStack(40, MAGIC_STACK);
-        inventory.setCursorItem(player, MAGIC_STACK);
+        player.getInventory().setCursorItem(MAGIC_STACK);
 
         setSlotTracker.assertCount(5);
 
@@ -116,7 +116,7 @@ public class InventoryIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
-        final var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var inventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(inventory);
         assertSame(inventory, player.getOpenInventory());
         player.closeInventory();
@@ -124,24 +124,24 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void openInventoryOnItemDropFromInventoryClosingTest(Env env) {
+    public void openInventoryOnItemAddFromInventoryClosingTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
-        var listener = env.listen(ItemDropEvent.class);
-        final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        var listener = env.listen(InventoryItemChangeEvent.class);
+        final var firstInventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
-        firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
+        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
 
         listener.followup();
         player.closeInventory();
         assertNull(player.getOpenInventory());
 
         player.openInventory(firstInventory);
-        firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
-        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
-        listener.followup(event -> event.getPlayer().openInventory(secondInventory));
+        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
+        final var secondInventory = new ContainerInventory(InventoryType.CHEST_1_ROW, "title");
+        listener.followup(event -> player.openInventory(secondInventory));
         player.closeInventory();
         assertSame(secondInventory, player.getOpenInventory());
     }
@@ -156,17 +156,16 @@ public class InventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         assertEquals(instance, player.getInstance());
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        Inventory inventory = new ContainerInventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
         // Ensure that slots not in the inner inventory are sent separately
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.getInventory().setItemStack(PlayerInventoryUtils.OFFHAND_SLOT, MAGIC_STACK);
+        player.getInventory().setItemStack(PlayerInventoryUtils.OFF_HAND_SLOT, MAGIC_STACK);
         packetTracker.assertSingle(slot -> {
-            System.out.println(slot);
             assertEquals((byte) 0, slot.windowId());
-            assertEquals(PlayerInventoryUtils.OFFHAND_SLOT, slot.slot());
+            assertEquals(PlayerInventoryUtils.OFF_HAND_SLOT, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
@@ -175,8 +174,7 @@ public class InventoryIntegrationTest {
         player.getInventory().setItemStack(0, MAGIC_STACK); // Test with first inner inventory slot
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
-            System.out.println(slot.slot());
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(0) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(PlayerInventoryUtils.minestomToProtocol(0, inventory.getSize()), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
@@ -184,7 +182,7 @@ public class InventoryIntegrationTest {
         player.getInventory().setItemStack(35, MAGIC_STACK); // Test with last inner inventory slot
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(35) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(PlayerInventoryUtils.minestomToProtocol(35, inventory.getSize()), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
     }

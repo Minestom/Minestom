@@ -1,124 +1,101 @@
 package net.minestom.server.inventory;
 
-import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.IntFunction;
 
 /**
- * Represents a type of transaction that you can apply to an {@link AbstractInventory}.
+ * Represents a type of transaction that you can apply to an {@link Inventory}.
  */
-@FunctionalInterface
-public interface TransactionType {
+public interface TransactionType extends BiFunction<@NotNull ItemStack, @NotNull IntFunction<ItemStack>, TransactionType.@NotNull Entry> {
+
+    /**
+     * Applies a transaction operator to a given list of slots, turning it into a TransactionType.
+     */
+    static @NotNull TransactionType general(@NotNull TransactionOperator operator, @NotNull List<Integer> slots) {
+        return (item, getter) -> {
+            Int2ObjectMap<ItemStack> map = new Int2ObjectArrayMap<>();
+            for (int slot : slots) {
+                final ItemStack slotItem = getter.apply(slot);
+                final TransactionOperator.Entry result = operator.apply(slotItem, item);
+                if (result == null) continue;
+
+                map.put(slot, result.left());
+                item = result.right();
+            }
+            return new Entry(item, map);
+        };
+    }
+
+    /**
+     * Joins two transaction types consecutively.
+     * This will use the same getter in both properties, so ensure that any potential overlap between the transaction types
+     * will not result in unexpected behaviour (e.g. item duping).
+     */
+    static @NotNull TransactionType join(@NotNull TransactionType first, @NotNull TransactionType second) {
+        return (item, getter) -> {
+            // Calculate results
+            final Entry f = first.apply(item, getter);
+            final Entry s = second.apply(f.remaining(), getter);
+            // Join results
+            Map<Integer, ItemStack> map = new Int2ObjectArrayMap<>();
+            map.putAll(f.changes());
+            map.putAll(s.changes());
+            return new Entry(s.remaining(), map);
+        };
+    }
 
     /**
      * Adds an item to the inventory.
      * Can either take an air slot or be stacked.
+     *
+     * @param fill the list of slots that will be added to if they already have some of the item in it
+     * @param air  the list of slots that will be added to if they have air (may be different from {@code fill}).
      */
-    TransactionType ADD = (inventory, itemStack, slotPredicate, start, end, step) -> {
-        Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-        final StackingRule stackingRule = StackingRule.get();
-        // Check filled slot (not air)
-        for (int i = start; i < end; i += step) {
-            ItemStack inventoryItem = inventory.getItemStack(i);
-            if (inventoryItem.isAir()) {
-                continue;
-            }
-            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
-                final int itemAmount = stackingRule.getAmount(inventoryItem);
-                final int maxSize = stackingRule.getMaxSize(inventoryItem);
-                if (itemAmount >= maxSize) continue;
-                if (!slotPredicate.test(i, inventoryItem)) {
-                    // Cancelled transaction
-                    continue;
-                }
-
-                final int itemStackAmount = stackingRule.getAmount(itemStack);
-                final int totalAmount = itemStackAmount + itemAmount;
-                if (!stackingRule.canApply(itemStack, totalAmount)) {
-                    // Slot cannot accept the whole item, reduce amount to 'itemStack'
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, maxSize));
-                    itemStack = stackingRule.apply(itemStack, totalAmount - maxSize);
-                } else {
-                    // Slot can accept the whole item
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));
-                    itemStack = stackingRule.apply(itemStack, 0);
-                    break;
-                }
-            }
-        }
-        // Check air slot to fill
-        for (int i = start; i < end; i += step) {
-            ItemStack inventoryItem = inventory.getItemStack(i);
-            if (!inventoryItem.isAir()) continue;
-            if (!slotPredicate.test(i, inventoryItem)) {
-                // Cancelled transaction
-                continue;
-            }
-            // Fill the slot
-            itemChangesMap.put(i, itemStack);
-            itemStack = stackingRule.apply(itemStack, 0);
-            break;
-        }
-        return Pair.of(itemStack, itemChangesMap);
-    };
+    static @NotNull TransactionType add(@NotNull List<Integer> fill, @NotNull List<Integer> air) {
+        final TransactionType first = general(entry -> {
+            final ItemStack slotItem = entry.left();
+            final ItemStack extra = entry.right();
+            return !slotItem.isAir() ? TransactionOperator.STACK_LEFT.apply(slotItem, extra) : null;
+        }, fill);
+        final TransactionType second = general(entry -> {
+            final ItemStack slotItem = entry.left();
+            final ItemStack extra = entry.right();
+            return slotItem.isAir() ? TransactionOperator.STACK_LEFT.apply(slotItem, extra) : null;
+        }, air);
+        return TransactionType.join(first, second);
+    }
 
     /**
      * Takes an item from the inventory.
      * Can either transform items to air or reduce their amount.
+     *
+     * @param takeSlots the ordered list of slots that will be taken from (if possible)
      */
-    TransactionType TAKE = (inventory, itemStack, slotPredicate, start, end, step) -> {
-        Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-        final StackingRule stackingRule = StackingRule.get();
-        for (int i = start; i < end; i += step) {
-            final ItemStack inventoryItem = inventory.getItemStack(i);
-            if (inventoryItem.isAir()) continue;
-            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
-                if (!slotPredicate.test(i, inventoryItem)) {
-                    // Cancelled transaction
-                    continue;
-                }
+    static @NotNull TransactionType take(@NotNull List<Integer> takeSlots) {
+        return general(TransactionOperator.TAKE, takeSlots);
+    }
 
-                final int itemAmount = stackingRule.getAmount(inventoryItem);
-                final int itemStackAmount = stackingRule.getAmount(itemStack);
-                if (itemStackAmount < itemAmount) {
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, itemAmount - itemStackAmount));
-                    itemStack = stackingRule.apply(itemStack, 0);
-                    break;
-                }
-                itemChangesMap.put(i, stackingRule.apply(inventoryItem, 0));
-                itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
-                if (stackingRule.getAmount(itemStack) == 0) {
-                    itemStack = stackingRule.apply(itemStack, 0);
-                    break;
-                }
-            }
+    /**
+     * Processes the provided item into the given inventory.
+     *
+     * @param itemStack the item to process
+     * @param inventory the inventory function
+     * @return the remaining portion of the processed item, as well as the changes
+     */
+    @Override
+    @NotNull
+    Entry apply(@NotNull ItemStack itemStack, @NotNull IntFunction<ItemStack> inventory);
+
+    record Entry(@NotNull ItemStack remaining, @NotNull Map<@NotNull Integer, @NotNull ItemStack> changes) {
+        public Entry {
+            changes = Map.copyOf(changes);
         }
-        return Pair.of(itemStack, itemChangesMap);
-    };
-
-    @NotNull Pair<ItemStack, Map<Integer, ItemStack>> process(@NotNull AbstractInventory inventory,
-                                                              @NotNull ItemStack itemStack,
-                                                              @NotNull SlotPredicate slotPredicate,
-                                                              int start, int end, int step);
-
-    default @NotNull Pair<ItemStack, Map<Integer, ItemStack>> process(@NotNull AbstractInventory inventory,
-                                                                      @NotNull ItemStack itemStack,
-                                                                      @NotNull SlotPredicate slotPredicate) {
-        return process(inventory, itemStack, slotPredicate, 0, inventory.getInnerSize(), 1);
-    }
-
-    default @NotNull Pair<ItemStack, Map<Integer, ItemStack>> process(@NotNull AbstractInventory inventory,
-                                                                      @NotNull ItemStack itemStack) {
-        return process(inventory, itemStack, (slot, itemStack1) -> true);
-    }
-
-    @FunctionalInterface
-    interface SlotPredicate {
-        boolean test(int slot, @NotNull ItemStack itemStack);
     }
 }

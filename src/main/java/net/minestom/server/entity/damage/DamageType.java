@@ -1,12 +1,12 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
 
@@ -36,7 +36,7 @@ public sealed interface DamageType extends StaticProtocolObject, DamageTypes per
         return registry().scaling();
     }
 
-    NBTCompound asNBT();
+    @NotNull RegistryDataPacket.Entry toRegistryEntry();
 
     static @NotNull Collection<@NotNull DamageType> values() {
         return DamageTypeImpl.values();
@@ -54,7 +54,7 @@ public sealed interface DamageType extends StaticProtocolObject, DamageTypes per
         return DamageTypeImpl.getId(id);
     }
 
-    static NBTCompound getNBT() {
-        return DamageTypeImpl.getNBT();
+    static @NotNull RegistryDataPacket registryDataPacket() {
+        return DamageTypeImpl.registryDataPacket();
     }
 }

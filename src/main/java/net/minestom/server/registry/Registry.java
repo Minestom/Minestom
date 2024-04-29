@@ -2,12 +2,16 @@ package net.minestom.server.registry;
 
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
@@ -76,6 +80,11 @@ public final class Registry {
     @ApiStatus.Internal
     public static TrimPatternEntry trimPattern(String namespace, @NotNull Properties main) {
         return new TrimPatternEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
+        return new AttributeEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -223,7 +232,8 @@ public final class Registry {
         FLUID_TAGS("tags/fluid_tags.json"),
         GAMEPLAY_TAGS("tags/gameplay_tags.json"),
         ITEM_TAGS("tags/item_tags.json"),
-        BIOMES("biomes.json");
+        BIOMES("biomes.json"),
+        ATTRIBUTES("attributes.json");
 
         private final String name;
 
@@ -467,24 +477,22 @@ public final class Registry {
 
     public static final class MaterialEntry implements Entry {
         private final NamespaceID namespace;
+        private final Properties main;
         private final int id;
         private final String translationKey;
-        private final int maxStackSize;
-        private final int maxDamage;
-        private final boolean isFood;
         private final Supplier<Block> blockSupplier;
+        private DataComponentMap prototype;
+
         private final EquipmentSlot equipmentSlot;
         private final EntityType entityType;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
+            this.main = main;
             this.custom = custom;
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
-            this.maxStackSize = main.getInt("maxStackSize", 64);
-            this.maxDamage = main.getInt("maxDamage", 0);
-            this.isFood = main.getBoolean("edible", false);
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
@@ -521,24 +529,33 @@ public final class Registry {
             return id;
         }
 
-        public String translationKey() {
+        public @NotNull String translationKey() {
             return translationKey;
-        }
-
-        public int maxStackSize() {
-            return maxStackSize;
-        }
-
-        public int maxDamage() {
-            return maxDamage;
-        }
-
-        public boolean isFood() {
-            return isFood;
         }
 
         public @Nullable Block block() {
             return blockSupplier.get();
+        }
+
+        public @NotNull DataComponentMap prototype() {
+            if (prototype == null) {
+                try {
+                    DataComponentMap.Builder builder = DataComponentMap.builder();
+                    for (Map.Entry<String, Object> entry : main.section("components")) {
+                        //noinspection unchecked
+                        DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromNamespaceId(entry.getKey());
+                        Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
+
+                        BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
+                        builder.set(component, component.read(tag));
+                    }
+                    this.prototype = builder.build();
+                } catch (IOException e) {
+                    throw new RuntimeException("failed to parse material registry: " + namespace, e);
+                }
+            }
+
+            return prototype;
         }
 
         public boolean isArmor() {
@@ -551,6 +568,7 @@ public final class Registry {
 
         /**
          * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+         *
          * @return The entity type it can spawn, or null if it is not a spawn egg
          */
         public @Nullable EntityType spawnEntityType() {
@@ -563,28 +581,85 @@ public final class Registry {
         }
     }
 
-    public record EntityEntry(NamespaceID namespace, int id,
-                              String translationKey,
-                              double width, double height,
-                              double drag, double acceleration,
-                              EntitySpawnType spawnType,
-                              BoundingBox boundingBox,
-                              Properties custom) implements Entry {
+    public static final class EntityEntry implements Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final String translationKey;
+        private final double drag;
+        private final double acceleration;
+        private final EntitySpawnType spawnType;
+        private final double width;
+        private final double height;
+        private final double eyeHeight;
+        private final BoundingBox boundingBox;
+        private final Properties custom;
+
         public EntityEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    main.getString("translationKey"),
-                    main.getDouble("width"),
-                    main.getDouble("height"),
-                    main.getDouble("drag", 0.02),
-                    main.getDouble("acceleration", 0.08),
-                    EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    new BoundingBox(
-                            main.getDouble("width"),
-                            main.getDouble("height"),
-                            main.getDouble("width")),
-                    custom
-            );
+            this.namespace = NamespaceID.from(namespace);
+            this.id = main.getInt("id");
+            this.translationKey = main.getString("translationKey");
+            this.drag = main.getDouble("drag", 0.02);
+            this.acceleration = main.getDouble("acceleration", 0.08);
+            this.spawnType = EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT));
+
+            // Dimensions
+            this.width = main.getDouble("width");
+            this.height = main.getDouble("height");
+            this.eyeHeight = main.getDouble("eyeHeight");
+            this.boundingBox = new BoundingBox(this.width, this.height, this.width);
+
+            // Attachments
+            Properties attachments = main.section("attachments");
+            if (attachments != null) {
+                //todo
+            }
+
+            this.custom = custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
+        }
+
+        public double drag() {
+            return drag;
+        }
+
+        public double acceleration() {
+            return acceleration;
+        }
+
+        public @NotNull EntitySpawnType spawnType() {
+            return spawnType;
+        }
+
+        public double width() {
+            return width;
+        }
+
+        public double height() {
+            return height;
+        }
+
+        public double eyeHeight() {
+            return eyeHeight;
+        }
+
+        public @NotNull BoundingBox boundingBox() {
+            return boundingBox;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
         }
     }
 
@@ -604,11 +679,12 @@ public final class Registry {
                     custom);
         }
     }
+
     public record TrimMaterialEntry(@NotNull NamespaceID namespace,
                                     @NotNull String assetName,
                                     @NotNull Material ingredient,
                                     float itemModelIndex,
-                                    @NotNull Map<String,String> overrideArmorMaterials,
+                                    @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
         public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
@@ -617,7 +693,7 @@ public final class Registry {
                     main.getString("asset_name"),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
                     (float) main.getDouble("item_model_index"),
-                    Objects.requireNonNullElse(main.section("override_armor_materials"),new PropertiesMap(Map.of()))
+                    Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
                     custom
@@ -675,6 +751,23 @@ public final class Registry {
                     main.getString("translationKey"),
                     main.getInt("color"),
                     main.getBoolean("instantaneous"),
+                    custom);
+        }
+    }
+
+    public record AttributeEntry(NamespaceID namespace, int id,
+                                 String translationKey, double defaultValue,
+                                 boolean clientSync,
+                                 double maxValue, double minValue,
+                                 Properties custom) implements Entry {
+        public AttributeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getString("translationKey"),
+                    main.getDouble("defaultValue"),
+                    main.getBoolean("clientSync"),
+                    main.getDouble("maxValue"),
+                    main.getDouble("minValue"),
                     custom);
         }
     }
@@ -778,7 +871,7 @@ public final class Registry {
         public String toString() {
             AtomicReference<String> string = new AtomicReference<>("{ ");
             this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
-            return string.updateAndGet(s -> s.replaceFirst(" , ","") + "}");
+            return string.updateAndGet(s -> s.replaceFirst(" , ", "") + "}");
         }
 
     }

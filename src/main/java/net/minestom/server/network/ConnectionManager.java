@@ -17,7 +17,6 @@ import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
-import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -32,7 +31,6 @@ import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -249,7 +247,7 @@ public final class ConnectionManager {
             }
 
             // Send login success packet (and switch to configuration phase)
-            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0);
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0, true);
             playerConnection.sendPacket(loginSuccessPacket);
         });
     }
@@ -280,14 +278,15 @@ public final class ConnectionManager {
 
             // Registry data (if it should be sent)
             if (event.willSendRegistryData()) {
-                var registry = new HashMap<String, NBT>();
-                registry.put("minecraft:chat_type", Messenger.chatRegistry());
-                registry.put("minecraft:dimension_type", MinecraftServer.getDimensionTypeManager().toNBT());
-                registry.put("minecraft:worldgen/biome", MinecraftServer.getBiomeManager().toNBT());
-                registry.put("minecraft:damage_type", DamageType.getNBT());
-                registry.put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT());
-                registry.put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT());
-                player.sendPacket(new RegistryDataPacket(NBT.Compound(registry)));
+
+                // minecraft:trim_pattern, minecraft:trim_material, minecraft:wolf_variant, and minecraft:banner_pattern.
+
+                player.sendPacket(Messenger.registryDataPacket());
+                player.sendPacket(MinecraftServer.getDimensionTypeManager().registryDataPacket());
+                player.sendPacket(MinecraftServer.getBiomeManager().registryDataPacket());
+                player.sendPacket(DamageType.registryDataPacket());
+//                registry.put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT());
+//                registry.put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT());
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }

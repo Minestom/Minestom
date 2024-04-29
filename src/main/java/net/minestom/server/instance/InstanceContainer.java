@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -10,6 +11,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -32,7 +34,6 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
@@ -158,7 +159,7 @@ public class InstanceContainer extends Instance {
                             this, block, pp.getBlockFace(), blockPosition,
                             new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
                             pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()).meta(),
+                            pp.getPlayer().getItemInHand(pp.getHand()),
                             pp.getPlayer().isSneaking()
                     );
                 } else {
@@ -186,7 +187,7 @@ public class InstanceContainer extends Instance {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
                 var registry = block.registry();
                 if (registry.isBlockEntity()) {
-                    final NBTCompound data = BlockUtils.extractClientNbt(block);
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }

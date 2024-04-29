@@ -1,13 +1,11 @@
 package net.minestom.server.world;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.mcdata.SizesKt;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,6 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DimensionType {
 
     private static final AtomicInteger idCounter = new AtomicInteger(0);
+
+    private static final int VANILLA_MIN_Y = -64;
+    private static final int VANILLA_MAX_Y = 319;
 
     public static final DimensionType OVERWORLD = DimensionType.builder(NamespaceID.from("minecraft:overworld"))
             .ultrawarm(false)
@@ -91,55 +92,51 @@ public class DimensionType {
         return new DimensionTypeBuilder();
     }
 
-    public static DimensionType fromNBT(NBTCompound nbt) {
+    public static DimensionType fromNBT(CompoundBinaryTag nbt) {
         return DimensionType.builder(NamespaceID.from(nbt.getString("name")))
                 .ambientLight(nbt.getFloat("ambient_light"))
                 .infiniburn(NamespaceID.from(nbt.getString("infiniburn").replaceFirst("#", "")))
-                .natural(nbt.getByte("natural") != 0)
-                .ceilingEnabled(nbt.getByte("has_ceiling") != 0)
-                .skylightEnabled(nbt.getByte("has_skylight") != 0)
-                .ultrawarm(nbt.getByte("ultrawarm") != 0)
-                .raidCapable(nbt.getByte("has_raids") != 0)
-                .respawnAnchorSafe(nbt.getByte("respawn_anchor_works") != 0)
-                .bedSafe(nbt.getByte("bed_works") != 0)
+                .natural(nbt.getBoolean("natural"))
+                .ceilingEnabled(nbt.getBoolean("has_ceiling"))
+                .skylightEnabled(nbt.getBoolean("has_skylight"))
+                .ultrawarm(nbt.getBoolean("ultrawarm"))
+                .raidCapable(nbt.getBoolean("has_raids"))
+                .respawnAnchorSafe(nbt.getBoolean("respawn_anchor_works"))
+                .bedSafe(nbt.getBoolean("bed_works"))
                 .effects(nbt.getString("effects"))
-                .piglinSafe(nbt.getByte("piglin_safe") != 0)
+                .piglinSafe(nbt.getBoolean("piglin_safe"))
                 .logicalHeight(nbt.getInt("logical_height"))
                 .coordinateScale(nbt.getDouble("coordinate_scale"))
                 .build();
     }
 
-    @NotNull
-    public NBTCompound toIndexedNBT() {
-        return NBT.Compound(Map.of(
-                "name", NBT.String(name.toString()),
-                "id", NBT.Int(id),
-                "element", toNBT()));
+    public @NotNull RegistryDataPacket.Entry toRegistryEntry() {
+        return new RegistryDataPacket.Entry(name.toString(), toNBT());
     }
 
     @NotNull
-    public NBTCompound toNBT() {
-        return NBT.Compound(nbt -> {
-            nbt.setFloat("ambient_light", ambientLight);
-            nbt.setString("infiniburn", "#" + infiniburn.toString());
-            nbt.setByte("natural", (byte) (natural ? 0x01 : 0x00));
-            nbt.setByte("has_ceiling", (byte) (ceilingEnabled ? 0x01 : 0x00));
-            nbt.setByte("has_skylight", (byte) (skylightEnabled ? 0x01 : 0x00));
-            nbt.setByte("ultrawarm", (byte) (ultrawarm ? 0x01 : 0x00));
-            nbt.setByte("has_raids", (byte) (raidCapable ? 0x01 : 0x00));
-            nbt.setByte("respawn_anchor_works", (byte) (respawnAnchorSafe ? 0x01 : 0x00));
-            nbt.setByte("bed_works", (byte) (bedSafe ? 0x01 : 0x00));
-            nbt.setString("effects", effects);
-            nbt.setByte("piglin_safe", (byte) (piglinSafe ? 0x01 : 0x00));
-            nbt.setInt("min_y", minY);
-            nbt.setInt("height", height);
-            nbt.setInt("logical_height", logicalHeight);
-            nbt.setDouble("coordinate_scale", coordinateScale);
-            nbt.setString("name", name.toString());
-            nbt.setInt("monster_spawn_block_light_limit", 0);
-            nbt.setInt("monster_spawn_light_level", 11);
-            if (fixedTime != null) nbt.setLong("fixed_time", fixedTime);
-        });
+    public CompoundBinaryTag toNBT() {
+        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+        builder.putFloat("ambient_light", ambientLight);
+        builder.putString("infiniburn", "#" + infiniburn.toString());
+        builder.putByte("natural", (byte) (natural ? 0x01 : 0x00));
+        builder.putByte("has_ceiling", (byte) (ceilingEnabled ? 0x01 : 0x00));
+        builder.putByte("has_skylight", (byte) (skylightEnabled ? 0x01 : 0x00));
+        builder.putByte("ultrawarm", (byte) (ultrawarm ? 0x01 : 0x00));
+        builder.putByte("has_raids", (byte) (raidCapable ? 0x01 : 0x00));
+        builder.putByte("respawn_anchor_works", (byte) (respawnAnchorSafe ? 0x01 : 0x00));
+        builder.putByte("bed_works", (byte) (bedSafe ? 0x01 : 0x00));
+        builder.putString("effects", effects);
+        builder.putByte("piglin_safe", (byte) (piglinSafe ? 0x01 : 0x00));
+        builder.putInt("min_y", minY);
+        builder.putInt("height", height);
+        builder.putInt("logical_height", logicalHeight);
+        builder.putDouble("coordinate_scale", coordinateScale);
+        builder.putString("name", name.toString());
+        builder.putInt("monster_spawn_block_light_limit", 0);
+        builder.putInt("monster_spawn_light_level", 11);
+        if (fixedTime != null) builder.putLong("fixed_time", fixedTime);
+        return builder.build();
     }
 
     @Override
@@ -261,9 +258,9 @@ public class DimensionType {
         private boolean bedSafe = true;
         private String effects = "minecraft:overworld";
         private boolean piglinSafe = false;
-        private int minY = SizesKt.getVanillaMinY();
-        private int logicalHeight = SizesKt.getVanillaMaxY() - SizesKt.getVanillaMinY() + 1;
-        private int height = SizesKt.getVanillaMaxY() - SizesKt.getVanillaMinY() + 1;
+        private int minY = VANILLA_MIN_Y;
+        private int logicalHeight = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
+        private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
         private double coordinateScale = 1.0;
         private NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
 

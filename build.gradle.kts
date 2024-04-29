@@ -36,8 +36,7 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
 
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        toolchain.languageVersion = JavaLanguageVersion.of(21)
     }
 
     tasks.withType<Zip> {
@@ -71,10 +70,7 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
-    api(libs.bundles.kotlin)
-    api(libs.bundles.hephaistos)
     implementation(libs.minestomData)
-    implementation(libs.dependencyGetter)
 
     // Performance/data structures
     implementation(libs.caffeine)

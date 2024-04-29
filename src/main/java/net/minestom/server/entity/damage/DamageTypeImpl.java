@@ -1,14 +1,11 @@
 package net.minestom.server.entity.damage;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements DamageType {
@@ -32,13 +29,14 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements Dama
         return CONTAINER.getId(id);
     }
 
+
     @Override
-    public NBTCompound asNBT() {
-        var elem = new HashMap<String, NBT>();
-        elem.put("exhaustion", NBT.Float(registry.exhaustion()));
-        elem.put("message_id", NBT.String(registry.messageId()));
-        elem.put("scaling", NBT.String(registry.scaling()));
-        return NBT.Compound(elem);
+    public @NotNull RegistryDataPacket.Entry toRegistryEntry() {
+        return new RegistryDataPacket.Entry(name(), CompoundBinaryTag.builder()
+                .putFloat("exhaustion", registry.exhaustion())
+                .putString("message_id", registry.messageId())
+                .putString("scaling", registry.scaling())
+                .build());
     }
 
     static Collection<DamageType> values() {
@@ -55,23 +53,15 @@ record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements Dama
         return id;
     }
 
-    private static NBTCompound lazyNbt = null;
+    private static RegistryDataPacket lazyRegistryDataPacket = null;
 
-    static NBTCompound getNBT() {
-        if (lazyNbt == null) {
-            var damageTypes = values().stream()
-                    .map((damageType) -> NBT.Compound(Map.of(
-                            "id", NBT.Int(damageType.id()),
-                            "name", NBT.String(damageType.name()),
-                            "element", damageType.asNBT()
-                    )))
-                    .toList();
-
-            lazyNbt = NBT.Compound(Map.of(
-                    "type", NBT.String("minecraft:damage_type"),
-                    "value", NBT.List(NBTType.TAG_Compound, damageTypes)
-            ));
-        }
-        return lazyNbt;
+    static @NotNull RegistryDataPacket registryDataPacket() {
+        if (lazyRegistryDataPacket != null) return lazyRegistryDataPacket;
+        return lazyRegistryDataPacket = new RegistryDataPacket(
+                "minecraft:damage_type",
+                values().stream()
+                        .map(DamageType::toRegistryEntry)
+                        .toList()
+        );
     }
 }
