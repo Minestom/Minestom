@@ -1,4 +1,4 @@
-package net.minestom.server.item;
+package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -19,14 +19,14 @@ import java.util.Map;
  *
  * @param patch
  */
-record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
+public record DataComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
     private static final char REMOVAL_PREFIX = '!';
 
-    public static final ItemComponentPatch EMPTY = new ItemComponentPatch(new Int2ObjectArrayMap<>(0));
+    public static final DataComponentPatch EMPTY = new DataComponentPatch(new Int2ObjectArrayMap<>(0));
 
-    public static final @NotNull NetworkBuffer.Type<ItemComponentPatch> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    public static final @NotNull NetworkBuffer.Type<DataComponentPatch> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ItemComponentPatch value) {
+        public void write(@NotNull NetworkBuffer buffer, DataComponentPatch value) {
             int added = 0;
             for (Object o : value.patch.values()) {
                 if (o != null) added++;
@@ -38,7 +38,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                 if (entry.getValue() != null) {
                     buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
                     //noinspection unchecked
-                    ItemComponent<Object> type = (ItemComponent<Object>) ItemComponent.fromId(entry.getIntKey());
+                    DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromId(entry.getIntKey());
                     assert type != null;
                     type.write(buffer, entry.getValue());
                 }
@@ -51,15 +51,15 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         }
 
         @Override
-        public ItemComponentPatch read(@NotNull NetworkBuffer buffer) {
+        public DataComponentPatch read(@NotNull NetworkBuffer buffer) {
             int added = buffer.read(NetworkBuffer.VAR_INT);
             int removed = buffer.read(NetworkBuffer.VAR_INT);
-            Check.stateCondition(added + removed > ItemComponent.values().size() * 2, "Item component patch too large: {0}", added + removed);
+            Check.stateCondition(added + removed > DataComponent.values().size() * 2, "Item component patch too large: {0}", added + removed);
             Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(added + removed);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 //noinspection unchecked
-                ItemComponent<Object> type = (ItemComponent<Object>) ItemComponent.fromId(id);
+                DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromId(id);
                 Check.notNull(type, "Unknown item component id: {0}", id);
                 patch.put(id, type.read(buffer));
             }
@@ -67,10 +67,10 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 patch.put(id, null);
             }
-            return new ItemComponentPatch(patch);
+            return new DataComponentPatch(patch);
         }
     };
-    public static final @NotNull BinaryTagSerializer<ItemComponentPatch> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    public static final @NotNull BinaryTagSerializer<DataComponentPatch> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 if (tag.size() == 0) return EMPTY;
                 Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(tag.size());
@@ -81,7 +81,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                         key = key.substring(1);
                         remove = true;
                     }
-                    ItemComponent<?> type = ItemComponent.fromNamespaceId(key);
+                    DataComponent<?> type = DataComponent.fromNamespaceId(key);
                     Check.notNull(type, "Unknown item component: {0}", key);
                     if (remove) {
                         patch.put(type.id(), null);
@@ -90,14 +90,14 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
                         patch.put(type.id(), value);
                     }
                 }
-                return new ItemComponentPatch(patch);
+                return new DataComponentPatch(patch);
             },
             patch -> {
                 if (patch.patch.isEmpty()) return CompoundBinaryTag.empty();
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
                 for (Int2ObjectMap.Entry<Object> entry : patch.patch.int2ObjectEntrySet()) {
                     //noinspection unchecked
-                    ItemComponent<Object> type = (ItemComponent<Object>) ItemComponent.fromId(entry.getIntKey());
+                    DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromId(entry.getIntKey());
                     Check.notNull(type, "Unknown item component id: {0}", entry.getIntKey());
                     if (entry.getValue() == null) {
                         builder.put(REMOVAL_PREFIX + type.name(), CompoundBinaryTag.empty());
@@ -109,11 +109,11 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
             }
     );
 
-    public static @NotNull ItemComponentPatch from(@NotNull ItemComponentMap prototype, @NotNull ItemComponentMap components) {
-        return new ItemComponentPatch(((ItemComponentMapImpl) components).components());
+    public static @NotNull DataComponentPatch from(@NotNull DataComponentMap prototype, @NotNull DataComponentMap components) {
+        return new DataComponentPatch(((DataComponentMapImpl) components).components());
     }
 
-    public boolean has(@NotNull ItemComponentMap prototype, @NotNull ItemComponent<?> component) {
+    public boolean has(@NotNull DataComponentMap prototype, @NotNull DataComponent<?> component) {
         if (patch.containsKey(component.id())) {
             return patch.get(component.id()) != null;
         } else {
@@ -121,7 +121,7 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         }
     }
 
-    public <T> @Nullable T get(@NotNull ItemComponentMap prototype, @NotNull ItemComponent<T> component) {
+    public <T> @Nullable T get(@NotNull DataComponentMap prototype, @NotNull DataComponent<T> component) {
         if (patch.containsKey(component.id())) {
             return (T) patch.get(component.id());
         } else {
@@ -129,46 +129,46 @@ record ItemComponentPatch(@NotNull Int2ObjectMap<Object> patch) {
         }
     }
 
-    public <T> @NotNull ItemComponentPatch with(@NotNull ItemComponent<T> component, @NotNull T value) {
+    public <T> @NotNull DataComponentPatch with(@NotNull DataComponent<T> component, @NotNull T value) {
         Int2ObjectMap<Object> newPatch = new Int2ObjectArrayMap<>(patch);
         newPatch.put(component.id(), value);
-        return new ItemComponentPatch(newPatch);
+        return new DataComponentPatch(newPatch);
     }
 
-    public <T> @NotNull ItemComponentPatch without(@NotNull ItemComponent<T> component) {
+    public <T> @NotNull DataComponentPatch without(@NotNull DataComponent<T> component) {
         Int2ObjectMap<Object> newPatch = new Int2ObjectArrayMap<>(patch);
         newPatch.put(component.id(), null);
-        return new ItemComponentPatch(newPatch);
+        return new DataComponentPatch(newPatch);
     }
 
     public @NotNull Builder builder() {
         return new Builder(new Int2ObjectArrayMap<>(patch));
     }
 
-    record Builder(@NotNull Int2ObjectMap<Object> patch) implements ItemComponentMap {
+    public record Builder(@NotNull Int2ObjectMap<Object> patch) implements DataComponentMap {
 
         @Override
-        public boolean has(@NotNull ItemComponent<?> component) {
+        public boolean has(@NotNull DataComponent<?> component) {
             return patch.get(component.id()) != null;
         }
 
         @Override
-        public <T> @Nullable T get(@NotNull ItemComponent<T> component) {
+        public <T> @Nullable T get(@NotNull DataComponent<T> component) {
             return (T) patch.get(component.id());
         }
 
-        public <T> ItemComponentPatch.@NotNull Builder set(@NotNull ItemComponent<T> component, @NotNull T value) {
+        public <T> DataComponentPatch.@NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value) {
             patch.put(component.id(), value);
             return this;
         }
 
-        public ItemComponentPatch.@NotNull Builder remove(@NotNull ItemComponent<?> component) {
+        public DataComponentPatch.@NotNull Builder remove(@NotNull DataComponent<?> component) {
             patch.put(component.id(), null);
             return this;
         }
 
-        public @NotNull ItemComponentPatch build() {
-            return new ItemComponentPatch(new Int2ObjectArrayMap<>(this.patch));
+        public @NotNull DataComponentPatch build() {
+            return new DataComponentPatch(new Int2ObjectArrayMap<>(this.patch));
         }
     }
 }
