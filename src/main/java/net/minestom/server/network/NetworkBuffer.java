@@ -64,7 +64,6 @@ public final class NetworkBuffer {
     public static final Type<Component> OPT_CHAT = NetworkBufferTypeImpl.fromOptional(COMPONENT);
     public static final Type<Point> OPT_BLOCK_POSITION = NetworkBufferTypeImpl.fromOptional(BLOCK_POSITION);
     public static final Type<UUID> OPT_UUID = NetworkBufferTypeImpl.fromOptional(UUID);
-    public static final Type<Integer> OPT_BLOCK_STATE = NetworkBufferTypeImpl.fromOptional(BLOCK_STATE);
 
     public static final Type<Direction> DIRECTION = NetworkBufferTypeImpl.fromEnum(Direction.class);
     public static final Type<Entity.Pose> POSE = NetworkBufferTypeImpl.fromEnum(Entity.Pose.class);

@@ -81,12 +81,23 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Integer> BlockState(@Nullable Integer value) {
+    public static Entry<Integer> BlockState(@NotNull Integer value) {
         return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, NetworkBuffer.BLOCK_STATE);
     }
 
     public static Entry<Integer> OptBlockState(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKSTATE, value, NetworkBuffer.OPT_BLOCK_STATE);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKSTATE, value, new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+                buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value);
+            }
+
+            @Override
+            public Integer read(@NotNull NetworkBuffer buffer) {
+                int value = buffer.read(NetworkBuffer.VAR_INT);
+                return value == 0 ? null : value;
+            }
+        });
     }
 
     public static Entry<NBT> NBT(@NotNull NBT nbt) {
