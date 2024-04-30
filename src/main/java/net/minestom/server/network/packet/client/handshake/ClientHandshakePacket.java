@@ -22,6 +22,11 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
     }
 
     @Override
+    public boolean shouldProcessImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, protocolVersion);
         int maxLength = getMaxHandshakeLength();
