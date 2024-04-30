@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
@@ -21,7 +22,6 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 import java.util.Set;
@@ -106,7 +106,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     public abstract @NotNull Heightmap motionBlockingHeightmap();
     public abstract @NotNull Heightmap worldSurfaceHeightmap();
-    public abstract void loadHeightmapsFromNBT(NBTCompound heightmaps);
+    public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
     public @NotNull Section getSectionAt(int blockY) {
         return getSection(ChunkUtils.getChunkCoordinate(blockY));

@@ -4,9 +4,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTLongArray;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
@@ -59,13 +56,13 @@ public abstract class Heightmap {
         setHeightY(x, z, y);
     }
 
-    public NBTLongArray getNBT() {
+    public long[] getNBT() {
         final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.LongArray(encode(heights, bitsForHeight));
+        return encode(heights, bitsForHeight);
     }
 
-    public void loadFrom(ImmutableLongArray data) {
+    public void loadFrom(long[] data) {
         final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
         final int bitsPerEntry = MathUtils.bitsToRepresent(dimensionHeight);
 
@@ -78,7 +75,7 @@ public abstract class Heightmap {
         for (int i = 0; i < heights.length; i++) {
             final int indexInContainer = i % entriesPerLong;
 
-            heights[i] = (short) ((int)(data.get(containerIndex) >> (indexInContainer * bitsPerEntry)) & entryMask);
+            heights[i] = (short) ((int)(data[containerIndex] >> (indexInContainer * bitsPerEntry)) & entryMask);
 
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }

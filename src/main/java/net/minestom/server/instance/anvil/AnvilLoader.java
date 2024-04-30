@@ -114,6 +114,8 @@ public class AnvilLoader implements IChunkLoader {
 
                 // Block entities
                 loadBlockEntities(chunk, chunkData);
+
+                chunk.loadHeightmapsFromNBT(chunkData.getCompound("Heightmaps"));
             } else {
                 LOGGER.warn("Skipping partially generated chunk at {}, {} with status {}", chunkX, chunkZ, status);
             }
