@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -126,6 +127,8 @@ public class AnvilLoader implements IChunkLoader {
 
             // Block entities
             loadBlockEntities(chunk, chunkReader);
+
+            chunk.loadHeightmapsFromNBT(chunkReader.getHeightmaps());
         }
         synchronized (perRegionLoadedChunks) {
             int regionX = CoordinatesKt.chunkToRegion(chunkX);
@@ -434,6 +437,10 @@ public class AnvilLoader implements IChunkLoader {
 
         chunkWriter.setSectionsData(NBT.List(NBTType.TAG_Compound, sectionData));
         chunkWriter.setBlockEntityData(NBT.List(NBTType.TAG_Compound, blockEntities));
+
+        // Save heightmaps
+        chunkWriter.setMotionBlockingHeightMap(chunk.motionBlockingHeightmap().getNBT());
+        chunkWriter.setWorldSurfaceHeightMap(chunk.worldSurfaceHeightmap().getNBT());
     }
 
     /**

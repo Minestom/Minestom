@@ -8,16 +8,14 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -39,7 +37,7 @@ public class LightingChunk extends DynamicChunk {
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
-    private int[] heightmap;
+    private int[] occlusionMap;
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
     private LightData lightData;
 
@@ -133,7 +131,7 @@ public class LightingChunk extends DynamicChunk {
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         super.setBlock(x, y, z, block, placement, destroy);
-        this.heightmap = null;
+        this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
         int coordinate = ChunkUtils.getChunkCoordinate(y);
@@ -201,43 +199,33 @@ public class LightingChunk extends DynamicChunk {
         doneInit = true;
     }
 
-    @Override
-    protected NBTCompound computeHeightmap() {
-        // Heightmap
-        int[] heightmap = getHeightmap();
-        int dimensionHeight = getInstance().getDimensionType().getHeight();
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight)),
-                "WORLD_SURFACE", NBT.LongArray(encodeBlocks(heightmap, bitsForHeight))));
-    }
-
-    // Lazy compute heightmap
-    public int[] getHeightmap() {
-        if (this.heightmap != null) return this.heightmap;
-        var heightmap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
+    // Lazy compute occlusion map
+    public int[] getOcclusionMap() {
+        if (this.occlusionMap != null) return this.occlusionMap;
+        var occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
         int minY = instance.getDimensionType().getMinY();
-        int maxY = instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight();
-        highestBlock = minY;
+        highestBlock = minY - 1;
 
         synchronized (this) {
+            int startY = Heightmap.getHighestBlockSection(this);
+
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int height = maxY;
-                    while (height > minY) {
+                    int height = startY;
+                    while (height >= minY) {
                         Block block = getBlock(x, height, z, Condition.TYPE);
                         if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
                         if (checkSkyOcclusion(block)) break;
                         height--;
                     }
-                    heightmap[z << 4 | x] = (height + 1);
+                    occlusionMap[z << 4 | x] = (height + 1);
                 }
             }
         }
 
-        this.heightmap = heightmap;
-        return heightmap;
+        this.occlusionMap = occlusionMap;
+        return occlusionMap;
     }
 
     @Override
@@ -264,7 +252,7 @@ public class LightingChunk extends DynamicChunk {
                 if (neighborChunk == null) continue;
 
                 if (neighborChunk instanceof LightingChunk light) {
-                    light.getHeightmap();
+                    light.getOcclusionMap();
                     highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
                 }
             }
@@ -289,13 +277,12 @@ public class LightingChunk extends DynamicChunk {
                 wasUpdatedSky = true;
             }
 
+            final int sectionMinY = index * 16 + chunkMin;
             index++;
 
-            final byte[] skyLight = section.skyLight().array();
-            final byte[] blockLight = section.blockLight().array();
-            final int sectionMaxY = index * 16 + chunkMin;
+            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMinY <= (highestNeighborBlock + 16)) {
+                final byte[] skyLight = section.skyLight().array();
 
-            if ((wasUpdatedSky) && this.instance.getDimensionType().isSkylightEnabled() && sectionMaxY <= (highestNeighborBlock + 16)) {
                 if (skyLight.length != 0 && skyLight != emptyContent) {
                     skyLights.add(skyLight);
                     skyMask.set(index);
@@ -305,6 +292,8 @@ public class LightingChunk extends DynamicChunk {
             }
 
             if (wasUpdatedBlock) {
+                final byte[] blockLight = section.blockLight().array();
+
                 if (blockLight.length != 0 && blockLight != emptyContent) {
                     blockLights.add(blockLight);
                     blockMask.set(index);
@@ -433,7 +422,7 @@ public class LightingChunk extends DynamicChunk {
         Set<Point> collected = new HashSet<>();
         collected.add(point);
 
-        int highestRegionPoint = instance.getDimensionType().getMinY();
+        int highestRegionPoint = instance.getDimensionType().getMinY() - 1;
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
@@ -442,8 +431,8 @@ public class LightingChunk extends DynamicChunk {
 
                 if (chunkCheck instanceof LightingChunk lighting) {
                     // Ensure heightmap is calculated before taking values from it
-                    lighting.getHeightmap();
-                    if (lighting.highestBlock > highestRegionPoint) highestRegionPoint = lighting.highestBlock;
+                    lighting.getOcclusionMap();
+                    highestRegionPoint = Math.max(highestRegionPoint, lighting.highestBlock);
                 }
             }
         }

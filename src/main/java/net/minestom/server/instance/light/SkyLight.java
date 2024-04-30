@@ -10,7 +10,6 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -57,7 +56,7 @@ final class SkyLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         if (c instanceof LightingChunk lc) {
-            int[] heightmap = lc.getHeightmap();
+            int[] heightmap = lc.getOcclusionMap();
             int maxY = c.getInstance().getDimensionType().getMinY() + c.getInstance().getDimensionType().getHeight();
             int sectionMaxY = (sectionY + 1) * 16 - 1;
             int sectionMinY = sectionY * 16;

@@ -9,6 +9,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.heightmap.*;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -20,8 +21,6 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -45,6 +44,11 @@ public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
     protected List<Section> sections;
+
+    private boolean needsCompleteHeightmapRefresh = true;
+
+    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
+    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
@@ -82,10 +86,14 @@ public class DynamicChunk extends Chunk {
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = getSectionAt(y);
+
+        int sectionRelativeX = toSectionRelativeCoordinate(x);
+        int sectionRelativeZ = toSectionRelativeCoordinate(z);
+
         section.blockPalette().set(
-                toSectionRelativeCoordinate(x),
+                sectionRelativeX,
                 toSectionRelativeCoordinate(y),
-                toSectionRelativeCoordinate(z),
+                sectionRelativeZ,
                 block.stateId()
         );
 
@@ -119,6 +127,10 @@ public class DynamicChunk extends Chunk {
                     () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
         }
 
+        // UpdateHeightMaps
+        if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
+        motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+        worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
     }
 
     @Override
@@ -144,6 +156,27 @@ public class DynamicChunk extends Chunk {
     @Override
     public @NotNull Section getSection(int section) {
         return sections.get(section - minSection);
+    }
+
+    @Override
+    public @NotNull Heightmap motionBlockingHeightmap() {
+        return motionBlocking;
+    }
+
+    @Override
+    public @NotNull Heightmap worldSurfaceHeightmap() {
+        return worldSurface;
+    }
+
+    @Override
+    public void loadHeightmapsFromNBT(NBTCompound heightmapsNBT) {
+        if (heightmapsNBT.contains(motionBlockingHeightmap().NBTName())) {
+            motionBlockingHeightmap().loadFrom(heightmapsNBT.getLongArray(motionBlockingHeightmap().NBTName()));
+        }
+
+        if (heightmapsNBT.contains(worldSurfaceHeightmap().NBTName())) {
+            worldSurfaceHeightmap().loadFrom(heightmapsNBT.getLongArray(worldSurfaceHeightmap().NBTName()));
+        }
     }
 
     @Override
@@ -225,39 +258,20 @@ public class DynamicChunk extends Chunk {
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
-        final NBTCompound heightmapsNBT = computeHeightmap();
-        // Data
-
         final byte[] data;
+        final NBTCompound heightmapsNBT;
         synchronized (this) {
-            data = ObjectPool.PACKET_POOL.use(buffer ->
-                    NetworkBuffer.makeArray(networkBuffer -> {
-                        for (Section section : sections) networkBuffer.write(section);
-                    }));
+            heightmapsNBT = getHeightmapNBT();
+
+            data = NetworkBuffer.makeArray(networkBuffer -> {
+                for (Section section : sections) networkBuffer.write(section);
+            });
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, data, entries),
                 createLightData()
         );
-    }
-
-    protected NBTCompound computeHeightmap() {
-        // TODO: don't hardcode heightmaps
-        // Heightmap
-        int dimensionHeight = getInstance().getDimensionType().getHeight();
-        int[] motionBlocking = new int[16 * 16];
-        int[] worldSurface = new int[16 * 16];
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                motionBlocking[x + z * 16] = 0;
-                worldSurface[x + z * 16] = dimensionHeight - 1;
-            }
-        }
-        final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.Compound(Map.of(
-                "MOTION_BLOCKING", NBT.LongArray(encodeBlocks(motionBlocking, bitsForHeight)),
-                "WORLD_SURFACE", NBT.LongArray(encodeBlocks(worldSurface, bitsForHeight))));
     }
 
     @NotNull UpdateLightPacket createLightPacket() {
@@ -297,6 +311,23 @@ public class DynamicChunk extends Chunk {
         );
     }
 
+    private NBTCompound getHeightmapNBT() {
+        if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
+        return NBT.Compound(Map.of(
+                motionBlocking.NBTName(), motionBlocking.getNBT(),
+                worldSurface.NBTName(), worldSurface.getNBT()
+        ));
+    }
+
+    private void calculateFullHeightmap() {
+        int startY = Heightmap.getHighestBlockSection(this);
+
+        motionBlocking.refresh(startY);
+        worldSurface.refresh(startY);
+
+        needsCompleteHeightmapRefresh = false;
+    }
+
     @Override
     public @NotNull ChunkSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         Section[] clonedSections = new Section[sections.size()];
@@ -311,48 +342,5 @@ public class DynamicChunk extends Chunk {
 
     private void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
-    }
-
-    private static final int[] MAGIC = {
-            -1, -1, 0, Integer.MIN_VALUE, 0, 0, 1431655765, 1431655765, 0, Integer.MIN_VALUE,
-            0, 1, 858993459, 858993459, 0, 715827882, 715827882, 0, 613566756, 613566756,
-            0, Integer.MIN_VALUE, 0, 2, 477218588, 477218588, 0, 429496729, 429496729, 0,
-            390451572, 390451572, 0, 357913941, 357913941, 0, 330382099, 330382099, 0, 306783378,
-            306783378, 0, 286331153, 286331153, 0, Integer.MIN_VALUE, 0, 3, 252645135, 252645135,
-            0, 238609294, 238609294, 0, 226050910, 226050910, 0, 214748364, 214748364, 0,
-            204522252, 204522252, 0, 195225786, 195225786, 0, 186737708, 186737708, 0, 178956970,
-            178956970, 0, 171798691, 171798691, 0, 165191049, 165191049, 0, 159072862, 159072862,
-            0, 153391689, 153391689, 0, 148102320, 148102320, 0, 143165576, 143165576, 0,
-            138547332, 138547332, 0, Integer.MIN_VALUE, 0, 4, 130150524, 130150524, 0, 126322567,
-            126322567, 0, 122713351, 122713351, 0, 119304647, 119304647, 0, 116080197, 116080197,
-            0, 113025455, 113025455, 0, 110127366, 110127366, 0, 107374182, 107374182, 0,
-            104755299, 104755299, 0, 102261126, 102261126, 0, 99882960, 99882960, 0, 97612893,
-            97612893, 0, 95443717, 95443717, 0, 93368854, 93368854, 0, 91382282, 91382282,
-            0, 89478485, 89478485, 0, 87652393, 87652393, 0, 85899345, 85899345, 0,
-            84215045, 84215045, 0, 82595524, 82595524, 0, 81037118, 81037118, 0, 79536431,
-            79536431, 0, 78090314, 78090314, 0, 76695844, 76695844, 0, 75350303, 75350303,
-            0, 74051160, 74051160, 0, 72796055, 72796055, 0, 71582788, 71582788, 0,
-            70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
-            0, 5};
-
-    static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
-        final long maxEntryValue = (1L << bitsPerEntry) - 1;
-        final char valuesPerLong = (char) (64 / bitsPerEntry);
-        final int magicIndex = 3 * (valuesPerLong - 1);
-        final long divideMul = Integer.toUnsignedLong(MAGIC[magicIndex]);
-        final long divideAdd = Integer.toUnsignedLong(MAGIC[magicIndex + 1]);
-        final int divideShift = MAGIC[magicIndex + 2];
-        final int size = (blocks.length + valuesPerLong - 1) / valuesPerLong;
-
-        long[] data = new long[size];
-
-        for (int i = 0; i < blocks.length; i++) {
-            final long value = blocks[i];
-            final int cellIndex = (int) (i * divideMul + divideAdd >> 32L >> divideShift);
-            final int bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
-            data[cellIndex] = data[cellIndex] & ~(maxEntryValue << bitIndex) | (value & maxEntryValue) << bitIndex;
-        }
-
-        return data;
     }
 }
