@@ -12,6 +12,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.instance.block.BlockManager;
@@ -138,7 +139,7 @@ public class Main {
 //        VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
-        //MojangAuth.init();
+        MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));

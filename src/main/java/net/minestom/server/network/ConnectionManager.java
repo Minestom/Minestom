@@ -352,6 +352,7 @@ public final class ConnectionManager {
     @ApiStatus.Internal
     public void updateWaitingPlayers() {
         this.waitingPlayers.drain(player -> {
+            if (!player.isOnline()) return; // Player disconnected while in queued to join
             player.getPlayerConnection().setConnectionState(ConnectionState.PLAY);
             playPlayers.add(player);
             keepAlivePlayers.add(player);
