@@ -95,7 +95,7 @@ public final class SnapshotImpl {
             final Section section = sections[getChunkCoordinate(y) - minSection];
             final int blockStateId = section.blockPalette()
                     .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
-            return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
+            return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
         }
 
         @Override

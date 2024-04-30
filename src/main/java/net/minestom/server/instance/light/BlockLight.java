@@ -49,7 +49,7 @@ final class BlockLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId((short) stateId);
+            final Block block = Block.fromStateId(stateId);
             assert block != null;
             final byte lightEmission = (byte) block.registry().lightEmission();
 
@@ -62,7 +62,7 @@ final class BlockLight implements Light {
     }
 
     private static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short)palette.get(x, y, z));
+        return Block.fromStateId(palette.get(x, y, z));
     }
 
     private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {

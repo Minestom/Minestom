@@ -191,7 +191,7 @@ public final class ShapeImpl implements Shape {
 
     public Block block() {
         Block block = this.block;
-        if (block == null) this.block = block = Block.fromStateId((short) blockEntry.stateId());
+        if (block == null) this.block = block = Block.fromStateId(blockEntry.stateId());
         return block;
     }
 

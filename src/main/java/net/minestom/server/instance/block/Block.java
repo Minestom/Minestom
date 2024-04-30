@@ -181,7 +181,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
         return fromNamespaceId(namespaceID.asString());
     }
 
-    static @Nullable Block fromStateId(short stateId) {
+    static @Nullable Block fromStateId(int stateId) {
         return BlockImpl.getState(stateId);
     }
 

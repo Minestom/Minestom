@@ -16,7 +16,7 @@ public record BlockMarkerParticleData(@NotNull Block block) implements ParticleD
     }
 
     private static Block read(NetworkBuffer reader) {
-        short blockState = reader.read(NetworkBuffer.VAR_INT).shortValue();
+        int blockState = reader.read(NetworkBuffer.VAR_INT);
         Block block = Block.fromStateId(blockState);
         Check.stateCondition(block == null, "Block state " + blockState + " is invalid");
         return block;

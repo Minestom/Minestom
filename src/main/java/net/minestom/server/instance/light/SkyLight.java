@@ -78,7 +78,7 @@ final class SkyLight implements Light {
     }
 
     private static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short)palette.get(x, y, z));
+        return Block.fromStateId(palette.get(x, y, z));
     }
 
     private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
