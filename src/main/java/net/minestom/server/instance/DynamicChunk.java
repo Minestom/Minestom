@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -10,7 +11,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.*;
+import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
+import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -168,13 +171,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void loadHeightmapsFromNBT(NBTCompound heightmapsNBT) {
-        if (heightmapsNBT.contains(motionBlockingHeightmap().NBTName())) {
-            motionBlockingHeightmap().loadFrom(heightmapsNBT.getLongArray(motionBlockingHeightmap().NBTName()));
+    public void loadHeightmapsFromNBT(CompoundBinaryTag heightmapsNBT) {
+        if (heightmapsNBT.get(motionBlockingHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+            motionBlockingHeightmap().loadFrom(array.value());
         }
 
-        if (heightmapsNBT.contains(worldSurfaceHeightmap().NBTName())) {
-            worldSurfaceHeightmap().loadFrom(heightmapsNBT.getLongArray(worldSurfaceHeightmap().NBTName()));
+        if (heightmapsNBT.get(worldSurfaceHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+            worldSurfaceHeightmap().loadFrom(array.value());
         }
     }
 
@@ -258,7 +261,7 @@ public class DynamicChunk extends Chunk {
 
     private @NotNull ChunkDataPacket createChunkPacket() {
         final byte[] data;
-        final NBTCompound heightmapsNBT;
+        final CompoundBinaryTag heightmapsNBT;
         synchronized (this) {
             heightmapsNBT = getHeightmapNBT();
 
@@ -310,12 +313,12 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    private NBTCompound getHeightmapNBT() {
+    private CompoundBinaryTag getHeightmapNBT() {
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        return NBT.Compound(Map.of(
-                motionBlocking.NBTName(), motionBlocking.getNBT(),
-                worldSurface.NBTName(), worldSurface.getNBT()
-        ));
+        return CompoundBinaryTag.builder()
+                .putLongArray(motionBlocking.NBTName(), motionBlocking.getNBT())
+                .putLongArray(worldSurface.NBTName(), worldSurface.getNBT())
+                .build();
     }
 
     private void calculateFullHeightmap() {
