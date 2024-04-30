@@ -21,11 +21,11 @@ public class PathGenerator {
 
     public static @NotNull PPath generate(@NotNull Instance instance, @NotNull Pos orgStart, @NotNull Point orgTarget, double closeDistance, double maxDistance, double pathVariance, @NotNull BoundingBox boundingBox, boolean isOnGround, @NotNull NodeGenerator generator, @Nullable Runnable onComplete) {
         Point start = (!isOnGround && generator.hasGravitySnap())
-                ? orgStart.withY(generator.gravitySnap(instance, orgStart.x(), orgStart.y(), orgStart.z(), boundingBox, 100))
+                ? orgStart.withY(generator.gravitySnap(instance, orgStart.x(), orgStart.y(), orgStart.z(), boundingBox, 100).orElse(orgStart.y()))
                 : orgStart;
 
         Point target = (generator.hasGravitySnap())
-                ? orgTarget.withY(generator.gravitySnap(instance, orgTarget.x(), orgTarget.y(), orgTarget.z(), boundingBox, 100))
+                ? orgTarget.withY(generator.gravitySnap(instance, orgTarget.x(), orgTarget.y(), orgTarget.z(), boundingBox, 100).orElse(orgTarget.y()))
                 : Pos.fromPoint(orgTarget);
 
         PPath path = new PPath(maxDistance, pathVariance, onComplete);

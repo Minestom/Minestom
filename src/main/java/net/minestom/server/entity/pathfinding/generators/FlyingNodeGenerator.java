@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 public class FlyingNodeGenerator implements NodeGenerator {
@@ -94,7 +95,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
     }
 
     @Override
-    public double gravitySnap(@NotNull Instance instance, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall) {
-        return pointY;
+    public @NotNull OptionalDouble gravitySnap(@NotNull Instance instance, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall) {
+        return OptionalDouble.of(pointY);
     }
 }

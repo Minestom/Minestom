@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 public class WaterNodeGenerator implements NodeGenerator {
@@ -106,13 +107,13 @@ public class WaterNodeGenerator implements NodeGenerator {
         return newNode;
     }
 
-    public double gravitySnap(@NotNull Instance instance, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
+    public @NotNull OptionalDouble gravitySnap(@NotNull Instance instance, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
         double pointX = (int) Math.floor(pointOrgX) + 0.5;
         double pointY = (int) Math.floor(pointOrgY);
         double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
 
         Chunk c = instance.getChunkAt(pointX, pointZ);
-        if (c == null) return pointY;
+        if (c == null) return OptionalDouble.of(pointY);
 
         for (int axis = 1; axis <= maxFall; ++axis) {
             pointIterator.reset(boundingBox, pointX, pointY, pointZ, BoundingBox.AxisMask.Y, -axis);
@@ -123,11 +124,11 @@ public class WaterNodeGenerator implements NodeGenerator {
                 var foundBlock = instance.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE);
                 // Stop falling when water is hit
                 if (foundBlock.isSolid() || foundBlock.compare(Block.WATER)) {
-                    return block.blockY() + 1;
+                    return OptionalDouble.of(block.blockY() + 1);
                 }
             }
         }
 
-        return pointY - maxFall;
+        return OptionalDouble.empty();
     }
 }

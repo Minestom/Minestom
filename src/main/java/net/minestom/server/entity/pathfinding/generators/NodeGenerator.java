@@ -12,6 +12,7 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 public interface NodeGenerator {
@@ -40,9 +41,9 @@ public interface NodeGenerator {
      * @param pointZ the z coordinate
      * @param boundingBox the bounding box
      * @param maxFall the maximum fall distance
-     * @return the snapped y coordinate
+     * @return the snapped y coordinate. Empty if the snap point is not found
      */
-    double gravitySnap(@NotNull Instance instance, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall);
+    @NotNull OptionalDouble gravitySnap(@NotNull Instance instance, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall);
 
     /**
      * Check if we can move directly from one point to another
