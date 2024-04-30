@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <h2>Field Summary</h2>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.instance.DynamicChunk">Fields inherited from class&nbsp;net.minestom.server.instance.<a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></h3>
-<code><a href="DynamicChunk.html#entries">entries</a>, <a href="DynamicChunk.html#sections">sections</a>, <a href="DynamicChunk.html#tickableMap">tickableMap</a></code></div>
+<code><a href="DynamicChunk.html#entries">entries</a>, <a href="DynamicChunk.html#motionBlocking">motionBlocking</a>, <a href="DynamicChunk.html#sections">sections</a>, <a href="DynamicChunk.html#tickableMap">tickableMap</a>, <a href="DynamicChunk.html#worldSurface">worldSurface</a></code></div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.instance.Chunk">Fields inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
 <code><a href="Chunk.html#CHUNK_SECTION_SIZE">CHUNK_SECTION_SIZE</a>, <a href="Chunk.html#CHUNK_SIZE_X">CHUNK_SIZE_X</a>, <a href="Chunk.html#CHUNK_SIZE_Z">CHUNK_SIZE_Z</a>, <a href="Chunk.html#chunkX">chunkX</a>, <a href="Chunk.html#chunkZ">chunkZ</a>, <a href="Chunk.html#columnarSpace">columnarSpace</a>, <a href="Chunk.html#instance">instance</a>, <a href="Chunk.html#loaded">loaded</a>, <a href="Chunk.html#maxSection">maxSection</a>, <a href="Chunk.html#minSection">minSection</a></code></div>
@@ -154,57 +154,54 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#computeHeightmap()" class="member-name-link">computeHeightmap</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy(net.minestom.server.instance.Instance,int,int)" class="member-name-link">copy</a><wbr>(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copy(net.minestom.server.instance.Instance,int,int)" class="member-name-link">copy</a><wbr>(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../network/packet/server/play/data/LightData.html" title="class in net.minestom.server.network.packet.server.play.data">LightData</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createLightData()" class="member-name-link">createLightData</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeightmap()" class="member-name-link">getHeightmap</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../network/packet/server/play/data/LightData.html" title="class in net.minestom.server.network.packet.server.play.data">LightData</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createLightData()" class="member-name-link">createLightData</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOcclusionMap()" class="member-name-link">getOcclusionMap</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Invalidate the chunk caches</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onGenerate()" class="member-name-link">onGenerate</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onGenerate()" class="member-name-link">onGenerate</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when the chunk generator has finished generating the chunk.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onLoad()" class="member-name-link">onLoad</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onLoad()" class="member-name-link">onLoad</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when the chunk has been successfully loaded.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)" class="member-name-link">relight</a><wbr>(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#relight(net.minestom.server.instance.Instance,java.util.Collection)" class="member-name-link">relight</a><wbr>(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Forces a relight of the specified chunks.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendLighting()" class="member-name-link">sendLighting</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)" class="member-name-link">setBlock</a><wbr>(int&nbsp;x,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendLighting()" class="member-name-link">sendLighting</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)" class="member-name-link">setBlock</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  @NotNull <a href="block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  <a href="block/BlockHandler.Placement.html" title="class in net.minestom.server.instance.block">BlockHandler.Placement</a>&nbsp;placement,
  <a href="block/BlockHandler.Destroy.html" title="class in net.minestom.server.instance.block">BlockHandler.Destroy</a>&nbsp;destroy)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes a chunk tick.</div>
 </div>
 </div>
@@ -212,7 +209,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.instance.DynamicChunk">Methods inherited from class&nbsp;net.minestom.server.instance.<a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></h3>
-<code><a href="DynamicChunk.html#getBiome(int,int,int)">getBiome</a>, <a href="DynamicChunk.html#getBlock(int,int,int,net.minestom.server.instance.block.Block.Getter.Condition)">getBlock</a>, <a href="DynamicChunk.html#getFullDataPacket()">getFullDataPacket</a>, <a href="DynamicChunk.html#getLastChangeTime()">getLastChangeTime</a>, <a href="DynamicChunk.html#getSection(int)">getSection</a>, <a href="DynamicChunk.html#getSections()">getSections</a>, <a href="DynamicChunk.html#reset()">reset</a>, <a href="DynamicChunk.html#setBiome(int,int,int,net.minestom.server.world.biomes.Biome)">setBiome</a>, <a href="DynamicChunk.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">updateSnapshot</a></code></div>
+<code><a href="DynamicChunk.html#getBiome(int,int,int)">getBiome</a>, <a href="DynamicChunk.html#getBlock(int,int,int,net.minestom.server.instance.block.Block.Getter.Condition)">getBlock</a>, <a href="DynamicChunk.html#getFullDataPacket()">getFullDataPacket</a>, <a href="DynamicChunk.html#getLastChangeTime()">getLastChangeTime</a>, <a href="DynamicChunk.html#getSection(int)">getSection</a>, <a href="DynamicChunk.html#getSections()">getSections</a>, <a href="DynamicChunk.html#loadHeightmapsFromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)">loadHeightmapsFromNBT</a>, <a href="DynamicChunk.html#motionBlockingHeightmap()">motionBlockingHeightmap</a>, <a href="DynamicChunk.html#reset()">reset</a>, <a href="DynamicChunk.html#setBiome(int,int,int,net.minestom.server.world.biomes.Biome)">setBiome</a>, <a href="DynamicChunk.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">updateSnapshot</a>, <a href="DynamicChunk.html#worldSurfaceHeightmap()">worldSurfaceHeightmap</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.instance.Chunk">Methods inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
 <code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getInstance()">getInstance</a>, <a href="Chunk.html#getMaxSection()">getMaxSection</a>, <a href="Chunk.html#getMinSection()">getMinSection</a>, <a href="Chunk.html#getSectionAt(int)">getSectionAt</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk()">sendChunk</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)">setBlock</a>, <a href="Chunk.html#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#tagHandler()">tagHandler</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></div>
@@ -326,19 +323,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="computeHeightmap()">
-<h3>computeHeightmap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">computeHeightmap</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="DynamicChunk.html#computeHeightmap()">computeHeightmap</a></code>&nbsp;in class&nbsp;<code><a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getHeightmap()">
-<h3>getHeightmap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name">getHeightmap</span>()</div>
+<section class="detail" id="getOcclusionMap()">
+<h3>getOcclusionMap</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name">getOcclusionMap</span>()</div>
 </section>
 </li>
 <li>

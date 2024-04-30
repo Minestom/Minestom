@@ -102,7 +102,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>, <a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a>, <a href="../world/biomes/Biome.Getter.html" title="interface in net.minestom.server.world.biomes">Biome.Getter</a>, <a href="../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a>, <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a>, <a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>, <a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a>, <a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></span></div>
 <div class="block">A chunk is a part of an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
- Should contains all the blocks located at those positions and manage their tick updates.
+ Should contain all the blocks located at those positions and manage their tick updates.
  Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  <p>
  You can create your own implementation of this class by extending it
@@ -270,6 +270,12 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if this chunk is read-only.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#loadHeightmapsFromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">loadHeightmapsFromNBT</a><wbr>(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;heightmaps)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#motionBlockingHeightmap()" class="member-name-link">motionBlockingHeightmap</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onGenerate()" class="member-name-link">onGenerate</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -350,6 +356,9 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the chunk as "unloaded".</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#worldSurfaceHeightmap()" class="member-name-link">worldSurfaceHeightmap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -553,6 +562,26 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
 </section>
 </li>
 <li>
+<section class="detail" id="motionBlockingHeightmap()">
+<h3>motionBlockingHeightmap</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></span>&nbsp;<span class="element-name">motionBlockingHeightmap</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="worldSurfaceHeightmap()">
+<h3>worldSurfaceHeightmap</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></span>&nbsp;<span class="element-name">worldSurfaceHeightmap</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="loadHeightmapsFromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<h3>loadHeightmapsFromNBT</h3>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadHeightmapsFromNBT</span><wbr><span class="parameters">(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;heightmaps)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="getSectionAt(int)">
 <h3>getSectionAt</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -584,7 +613,7 @@ implements <a href="block/Block.Getter.html" title="interface in net.minestom.se
  <p>
  "Change" means here data used in <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a>.
  It is necessary to see if the cached version of this chunk can be used
- instead of re writing and compressing everything.</div>
+ instead of re-writing and compressing everything.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the last change time in milliseconds</dd>

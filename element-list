@@ -74,6 +74,7 @@ net.minestom.server.instance.batch
 net.minestom.server.instance.block
 net.minestom.server.instance.block.rule
 net.minestom.server.instance.generator
+net.minestom.server.instance.heightmap
 net.minestom.server.instance.light
 net.minestom.server.instance.palette
 net.minestom.server.inventory
