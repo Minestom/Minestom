@@ -11,6 +11,9 @@ import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPac
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.common.PingPacket;
+import net.minestom.server.utils.inventory.ClickUtils;
+
+import java.util.List;
 
 public class WindowListener {
 
@@ -24,7 +27,12 @@ public class WindowListener {
 
         Click.Preprocessor preprocessor = player.clickPreprocessor();
         final Click.Info info = preprocessor.processClick(packet, player.isCreative(), playerInventory ? null : inventory.getSize());
-        if (info != null) inventory.handleClick(player, info);
+        if (info != null) {
+            Click.Getter getter = ClickUtils.makeGetter(inventory, player.getInventory());
+            List<Click.Change> clientPrediction = ClickUtils.packetToChanges(packet, info, getter, playerInventory);
+
+            inventory.handleClick(player, info, clientPrediction);
+        }
 
         // (Why is the ping packet necessary?)
         player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));

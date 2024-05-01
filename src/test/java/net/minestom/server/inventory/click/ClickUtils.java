@@ -9,12 +9,13 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.*;
+
+import static net.minestom.server.utils.inventory.ClickUtils.consolidate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -61,7 +62,7 @@ public final class ClickUtils {
         var inventory = createInventory();
 
         ContainerInventory.apply(initial, player, inventory);
-        var actual = inventory.handleClick(player, info);
+        var actual = inventory.handleClick(player, info, null);
 
         assertChanges(expected, actual, inventory.getSize());
     }
@@ -71,40 +72,13 @@ public final class ClickUtils {
         var inventory = player.getInventory();
 
         ContainerInventory.apply(initial, player, inventory);
-        var actual = inventory.handleClick(player, info);
+        var actual = inventory.handleClick(player, info, null);
 
         assertChanges(expected, actual, inventory.getSize());
     }
 
     public static void assertChanges(List<Click.Change> expected, List<Click.Change> actual, int size) {
-        assertEquals(ChangeResult.make(expected, size), ChangeResult.make(actual, size));
-    }
-
-    private record ChangeResult(Map<Integer, ItemStack> main, Map<Integer, ItemStack> player,
-                                @Nullable ItemStack cursor, List<ItemStack> drops) {
-        private static ChangeResult make(@NotNull List<Click.Change> changes, int size) {
-            Map<Integer, ItemStack> main = new HashMap<>();
-            Map<Integer, ItemStack> player = new HashMap<>();
-            @Nullable ItemStack cursor = null;
-            List<ItemStack> drops = new ArrayList<>();
-
-            for (var change : changes) {
-                switch (change) {
-                    case Click.Change.Container(int slot, ItemStack item) -> {
-                        if (slot < size) {
-                            main.put(slot, item);
-                        } else {
-                            player.put(PlayerInventoryUtils.protocolToMinestom(slot, size), item);
-                        }
-                    }
-                    case Click.Change.Player(int slot, ItemStack item) -> player.put(slot, item);
-                    case Click.Change.Cursor(ItemStack item) -> cursor = item;
-                    case Click.Change.DropFromPlayer(ItemStack item) -> drops.add(item);
-                }
-            }
-
-            return new ChangeResult(main, player, cursor, drops);
-        }
+        assertEquals(consolidate(expected, size), consolidate(actual, size));
     }
 
     public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
