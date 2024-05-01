@@ -11,6 +11,7 @@ import net.minestom.server.inventory.click.ClickProcessors;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.utils.inventory.ClickUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,42 +36,27 @@ public non-sealed class ContainerInventory extends InventoryImpl {
      * @return the click result, or null if the click did not occur
      */
     public static @Nullable List<Click.Change> handleClick(@NotNull Inventory inventory, @NotNull Player player, @NotNull Click.Info info,
-                                                     @NotNull ClickProcessors.InventoryProcessor processor) {
+                                                           @NotNull ClickProcessors.InventoryProcessor processor) {
         PlayerInventory playerInventory = player.getInventory();
 
         InventoryPreClickEvent preClickEvent = new InventoryPreClickEvent(playerInventory, inventory, player, info);
         EventDispatcher.call(preClickEvent);
-        if (!preClickEvent.isCancelled()) {
-            final Click.Info newInfo = preClickEvent.getClickInfo();
-            Click.Getter getter = new Click.Getter(inventory::getItemStack, playerInventory::getItemStack, playerInventory.getCursorItem(), inventory.getSize());
-            final List<Click.Change> changes = processor.apply(newInfo, getter);
+        if (preClickEvent.isCancelled()) return null;
 
-            InventoryClickEvent clickEvent = new InventoryClickEvent(playerInventory, inventory, player, newInfo, changes);
-            EventDispatcher.call(clickEvent);
+        final Click.Info newInfo = preClickEvent.getClickInfo();
+        final List<Click.Change> changes = processor.apply(newInfo, ClickUtils.makeGetter(inventory, playerInventory));
 
-            if (!clickEvent.isCancelled()) {
-                final List<Click.Change> newChanges = clickEvent.getChanges();
+        InventoryClickEvent clickEvent = new InventoryClickEvent(playerInventory, inventory, player, newInfo, changes);
+        EventDispatcher.call(clickEvent);
+        if (clickEvent.isCancelled()) return null;
 
-                apply(newChanges, player, inventory);
+        final List<Click.Change> newChanges = clickEvent.getChanges();
 
-                EventDispatcher.call(new InventoryPostClickEvent(player, inventory, newInfo, newChanges));
+        apply(newChanges, player, inventory);
 
-                if (!info.equals(newInfo) || !changes.equals(newChanges)) {
-                    inventory.update(player);
-                    if (inventory != playerInventory) {
-                        playerInventory.update(player);
-                    }
-                }
+        EventDispatcher.call(new InventoryPostClickEvent(player, inventory, newInfo, newChanges));
 
-                return newChanges;
-            }
-        }
-
-        inventory.update(player);
-        if (inventory != playerInventory) {
-            playerInventory.update(player);
-        }
-        return null;
+        return newChanges;
     }
 
     public static void apply(@NotNull List<Click.Change> changes, @NotNull Player player, @NotNull Inventory inventory) {
@@ -146,9 +132,18 @@ public non-sealed class ContainerInventory extends InventoryImpl {
     }
 
     @Override
-    public @Nullable List<Click.Change> handleClick(@NotNull Player player, Click.@NotNull Info info) {
-        return ContainerInventory.handleClick(this, player, info,
-                ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
+    public @Nullable List<Click.Change> handleClick(@NotNull Player player, Click.@NotNull Info info, @Nullable List<Click.Change> clientPrediction) {
+        // We can use the client prediction if it's conservative (i.e. doesn't create or delete items) or the client is in creative.
+        // Otherwise, we make our own.
+        if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, player.getInventory()) || player.isCreative())) {
+            return ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
+        } else {
+            var results = ContainerInventory.handleClick(this, player, info,
+                    ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
+            update(player);
+            player.getInventory().update(player);
+            return results;
+        }
     }
 
     @Override
