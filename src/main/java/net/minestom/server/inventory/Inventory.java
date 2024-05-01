@@ -51,9 +51,10 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
      *
      * @param player the player that clicked
      * @param info the information about the player's click
+     * @param clientPrediction the client prediction (null if none)
      * @return the results of the click, or null if the click was cancelled or otherwise was not handled
      */
-    @Nullable List<Click.Change> handleClick(@NotNull Player player, @NotNull Click.Info info);
+    @Nullable List<Click.Change> handleClick(@NotNull Player player, @NotNull Click.Info info, @Nullable List<Click.Change> clientPrediction);
 
     /**
      * Gets all the {@link ItemStack} in the inventory.
