@@ -271,7 +271,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public boolean isOnGround() {
-        return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
+        return onGround;
     }
 
     /**
