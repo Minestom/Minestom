@@ -9,6 +9,7 @@ import net.minestom.server.inventory.click.ClickProcessors;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.inventory.ClickUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -158,8 +159,16 @@ public non-sealed class PlayerInventory extends InventoryImpl {
     }
 
     @Override
-    public @Nullable List<Click.Change> handleClick(@NotNull Player player, @NotNull Click.Info info) {
-        return ContainerInventory.handleClick(this, player, info, ClickProcessors.PLAYER_PROCESSOR);
+    public @Nullable List<Click.Change> handleClick(@NotNull Player player, Click.@NotNull Info info, @Nullable List<Click.Change> clientPrediction) {
+        // We can use the client prediction if it's conservative (i.e. doesn't create or delete items) or the client is in creative.
+        // Otherwise, we make our own.
+        if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, this) || player.isCreative())) {
+            return ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
+        } else {
+            var results = ContainerInventory.handleClick(this, player, info, ClickProcessors.PLAYER_PROCESSOR);
+            update(player);
+            return results;
+        }
     }
 
     public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot, int heldSlot) {
