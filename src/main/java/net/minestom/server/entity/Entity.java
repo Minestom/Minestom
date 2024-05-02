@@ -602,9 +602,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
         velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
-        onGround = physicsResult.isOnGround();
-
         if (!PlayerUtils.isSocketClient(this)) {
+            onGround = physicsResult.isOnGround();
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
         }
     }
