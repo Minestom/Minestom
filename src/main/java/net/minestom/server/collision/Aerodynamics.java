@@ -20,6 +20,11 @@ public record Aerodynamics(double gravity, double horizontalAirResistance, doubl
     }
 
     @Contract(pure = true)
+    public @NotNull Aerodynamics withGravity(@NotNull DoubleUnaryOperator operator) {
+        return withHorizontalAirResistance(operator.apply(gravity));
+    }
+
+    @Contract(pure = true)
     public @NotNull Aerodynamics withHorizontalAirResistance(double horizontalAirResistance) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);
     }
@@ -40,7 +45,7 @@ public record Aerodynamics(double gravity, double horizontalAirResistance, doubl
     }
 
     @Contract(pure = true)
-    public @NotNull Aerodynamics withAirResistance(double horizontal, double vertical) {
+    public @NotNull Aerodynamics withAirResistance(double horizontalAirResistance, double verticalAirResistance) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);
     }
 }
