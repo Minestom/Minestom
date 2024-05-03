@@ -81,7 +81,7 @@ public class TrimManager {
     }
 
     public void addDefaultTrimPatterns() {
-        this.trimMaterialCache = null;
+        this.trimPatternCache = null;
         this.trimPatterns.addAll(TrimPattern.values());
     }
 
@@ -96,12 +96,12 @@ public class TrimManager {
     }
 
     public boolean addTrimPattern(TrimPattern trimPattern) {
-        this.trimMaterialCache = null;
+        this.trimPatternCache = null;
         return this.trimPatterns.add(trimPattern);
     }
 
     public boolean removeTrimPattern(TrimPattern trimPattern) {
-        this.trimMaterialCache = null;
+        this.trimPatternCache = null;
         return this.trimPatterns.remove(trimPattern);
     }
 }
