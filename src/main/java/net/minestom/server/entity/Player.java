@@ -1382,8 +1382,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Sets the camera at {@code entity} eyes.
      *
      * @param entity the entity to spectate
+     * @throws IllegalStateException if {@code entity.getInstance()} returns null
      */
     public void spectate(@NotNull Entity entity) {
+        Check.stateCondition(entity.getInstance() != null, "The entity's instance must be set before spectating it");
+        if (this.instance != entity.getInstance())
+            this.setInstance(entity.getInstance(), position).join();
         sendPacket(new CameraPacket(entity));
     }
 
