@@ -21,7 +21,7 @@ public record Aerodynamics(double gravity, double horizontalAirResistance, doubl
 
     @Contract(pure = true)
     public @NotNull Aerodynamics withGravity(@NotNull DoubleUnaryOperator operator) {
-        return withHorizontalAirResistance(operator.apply(gravity));
+        return withGravity(operator.apply(gravity));
     }
 
     @Contract(pure = true)
