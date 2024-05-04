@@ -40,6 +40,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.event.item.ItemUsageCompleteEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
@@ -433,7 +434,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isUsingItem()) {
             if (time - startItemUseTime >= itemUseTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand, true);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
                 // Refresh hand
                 final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
@@ -446,6 +447,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, item, itemUseHand);
                     EventDispatcher.call(playerEatEvent);
                 }
+
+                var itemUsageCompleteEvent = new ItemUsageCompleteEvent(this, itemUseHand, item);
+                EventDispatcher.call(itemUsageCompleteEvent);
 
                 refreshItemUse(null);
             }
@@ -2214,8 +2218,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the called {@link ItemUpdateStateEvent},
      */
-    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand, boolean completed) {
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand), completed);
+    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand) {
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand));
         EventDispatcher.call(itemUpdateStateEvent);
 
         return itemUpdateStateEvent;

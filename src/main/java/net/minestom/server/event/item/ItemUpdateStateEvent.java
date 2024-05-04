@@ -8,38 +8,25 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Event when a player updates an item state, meaning when they stop using the item.
- * This event is also called when the item usage duration has passed, in which case {@link #isCompleted()} returns true.
  */
 public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
 
     private final Player player;
     private final Player.Hand hand;
     private final ItemStack itemStack;
-    private final boolean completed;
 
     private boolean handAnimation;
     private boolean riptideSpinAttack;
 
-    public ItemUpdateStateEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                @NotNull ItemStack itemStack, boolean completed) {
+    public ItemUpdateStateEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
-        this.completed = completed;
     }
 
     @NotNull
     public Player.Hand getHand() {
         return hand;
-    }
-
-    /**
-     * Gets whether the item usage is completed. This is the case if the item usage duration has passed.
-     *
-     * @return whether the item usage is completed
-     */
-    public boolean isCompleted() {
-        return completed;
     }
 
     /**
