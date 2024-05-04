@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.UniqueIdUtils;
+import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -108,15 +109,15 @@ public interface BinaryTagSerializer<T> {
         };
     }
 
-    BinaryTagSerializer<Void> NOTHING = new BinaryTagSerializer<>() {
+    BinaryTagSerializer<Unit> UNIT = new BinaryTagSerializer<>() {
         @Override
-        public @NotNull BinaryTag write(@NotNull Void value) {
+        public @NotNull BinaryTag write(@NotNull Unit value) {
             return EndBinaryTag.endBinaryTag();
         }
 
         @Override
-        public @NotNull Void read(@NotNull BinaryTag tag) {
-            return null;
+        public @NotNull Unit read(@NotNull BinaryTag tag) {
+            return Unit.INSTANCE;
         }
     };
 

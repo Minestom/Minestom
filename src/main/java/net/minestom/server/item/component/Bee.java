@@ -17,7 +17,9 @@ public record Bee(@NotNull CustomData entityData, int ticksInHive, int minTicksI
 
         @Override
         public Bee read(@NotNull NetworkBuffer buffer) {
-            return new Bee(buffer.read(CustomData.NETWORK_TYPE), buffer.read(NetworkBuffer.VAR_INT), buffer.read(NetworkBuffer.VAR_INT));
+            return new Bee(buffer.read(CustomData.NETWORK_TYPE),
+                    buffer.read(NetworkBuffer.VAR_INT),
+                    buffer.read(NetworkBuffer.VAR_INT));
         }
     };
     public static @NotNull BinaryTagSerializer<Bee> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -30,4 +32,16 @@ public record Bee(@NotNull CustomData entityData, int ticksInHive, int minTicksI
                     .putInt("min_ticks_in_hive", value.minTicksInHive)
                     .build()
     );
+
+    public @NotNull Bee withEntityData(@NotNull CustomData entityData) {
+        return new Bee(entityData, ticksInHive, minTicksInHive);
+    }
+
+    public @NotNull Bee withTicksInHive(int ticksInHive) {
+        return new Bee(entityData, ticksInHive, minTicksInHive);
+    }
+
+    public @NotNull Bee withMinTicksInHive(int minTicksInHive) {
+        return new Bee(entityData, ticksInHive, minTicksInHive);
+    }
 }
