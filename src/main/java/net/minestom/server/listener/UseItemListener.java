@@ -69,13 +69,14 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.OTHER;
         }
 
-        if (itemUseTime > 0)
+        if (itemUseTime > 0) {
             player.refreshItemUse(hand, itemUseTime);
 
-        PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
-        EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
-            player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
-            player.sendPacketToViewers(player.getMetadataPacket());
-        });
+            PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
+            EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
+                player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
+                player.sendPacketToViewers(player.getMetadataPacket());
+            });
+        }
     }
 }
