@@ -24,6 +24,16 @@ record DataComponentImpl<T>(
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
     @Override
+    public boolean isSynced() {
+        return network != null;
+    }
+
+    @Override
+    public boolean isSerialized() {
+        return nbt != null;
+    }
+
+    @Override
     public @NotNull T read(@NotNull BinaryTag tag) {
         Check.notNull(nbt, "{0} cannot be deserialized from NBT", this);
         return nbt.read(tag);

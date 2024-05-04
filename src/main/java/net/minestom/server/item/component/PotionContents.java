@@ -1,6 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.potion.CustomPotionEffect;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public record PotionContents(
         @Nullable PotionType potion,
-        @Nullable Color customColor,
+        @Nullable RGBLike customColor,
         @NotNull List<CustomPotionEffect> customEffects
 ) {
     public static final int POTION_DRINK_TIME = 32; // 32 ticks, in ms
@@ -25,7 +26,7 @@ public record PotionContents(
         public void write(@NotNull NetworkBuffer buffer, PotionContents value) {
             Integer typeId = value.potion == null ? null : value.potion.id();
             buffer.writeOptional(NetworkBuffer.VAR_INT, typeId);
-            buffer.writeOptional(NetworkBuffer.COLOR, value.customColor);
+            buffer.writeOptional(Color.NETWORK_TYPE, value.customColor);
             buffer.writeCollection(CustomPotionEffect.NETWORK_TYPE, value.customEffects);
         }
 
@@ -34,7 +35,7 @@ public record PotionContents(
             Integer typeId = buffer.readOptional(NetworkBuffer.VAR_INT);
             return new PotionContents(
                     typeId == null ? null : PotionType.fromId(typeId),
-                    buffer.readOptional(NetworkBuffer.COLOR),
+                    buffer.readOptional(Color.NETWORK_TYPE),
                     buffer.readCollection(CustomPotionEffect.NETWORK_TYPE, Short.MAX_VALUE)
             );
         }
