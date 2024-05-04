@@ -2181,7 +2181,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Changes the held item for the player viewers
-     * Also cancel eating if {@link #isUsingItem()} was true.
+     * Also cancel item usage if {@link #isUsingItem()} was true.
      * <p>
      * Warning: the player will not be noticed by this chance, only his viewers,
      * see instead: {@link #setHeldItemSlot(byte)}.
