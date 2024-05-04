@@ -128,7 +128,7 @@ public final class AttributeInstance {
             result *= (1.0f + modifier.getAmount());
         }
 
-        this.cachedValue = Math.min(result, getAttribute().maxValue());
+        this.cachedValue = Math.clamp(result, getAttribute().minValue(), getAttribute().maxValue());
 
         // Signal entity
         if (propertyChangeListener != null) {

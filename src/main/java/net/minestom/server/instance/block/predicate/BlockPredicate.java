@@ -10,6 +10,7 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -36,6 +37,12 @@ public record BlockPredicate(
      * Matches all blocks.
      */
     public static final BlockPredicate ALL = new BlockPredicate(null, null, null);
+    /**
+     * <p>Matches no blocks.</p>
+     *
+     * <p>Works based on the property that an exact property will never match a property which doesnt exist on any block.</p>
+     */
+    public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null);
 
     public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -87,6 +94,10 @@ public record BlockPredicate(
 
     public BlockPredicate(@NotNull BlockTypeFilter blocks) {
         this(blocks, null, null);
+    }
+
+    public BlockPredicate(@NotNull Block... blocks) {
+        this(new BlockTypeFilter.Blocks(blocks));
     }
 
     public BlockPredicate(@NotNull PropertiesPredicate state) {

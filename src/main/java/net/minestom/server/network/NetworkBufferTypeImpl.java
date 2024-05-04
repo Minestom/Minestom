@@ -4,12 +4,12 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
-import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
@@ -25,14 +25,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
 
-    record NothingType<T>() implements NetworkBufferTypeImpl<T> {
+    record UnitType() implements NetworkBufferTypeImpl<Unit> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, T value) {
+        public void write(@NotNull NetworkBuffer buffer, Unit value) {
         }
 
         @Override
-        public T read(@NotNull NetworkBuffer buffer) {
-            return null;
+        public Unit read(@NotNull NetworkBuffer buffer) {
+            return Unit.INSTANCE;
         }
     }
 
@@ -577,18 +577,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public Particle read(@NotNull NetworkBuffer buffer) {
             throw new UnsupportedOperationException("Cannot read a particle from the network buffer");
-        }
-    }
-
-    record ColorType() implements NetworkBufferTypeImpl<Color> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Color value) {
-            buffer.write(NetworkBuffer.INT, value.asRGB());
-        }
-
-        @Override
-        public Color read(@NotNull NetworkBuffer buffer) {
-            return new Color(buffer.read(NetworkBuffer.INT));
         }
     }
 
