@@ -13,6 +13,9 @@ import java.util.Collection;
 
 public sealed interface DataComponent<T> extends StaticProtocolObject permits DataComponentImpl {
 
+    boolean isSynced();
+    boolean isSerialized();
+
     @NotNull T read(@NotNull BinaryTag tag);
     @NotNull BinaryTag write(@NotNull T value);
 
