@@ -13,10 +13,12 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
+import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -62,6 +64,8 @@ public final class ConnectionManager {
 
     private final Set<Player> unmodifiableConfigurationPlayers = Collections.unmodifiableSet(configurationPlayers);
     private final Set<Player> unmodifiablePlayPlayers = Collections.unmodifiableSet(playPlayers);
+
+    private final CachedPacket resetChatPacket = new CachedPacket(new ResetChatPacket());
 
 
     // The uuid provider once a player login
@@ -275,6 +279,10 @@ public final class ConnectionManager {
 
             final Instance spawningInstance = event.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+
+            if (event.willClearChat()) {
+                player.sendPacket(resetChatPacket);
+            }
 
             // Registry data (if it should be sent)
             if (event.willSendRegistryData()) {

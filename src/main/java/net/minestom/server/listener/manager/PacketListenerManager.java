@@ -96,6 +96,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
         setPlayListener(ClientPingRequestPacket.class, PlayPingListener::requestListener);
         setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
+        setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
     }
 
     /**
