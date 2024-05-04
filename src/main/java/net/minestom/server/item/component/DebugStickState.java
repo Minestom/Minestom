@@ -35,4 +35,16 @@ public record DebugStickState(@NotNull Map<String, String> state) {
         state = Map.copyOf(state);
     }
 
+    public @NotNull DebugStickState set(@NotNull String key, @NotNull String value) {
+        Map<String, String> newState = new HashMap<>(state);
+        newState.put(key, value);
+        return new DebugStickState(newState);
+    }
+
+    public @NotNull DebugStickState remove(@NotNull String key) {
+        Map<String, String> newState = new HashMap<>(state);
+        newState.remove(key);
+        return new DebugStickState(newState);
+    }
+
 }
