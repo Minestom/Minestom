@@ -189,10 +189,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private int food;
     private float foodSaturation;
-    private long startEatingTime;
+
+    private long startItemUseTime;
     private long defaultEatingTime = 1000L;
-    private long eatingTime;
-    private Hand eatingHand;
+    private long itemUseTime;
+    private Hand itemUseHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -428,27 +429,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     });
         }
 
-        // Eating animation
-        if (isEating()) {
-            if (time - startEatingTime >= eatingTime) {
+        // Complete item usage if needed
+        if (isUsingItem()) {
+            if (time - startItemUseTime >= itemUseTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
-
-                Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
                 // Refresh hand
                 final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
                 refreshActiveHand(false, isOffHand, false);
 
-                final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.material().isFood();
+                final ItemStack item = itemUpdateStateEvent.getItemStack();
+                final boolean isFood = item.material().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, item, itemUseHand);
                     EventDispatcher.call(playerEatEvent);
                 }
 
-                refreshEating(null);
+                refreshItemUse(null);
             }
         }
 
@@ -1108,8 +1107,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return true if the player is eating, false otherwise
      */
-    public boolean isEating() {
-        return eatingHand != null;
+    public boolean isUsingItem() {
+        return itemUseHand != null;
     }
 
     /**
@@ -1117,8 +1116,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the eating hand, null if none
      */
-    public @Nullable Hand getEatingHand() {
-        return eatingHand;
+    public @Nullable Hand getItemUseHand() {
+        return itemUseHand;
     }
 
     /**
@@ -2173,7 +2172,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Changes the held item for the player viewers
-     * Also cancel eating if {@link #isEating()} was true.
+     * Also cancel eating if {@link #isUsingItem()} was true.
      * <p>
      * Warning: the player will not be noticed by this chance, only his viewers,
      * see instead: {@link #setHeldItemSlot(byte)}.
@@ -2183,21 +2182,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
-        refreshEating(null);
+        refreshItemUse(null);
     }
 
-    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
-        this.eatingHand = eatingHand;
-        if (eatingHand != null) {
-            this.startEatingTime = System.currentTimeMillis();
-            this.eatingTime = eatingTime;
+    public void refreshItemUse(@Nullable Hand itemUseHand, long itemUseTime) {
+        this.itemUseHand = itemUseHand;
+        if (itemUseHand != null) {
+            this.startItemUseTime = System.currentTimeMillis();
+            this.itemUseTime = itemUseTime;
         } else {
-            this.startEatingTime = 0;
+            this.startItemUseTime = 0;
         }
     }
 
-    public void refreshEating(@Nullable Hand eatingHand) {
-        refreshEating(eatingHand, defaultEatingTime);
+    public void refreshItemUse(@Nullable Hand eatingHand) {
+        refreshItemUse(eatingHand, defaultEatingTime);
     }
 
     /**
@@ -2210,10 +2209,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
     @Deprecated
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
-        if (hand == null)
-            return null;
-
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @NotNull Hand hand) {
         final ItemStack updatedItem = getItemInHand(hand);
         final boolean isFood = updatedItem.material().isFood();
 
@@ -2231,10 +2227,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * It does check which hand to get the item to update. Allows food.
      *
      * @return the called {@link ItemUpdateStateEvent},
-     * null if there is no item to update the state
      */
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
-        return callItemUpdateStateEvent(true, hand);
+    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand) {
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand));
+        EventDispatcher.call(itemUpdateStateEvent);
+
+        return itemUpdateStateEvent;
     }
 
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {

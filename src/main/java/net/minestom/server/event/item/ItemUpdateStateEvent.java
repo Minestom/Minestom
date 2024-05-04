@@ -6,6 +6,9 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Event when a player updates an item state, meaning when they stop using the item.
+ */
 public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
 
     private final Player player;

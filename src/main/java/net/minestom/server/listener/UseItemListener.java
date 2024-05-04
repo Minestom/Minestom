@@ -18,8 +18,9 @@ public class UseItemListener {
         final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand();
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        //itemStack.onRightClick(player, hand);
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
+        final Material material = itemStack.material();
+
+        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, material.isFood() ? player.getDefaultEatingTime() : 0);
         EventDispatcher.call(useItemEvent);
 
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
@@ -28,9 +29,6 @@ public class UseItemListener {
             playerInventory.update();
             return;
         }
-
-        itemStack = useItemEvent.getItemStack();
-        final Material material = itemStack.material();
 
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
@@ -42,9 +40,8 @@ public class UseItemListener {
             }
         }
 
-        PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;
-
-        boolean cancelAnimation = false;
+        long itemUseTime = useItemEvent.getItemUseTime();
+        PlayerItemAnimationEvent.ItemAnimationType itemAnimationType;
 
         if (material == Material.BOW) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.BOW;
@@ -54,25 +51,31 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SHIELD;
         } else if (material == Material.TRIDENT) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.TRIDENT;
+        } else if (material == Material.SPYGLASS) {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SPYGLASS;
+        } else if (material == Material.GOAT_HORN) {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.HORN;
+        } else if (material == Material.BRUSH) {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.BRUSH;
         } else if (material.isFood()) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
-            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, player.getDefaultEatingTime());
-            EventDispatcher.callCancellable(playerPreEatEvent, () -> player.refreshEating(hand, playerPreEatEvent.getEatingTime()));
-
-            if (playerPreEatEvent.isCancelled()) {
-                cancelAnimation = true;
-            }
+            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, itemUseTime);
+            EventDispatcher.call(playerPreEatEvent);
+            if (playerPreEatEvent.isCancelled()) return;
+            itemUseTime = playerPreEatEvent.getEatingTime();
+        } else {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.OTHER;
         }
 
-        if (!cancelAnimation && itemAnimationType != null) {
-            PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
-            EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
-                player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
-                player.sendPacketToViewers(player.getMetadataPacket());
-            });
-        }
+        if (itemUseTime > 0)
+            player.refreshItemUse(hand, itemUseTime);
+
+        PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
+        EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
+            player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
+            player.sendPacketToViewers(player.getMetadataPacket());
+        });
     }
-
 }
