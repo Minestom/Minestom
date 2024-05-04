@@ -313,7 +313,7 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    private CompoundBinaryTag getHeightmapNBT() {
+    protected CompoundBinaryTag getHeightmapNBT() {
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
         return CompoundBinaryTag.builder()
                 .putLongArray(motionBlocking.NBTName(), motionBlocking.getNBT())
