@@ -142,7 +142,7 @@ public interface BinaryTagSerializer<T> {
 
         @Override
         public @NotNull Integer read(@NotNull BinaryTag tag) {
-            return tag instanceof IntBinaryTag intBinaryTag ? intBinaryTag.value() : 0;
+            return tag instanceof NumberBinaryTag numberTag ? numberTag.intValue() : 0;
         }
     };
 

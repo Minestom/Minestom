@@ -83,4 +83,8 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
         newEnchantments.put(enchantment, level);
         return new EnchantmentList(newEnchantments, showInTooltip);
     }
+
+    public @NotNull EnchantmentList withTooltip(boolean showInTooltip) {
+        return new EnchantmentList(enchantments, showInTooltip);
+    }
 }

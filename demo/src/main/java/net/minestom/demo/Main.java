@@ -23,6 +23,7 @@ import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeCategory;
 import net.minestom.server.recipe.ShapedRecipe;
+import net.minestom.server.recipe.ShapelessRecipe;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -33,11 +34,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        try {
-            Class.forName(ItemComponent.class.getName());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         System.setProperty("minestom.experiment.pose-updates", "true");
 
         MinecraftServer.setCompressionThreshold(0);
@@ -141,22 +137,22 @@ public class Main {
             }
         };
         MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
-//        var recipe = new ShapelessRecipe(
-//                "minestom:test2", "abc",
-//                RecipeCategory.Crafting.MISC,
-//                List.of(
-//                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.AIR))
-//                ),
-//                ItemStack.builder(Material.GOLD_BLOCK)
-//                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
-//                        .build()
-//        ) {
-//            @Override
-//            public boolean shouldShow(@NotNull Player player) {
-//                return true;
-//            }
-//        };
-//        MinecraftServer.getRecipeManager().addRecipe(recipe);
+        var recipe = new ShapelessRecipe(
+                "minestom:test2", "abc",
+                RecipeCategory.Crafting.MISC,
+                List.of(
+                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.DIRT)))
+                ),
+                ItemStack.builder(Material.GOLD_BLOCK)
+                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .build()
+        ) {
+            @Override
+            public boolean shouldShow(@NotNull Player player) {
+                return true;
+            }
+        };
+        MinecraftServer.getRecipeManager().addRecipe(recipe);
 
         PlayerInit.init();
 

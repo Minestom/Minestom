@@ -149,7 +149,7 @@ public class BlockPlacementListener {
             // If a player is trying to place a block on themselves, the client will send a block change but will not set the block on the client
             // For this reason, the block doesn't need to be updated for the client
 
-            // Client also doesn't predict placement of blocks on entities, but we need to refresh for properties where bounding boxes on the server don't match the client
+            // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
             if (collisionEntity != player)
                 refresh(player, chunk);
             

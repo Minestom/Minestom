@@ -18,7 +18,9 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
 
     public ClientHandshakePacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(STRING),
-                reader.read(UNSIGNED_SHORT), Intent.fromId(reader.read(VAR_INT)));
+                reader.read(UNSIGNED_SHORT),
+                // Not a readEnum call because the indices are not 0-based
+                Intent.fromId(reader.read(VAR_INT)));
     }
 
     @Override
@@ -30,6 +32,7 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
         }
         writer.write(STRING, serverAddress);
         writer.write(UNSIGNED_SHORT, serverPort);
+        // Not a writeEnum call because the indices are not 0-based
         writer.write(VAR_INT, intent.id());
     }
 
