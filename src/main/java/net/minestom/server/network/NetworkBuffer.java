@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
@@ -31,8 +30,7 @@ import java.util.function.Supplier;
 
 @ApiStatus.Experimental
 public final class NetworkBuffer {
-    public static final Type<Void> NOTHING = new NetworkBufferTypeImpl.NothingType<>();
-    public static final Type<Unit> NOTHING_V2 = new NetworkBufferTypeImpl.NothingType<>();
+    public static final Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     public static final Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
     public static final Type<Short> SHORT = new NetworkBufferTypeImpl.ShortType();
@@ -77,8 +75,6 @@ public final class NetworkBuffer {
     public static final Type<PaintingMeta.Variant> PAINTING_VARIANT = NetworkBufferTypeImpl.fromEnum(PaintingMeta.Variant.class);
     public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
     public static final Type<ArmadilloMeta.State> ARMADILLO_STATE = NetworkBufferTypeImpl.fromEnum(ArmadilloMeta.State.class);
-
-    public static final Type<Color> COLOR = new NetworkBufferTypeImpl.ColorType();
 
     public static <E extends Enum<E>> Type<E> fromEnum(@NotNull Class<E> enumClass) {
         return NetworkBufferTypeImpl.fromEnum(enumClass);
