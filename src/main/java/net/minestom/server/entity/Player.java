@@ -1107,14 +1107,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return true if the player is eating, false otherwise
      */
+    public boolean isEating() {
+        return isUsingItem() && getItemInHand(itemUseHand).material().isFood();
+    }
+
+    /**
+     * Gets if the player is using an item.
+     *
+     * @return true if the player is using an item, false otherwise
+     */
     public boolean isUsingItem() {
         return itemUseHand != null;
     }
 
     /**
-     * Gets the hand which the player is eating from.
+     * Gets the hand which the player is using an item from.
      *
-     * @return the eating hand, null if none
+     * @return the item use hand, null if none
      */
     public @Nullable Hand getItemUseHand() {
         return itemUseHand;
