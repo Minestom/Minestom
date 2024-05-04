@@ -825,7 +825,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         else if (isSneaking() && !isFlying()) newPose = Pose.SNEAKING;
 
         // Try to put them in their expected state, or the closest if they don't fit.
-        if (canFitWithBoundingBox(newPose)) setPose(newPose);// Use expected state
+        if (canFitWithBoundingBox(newPose)) setPose(newPose); // Use expected state
         else if (canFitWithBoundingBox(Pose.SNEAKING)) setPose(Pose.SNEAKING);
         else if (canFitWithBoundingBox(Pose.SWIMMING)) setPose(Pose.SWIMMING);
         else setPose(Pose.STANDING); // If they can't fit anywhere, just use standing

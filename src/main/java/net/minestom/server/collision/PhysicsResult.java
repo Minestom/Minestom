@@ -6,8 +6,7 @@ import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-@ApiStatus.Experimental
-/*
+/**
  * The result of a physics simulation.
  * @param newPosition the new position of the entity
  * @param newVelocity the new velocity of the entity
@@ -19,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * @param collisionPoints the points where the entity collided
  * @param collisionShapes the shapes the entity collided with
  */
+@ApiStatus.Experimental
 public record PhysicsResult(
         Pos newPosition,
         Vec newVelocity,
