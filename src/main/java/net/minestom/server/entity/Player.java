@@ -41,6 +41,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.event.item.ItemUsageCompleteEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
@@ -195,9 +196,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private int food;
     private float foodSaturation;
-    private long startEatingTime;
-    private long eatingTime;
-    private Hand eatingHand;
+
+    private long startItemUseTime;
+    private long itemUseTime;
+    private Hand itemUseHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -434,25 +436,26 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Eating animation
-        if (isEating()) {
-            if (instance.getWorldAge() - startEatingTime >= eatingTime) {
+        if (isUsingItem()) {
+            if (instance.getWorldAge() - startItemUseTime >= itemUseTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
-
-                Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
                 // Refresh hand
                 final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
                 refreshActiveHand(false, isOffHand, false);
 
-                final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = foodItem.has(ItemComponent.FOOD);
-                if (isFood || foodItem.material() == Material.POTION) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
+                final ItemStack item = itemUpdateStateEvent.getItemStack();
+                final boolean isFood = item.has(ItemComponent.FOOD);
+                if (isFood || item.material() == Material.POTION) {
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, item, itemUseHand);
                     EventDispatcher.call(playerEatEvent);
                 }
 
-                refreshEating(null);
+                var itemUsageCompleteEvent = new ItemUsageCompleteEvent(this, itemUseHand, item);
+                EventDispatcher.call(itemUsageCompleteEvent);
+
+                refreshItemUse(null);
             }
         }
 
@@ -1128,16 +1131,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return eatingHand != null;
+        return isUsingItem() && getItemInHand(itemUseHand).material().isFood();
     }
 
     /**
-     * Gets the hand which the player is eating from.
+     * Gets if the player is using an item.
      *
-     * @return the eating hand, null if none
+     * @return true if the player is using an item, false otherwise
      */
-    public @Nullable Hand getEatingHand() {
-        return eatingHand;
+    public boolean isUsingItem() {
+        return itemUseHand != null;
+    }
+
+    /**
+     * Gets the hand which the player is using an item from.
+     *
+     * @return the item use hand, null if none
+     */
+    public @Nullable Hand getItemUseHand() {
+        return itemUseHand;
     }
 
     @Override
@@ -2169,7 +2181,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Changes the held item for the player viewers
-     * Also cancel eating if {@link #isEating()} was true.
+     * Also cancel item usage if {@link #isUsingItem()} was true.
      * <p>
      * Warning: the player will not be noticed by this chance, only his viewers,
      * see instead: {@link #setHeldItemSlot(byte)}.
@@ -2179,58 +2191,34 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
-        refreshEating(null);
+        refreshItemUse(null);
     }
 
-    public void refreshEating(@Nullable Hand eatingHand, long eatingTimeTicks) {
-        this.eatingHand = eatingHand;
-        if (eatingHand != null) {
-            this.startEatingTime = instance.getWorldAge();
-            this.eatingTime = eatingTimeTicks;
+    public void refreshItemUse(@Nullable Hand itemUseHand, long itemUseTimeTicks) {
+        this.itemUseHand = itemUseHand;
+        if (itemUseHand != null) {
+            this.startItemUseTime = instance.getWorldAge();
+            this.itemUseTime = itemUseTimeTicks;
         } else {
-            this.startEatingTime = 0;
+            this.startItemUseTime = 0;
         }
     }
 
-    public void refreshEating(@Nullable Hand eatingHand) {
-        refreshEating(eatingHand, 0);
+    public void refreshItemUse(@Nullable Hand eatingHand) {
+        refreshItemUse(eatingHand, defaultEatingTime);
     }
 
     /**
      * Used to call {@link ItemUpdateStateEvent} with the proper item
      * It does check which hand to get the item to update.
      *
-     * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
-     * null if there is no item to update the state
-     * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
-    @Deprecated
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
-        if (hand == null)
-            return null;
-
-        final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.has(ItemComponent.FOOD);
-
-        if (isFood && !allowFood)
-            return null;
-
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
+    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand) {
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand));
         EventDispatcher.call(itemUpdateStateEvent);
 
         return itemUpdateStateEvent;
-    }
-
-    /**
-     * Used to call {@link ItemUpdateStateEvent} with the proper item
-     * It does check which hand to get the item to update. Allows food.
-     *
-     * @return the called {@link ItemUpdateStateEvent},
-     * null if there is no item to update the state
-     */
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
-        return callItemUpdateStateEvent(true, hand);
     }
 
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
