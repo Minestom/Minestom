@@ -20,8 +20,9 @@ public class UseItemListener {
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
         final Player.Hand hand = packet.hand();
         ItemStack itemStack = player.getItemInHand(hand);
-        //itemStack.onRightClick(player, hand);
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
+        final Material material = itemStack.material();
+
+        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, material.isFood() ? player.getDefaultEatingTime() : 0);
         EventDispatcher.call(useItemEvent);
 
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
@@ -44,9 +45,8 @@ public class UseItemListener {
             }
         }
 
-        PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;
-
-        boolean cancelAnimation = false;
+        long itemUseTime = useItemEvent.getItemUseTime();
+        PlayerItemAnimationEvent.ItemAnimationType itemAnimationType;
 
         if (material == Material.BOW) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.BOW;
@@ -56,21 +56,29 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SHIELD;
         } else if (material == Material.TRIDENT) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.TRIDENT;
+        } else if (material == Material.SPYGLASS) {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SPYGLASS;
+        } else if (material == Material.GOAT_HORN) {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.HORN;
+        } else if (material == Material.BRUSH) {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.BRUSH;
         } else if (itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
             final Food food = itemStack.get(ItemComponent.FOOD);
             int defaultEatingTime = food != null ? food.eatDurationTicks() : PotionContents.POTION_DRINK_TIME;
-            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, defaultEatingTime);
-            EventDispatcher.callCancellable(playerPreEatEvent, () -> player.refreshEating(hand, playerPreEatEvent.getEatingTime()));
-
-            if (playerPreEatEvent.isCancelled()) {
-                cancelAnimation = true;
-            }
+            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, itemUseTime);
+            EventDispatcher.call(playerPreEatEvent);
+            if (playerPreEatEvent.isCancelled()) return;
+            itemUseTime = playerPreEatEvent.getEatingTime();
+        } else {
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.OTHER;
         }
 
-        if (!cancelAnimation && itemAnimationType != null) {
+        if (itemUseTime > 0) {
+            player.refreshItemUse(hand, itemUseTime);
+
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
                 player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
@@ -78,5 +86,4 @@ public class UseItemListener {
             });
         }
     }
-
 }

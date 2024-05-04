@@ -138,17 +138,14 @@ public final class PlayerDiggingListener {
         if (meta == null || !meta.isHandActive()) return;
         Player.Hand hand = meta.getActiveHand();
 
-        player.refreshEating(null);
+        player.refreshItemUse(null);
         player.triggerStatus((byte) 9);
 
         ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
-        if (itemUpdateStateEvent == null) {
-            player.refreshActiveHand(true, false, false);
-        } else {
-            final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-            player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
-                    isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
-        }
+
+        final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+        player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
+                isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
     }
 
     private static DiggingResult breakBlock(Instance instance,
