@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +21,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private final boolean isFirstConfig;
 
     private boolean hardcore;
+    private boolean clearChat;
     private boolean sendRegistryData;
     private Instance spawningInstance;
 
@@ -28,6 +30,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
         this.isFirstConfig = isFirstConfig;
 
         this.hardcore = false;
+        this.clearChat = false;
         this.sendRegistryData = isFirstConfig;
         this.spawningInstance = null;
     }
@@ -50,6 +53,29 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
 
     public void setHardcore(boolean hardcore) {
         this.hardcore = hardcore;
+    }
+
+    /**
+     * If true, the player's chat will be cleared when exiting the configuration state, otherwise
+     * it will be preserved. The default is not to clear the chat.
+     *
+     * @return true if the chat will be cleared, false otherwise
+     *
+     * @see ResetChatPacket
+     */
+    public boolean willClearChat() {
+        return clearChat;
+    }
+
+    /**
+     * Set whether the player's chat will be cleared when exiting the configuration state.
+     *
+     * @param clearChat true to clear the chat, false otherwise
+     *
+     * @see ResetChatPacket
+     */
+    public void setClearChat(boolean clearChat) {
+        this.clearChat = clearChat;
     }
 
     public boolean willSendRegistryData() {

@@ -7,7 +7,6 @@ import net.minestom.server.advancements.notifications.Notification;
 import net.minestom.server.advancements.notifications.NotificationCenter;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -39,18 +38,11 @@ import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.play.ExplosionPacket;
-import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.BlockParticleData;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
@@ -98,8 +90,6 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
-
-                player.sendPacket(makeExplosion(playerPos, velocity));
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -188,20 +178,6 @@ public class PlayerInit {
                 event.getInstance().setBlock(event.getBlockPosition(), block);
             });
 
-    private static final byte[] AIR_BLOCK_PARTICLE = NetworkBuffer.makeArray(new BlockParticleData(Block.AIR)::write);
-
-    private static @NotNull ExplosionPacket makeExplosion(@NotNull Point position, @NotNull Vec motion) {
-        return new ExplosionPacket(
-                position.x(), position.y(), position.z(),
-                0, new byte[0],
-                (float) motion.x(), (float) motion.y(), (float) motion.z(),
-                ExplosionPacket.BlockInteraction.KEEP,
-                Particle.BLOCK.id(), AIR_BLOCK_PARTICLE,
-                Particle.BLOCK.id(), AIR_BLOCK_PARTICLE,
-                SoundEvent.of(NamespaceID.from("not.a.real.sound"), 0f)
-        );
-    }
-
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
@@ -250,8 +226,7 @@ public class PlayerInit {
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            if (LAST_TICK.get() == null) return;
-            if (MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
+            if (LAST_TICK.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
                 return;
 
             long ramUsage = benchmarkManager.getUsedMemory();

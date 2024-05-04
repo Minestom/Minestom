@@ -1092,14 +1092,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Sets and refresh client food saturationModifier.
+     * Sets and refresh client food saturation.
      *
-     * @param foodSaturation the food saturationModifier
+     * @param foodSaturation the food saturation
      * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 20
      */
     public void setFoodSaturation(float foodSaturation) {
         Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 20),
-                "Food saturationModifier has to be between 0 and 20");
+                "Food saturation has to be between 0 and 20");
         this.foodSaturation = foodSaturation;
         sendPacket(new UpdateHealthPacket(getHealth(), food, foodSaturation));
     }
