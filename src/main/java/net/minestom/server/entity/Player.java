@@ -433,7 +433,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isUsingItem()) {
             if (time - startItemUseTime >= itemUseTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand, true);
 
                 // Refresh hand
                 final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
@@ -2214,8 +2214,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the called {@link ItemUpdateStateEvent},
      */
-    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand) {
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand));
+    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand, boolean completed) {
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand), completed);
         EventDispatcher.call(itemUpdateStateEvent);
 
         return itemUpdateStateEvent;
