@@ -2203,29 +2203,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Used to call {@link ItemUpdateStateEvent} with the proper item
      * It does check which hand to get the item to update.
      *
-     * @param allowFood true if food should be updated, false otherwise
-     * @return the called {@link ItemUpdateStateEvent},
-     * null if there is no item to update the state
-     * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
-     */
-    @Deprecated
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @NotNull Hand hand) {
-        final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.material().isFood();
-
-        if (isFood && !allowFood)
-            return null;
-
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
-        EventDispatcher.call(itemUpdateStateEvent);
-
-        return itemUpdateStateEvent;
-    }
-
-    /**
-     * Used to call {@link ItemUpdateStateEvent} with the proper item
-     * It does check which hand to get the item to update. Allows food.
-     *
      * @return the called {@link ItemUpdateStateEvent},
      */
     public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand) {
