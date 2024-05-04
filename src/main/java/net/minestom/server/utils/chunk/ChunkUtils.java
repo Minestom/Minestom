@@ -1,6 +1,5 @@
 package net.minestom.server.utils.chunk;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;

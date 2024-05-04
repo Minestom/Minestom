@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
@@ -343,7 +342,7 @@ public class AnvilLoader implements IChunkLoader {
                     mcaFile = new RegionFile(new RandomAccessFile(regionFile, "rw"), regionX, regionZ);
                     alreadyLoaded.put(n, mcaFile);
                 } catch (AnvilException | IOException e) {
-                    LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+                    LOGGER.error("Failed to save chunk {}, {}", chunkX, chunkZ, e);
                     MinecraftServer.getExceptionManager().handleException(e);
                     return AsyncUtils.VOID_FUTURE;
                 }
@@ -355,7 +354,7 @@ public class AnvilLoader implements IChunkLoader {
             LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
             mcaFile.writeColumnData(writer.toNBT(), chunk.getChunkX(), chunk.getChunkZ());
         } catch (IOException e) {
-            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+            LOGGER.error("Failed to save chunk {}, {}", chunkX, chunkZ, e);
             MinecraftServer.getExceptionManager().handleException(e);
             return AsyncUtils.VOID_FUTURE;
         }

@@ -566,11 +566,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean isOnGround() {
-        return onGround;
-    }
-
-    @Override
     public void remove(boolean permanent) {
         if (isRemoved()) return;
 
@@ -811,7 +806,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
             sendPacket(new ChunkBatchFinishedPacket(batchSize));
             chunkBatchLead += 1;
-//            logger.debug("chunk batch sent player={} chunks={} lead={}", username, batchSize, chunkBatchLead);
+            //logger.debug("chunk batch sent player={} chunks={} lead={}", username, batchSize, chunkBatchLead);
         } finally {
             chunkQueueLock.unlock();
         }
@@ -819,38 +814,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     protected void updatePose() {
-        Pose oldPose = getPose();
-        Pose newPose;
+        Pose newPose = Pose.STANDING;
 
         // Figure out their expected state
+        // Excludes sleeping as minestom does not have that builtin.
         var meta = getEntityMeta();
-        if (meta.isFlyingWithElytra()) {
-            newPose = Pose.FALL_FLYING;
-        } else if (false) { // When should they be sleeping? We don't have any in-bed state...
-            newPose = Pose.SLEEPING;
-        } else if (meta.isSwimming()) {
-            newPose = Pose.SWIMMING;
-        } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            newPose = Pose.SPIN_ATTACK;
-        } else if (isSneaking() && !isFlying()) {
-            newPose = Pose.SNEAKING;
-        } else {
-            newPose = Pose.STANDING;
-        }
+        if (meta.isFlyingWithElytra()) newPose = Pose.FALL_FLYING;
+        else if (meta.isSwimming()) newPose = Pose.SWIMMING;
+        else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) newPose = Pose.SPIN_ATTACK;
+        else if (isSneaking() && !isFlying()) newPose = Pose.SNEAKING;
 
         // Try to put them in their expected state, or the closest if they don't fit.
-        if (canFitWithBoundingBox(newPose)) {
-            // Use expected state
-        } else if (canFitWithBoundingBox(Pose.SNEAKING)) {
-            newPose = Pose.SNEAKING;
-        } else if (canFitWithBoundingBox(Pose.SWIMMING)) {
-            newPose = Pose.SWIMMING;
-        } else {
-            // If they can't fit anywhere, just use standing
-            newPose = Pose.STANDING;
-        }
-
-        if (newPose != oldPose) setPose(newPose);
+        if (canFitWithBoundingBox(newPose)) setPose(newPose);// Use expected state
+        else if (canFitWithBoundingBox(Pose.SNEAKING)) setPose(Pose.SNEAKING);
+        else if (canFitWithBoundingBox(Pose.SWIMMING)) setPose(Pose.SWIMMING);
+        else setPose(Pose.STANDING); // If they can't fit anywhere, just use standing
     }
 
     /**
@@ -1938,15 +1916,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public boolean hasReducedDebugScreenInformation() {
         return reducedDebugScreenInformation;
-    }
-
-    /**
-     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet.
-     *
-     * @return true if the player is invulnerable, false otherwise
-     */
-    public boolean isInvulnerable() {
-        return super.isInvulnerable();
     }
 
     /**

@@ -29,7 +29,7 @@ public record BiomeParticle(float probability, Option option) {
                 nbtCompound.setString("type", type);
                 nbtCompound.setString("Name", block.name());
                 Map<String, String> propertiesMap = block.properties();
-                if (propertiesMap.size() != 0) {
+                if (!propertiesMap.isEmpty()) {
                     nbtCompound.set("Properties", NBT.Compound(p -> propertiesMap.forEach(p::setString)));
                 }
             });

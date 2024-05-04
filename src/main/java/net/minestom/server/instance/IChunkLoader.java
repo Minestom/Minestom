@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +28,7 @@ public interface IChunkLoader {
     }
 
     /**
-     * Loads a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied.
+     * Loads a {@link Chunk}, all blocks should be set since the {@link Generator} is not applied.
      *
      * @param instance the {@link Instance} where the {@link Chunk} belong
      * @param chunkX   the chunk X

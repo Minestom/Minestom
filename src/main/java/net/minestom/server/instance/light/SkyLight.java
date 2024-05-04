@@ -142,7 +142,7 @@ final class SkyLight implements Light {
                     } else if (blockTo != null && blockFrom == null) {
                         if (Block.AIR.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face))
                             continue;
-                    } else if (blockTo != null && blockFrom != null) {
+                    } else if (blockTo != null) {
                         if (blockFrom.registry().collisionShape().isOccluded(blockTo.registry().collisionShape(), face.getOppositeFace()))
                             continue;
                     }

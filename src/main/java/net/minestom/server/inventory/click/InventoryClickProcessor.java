@@ -182,10 +182,7 @@ public final class InventoryClickProcessor {
                 List<DragData> right = rightDraggingMap.get(player);
                 if (right == null) return null;
                 right.add(new DragData(slot, inventory));
-            } else if (button == 9) {
-                // Add middle
-                // TODO
-            }
+            } //else if (button == 9) TODO add middle
         } else {
             // Drag instruction
             if (button == 0) {

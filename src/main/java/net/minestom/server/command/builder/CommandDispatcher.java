@@ -80,16 +80,11 @@ public class CommandDispatcher {
     }
 
     private static CommandResult resultConverter(net.minestom.server.command.CommandParser.Result parseResult, String input) {
-        CommandResult.Type type;
-        if (parseResult instanceof CommandParser.Result.UnknownCommand) {
-            type = CommandResult.Type.UNKNOWN;
-        } else if (parseResult instanceof CommandParser.Result.KnownCommand.Valid) {
-            type = CommandResult.Type.SUCCESS;
-        } else if (parseResult instanceof CommandParser.Result.KnownCommand.Invalid) {
-            type = CommandResult.Type.INVALID_SYNTAX;
-        } else {
-            throw new IllegalStateException("Unknown CommandParser.Result type");
-        }
-        return CommandResult.of(type, input, ParsedCommand.fromExecutable(parseResult.executable()), null);
+        return CommandResult.of(switch (parseResult) {
+            case CommandParser.Result.UnknownCommand unknownCommand -> CommandResult.Type.UNKNOWN;
+            case CommandParser.Result.KnownCommand.Valid valid -> CommandResult.Type.SUCCESS;
+            case CommandParser.Result.KnownCommand.Invalid invalid -> CommandResult.Type.INVALID_SYNTAX;
+            case null, default -> throw new IllegalStateException("Unknown CommandParser.Result type");
+        }, input, ParsedCommand.fromExecutable(parseResult.executable()), null);
     }
 }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ExperienceOrbMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     private int count = 1;
 

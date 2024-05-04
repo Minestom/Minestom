@@ -118,11 +118,7 @@ public class FullQueryResponse implements Writeable {
      * @return the string result
      */
     public static String generatePluginsValue() {
-        StringBuilder builder = new StringBuilder(MinecraftServer.getBrandName())
-                .append(' ')
-                .append(MinecraftServer.VERSION_NAME);
-
-        return builder.toString();
+        return MinecraftServer.getBrandName() + ' ' + MinecraftServer.VERSION_NAME;
     }
 
     @Override

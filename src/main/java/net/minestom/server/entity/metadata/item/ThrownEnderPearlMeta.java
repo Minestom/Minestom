@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ThrownEnderPearlMeta extends ItemContainingMeta {
     public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public ThrownEnderPearlMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata, Material.ENDER_PEARL);

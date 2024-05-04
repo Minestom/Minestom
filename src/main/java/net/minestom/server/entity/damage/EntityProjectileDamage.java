@@ -7,10 +7,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents damage inflicted by an entity, via a projectile.
  */
-public class EntityProjectileDamage extends Damage {
+public class EntityProjectileDamage extends EntityDamage {
 
     public EntityProjectileDamage(@Nullable Entity shooter, @NotNull Entity projectile, float amount) {
-        super(DamageType.MOB_PROJECTILE, projectile, shooter, null, amount);
+        super(DamageType.MOB_PROJECTILE, projectile, shooter, amount);
     }
 
     /**
@@ -31,10 +31,5 @@ public class EntityProjectileDamage extends Damage {
     @Nullable
     public Entity getShooter() {
         return getAttacker();
-    }
-
-    @Override
-    public @NotNull Entity getSource() {
-        return super.getSource();
     }
 }

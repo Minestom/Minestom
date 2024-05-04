@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BatMeta extends AmbientCreatureMeta {
     public static final byte OFFSET = AmbientCreatureMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     private final static byte IS_HANGING_BIT = 0x01;
 

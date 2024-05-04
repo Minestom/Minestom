@@ -82,7 +82,7 @@ public final class ShapeImpl implements Shape {
         final int count = vals.size() / 6;
         BoundingBox[] boundingBoxes = new BoundingBox[count];
         for (int i = 0; i < count; ++i) {
-            final double minX = vals.getDouble(0 + 6 * i);
+            final double minX = vals.getDouble(6 * i);
             final double minY = vals.getDouble(1 + 6 * i);
             final double minZ = vals.getDouble(2 + 6 * i);
 

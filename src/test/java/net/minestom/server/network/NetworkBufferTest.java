@@ -345,7 +345,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferTypeOptional(NetworkBuffer.@NotNull Type<T> type, @Nullable T value, byte @Nullable [] expected) {
-        assertBufferType(type, value, expected, new Action<T>() {
+        assertBufferType(type, value, expected, new Action<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type, @UnknownNullability T value) {
                 buffer.writeOptional(type, value);

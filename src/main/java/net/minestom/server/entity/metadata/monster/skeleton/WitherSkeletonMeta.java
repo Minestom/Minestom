@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class WitherSkeletonMeta extends AbstractSkeletonMeta {
     public static final byte OFFSET = AbstractSkeletonMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public WitherSkeletonMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

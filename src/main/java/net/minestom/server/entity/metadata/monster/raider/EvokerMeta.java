@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EvokerMeta extends SpellcasterIllagerMeta {
     public static final byte OFFSET = SpellcasterIllagerMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public EvokerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

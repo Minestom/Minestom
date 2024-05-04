@@ -1,6 +1,5 @@
 package net.minestom.server.recipe;
 
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import org.jetbrains.annotations.NotNull;
 

@@ -5,7 +5,6 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -166,7 +165,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
             var description = reader.read(COMPONENT);
             var icon = reader.read(ITEM);
             var frameType = FrameType.values()[reader.read(VAR_INT)];
-            var flags = reader.read(INT);
+            int flags = reader.read(INT);
             var backgroundTexture = (flags & 0x1) != 0 ? reader.read(STRING) : null;
             var x = reader.read(FLOAT);
             var y = reader.read(FLOAT);

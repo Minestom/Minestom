@@ -1,12 +1,12 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
 import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class EntityTeleportIntegrationTest {
 
         viewerTracker.assertCount(2);
         List<ServerPacket> packets = viewerTracker.collect();
-        var teleportPacket = (EntityTeleportPacket) packets.get(0);
+        var teleportPacket = (EntityTeleportPacket) packets.getFirst();
         assertEquals(player.getEntityId(), teleportPacket.entityId());
         assertEquals(teleportPosition, teleportPacket.position());
 

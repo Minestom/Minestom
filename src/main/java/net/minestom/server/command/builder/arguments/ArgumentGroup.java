@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

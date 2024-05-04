@@ -3,6 +3,8 @@ package net.minestom.server.entity.damage;
 import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Represents damage that is associated with a certain position.
  */
@@ -14,6 +16,6 @@ public class PositionalDamage extends Damage {
 
     @Override
     public @NotNull Point getSourcePosition() {
-        return super.getSourcePosition();
+        return Objects.requireNonNull(super.getSourcePosition());
     }
 }

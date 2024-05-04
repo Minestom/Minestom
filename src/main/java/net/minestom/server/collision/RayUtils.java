@@ -11,7 +11,7 @@ final class RayUtils {
      * @param rayStart         Ray start position
      * @param rayDirection     Ray to check
      * @param collidableStatic Bounding box
-     * @param finalResult
+     * @param finalResult      The result
      * @return true if an intersection between the ray and the bounding box was found
      */
     public static boolean BoundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult finalResult) {

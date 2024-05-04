@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TadpoleMeta extends AbstractFishMeta {
     public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public TadpoleMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

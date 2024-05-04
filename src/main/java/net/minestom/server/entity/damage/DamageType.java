@@ -1,7 +1,7 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

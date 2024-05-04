@@ -77,9 +77,7 @@ public class HeldClickIntegrationTest {
         }
         // Swap offhand
         {
-            listener.followup(event -> {
-                assertTrue(event.getSlot() == 3 || event.getSlot() == 45 /* Vanilla offhand slot is 40, Minestom is 45 */);
-            });
+            listener.followup(event -> assertTrue(event.getSlot() == 3 || event.getSlot() == 45 /* Vanilla offhand slot is 40, Minestom is 45 */));
             heldClick(player, 3, 40);
             assertEquals(ItemStack.AIR, inventory.getItemStack(3));
             assertEquals(ItemStack.of(Material.EGG), inventory.getItemInOffHand());

@@ -64,7 +64,7 @@ public abstract class Explosion {
             final byte x = (byte) (pos.x() - Math.floor(getCenterX()));
             final byte y = (byte) (pos.y() - Math.floor(getCenterY()));
             final byte z = (byte) (pos.z() - Math.floor(getCenterZ()));
-            records[i * 3 + 0] = x;
+            records[i * 3] = x;
             records[i * 3 + 1] = y;
             records[i * 3 + 2] = z;
         }

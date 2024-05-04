@@ -3,14 +3,14 @@ package net.minestom.server.utils;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /**
- * Represents a namespaced ID
- * https://minecraft.wiki/w/Namespaced_ID
+ * Represents a <a href="https://minecraft.wiki/w/Namespaced_ID">namespaced ID</a>
  */
 public final class NamespaceID implements CharSequence, Key {
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
@@ -103,6 +103,7 @@ public final class NamespaceID implements CharSequence, Key {
         return this.domain;
     }
 
+    @KeyPattern.Value
     @Override
     public @NotNull String value() {
         return this.path;

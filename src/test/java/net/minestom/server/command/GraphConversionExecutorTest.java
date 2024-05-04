@@ -37,7 +37,7 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        var execution = graph.root().next().get(0).execution();
+        var execution = graph.root().next().getFirst().execution();
         assertNotNull(execution);
         assertNull(execution.condition());
         assertNotNull(execution.executor());
@@ -51,7 +51,7 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        var execution = graph.root().next().get(0).execution();
+        var execution = graph.root().next().getFirst().execution();
         assertNotNull(execution);
         assertTrue(execution.test(null));
     }
@@ -64,7 +64,7 @@ public class GraphConversionExecutorTest {
 
         var graph = Graph.fromCommand(foo);
         assertEquals(1, graph.root().next().size());
-        var execution = graph.root().next().get(0).execution();
+        var execution = graph.root().next().getFirst().execution();
         assertNotNull(execution);
         assertFalse(execution.test(null));
     }

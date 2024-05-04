@@ -1,4 +1,3 @@
-net.minestom.server.terminal.MinestomConsoleWriter
 org.tinylog.writers.ConsoleWriter
 org.tinylog.writers.FileWriter
 org.tinylog.writers.JdbcWriter

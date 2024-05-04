@@ -59,16 +59,15 @@ public final class ThreadDispatcher<P> {
     public synchronized void updateAndAwait(long time) {
         // Update dispatcher
         this.updates.drain(update -> {
-            if (update instanceof DispatchUpdate.PartitionLoad<P> chunkUpdate) {
-                processLoadedPartition(chunkUpdate.partition());
-            } else if (update instanceof DispatchUpdate.PartitionUnload<P> partitionUnload) {
-                processUnloadedPartition(partitionUnload.partition());
-            } else if (update instanceof DispatchUpdate.ElementUpdate<P> elementUpdate) {
-                processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
-            } else if (update instanceof DispatchUpdate.ElementRemove elementRemove) {
-                processRemovedElement(elementRemove.tickable());
-            } else {
-                throw new IllegalStateException("Unknown update type: " + update.getClass().getSimpleName());
+            switch (update) {
+                case DispatchUpdate.PartitionLoad<P> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
+                case DispatchUpdate.PartitionUnload<P> partitionUnload ->
+                        processUnloadedPartition(partitionUnload.partition());
+                case DispatchUpdate.ElementUpdate<P> elementUpdate ->
+                        processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
+                case DispatchUpdate.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
+                case null, default ->
+                        throw new IllegalStateException("Unknown update type: " + update.getClass().getSimpleName());
             }
         });
         // Tick all partitions

@@ -87,7 +87,7 @@ public class ArgumentParser {
                 if (c == ' ') {
                     // Use literal as the default argument
                     final String argument = builder.toString();
-                    if (argument.length() != 0) {
+                    if (!argument.isEmpty()) {
                         result.add(new ArgumentLiteral(argument));
                         builder = new StringBuilder();
                     }
@@ -95,22 +95,12 @@ public class ArgumentParser {
                     // Retrieve argument type
                     final String argument = builder.toString();
                     argumentFunction = ARGUMENT_FUNCTION_MAP.get(argument.toLowerCase(Locale.ROOT));
-                    if (argumentFunction == null) {
-                        throw new IllegalArgumentException("error invalid argument name: " + argument);
-                    }
+                    if (argumentFunction == null) throw new IllegalArgumentException("error invalid argument name: " + argument);
 
                     builder = new StringBuilder();
                     state = 1;
-                } else {
-                    // Append to builder
-                    builder.append(c);
-                }
-
-                continue;
-            }
-
-            // Inside bracket <>
-            if (state == 1) {
+                } else builder.append(c); // Append to builder
+            } else { // Inside bracket <>
                 if (c == '>') {
                     final String param = builder.toString();
                     // TODO argument options
@@ -119,21 +109,14 @@ public class ArgumentParser {
 
                     builder = new StringBuilder();
                     state = 0;
-                } else {
-                    builder.append(c);
-                }
-
-                continue;
+                } else builder.append(c);
             }
-
         }
 
         // Use remaining as literal if present
         if (state == 0) {
             final String argument = builder.toString();
-            if (argument.length() != 0) {
-                result.add(new ArgumentLiteral(argument));
-            }
+            if (!argument.isEmpty()) result.add(new ArgumentLiteral(argument));
         }
 
         return result.toArray(Argument[]::new);
@@ -165,7 +148,7 @@ public class ArgumentParser {
                 // Argument is supposed to take the rest of the command input
                 for (int i = inputIndex; i < inputArguments.length; i++) {
                     final String arg = inputArguments[i];
-                    if (builder.length() > 0)
+                    if (!builder.isEmpty())
                         builder.append(StringUtils.SPACE);
                     builder.append(arg);
                 }
@@ -211,7 +194,7 @@ public class ArgumentParser {
                         // rawArg should be the remaining
                         for (int j = i + 1; j < inputArguments.length; j++) {
                             final String arg = inputArguments[j];
-                            if (builder.length() > 0)
+                            if (!builder.isEmpty())
                                 builder.append(StringUtils.SPACE);
                             builder.append(arg);
                         }

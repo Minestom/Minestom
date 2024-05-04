@@ -11,8 +11,6 @@ public class DirectFramebuffer implements Framebuffer {
 
     /**
      * Mutable colors array
-     *
-     * @return
      */
     public byte[] getColors() {
         return colors;

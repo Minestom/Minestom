@@ -105,13 +105,11 @@ public final class BiomeManager {
         if (nbtCache != null) return nbtCache;
         nbtCache = NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:worldgen/biome"),
-                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(biome -> {
-                    return NBT.Compound(Map.of(
-                            "id", NBT.Int(getId(biome)),
-                            "name", NBT.String(biome.namespace().toString()),
-                            "element", biome.toNbt()
-                    ));
-                }).toList())));
+                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(biome -> NBT.Compound(Map.of(
+                        "id", NBT.Int(getId(biome)),
+                        "name", NBT.String(biome.namespace().toString()),
+                        "element", biome.toNbt()
+                ))).toList())));
 
         return nbtCache;
     }
@@ -119,7 +117,7 @@ public final class BiomeManager {
     /**
      * Gets the id of a biome.
      *`
-     * @param biome
+     * @param biome the biome
      * @return the id of the biome, or -1 if the biome is not registered
      */
     public int getId(Biome biome) {

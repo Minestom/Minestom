@@ -7,10 +7,10 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.projectile.ArrowMeta;
-import net.minestom.server.entity.EntityProjectile;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -53,10 +53,8 @@ public class ShootCommand extends Command {
                 return;
         }
         var pos = player.getPosition().add(0D, player.getEyeHeight(), 0D);
-        //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
         projectile.setInstance(player.getInstance(), pos);
-        var dir = pos.direction().mul(30D);
-        pos = pos.add(dir);
+        pos = pos.add(pos.direction().mul(30D));
         projectile.shoot(pos, 1D, 0D);
     }
 }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SilverfishMeta extends MonsterMeta {
     public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public SilverfishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

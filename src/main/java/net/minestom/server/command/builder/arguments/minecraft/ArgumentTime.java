@@ -70,9 +70,7 @@ public class ArgumentTime extends Argument<Duration> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeInt(min);
-        });
+        return BinaryWriter.makeArray(packetWriter -> packetWriter.writeInt(min));
     }
 
     @Override

@@ -4,8 +4,6 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Enum;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

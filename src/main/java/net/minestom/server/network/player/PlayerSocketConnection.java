@@ -300,19 +300,19 @@ public class PlayerSocketConnection extends PlayerConnection {
             if (event.isCancelled()) return;
         }
         // Write packet
-        if (packet instanceof ServerPacket serverPacket) {
-            writeServerPacketSync(serverPacket, compressed);
-        } else if (packet instanceof FramedPacket framedPacket) {
-            var buffer = framedPacket.body();
-            writeBufferSync(buffer, 0, buffer.limit());
-        } else if (packet instanceof CachedPacket cachedPacket) {
-            var buffer = cachedPacket.body(getConnectionState());
-            if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
-            else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            writeServerPacketSync(lazyPacket.packet(), compressed);
-        } else {
-            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
+        switch (packet) {
+            case ServerPacket serverPacket -> writeServerPacketSync(serverPacket, compressed);
+            case FramedPacket framedPacket -> {
+                var buffer = framedPacket.body();
+                writeBufferSync(buffer, 0, buffer.limit());
+            }
+            case CachedPacket cachedPacket -> {
+                var buffer = cachedPacket.body(getConnectionState());
+                if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
+                else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
+            }
+            case LazyPacket lazyPacket -> writeServerPacketSync(lazyPacket.packet(), compressed);
+            case null, default -> throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }
     }
 

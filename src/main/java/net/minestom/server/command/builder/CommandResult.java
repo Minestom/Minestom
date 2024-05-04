@@ -56,9 +56,7 @@ public class CommandResult {
 
     @ApiStatus.Internal
     public static @NotNull CommandResult of(Type type, String input, ParsedCommand parsedCommand, CommandData data) {
-        CommandResult result = new CommandResult();
-        result.type = type;
-        result.input = input;
+        CommandResult result = of(type, input);
         result.parsedCommand = parsedCommand;
         result.commandData = data;
         return result;

@@ -14,7 +14,7 @@ public interface Collector<T> {
     default <P extends T> void assertSingle(@NotNull Class<P> type, @NotNull Consumer<P> consumer) {
         List<T> elements = collect();
         assertEquals(1, elements.size(), "Expected 1 element, got " + elements);
-        var element = elements.get(0);
+        var element = elements.getFirst();
         assertInstanceOf(type, element, "Expected type " + type.getSimpleName() + ", got " + element.getClass().getSimpleName());
         consumer.accept((P) element);
     }
@@ -22,7 +22,7 @@ public interface Collector<T> {
     default void assertSingle(@NotNull Consumer<T> consumer) {
         List<T> elements = collect();
         assertEquals(1, elements.size(), "Expected 1 element, got " + elements);
-        consumer.accept(elements.get(0));
+        consumer.accept(elements.getFirst());
     }
 
     default void assertCount(int count) {

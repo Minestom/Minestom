@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SquidMeta extends WaterAnimalMeta {
     public static final byte OFFSET = WaterAnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public SquidMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

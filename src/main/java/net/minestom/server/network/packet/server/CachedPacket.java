@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;

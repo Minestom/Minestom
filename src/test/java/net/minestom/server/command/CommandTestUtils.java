@@ -171,7 +171,7 @@ public class CommandTestUtils {
             Map<String, String[]> references = new HashMap<>();
             Map<String, TestNode> nodes = new HashMap<>();
             final List<String> strings = preProcessString(input);
-            String rootId = strings.get(0);
+            String rootId = strings.getFirst();
 
             for (String s : strings.stream().skip(0).toList()) {
                 if (s.length() < 3) continue; //invalid line

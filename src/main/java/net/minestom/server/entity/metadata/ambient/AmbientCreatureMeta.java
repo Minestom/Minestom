@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AmbientCreatureMeta extends MobMeta {
     public static final byte OFFSET = MobMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     protected AmbientCreatureMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

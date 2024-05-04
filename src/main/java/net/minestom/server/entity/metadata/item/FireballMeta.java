@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FireballMeta extends ItemContainingMeta implements ObjectDataProvider, ProjectileMeta {
     public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     private Entity shooter;
 

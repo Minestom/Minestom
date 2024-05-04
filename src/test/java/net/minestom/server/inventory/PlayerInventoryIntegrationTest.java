@@ -1,7 +1,5 @@
 package net.minestom.server.inventory;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
@@ -9,11 +7,13 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
 public class PlayerInventoryIntegrationTest {
@@ -119,9 +119,7 @@ public class PlayerInventoryIntegrationTest {
 
         // Setting to an item should send EntityEquipmentPacket to viewer
         playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET)));
 
         // Setting to the same item shouldn't send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
@@ -131,9 +129,7 @@ public class PlayerInventoryIntegrationTest {
         // Setting to air should send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET)));
     }
 
     @Test
@@ -152,23 +148,17 @@ public class PlayerInventoryIntegrationTest {
         // Setting held item
         var equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerHolder.setItemInMainHand(MAGIC_STACK);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND)));
 
         // Changing held slot to an empty slot should update MAIN_HAND to empty item
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerHolder.setHeldItemSlot((byte) 3);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND)));
 
         // Changing held slot to the original slot should update MAIN_HAND to original item
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerHolder.setHeldItemSlot((byte) 0);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND)));
     }
 
 }

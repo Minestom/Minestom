@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AnimalMeta extends AgeableMobMeta {
     public static final byte OFFSET = AgeableMobMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     protected AnimalMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

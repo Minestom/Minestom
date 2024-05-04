@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CodMeta extends AbstractFishMeta {
     public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public CodMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

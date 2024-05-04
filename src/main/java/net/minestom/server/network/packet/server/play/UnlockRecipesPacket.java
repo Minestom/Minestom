@@ -38,7 +38,7 @@ public record UnlockRecipesPacket(int mode,
     }
 
     private static UnlockRecipesPacket read(@NotNull NetworkBuffer reader) {
-        var mode = reader.read(VAR_INT);
+        int mode = reader.read(VAR_INT);
         var craftingRecipeBookOpen = reader.read(BOOLEAN);
         var craftingRecipeBookFilterActive = reader.read(BOOLEAN);
         var smeltingRecipeBookOpen = reader.read(BOOLEAN);

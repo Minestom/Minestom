@@ -1,7 +1,10 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.Graph.Node;
-import net.minestom.server.command.builder.*;
+import net.minestom.server.command.builder.ArgumentCallback;
+import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.CommandData;
+import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -319,7 +322,7 @@ final class CommandParserImpl implements CommandParser {
                 executor().apply(sender, context);
                 return new ExecutionResultImpl(ExecutableCommand.Result.Type.SUCCESS, context.getReturnData());
             } catch (Exception e) {
-                LOGGER.error("An exception was encountered while executing command: " + input(), e);
+                LOGGER.error("An exception was encountered while executing command: {}", input(), e);
                 return ExecutionResultImpl.EXECUTOR_EXCEPTION;
             }
         }

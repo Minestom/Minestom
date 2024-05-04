@@ -1,9 +1,9 @@
 package net.minestom.server.adventure.provider;
 
-import java.util.function.Consumer;
-
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
 public final class MinestomPlainTextComponentSerializerProvider implements PlainTextComponentSerializer.Provider {

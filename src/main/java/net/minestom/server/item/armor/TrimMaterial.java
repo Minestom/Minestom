@@ -2,8 +2,8 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

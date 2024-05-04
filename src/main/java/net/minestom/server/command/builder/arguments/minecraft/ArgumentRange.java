@@ -40,15 +40,15 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
             if (split.length == 2) {
                 final N min;
                 final N max;
-                if (split[0].length() == 0 && split[1].length() > 0) {
+                if (split[0].isEmpty() && !split[1].isEmpty()) {
                     // Format ..NUMBER
                     min = this.min;
                     max = parser.apply(split[1]);
-                } else if (split[0].length() > 0 && split[1].length() == 0) {
+                } else if (!split[0].isEmpty() && split[1].isEmpty()) {
                     // Format NUMBER..
                     min = parser.apply(split[0]);
                     max = this.max;
-                } else if (split[0].length() > 0) {
+                } else if (!split[0].isEmpty()) {
                     // Format NUMBER..NUMBER
                     min = parser.apply(split[0]);
                     max = parser.apply(split[1]);

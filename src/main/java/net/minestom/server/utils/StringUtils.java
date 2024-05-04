@@ -8,7 +8,7 @@ public class StringUtils {
     public static final char SPACE_CHAR = ' ';
 
     public static int countMatches(@NotNull final CharSequence str, final char ch) {
-        if (str.length() == 0) {
+        if (str.isEmpty()) {
             return 0;
         }
         int count = 0;

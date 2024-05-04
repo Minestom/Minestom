@@ -54,8 +54,7 @@ public class PlayerInit {
 
                 entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
 
-                if (entity instanceof Player) {
-                    Player target = (Player) entity;
+                if (entity instanceof Player target) {
                     target.damage(Damage.fromEntity(source, 5));
                 }
 

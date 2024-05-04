@@ -110,7 +110,7 @@ public final class MojangUtils {
         try {
             // Retrieve from the rate-limited Mojang API
             response = URLUtils.getText(url);
-        } catch (IOException e) {
+        } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
             throw new RuntimeException(e);
         }

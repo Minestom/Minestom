@@ -2,7 +2,6 @@ package net.minestom.server.utils.block;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;

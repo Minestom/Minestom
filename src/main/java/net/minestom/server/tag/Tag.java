@@ -117,7 +117,6 @@ public class Tag<T> {
     @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
-        var entry = this.entry;
         var readFunction = entry.reader();
         var writeFunction = entry.writer();
         var listEntry = new Serializers.Entry<List<T>, NBTList<?>>(
@@ -130,7 +129,7 @@ public class Tag<T> {
                     if (write.isEmpty())
                         return NBT.List(NBTType.TAG_String); // String is the default type for lists
                     final List<NBT> list = write.stream().map(writeFunction).toList();
-                    final NBTType<?> type = list.get(0).getID();
+                    final NBTType<?> type = list.getFirst().getID();
                     return NBT.List(type, list);
                 });
         UnaryOperator<List<T>> co = this.copy != null ? ts -> {

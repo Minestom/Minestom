@@ -91,7 +91,7 @@ public class Main {
 
             // on modern versions, you can obtain the player connection directly from the event
             if (event.getConnection() != null) {
-                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
+                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress()));
 
                 responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
                 String ip = event.getConnection().getServerAddress();

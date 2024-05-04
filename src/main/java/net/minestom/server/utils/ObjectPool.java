@@ -1,7 +1,6 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;

@@ -47,7 +47,7 @@ public class WeatherTest {
         var tracker2 = connection.trackIncoming(ChangeGameStatePacket.class);
         instance.setWeather(new Weather(0, 0), 2);
         instance.tick(0);
-        state = tracker2.collect().get(0);
+        state = tracker2.collect().getFirst();
         assertEquals(ChangeGameStatePacket.Reason.RAIN_LEVEL_CHANGE, state.reason());
         assertEquals(0.5f, state.value());
     }

@@ -31,13 +31,13 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
     }
 
     private static MapDataPacket read(@NotNull NetworkBuffer reader) {
-        var mapId = reader.read(VAR_INT);
-        var scale = reader.read(BYTE);
-        var locked = reader.read(BOOLEAN);
-        var trackingPosition = reader.read(BOOLEAN);
+        int mapId = reader.read(VAR_INT);
+        byte scale = reader.read(BYTE);
+        boolean locked = reader.read(BOOLEAN);
+        boolean trackingPosition = reader.read(BOOLEAN);
         List<Icon> icons = trackingPosition ? reader.readCollection(Icon::new, MAX_ICONS) : List.of();
 
-        var columns = reader.read(BYTE);
+        byte columns = reader.read(BYTE);
         if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);
         byte rows = reader.read(BYTE);
         byte x = reader.read(BYTE);

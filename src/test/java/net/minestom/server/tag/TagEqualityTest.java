@@ -11,8 +11,6 @@ public class TagEqualityTest {
     public void sameType() {
         var tag1 = Tag.Integer("key");
         var tag2 = Tag.Integer("key");
-        assertEquals(tag1, tag1);
-        assertEquals(tag2, tag2);
         assertEquals(tag1, tag2);
     }
 

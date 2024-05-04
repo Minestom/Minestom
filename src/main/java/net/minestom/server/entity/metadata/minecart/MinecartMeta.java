@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MinecartMeta extends AbstractMinecartMeta {
     public static final byte OFFSET = AbstractMinecartMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public MinecartMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

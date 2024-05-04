@@ -4,7 +4,10 @@ package net.minestom.server.snapshot;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class SnapshotUpdaterImpl implements SnapshotUpdater {

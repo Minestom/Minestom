@@ -29,12 +29,10 @@ public class GamemodeCommand extends Command {
 
         //GameMode parameter
         ArgumentEnum<GameMode> gamemode = ArgumentType.Enum("gamemode", GameMode.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
-        gamemode.setCallback((sender, exception) -> {
-            sender.sendMessage(
-                    Component.text("Invalid gamemode ", NamedTextColor.RED)
-                            .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
-                            .append(Component.text("!")), MessageType.SYSTEM);
-        });
+        gamemode.setCallback((sender, exception) -> sender.sendMessage(
+                Component.text("Invalid gamemode ", NamedTextColor.RED)
+                        .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
+                        .append(Component.text("!")), MessageType.SYSTEM));
 
         ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
 
@@ -87,7 +85,7 @@ public class GamemodeCommand extends Command {
      * notifies them (and the sender) in the chat.
      */
     private void executeOthers(CommandSender sender, GameMode mode, List<Entity> entities) {
-        if (entities.size() == 0) {
+        if (entities.isEmpty()) {
             //If there are no players that could be modified, display an error message
             if (sender instanceof Player)
                 sender.sendMessage(Component.translatable("argument.entity.notfound.player", NamedTextColor.RED), MessageType.SYSTEM);

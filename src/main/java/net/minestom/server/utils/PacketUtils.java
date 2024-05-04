@@ -78,15 +78,15 @@ public final class PacketUtils {
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
-        if (audience instanceof Player player) {
-            player.sendPacket(packet);
-        } else if (audience instanceof PacketGroupingAudience groupingAudience) {
-            PacketUtils.sendGroupedPacket(groupingAudience.getPlayers(), packet);
-        } else if (audience instanceof ForwardingAudience.Single singleAudience) {
-            PacketUtils.sendPacket(singleAudience.audience(), packet);
-        } else if (audience instanceof ForwardingAudience forwardingAudience) {
-            for (Audience member : forwardingAudience.audiences()) {
-                PacketUtils.sendPacket(member, packet);
+        switch (audience) {
+            case Player player -> player.sendPacket(packet);
+            case PacketGroupingAudience groupingAudience ->
+                    PacketUtils.sendGroupedPacket(groupingAudience.getPlayers(), packet);
+            case ForwardingAudience.Single singleAudience -> PacketUtils.sendPacket(singleAudience.audience(), packet);
+            case ForwardingAudience forwardingAudience -> {
+                for (Audience member : forwardingAudience.audiences()) PacketUtils.sendPacket(member, packet);
+            }
+            default -> {
             }
         }
     }
@@ -379,10 +379,8 @@ public final class PacketUtils {
         }
 
         private static void writeTo(PlayerConnection connection, ByteBuffer buffer, int offset, int length) {
-            if (connection instanceof PlayerSocketConnection socketConnection) {
+            if (connection instanceof PlayerSocketConnection socketConnection)
                 socketConnection.write(buffer, offset, length);
-                return;
-            }
             // TODO for non-socket connection
         }
     }

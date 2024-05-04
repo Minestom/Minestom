@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class WaterAnimalMeta extends PathfinderMobMeta {
     public static final byte OFFSET = PathfinderMobMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     protected WaterAnimalMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

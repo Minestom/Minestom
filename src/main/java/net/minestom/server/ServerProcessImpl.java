@@ -209,7 +209,7 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
-        LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Starting {} server.", MinecraftServer.getBrandName());
 
         // Init server
         try {
@@ -222,7 +222,7 @@ final class ServerProcessImpl implements ServerProcess {
         // Start server
         server.start();
 
-        LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
+        LOGGER.info("{} server started successfully.", MinecraftServer.getBrandName());
 
         // Stop the server on SIGINT
         if (SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
@@ -232,14 +232,14 @@ final class ServerProcessImpl implements ServerProcess {
     public void stop() {
         if (!stopped.compareAndSet(false, true))
             return;
-        LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Stopping {} server.", MinecraftServer.getBrandName());
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         dispatcher.shutdown();
-        LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
+        LOGGER.info("{} server stopped successfully.", MinecraftServer.getBrandName());
     }
 
     @Override

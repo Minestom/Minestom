@@ -18,8 +18,6 @@ public interface LargeFramebuffer {
      * Returns a new {@link Framebuffer} that represent a 128x128 sub-view of this framebuffer.
      * Implementations are free (but not guaranteed) to throw exceptions if left &amp; top produces out-of-bounds coordinates.
      *
-     * @param left
-     * @param top
      * @return the sub-view {@link Framebuffer}
      */
     Framebuffer createSubView(int left, int top);

@@ -12,7 +12,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.location.RelativeVec;
-
 import org.jetbrains.annotations.NotNull;
 
 public class DebugGridCommand extends Command {
@@ -36,7 +35,6 @@ public class DebugGridCommand extends Command {
                 relativeBlockBatch.setBlock(x, 0, z, ((x % 2 == 0) ^ (z % 2) == 0) ? Block.WHITE_CONCRETE : Block.BLACK_CONCRETE);
             }
         }
-        //noinspection ConstantConditions
         relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player), () -> {});
     }
 }

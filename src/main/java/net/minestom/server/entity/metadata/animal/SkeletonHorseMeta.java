@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SkeletonHorseMeta extends AbstractHorseMeta {
     public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public SkeletonHorseMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

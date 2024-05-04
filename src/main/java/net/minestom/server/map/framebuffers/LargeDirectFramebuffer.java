@@ -19,9 +19,6 @@ public class LargeDirectFramebuffer implements LargeFramebuffer {
 
     /**
      * Creates a new {@link LargeDirectFramebuffer} with the desired size
-     *
-     * @param width
-     * @param height
      */
     public LargeDirectFramebuffer(int width, int height) {
         this.width = width;

@@ -5,10 +5,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.minestom.server.adventure.MinestomAdventure;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -43,9 +43,7 @@ public class TranslationIntegrationTest {
 
         // the message should not be changed if translations are enabled.
         // the translation of the message itself will be proceeded in PlayerConnectionImpl class
-        collector.assertSingle(received -> {
-            assertNotEquals(message, received.message());
-        });
+        collector.assertSingle(received -> assertNotEquals(message, received.message()));
     }
 
     @Test
@@ -60,8 +58,6 @@ public class TranslationIntegrationTest {
         final var packet = new SystemChatPacket(message, false);
         PacketUtils.sendGroupedPacket(List.of(player), packet);
 
-        collector.assertSingle(received -> {
-            assertEquals(message, received.message());
-        });
+        collector.assertSingle(received -> assertEquals(message, received.message()));
     }
 }

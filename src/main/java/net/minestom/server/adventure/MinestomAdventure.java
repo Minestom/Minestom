@@ -1,20 +1,18 @@
 package net.minestom.server.adventure;
 
-import java.io.StringReader;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.Codec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Locale;
-import java.util.Objects;
-import java.util.function.BiFunction;
-
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
+
+import java.io.StringReader;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Adventure related constants, etc.

@@ -16,7 +16,6 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.math.FloatRange;
@@ -267,7 +266,7 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentLong() {
         var arg = ArgumentType.Long("long");
-        assertArg(arg, 2564l, "2564");
+        assertArg(arg, 2564L, "2564");
         assertInvalidArg(arg, "256.4");
         assertInvalidArg(arg, "9223372036854775808");
     }

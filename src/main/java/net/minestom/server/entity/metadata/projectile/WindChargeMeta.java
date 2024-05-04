@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class WindChargeMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     private Entity shooter;
 

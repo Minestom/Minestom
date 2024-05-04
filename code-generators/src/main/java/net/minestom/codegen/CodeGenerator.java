@@ -28,7 +28,7 @@ public class CodeGenerator {
 
     public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         if (resourceFile == null) {
-            LOGGER.error("Failed to find resource file for " + typeName);
+            LOGGER.error("Failed to find resource file for {}", typeName);
             return;
         }
         ClassName typeClass = ClassName.get(packageName, typeName);

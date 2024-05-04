@@ -10,7 +10,6 @@ import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +57,7 @@ public class ChatMessageListener {
     private static @NotNull Component buildDefaultChatMessage(@NotNull Player player, @NotNull String message) {
         final String username = player.getUsername();
         return Component.translatable("chat.type.text")
-                .args(Component.text(username)
+                .arguments(Component.text(username)
                                 .insertion(username)
                                 .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
                                 .hoverEvent(player),

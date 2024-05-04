@@ -31,11 +31,11 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
     @NotNull TemperatureModifier temperatureModifier();
 
     enum Precipitation {
-        NONE, RAIN, SNOW;
+        NONE, RAIN, SNOW
     }
 
     enum TemperatureModifier {
-        NONE, FROZEN;
+        NONE, FROZEN
     }
 
     interface Setter {

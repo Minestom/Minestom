@@ -10,8 +10,6 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import static net.minestom.server.instance.light.LightCompute.SECTION_SIZE;
@@ -95,7 +93,7 @@ public interface Light {
 
                 if (content == null && contentPropagation == null) valueFrom = 0;
                 else if (content != null && contentPropagation == null) valueFrom = getLight(content, posFrom);
-                else if (content == null && contentPropagation != null) valueFrom = getLight(contentPropagation, posFrom);
+                else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
                 else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
 
                 int valueTo = getLight(contentPropagationTemp, posFrom);

@@ -52,7 +52,7 @@ jobs:
           echo "short_commit_hash=${ACTUAL::10}" >> $GITHUB_OUTPUT
       - name: Publish to Sonatype
         env:
-          MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
+          MINESTOM_VERSION: "${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}"
           MINESTOM_CHANNEL: snapshot
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository

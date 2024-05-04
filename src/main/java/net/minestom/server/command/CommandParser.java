@@ -23,7 +23,7 @@ public interface CommandParser {
      * @param input command string without prefix
      * @return the parsed command which can be executed and cached
      */
-    @Contract("_, _ -> new")
+    @Contract("_, _, _ -> new")
     @NotNull Result parse(@NotNull CommandSender sender, @NotNull Graph graph, @NotNull String input);
 
     sealed interface Result {

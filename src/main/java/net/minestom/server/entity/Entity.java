@@ -480,7 +480,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (entity.isViewer(player)) {
                 player.sendPacket(entity.getAttachEntityPacket());
             }
-        };
+        }
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
@@ -1174,21 +1174,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param pose the new entity pose
      */
     public void setPose(@NotNull Pose pose) {
-        this.entityMeta.setPose(pose);
+        if(getPose() != pose) entityMeta.setPose(pose);
     }
 
     protected void updatePose() {
-        if (entityMeta.isFlyingWithElytra()) {
-            setPose(Pose.FALL_FLYING);
-        } else if (entityMeta.isSwimming()) {
-            setPose(Pose.SWIMMING);
-        } else if (entityMeta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            setPose(Pose.SPIN_ATTACK);
-        } else if (entityMeta.isSneaking()) {
-            setPose(Pose.SNEAKING);
-        } else {
-            setPose(Pose.STANDING);
-        }
+        if (entityMeta.isFlyingWithElytra()) setPose(Pose.FALL_FLYING);
+        else if (entityMeta.isSwimming()) setPose(Pose.SWIMMING);
+        else if (entityMeta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) setPose(Pose.SPIN_ATTACK);
+        else if (entityMeta.isSneaking()) setPose(Pose.SNEAKING);
+        else setPose(Pose.STANDING);
     }
 
     /**
@@ -1804,6 +1798,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         DIGGING,
         SLIDING,
         SHOOTING,
-        INHALING;
+        INHALING
     }
 }

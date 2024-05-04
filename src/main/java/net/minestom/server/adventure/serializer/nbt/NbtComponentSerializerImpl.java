@@ -239,37 +239,43 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         MutableNBTCompound compound = new MutableNBTCompound();
 
         // Base component types
-        if (component instanceof TextComponent text) {
-            compound.setString("type", "text");
-            compound.setString("text", text.content());
-        } else if (component instanceof TranslatableComponent translatable) {
-            compound.setString("type", "translatable");
-            compound.setString("translate", translatable.key());
-            var fallback = translatable.fallback();
-            if (fallback != null) compound.setString("fallback", fallback);
-            var args = translatable.arguments();
-            if (!args.isEmpty()) compound.set("with", serializeTranslationArgs(args));
-        } else if (component instanceof ScoreComponent score) {
-            compound.setString("type", "score");
-            var scoreCompound = new MutableNBTCompound();
-            scoreCompound.setString("name", score.name());
-            scoreCompound.setString("objective", score.objective());
-            @SuppressWarnings("deprecation") var value = score.value();
-            if (value != null) scoreCompound.setString("value", value);
-            compound.set("score", scoreCompound.toCompound());
-        } else if (component instanceof SelectorComponent selector) {
-            compound.setString("type", "selector");
-            compound.setString("selector", selector.pattern());
-            var separator = selector.separator();
-            if (separator != null) compound.set("separator", serializeComponent(separator));
-        } else if (component instanceof KeybindComponent keybind) {
-            compound.setString("type", "keybind");
-            compound.setString("keybind", keybind.keybind());
-        } else if (component instanceof NBTComponent<?, ?> nbt) {
-            //todo
-            throw new UnsupportedOperationException("NBTComponent is not implemented yet");
-        } else {
-            throw new UnsupportedOperationException("Unknown component type: " + component.getClass().getName());
+        switch (component) {
+            case TextComponent text -> {
+                compound.setString("type", "text");
+                compound.setString("text", text.content());
+            }
+            case TranslatableComponent translatable -> {
+                compound.setString("type", "translatable");
+                compound.setString("translate", translatable.key());
+                var fallback = translatable.fallback();
+                if (fallback != null) compound.setString("fallback", fallback);
+                var args = translatable.arguments();
+                if (!args.isEmpty()) compound.set("with", serializeTranslationArgs(args));
+            }
+            case ScoreComponent score -> {
+                compound.setString("type", "score");
+                var scoreCompound = new MutableNBTCompound();
+                scoreCompound.setString("name", score.name());
+                scoreCompound.setString("objective", score.objective());
+                @SuppressWarnings("deprecation") var value = score.value();
+                if (value != null) scoreCompound.setString("value", value);
+                compound.set("score", scoreCompound.toCompound());
+            }
+            case SelectorComponent selector -> {
+                compound.setString("type", "selector");
+                compound.setString("selector", selector.pattern());
+                var separator = selector.separator();
+                if (separator != null) compound.set("separator", serializeComponent(separator));
+            }
+            case KeybindComponent keybind -> {
+                compound.setString("type", "keybind");
+                compound.setString("keybind", keybind.keybind());
+            }
+            case NBTComponent<?, ?> nbt ->
+                //todo
+                    throw new UnsupportedOperationException("NBTComponent is not implemented yet");
+            default ->
+                    throw new UnsupportedOperationException("Unknown component type: " + component.getClass().getName());
         }
 
         // Children

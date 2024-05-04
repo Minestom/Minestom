@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CaveSpiderMeta extends SpiderMeta {
     public static final byte OFFSET = SpiderMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public CaveSpiderMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

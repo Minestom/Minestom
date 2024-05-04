@@ -205,7 +205,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
     /**
-     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
+     * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z

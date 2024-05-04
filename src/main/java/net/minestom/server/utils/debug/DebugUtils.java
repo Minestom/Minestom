@@ -14,7 +14,7 @@ public final class DebugUtils {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DebugUtils.class);
 
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     /**
      * Prints the current thread stack trace elements.

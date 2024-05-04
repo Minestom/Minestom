@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CowMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET;
 
     public CowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

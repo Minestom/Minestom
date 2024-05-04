@@ -44,7 +44,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
     }
 
     public enum GrassColorModifier {
-        NONE, DARK_FOREST, SWAMP;
+        NONE, DARK_FOREST, SWAMP
     }
 
     public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {

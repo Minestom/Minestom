@@ -26,7 +26,7 @@ public final class MergedMap<K, V> extends AbstractMap<K, V> {
 
         @Override
         public int size() {
-            return (int) stream().count();
+            return (int) (first.entrySet().size() + secondStream().count());
         }
 
         @Override

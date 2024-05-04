@@ -1,7 +1,6 @@
 package net.minestom.server.extras.query.response;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.ConnectionState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

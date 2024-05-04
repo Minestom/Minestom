@@ -35,7 +35,7 @@ public class SocketReadTest {
         assertNull(remaining);
 
         assertEquals(1, packets.size());
-        var rawPacket = packets.get(0);
+        var rawPacket = packets.getFirst();
         assertEquals(0x0A, rawPacket.left());
         var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
@@ -89,7 +89,7 @@ public class SocketReadTest {
         assertEquals(Utils.getVarIntSize(200), remaining.readableBytes());
 
         assertEquals(1, packets.size());
-        var rawPacket = packets.get(0);
+        var rawPacket = packets.getFirst();
         assertEquals(0x0A, rawPacket.left());
         var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
@@ -117,7 +117,7 @@ public class SocketReadTest {
         assertEquals(1, remaining.readableBytes());
 
         assertEquals(1, packets.size());
-        var rawPacket = packets.get(0);
+        var rawPacket = packets.getFirst();
         assertEquals(0x0A, rawPacket.left());
         var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());

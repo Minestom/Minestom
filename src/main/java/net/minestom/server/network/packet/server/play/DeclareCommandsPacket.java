@@ -142,6 +142,6 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
     }
 
     public enum NodeType {
-        ROOT, LITERAL, ARGUMENT, NONE;
+        ROOT, LITERAL, ARGUMENT, NONE
     }
 }

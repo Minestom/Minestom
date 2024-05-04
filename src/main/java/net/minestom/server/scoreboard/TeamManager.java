@@ -35,7 +35,7 @@ public final class TeamManager {
      *
      * @param team The team to be registered
      */
-    protected void registerNewTeam(@NotNull Team team) {
+    private void registerNewTeam(@NotNull Team team) {
         this.teams.add(team);
         PacketUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
     }

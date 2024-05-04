@@ -7,7 +7,6 @@ import net.minestom.server.advancements.notifications.NotificationCenter;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
 
 public class NotificationCommand extends Command {
     public NotificationCommand() {
