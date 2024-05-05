@@ -135,15 +135,19 @@ public non-sealed class ContainerInventory extends InventoryImpl {
     public @Nullable List<Click.Change> handleClick(@NotNull Player player, Click.@NotNull Info info, @Nullable List<Click.Change> clientPrediction) {
         // We can use the client prediction if it's conservative (i.e. doesn't create or delete items) or the client is in creative.
         // Otherwise, we make our own.
+        List<Click.Change> changes;
         if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, player.getInventory()) || player.isCreative())) {
-            return ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
+            changes = ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
         } else {
-            var results = ContainerInventory.handleClick(this, player, info,
+            changes = ContainerInventory.handleClick(this, player, info,
                     ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
+        }
+
+        if (changes == null || !changes.equals(clientPrediction)) {
             update(player);
             player.getInventory().update(player);
-            return results;
         }
+        return changes;
     }
 
     @Override
