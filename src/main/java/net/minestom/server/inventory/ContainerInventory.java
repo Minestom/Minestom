@@ -54,7 +54,7 @@ public non-sealed class ContainerInventory extends InventoryImpl {
 
         apply(newChanges, player, inventory);
 
-        EventDispatcher.call(new InventoryPostClickEvent(player, inventory, newInfo, newChanges));
+        EventDispatcher.call(new InventoryPostClickEvent(playerInventory, player, inventory, newInfo, newChanges));
 
         return newChanges;
     }
