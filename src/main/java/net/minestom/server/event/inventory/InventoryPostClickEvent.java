@@ -4,6 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.Click;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,12 +16,15 @@ import java.util.List;
  */
 public class InventoryPostClickEvent implements InventoryEvent, PlayerInstanceEvent {
 
+    private final PlayerInventory playerInventory;
     private final Player player;
     private final Inventory inventory;
     private final Click.Info info;
     private final List<Click.Change> changes;
 
-    public InventoryPostClickEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull Click.Info info, @NotNull List<Click.Change> changes) {
+    public InventoryPostClickEvent(@NotNull PlayerInventory playerInventory, @NotNull Player player, @NotNull Inventory inventory,
+                                   @NotNull Click.Info info, @NotNull List<Click.Change> changes) {
+        this.playerInventory = playerInventory;
         this.player = player;
         this.inventory = inventory;
         this.info = info;
@@ -35,6 +39,15 @@ public class InventoryPostClickEvent implements InventoryEvent, PlayerInstanceEv
     @NotNull
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Gets the player inventory that was involved with the click.
+     *
+     * @return the player inventory
+     */
+    public @NotNull PlayerInventory getPlayerInventory() {
+        return playerInventory;
     }
 
     /**
