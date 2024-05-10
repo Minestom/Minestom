@@ -1,6 +1,8 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -12,6 +14,8 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -184,6 +188,49 @@ public class InventoryIntegrationTest {
             assertEquals(inventory.getWindowId(), slot.windowId());
             assertEquals(PlayerInventoryUtils.minestomToProtocol(35, inventory.getSize()), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
+        });
+    }
+
+    @Test
+    public void testClientUpdatesInventoryWhenCancelled(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, player.getInstance());
+
+        var inventory = player.getInventory();
+
+        player.getInventory().setCursorItem(MAGIC_STACK);
+
+        var packetTracker = connection.trackIncoming(WindowItemsPacket.class);
+
+        inventory.handleClick(player, new Click.Info.Left(0), List.of(
+                new Click.Change.Container(0, MAGIC_STACK),
+                new Click.Change.Cursor(ItemStack.AIR)
+        ));
+
+        // Should not have sent any packets because client predictions can be followed
+        packetTracker.assertEmpty();
+
+        // Reset inventory to previous state
+        inventory.setItemStack(0, ItemStack.AIR);
+        player.getInventory().setCursorItem(MAGIC_STACK);
+
+        packetTracker = connection.trackIncoming(WindowItemsPacket.class);
+
+        // Cancelling the event should send a packet back
+        var listener = env.listen(InventoryPreClickEvent.class);
+        listener.followup(event -> event.setCancelled(true));
+
+        inventory.handleClick(player, new Click.Info.Left(0), List.of(
+                new Click.Change.Container(0, MAGIC_STACK),
+                new Click.Change.Cursor(ItemStack.AIR)
+        ));
+
+        // Should not have sent any packets because client predictions can be followed
+        packetTracker.assertSingle(packet -> {
+            packet.items().forEach(item -> assertEquals(ItemStack.AIR, item));
+            assertEquals(MAGIC_STACK, packet.carriedItem());
         });
     }
 

@@ -1,6 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -12,8 +13,8 @@ import java.util.Locale;
 
 public record FireworkExplosion(
         @NotNull Shape shape,
-        @NotNull List<Color> colors,
-        @NotNull List<Color> fadeColors,
+        @NotNull List<RGBLike> colors,
+        @NotNull List<RGBLike> fadeColors,
         boolean hasTrail,
         boolean hasTwinkle
 ) {
@@ -30,8 +31,8 @@ public record FireworkExplosion(
         @Override
         public void write(@NotNull NetworkBuffer buffer, FireworkExplosion value) {
             buffer.writeEnum(Shape.class, value.shape);
-            buffer.writeCollection(NetworkBuffer.COLOR, value.colors);
-            buffer.writeCollection(NetworkBuffer.COLOR, value.fadeColors);
+            buffer.writeCollection(Color.NETWORK_TYPE, value.colors);
+            buffer.writeCollection(Color.NETWORK_TYPE, value.fadeColors);
             buffer.write(NetworkBuffer.BOOLEAN, value.hasTrail);
             buffer.write(NetworkBuffer.BOOLEAN, value.hasTwinkle);
         }
@@ -40,8 +41,8 @@ public record FireworkExplosion(
         public FireworkExplosion read(@NotNull NetworkBuffer buffer) {
             return new FireworkExplosion(
                     buffer.readEnum(Shape.class),
-                    buffer.readCollection(NetworkBuffer.COLOR, Short.MAX_VALUE),
-                    buffer.readCollection(NetworkBuffer.COLOR, Short.MAX_VALUE),
+                    buffer.readCollection(Color.NETWORK_TYPE, Short.MAX_VALUE),
+                    buffer.readCollection(Color.NETWORK_TYPE, Short.MAX_VALUE),
                     buffer.read(NetworkBuffer.BOOLEAN),
                     buffer.read(NetworkBuffer.BOOLEAN)
             );
@@ -51,10 +52,10 @@ public record FireworkExplosion(
     public static final BinaryTagSerializer<FireworkExplosion> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 Shape shape = Shape.valueOf(tag.getString("shape").toUpperCase(Locale.ROOT));
-                List<Color> colors = new ArrayList<>();
+                List<RGBLike> colors = new ArrayList<>();
                 for (int color : tag.getIntArray("colors"))
                     colors.add(new Color(color));
-                List<Color> fadeColors = new ArrayList<>();
+                List<RGBLike> fadeColors = new ArrayList<>();
                 for (int fadeColor : tag.getIntArray("fadeColors"))
                     fadeColors.add(new Color(fadeColor));
                 boolean hasTrail = tag.getBoolean("hasTrail");
@@ -67,13 +68,13 @@ public record FireworkExplosion(
                 if (!value.colors.isEmpty()) {
                     int[] colors = new int[value.colors.size()];
                     for (int i = 0; i < value.colors.size(); i++)
-                        colors[i] = value.colors.get(i).asRGB();
+                        colors[i] = Color.fromRGBLike(value.colors.get(i)).asRGB();
                     builder.putIntArray("colors", colors);
                 }
                 if (!value.fadeColors.isEmpty()) {
                     int[] fadeColors = new int[value.fadeColors.size()];
                     for (int i = 0; i < value.fadeColors.size(); i++)
-                        fadeColors[i] = value.fadeColors.get(i).asRGB();
+                        fadeColors[i] = Color.fromRGBLike(value.fadeColors.get(i)).asRGB();
                     builder.putIntArray("fadeColors", fadeColors);
                 }
                 if (value.hasTrail) builder.putBoolean("hasTrail", value.hasTrail);

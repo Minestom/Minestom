@@ -1,11 +1,13 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 
 import java.util.List;
@@ -28,18 +30,18 @@ public final class ItemComponent {
     public static final DataComponent<BlockPredicates> CAN_BREAK = DataComponent.register("can_break", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
     public static final DataComponent<AttributeList> ATTRIBUTE_MODIFIERS = DataComponent.register("attribute_modifiers", AttributeList.NETWORK_TYPE, AttributeList.NBT_TYPE);
     public static final DataComponent<Integer> CUSTOM_MODEL_DATA = DataComponent.register("custom_model_data", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
-    public static final DataComponent<Void> HIDE_ADDITIONAL_TOOLTIP = DataComponent.register("hide_additional_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
-    public static final DataComponent<Void> HIDE_TOOLTIP = DataComponent.register("hide_tooltip", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
+    public static final DataComponent<Unit> HIDE_ADDITIONAL_TOOLTIP = DataComponent.register("hide_additional_tooltip", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
+    public static final DataComponent<Unit> HIDE_TOOLTIP = DataComponent.register("hide_tooltip", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<Integer> REPAIR_COST = DataComponent.register("repair_cost", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
-    public static final DataComponent<Void> CREATIVE_SLOT_LOCK = DataComponent.register("creative_slot_lock", NetworkBuffer.NOTHING, null);
+    public static final DataComponent<Unit> CREATIVE_SLOT_LOCK = DataComponent.register("creative_slot_lock", NetworkBuffer.UNIT, null);
     public static final DataComponent<Boolean> ENCHANTMENT_GLINT_OVERRIDE = DataComponent.register("enchantment_glint_override", NetworkBuffer.BOOLEAN, BinaryTagSerializer.BOOLEAN);
-    public static final DataComponent<Void> INTANGIBLE_PROJECTILE = DataComponent.register("intangible_projectile", null, BinaryTagSerializer.NOTHING);
+    public static final DataComponent<Unit> INTANGIBLE_PROJECTILE = DataComponent.register("intangible_projectile", null, BinaryTagSerializer.UNIT);
     public static final DataComponent<Food> FOOD = DataComponent.register("food", Food.NETWORK_TYPE, Food.NBT_TYPE);
-    public static final DataComponent<Void> FIRE_RESISTANT = DataComponent.register("fire_resistant", NetworkBuffer.NOTHING, BinaryTagSerializer.NOTHING);
+    public static final DataComponent<Unit> FIRE_RESISTANT = DataComponent.register("fire_resistant", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<Tool> TOOL = DataComponent.register("tool", Tool.NETWORK_TYPE, Tool.NBT_TYPE);
     public static final DataComponent<EnchantmentList> STORED_ENCHANTMENTS = DataComponent.register("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
     public static final DataComponent<DyedItemColor> DYED_COLOR = DataComponent.register("dyed_color", DyedItemColor.NETWORK_TYPE, DyedItemColor.NBT_TYPE);
-    public static final DataComponent<Color> MAP_COLOR = DataComponent.register("map_color", NetworkBuffer.COLOR, BinaryTagSerializer.INT.map(Color::new, Color::asRGB));
+    public static final DataComponent<RGBLike> MAP_COLOR = DataComponent.register("map_color", Color.NETWORK_TYPE, BinaryTagSerializer.INT.map(Color::new, color -> Color.fromRGBLike(color).asRGB()));
     public static final DataComponent<Integer> MAP_ID = DataComponent.register("map_id", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     public static final DataComponent<MapDecorations> MAP_DECORATIONS = DataComponent.register("map_decorations", null, MapDecorations.NBT_TYPE);
     public static final DataComponent<MapPostProcessing> MAP_POST_PROCESSING = DataComponent.register("map_post_processing", MapPostProcessing.NETWORK_TYPE, null);

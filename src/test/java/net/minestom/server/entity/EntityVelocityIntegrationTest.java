@@ -159,7 +159,10 @@ public class EntityVelocityIntegrationTest {
         // Only entities on the ground should ignore the default velocity.
         assertTrue(entity.hasVelocity());
 
-        env.tick();
+        // Tick entity so it falls on the ground
+        for (int i = 0; i < 5; i++) {
+            entity.tick(0);
+        }
 
         // Now that the entity is on the ground, it should no longer have a velocity.
         assertFalse(entity.hasVelocity());
@@ -167,8 +170,6 @@ public class EntityVelocityIntegrationTest {
 
     @Test
     public void countVelocityPackets(Env env) {
-        final int VELOCITY_UPDATE_INTERVAL = 1;
-
         var instance = env.createFlatInstance();
         var viewerConnection = env.createConnection();
         viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
@@ -178,11 +179,11 @@ public class EntityVelocityIntegrationTest {
         env.tick(); // Tick because the entity is in the air, they'll send velocity from gravity
 
         AtomicInteger i = new AtomicInteger();
-        BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(VELOCITY_UPDATE_INTERVAL, 1);
+        BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(entity.getSynchronizationTicks() - 1, 19);
 
         var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
         env.tickWhile(tickLoopCondition, null);
-        tracker.assertEmpty(); // Verify no updates are sent while the entity is not moving
+        tracker.assertEmpty(); // Verify no updates are sent while the entity is not being synchronized
 
         entity.setVelocity(new Vec(0, 5, 0));
         tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);

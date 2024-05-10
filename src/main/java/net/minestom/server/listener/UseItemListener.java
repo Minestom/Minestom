@@ -13,6 +13,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Food;
 import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
+import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 
 public class UseItemListener {
 
@@ -23,6 +24,7 @@ public class UseItemListener {
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         EventDispatcher.call(useItemEvent);
 
+        player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         final PlayerInventory playerInventory = player.getInventory();
         if (useItemEvent.isCancelled()) {
             playerInventory.update();

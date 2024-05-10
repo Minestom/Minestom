@@ -580,6 +580,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Scheduled synchronization
         if (vehicle == null && ticks >= nextSynchronizationTick) {
             synchronizePosition();
+            sendPacketToViewers(getVelocityPacket());
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
@@ -601,12 +602,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
         velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
-        onGround = physicsResult.isOnGround();
-        boolean shouldSendVelocity = !entityIsPlayer && hasVelocity();
-
         if (!PlayerUtils.isSocketClient(this)) {
+            onGround = physicsResult.isOnGround();
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
-            if (shouldSendVelocity) sendPacketToViewers(getVelocityPacket());
         }
     }
 

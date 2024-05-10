@@ -156,6 +156,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Vec chunksLoadedByClient = Vec.ZERO;
     private final ReentrantLock chunkQueueLock = new ReentrantLock();
     private final LongPriorityQueue chunkQueue = new LongArrayPriorityQueue(this::compareChunkDistance);
+    private boolean needsChunkPositionSync = true;
     private float targetChunksPerTick = 9f; // Always send 9 chunks immediately
     private float pendingChunkCount = 0f; // Number of chunks to send on the current tick (ie 0.5 means we cannot send a chunk yet, 1.5 would send a single chunk with a 0.5 remainder)
     private int maxChunkBatchLead = 1; // Maximum number of batches to send before waiting for a reply
@@ -651,6 +652,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
 
+        // Reset chunk queue state
+        needsChunkPositionSync = true;
+        targetChunksPerTick = 9f;
+        pendingChunkCount = 0f;
+
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
         ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
@@ -817,6 +823,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new ChunkBatchFinishedPacket(batchSize));
             chunkBatchLead += 1;
 //            logger.debug("chunk batch sent player={} chunks={} lead={}", username, batchSize, chunkBatchLead);
+
+            // After sending the first chunk we always send a synchronize position to the client. This is to prevent
+            // cases where the client falls through the floor slightly while loading the first chunk.
+            // In the vanilla server they have an anticheat which teleports the client back if they enter the floor,
+            // but since Minestom does not have an anticheat this provides a similar effect.
+            if (needsChunkPositionSync) {
+                synchronizePositionAfterTeleport(getPosition(), RelativeFlags.NONE);
+                needsChunkPositionSync = false;
+            }
         } finally {
             chunkQueueLock.unlock();
         }

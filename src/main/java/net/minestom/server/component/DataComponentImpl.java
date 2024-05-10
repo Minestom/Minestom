@@ -1,6 +1,7 @@
 package net.minestom.server.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -18,9 +19,19 @@ record DataComponentImpl<T>(
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable BinaryTagSerializer<T> nbt
 ) implements DataComponent<T> {
+
     static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
+    @Override
+    public boolean isSynced() {
+        return network != null;
+    }
+
+    @Override
+    public boolean isSerialized() {
+        return nbt != null;
+    }
 
     @Override
     public @NotNull T read(@NotNull BinaryTag tag) {
@@ -49,5 +60,15 @@ record DataComponentImpl<T>(
     @Override
     public String toString() {
         return name();
+    }
+
+    static {
+        try {
+            // Force init of item component for the weird edge case of tests which reference a component by
+            // loading it (with fromNamespaceId) before referencing a component by name
+            Class.forName(ItemComponent.class.getName());
+        } catch (ClassNotFoundException e) {
+            // Ignored
+        }
     }
 }
