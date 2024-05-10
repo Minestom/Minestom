@@ -7,6 +7,7 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static net.minestom.server.instance.light.BlockLight.buildInternalQueue;
@@ -17,6 +18,11 @@ public final class LightCompute {
     static final int SECTION_SIZE = 16;
 
     public static final byte[] emptyContent = new byte[LIGHT_LENGTH];
+    public static final byte[] contentFullyLit = new byte[LIGHT_LENGTH];
+
+    static {
+        Arrays.fill(contentFullyLit, (byte) -1);
+    }
 
     static @NotNull Result compute(Palette blockPalette) {
         return LightCompute.compute(blockPalette, buildInternalQueue(blockPalette));

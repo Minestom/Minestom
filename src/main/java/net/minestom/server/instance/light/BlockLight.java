@@ -195,14 +195,12 @@ final class BlockLight implements Light {
     }
 
     @Override
+    @ApiStatus.Internal
     public void set(byte[] copyArray) {
-        if (copyArray.length == 0) {
-            this.content = emptyContent;
-            this.contentPropagation = emptyContent;
-        } else {
-            this.content = copyArray.clone();
-            this.contentPropagation = this.content;
-        }
+        this.content = copyArray.clone();
+        this.contentPropagation = this.content;
+        this.isValidBorders = true;
+        this.needsSend = true;
     }
 
     @Override
