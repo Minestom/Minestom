@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents an inventory which can receive click input.
  * All methods returning boolean returns true if the action is successful, false otherwise.
  * <p>
- * See https://wiki.vg/Protocol#Click_Window for more information.
+ * See https://wiki.vg/Protocol#Click_Container for more information.
  */
 public sealed interface InventoryClickHandler permits AbstractInventory {
 
@@ -38,9 +38,10 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      *
      * @param player the player who clicked
      * @param slot   the slot number
+     * @param button the button used
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean shiftClick(@NotNull Player player, int slot); // shift + left/right click have the same behavior
+    boolean shiftClick(@NotNull Player player, int slot, int button);
 
     /**
      * Called when a {@link Player} held click in the inventory
@@ -58,9 +59,9 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * Called when a {@link Player} press the drop button
      *
      * @param player the player who clicked
-     * @param all
-     * @param slot   the slot number
-     * @param button -999 if clicking outside, normal if he is not
+     * @param all    if the entire stack should be dropped
+     * @param slot   the slot number, -999 if clicked outside the window
+     * @param button the button used
      * @return true if the drop hasn't been cancelled, false otherwise
      */
     boolean drop(@NotNull Player player, boolean all, int slot, int button);

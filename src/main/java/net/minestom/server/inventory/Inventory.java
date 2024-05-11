@@ -258,7 +258,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     @Override
-    public boolean shiftClick(@NotNull Player player, int slot) {
+    public boolean shiftClick(@NotNull Player player, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
@@ -268,7 +268,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 isInWindow ? this : playerInventory,
                 isInWindow ? playerInventory : this,
                 0, isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1,
-                player, clickSlot, clicked, cursor);
+                player, clickSlot, clicked, cursor, button);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;

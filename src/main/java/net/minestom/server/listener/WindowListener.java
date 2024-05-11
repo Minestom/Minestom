@@ -27,49 +27,37 @@ public class WindowListener {
         final byte button = packet.button();
         final ClientClickWindowPacket.ClickType clickType = packet.clickType();
 
-        boolean successful = false;
-
         // prevent click in a non-interactive slot (why does it exist?)
-        if (slot == -1) {
-            return;
-        }
-        if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
-            if (button == 0) {
-                if (slot != -999) {
-                    successful = inventory.leftClick(player, slot);
+        if (slot == -1) return;
+
+        boolean successful = switch (clickType) {
+            case PICKUP -> {
+                if (button == 0) {
+                    if (slot != -999) yield inventory.leftClick(player, slot);
+                    else yield inventory.drop(player, true, slot, button);
                 } else {
-                    successful = inventory.drop(player, true, slot, button);
-                }
-            } else if (button == 1) {
-                if (slot != -999) {
-                    successful = inventory.rightClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, false, slot, button);
+                    if (slot != -999) yield inventory.rightClick(player, slot);
+                    else yield inventory.drop(player, false, slot, button);
                 }
             }
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
-            successful = inventory.shiftClick(player, slot);
-        } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
-            successful = inventory.changeHeld(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
-            successful = player.isCreative();
-            if (successful) {
-                setCursor(player, inventory, packet.clickedItem());
+            case QUICK_MOVE -> inventory.shiftClick(player, slot, button);
+            case SWAP -> inventory.changeHeld(player, slot, button);
+            case CLONE -> {
+                if (player.isCreative()) {
+                    setCursor(player, inventory, packet.clickedItem());
+                    yield true;
+                }
+                yield false;
             }
-        } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
-            successful = inventory.drop(player, false, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_CRAFT) {
-            successful = inventory.dragging(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.PICKUP_ALL) {
-            successful = inventory.doubleClick(player, slot);
-        }
+            case THROW -> inventory.drop(player, false, slot, button);
+            case QUICK_CRAFT -> inventory.dragging(player, slot, button);
+            case PICKUP_ALL -> inventory.doubleClick(player, slot);
+        };
 
         // Prevent ghost item when the click is cancelled
         if (!successful) {
             player.getInventory().update();
-            if (inventory instanceof Inventory) {
-                ((Inventory) inventory).update(player);
-            }
+            if (inventory instanceof Inventory) ((Inventory) inventory).update(player);
         }
 
         // Prevent the player from picking a ghost item in cursor

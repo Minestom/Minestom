@@ -119,10 +119,11 @@ public final class InventoryClickProcessor {
     public @NotNull InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
                                                     int start, int end, int step,
                                                     @NotNull Player player, int slot,
-                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
+                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor, int button) {
+        InventoryClickResult clickResult = startCondition(player, inventory, slot, button == 0 ? ClickType.START_LEFT_SHIFT_CLICK : ClickType.START_RIGHT_SHIFT_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
         if (clicked.isAir()) return clickResult.cancelled();
+        ClickType shiftClick = button == 0 ? ClickType.SHIFT_LEFT_CLICK : ClickType.SHIFT_RIGHT_CLICK;
 
         // Handle armor equip
         if (inventory instanceof PlayerInventory && targetInventory instanceof PlayerInventory) {
@@ -133,7 +134,7 @@ public final class InventoryClickProcessor {
                 final ItemStack currentArmor = player.getEquipment(equipmentSlot);
                 if (currentArmor.isAir()) {
                     final int armorSlot = equipmentSlot.armorSlot();
-                    InventoryClickResult result = startCondition(player, targetInventory, armorSlot, ClickType.SHIFT_CLICK, clicked, cursor);
+                    InventoryClickResult result = startCondition(player, targetInventory, armorSlot, shiftClick, clicked, cursor);
                     if (result.isCancel()) return clickResult;
                     result.setClicked(ItemStack.AIR);
                     result.setCursor(cursor);
@@ -147,7 +148,7 @@ public final class InventoryClickProcessor {
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
-            InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            InventoryClickResult result = startCondition(player, targetInventory, index, shiftClick, itemStack, cursor);
             if (result.isCancel()) {
                 return false;
             }
@@ -159,7 +160,7 @@ public final class InventoryClickProcessor {
         final Map<Integer, ItemStack> itemChangesMap = pair.right();
         itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
             targetInventory.setItemStack(s, itemStack);
-            callClickEvent(player, targetInventory, s, ClickType.SHIFT_CLICK, itemStack, cursor);
+            callClickEvent(player, targetInventory, s, shiftClick, itemStack, cursor);
         });
         clickResult.setClicked(itemResult);
         return clickResult;
