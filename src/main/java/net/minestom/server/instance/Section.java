@@ -53,8 +53,8 @@ public final class Section implements NetworkBuffer.Writer {
         final Light skyLight = Light.sky(blockPalette);
         final Light blockLight = Light.block(blockPalette);
 
-        setBlockLight(this.skyLight.array());
-        setSkyLight(this.blockLight.array());
+        setSkyLight(this.skyLight.array());
+        setBlockLight(this.blockLight.array());
 
         return new Section(this.blockPalette.clone(), this.biomePalette.clone(), skyLight, blockLight);
     }
