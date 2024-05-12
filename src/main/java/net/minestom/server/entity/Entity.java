@@ -168,7 +168,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
     // Tick related
-    private long ticks;
+    protected long ticks;
 
     private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
