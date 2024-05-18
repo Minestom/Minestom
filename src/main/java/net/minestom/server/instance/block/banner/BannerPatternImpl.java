@@ -15,7 +15,7 @@ record BannerPatternImpl(
         @Nullable Registry.BannerPatternEntry registry
 ) implements BannerPattern {
 
-    static final BinaryTagSerializer<BannerPattern> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    static final BinaryTagSerializer<BannerPattern> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("BannerPattern is read-only");
             },

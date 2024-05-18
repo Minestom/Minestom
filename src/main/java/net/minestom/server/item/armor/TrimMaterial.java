@@ -2,10 +2,8 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
-    @NotNull BinaryTagSerializer<TrimMaterial> NBT_TYPE = TrimMaterialImpl.NBT_TYPE;
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimMaterial>> NETWORK_TYPE = NetworkBuffer.registryKey(Registries::trimMaterial);
+    @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimMaterial>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimMaterial);
 
     static @NotNull TrimMaterial create(
             @NotNull NamespaceID namespace,
@@ -49,7 +48,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:trim_material", NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
+                "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
                 (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
         );
     }

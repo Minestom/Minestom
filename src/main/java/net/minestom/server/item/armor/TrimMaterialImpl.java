@@ -22,7 +22,7 @@ record TrimMaterialImpl(
         @Nullable Registry.TrimMaterialEntry registry
 ) implements TrimMaterial {
 
-    static final BinaryTagSerializer<TrimMaterial> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    static final BinaryTagSerializer<TrimMaterial> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("TrimMaterial is read-only");
             },

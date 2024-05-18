@@ -25,6 +25,7 @@ import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityAttributesPacket;
 import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.block.BlockIterator;
@@ -311,7 +312,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
-    public boolean damage(@NotNull DamageType type, float amount) {
+    public boolean damage(@NotNull DynamicRegistry.Key<DamageType> type, float amount) {
         return damage(new Damage(type, null, null, null, amount));
     }
 
@@ -382,7 +383,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param type the type of damage
      * @return true if this entity is immune to the given type of damage
      */
-    public boolean isImmune(@NotNull DamageType type) {
+    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
         return false;
     }
 

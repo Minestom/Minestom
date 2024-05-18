@@ -2,10 +2,8 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -14,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
-    @NotNull BinaryTagSerializer<TrimPattern> NBT_TYPE = TrimPatternImpl.NBT_TYPE;
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimPattern>> NETWORK_TYPE = NetworkBuffer.registryKey(Registries::trimPattern);
+    @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
 
     static @NotNull TrimPattern create(
             @NotNull NamespaceID namespace,
@@ -42,7 +41,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:trim_pattern", NBT_TYPE, Registry.Resource.TRIM_PATTERNS,
+                "minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_PATTERNS,
                 (namespace, props) -> new TrimPatternImpl(Registry.trimPattern(namespace, props))
         );
     }
