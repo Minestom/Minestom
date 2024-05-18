@@ -43,7 +43,7 @@ final class BlockCollision {
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
             final EntityType type = entity.getEntityType();
-            if (type == EntityType.ITEM || type == EntityType.ARROW)
+            if (!entity.hasCollision() || type == EntityType.ITEM || type == EntityType.ARROW)
                 continue;
             // Marker Armor Stands should not prevent block placement
             if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker())

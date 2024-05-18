@@ -96,6 +96,17 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         }
 
         // Formatting
+        builder.style(deserializeStyle(compound));
+
+        return builder.build();
+    }
+
+    @Override
+    public @NotNull Style deserializeStyle(@NotNull BinaryTag tag) {
+        if (!(tag instanceof CompoundBinaryTag compound)) {
+            return Style.empty();
+        }
+
         var style = Style.style();
         var color = compound.getString("color");
         if (!color.isEmpty()) {
@@ -128,17 +139,16 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         BinaryTag obfuscated = compound.get("obfuscated");
         if (obfuscated instanceof ByteBinaryTag b)
             style.decoration(TextDecoration.OBFUSCATED, b.value() == 1 ? TextDecoration.State.TRUE : TextDecoration.State.FALSE);
-        builder.style(style.build());
 
         // Interactivity
         var insertion = compound.getString("insertion");
-        if (!insertion.isEmpty()) builder.insertion(insertion);
+        if (!insertion.isEmpty()) style.insertion(insertion);
         var clickEvent = compound.getCompound("clickEvent");
-        if (clickEvent.size() > 0) builder.clickEvent(deserializeClickEvent(clickEvent));
+        if (clickEvent.size() > 0) style.clickEvent(deserializeClickEvent(clickEvent));
         var hoverEvent = compound.getCompound("hoverEvent");
-        if (hoverEvent.size() > 0) builder.hoverEvent(deserializeHoverEvent(hoverEvent));
+        if (hoverEvent.size() > 0) style.hoverEvent(deserializeHoverEvent(hoverEvent));
 
-        return builder.build();
+        return style.build();
     }
 
     private @NotNull ComponentBuilder<?, ?> deserializeTextComponent(@NotNull CompoundBinaryTag compound) {
@@ -289,8 +299,16 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
             compound.put("extra", children.build());
         }
 
-        // Formatting
-        var style = component.style();
+        // Formatting/Interactivity
+        compound.put(serializeStyle(component.style()));
+
+        return compound.build();
+    }
+
+    @Override
+    public @NotNull CompoundBinaryTag serializeStyle(@NotNull Style style) {
+        CompoundBinaryTag.Builder compound = CompoundBinaryTag.builder();
+
         var color = style.color();
         if (color != null) {
             if (color instanceof NamedTextColor named) {
@@ -318,12 +336,11 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         if (obfuscated != TextDecoration.State.NOT_SET)
             compound.putBoolean("obfuscated", obfuscated == TextDecoration.State.TRUE);
 
-        // Interactivity
-        var insertion = component.insertion();
+        var insertion = style.insertion();
         if (insertion != null) compound.putString("insertion", insertion);
-        var clickEvent = component.clickEvent();
+        var clickEvent = style.clickEvent();
         if (clickEvent != null) compound.put("clickEvent", serializeClickEvent(clickEvent));
-        var hoverEvent = component.hoverEvent();
+        var hoverEvent = style.hoverEvent();
         if (hoverEvent != null) compound.put("hoverEvent", serializeHoverEvent(hoverEvent));
 
         return compound.build();
