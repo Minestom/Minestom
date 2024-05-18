@@ -19,7 +19,7 @@ record TrimPatternImpl(
         @Nullable Registry.TrimPatternEntry registry
 ) implements TrimPattern {
 
-    static final BinaryTagSerializer<TrimPattern> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    static final BinaryTagSerializer<TrimPattern> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("TrimMaterial is read-only");
             },

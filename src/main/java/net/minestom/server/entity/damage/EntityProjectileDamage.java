@@ -1,21 +1,16 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * Represents damage inflicted by an entity, via a projectile.
  */
 public class EntityProjectileDamage extends Damage {
-    private static final DynamicRegistry<DamageType> DAMAGE_TYPES = MinecraftServer.getDamageTypeRegistry();
 
     public EntityProjectileDamage(@Nullable Entity shooter, @NotNull Entity projectile, float amount) {
-        super(Objects.requireNonNull(DAMAGE_TYPES.get(DamageType.MOB_PROJECTILE)), projectile, shooter, null, amount);
+        super(DamageType.MOB_PROJECTILE, projectile, shooter, null, amount);
     }
 
     /**

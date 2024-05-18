@@ -415,8 +415,8 @@ public class AnvilLoader implements IChunkLoader {
                         // Add biome (biome are stored for 4x4x4 volumes, avoid unnecessary work)
                         if (x % 4 == 0 && sectionLocalY % 4 == 0 && z % 4 == 0) {
                             int biomeIndex = (x / 4) + (sectionLocalY / 4) * 4 * 4 + (z / 4) * 4;
-                            final Biome biome = chunk.getBiome(x, y, z);
-                            final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biome.name());
+                            final DynamicRegistry.Key<Biome> biomeKey = chunk.getBiome(x, y, z);
+                            final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.name());
 
                             int biomePaletteIndex = biomePalette.indexOf(biomeName);
                             if (biomePaletteIndex == -1) {

@@ -30,6 +30,7 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.DimensionType;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -117,8 +118,10 @@ public class BlockPlacementListener {
             }
         }
 
-        if (placementPosition.y() >= instance.getDimensionType().maxY()
-                || placementPosition.y() < instance.getDimensionType().minY()) return;
+        final DimensionType instanceDim = instance.getCachedDimensionType();
+        if (placementPosition.y() >= instanceDim.maxY() || placementPosition.y() < instanceDim.minY()) {
+            return;
+        }
 
         // Ensure that the final placement position is inside the world border.
         if (!instance.getWorldBorder().isInside(placementPosition)) {
