@@ -10,10 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -57,7 +54,8 @@ public final class InstanceManager {
 
     @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
-        return createInstanceContainer(DimensionType.OVERWORLD, loader);
+        DimensionType defaultDimension = Objects.requireNonNull(MinecraftServer.getDimensionTypeRegistry().get(DimensionType.OVERWORLD));
+        return createInstanceContainer(defaultDimension, loader);
     }
 
     /**
@@ -66,7 +64,8 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public @NotNull InstanceContainer createInstanceContainer() {
-        return createInstanceContainer(DimensionType.OVERWORLD, null);
+        DimensionType defaultDimension = Objects.requireNonNull(MinecraftServer.getDimensionTypeRegistry().get(DimensionType.OVERWORLD));
+        return createInstanceContainer(defaultDimension, null);
     }
 
     /**

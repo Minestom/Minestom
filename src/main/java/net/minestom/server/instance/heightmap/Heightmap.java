@@ -16,7 +16,7 @@ public abstract class Heightmap {
 
     public Heightmap(Chunk chunk) {
         this.chunk = chunk;
-        minHeight = chunk.getInstance().getDimensionType().getMinY() - 1;
+        minHeight = chunk.getInstance().getDimensionType().minY() - 1;
     }
 
     protected abstract boolean checkBlock(@NotNull Block block);
@@ -57,13 +57,13 @@ public abstract class Heightmap {
     }
 
     public long[] getNBT() {
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
+        final int dimensionHeight = chunk.getInstance().getDimensionType().height();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
         return encode(heights, bitsForHeight);
     }
 
     public void loadFrom(long[] data) {
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
+        final int dimensionHeight = chunk.getInstance().getDimensionType().height();
         final int bitsPerEntry = MathUtils.bitsToRepresent(dimensionHeight);
 
         final int entriesPerLong = 64 / bitsPerEntry;
@@ -94,7 +94,7 @@ public abstract class Heightmap {
     }
 
     public static int getHighestBlockSection(Chunk chunk) {
-        int y = chunk.getInstance().getDimensionType().getMaxY();
+        int y = chunk.getInstance().getDimensionType().maxY();
 
         final int sectionsCount = chunk.getMaxSection() - chunk.getMinSection();
         for (int i = 0; i < sectionsCount; i++) {
