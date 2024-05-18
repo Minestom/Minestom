@@ -5,7 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -79,8 +79,8 @@ public class AnvilLoaderIntegrationTest {
                 for (int y = 0; y < 16; y++) {
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
-                            Biome b = chunk.getBiome(x, y, z);
-                            assertEquals(NamespaceID.from("minecraft:plains"), b.namespace());
+                            DynamicRegistry.Key<Biome> b = chunk.getBiome(x, y, z);
+                            assertEquals(Biome.PLAINS, b);
                         }
                     }
                 }
