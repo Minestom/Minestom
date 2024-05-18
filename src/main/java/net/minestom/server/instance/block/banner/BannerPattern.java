@@ -1,16 +1,17 @@
 package net.minestom.server.instance.block.banner;
 
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<BannerPattern>> NETWORK_TYPE = NetworkBuffer.registryKey(Registries::bannerPattern);
+    @NotNull BinaryTagSerializer<DynamicRegistry.Key<BannerPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::bannerPattern);
 
     static @NotNull BannerPattern create(
             @NotNull NamespaceID namespace,

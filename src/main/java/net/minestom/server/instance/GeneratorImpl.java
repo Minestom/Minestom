@@ -219,10 +219,6 @@ final class GeneratorImpl {
                                Palette blockPalette, Palette biomePalette,
                                Int2ObjectMap<Block> cache, boolean fork) implements GenericModifier {
 
-        SectionModifierImpl {
-            biomePalette.fill(BIOME_MANAGER.getId(Biome.PLAINS));
-        }
-
         @Override
         public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
