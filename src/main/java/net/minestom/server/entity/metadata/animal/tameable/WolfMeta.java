@@ -5,10 +5,8 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -20,7 +18,7 @@ import java.util.List;
 
 public class WolfMeta extends TameableAnimalMeta {
     public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
+    public static final byte MAX_OFFSET = OFFSET + 4;
 
     public WolfMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -52,8 +50,17 @@ public class WolfMeta extends TameableAnimalMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
     }
 
+    public @NotNull DynamicRegistry.Key<Variant> getVariant() {
+        return super.metadata.getIndex(OFFSET + 3, Variant.PALE);
+    }
+
+    public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
+        super.metadata.setIndex(OFFSET + 3, Metadata.WolfVariant(value));
+    }
+
     public sealed interface Variant extends ProtocolObject, WolfVariants permits VariantImpl {
-        @NotNull BinaryTagSerializer<Variant> NBT_TYPE = VariantImpl.NBT_TYPE;
+        @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Variant>> NETWORK_TYPE = NetworkBuffer.registryKey(Registries::wolfVariant);
+        @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
 
         static @NotNull Variant create(
                 @NotNull NamespaceID namespace,
@@ -81,7 +88,7 @@ public class WolfMeta extends TameableAnimalMeta {
         @ApiStatus.Internal
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             return new DynamicRegistryImpl<>(
-                    "minecraft:wolf_variant", NBT_TYPE, Registry.Resource.WOLF_VARIANTS,
+                    "minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.WOLF_VARIANTS,
                     (namespace, props) -> new WolfMeta.VariantImpl(Registry.wolfVariant(namespace, props))
             );
         }
@@ -149,7 +156,7 @@ public class WolfMeta extends TameableAnimalMeta {
     ) implements Variant {
 
         private static final BinaryTagSerializer<List<String>> BIOMES_NBT_TYPE = BinaryTagSerializer.STRING.list();
-        static final BinaryTagSerializer<Variant> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+        static final BinaryTagSerializer<Variant> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> {
                     throw new UnsupportedOperationException("WolfVariant is read-only");
                 },

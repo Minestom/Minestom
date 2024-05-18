@@ -27,6 +27,8 @@ import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,9 +73,10 @@ public class DynamicChunk extends Chunk {
     public void setBlock(int x, int y, int z, @NotNull Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
-        if(y >= instance.getDimensionType().maxY() || y < instance.getDimensionType().minY()) {
+        final DimensionType instanceDim = instance.getCachedDimensionType();
+        if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
-                    instance.getDimensionType().minY(), instance.getDimensionType().maxY(), y);
+                    instanceDim.minY(), instanceDim.maxY(), y);
             return;
         }
         assertLock();
@@ -136,7 +139,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+    public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
@@ -216,17 +219,14 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull Biome getBiome(int x, int y, int z) {
+    public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
 
-        Biome biome = BIOME_REGISTRY.get(id);
-        if (biome == null) {
-            throw new IllegalStateException("Biome with id " + id + " is not registered");
-        }
-
+        DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
+        Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
     }
 

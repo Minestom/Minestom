@@ -28,7 +28,7 @@ record DimensionTypeImpl(
         @Nullable Registry.DimensionTypeEntry registry
 ) implements DimensionType {
 
-    static final BinaryTagSerializer<DimensionType> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    static final BinaryTagSerializer<DimensionType> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("DimensionType is read-only");
             },

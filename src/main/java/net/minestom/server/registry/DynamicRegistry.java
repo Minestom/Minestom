@@ -1,20 +1,61 @@
 package net.minestom.server.registry;
 
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface DynamicRegistry<T extends ProtocolObject> {
+public sealed interface DynamicRegistry<T extends ProtocolObject> permits DynamicRegistryImpl {
+
+    /**
+     * A key for a {@link ProtocolObject} in a {@link DynamicRegistry}.
+     *
+     * @param <T> Unused, except to provide compile-time safety and self documentation.
+     */
+    sealed interface Key<T extends ProtocolObject> extends Keyed permits DynamicRegistryImpl.KeyImpl {
+
+        static <T extends ProtocolObject> @NotNull Key<T> of(@NotNull String namespace) {
+            return new DynamicRegistryImpl.KeyImpl<>(NamespaceID.from(namespace));
+        }
+
+        static <T extends ProtocolObject> @NotNull Key<T> of(@NotNull NamespaceID namespace) {
+            return new DynamicRegistryImpl.KeyImpl<>(namespace);
+        }
+
+        @Contract(pure = true)
+        @NotNull NamespaceID namespace();
+
+        @Contract(pure = true)
+        default @NotNull String name() {
+            return namespace().asString();
+        }
+
+        @Override
+        @Contract(pure = true)
+        default @NotNull net.kyori.adventure.key.Key key() {
+            return namespace();
+        }
+    }
 
     @Nullable T get(int id);
     @Nullable T get(@NotNull NamespaceID namespace);
+    default @Nullable T get(@NotNull Key<T> key) {
+        return get(key.namespace());
+    }
+
+    @Nullable Key<T> getKey(int id);
+    @Nullable NamespaceID getName(int id);
 
     int getId(@NotNull NamespaceID id);
+    default int getId(@NotNull Key<T> key) {
+        return getId(key.namespace());
+    }
 
     /**
      * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
@@ -36,7 +77,7 @@ public interface DynamicRegistry<T extends ProtocolObject> {
      * @param object The entry to register
      * @return The new ID of the registered object
      */
-    int register(@NotNull T object);
+    @NotNull DynamicRegistry.Key<T> register(@NotNull T object);
 
     /**
      * <p>Removes an object from this registry.</p>

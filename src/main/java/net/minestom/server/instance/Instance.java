@@ -72,8 +72,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private boolean registered;
 
-    private final int dimensionTypeId;
-    private final DimensionType cachedDimensionType;
+    private final DynamicRegistry.Key<DimensionType> dimensionType;
+    private final DimensionType cachedDimensionType; // Cached to prevent self-destruction if the registry is changed, and to avoid the lookups.
     private final String dimensionName;
 
     private final WorldBorder worldBorder;
@@ -123,7 +123,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+    public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
         this(uniqueId, dimensionType, dimensionType.namespace());
     }
 
@@ -133,11 +133,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
+    public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
         this.uniqueId = uniqueId;
-        this.dimensionTypeId = DIMENSION_REGISTRY.getId(dimensionType.namespace());
-        Check.argCondition(this.dimensionTypeId == -1, "The dimension " + dimensionType.name() + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
-        this.cachedDimensionType = dimensionType;
+        this.dimensionType = dimensionType;
+        this.cachedDimensionType = DIMENSION_REGISTRY.get(dimensionType);
+        Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
 
         this.worldBorder = new WorldBorder(this);
@@ -399,7 +399,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the dimension of the instance
      */
-    public DimensionType getDimensionType() {
+    public DynamicRegistry.Key<DimensionType> getDimensionType() {
+        return dimensionType;
+    }
+
+    @ApiStatus.Internal
+    public @NotNull DimensionType getCachedDimensionType() {
         return cachedDimensionType;
     }
 

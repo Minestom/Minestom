@@ -11,20 +11,27 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApiStatus.Internal
-public class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
+public final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-remove' to 'true'");
+
+    record KeyImpl<T extends ProtocolObject>(NamespaceID namespace) implements Key<T> {
+    }
 
     private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(true));
 
-    private final ReentrantLock lock = new ReentrantLock(); // Protects entryById (except when used alone, it is safe), entryByName, and idByName
+    private final ReentrantLock lock = new ReentrantLock(); // Protects writes
     private final List<T> entryById = new CopyOnWriteArrayList<>(); // We use a CopyOnWriteArrayList even with the lock above because it handles concurrent iteration
-    private final Map<NamespaceID, T> entryByName = new HashMap<>();
-    private final List<NamespaceID> idByName = new ArrayList<>();
+    private final Map<NamespaceID, T> entryByName = new ConcurrentHashMap<>();
+    private final List<NamespaceID> idByName = new CopyOnWriteArrayList<>();
 
     private final String id;
     private final BinaryTagSerializer<T> nbtType;
@@ -49,22 +56,26 @@ public class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicReg
 
     @Override
     public @Nullable T get(@NotNull NamespaceID namespace) {
-        lock.lock();
-        try {
-            return entryByName.get(namespace);
-        } finally {
-            lock.unlock();
-        }
+        return entryByName.get(namespace);
+    }
+
+    @Override
+    public @Nullable Key<T> getKey(int id) {
+        if (id < 0 || id >= entryById.size())
+            return null;
+        return Key.of(idByName.get(id));
+    }
+
+    @Override
+    public @Nullable NamespaceID getName(int id) {
+        if (id < 0 || id >= entryById.size())
+            return null;
+        return idByName.get(id);
     }
 
     @Override
     public int getId(@NotNull NamespaceID id) {
-        lock.lock();
-        try {
-            return idByName.indexOf(id);
-        } finally {
-            lock.unlock();
-        }
+        return idByName.indexOf(id);
     }
 
     @Override
@@ -73,7 +84,7 @@ public class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicReg
     }
 
     @Override
-    public int register(@NotNull T object) {
+    public @NotNull DynamicRegistry.Key<T> register(@NotNull T object) {
         lock.lock();
         try {
             int id = idByName.indexOf(object.namespace());
@@ -83,7 +94,7 @@ public class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicReg
             entryByName.put(object.namespace(), object);
             idByName.add(object.namespace());
             vanillaRegistryDataPacket.invalidate();
-            return id;
+            return Key.of(object.namespace());
         } finally {
             lock.unlock();
         }
@@ -116,28 +127,23 @@ public class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicReg
     }
 
     private @NotNull RegistryDataPacket createRegistryDataPacket(boolean excludeVanilla) {
-        lock.lock();
-        try {
-            var entries = new ArrayList<RegistryDataPacket.Entry>(entryById.size());
-            for (var entry : entryById) {
-                CompoundBinaryTag data = null;
-                // sorta todo, sorta just a note:
-                // Right now we very much only support the minecraft:core (vanilla) 'pack'. Any entry which was not loaded
-                // from static data will be treated as non vanilla and always sent completely. However, we really should
-                // support arbitrary packs and associate all registry data with a datapack. Additionally, we should generate
-                // all data for the experimental datapacks built in to vanilla such as the next update experimental (1.21 at
-                // the time of writing). Datagen currently behaves kind of badly in that the registry inspecting generators
-                // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
-                // static assets (the traditionally dynamic registries), do not generate those assets.
-                if (!excludeVanilla || entry.registry() == null) {
-                    data = (CompoundBinaryTag) nbtType.write(entry);
-                }
-                entries.add(new RegistryDataPacket.Entry(entry.name(), data));
+        var entries = new ArrayList<RegistryDataPacket.Entry>(entryById.size());
+        for (var entry : entryById) {
+            CompoundBinaryTag data = null;
+            // sorta todo, sorta just a note:
+            // Right now we very much only support the minecraft:core (vanilla) 'pack'. Any entry which was not loaded
+            // from static data will be treated as non vanilla and always sent completely. However, we really should
+            // support arbitrary packs and associate all registry data with a datapack. Additionally, we should generate
+            // all data for the experimental datapacks built in to vanilla such as the next update experimental (1.21 at
+            // the time of writing). Datagen currently behaves kind of badly in that the registry inspecting generators
+            // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
+            // static assets (the traditionally dynamic registries), do not generate those assets.
+            if (!excludeVanilla || entry.registry() == null) {
+                data = (CompoundBinaryTag) nbtType.write(entry);
             }
-            return new RegistryDataPacket(id, entries);
-        } finally {
-            lock.unlock();
+            entries.add(new RegistryDataPacket.Entry(entry.name(), data));
         }
+        return new RegistryDataPacket(id, entries);
     }
 
     private void loadStaticRegistry(@NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {

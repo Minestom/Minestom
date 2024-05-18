@@ -74,8 +74,10 @@ public class CodeGenerator {
             LOGGER.error("Failed to find resource file for " + typeName);
             return;
         }
-        ClassName typeClass = ClassName.get(packageName, typeName);
-        ClassName namespaceIdClass = ClassName.get("net.minestom.server.utils", "NamespaceID");
+
+        ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class
+        ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "DynamicRegistry", "Key");
+        ParameterizedTypeName typedRegistryKeyClass = ParameterizedTypeName.get(registryKeyClass, typeClass);
 
         JsonObject json;
         json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
@@ -93,12 +95,12 @@ public class CodeGenerator {
                     .replace(".", "_")
                     .toUpperCase(Locale.ROOT);
             blockConstantsClass.addField(
-                    FieldSpec.builder(namespaceIdClass, constantName)
+                    FieldSpec.builder(typedRegistryKeyClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
                                     // TypeClass.STONE = NamespaceID.from("minecraft:stone")
-                                    "$T.from($S)",
-                                    namespaceIdClass,
+                                    "$T.of($S)",
+                                    registryKeyClass,
                                     namespace
                             )
                             .build()
