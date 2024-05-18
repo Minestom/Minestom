@@ -90,7 +90,7 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
     }
 
     @Override
-    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, T value) {
+    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, @NotNull T value) {
         return new ItemStackImpl(material, amount, components.with(component, value));
     }
 

@@ -68,8 +68,6 @@ import java.util.stream.Collectors;
 public abstract class Instance implements Block.Getter, Block.Setter,
         Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
 
-    private static final DynamicRegistry<DimensionType> DIMENSION_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
-
     private boolean registered;
 
     private final DynamicRegistry.Key<DimensionType> dimensionType;
@@ -134,9 +132,19 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, dimensionName);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param uniqueId      the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
+     */
+    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;
-        this.cachedDimensionType = DIMENSION_REGISTRY.get(dimensionType);
+        this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
         Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
 

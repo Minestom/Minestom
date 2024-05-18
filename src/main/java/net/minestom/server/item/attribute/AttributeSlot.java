@@ -28,4 +28,11 @@ public enum AttributeSlot {
     public @NotNull List<EquipmentSlot> equipmentSlots() {
         return this.equipmentSlots;
     }
+
+    /**
+     * Returns true if this attribute slot has an effect on the given {@link EquipmentSlot}, false otherwise.
+     */
+    public boolean contains(@NotNull EquipmentSlot equipmentSlot) {
+        return this.equipmentSlots.contains(equipmentSlot);
+    }
 }
