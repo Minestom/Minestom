@@ -12,7 +12,8 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
 public class BlockPlaceIntegrationTest {
@@ -20,8 +21,8 @@ public class BlockPlaceIntegrationTest {
     @Test
     void testPlacementOutOfLimit(Env env) {
         Instance instance = env.createFlatInstance();
-        assertDoesNotThrow(() -> instance.setBlock(0, instance.getDimensionType().getMaxY() + 1, 0, Block.STONE));
-        assertDoesNotThrow(() -> instance.setBlock(0, instance.getDimensionType().getMinY() - 1, 0, Block.STONE));
+        assertDoesNotThrow(() -> instance.setBlock(0, instance.getCachedDimensionType().maxY() + 1, 0, Block.STONE));
+        assertDoesNotThrow(() -> instance.setBlock(0, instance.getCachedDimensionType().minY() - 1, 0, Block.STONE));
     }
 
     @Test

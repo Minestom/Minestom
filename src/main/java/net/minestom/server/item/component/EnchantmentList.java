@@ -78,6 +78,14 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
         enchantments = Map.copyOf(enchantments);
     }
 
+    public boolean has(@NotNull Enchantment enchantment) {
+        return enchantments.containsKey(enchantment);
+    }
+
+    public int level(@NotNull Enchantment enchantment) {
+        return enchantments.getOrDefault(enchantment, 0);
+    }
+
     public @NotNull EnchantmentList with(@NotNull Enchantment enchantment, int level) {
         Map<Enchantment, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.put(enchantment, level);

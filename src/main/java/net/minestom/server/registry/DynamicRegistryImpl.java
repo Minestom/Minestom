@@ -11,10 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -24,6 +21,24 @@ public final class DynamicRegistryImpl<T extends ProtocolObject> implements Dyna
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-remove' to 'true'");
 
     record KeyImpl<T extends ProtocolObject>(NamespaceID namespace) implements Key<T> {
+
+        @Override
+        public String toString() {
+            return namespace.asString();
+        }
+
+        @Override
+        public int hashCode() {
+            return namespace.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            KeyImpl<?> key = (KeyImpl<?>) obj;
+            return namespace.equals(key.namespace);
+        }
     }
 
     private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(true));
@@ -42,8 +57,12 @@ public final class DynamicRegistryImpl<T extends ProtocolObject> implements Dyna
     }
 
     public DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
+        this(id, nbtType, resource, loader, null);
+    }
+
+    public DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
         this(id, nbtType);
-        loadStaticRegistry(resource, loader);
+        loadStaticRegistry(resource, loader, idComparator);
     }
 
     @Override
@@ -146,8 +165,10 @@ public final class DynamicRegistryImpl<T extends ProtocolObject> implements Dyna
         return new RegistryDataPacket(id, entries);
     }
 
-    private void loadStaticRegistry(@NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        for (var entry : Registry.load(resource).entrySet()) {
+    private void loadStaticRegistry(@NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
+        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
+        if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
+        for (var entry : entries) {
             final String namespace = entry.getKey();
             final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
             register(loader.get(namespace, properties));

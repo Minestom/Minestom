@@ -86,16 +86,42 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
     ) implements NetworkBuffer.Writer {
 
         public Modifier(@NotNull NetworkBuffer reader) {
-            this(Attribute.fromId(reader.read(NetworkBuffer.VAR_INT)),
+            this(reader.read(Attribute.NETWORK_TYPE),
                     new AttributeModifier(reader),
                     reader.readEnum(AttributeSlot.class));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, attribute.id());
+            writer.write(Attribute.NETWORK_TYPE, attribute);
             modifier.write(writer);
             writer.writeEnum(AttributeSlot.class, slot);
         }
+    }
+
+    public AttributeList {
+        modifiers = List.copyOf(modifiers);
+    }
+
+    public AttributeList(@NotNull List<Modifier> modifiers) {
+        this(modifiers, true);
+    }
+
+    public AttributeList(@NotNull Modifier modifier, boolean showInTooltip) {
+        this(List.of(modifier), showInTooltip);
+    }
+
+    public AttributeList(@NotNull Modifier modifier) {
+        this(modifier, true);
+    }
+
+    public @NotNull AttributeList with(@NotNull Modifier modifier) {
+        List<Modifier> newModifiers = new ArrayList<>(modifiers);
+        newModifiers.add(modifier);
+        return new AttributeList(newModifiers, showInTooltip);
+    }
+
+    public @NotNull AttributeList withTooltip(boolean showInTooltip) {
+        return new AttributeList(modifiers, showInTooltip);
     }
 }
