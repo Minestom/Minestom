@@ -100,7 +100,17 @@ public class InstanceContainer extends Instance {
     }
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
-        super(uniqueId, dimensionType, dimensionName);
+        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, loader, dimensionName);
+    }
+
+    public InstanceContainer(
+            @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
+            @NotNull UUID uniqueId,
+            @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
+            @Nullable IChunkLoader loader,
+            @NotNull NamespaceID dimensionName
+    ) {
+        super(dimensionTypeRegistry, uniqueId, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
