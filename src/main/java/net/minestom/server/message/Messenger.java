@@ -1,19 +1,14 @@
 package net.minestom.server.message;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,38 +22,6 @@ public final class Messenger {
     public static final Component CANNOT_SEND_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
     private static final UUID NO_SENDER = new UUID(0, 0);
     private static final SystemChatPacket CANNOT_SEND_PACKET = new SystemChatPacket(CANNOT_SEND_MESSAGE, false);
-
-    private static final RegistryDataPacket REGISTRY_DATA_PACKET;
-
-    static {
-        try {
-            REGISTRY_DATA_PACKET = new RegistryDataPacket(
-                    "minecraft:chat_type", List.of(
-                    new RegistryDataPacket.Entry(
-                            "minecraft:chat",
-                            TagStringIO.get().asCompound(
-                                    """
-                                            {
-                                                "chat":{
-                                                    "translation_key":"chat.type.text",
-                                                    "parameters":["sender", "content"]
-                                                },
-                                                "narration":{
-                                                   "translation_key":"chat.type.text.narrate",
-                                                   "parameters":["sender", "content"]
-                                                }
-                                            }"""
-                            )
-                    )
-            ));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static @NotNull RegistryDataPacket registryDataPacket() {
-        return REGISTRY_DATA_PACKET;
-    }
 
     /**
      * Sends a message to a player, respecting their chat settings.

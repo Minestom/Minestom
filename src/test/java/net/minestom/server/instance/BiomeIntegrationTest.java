@@ -3,13 +3,12 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 

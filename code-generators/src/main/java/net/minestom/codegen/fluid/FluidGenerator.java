@@ -37,7 +37,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
+        ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "FluidRegistries");
 
         JsonObject fluids = GSON.fromJson(new InputStreamReader(fluidsFile), JsonObject.class);
         ClassName fluidClassName = ClassName.get("net.minestom.server.fluid", "Fluid");

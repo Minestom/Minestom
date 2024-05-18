@@ -2,7 +2,9 @@ package net.minestom.server.utils.nbt;
 
 import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.UniqueIdUtils;
 import net.minestom.server.utils.Unit;
@@ -176,6 +178,28 @@ public interface BinaryTagSerializer<T> {
             s -> GsonComponentSerializer.gson().deserialize(s),
             c -> GsonComponentSerializer.gson().serialize(c)
     );
+    BinaryTagSerializer<Component> NBT_COMPONENT = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Component value) {
+            return NbtComponentSerializer.nbt().serialize(value);
+        }
+
+        @Override
+        public @NotNull Component read(@NotNull BinaryTag tag) {
+            return NbtComponentSerializer.nbt().deserialize(tag);
+        }
+    };
+    BinaryTagSerializer<Style> NBT_COMPONENT_STYLE = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Style value) {
+            return NbtComponentSerializer.nbt().serializeStyle(value);
+        }
+
+        @Override
+        public @NotNull Style read(@NotNull BinaryTag tag) {
+            return NbtComponentSerializer.nbt().deserializeStyle(tag);
+        }
+    };
     BinaryTagSerializer<ItemStack> ITEM = COMPOUND.map(ItemStack::fromItemNBT, ItemStack::toItemNBT);
 
     BinaryTagSerializer<UUID> UUID = new BinaryTagSerializer<>() {

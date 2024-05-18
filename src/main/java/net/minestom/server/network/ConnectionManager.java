@@ -5,13 +5,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.preplay.LoginListener;
-import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
@@ -19,6 +17,7 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
+import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -287,14 +286,18 @@ public final class ConnectionManager {
             // Registry data (if it should be sent)
             if (event.willSendRegistryData()) {
 
-                // minecraft:trim_pattern, minecraft:trim_material, minecraft:wolf_variant, and minecraft:banner_pattern.
+                player.sendPacket(new SelectKnownPacksPacket(List.of(SelectKnownPacksPacket.MINECRAFT_CORE)));
 
-                player.sendPacket(Messenger.registryDataPacket());
-                player.sendPacket(MinecraftServer.getDimensionTypeManager().registryDataPacket());
-                player.sendPacket(MinecraftServer.getBiomeManager().registryDataPacket());
-                player.sendPacket(DamageType.registryDataPacket());
-//                registry.put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT());
-//                registry.put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT());
+                boolean excludeVanilla = false;
+                var serverProcess = MinecraftServer.process();
+                player.sendPacket(serverProcess.chatType().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.dimensionType().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.biome().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.damageType().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.trimMaterial().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.trimPattern().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.bannerPattern().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.wolfVariant().registryDataPacket(excludeVanilla));
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }

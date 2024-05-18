@@ -39,7 +39,6 @@ public class Main {
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
-        MinecraftServer.getBiomeManager().loadVanillaBiomes();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());

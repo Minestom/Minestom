@@ -27,6 +27,7 @@ import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -67,9 +68,12 @@ import java.util.stream.Collectors;
 public abstract class Instance implements Block.Getter, Block.Setter,
         Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
 
+    private static final DynamicRegistry<DimensionType> DIMENSION_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
+
     private boolean registered;
 
-    private final DimensionType dimensionType;
+    private final int dimensionTypeId;
+    private final DimensionType cachedDimensionType;
     private final String dimensionName;
 
     private final WorldBorder worldBorder;
@@ -120,7 +124,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
-        this(uniqueId, dimensionType, dimensionType.getName());
+        this(uniqueId, dimensionType, dimensionType.namespace());
     }
 
     /**
@@ -130,10 +134,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
-        Check.argCondition(!dimensionType.isRegistered(),
-                "The dimension " + dimensionType.getName() + " is not registered! Please use DimensionTypeManager#addDimension");
         this.uniqueId = uniqueId;
-        this.dimensionType = dimensionType;
+        this.dimensionTypeId = DIMENSION_REGISTRY.getId(dimensionType.namespace());
+        Check.argCondition(this.dimensionTypeId == -1, "The dimension " + dimensionType.name() + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
+        this.cachedDimensionType = dimensionType;
         this.dimensionName = dimensionName.asString();
 
         this.worldBorder = new WorldBorder(this);
@@ -396,7 +400,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the dimension of the instance
      */
     public DimensionType getDimensionType() {
-        return dimensionType;
+        return cachedDimensionType;
     }
 
     /**
