@@ -4,7 +4,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.FluidRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -78,11 +78,11 @@ public final class Tag implements ProtocolObject {
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
                 name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> Registries.getFluid(name).ordinal()),
+                name -> FluidRegistries.getFluid(name).ordinal()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name -> Registries.getFluid(name).ordinal());
+                name -> FluidRegistries.getFluid(name).ordinal());
 
         private final static BasicType[] VALUES = values();
         private final String identifier;
