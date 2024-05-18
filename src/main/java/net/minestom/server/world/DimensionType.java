@@ -5,7 +5,6 @@ import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
  * https://minecraft.wiki/w/Custom_dimension
  */
 public sealed interface DimensionType extends ProtocolObject, DimensionTypes permits DimensionTypeImpl {
-    @NotNull BinaryTagSerializer<DimensionType> NBT_TYPE = DimensionTypeImpl.NBT_TYPE;
 
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
@@ -36,7 +34,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:dimension_type", NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
+                "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
                 (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
         );
     }

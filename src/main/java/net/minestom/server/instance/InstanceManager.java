@@ -4,13 +4,17 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -42,20 +46,19 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     @ApiStatus.Experimental
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
         registerInstance(instanceContainer);
         return instanceContainer;
     }
 
-    public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
+    public @NotNull InstanceContainer createInstanceContainer(@NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
         return createInstanceContainer(dimensionType, null);
     }
 
     @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
-        DimensionType defaultDimension = Objects.requireNonNull(MinecraftServer.getDimensionTypeRegistry().get(DimensionType.OVERWORLD));
-        return createInstanceContainer(defaultDimension, loader);
+        return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
 
     /**
@@ -64,8 +67,7 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public @NotNull InstanceContainer createInstanceContainer() {
-        DimensionType defaultDimension = Objects.requireNonNull(MinecraftServer.getDimensionTypeRegistry().get(DimensionType.OVERWORLD));
-        return createInstanceContainer(defaultDimension, null);
+        return createInstanceContainer(DimensionType.OVERWORLD, null);
     }
 
     /**

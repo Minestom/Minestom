@@ -45,7 +45,7 @@ public class Generators {
         generator.generateKeys(resource("trim_materials.json"), "net.minestom.server.item.armor", "TrimMaterial", "TrimMaterials");
         generator.generateKeys(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatterns");
         generator.generateKeys(resource("banner_patterns.json"), "net.minestom.server.instance.block.banner", "BannerPattern", "BannerPatterns");
-        generator.generateKeys(resource("wolf_variants.json"), "net.minestom.server.entity.metadata.animal.tameable", "Wolf$Variant", "WolfVariants");
+        generator.generateKeys(resource("wolf_variants.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfMeta.Variant", "WolfVariants");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
