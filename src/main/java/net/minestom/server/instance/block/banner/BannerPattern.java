@@ -5,14 +5,12 @@ import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
-    @NotNull BinaryTagSerializer<BannerPattern> NBT_TYPE = BannerPatternImpl.NBT_TYPE;
 
     static @NotNull BannerPattern create(
             @NotNull NamespaceID namespace,
@@ -38,7 +36,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:banner_pattern", NBT_TYPE, Registry.Resource.BANNER_PATTERNS,
+                "minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.BANNER_PATTERNS,
                 (namespace, props) -> new BannerPatternImpl(Registry.bannerPattern(namespace, props))
         );
     }

@@ -5,13 +5,11 @@ import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
-    @NotNull BinaryTagSerializer<DamageType> NBT_TYPE = DamageTypeImpl.NBT_TYPE;
 
     static @NotNull DamageType create(
             @NotNull NamespaceID namespace,
@@ -38,7 +36,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:damage_type", NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
+                "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
                 (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
         );
     }

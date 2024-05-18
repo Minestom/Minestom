@@ -1,6 +1,7 @@
 package net.minestom.server.entity.damage;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -8,12 +9,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PositionalDamage extends Damage {
 
-    public PositionalDamage(@NotNull DamageType type, @NotNull Point sourcePosition, float amount) {
+    public PositionalDamage(@NotNull DynamicRegistry.Key<DamageType> type, @NotNull Point sourcePosition, float amount) {
         super(type, null, null, sourcePosition, amount);
     }
 
-    @Override
-    public @NotNull Point getSourcePosition() {
-        return super.getSourcePosition();
-    }
 }

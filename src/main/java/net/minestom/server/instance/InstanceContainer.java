@@ -22,6 +22,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -86,19 +87,19 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
         this(uniqueId, dimensionType, null, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
         this(uniqueId, dimensionType, null, dimensionName);
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         this(uniqueId, dimensionType, loader, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
         super(uniqueId, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
@@ -131,8 +132,9 @@ public class InstanceContainer extends Instance {
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
-        if (y >= getDimensionType().maxY() || y < getDimensionType().minY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", getDimensionType().minY(), getDimensionType().maxY(), y);
+        final DimensionType dim = getCachedDimensionType();
+        if (y >= dim.maxY() || y < dim.minY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
             return;
         }
 
@@ -437,7 +439,7 @@ public class InstanceContainer extends Instance {
     @Override
     public boolean isInVoid(@NotNull Point point) {
         // TODO: more customizable
-        return point.y() < getDimensionType().minY() - 64;
+        return point.y() < getCachedDimensionType().minY() - 64;
     }
 
     /**
@@ -626,7 +628,7 @@ public class InstanceContainer extends Instance {
             final int neighborX = blockPosition.blockX() + direction.normalX();
             final int neighborY = blockPosition.blockY() + direction.normalY();
             final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getDimensionType().minY() || neighborY > getDimensionType().height())
+            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
                 continue;
             final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.TYPE);
             if (neighborBlock == null)

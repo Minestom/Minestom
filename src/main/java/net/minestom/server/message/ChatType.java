@@ -5,13 +5,11 @@ import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatTypeImpl {
-    @NotNull BinaryTagSerializer<ChatType> NBT_TYPE = ChatTypeImpl.NBT_TYPE;
 
     static @NotNull ChatType create(
             @NotNull NamespaceID namespace,
@@ -37,7 +35,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:chat_type", NBT_TYPE, Registry.Resource.CHAT_TYPES,
+                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
                 (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
         );
     }

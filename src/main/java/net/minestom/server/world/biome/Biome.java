@@ -6,14 +6,12 @@ import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
-    @NotNull BinaryTagSerializer<Biome> NBT_TYPE = BiomeImpl.NBT_TYPE;
 
     static @NotNull Builder builder(@NotNull String namespace) {
         return builder(NamespaceID.from(namespace));
@@ -31,7 +29,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
         return new DynamicRegistryImpl<>(
-                "minecraft:worldgen/biome", NBT_TYPE, Registry.Resource.BIOMES,
+                "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
                 (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props))
         );
     }
@@ -57,17 +55,17 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     }
 
     interface Setter {
-        void setBiome(int x, int y, int z, @NotNull Biome biome);
+        void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome);
 
-        default void setBiome(@NotNull Point blockPosition, @NotNull Biome biome) {
+        default void setBiome(@NotNull Point blockPosition, @NotNull DynamicRegistry.Key<Biome> biome) {
             setBiome(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), biome);
         }
     }
 
     interface Getter {
-        @NotNull Biome getBiome(int x, int y, int z);
+        @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z);
 
-        default @NotNull Biome getBiome(@NotNull Point point) {
+        default @NotNull DynamicRegistry.Key<Biome> getBiome(@NotNull Point point) {
             return getBiome(point.blockX(), point.blockY(), point.blockZ());
         }
     }
