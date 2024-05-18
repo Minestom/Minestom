@@ -71,7 +71,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
 
     int height();
 
-    @NotNull NamespaceID infiniburn();
+    @NotNull String infiniburn();
 
     @NotNull String effects();
 
@@ -96,7 +96,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         private int logicalHeight = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
         private int minY = VANILLA_MIN_Y;
         private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
-        private NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
+        private String infiniburn = "#minecraft:infiniburn_overworld";
         private String effects = "minecraft:overworld";
 
         public Builder(@NotNull NamespaceID namespace) {
@@ -188,7 +188,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder infiniburn(@NotNull NamespaceID infiniburn) {
+        public @NotNull Builder infiniburn(@NotNull String infiniburn) {
             this.infiniburn = infiniburn;
             return this;
         }

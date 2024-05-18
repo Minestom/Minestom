@@ -23,7 +23,7 @@ record DimensionTypeImpl(
         int logicalHeight,
         int minY,
         int height,
-        @NotNull NamespaceID infiniburn,
+        @NotNull String infiniburn,
         @NotNull String effects,
         @Nullable Registry.DimensionTypeEntry registry
 ) implements DimensionType {
@@ -47,7 +47,7 @@ record DimensionTypeImpl(
                         .putInt("logical_height", dimensionType.logicalHeight())
                         .putInt("min_y", dimensionType.minY())
                         .putInt("height", dimensionType.height())
-                        .putString("infiniburn", dimensionType.infiniburn().toString())
+                        .putString("infiniburn", dimensionType.infiniburn())
                         .putString("effects", dimensionType.effects())
 
                         //todo load these from registry
@@ -63,7 +63,7 @@ record DimensionTypeImpl(
         this(registry.namespace(), registry.ultrawarm(), registry.natural(), registry.coordinateScale(),
                 registry.hasSkylight(), registry.hasCeiling(), registry.ambientLight(), registry.fixedTime(),
                 registry.piglinSafe(), registry.bedWorks(), registry.respawnAnchorWorks(), registry.hasRaids(),
-                registry.logicalHeight(), registry.minY(), registry.height(), NamespaceID.from(registry.infiniburn()),
+                registry.logicalHeight(), registry.minY(), registry.height(), registry.infiniburn(),
                 registry.effects(), registry);
     }
 }

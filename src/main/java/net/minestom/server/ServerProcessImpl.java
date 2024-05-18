@@ -54,6 +54,16 @@ final class ServerProcessImpl implements ServerProcess {
     private static final Boolean SHUTDOWN_ON_SIGNAL = PropertyUtils.getBoolean("minestom.shutdown-on-signal", true);
 
     private final ExceptionManager exception;
+
+    private final DynamicRegistry<ChatType> chatType;
+    private final DynamicRegistry<DimensionType> dimensionType;
+    private final DynamicRegistry<Biome> biome;
+    private final DynamicRegistry<DamageType> damageType;
+    private final DynamicRegistry<TrimMaterial> trimMaterial;
+    private final DynamicRegistry<TrimPattern> trimPattern;
+    private final DynamicRegistry<BannerPattern> bannerPattern;
+    private final DynamicRegistry<WolfMeta.Variant> wolfVariant;
+
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
     private final PacketProcessor packetProcessor;
@@ -69,15 +79,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final BossBarManager bossBar;
     private final TagManager tag;
 
-    private final DynamicRegistry<ChatType> chatType;
-    private final DynamicRegistry<DimensionType> dimensionType;
-    private final DynamicRegistry<Biome> biome;
-    private final DynamicRegistry<DamageType> damageType;
-    private final DynamicRegistry<TrimMaterial> trimMaterial;
-    private final DynamicRegistry<TrimPattern> trimPattern;
-    private final DynamicRegistry<BannerPattern> bannerPattern;
-    private final DynamicRegistry<WolfMeta.Variant> wolfVariant;
-
     private final Server server;
 
     private final ThreadDispatcher<Chunk> dispatcher;
@@ -88,10 +89,20 @@ final class ServerProcessImpl implements ServerProcess {
 
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
+
+        this.chatType = ChatType.createDefaultRegistry();
+        this.dimensionType = DimensionType.createDefaultRegistry();
+        this.biome = Biome.createDefaultRegistry();
+        this.damageType = DamageType.createDefaultRegistry();
+        this.trimMaterial = TrimMaterial.createDefaultRegistry();
+        this.trimPattern = TrimPattern.createDefaultRegistry();
+        this.bannerPattern = BannerPattern.createDefaultRegistry();
+        this.wolfVariant = WolfMeta.Variant.createDefaultRegistry();
+
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
         this.packetProcessor = new PacketProcessor(packetListener);
-        this.instance = new InstanceManager();
+        this.instance = new InstanceManager(this);
         this.block = new BlockManager();
         this.command = new CommandManager();
         this.recipe = new RecipeManager();
@@ -103,19 +114,40 @@ final class ServerProcessImpl implements ServerProcess {
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
 
-        this.chatType = ChatType.createDefaultRegistry();
-        this.dimensionType = DimensionType.createDefaultRegistry();
-        this.biome = Biome.createDefaultRegistry();
-        this.damageType = DamageType.createDefaultRegistry();
-        this.trimMaterial = TrimMaterial.createDefaultRegistry();
-        this.trimPattern = TrimPattern.createDefaultRegistry();
-        this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.wolfVariant = WolfMeta.Variant.createDefaultRegistry();
-
         this.server = new Server(packetProcessor);
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
+    }
+
+    @Override
+    public @NotNull ExceptionManager exception() {
+        return exception;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<DamageType> damageType() {
+        return damageType;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
+        return trimMaterial;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
+        return trimPattern;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
+        return bannerPattern;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
+        return wolfVariant;
     }
 
     @Override
@@ -191,36 +223,6 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<Biome> biome() {
         return biome;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<DamageType> damageType() {
-        return damageType;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
-        return trimMaterial;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
-        return trimPattern;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
-        return bannerPattern;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
-        return wolfVariant;
-    }
-
-    @Override
-    public @NotNull ExceptionManager exception() {
-        return exception;
     }
 
     @Override

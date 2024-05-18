@@ -5,6 +5,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,7 +23,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public final class InstanceManager {
 
+    private final Registries registries;
     private final Set<Instance> instances = new CopyOnWriteArraySet<>();
+
+    public InstanceManager(@NotNull Registries registries) {
+        this.registries = registries;
+    }
 
     /**
      * Registers an {@link Instance} internally.
@@ -47,7 +53,7 @@ public final class InstanceManager {
      */
     @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
-        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, loader);
+        final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.namespace());
         registerInstance(instanceContainer);
         return instanceContainer;
     }
