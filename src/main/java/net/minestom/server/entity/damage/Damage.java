@@ -160,7 +160,7 @@ public class Damage implements Taggable {
     }
 
     protected SoundEvent getPlayerSound(@NotNull Player player) {
-        if (type == DamageType.ON_FIRE) return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
+        if (DamageType.ON_FIRE.equals(type.namespace())) return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
         return SoundEvent.ENTITY_PLAYER_HURT;
     }
 

@@ -73,6 +73,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
@@ -121,6 +122,8 @@ import java.util.function.UnaryOperator;
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
     private static final Logger logger = LoggerFactory.getLogger(Player.class);
 
+    private static final DynamicRegistry<DimensionType> DIMENSION_TYPE_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
+
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
 
     private static final float MIN_CHUNKS_PER_TICK = PropertyUtils.getFloat("minestom.chunk-queue.min-per-tick", 0.01f);
@@ -145,7 +148,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private PlayerSkin skin;
 
     private Instance pendingInstance = null;
-    private DimensionType dimensionType;
+    private int dimensionTypeId;
     private GameMode gameMode;
     private WorldPos deathLocation;
 
@@ -251,7 +254,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
-        this.dimensionType = DimensionType.OVERWORLD; // Default dimension
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(DimensionType.OVERWORLD); // Default dimension
         this.levelFlat = true;
         getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
 
@@ -290,12 +293,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.pendingInstance = null;
 
         this.removed = false;
-        this.dimensionType = spawnInstance.getDimensionType();
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType().namespace());
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
-                false, true, false, dimensionType.getId(), spawnInstance.getDimensionName(),
+                false, true, false, dimensionTypeId, spawnInstance.getDimensionName(),
                 0, gameMode, null, false, levelFlat, deathLocation, portalCooldown, true);
         sendPacket(joinGamePacket);
 
@@ -524,7 +527,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(getDimensionType().getId(), instance.getDimensionName(),
+        sendPacket(new RespawnPacket(DIMENSION_TYPE_REGISTRY.getId(getDimensionType().namespace()), instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
@@ -1038,7 +1041,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public boolean isImmune(@NotNull DamageType type) {
         if (!getGameMode().canTakeDamage()) {
-            return type != DamageType.OUT_OF_WORLD;
+            return !DamageType.OUT_OF_WORLD.equals(type.namespace());
         }
         return super.isImmune(type);
     }
@@ -1200,7 +1203,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().getId(), instance.getDimensionName(),
+        RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL);
 
         sendPacket(removePlayerPacket);
@@ -1224,7 +1227,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     public void setDeathLocation(@NotNull DimensionType type, @NotNull Pos position) {
-        this.deathLocation = new WorldPos(type.getName().asString(), position);
+        this.deathLocation = new WorldPos(type.name(), position);
     }
 
     public @Nullable WorldPos getDeathLocation() {
@@ -1547,7 +1550,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the player current dimension
      */
     public DimensionType getDimensionType() {
-        return dimensionType;
+        return DIMENSION_TYPE_REGISTRY.get(dimensionTypeId);
     }
 
     public @NotNull PlayerInventory getInventory() {
@@ -1650,8 +1653,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void sendDimension(@NotNull DimensionType dimensionType, @NotNull String dimensionName) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
-        this.dimensionType = dimensionType;
-        sendPacket(new RespawnPacket(dimensionType.getId(), dimensionName,
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType.namespace());
+        sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
                 deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();

@@ -1,55 +1,61 @@
 package net.minestom.server.item.armor;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.StringBinaryTag;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
-record TrimMaterialImpl(Registry.TrimMaterialEntry registry, int id) implements TrimMaterial {
-    static final AtomicInteger i = new AtomicInteger();
-    private static final Registry.Container<TrimMaterial> CONTAINER;
+record TrimMaterialImpl(
+        @NotNull NamespaceID namespace,
+        @NotNull String assetName,
+        @NotNull Material ingredient,
+        float itemModelIndex,
+        @NotNull Map<String, String> overrideArmorMaterials,
+        @NotNull Component description,
+        @Nullable Registry.TrimMaterialEntry registry
+) implements TrimMaterial {
 
-    static {
-        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_MATERIALS,
-                (namespace, properties) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, properties)));
+    static final BinaryTagSerializer<TrimMaterial> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+            tag -> {
+                throw new UnsupportedOperationException("TrimMaterial is read-only");
+            },
+            trimMaterial -> {
+                CompoundBinaryTag.Builder overrideArmorMaterials = CompoundBinaryTag.builder();
+                for (Map.Entry<String, String> entry : trimMaterial.overrideArmorMaterials().entrySet()) {
+                    overrideArmorMaterials.putString(entry.getKey(), entry.getValue());
+                }
+
+                return CompoundBinaryTag.builder()
+                        .putString("asset_name", trimMaterial.assetName())
+                        .put("ingredient", Material.NBT_TYPE.write(trimMaterial.ingredient()))
+                        .putFloat("item_model_index", trimMaterial.itemModelIndex())
+                        .put("override_armor_materials", overrideArmorMaterials.build())
+                        .put("description", BinaryTagSerializer.NBT_COMPONENT.write(trimMaterial.description()))
+                        .build();
+            }
+    );
+
+    @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
+    TrimMaterialImpl {
+        Check.notNull(namespace, "Namespace cannot be null");
+        Check.argCondition(assetName == null || assetName.isEmpty(), "missing asset name: {0}", namespace);
+        Check.argCondition(ingredient == null, "missing ingredient: {0}", namespace);
+        Check.argCondition(overrideArmorMaterials == null, "missing override armor materials: {0}", namespace);
+        Check.argCondition(description == null, "missing description: {0}", namespace);
+        overrideArmorMaterials = Map.copyOf(overrideArmorMaterials);
     }
 
-    public TrimMaterialImpl(Registry.TrimMaterialEntry registry) {
-        this(registry, i.getAndIncrement());
-    }
-
-    public static TrimMaterial get(String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static @Nullable TrimMaterial fromId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static @Nullable TrimMaterial fromNamespaceId(@NotNull String id) {
-        return CONTAINER.get(id);
-    }
-
-    static Collection<TrimMaterial> values() {
-        return CONTAINER.values();
-    }
-
-    public CompoundBinaryTag asNBT() {
-        return CompoundBinaryTag.builder()
-                .putString("asset_name", assetName())
-                .putString("ingredient", ingredient().namespace().asString())
-                .putFloat("item_model_index", itemModelIndex())
-                .put("override_armor_materials", CompoundBinaryTag.from(overrideArmorMaterials().entrySet().stream()
-                        .collect(Collectors.toMap(Map.Entry::getKey, entry -> StringBinaryTag.stringBinaryTag(entry.getValue())))))
-                .put("description", NbtComponentSerializer.nbt().serialize(description()))
-                .build();
+    TrimMaterialImpl(@NotNull Registry.TrimMaterialEntry registry) {
+        this(registry.namespace(), registry.assetName(), registry.ingredient(),
+                registry.itemModelIndex(), registry.overrideArmorMaterials(),
+                registry.description(), registry);
     }
 
 }

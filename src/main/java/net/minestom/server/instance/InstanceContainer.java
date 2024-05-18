@@ -31,7 +31,6 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -88,19 +87,17 @@ public class InstanceContainer extends Instance {
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
-        this(uniqueId, dimensionType, null, dimensionType.getName());
+        this(uniqueId, dimensionType, null, dimensionType.namespace());
     }
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
         this(uniqueId, dimensionType, null, dimensionName);
     }
 
-    @ApiStatus.Experimental
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
-        this(uniqueId, dimensionType, loader, dimensionType.getName());
+        this(uniqueId, dimensionType, loader, dimensionType.namespace());
     }
 
-    @ApiStatus.Experimental
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
         super(uniqueId, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
@@ -134,8 +131,8 @@ public class InstanceContainer extends Instance {
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
-        if(y >= getDimensionType().getMaxY() || y < getDimensionType().getMinY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", getDimensionType().getMinY(), getDimensionType().getMaxY(), y);
+        if (y >= getDimensionType().maxY() || y < getDimensionType().minY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", getDimensionType().minY(), getDimensionType().maxY(), y);
             return;
         }
 
@@ -440,7 +437,7 @@ public class InstanceContainer extends Instance {
     @Override
     public boolean isInVoid(@NotNull Point point) {
         // TODO: more customizable
-        return point.y() < getDimensionType().getMinY() - 64;
+        return point.y() < getDimensionType().minY() - 64;
     }
 
     /**
@@ -629,7 +626,7 @@ public class InstanceContainer extends Instance {
             final int neighborX = blockPosition.blockX() + direction.normalX();
             final int neighborY = blockPosition.blockY() + direction.normalY();
             final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getDimensionType().getMinY() || neighborY > getDimensionType().getTotalHeight())
+            if (neighborY < getDimensionType().minY() || neighborY > getDimensionType().height())
                 continue;
             final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.TYPE);
             if (neighborBlock == null)

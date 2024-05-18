@@ -1,4 +1,4 @@
-package net.minestom.server.world.biomes;
+package net.minestom.server.world.biome;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;

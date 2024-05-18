@@ -18,7 +18,7 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,8 +70,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-        this.minSection = instance.getDimensionType().getMinY() / CHUNK_SECTION_SIZE;
-        this.maxSection = (instance.getDimensionType().getMinY() + instance.getDimensionType().getHeight()) / CHUNK_SECTION_SIZE;
+        this.minSection = instance.getDimensionType().minY() / CHUNK_SECTION_SIZE;
+        this.maxSection = (instance.getDimensionType().minY() + instance.getDimensionType().height()) / CHUNK_SECTION_SIZE;
         final List<SharedInstance> shared = instance instanceof InstanceContainer instanceContainer ?
                 instanceContainer.getSharedInstances() : List.of();
         this.viewable = instance.getEntityTracker().viewable(shared, chunkX, chunkZ);
