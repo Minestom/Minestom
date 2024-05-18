@@ -9,13 +9,13 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.BiomeManager;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,8 +35,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
-    private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
-    private final static Biome PLAINS = BIOME_MANAGER.getByName(NamespaceID.from("minecraft:plains"));
+    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
+    private final static int PLAINS_ID = BIOME_REGISTRY.getId(NamespaceID.from("minecraft:plains"));
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
     private final Path path;
@@ -182,12 +182,12 @@ public class AnvilLoader implements IChunkLoader {
             {   // Biomes
                 final CompoundBinaryTag biomesTag = sectionData.getCompound("biomes");
                 final ListBinaryTag biomePaletteTag = biomesTag.getList("palette", BinaryTagTypes.STRING);
-                Biome[] convertedPalette = loadBiomePalette(biomePaletteTag);
+                int[] convertedBiomePalette = loadBiomePalette(biomePaletteTag);
 
-                if (convertedPalette.length == 1) {
+                if (convertedBiomePalette.length == 1) {
                     // One solid block, no need to check the data
-                    section.biomePalette().fill(BIOME_MANAGER.getId(convertedPalette[0]));
-                } else if (convertedPalette.length > 1) {
+                    section.biomePalette().fill(convertedBiomePalette[0]);
+                } else if (convertedBiomePalette.length > 1) {
                     final long[] packedIndices = biomesTag.getLongArray("data");
                     Check.stateCondition(packedIndices.length == 0, "Missing packed biomes data");
                     int[] biomeIndices = new int[64];
@@ -195,8 +195,7 @@ public class AnvilLoader implements IChunkLoader {
 
                     section.biomePalette().setAll((x, y, z) -> {
                         final int index = x + z * 4 + y * 16;
-                        final Biome biome = convertedPalette[biomeIndices[index]];
-                        return BIOME_MANAGER.getId(biome);
+                        return convertedBiomePalette[biomeIndices[index]];
                     });
                 }
             }
@@ -266,11 +265,13 @@ public class AnvilLoader implements IChunkLoader {
         return convertedPalette;
     }
 
-    private Biome[] loadBiomePalette(@NotNull ListBinaryTag paletteTag) {
-        Biome[] convertedPalette = new Biome[paletteTag.size()];
+    private int[] loadBiomePalette(@NotNull ListBinaryTag paletteTag) {
+        int[] convertedPalette = new int[paletteTag.size()];
         for (int i = 0; i < convertedPalette.length; i++) {
             final String name = paletteTag.getString(i);
-            convertedPalette[i] = Objects.requireNonNullElse(BIOME_MANAGER.getByName(name), PLAINS);
+            int biomeId = BIOME_REGISTRY.getId(NamespaceID.from(name));
+            if (biomeId == -1) biomeId = PLAINS_ID;
+            convertedPalette[i] = biomeId;
         }
         return convertedPalette;
     }

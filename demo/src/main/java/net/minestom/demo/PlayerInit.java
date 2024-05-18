@@ -42,7 +42,6 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
 import java.util.List;
@@ -181,7 +180,7 @@ public class PlayerInit {
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
         instanceContainer.setGenerator(unit -> {
             unit.modifier().fillHeight(0, 40, Block.STONE);
 

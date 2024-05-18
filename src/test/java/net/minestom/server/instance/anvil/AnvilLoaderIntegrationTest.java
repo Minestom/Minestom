@@ -6,7 +6,7 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;

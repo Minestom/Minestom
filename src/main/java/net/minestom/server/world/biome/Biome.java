@@ -1,34 +1,52 @@
-package net.minestom.server.world.biomes;
+package net.minestom.server.world.biome;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
+public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
+    @NotNull BinaryTagSerializer<Biome> NBT_TYPE = BiomeImpl.NBT_TYPE;
 
-sealed public interface Biome extends ProtocolObject permits BiomeImpl {
+    static @NotNull Builder builder(@NotNull String namespace) {
+        return builder(NamespaceID.from(namespace));
+    }
+
+    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
+        return new Builder(namespace);
+    }
+
     /**
-     * Returns the entity registry.
+     * <p>Creates a new registry for biomes, loading the vanilla trim biomes.</p>
      *
-     * @return the entity registry or null if it was created with a builder
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
-    @Contract(pure = true)
-    @Nullable Registry.BiomeEntry registry();
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
+        return new DynamicRegistryImpl<>(
+                "minecraft:worldgen/biome", NBT_TYPE, Registry.Resource.BIOMES,
+                (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props))
+        );
+    }
 
-    @Override
-    @NotNull NamespaceID namespace();
     float temperature();
+
     float downfall();
+
     @NotNull BiomeEffects effects();
+
     @NotNull Precipitation precipitation();
+
     @NotNull TemperatureModifier temperatureModifier();
+
+    @Nullable Registry.BiomeEntry registry();
 
     enum Precipitation {
         NONE, RAIN, SNOW;
@@ -54,30 +72,6 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
         }
     }
 
-    default @NotNull RegistryDataPacket.Entry toRegistryEntry() {
-        return new RegistryDataPacket.Entry(namespace().toString(), toNbt());
-    }
-
-    default @NotNull CompoundBinaryTag toNbt() {
-        Check.notNull(name(), "The biome namespace cannot be null");
-        Check.notNull(effects(), "The biome effects cannot be null");
-
-        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
-                .putFloat("temperature", temperature())
-                .putFloat("downfall", downfall())
-                .putByte("has_precipitation", (byte) (precipitation() == Precipitation.NONE ? 0 : 1))
-                .putString("precipitation", precipitation().name().toLowerCase(Locale.ROOT));
-        if (temperatureModifier() != TemperatureModifier.NONE)
-            builder.putString("temperature_modifier", temperatureModifier().name().toLowerCase(Locale.ROOT));
-        return builder
-                .put("effects", effects().toNbt())
-                .build();
-    }
-
-    static @NotNull Builder builder() {
-        return new Builder();
-    }
-
     final class Builder {
         private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
                 .fogColor(0xC0D8FF)
@@ -86,17 +80,15 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
                 .waterFogColor(0x50533)
                 .build();
 
-        private NamespaceID name;
+        private final NamespaceID namespace;
         private float temperature = 0.25f;
         private float downfall = 0.8f;
         private BiomeEffects effects = DEFAULT_EFFECTS;
         private Precipitation precipitation = Precipitation.RAIN;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder name(@NotNull NamespaceID name) {
-            this.name = name;
-            return this;
+        Builder(@NotNull NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -131,7 +123,7 @@ sealed public interface Biome extends ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(name, temperature, downfall, effects, precipitation, temperatureModifier);
+            return new BiomeImpl(namespace, temperature, downfall, effects, precipitation, temperatureModifier, null);
         }
     }
 }
