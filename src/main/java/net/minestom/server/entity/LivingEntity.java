@@ -8,6 +8,7 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityDamageEvent;
@@ -15,6 +16,7 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
+import net.minestom.server.event.player.EntitySwingHandEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
@@ -515,17 +517,36 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sends a {@link EntityAnimationPacket} to swing the main hand
      * (can be used for attack animation).
+     *
+     * @see LivingEntity#swingHand(Hand)
      */
     public void swingMainHand() {
-        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
+        swingHand(Hand.MAIN);
     }
 
     /**
      * Sends a {@link EntityAnimationPacket} to swing the off hand
      * (can be used for attack animation).
+     *
+     * @see LivingEntity#swingHand(Hand)
      */
     public void swingOffHand() {
-        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
+        swingHand(Hand.OFF);
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to swing a hand.
+     * (can be used for attack animation)
+     *
+     * @param hand the type of hand
+     */
+    public void swingHand(LivingEntity.@NotNull Hand hand) {
+        EventDispatcher.callCancellable(new EntitySwingHandEvent(this, hand), () ->
+            sendPacketToViewers(new EntityAnimationPacket(getEntityId(), switch (hand) {
+                case MAIN -> EntityAnimationPacket.Animation.SWING_MAIN_ARM;
+                case OFF -> EntityAnimationPacket.Animation.SWING_OFF_HAND;
+            }))
+        );
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
@@ -533,7 +554,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (meta != null) {
             meta.setNotifyAboutChanges(false);
             meta.setHandActive(isHandActive);
-            meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
+            meta.setActiveHand(offHand ? Hand.OFF : Hand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
             meta.setNotifyAboutChanges(true);
 
@@ -639,7 +660,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets {@link net.minestom.server.entity.metadata.EntityMeta} of this entity casted to {@link LivingEntityMeta}.
+     * Gets {@link EntityMeta} of this entity casted to {@link LivingEntityMeta}.
      *
      * @return null if meta of this entity does not inherit {@link LivingEntityMeta}, casted value otherwise.
      */
@@ -663,5 +684,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void takeKnockback(float strength, final double x, final double z) {
         strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
+    }
+
+    /**
+     * Represents the main or off hand of the entity.
+     */
+    public enum Hand {
+        MAIN,
+        OFF
     }
 }

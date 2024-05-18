@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerItemAnimationEvent;
@@ -18,7 +19,7 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        final Player.Hand hand = packet.hand();
+        final LivingEntity.Hand hand = packet.hand();
         ItemStack itemStack = player.getItemInHand(hand);
         //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
@@ -73,7 +74,7 @@ public class UseItemListener {
         if (!cancelAnimation && itemAnimationType != null) {
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
-                player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
+                player.refreshActiveHand(true, hand == LivingEntity.Hand.OFF, false);
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
         }

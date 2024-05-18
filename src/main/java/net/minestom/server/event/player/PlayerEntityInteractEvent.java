@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
@@ -13,10 +14,10 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private final Entity entityTarget;
-    private final Player.Hand hand;
+    private final LivingEntity.Hand hand;
     private final Point interactPosition;
 
-    public PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity entityTarget, @NotNull Player.Hand hand,
+    public PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity entityTarget, LivingEntity.@NotNull Hand hand,
                                      @NotNull Point interactPosition) {
         this.player = player;
         this.entityTarget = entityTarget;
@@ -45,7 +46,7 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
      * @return the hand
      */
     @NotNull
-    public Player.Hand getHand() {
+    public LivingEntity.Hand getHand() {
         return hand;
     }
 

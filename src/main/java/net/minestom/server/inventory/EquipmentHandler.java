@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
@@ -49,7 +50,7 @@ public interface EquipmentHandler {
      * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
      */
-    default @NotNull ItemStack getItemInHand(@NotNull Player.Hand hand) {
+    default @NotNull ItemStack getItemInHand(LivingEntity.@NotNull Hand hand) {
         return switch (hand) {
             case MAIN -> getItemInMainHand();
             case OFF -> getItemInOffHand();

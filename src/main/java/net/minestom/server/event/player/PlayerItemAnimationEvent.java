@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -14,10 +15,10 @@ public class PlayerItemAnimationEvent implements PlayerInstanceEvent, Cancellabl
 
     private final Player player;
     private final ItemAnimationType itemAnimationType;
-    private final Player.Hand hand;
+    private final LivingEntity.Hand hand;
     private boolean cancelled;
 
-    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType itemAnimationType, @NotNull Player.Hand hand) {
+    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType itemAnimationType, LivingEntity.@NotNull Hand hand) {
         this.player = player;
         this.itemAnimationType = itemAnimationType;
         this.hand = hand;
@@ -37,7 +38,7 @@ public class PlayerItemAnimationEvent implements PlayerInstanceEvent, Cancellabl
      *
      * @return the hand
      */
-    public @NotNull Player.Hand getHand() {
+    public LivingEntity.@NotNull Hand getHand() {
         return hand;
     }
 

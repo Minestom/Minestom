@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
@@ -16,12 +17,12 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
 
     private final Player player;
     private final ItemStack foodItem;
-    private final Player.Hand hand;
+    private final LivingEntity.Hand hand;
     private long eatingTime;
 
     private boolean cancelled;
 
-    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull Player.Hand hand, long eatingTime) {
+    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, LivingEntity.@NotNull Hand hand, long eatingTime) {
         this.player = player;
         this.foodItem = foodItem;
         this.hand = hand;
@@ -39,7 +40,7 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
         return foodItem;
     }
 
-    public @NotNull Player.Hand getHand() {
+    public LivingEntity.@NotNull Hand getHand() {
         return hand;
     }
 

@@ -2,6 +2,7 @@ package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
@@ -122,7 +123,7 @@ public interface BlockHandler {
 
         @ApiStatus.Internal
         public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, Player.Hand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+                               Player player, LivingEntity.Hand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
             super(block, instance, blockPosition);
             this.player = player;
             this.hand = hand;
@@ -136,7 +137,7 @@ public interface BlockHandler {
             return player;
         }
 
-        public @NotNull Player.Hand getHand() {
+        public LivingEntity.@NotNull Hand getHand() {
             return hand;
         }
 
@@ -202,10 +203,10 @@ public interface BlockHandler {
         private final Point blockPosition;
         private final Point cursorPosition;
         private final Player player;
-        private final Player.Hand hand;
+        private final LivingEntity.Hand hand;
 
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, Point blockPosition, Point cursorPosition, Player player, Player.Hand hand) {
+        public Interaction(Block block, Instance instance, Point blockPosition, Point cursorPosition, Player player, LivingEntity.Hand hand) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
@@ -234,7 +235,7 @@ public interface BlockHandler {
             return player;
         }
 
-        public @NotNull Player.Hand getHand() {
+        public LivingEntity.@NotNull Hand getHand() {
             return hand;
         }
     }

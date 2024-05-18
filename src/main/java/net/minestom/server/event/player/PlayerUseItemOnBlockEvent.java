@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -14,12 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent {
 
     private final Player player;
-    private final Player.Hand hand;
+    private final LivingEntity.Hand hand;
     private final ItemStack itemStack;
     private final Point position;
     private final BlockFace blockFace;
 
-    public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull Player.Hand hand,
+    public PlayerUseItemOnBlockEvent(@NotNull Player player, LivingEntity.@NotNull Hand hand,
                                      @NotNull ItemStack itemStack,
                                      @NotNull Point position, @NotNull Point cursorPosition,
                                      @NotNull BlockFace blockFace) {
@@ -53,7 +54,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the hand
      */
-    public @NotNull Player.Hand getHand() {
+    public LivingEntity.@NotNull Hand getHand() {
         return hand;
     }
 

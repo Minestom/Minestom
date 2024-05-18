@@ -1,5 +1,6 @@
 package net.minestom.server.event.item;
 
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -14,14 +15,14 @@ public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
     private boolean handAnimation;
     private boolean riptideSpinAttack;
 
-    public ItemUpdateStateEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack) {
+    public ItemUpdateStateEvent(@NotNull Player player, LivingEntity.@NotNull Hand hand, @NotNull ItemStack itemStack) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
     }
 
     @NotNull
-    public Player.Hand getHand() {
+    public LivingEntity.Hand getHand() {
         return hand;
     }
 

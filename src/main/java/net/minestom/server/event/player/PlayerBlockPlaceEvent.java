@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
@@ -18,7 +19,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     private Block block;
     private final BlockFace blockFace;
     private final Point blockPosition;
-    private final Player.Hand hand;
+    private final LivingEntity.Hand hand;
 
     private boolean consumeBlock;
     private boolean doBlockUpdates;
@@ -27,7 +28,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
 
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockFace blockFace,
-                                 @NotNull Point blockPosition, @NotNull Player.Hand hand) {
+                                 @NotNull Point blockPosition, LivingEntity.@NotNull Hand hand) {
         this.player = player;
         this.block = block;
         this.blockFace = blockFace;
@@ -74,7 +75,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
      *
      * @return the hand used
      */
-    public @NotNull Player.Hand getHand() {
+    public LivingEntity.@NotNull Hand getHand() {
         return hand;
     }
 

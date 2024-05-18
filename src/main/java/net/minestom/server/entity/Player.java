@@ -199,7 +199,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private float foodSaturation;
     private long startEatingTime;
     private long eatingTime;
-    private Hand eatingHand;
+    private LivingEntity.Hand eatingHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -446,7 +446,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
                 // Refresh hand
-                final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                final boolean isOffHand = itemUpdateStateEvent.getHand() == LivingEntity.Hand.OFF;
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
@@ -1033,7 +1033,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Set book in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, writtenBook));
         // Open the book
-        sendPacket(new OpenBookPacket(Hand.OFF));
+        sendPacket(new OpenBookPacket(LivingEntity.Hand.OFF));
         // Restore the item in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFF_HAND_SLOT, getItemInOffHand()));
     }
@@ -1140,7 +1140,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the eating hand, null if none
      */
-    public @Nullable Hand getEatingHand() {
+    public LivingEntity.@Nullable Hand getEatingHand() {
         return eatingHand;
     }
 
@@ -2170,7 +2170,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshEating(null);
     }
 
-    public void refreshEating(@Nullable Hand eatingHand, long eatingTimeTicks) {
+    public void refreshEating(LivingEntity.@Nullable Hand eatingHand, long eatingTimeTicks) {
         this.eatingHand = eatingHand;
         if (eatingHand != null) {
             this.startEatingTime = instance.getWorldAge();
@@ -2180,7 +2180,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
-    public void refreshEating(@Nullable Hand eatingHand) {
+    public void refreshEating(LivingEntity.@Nullable Hand eatingHand) {
         refreshEating(eatingHand, 0);
     }
 
@@ -2217,7 +2217,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(LivingEntity.@Nullable Hand hand) {
         return callItemUpdateStateEvent(true, hand);
     }
 
@@ -2416,14 +2416,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
         chunkUpdateLimitChecker.clearHistory();
         return super.teleport(position, chunks, flags);
-    }
-
-    /**
-     * Represents the main or off hand of the player.
-     */
-    public enum Hand {
-        MAIN,
-        OFF
     }
 
     public enum FacePoint {

@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
@@ -36,7 +37,7 @@ public class BlockPlacementListener {
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
-        final Player.Hand hand = packet.hand();
+        final LivingEntity.Hand hand = packet.hand();
         final BlockFace blockFace = packet.blockFace();
         Point blockPosition = packet.blockPosition();
 
