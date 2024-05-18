@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
@@ -11,6 +12,9 @@ import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
@@ -76,6 +80,29 @@ public final class NetworkBuffer {
     public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
     public static final Type<ArmadilloMeta.State> ARMADILLO_STATE = NetworkBufferTypeImpl.fromEnum(ArmadilloMeta.State.class);
 
+    public static <T extends ProtocolObject> Type<DynamicRegistry.Key<T>> registryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {
+        return new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
+                Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
+                final DynamicRegistry<T> registry = selector.apply(buffer.registries);
+                final int id = registry.getId(value);
+                Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
+                buffer.write(VAR_INT, id);
+            }
+
+            @Override
+            public DynamicRegistry.Key<T> read(@NotNull NetworkBuffer buffer) {
+                Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
+                DynamicRegistry<T> registry = selector.apply(buffer.registries);
+                final int id = buffer.read(VAR_INT);
+                final DynamicRegistry.Key<T> key = registry.getKey(id);
+                Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
+                return key;
+            }
+        };
+    }
+
     public static <E extends Enum<E>> Type<E> fromEnum(@NotNull Class<E> enumClass) {
         return NetworkBufferTypeImpl.fromEnum(enumClass);
     }
@@ -105,6 +132,9 @@ public final class NetworkBuffer {
 
     BinaryTagWriter nbtWriter;
     BinaryTagReader nbtReader;
+
+    // In the future, this should be passed as a parameter.
+    final Registries registries = MinecraftServer.process();
 
     public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);

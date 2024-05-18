@@ -4,10 +4,15 @@ import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.UniqueIdUtils;
 import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -216,6 +221,19 @@ public interface BinaryTagSerializer<T> {
             return UniqueIdUtils.fromNbt(intArrayTag);
         }
     };
+
+    static <T extends ProtocolObject> @NotNull BinaryTagSerializer<DynamicRegistry.Key<T>> registryKey(@NotNull Function<Registries, DynamicRegistry<T>> registrySelector) {
+        //todo need to pass Registries as context here somehow.
+        return STRING.map(
+                s -> {
+                    final DynamicRegistry<T> registry = registrySelector.apply(MinecraftServer.process());
+                    final DynamicRegistry.Key<T> key = DynamicRegistry.Key.of(s);
+                    Check.argCondition(registry.get(key) == null, "Key is not registered: {0} > {1}", registry, s);
+                    return key;
+                },
+                DynamicRegistry.Key::name
+        );
+    }
 
     @NotNull BinaryTag write(@NotNull T value);
     @NotNull T read(@NotNull BinaryTag tag);

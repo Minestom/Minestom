@@ -16,7 +16,7 @@ record DamageTypeImpl(
         @Nullable Registry.DamageTypeEntry registry
 ) implements DamageType {
 
-    static final BinaryTagSerializer<DamageType> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    static final BinaryTagSerializer<DamageType> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("DamageType is read-only");
             },

@@ -510,7 +510,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // Set death location
             if (getInstance() != null)
-                setDeathLocation(getInstance().getDimensionType(), getPosition());
+                setDeathLocation(getInstance().getDimensionName(), getPosition());
         }
         super.kill();
     }
@@ -1039,9 +1039,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean isImmune(@NotNull DamageType type) {
+    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
         if (!getGameMode().canTakeDamage()) {
-            return !DamageType.OUT_OF_WORLD.equals(type.namespace());
+            return !DamageType.OUT_OF_WORLD.equals(type);
         }
         return super.isImmune(type);
     }
@@ -1226,8 +1226,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         teleport(getPosition());
     }
 
-    public void setDeathLocation(@NotNull DimensionType type, @NotNull Pos position) {
-        this.deathLocation = new WorldPos(type.name(), position);
+    public void setDeathLocation(@NotNull Pos position) {
+        setDeathLocation(getInstance().getDimensionName(), position);
+    }
+
+    public void setDeathLocation(@NotNull String dimension, @NotNull Pos position) {
+        this.deathLocation = new WorldPos(dimension, position);
     }
 
     public @Nullable WorldPos getDeathLocation() {
@@ -1650,10 +1654,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param dimensionType the new player dimension
      */
-    protected void sendDimension(@NotNull DimensionType dimensionType, @NotNull String dimensionName) {
+    protected void sendDimension(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull String dimensionName) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
-        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType.namespace());
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
         sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
                 deathLocation, portalCooldown, RespawnPacket.COPY_ALL));

@@ -7,6 +7,7 @@ import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
@@ -49,7 +50,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_OPT_VARINT, OptVarInt(null));
         EMPTY_VALUES.set(TYPE_POSE, Pose(Entity.Pose.STANDING));
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatMeta.Variant.TABBY));
-        // WolfVariant
+        EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfMeta.Variant.PALE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
         // OptGlobalPos
         EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingMeta.Variant.KEBAB));

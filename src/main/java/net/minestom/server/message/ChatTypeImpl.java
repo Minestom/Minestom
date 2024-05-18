@@ -15,7 +15,7 @@ record ChatTypeImpl(
         @Nullable Registry.ChatTypeEntry registry
 ) implements ChatType {
 
-    static final BinaryTagSerializer<ChatType> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    static final BinaryTagSerializer<ChatType> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("ChatType is read-only");
             },
