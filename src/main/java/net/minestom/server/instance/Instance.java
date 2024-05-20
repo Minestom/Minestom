@@ -24,6 +24,8 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.playerlist.PlayerList;
+import net.minestom.server.instance.playerlist.ServerWidePlayerList;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.snapshot.*;
@@ -740,6 +742,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)Math.max(1, remainingRainTransitionTicks));
         float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)Math.max(1, remainingThunderTransitionTicks));
         return new Weather(rainLevel, thunderLevel);
+    }
+
+    @ApiStatus.Experimental
+    public PlayerList createPlayerList(Player viewer) {
+        return new ServerWidePlayerList(viewer);
     }
 
     @Override

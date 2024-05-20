@@ -46,6 +46,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.playerlist.PlayerList;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -145,6 +146,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private DimensionType dimensionType;
     private GameMode gameMode;
     private WorldPos deathLocation;
+
+    private PlayerList playerList;
 
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
@@ -321,14 +324,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        PacketUtils.broadcastPlayPacket(getAddPlayerToList());
+        playerList.broadcast(playerList.createAddPlayerToList(this));
 
-        var connectionManager = MinecraftServer.getConnectionManager();
-        for (var player : connectionManager.getOnlinePlayers()) {
+        for (var player : playerList.getBroadcastRecipients()) {
             if (player != this) {
-                sendPacket(player.getAddPlayerToList());
+                playerList.send(playerList.createAddPlayerToList(player));
                 if (player.displayName != null) {
-                    sendPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, player.infoEntry()));
+                    playerList.send(playerList.createUpdateDisplayName(player));
                 }
             }
         }
@@ -599,7 +601,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Clear all viewable chunks
         ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
-        PacketUtils.broadcastPlayPacket(getRemovePlayerToList());
+        playerList.broadcast(playerList.createRemovePlayer(this));
 
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
@@ -726,6 +728,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
+
+        this.playerList = instance.createPlayerList(this);
 
         super.setInstance(instance, spawnPosition);
 
@@ -1167,7 +1171,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
-        PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, infoEntry()));
+        playerList.broadcast(playerList.createUpdateDisplayName(this));
     }
 
     /**
@@ -1195,11 +1199,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket(getEntityId());
 
-        final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
-        final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
-
         RespawnPacket respawnPacket = new RespawnPacket(getDimensionType().toString(), instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL);
+
+        final PlayerInfoRemovePacket removePlayerPacket = playerList.createRemovePlayer(this);
+        final PlayerInfoUpdatePacket addPlayerPacket = playerList.createAddPlayerToList(this);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1209,11 +1213,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         {
             // Remove player
-            PacketUtils.broadcastPlayPacket(removePlayerPacket);
+            playerList.broadcast(removePlayerPacket);
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            PacketUtils.broadcastPlayPacket(addPlayerPacket);
+            playerList.broadcast(addPlayerPacket);
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
@@ -1591,7 +1595,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.id()));
-            PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
+            playerList.broadcast(playerList.createUpdateGameMode(this));
         }
 
         // The client updates their abilities based on the GameMode as follows
@@ -2139,7 +2143,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshLatency(int latency) {
         this.latency = latency;
         if (getPlayerConnection().getConnectionState() == ConnectionState.PLAY) {
-            PacketUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY, infoEntry()));
+            playerList.broadcast(playerList.createUpdateLatency(this));
         }
     }
 
@@ -2253,34 +2257,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
         return HoverEvent.showEntity(ShowEntity.showEntity(EntityType.PLAYER, this.uuid, this.displayName));
-    }
-
-    /**
-     * Gets the packet to add the player from the tab-list.
-     *
-     * @return a {@link PlayerInfoUpdatePacket} to add the player
-     */
-    protected @NotNull PlayerInfoUpdatePacket getAddPlayerToList() {
-        return new PlayerInfoUpdatePacket(EnumSet.of(PlayerInfoUpdatePacket.Action.ADD_PLAYER, PlayerInfoUpdatePacket.Action.UPDATE_LISTED),
-                List.of(infoEntry()));
-    }
-
-    /**
-     * Gets the packet to remove the player from the tab-list.
-     *
-     * @return a {@link PlayerInfoRemovePacket} to remove the player
-     */
-    protected @NotNull PlayerInfoRemovePacket getRemovePlayerToList() {
-        return new PlayerInfoRemovePacket(getUuid());
-    }
-
-    private PlayerInfoUpdatePacket.Entry infoEntry() {
-        final PlayerSkin skin = this.skin;
-        List<PlayerInfoUpdatePacket.Property> prop = skin != null ?
-                List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
-                List.of();
-        return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
-                true, getLatency(), getGameMode(), displayName, null);
     }
 
     /**
