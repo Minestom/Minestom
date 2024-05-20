@@ -46,8 +46,8 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.playerlist.NoopPlayerList;
 import net.minestom.server.instance.playerlist.PlayerList;
+import net.minestom.server.instance.playerlist.ServerWidePlayerList;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -81,7 +81,6 @@ import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
@@ -148,7 +147,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private GameMode gameMode;
     private WorldPos deathLocation;
 
-    private PlayerList playerList = new NoopPlayerList();
+    private PlayerList playerList;
 
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
@@ -291,6 +290,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         this.removed = false;
         this.dimensionType = spawnInstance.getDimensionType();
+
+        this.playerList = new ServerWidePlayerList(this);
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
