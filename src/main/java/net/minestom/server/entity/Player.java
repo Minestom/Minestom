@@ -46,6 +46,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.playerlist.NoopPlayerList;
 import net.minestom.server.instance.playerlist.PlayerList;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -147,7 +148,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private GameMode gameMode;
     private WorldPos deathLocation;
 
-    private PlayerList playerList;
+    private PlayerList playerList = new NoopPlayerList();
 
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
