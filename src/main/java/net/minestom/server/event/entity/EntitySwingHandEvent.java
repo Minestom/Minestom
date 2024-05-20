@@ -1,4 +1,4 @@
-package net.minestom.server.event.player;
+package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.trait.CancellableEvent;
