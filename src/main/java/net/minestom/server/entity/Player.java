@@ -2497,7 +2497,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-            PlayerMeta playerMeta = getPlayerMeta();
+            PlayerMeta playerMeta = getUnsafeEntityMeta();
             if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
             playerMeta.setDisplayedSkinParts(displayedSkinParts);
             playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
