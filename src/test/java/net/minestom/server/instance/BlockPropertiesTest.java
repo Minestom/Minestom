@@ -7,16 +7,16 @@ import java.util.Map;
 import static net.minestom.server.utils.block.BlockUtils.parseProperties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BlockPropertiesTest {
+class BlockPropertiesTest {
 
     @Test
-    public void empty() {
+    void empty() {
         assertEquals(Map.of(), parseProperties("[]"));
         assertEquals(Map.of(), parseProperties(""));
     }
 
     @Test
-    public void noBrackets() {
+    void noBrackets() {
         assertEquals(Map.of(), parseProperties("random test without brackets"));
         assertEquals(Map.of(), parseProperties("["));
         assertEquals(Map.of(), parseProperties("[end"));
@@ -27,28 +27,28 @@ public class BlockPropertiesTest {
     }
 
     @Test
-    public void spaces() {
+    void spaces() {
         assertEquals(Map.of(), parseProperties("[    ]"));
     }
 
     @Test
-    public void comma() {
+    void comma() {
         assertEquals(Map.of(), parseProperties("[  , , ,,,,  ]"));
     }
 
     @Test
-    public void single() {
+    void single() {
         assertEquals(Map.of("facing", "east"), parseProperties("[facing=east]"));
     }
 
     @Test
-    public void doubleSpace() {
+    void doubleSpace() {
         assertEquals(Map.of("facing", "east", "key", "value"), parseProperties("[facing=east,key=value ]"));
         assertEquals(Map.of("facing", "east", "key", "value"), parseProperties("[ facing = east, key= value ]"));
     }
 
     @Test
-    public void allLengths() {
+    void allLengths() {
         // Verify all length variations
         for (int i = 0; i < 13; i++) {
             StringBuilder properties = new StringBuilder("[");
@@ -67,7 +67,7 @@ public class BlockPropertiesTest {
     }
 
     @Test
-    public void corrupted() {
+    void corrupted() {
         final int size = 12;
         StringBuilder properties = new StringBuilder("[");
         for (int j = 0; j < size; j++) {

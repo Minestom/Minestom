@@ -8,10 +8,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SubcommandTest {
+class SubcommandTest {
 
     @Test
-    public void testSubCommands() {
+    void testSubCommands() {
         var manager = new CommandManager();
 
         var parent = new Command("parent");
@@ -33,7 +33,7 @@ public class SubcommandTest {
     }
 
     @Test
-    public void testSubCommandConditions() {
+    void testSubCommandConditions() {
         var manager = new CommandManager();
 
         var parent = new Command("parent");

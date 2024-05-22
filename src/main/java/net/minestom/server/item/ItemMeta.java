@@ -47,7 +47,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
     @Contract(pure = true)
     default @Nullable Component getDisplayName() {
-        return getTag(ItemTags.NAME);
+        return getTag(ItemTags.DISPLAY_NAME); // Microtus - Rename name tag to DISPLAY_NAME for consistency
     }
 
     @Contract(pure = true)
@@ -123,7 +123,7 @@ public sealed interface ItemMeta extends TagReadable, NetworkBuffer.Writer
 
         @Contract("_ -> this")
         default @NotNull Builder displayName(@Nullable Component displayName) {
-            return set(ItemTags.NAME, displayName);
+            return set(ItemTags.DISPLAY_NAME, displayName);
         }
 
         @Contract("_ -> this")

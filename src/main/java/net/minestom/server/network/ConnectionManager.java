@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
+import net.minestom.server.network.packet.server.configuration.UpdateEnabledFeaturesPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -33,6 +34,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -271,7 +275,7 @@ public final class ConnectionManager {
         CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
             player.sendPacket(PluginMessagePacket.getBrandPacket());
 
-            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
+            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig, Set.of());
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
 
@@ -291,6 +295,7 @@ public final class ConnectionManager {
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }
+            player.sendPacket(new UpdateEnabledFeaturesPacket(event.getEnabledFeatures()));
 
             // Wait for pending resource packs if any
             var packFuture = player.getResourcePackFuture();

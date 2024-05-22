@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class TagSerializerTest {
+class TagSerializerTest {
     @Test
-    public void fromCompound(){
+    void fromCompound(){
         var serializer = TagSerializer.fromCompound(FireworkEffect::fromCompound, FireworkEffect::asCompound);
         var effect = new FireworkEffect(false, false, FireworkEffectType.BURST, List.of(), List.of());
         TagHandler handler = TagHandler.newHandler();

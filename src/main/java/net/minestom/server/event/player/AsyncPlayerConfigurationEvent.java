@@ -1,8 +1,13 @@
 package net.minestom.server.event.player;
 
+import java.util.List;
+import java.util.Set;
+
+import net.kyori.adventure.key.Namespaced;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,10 +27,12 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private boolean hardcore;
     private boolean sendRegistryData;
     private Instance spawningInstance;
+    private Set<NamespaceID> enabledFeatures;
 
-    public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig) {
+    public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig, @NotNull Set<NamespaceID> enabledFeatures) {
         this.player = player;
         this.isFirstConfig = isFirstConfig;
+        this.enabledFeatures = enabledFeatures;
 
         this.hardcore = false;
         this.sendRegistryData = isFirstConfig;
@@ -66,5 +73,13 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
 
     public void setSpawningInstance(@Nullable Instance spawningInstance) {
         this.spawningInstance = spawningInstance;
+    }
+
+    public void setEnabledFeatures(Set<NamespaceID> enabledFeatures) {
+        this.enabledFeatures = enabledFeatures;
+    }
+
+    public Set<NamespaceID> getEnabledFeatures() {
+        return enabledFeatures;
     }
 }

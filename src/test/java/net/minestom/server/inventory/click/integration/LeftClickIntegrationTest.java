@@ -1,6 +1,9 @@
 package net.minestom.server.inventory.click.integration;
 
 
+import net.kyori.adventure.text.Component;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -11,8 +14,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
-public class LeftClickIntegrationTest {
+class LeftClickIntegrationTest {
 
     @Test
-    public void leftSelf(Env env) {
+    void leftSelf(Env env) {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
         var inventory = player.getInventory();
@@ -82,10 +83,10 @@ public class LeftClickIntegrationTest {
     }
 
     @Test
-    public void leftExternal(Env env) {
+    void leftExternal(Env env) {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
-        var inventory = new Inventory(InventoryType.HOPPER, "test");
+        var inventory = new Inventory(InventoryType.HOPPER, Component.text("test"));
         player.openInventory(inventory);
         var listener = env.listen(InventoryPreClickEvent.class);
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));

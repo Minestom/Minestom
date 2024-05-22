@@ -6,6 +6,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.TradeListPacket;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,10 +22,6 @@ public class VillagerInventory extends Inventory {
     private boolean canRestock;
 
     public VillagerInventory(@NotNull Component title) {
-        super(InventoryType.MERCHANT, title);
-    }
-
-    public VillagerInventory(@NotNull String title) {
         super(InventoryType.MERCHANT, title);
     }
 
@@ -92,7 +89,8 @@ public class VillagerInventory extends Inventory {
         return result;
     }
 
-    private TradeListPacket createTradePacket() {
+    @Contract(pure = true)
+    private @NotNull TradeListPacket createTradePacket() {
         return new TradeListPacket(getWindowId(), trades, villagerLevel, experience, regularVillager, canRestock);
     }
 }

@@ -9,10 +9,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AcquirableTest {
+class AcquirableTest {
 
     @Test
-    public void assignation() {
+    void assignation() {
         AtomicReference<TickThread> tickThread = new AtomicReference<>();
         Entity entity = new Entity(EntityType.ZOMBIE) {
             @Override

@@ -4,18 +4,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameModeTest {
+class GameModeTest {
 
     @Test
-    public void toId() {
-        assertEquals(GameMode.SURVIVAL.id(), 0);
-        assertEquals(GameMode.CREATIVE.id(), 1);
-        assertEquals(GameMode.ADVENTURE.id(), 2);
-        assertEquals(GameMode.SPECTATOR.id(), 3);
+    void toId() {
+        assertEquals(0, GameMode.SURVIVAL.id());
+        assertEquals(1, GameMode.CREATIVE.id());
+        assertEquals(2, GameMode.ADVENTURE.id());
+        assertEquals(3, GameMode.SPECTATOR.id());
     }
 
     @Test
-    public void fromId() {
+    void fromId() {
         assertEquals(GameMode.SURVIVAL, GameMode.fromId(0));
         assertEquals(GameMode.CREATIVE, GameMode.fromId(1));
         assertEquals(GameMode.ADVENTURE, GameMode.fromId(2));

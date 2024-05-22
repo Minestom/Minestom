@@ -14,7 +14,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class SocketWriteTest {
+class SocketWriteTest {
 
     record IntPacket(int value) implements ServerPacket.Play {
         @Override
@@ -41,7 +41,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeSingleUncompressed() {
+    void writeSingleUncompressed() {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
@@ -53,7 +53,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeMultiUncompressed() {
+    void writeMultiUncompressed() {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
@@ -66,7 +66,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeSingleCompressed() {
+    void writeSingleCompressed() {
         var string = "Hello world!".repeat(200);
         var stringLength = string.getBytes(StandardCharsets.UTF_8).length;
         var lengthLength = Utils.getVarIntSize(stringLength);
@@ -82,7 +82,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeSingleCompressedSmall() {
+    void writeSingleCompressedSmall() {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
@@ -94,7 +94,7 @@ public class SocketWriteTest {
     }
 
     @Test
-    public void writeMultiCompressedSmall() {
+    void writeMultiCompressedSmall() {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();

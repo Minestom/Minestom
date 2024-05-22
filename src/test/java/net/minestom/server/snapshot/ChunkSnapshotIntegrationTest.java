@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class ChunkSnapshotIntegrationTest {
+class ChunkSnapshotIntegrationTest {
 
     @Test
-    public void blocks(Env env) {
+    void blocks(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 0, 0, Block.STONE);
         var snapshot = ServerSnapshot.update();

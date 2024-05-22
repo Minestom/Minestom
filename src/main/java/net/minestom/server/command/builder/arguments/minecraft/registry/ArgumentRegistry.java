@@ -9,9 +9,9 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
 
     public static final int INVALID_NAME = -2;
 
-    public ArgumentRegistry(String id) {
+    ArgumentRegistry(String id) {
         super(id);
-    }
+    } //Microtus - update java keyword usage
 
     public abstract T getRegistry(@NotNull String value);
 

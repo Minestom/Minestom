@@ -8,10 +8,10 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ObjectPoolTest {
+class ObjectPoolTest {
 
     @Test
-    public void pool() {
+    void pool() {
         var pool = ObjectPool.BUFFER_POOL;
         Set<BinaryBuffer> pooledBuffers = new HashSet<>();
         pool.clear();
@@ -31,7 +31,7 @@ public class ObjectPoolTest {
     }
 
     @Test
-    public void autoClose() {
+    void autoClose() {
         var pool = ObjectPool.BUFFER_POOL;
         assertEquals(0, pool.count());
         try (var ignored = pool.hold()) {

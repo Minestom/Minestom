@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class PlayerHeldIntegrationTest {
+class PlayerHeldIntegrationTest {
 
     @Test
-    public void playerHeld(Env env) {
+    void playerHeld(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -32,7 +32,7 @@ public class PlayerHeldIntegrationTest {
     }
 
     @Test
-    public void playerHeldEvent(Env env) {
+    void playerHeldEvent(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();

@@ -13,10 +13,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandConditionTest {
+class CommandConditionTest {
 
     @Test
-    public void mainCondition() {
+    void mainCondition() {
         var dispatcher = new CommandDispatcher();
         assertNull(dispatcher.findCommand("name"));
         var sender = new Sender();
@@ -39,7 +39,7 @@ public class CommandConditionTest {
     }
 
     @Test
-    public void subCondition() {
+    void subCondition() {
         var dispatcher = new CommandDispatcher();
         assertNull(dispatcher.findCommand("name"));
         var sender = new Sender();
@@ -83,7 +83,7 @@ public class CommandConditionTest {
     }
 
     @Test
-    public void subConditionOverride() {
+    void subConditionOverride() {
         var dispatcher = new CommandDispatcher();
         assertNull(dispatcher.findCommand("name"));
         var sender = new Sender();

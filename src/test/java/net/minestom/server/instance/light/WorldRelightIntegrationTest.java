@@ -16,7 +16,7 @@ import static java.util.Map.entry;
 import static net.minestom.server.instance.BlockLightMergeIntegrationTest.assertLightInstance;
 
 @EnvTest
-public class WorldRelightIntegrationTest {
+class WorldRelightIntegrationTest {
     private @NotNull Instance createLightingInstance(@NotNull ServerProcess process) {
         var instance = process.instance().createInstanceContainer();
         instance.setGenerator(unit -> {
@@ -28,7 +28,7 @@ public class WorldRelightIntegrationTest {
     }
 
     @Test
-    public void testBorderLava(Env env) {
+    void testBorderLava(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         instance.loadChunk(6, 16).join();
@@ -46,7 +46,7 @@ public class WorldRelightIntegrationTest {
     }
 
     @Test
-    public void testBlockRemoval(Env env) {
+    void testBlockRemoval(Env env) {
         Instance instance = createLightingInstance(env.process());
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {

@@ -5,11 +5,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ObjectArrayTest {
+class ObjectArrayTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void objectArray(boolean concurrent) {
+    void objectArray(boolean concurrent) {
         ObjectArray<String> array = concurrent ? ObjectArray.concurrent() : ObjectArray.singleThread();
 
         array.set(50, "Hey");
@@ -37,7 +37,7 @@ public class ObjectArrayTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void arrayCopy(boolean concurrent) {
+    void arrayCopy(boolean concurrent) {
         ObjectArray<String> array = concurrent ? ObjectArray.concurrent() : ObjectArray.singleThread();
 
         array.set(1, "Hey");

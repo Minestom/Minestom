@@ -9,8 +9,10 @@ public class AbstractArrowMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 2;
 
-    private final static byte CRITICAL_BIT = 0x01;
-    private final static byte NO_CLIP_BIT = 0x02;
+    //Microtus start - update java keyword usage
+    private static final byte CRITICAL_BIT = 0x01;
+    private static final byte NO_CLIP_BIT = 0x02;
+    //Microtus end - update java keyword usage
 
     protected AbstractArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

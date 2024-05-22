@@ -14,10 +14,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class EntityTeleportIntegrationTest {
+class EntityTeleportIntegrationTest {
 
     @Test
-    public void entityChunkTeleport(Env env) {
+    void entityChunkTeleport(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -29,7 +29,7 @@ public class EntityTeleportIntegrationTest {
     }
 
     @Test
-    public void entityTeleport(Env env) {
+    void entityTeleport(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -41,7 +41,7 @@ public class EntityTeleportIntegrationTest {
     }
 
     @Test
-    public void playerChunkTeleport(Env env) {
+    void playerChunkTeleport(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -74,7 +74,7 @@ public class EntityTeleportIntegrationTest {
     }
 
     @Test
-    public void playerTeleport(Env env) {
+    void playerTeleport(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();

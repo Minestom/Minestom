@@ -35,7 +35,6 @@ public class EnderDragonMeta extends MobMeta {
         FLYING_TO_THE_PORTAL_TO_DIE,
         HOVERING_WITHOUT_AI;
 
-        private final static Phase[] VALUES = values();
+        private static final Phase[] VALUES = values();  //Microtus - update java keyword usage
     }
-
 }

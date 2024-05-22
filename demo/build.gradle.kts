@@ -2,21 +2,28 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     application
-    alias(libs.plugins.shadow)
+    id("minestom.common-conventions")
+    id("minestom.native-conventions")
+    id("com.github.johnrengelman.shadow") version ("7.1.2")
+//    id("net.onelitefeather.microtus.extension")
+}
+
+application {
+    mainClass.set("net.minestom.demo.Main")
+    // This is included because Shadow is buggy. Wait for https://github.com/johnrengelman/shadow/issues/613 to befixed.
 }
 
 dependencies {
+//    extensionLibrary("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     implementation(rootProject)
-
-    runtimeOnly(libs.bundles.logback)
+    implementation(libs.jNoise)
 }
 
-tasks {
-    application {
-        mainClass.set("net.minestom.demo.Main")
-    }
-
-    withType<ShadowJar> {
-        archiveFileName.set("minestom-demo.jar")
-    }
+tasks.withType<ShadowJar> {
+    archiveFileName.set("minestom-demo.jar")
 }
+
+/*extension {
+    authors = listOf("yolo")
+    entrypoint = "net.onelitefeather.microtus.extension.Test"
+}*/

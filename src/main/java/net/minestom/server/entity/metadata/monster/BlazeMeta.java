@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlazeMeta extends MonsterMeta {
     public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
-
-    private final static byte ON_FIRE_BIT = 0x01;
+    private static final byte ON_FIRE_BIT = 0x01; //Microtus - update java keyword usage
 
     public BlazeMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

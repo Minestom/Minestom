@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ItemBlockTest {
+class ItemBlockTest {
 
     @Test
-    public void canPlace() {
+    void canPlace() {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canPlaceOn(Block.STONE))
                 .build();
@@ -18,7 +18,7 @@ public class ItemBlockTest {
     }
 
     @Test
-    public void canPlaceNbt() {
+    void canPlaceNbt() {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canPlaceOn(Block.STONE))
                 .build();
@@ -28,7 +28,7 @@ public class ItemBlockTest {
     }
 
     @Test
-    public void canPlaceMismatchProperties() {
+    void canPlaceMismatchProperties() {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canPlaceOn(Block.SANDSTONE_STAIRS.withProperty("facing", "south")))
                 .build();
@@ -38,7 +38,7 @@ public class ItemBlockTest {
     }
 
     @Test
-    public void canDestroy() {
+    void canDestroy() {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canDestroy(Block.STONE))
                 .build();
@@ -47,7 +47,7 @@ public class ItemBlockTest {
     }
 
     @Test
-    public void canDestroyNbt() {
+    void canDestroyNbt() {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canDestroy(Block.STONE))
                 .build();
@@ -57,7 +57,7 @@ public class ItemBlockTest {
     }
 
     @Test
-    public void canDestroyMismatchProperties() {
+    void canDestroyMismatchProperties() {
         var item = ItemStack.builder(Material.STONE)
                 .meta(builder -> builder.canDestroy(Block.SANDSTONE_STAIRS.withProperty("facing", "south")))
                 .build();

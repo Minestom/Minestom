@@ -12,12 +12,21 @@ public class PillagerMeta extends AbstractIllagerMeta {
         super(entity, metadata);
     }
 
-    public boolean isChargingCrossbow() {
-        return super.metadata.getIndex(OFFSET, false);
-    }
-
+    // Microtus start - meta update
+    /**
+     * Set the state if a Pillager charge his crossbow.
+     * @param value the value to set
+     */
     public void setChargingCrossbow(boolean value) {
         super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }
 
+    /**
+     * Returns a boolean value if a Pillager is charging his crossbow.
+     * @return true when yes otherwise false
+     */
+    public boolean isChargingCrossbow() {
+        return super.metadata.getIndex(OFFSET, false);
+    }
+    // Microtus end - meta update
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagStructureTest {
+class TagStructureTest {
 
     private static final Tag<Entry> STRUCTURE_TAG = Tag.Structure("entry", new TagSerializer<>() {
         private static final Tag<String> VALUE_TAG = Tag.String("value");
@@ -46,7 +46,7 @@ public class TagStructureTest {
     }
 
     @Test
-    public void basic() {
+    void basic() {
         var handler = TagHandler.newHandler();
         assertNull(handler.getTag(STRUCTURE_TAG));
         assertFalse(handler.hasTag(STRUCTURE_TAG));
@@ -62,7 +62,7 @@ public class TagStructureTest {
     }
 
     @Test
-    public void snbt() {
+    void snbt() {
         var handler = TagHandler.newHandler();
         var entry = new Entry("hello");
         handler.setTag(STRUCTURE_TAG, entry);
@@ -79,7 +79,7 @@ public class TagStructureTest {
     }
 
     @Test
-    public void overrideBasic() {
+    void overrideBasic() {
         var handler = TagHandler.newHandler();
         assertNull(handler.getTag(STRUCTURE_TAG));
         assertFalse(handler.hasTag(STRUCTURE_TAG));
@@ -105,7 +105,7 @@ public class TagStructureTest {
     }
 
     @Test
-    public void overrideNbt() {
+    void overrideNbt() {
         var handler = TagHandler.newHandler();
         var entry1 = new Entry("hello");
         var entry2 = new Entry("hello2");
@@ -134,7 +134,7 @@ public class TagStructureTest {
     }
 
     @Test
-    public void pathOverride() {
+    void pathOverride() {
         var handler = TagHandler.newHandler();
         Tag<UUID> uuidTag = Tag.UUID("Id").path("SkullOwner");
         Tag<PlayerSkin> skinTag = Tag.Structure("Properties", new TagSerializer<PlayerSkin>() {

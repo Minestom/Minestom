@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 /**
  * Ensure that NBT tag can be read from other tags properly.
  */
-public class TagNbtTest {
+class TagNbtTest {
 
     @Test
-    public void list() {
+    void list() {
         var handler = TagHandler.newHandler();
         var tag = Tag.NBT("nbt").list();
         List<NBT> list = List.of(NBT.Int(1), NBT.Int(2), NBT.Int(3));
@@ -35,7 +35,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void map() {
+    void map() {
         var handler = TagHandler.newHandler();
         var tag = Tag.NBT("nbt").map(nbt -> ((NBTInt) nbt).getValue(), NBT::Int);
         handler.setTag(tag, 5);
@@ -51,7 +51,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void fromCompoundModify() {
+    void fromCompoundModify() {
         var compound = NBT.Compound(Map.of("key", NBT.Int(5)));
         var handler = TagHandler.fromCompound(compound);
         assertEquals(compound, handler.asCompound());
@@ -71,7 +71,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void fromCompoundModifyPath() {
+    void fromCompoundModifyPath() {
         var compound = NBT.Compound(Map.of("path", NBT.Compound(Map.of("key", NBT.Int(5)))));
         var handler = TagHandler.fromCompound(compound);
         var tag = Tag.Integer("key").path("path");
@@ -88,7 +88,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void fromCompoundModifyDoublePath() {
+    void fromCompoundModifyDoublePath() {
         var compound = NBT.Compound(Map.of("path", NBT.Compound(Map.of("path2",
                 NBT.Compound(Map.of("key", NBT.Int(5)))))));
         var handler = TagHandler.fromCompound(compound);
@@ -106,7 +106,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void compoundOverride() {
+    void compoundOverride() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
@@ -120,7 +120,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void compoundRead() {
+    void compoundRead() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
@@ -133,7 +133,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void compoundPathRead() {
+    void compoundPathRead() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("compound").path("path");
 
@@ -146,7 +146,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void doubleCompoundRead() {
+    void doubleCompoundRead() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
@@ -159,7 +159,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void compoundWrite() {
+    void compoundWrite() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("path1");
 
@@ -174,7 +174,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void rawList() {
+    void rawList() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("list");
         var list = NBT.List(NBTType.TAG_Int, NBT.Int(1));
@@ -183,7 +183,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void listConversion() {
+    void listConversion() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("list");
         var listTag = Tag.Integer("list").list();
@@ -196,7 +196,7 @@ public class TagNbtTest {
     }
 
     @Test
-    public void rawArray() {
+    void rawArray() {
         var handler = TagHandler.newHandler();
         var nbtTag = Tag.NBT("array");
         var array = NBT.IntArray(1, 2, 3);

@@ -2,6 +2,7 @@ package net.minestom.server.entity.ai;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +13,7 @@ public abstract class GoalSelector {
     private WeakReference<EntityAIGroup> aiGroupWeakReference;
     protected EntityCreature entityCreature;
 
-    public GoalSelector(@NotNull EntityCreature entityCreature) {
+    protected GoalSelector(@NotNull EntityCreature entityCreature) { //Microtus - update java keyword usage
         this.entityCreature = entityCreature;
     }
 

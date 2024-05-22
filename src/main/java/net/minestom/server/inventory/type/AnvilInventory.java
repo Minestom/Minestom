@@ -14,10 +14,6 @@ public class AnvilInventory extends Inventory {
         super(InventoryType.ANVIL, title);
     }
 
-    public AnvilInventory(@NotNull String title) {
-        super(InventoryType.ANVIL, title);
-    }
-
     /**
      * Gets the anvil repair cost.
      *

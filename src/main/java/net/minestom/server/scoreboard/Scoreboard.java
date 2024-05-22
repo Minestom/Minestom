@@ -21,20 +21,6 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param value The value for the objective
      * @param type  The type for the objective
      * @return the creation objective packet
-     * @deprecated Use {@link #getCreationObjectivePacket(Component, ScoreboardObjectivePacket.Type)}
-     */
-    @Deprecated
-    @NotNull
-    default ScoreboardObjectivePacket getCreationObjectivePacket(String value, ScoreboardObjectivePacket.Type type) {
-        return this.getCreationObjectivePacket(Component.text(value), type);
-    }
-
-    /**
-     * Creates a creation objective packet.
-     *
-     * @param value The value for the objective
-     * @param type  The type for the objective
-     * @return the creation objective packet
      */
     default @NotNull ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
         return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type, null);

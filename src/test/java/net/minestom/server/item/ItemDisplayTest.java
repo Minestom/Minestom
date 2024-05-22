@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ItemDisplayTest {
+class ItemDisplayTest {
 
     @Test
-    public void lore() {
+    void lore() {
         var item = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(List.of(), item.getLore());
         assertNull(item.meta().toNBT().get("display"));

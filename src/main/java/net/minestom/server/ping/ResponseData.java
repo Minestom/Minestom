@@ -1,11 +1,7 @@
 package net.minestom.server.ping;
 
-import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -21,9 +17,7 @@ import java.util.*;
  */
 public class ResponseData {
     private static final Component DEFAULT_DESCRIPTION = Component.text("Minestom Server");
-
     private final List<NamedAndIdentified> entries;
-
     private String version;
     private int protocol;
     private int maxPlayer;
@@ -44,17 +38,6 @@ public class ResponseData {
         this.description = DEFAULT_DESCRIPTION;
         this.favicon = "";
         this.playersHidden = false;
-    }
-
-    /**
-     * Sets the name for the response.
-     *
-     * @param name The name for the response data.
-     * @deprecated This is named incorrectly, use {@link #setVersion(String)} instead
-     */
-    @Deprecated
-    public void setName(String name) {
-        this.setVersion(name);
     }
 
     /**
@@ -129,88 +112,6 @@ public class ResponseData {
         return online;
     }
 
-    /**
-     * Adds some players to the response.
-     *
-     * @param players the players
-     * @deprecated Use {@link #addEntries(Collection)}}
-     */
-    @Deprecated
-    public void addPlayer(Iterable<Player> players) {
-        for (Player player : players) {
-            this.addPlayer(player);
-        }
-    }
-
-    /**
-     * Adds a player to the response.
-     *
-     * @param player the player
-     * @deprecated Use {@link #addEntry(NamedAndIdentified)}
-     */
-    @Deprecated
-    public void addPlayer(Player player) {
-        this.addEntry(player);
-    }
-
-    /**
-     * Adds a player to the response.
-     *
-     * @param name The name of the player.
-     * @param uuid The unique identifier of the player.
-     * @deprecated Use {@link #addEntry(NamedAndIdentified)} with {@link NamedAndIdentified#of(String, UUID)}
-     */
-    @Deprecated
-    public void addPlayer(String name, UUID uuid) {
-        this.addEntry(NamedAndIdentified.of(name, uuid));
-    }
-
-    /**
-     * Adds a player to the response.
-     * <p>
-     * {@link UUID#randomUUID()} is used as the player's UUID.
-     *
-     * @param name The name of the player.
-     * @deprecated Use {@link #addEntry(NamedAndIdentified)} with {@link NamedAndIdentified#named(String)}
-     */
-    @Deprecated
-    public void addPlayer(String name) {
-        this.addEntry(NamedAndIdentified.named(name));
-    }
-
-    /**
-     * Removes all of the ping players from this {@link #entries}. The {@link #entries} list
-     * will be empty this call returns.
-     *
-     * @deprecated Use {@link #clearEntries()}
-     */
-    @Deprecated
-    public void clearPlayers() {
-        this.clearEntries();
-    }
-
-    /**
-     * Get the list of the response players.
-     *
-     * @return the list of the response players.
-     * @deprecated Use {@link #getEntries()}. This return value is now unmodifiable and this operation is incredibly costly.
-     */
-    @Deprecated(forRemoval = true) // to throw an error for people using it - this method is *horrible*
-    public List<PingPlayer> getPlayers() {
-        return this.entries.stream()
-                .map(entry -> PingPlayer.of(PlainComponentSerializer.plain().serialize(entry.getName()), entry.getUuid())).toList();
-    }
-
-    /**
-     * Sets the response description.
-     *
-     * @param description The description for the response data.
-     * @deprecated Use {@link #setDescription(Component)}
-     */
-    @Deprecated
-    public void setDescription(String description) {
-        this.description = LegacyComponentSerializer.legacySection().deserialize(description);
-    }
 
     /**
      * Sets the response description.
@@ -313,45 +214,5 @@ public class ResponseData {
      */
     public boolean arePlayersHidden() {
         return playersHidden;
-    }
-
-    /**
-     * Converts the response data into a {@link JsonObject}.
-     *
-     * @return The converted response data as a json tree.
-     * @deprecated Use {@link ServerListPingType#getPingResponse(ResponseData)}
-     */
-    @Deprecated
-    public @NotNull JsonObject build() {
-        return ServerListPingType.getModernPingResponse(this, true);
-    }
-
-    /**
-     * Represents a player line in the server list hover.
-     *
-     * @deprecated See {@link NamedAndIdentified}
-     */
-    @Deprecated
-    public static class PingPlayer {
-
-        private static @NotNull PingPlayer of(@NotNull String name, @NotNull UUID uuid) {
-            return new PingPlayer(name, uuid);
-        }
-
-        private final String name;
-        private final UUID uuid;
-
-        private PingPlayer(@NotNull String name, @NotNull UUID uuid) {
-            this.name = name;
-            this.uuid = uuid;
-        }
-
-        public @NotNull String getName() {
-            return name;
-        }
-
-        public @NotNull UUID getUuid() {
-            return uuid;
-        }
     }
 }

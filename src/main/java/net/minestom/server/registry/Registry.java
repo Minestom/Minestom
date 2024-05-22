@@ -218,6 +218,7 @@ public final class Registry {
         DAMAGE_TYPES("damage_types.json"),
         TRIM_MATERIALS("trim_materials.json"),
         TRIM_PATTERNS("trim_patterns.json"),
+        BANNER_PATTERNS("banner_patterns.json"), // Microtus -  Banner and Shield Meta
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
         FLUID_TAGS("tags/fluid_tags.json"),

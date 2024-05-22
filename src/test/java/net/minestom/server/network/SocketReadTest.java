@@ -16,11 +16,11 @@ import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SocketReadTest {
+class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void complete(boolean compressed) throws DataFormatException {
+    void complete(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = ObjectPool.PACKET_POOL.get();
@@ -44,7 +44,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void completeTwo(boolean compressed) throws DataFormatException {
+    void completeTwo(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = ObjectPool.PACKET_POOL.get();
@@ -70,7 +70,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void insufficientLength(boolean compressed) throws DataFormatException {
+    void insufficientLength(boolean compressed) throws DataFormatException {
         // Write a complete packet then the next packet length without any payload
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
@@ -98,7 +98,7 @@ public class SocketReadTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void incomplete(boolean compressed) throws DataFormatException {
+    void incomplete(boolean compressed) throws DataFormatException {
         // Write a complete packet and incomplete var-int length for the next packet
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);

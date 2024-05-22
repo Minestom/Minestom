@@ -7,10 +7,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EntityMetaTest {
+class EntityMetaTest {
 
     @Test
-    public void ensureRegistration() throws IllegalAccessException {
+    void ensureRegistration() throws IllegalAccessException {
         List<String> list = new ArrayList<>();
         for (var field : EntityTypes.class.getDeclaredFields()) {
             final EntityType entityType = (EntityType) field.get(this);

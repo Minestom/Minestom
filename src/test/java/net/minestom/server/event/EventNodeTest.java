@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EventNodeTest {
+class EventNodeTest {
 
     static class EventTest implements Event {
     }
@@ -57,7 +57,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testCall() {
+    void testCall() {
         var node = EventNode.all("main");
         AtomicBoolean result = new AtomicBoolean(false);
         var listener = EventListener.of(EventTest.class, eventTest -> result.set(true));
@@ -74,7 +74,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testHandle() {
+    void testHandle() {
         var node = EventNode.all("main");
         var handle = node.getHandle(EventTest.class);
         assertSame(handle, node.getHandle(EventTest.class));
@@ -84,7 +84,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testCancellable() {
+    void testCancellable() {
         var node = EventNode.all("main");
         AtomicBoolean result = new AtomicBoolean(false);
         var listener = EventListener.builder(CancellableTest.class)
@@ -103,7 +103,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void recursiveSub() {
+    void recursiveSub() {
         var node = EventNode.all("main");
         AtomicBoolean result1 = new AtomicBoolean(false);
         AtomicBoolean result2 = new AtomicBoolean(false);
@@ -144,7 +144,7 @@ public class EventNodeTest {
     //}
 
     @Test
-    public void testChildren() {
+    void testChildren() {
         var node = EventNode.all("main");
         AtomicInteger result = new AtomicInteger(0);
         var child1 = EventNode.all("child1").setPriority(1)
@@ -159,14 +159,14 @@ public class EventNodeTest {
                 });
         node.addChild(child1);
         node.addChild(child2);
-        assertEquals(node.getChildren().size(), 2, "The node should have 2 children");
+        assertEquals(2, node.getChildren().size(), "The node should have 2 children");
         node.call(new EventTest());
         assertEquals(2, result.get(), "The event should be called after the call");
 
         // Test removal
         result.set(0);
         node.removeChild(child2);
-        assertEquals(node.getChildren().size(), 1, "The node should have 1 child");
+        assertEquals(1, node.getChildren().size() , "The node should have 1 child");
         node.call(new EventTest());
         assertEquals(1, result.get(), "child2 should has been removed");
 
@@ -178,7 +178,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testFiltering() {
+    void testFiltering() {
         AtomicBoolean result = new AtomicBoolean(false);
         AtomicBoolean childResult = new AtomicBoolean(false);
 
@@ -202,7 +202,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void testBinding() {
+    void testBinding() {
         var node = EventNode.all("main");
 
         AtomicBoolean result = new AtomicBoolean(false);
@@ -224,7 +224,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void nodeEmptyGC() {
+    void nodeEmptyGC() {
         var node = EventNode.all("main");
         var ref = new WeakReference<>(node);
 
@@ -234,7 +234,7 @@ public class EventNodeTest {
     }
 
     @Test
-    public void nodeGC() {
+    void nodeGC() {
         var node = EventNode.all("main");
         var ref = new WeakReference<>(node);
         node.addListener(EventTest.class, event -> {
@@ -261,7 +261,7 @@ public class EventNodeTest {
 //    }
 
     @Test
-    public void nodeMapGC() {
+    void nodeMapGC() {
         var node = EventNode.all("main");
 
         var handler = ItemStack.AIR;

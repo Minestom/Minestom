@@ -6,10 +6,10 @@ import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class TagHandlerReadableCopyTest {
+class TagHandlerReadableCopyTest {
 
     @Test
-    public void copyCache() {
+    void copyCache() {
         var tag = Tag.String("key");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, "test");
@@ -23,7 +23,7 @@ public class TagHandlerReadableCopyTest {
     }
 
     @Test
-    public void copyCachePath() {
+    void copyCachePath() {
         var tag = Tag.String("key").path("path");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, "test");
@@ -38,14 +38,14 @@ public class TagHandlerReadableCopyTest {
     }
 
     @Test
-    public void copyCacheReuse() {
+    void copyCacheReuse() {
         var handler = TagHandler.newHandler();
         handler.setTag(Tag.String("key"), "test");
         assertSame(handler.readableCopy(), handler.readableCopy());
     }
 
     @Test
-    public void copyRehashing() {
+    void copyRehashing() {
         var tag = Tag.String("key");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, "test");

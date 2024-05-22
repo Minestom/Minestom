@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-public class ItemMetaViewTest {
+class ItemMetaViewTest {
     @Test
-    public void viewType() {
+    void viewType() {
         assertEquals(BundleMeta.Builder.class, ItemMetaViewImpl.viewType(BundleMeta.class));
     }
 
     @Test
-    public void construct() {
+    void construct() {
         assertInstanceOf(BundleMeta.Builder.class, ItemMetaViewImpl.constructBuilder(BundleMeta.class, TagHandler.newHandler()));
     }
 }

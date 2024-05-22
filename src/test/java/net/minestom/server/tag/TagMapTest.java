@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagMapTest {
+class TagMapTest {
 
     private record Entry(int value) {
     }
 
     @Test
-    public void map() {
+    void map() {
         var handler = TagHandler.newHandler();
         var intTag = Tag.Integer("key");
         var tag = intTag.map(Entry::new, Entry::value);
@@ -22,7 +22,7 @@ public class TagMapTest {
     }
 
     @Test
-    public void mapDefault() {
+    void mapDefault() {
         var handler = TagHandler.newHandler();
         var intTag = Tag.Integer("key");
         var tag = intTag.map(Entry::new, Entry::value);
@@ -35,7 +35,7 @@ public class TagMapTest {
     }
 
     @Test
-    public void mapDefaultAbsent() {
+    void mapDefaultAbsent() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("key").map(Entry::new, Entry::value);
         assertNull(handler.getTag(tag));

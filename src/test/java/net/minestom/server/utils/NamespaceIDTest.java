@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NamespaceIDTest {
+class NamespaceIDTest {
 
     @Test
-    public void init() {
+    void init() {
         var namespace = NamespaceID.from("minecraft:any");
         assertEquals("minecraft", namespace.domain());
         assertEquals("any", namespace.path());
@@ -21,7 +21,7 @@ public class NamespaceIDTest {
     }
 
     @Test
-    public void equals() {
+    void equals() {
         var namespace = NamespaceID.from("minecraft:any");
         assertEquals(namespace, NamespaceID.from("minecraft:any"));
         assertNotEquals(namespace, NamespaceID.from("minecraft:any2"));
@@ -29,7 +29,7 @@ public class NamespaceIDTest {
     }
 
     @Test
-    public void hashCodeConsistentWithEquals() {
+    void hashCodeConsistentWithEquals() {
         var namespace = NamespaceID.from("minecraft:any");
         var key = Key.key("minecraft:any");
 
@@ -38,50 +38,50 @@ public class NamespaceIDTest {
     }
 
     @Test
-    public void atMostOneColon() {
+    void atMostOneColon() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:block:wool"));
     }
 
     @Test
-    public void noSlashInDomain() {
+    void noSlashInDomain() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft/java_edition:any"));
     }
 
     @Test
-    public void noDotInDomain() {
+    void noDotInDomain() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft.java:game"));
     }
 
     @Test
-    public void noUppercase() {
+    void noUppercase() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("Minecraft:any"));
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:Any"));
     }
 
     @Test
-    public void noSpace() {
+    void noSpace() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:a n y"));
     }
 
     @Test
-    public void onlyLatinLowercase() {
+    void onlyLatinLowercase() {
         assertThrows(AssertionError.class, () -> NamespaceID.from("Minecraft:voilà"));
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:où_ça"));
         assertThrows(AssertionError.class, () -> NamespaceID.from("minecraft:schrödingers_var"));
     }
 
     @Test
-    public void numbersAllowed() {
+    void numbersAllowed() {
         NamespaceID.from("0xc1:468786471");
     }
 
     @Test
-    public void dotAllowedInPath() {
+    void dotAllowedInPath() {
         NamespaceID.from("minecraft:ambient.cave");
     }
 
     @Test
-    public void slashAllowedInPath() {
+    void slashAllowedInPath() {
         NamespaceID.from("minecraft:textures/blocks/dirt.png");
     }
 }

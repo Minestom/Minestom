@@ -8,23 +8,23 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PaletteOptimizationTest {
+class PaletteOptimizationTest {
 
     @Test
-    public void empty() {
+    void empty() {
         var palette = createPalette();
         paletteEquals(palette.palette, palette.optimizedPalette());
     }
 
     @Test
-    public void single() {
+    void single() {
         var palette = createPalette();
         palette.set(0, 0, 0, 1);
         paletteEquals(palette.palette, palette.optimizedPalette());
     }
 
     @Test
-    public void random() {
+    void random() {
         var random = new Random(12345);
         var palette = createPalette();
         palette.setAll((x, y, z) -> random.nextInt(256));
@@ -34,7 +34,7 @@ public class PaletteOptimizationTest {
     }
 
     @Test
-    public void manualFill() {
+    void manualFill() {
         var palette = createPalette();
         palette.setAll((x, y, z) -> 1);
         paletteEquals(palette.palette, palette.optimizedPalette());

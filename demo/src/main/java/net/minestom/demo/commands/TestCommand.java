@@ -8,6 +8,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.entity.Player;
 import net.minestom.server.sound.SoundEvent;
 
 public class TestCommand extends Command {
@@ -21,7 +22,9 @@ public class TestCommand extends Command {
 
         setDefaultExecutor((sender, context) -> {
             sender.playSound(Sound.sound(Key.key("item.trumpet.doot"), Sound.Source.PLAYER, 1, 1));
-            AdventurePacketConvertor.createSoundPacket(Sound.sound(Key.key(SoundEvent.BLOCK_ANVIL_HIT.name()), Sound.Source.HOSTILE, 1, 1), sender.asPlayer());
+            if (sender instanceof Player player) {
+                AdventurePacketConvertor.createSoundPacket(Sound.sound(Key.key(SoundEvent.BLOCK_ANVIL_HIT.name()), Sound.Source.HOSTILE, 1, 1), player);
+            }
         });
         addSyntax((sender, context) -> System.out.println("executed"), block);
 

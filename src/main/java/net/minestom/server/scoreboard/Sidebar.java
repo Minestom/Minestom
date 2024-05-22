@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}.
  * <p>
- * In order to use it you need to create a new instance using the constructor {@link #Sidebar(String)} and create new lines
+ * In order to use it you need to create a new instance using the constructor {@link #Sidebar(Component)} and create new lines
  * with {@link #createLine(ScoreboardLine)}. You can then add a {@link Player} to the viewing list using {@link #addViewer(Player)}
  * and remove him later with {@link #removeViewer(Player)}.
  * <p>
@@ -54,17 +54,6 @@ public class Sidebar implements Scoreboard {
      * Creates a new sidebar
      *
      * @param title The title of the sidebar
-     * @deprecated Use {@link #Sidebar(Component)}
-     */
-    @Deprecated
-    public Sidebar(@NotNull String title) {
-        this(Component.text(title));
-    }
-
-    /**
-     * Creates a new sidebar
-     *
-     * @param title The title of the sidebar
      */
     public Sidebar(@NotNull Component title) {
         this.title = title;
@@ -75,17 +64,6 @@ public class Sidebar implements Scoreboard {
         for (int i = 0; i < 16; i++) {
             availableColors.add(i);
         }
-    }
-
-    /**
-     * Changes the {@link Sidebar} title
-     *
-     * @param title The new sidebar title
-     * @deprecated Use {@link #setTitle(Component)}
-     */
-    @Deprecated
-    public void setTitle(@NotNull String title) {
-        this.setTitle(Component.text(title));
     }
 
     /**

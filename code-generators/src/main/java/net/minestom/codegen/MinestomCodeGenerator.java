@@ -2,33 +2,51 @@ package net.minestom.codegen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.ClassName;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import javax.lang.model.element.Modifier;
 import java.util.Locale;
+import java.util.Map;
 
-public abstract class MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MinestomCodeGenerator.class);
+@ApiStatus.Internal
+public abstract class MinestomCodeGenerator implements CodeExporter {
+    public static final ClassName NAMESPACE_ID_CLASS =
+            ClassName.get("net.minestom.server.utils", "NamespaceID");
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    protected static final ClassName REGISTRY_CLASS =
+            ClassName.get("net.minestom.server.registry", "Registries");
+    protected static final ClassName KEYORI_ADVENTURE_KEY =
+            ClassName.get("net.kyori.adventure.key", "Keyed");
+    protected static final Modifier[] CONSTANT_MODIFIERS = {Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL};
+    protected static final Modifier[] PRIVATE_FINAL_MODIFIERS = {Modifier.PRIVATE, Modifier.FINAL};
+    protected static final String DEFAULT_INDENT = "    ";
+    protected String packageName;
+
+    /**
+     * Creates a new code generator.
+     * @param packageName the package name of the generated class
+     */
+    protected MinestomCodeGenerator(@NotNull String packageName) {
+        if (packageName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Package name cannot be empty");
+        }
+        this.packageName = packageName;
+    }
 
     public abstract void generate();
 
-    protected void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
-        for (JavaFile javaFile : fileList) {
-            try {
-                javaFile.writeTo(outputFolder);
-            } catch (IOException e) {
-                LOGGER.error("An error occured while writing source code to the file system.", e);
-            }
-        }
+    protected static @NotNull String extractNamespace(@NotNull String namespace) {
+        return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
     }
 
-    protected static String toConstant(String namespace) {
-        return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
+    protected static @NotNull String extractNamespaces(@NotNull String namespace, @NotNull Map<String, String> arguments) {
+        if (arguments.isEmpty()) return extractNamespace(namespace);
+
+        for (Map.Entry<String, String> entry : arguments.entrySet()) {
+            namespace = namespace.replace(entry.getKey(), entry.getValue());
+        }
+        return namespace.toUpperCase(Locale.ROOT);
     }
 }

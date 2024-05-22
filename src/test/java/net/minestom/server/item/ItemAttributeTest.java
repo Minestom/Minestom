@@ -1,13 +1,12 @@
 package net.minestom.server.item;
 
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.tag.TagWritable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,12 +15,13 @@ import java.util.UUID;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ItemAttributeTest {
+@EnvTest
+class ItemAttributeTest {
 
     @Test
-    public void attribute() {
+    void attribute(Env env) {
         var attributes = List.of(new ItemAttribute(
-                new UUID(0, 0), "generic.attack_damage", Attribute.ATTACK_DAMAGE,
+                new UUID(0, 0), "generic.attack_damage", Attributes.GENERIC_ATTACK_DAMAGE.attribute(),
                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND));
         var item = ItemStack.builder(Material.STICK)
                 .meta(builder -> builder.attributes(attributes))
@@ -30,9 +30,10 @@ public class ItemAttributeTest {
     }
 
     @Test
-    public void attributeReader() {
+    void attributeReader(Env env) {
+        Attributes.registerAttributes();
         var attributes = List.of(new ItemAttribute(
-                new UUID(0, 0), "generic.attack_damage", Attribute.ATTACK_DAMAGE,
+                new UUID(0, 0), "generic.attack_damage", Attributes.GENERIC_ATTACK_DAMAGE.attribute(),
                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND));
 
         TagHandler handler = TagHandler.newHandler();
@@ -43,11 +44,11 @@ public class ItemAttributeTest {
     }
 
     @Test
-    public void attributeNbt() {
+    void attributeNbt(Env env) {
         var item = ItemStack.builder(Material.STICK)
                 .meta(builder -> builder.attributes(
                         List.of(new ItemAttribute(
-                                new UUID(0, 0), "generic.attack_damage", Attribute.ATTACK_DAMAGE,
+                                new UUID(0, 0), "generic.attack_damage", Attributes.GENERIC_ATTACK_DAMAGE.attribute(),
                                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND))))
                 .build();
         assertEqualsSNBT("""
@@ -57,7 +58,7 @@ public class ItemAttributeTest {
                 "UUID":[I;0,0,0,0],
                 "Slot":"mainhand",
                 "Operation":0,
-                "AttributeName":"generic.attack_damage",
+                "AttributeName":"minecraft:generic.attack_damage",
                 "Name":"generic.attack_damage"
                 }
                 ]}

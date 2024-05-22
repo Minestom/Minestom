@@ -27,9 +27,9 @@ import static net.minestom.server.utils.chunk.ChunkUtils.ceilSection;
 import static net.minestom.server.utils.chunk.ChunkUtils.floorSection;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GeneratorTest {
+class GeneratorTest {
     @Test
-    public void unitSize() {
+    void unitSize() {
         assertDoesNotThrow(() -> dummyUnit(Vec.ZERO, new Vec(16)));
         assertDoesNotThrow(() -> dummyUnit(new Vec(16), new Vec(32)));
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), Vec.ZERO));
@@ -40,7 +40,7 @@ public class GeneratorTest {
 
     @ParameterizedTest
     @MethodSource("sectionFloorParam")
-    public void sectionFloor(int expected, int input) {
+    void sectionFloor(int expected, int input) {
         assertEquals(expected, floorSection(input), "floorSection(" + input + ")");
     }
 
@@ -59,7 +59,7 @@ public class GeneratorTest {
 
     @ParameterizedTest
     @MethodSource("sectionCeilParam")
-    public void sectionCeil(int expected, int input) {
+    void sectionCeil(int expected, int input) {
         assertEquals(expected, ceilSection(input), "ceilSection(" + input + ")");
     }
 
@@ -77,7 +77,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkSize() {
+    void chunkSize() {
         final int minSection = 0;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -92,7 +92,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkSizeNeg() {
+    void chunkSizeNeg() {
         final int minSection = -1;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -107,7 +107,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void sectionSize() {
+    void sectionSize() {
         final int sectionX = 3;
         final int sectionY = -5;
         final int sectionZ = -2;
@@ -118,7 +118,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkSubdivide() {
+    void chunkSubdivide() {
         final int minSection = -1;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -138,7 +138,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkAbsolute() {
+    void chunkAbsolute() {
         final int minSection = 0;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -159,7 +159,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkAbsoluteAll() {
+    void chunkAbsoluteAll() {
         final int minSection = 0;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -187,7 +187,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkRelative() {
+    void chunkRelative() {
         final int minSection = -1;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -214,7 +214,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkRelativeAll() {
+    void chunkRelativeAll() {
         final int minSection = -1;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -243,7 +243,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkFillHeightExact() {
+    void chunkFillHeightExact() {
         final int minSection = -1;
         final int maxSection = 5;
         final int sectionCount = maxSection - minSection;
@@ -267,7 +267,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void chunkFillHeightOneOff() {
+    void chunkFillHeightOneOff() {
         final int minSection = -1;
         final int maxSection = 5;
         final int sectionCount = maxSection - minSection;

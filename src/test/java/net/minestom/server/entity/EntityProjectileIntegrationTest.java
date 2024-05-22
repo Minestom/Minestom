@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class EntityProjectileIntegrationTest {
+class EntityProjectileIntegrationTest {
     @Test
-    public void gravityVelocity(Env env) {
+    void gravityVelocity(Env env) {
         var instance = env.createFlatInstance();
         var shooter = new EntityCreature(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -42,7 +42,7 @@ public class EntityProjectileIntegrationTest {
     }
 
     @Test
-    public void noGravityVelocity(Env env) {
+    void noGravityVelocity(Env env) {
         var instance = env.createFlatInstance();
         var shooter = new EntityCreature(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 42, 0)).join();

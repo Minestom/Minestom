@@ -16,10 +16,10 @@ import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class EntityRemovalIntegrationTest {
+class EntityRemovalIntegrationTest {
 
     @Test
-    public void destructionPacket(Env env) {
+    void destructionPacket(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -33,7 +33,7 @@ public class EntityRemovalIntegrationTest {
     }
 
     @Test
-    public void instanceRemoval(Env env) {
+    void instanceRemoval(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -45,7 +45,7 @@ public class EntityRemovalIntegrationTest {
     }
 
     @Test
-    public void tickTimedRemoval(Env env) throws InterruptedException {
+    void tickTimedRemoval(Env env) throws InterruptedException {
         var instance = env.createFlatInstance();
         var entity = new TestEntity(2, TimeUnit.SERVER_TICK);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -65,7 +65,7 @@ public class EntityRemovalIntegrationTest {
     }
 
     @Test
-    public void entityGC(Env env) {
+    void entityGC(Env env) {
         // Ensure that entities do not stay in memory after they are removed
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
@@ -80,7 +80,7 @@ public class EntityRemovalIntegrationTest {
     }
 
     @Test
-    public void entityNodeGC(Env env) {
+    void entityNodeGC(Env env) {
         // Ensure that the entities GCed when a local listener is present
         var node = env.process().eventHandler();
         var entity = new Entity(EntityType.ZOMBIE);
@@ -97,7 +97,7 @@ public class EntityRemovalIntegrationTest {
     }
 
     static final class TestEntity extends Entity {
-        public TestEntity(long delay, TemporalUnit unit) {
+        TestEntity(long delay, TemporalUnit unit) {
             super(EntityType.ZOMBIE);
             scheduleRemove(delay, unit);
         }

@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class GeneratorForkIntegrationTest {
+class GeneratorForkIntegrationTest {
 
     @Test
-    public void local(Env env) {
+    void local(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         var block = Block.STONE;
@@ -30,7 +30,7 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
-    public void size(Env env) {
+    void size(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         // Set the Generator
@@ -47,7 +47,7 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
-    public void signal(Env env) {
+    void signal(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         var block = Block.STONE;
@@ -66,7 +66,7 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
-    public void air(Env env) {
+    void air(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> {
@@ -80,7 +80,7 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
-    public void fillHeight(Env env) {
+    void fillHeight(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> {
@@ -96,7 +96,7 @@ public class GeneratorForkIntegrationTest {
     }
 
     @Test
-    public void biome(Env env) {
+    void biome(Env env) {
         var manager = env.process().instance();
 
         var plains = MinecraftServer.getBiomeManager().getByName(NamespaceID.from("minecraft:plains"));
