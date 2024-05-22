@@ -21,10 +21,7 @@ jobs:
         run: |
           git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
-          git submodule init
-          git submodule update --init
-          ./gradlew applyPatches
-          ./gradlew :patched-minestom:javadoc
+          ./gradlew javadoc
 
       - name: Deploy javadoc to its assigned branch
         uses: s0/git-publish-subdir-action@develop
