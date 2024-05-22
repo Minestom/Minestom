@@ -275,7 +275,7 @@ public final class ConnectionManager {
         CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
             player.sendPacket(PluginMessagePacket.getBrandPacket());
 
-            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig, List.of());
+            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig, Set.of());
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
 
