@@ -10,15 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 21
-        uses: actions/setup-java@v1
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          java-version: 21
+          java-version: 17
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build javadoc
-        run: ./gradlew javadoc
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "Github Actions"
+          git submodule init
+          git submodule update --init
+          ./gradlew applyPatches
+          ./gradlew :patched-minestom:javadoc
 
       - name: Deploy javadoc to its assigned branch
         uses: s0/git-publish-subdir-action@develop
@@ -27,4 +33,3 @@ jobs:
           BRANCH: javadoc
           FOLDER: build/docs/javadoc
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CLEAR_GLOBS_FILE: ".github/javadoc-publish-clear"

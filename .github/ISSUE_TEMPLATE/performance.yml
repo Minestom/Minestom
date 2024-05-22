@@ -1,0 +1,40 @@
+name: Performance Problem
+description: Report a performance problem which is related to Microtus
+labels: [ "type: needs triage", "type: performance" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before creating an issue regarding to the performance, please reach out for support on our [Discord](https://discord.onelitefeather.net/)
+        or in the [Discussions](https://github.com/OneLiteFeatherNET/Microtus/discussions)!
+        
+        **Please be aware: Performance issues can sometimes depend on your specific implementation and not on Microtus itself. If the situation is clear and it's not a problem with the project, we will close the issue without any comment.**
+  - type: input
+    attributes:
+      label: Used Microtus version
+      description: Which version of Microtus are you using?
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the performance problem
+      description: If applicable, please describe your issue.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Other
+      description: |
+        Please include other helpful links below.
+        The more information we receive, the quicker and more effective we can be at finding the solution to the issue.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting your issue, please make sure you have done the following:
+        
+        1. You are running the latest version of Microtus from [Release page](https://github.com/OneLiteFeatherNET/Microtus/releases)
+        2. You searched for and ensured there isn't already an open issue regarding this
+        3. Your version of Minecraft is supported by Microtus

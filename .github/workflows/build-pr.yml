@@ -1,0 +1,27 @@
+name: Build PR
+on: [pull_request]
+jobs:
+  build_pr:
+    if: github.repository_owner == 'OneLiteFeatherNET'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Build on ${{ matrix.os }}
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "Github Actions"
+          git submodule init
+          git submodule update --init
+          ./gradlew applyPatches
+          ./gradlew :patched-minestom:classes
