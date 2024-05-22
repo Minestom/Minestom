@@ -46,7 +46,6 @@ import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
-import net.minestom.server.world.biomes.Biomes;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -264,7 +263,7 @@ final class ServerProcessImpl implements ServerProcess {
         LOGGER.info("Register Attributes({})", attribute.values().size());
 
         if (ServerFlag.BIOMES_ENABLED) {
-            Biomes.registerBiomes();
+            biome.loadVanillaBiomes();
         }
         LOGGER.info("Register Biomes({})", biome.unmodifiableCollection().size());
 

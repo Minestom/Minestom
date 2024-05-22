@@ -12,7 +12,7 @@ import java.util.Map;
 public record BannerPatternImpl(NamespaceID namespace, int id, String identifier) implements BannerPattern {
 
     private static Map<String, BannerPatternImpl> IDENTIFIERS = new HashMap<>();
-    private static final Registry.Container<BannerPattern> CONTAINER = Registry.createContainer(Registry.Resource.BANNER_PATTERNS,
+    private static final Registry.Container<BannerPattern> CONTAINER = Registry.createStaticContainer(Registry.Resource.BANNER_PATTERNS,
             (namespace, properties) -> {
                 int id = properties.getInt("id");
                 String identifier = properties.getString("identifier");

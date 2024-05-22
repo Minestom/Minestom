@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -25,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class BiomeManager {
     private final List<Biome> biomes = new ArrayList<>();
-    private final static Logger LOGGER = LoggerFactory.getLogger(BiomeManager.class);
     private final Map<NamespaceID, Biome> biomesByName = new ConcurrentHashMap<>();
     private final Map<NamespaceID, Integer> idMappings = new ConcurrentHashMap<>();
 
@@ -54,7 +54,6 @@ public final class BiomeManager {
         Check.stateCondition(getByName(biome.namespace()) != null, "The biome " + biome.namespace() + " has already been registered");
 
         var id = ID_COUNTER.getAndIncrement();
-        this.biomes.put(id, biome);
         this.biomesByName.put(biome.namespace(), biome);
         this.idMappings.put(biome.namespace(), id);
         nbtCache = null;
@@ -110,7 +109,7 @@ public final class BiomeManager {
         if (nbtCache != null) return nbtCache;
         nbtCache = NBT.Compound(Map.of(
                 "type", NBT.String("minecraft:worldgen/biome"),
-                "value", NBT.List(NBTType.TAG_Compound, biomes.values().stream().map(biome -> {
+                "value", NBT.List(NBTType.TAG_Compound, biomes.stream().map(biome -> {
                     return NBT.Compound(Map.of(
                             "id", NBT.Int(getId(biome)),
                             "name", NBT.String(biome.namespace().toString()),

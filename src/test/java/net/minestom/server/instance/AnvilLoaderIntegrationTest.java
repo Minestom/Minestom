@@ -5,7 +5,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.Biomes;
+import net.minestom.server.world.biomes.VanillaBiome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.AfterAll;
@@ -51,7 +51,7 @@ class AnvilLoaderIntegrationTest {
 
     @Test
     void loadHouse(Env env) {
-        MinecraftServer.getBiomeManager().addBiome(Biomes.PLAINS.biome());
+        MinecraftServer.getBiomeManager().addBiome(VanillaBiome.PLAINS);
         // load a world that contains only a basic house and make sure it is loaded properly
 
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
@@ -147,7 +147,7 @@ class AnvilLoaderIntegrationTest {
 
     @Test
     void loadAndSaveChunk(Env env) throws InterruptedException {
-        MinecraftServer.getBiomeManager().addBiome(Biomes.PLAINS.biome());
+        MinecraftServer.getBiomeManager().addBiome(VanillaBiome.PLAINS);
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
