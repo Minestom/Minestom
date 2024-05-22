@@ -26,10 +26,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class EntityProjectileCollisionIntegrationTest {
+class EntityProjectileCollisionIntegrationTest {
 
     @Test
-    public void blockShootAndBlockRemoval(Env env) {
+    void blockShootAndBlockRemoval(Env env) {
         final Instance instance = env.createFlatInstance();
         instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
@@ -73,7 +73,7 @@ public class EntityProjectileCollisionIntegrationTest {
     }
 
     @Test
-    public void entityShoot(Env env) {
+    void entityShoot(Env env) {
         final Instance instance = env.createFlatInstance();
         instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 
@@ -121,7 +121,7 @@ public class EntityProjectileCollisionIntegrationTest {
     }
 
     @Test
-    public void entitySelfShoot(Env env) {
+    void entitySelfShoot(Env env) {
         final Instance instance = env.createFlatInstance();
         instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
 

@@ -46,6 +46,8 @@ public class AdventurePacketConvertor {
         NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.WHITE, 15);
     }
 
+    private AdventurePacketConvertor() { } //Microtus - update java keyword usage
+
     /**
      * Gets the int value of a boss bar overlay.
      *
@@ -139,19 +141,6 @@ public class AdventurePacketConvertor {
 
         final long seed = sound.seed().orElse(ThreadLocalRandom.current().nextLong());
         return new EntitySoundEffectPacket(minestomSound, sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), seed);
-    }
-
-    /**
-     * Creates an entity sound packet from an Adventure sound.
-     *
-     * @param sound  the sound
-     * @param entity the entity the sound is coming from
-     * @return the packet
-     * @deprecated Use {@link #createSoundPacket(Sound, Sound.Emitter)}
-     */
-    @Deprecated(forRemoval = true)
-    public static ServerPacket createEntitySoundPacket(@NotNull Sound sound, @NotNull Entity entity) {
-        return createSoundPacket(sound, entity);
     }
 
     /**

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
  * <p>
- * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
+ * You can create one with {@link Inventory#Inventory(InventoryType, Component)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
 public non-sealed class Inventory extends AbstractInventory implements Viewable {
@@ -48,10 +48,6 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         this.title = title;
 
         this.offset = getSize();
-    }
-
-    public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
-        this(inventoryType, Component.text(title));
     }
 
     private static byte generateId() {
@@ -241,7 +237,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     @Override
-    public boolean shiftClick(@NotNull Player player, int slot) {
+    public boolean shiftClick(@NotNull Player player, int slot, int button) { // Microtus
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
@@ -251,7 +247,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 isInWindow ? this : playerInventory,
                 isInWindow ? playerInventory : this,
                 0, isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1,
-                player, clickSlot, clicked, cursor);
+                player, clickSlot, clicked, cursor, button); // Microtus
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;

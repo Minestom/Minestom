@@ -28,17 +28,6 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
         this.eatingTime = eatingTime;
     }
 
-    /**
-     * The food item which will be eaten.
-     *
-     * @return the food item
-     * @deprecated use getItemStack() for the eaten item
-     */
-    @Deprecated
-    public @NotNull ItemStack getFoodItem() {
-        return foodItem;
-    }
-
     public @NotNull Player.Hand getHand() {
         return hand;
     }

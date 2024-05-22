@@ -9,10 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class ServerProcessTest {
+class ServerProcessTest {
 
     @Test
-    public void init() {
+    void init() {
         // These like to fail on github actions
         assumeTrue(System.getenv("GITHUB_ACTIONS") == null);
 
@@ -24,7 +24,7 @@ public class ServerProcessTest {
     }
 
     @Test
-    public void tick() {
+    void tick() {
         // These like to fail on github actions
         assumeTrue(System.getenv("GITHUB_ACTIONS") == null);
 

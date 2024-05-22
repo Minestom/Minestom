@@ -26,8 +26,8 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
         if (currentThread instanceof TickThread) {
             return ((TickThread) currentThread).entries().stream()
                     .flatMap(partitionEntry -> partitionEntry.elements().stream())
-                    .filter(tickable -> tickable instanceof Entity)
-                    .map(tickable -> (Entity) tickable);
+                    .filter(Entity.class::isInstance)  //Microtus - update java keyword usage
+                    .map(Entity.class::cast);  //Microtus - update java keyword usage
         }
         return Stream.empty();
     }

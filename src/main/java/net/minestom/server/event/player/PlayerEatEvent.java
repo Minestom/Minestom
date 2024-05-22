@@ -21,17 +21,6 @@ public class PlayerEatEvent implements ItemEvent, PlayerInstanceEvent {
         this.hand = hand;
     }
 
-    /**
-     * Gets the food item that has been eaten.
-     *
-     * @return the food item
-     * @deprecated use getItemStack() for the eaten item
-     */
-    @Deprecated
-    public @NotNull ItemStack getFoodItem() {
-        return foodItem;
-    }
-
     public @NotNull Player.Hand getHand() {
         return hand;
     }

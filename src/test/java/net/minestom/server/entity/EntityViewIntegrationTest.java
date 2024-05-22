@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class EntityViewIntegrationTest {
+class EntityViewIntegrationTest {
 
     @Test
-    public void emptyEntity(Env env) {
+    void emptyEntity(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 42)).join();
@@ -20,14 +20,14 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void emptyPlayer(Env env) {
+    void emptyPlayer(Env env) {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         assertEquals(0, player.getViewers().size());
     }
 
     @Test
-    public void multiPlayers(Env env) {
+    void multiPlayers(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 42));
         var p2 = env.createPlayer(instance, new Pos(0, 42, 42));
@@ -48,7 +48,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void manualViewers(Env env) {
+    void manualViewers(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         var p2 = env.createPlayer(instance, new Pos(0, 42, 5_000));
@@ -65,7 +65,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void movements(Env env) {
+    void movements(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         var p2 = env.createPlayer(instance, new Pos(0, 42, 96));
@@ -79,7 +79,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void autoViewable(Env env) {
+    void autoViewable(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         assertTrue(p1.isAutoViewable());
@@ -96,7 +96,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void predictableViewers(Env env) {
+    void predictableViewers(Env env) {
         var instance = env.createFlatInstance();
         var p = env.createPlayer(instance, new Pos(0, 42, 0));
         assertTrue(p.hasPredictableViewers());
@@ -123,7 +123,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void livingVehicle(Env env) {
+    void livingVehicle(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -153,7 +153,7 @@ public class EntityViewIntegrationTest {
     }
 
     @Test
-    public void vehicleInheritance(Env env) {
+    void vehicleInheritance(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
         var p2 = env.createPlayer(instance, new Pos(0, 40, 0));

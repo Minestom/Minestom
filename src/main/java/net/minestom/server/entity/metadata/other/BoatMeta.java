@@ -82,7 +82,7 @@ public class BoatMeta extends EntityMeta {
         MANGROVE,
         BAMBOO;
 
-        private final static Type[] VALUES = values();
+        private static final Type[] VALUES = values();
     }
 
 }

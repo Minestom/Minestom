@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Test conversion from packet slots to internal ones (used in events and inventory methods)
  */
-public class PlayerSlotConversionTest {
+class PlayerSlotConversionTest {
 
     @Test
-    public void hotbar() {
+    void hotbar() {
         // Convert 36-44 into 0-8
         for (int i = 0; i < 9; i++) {
             assertEquals(i, convertPlayerInventorySlot(i + 36, OFFSET));
@@ -19,7 +19,7 @@ public class PlayerSlotConversionTest {
     }
 
     @Test
-    public void mainInventory() {
+    void mainInventory() {
         // No conversion, slots should stay 9-35
         for (int i = 9; i < 9 * 4; i++) {
             assertEquals(i, convertPlayerInventorySlot(i, OFFSET));
@@ -27,7 +27,7 @@ public class PlayerSlotConversionTest {
     }
 
     @Test
-    public void armor() {
+    void armor() {
         assertEquals(HELMET_SLOT, 41);
         assertEquals(CHESTPLATE_SLOT, 42);
         assertEquals(LEGGINGS_SLOT, 43);
@@ -43,7 +43,7 @@ public class PlayerSlotConversionTest {
     }
 
     @Test
-    public void craft() {
+    void craft() {
         assertEquals(CRAFT_RESULT, 36);
         assertEquals(CRAFT_SLOT_1, 37);
         assertEquals(CRAFT_SLOT_2, 38);

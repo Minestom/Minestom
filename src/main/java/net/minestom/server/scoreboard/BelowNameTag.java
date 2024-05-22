@@ -30,18 +30,6 @@ public class BelowNameTag implements Scoreboard {
      *
      * @param name  The objective name of the scoreboard
      * @param value The value of the scoreboard
-     * @deprecated Use {@link #BelowNameTag(String, Component)}
-     */
-    @Deprecated
-    public BelowNameTag(String name, String value) {
-        this(name, Component.text(value));
-    }
-
-    /**
-     * Creates a new below name scoreboard.
-     *
-     * @param name  The objective name of the scoreboard
-     * @param value The value of the scoreboard
      */
     public BelowNameTag(String name, Component value) {
         this.objectiveName = BELOW_NAME_TAG_PREFIX + name;

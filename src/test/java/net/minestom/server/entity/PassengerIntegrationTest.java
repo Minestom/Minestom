@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class PassengerIntegrationTest {
+class PassengerIntegrationTest {
 
     @Test
-    public void passenger(Env env) {
+    void passenger(Env env) {
         var instance = env.createFlatInstance();
         var vehicle = new Entity(EntityType.ZOMBIE);
         var passenger = new Entity(EntityType.ZOMBIE);
@@ -30,7 +30,7 @@ public class PassengerIntegrationTest {
     }
 
     @Test
-    public void passengerTeleport(Env env) {
+    void passengerTeleport(Env env) {
         var instance = env.createFlatInstance();
         var vehicle = new Entity(EntityType.ZOMBIE);
         var passenger = new Entity(EntityType.ZOMBIE);

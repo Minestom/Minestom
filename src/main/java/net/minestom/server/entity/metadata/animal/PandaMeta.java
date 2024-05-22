@@ -9,10 +9,12 @@ public class PandaMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 6;
 
-    private final static byte SNEEZING_BIT = 0x02;
-    private final static byte ROLLING_BIT = 0x04;
-    private final static byte SITTING_BIT = 0x08;
-    private final static byte ON_BACK_BIT = 0x10;
+    //Microtus start - update java keyword usage
+    private static final byte SNEEZING_BIT = 0x02;
+    private static final byte ROLLING_BIT = 0x04;
+    private static final byte SITTING_BIT = 0x08;
+    private static final byte ON_BACK_BIT = 0x10;
+    //Microtus end - update java keyword usage
 
     public PandaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);

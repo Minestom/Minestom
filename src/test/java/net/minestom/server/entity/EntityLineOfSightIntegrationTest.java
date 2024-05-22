@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class EntityLineOfSightIntegrationTest {
+class EntityLineOfSightIntegrationTest {
     @Test
-    public void entityPhysicsCheckLineOfSight(Env env) {
+    void entityPhysicsCheckLineOfSight(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);
@@ -35,7 +35,7 @@ public class EntityLineOfSightIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckLineOfSightBehind(Env env) {
+    void entityPhysicsCheckLineOfSightBehind(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);
@@ -59,7 +59,7 @@ public class EntityLineOfSightIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckLineOfSightNearMiss(Env env) {
+    void entityPhysicsCheckLineOfSightNearMiss(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);
@@ -83,7 +83,7 @@ public class EntityLineOfSightIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckLineOfSightNearHit(Env env) {
+    void entityPhysicsCheckLineOfSightNearHit(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);
@@ -109,7 +109,7 @@ public class EntityLineOfSightIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckLineOfSightCorrectOrder(Env env) {
+    void entityPhysicsCheckLineOfSightCorrectOrder(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);
@@ -130,7 +130,7 @@ public class EntityLineOfSightIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckLineOfSightBigMiss(Env env) {
+    void entityPhysicsCheckLineOfSightBigMiss(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);
@@ -145,7 +145,7 @@ public class EntityLineOfSightIntegrationTest {
         assertTrue(entity.hasLineOfSight(entity2, false));
     }
     @Test
-    public void entityPhysicsCheckLineOfSightLargeBoundingBox(Env env) {
+    void entityPhysicsCheckLineOfSightLargeBoundingBox(Env env) {
         var instance = env.createFlatInstance();
 
         var entity = new Entity(EntityTypes.ZOMBIE);

@@ -9,14 +9,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BlockIteratorTest {
+class BlockIteratorTest {
     private void assertContains(List<Point> points, Point point) {
         assertTrue(points.contains(point), "Expected " + points + " to contain " + point);
     }
 
     @Test
-    public void test2dOffsetppp() {
-        Vec s = new Vec(0, 0.1, 0);
+    void test2dOffsetppp() {
+        Vec s = new Vec(0,  0.1, 0);
         Vec e = new Vec(2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -29,8 +29,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dOffsetppn() {
-        Vec s = new Vec(0, 0.1, 0);
+    void test2dOffsetppn() {
+        Vec s = new Vec(0,  0.1, 0);
         Vec e = new Vec(-2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -44,8 +44,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dOffsetnpp() {
-        Vec s = new Vec(0, -0.1, 0);
+    void test2dOffsetnpp() {
+        Vec s = new Vec(0,  -0.1, 0);
         Vec e = new Vec(2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -59,8 +59,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dOffsetnnp() {
-        Vec s = new Vec(0, -0.1, 0);
+    void test2dOffsetnnp() {
+        Vec s = new Vec(0,  -0.1, 0);
         Vec e = new Vec(-2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -75,15 +75,15 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void testZeroVelocity() {
-        Vec s = new Vec(0, 0, 0);
+    void testZeroVelocity() {
+        Vec s = new Vec(0,  0, 0);
         Vec e = new Vec(0, 0, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
         assertFalse(iterator.hasNext());
     }
 
     @Test
-    public void testLongDistance() {
+    void testLongDistance() {
         Vec s = new Vec(42.5, 0, 51.5);
         Vec e = new Vec(-12, 0, -36);
         BlockIterator iterator = new BlockIterator(s, e, 0, 37);
@@ -163,7 +163,7 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void testSkipping() {
+    void testSkipping() {
         Vec s = new Vec(0.5, 40, 0.5);
         Vec e = new Vec(27, 0, 21);
         BlockIterator iterator = new BlockIterator(s, e, 0, 34);
@@ -235,8 +235,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void testExactEnd() {
-        Vec s = new Vec(0.5, 0, 0.5);
+    void testExactEnd() {
+        Vec s = new Vec(0.5,  0, 0.5);
         Vec e = new Vec(0, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 1);
         assertEquals(new Vec(0, 0, 0), iterator.next());
@@ -245,8 +245,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void testSameEnd() {
-        Vec s = new Vec(0.5, 0, 0.5);
+    void testSameEnd() {
+        Vec s = new Vec(0.5,  0, 0.5);
         Vec e = new Vec(0, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 0.5);
         assertEquals(new Vec(0, 0, 0), iterator.next());
@@ -254,8 +254,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test3dExtraCollection() {
-        Vec s = new Vec(0.1, 0.1, 0.1);
+    void test3dExtraCollection() {
+        Vec s = new Vec(0.1,  0.1, 0.1);
         Vec e = new Vec(1, 1, 1);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -290,8 +290,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dpp() {
-        Vec s = new Vec(0, 0, 0);
+    void test2dpp() {
+        Vec s = new Vec(0,  0, 0);
         Vec e = new Vec(2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -316,8 +316,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dpn() {
-        Vec s = new Vec(0, 0, 0);
+    void test2dpn() {
+        Vec s = new Vec(0,  0, 0);
         Vec e = new Vec(-2, 1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -343,8 +343,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void test2dnn() {
-        Vec s = new Vec(0, 0, 0);
+    void test2dnn() {
+        Vec s = new Vec(0,  0, 0);
         Vec e = new Vec(-2, -1, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 4);
 
@@ -372,8 +372,8 @@ public class BlockIteratorTest {
     }
 
     @Test
-    public void falling() {
-        Vec s = new Vec(0, 42, 0);
+    void falling() {
+        Vec s = new Vec(0,  42, 0);
         Vec e = new Vec(0, -10, 0);
         BlockIterator iterator = new BlockIterator(s, e, 0, 14.142135623730951);
 

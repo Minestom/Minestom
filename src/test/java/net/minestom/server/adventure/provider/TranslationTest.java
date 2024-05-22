@@ -4,10 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.MinestomAdventure;
 import org.junit.jupiter.api.Test;
 
-public class TranslationTest {
+class TranslationTest {
 
     @Test
-    public void testUnregisteredTranslation() {
+    void testUnregisteredTranslation() {
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
         try {
             MinestomFlattenerProvider.INSTANCE.flatten(Component.translatable("key.unregistered"), text -> {

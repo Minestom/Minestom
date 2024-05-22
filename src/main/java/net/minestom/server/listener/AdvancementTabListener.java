@@ -7,6 +7,8 @@ import net.minestom.server.network.packet.client.play.ClientAdvancementTabPacket
 
 public class AdvancementTabListener {
 
+    private AdvancementTabListener() {}
+
     public static void listener(ClientAdvancementTabPacket packet, Player player) {
         final String tabIdentifier = packet.tabIdentifier();
         if (tabIdentifier != null) {

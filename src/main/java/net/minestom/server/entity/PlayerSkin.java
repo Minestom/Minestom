@@ -60,20 +60,4 @@ public record PlayerSkin(String textures, String signature) {
             return null;
         }
     }
-
-    /**
-     * @deprecated use {@link #textures()}
-     */
-    @Deprecated
-    public String getTextures() {
-        return textures;
-    }
-
-    /**
-     * @deprecated use {@link #signature()}
-     */
-    @Deprecated
-    public String getSignature() {
-        return signature;
-    }
 }

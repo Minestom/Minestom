@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagViewTest {
+class TagViewTest {
 
     private static final Tag<Entry> VIEW_TAG = Tag.View(new TagSerializer<>() {
         private static final Tag<String> VALUE_TAG = Tag.String("value");
@@ -29,7 +29,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void basic() {
+    void basic() {
         var handler = TagHandler.newHandler();
         assertNull(handler.getTag(VIEW_TAG));
         assertFalse(handler.hasTag(VIEW_TAG));
@@ -45,7 +45,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void snbt() {
+    void snbt() {
         var handler = TagHandler.newHandler();
         var entry = new Entry("hello");
         handler.setTag(VIEW_TAG, entry);
@@ -60,7 +60,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void snbtOverride() {
+    void snbtOverride() {
         var handler = TagHandler.newHandler();
         var entry = new Entry("hello");
         handler.setTag(VIEW_TAG, entry);
@@ -79,7 +79,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void empty() {
+    void empty() {
         var handler = TagHandler.newHandler();
         var tag = Tag.View(new TagSerializer<Entry>() {
             @Override
@@ -109,7 +109,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void path() {
+    void path() {
         var handler = TagHandler.newHandler();
         var tag = VIEW_TAG.path("path");
         assertNull(handler.getTag(tag));
@@ -126,7 +126,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void pathSnbt() {
+    void pathSnbt() {
         var handler = TagHandler.newHandler();
         var tag = VIEW_TAG.path("path");
         var entry = new Entry("hello");
@@ -144,7 +144,7 @@ public class TagViewTest {
     }
 
     @Test
-    public void compoundSerializer() {
+    void compoundSerializer() {
         var tag = Tag.View(TagSerializer.COMPOUND);
         var handler = TagHandler.newHandler();
         handler.setTag(tag, CompoundBinaryTag.builder().putString("value", "hello").build());

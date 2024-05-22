@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @EnvTest
-public class InstanceBlockIntegrationTest {
+class InstanceBlockIntegrationTest {
 
     @Test
-    public void basic(Env env) {
+    void basic(Env env) {
         var instance = env.createFlatInstance();
         assertThrows(NullPointerException.class, () -> instance.getBlock(0, 0, 0),
                 "No exception throw when getting a block in an unloaded chunk");
@@ -41,7 +41,7 @@ public class InstanceBlockIntegrationTest {
     }
 
     @Test
-    public void unloadCache(Env env) {
+    void unloadCache(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
 
@@ -57,7 +57,7 @@ public class InstanceBlockIntegrationTest {
     }
 
     @Test
-    public void blockNbt(Env env) {
+    void blockNbt(Env env) {
         var instance = env.createFlatInstance();
         assertThrows(NullPointerException.class, () -> instance.getBlock(0, 0, 0),
                 "No exception throw when getting a block in an unloaded chunk");

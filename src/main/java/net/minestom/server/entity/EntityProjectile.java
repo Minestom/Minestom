@@ -162,8 +162,8 @@ public class EntityProjectile extends Entity {
                 chunk = currentChunk;
                 entities = instance.getChunkEntities(chunk)
                         .stream()
-                        .filter(entity -> entity instanceof LivingEntity)
-                        .map(entity -> (LivingEntity) entity)
+                        .filter(LivingEntity.class::isInstance) //Microtus - update java keyword usage
+                        .map(LivingEntity.class::cast) //Microtus - update java keyword usage
                         .collect(Collectors.toSet());
             }
             final Point currentPos = pos;

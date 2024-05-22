@@ -12,13 +12,15 @@ public class FoxMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 4;
 
-    private final static byte SITTING_BIT = 0x01;
-    private final static byte CROUCHING_BIT = 0x04;
-    private final static byte INTERESTED_BIT = 0x08;
-    private final static byte POUNCING_BIT = 0x10;
-    private final static byte SLEEPING_BIT = 0x20;
-    private final static byte FACEPLANTED_BIT = 0x40;
-    private final static byte DEFENDING_BIT = (byte) 0x80;
+    //Microtus start - update java keyword usage
+    private static final byte SITTING_BIT = 0x01;
+    private static final byte CROUCHING_BIT = 0x04;
+    private static final byte INTERESTED_BIT = 0x08;
+    private static final byte POUNCING_BIT = 0x10;
+    private static final byte SLEEPING_BIT = 0x20;
+    private static final byte FACEPLANTED_BIT = 0x40;
+    private static final byte DEFENDING_BIT = (byte) 0x80;
+    //Microtus end - update java keyword usage
 
     public FoxMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
@@ -111,7 +113,7 @@ public class FoxMeta extends AnimalMeta {
         RED,
         SNOW;
 
-        private final static Type[] VALUES = values();
+        private static final Type[] VALUES = values();
     }
 
 }

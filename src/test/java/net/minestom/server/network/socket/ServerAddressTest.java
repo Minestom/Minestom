@@ -11,11 +11,12 @@ import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class ServerAddressTest {
+class ServerAddressTest {
 
     @Test
-    public void inetAddressTest() throws IOException {
+    void inetAddressTest() throws IOException {
         // These like to fail on github actions
         assumeTrue(System.getenv("GITHUB_ACTIONS") == null);
 
@@ -31,7 +32,7 @@ public class ServerAddressTest {
     }
 
     @Test
-    public void inetAddressDynamicTest() throws IOException {
+    void inetAddressDynamicTest() throws IOException {
         // These like to fail on github actions
         assumeTrue(System.getenv("GITHUB_ACTIONS") == null);
 
@@ -47,7 +48,7 @@ public class ServerAddressTest {
     }
 
     @Test
-    public void unixAddressTest() throws IOException {
+    void unixAddressTest() throws IOException {
         // These like to fail on github actions
         assumeTrue(System.getenv("GITHUB_ACTIONS") == null);
 
@@ -65,7 +66,7 @@ public class ServerAddressTest {
     }
 
     @Test
-    public void noAddressTest() throws IOException {
+    void noAddressTest() throws IOException {
         var server = new Server(new PacketProcessor(new PacketListenerManager()));
         assertDoesNotThrow(server::stop);
     }

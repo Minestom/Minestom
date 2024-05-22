@@ -13,14 +13,4 @@ public record Notification(@NotNull Component title, @NotNull FrameType frameTyp
     public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull Material icon) {
         this(title, frameType, ItemStack.of(icon));
     }
-
-    @Deprecated
-    public @NotNull Component getTitle() {
-        return title;
-    }
-
-    @Deprecated
-    public @NotNull FrameType getFrameType() {
-        return frameType;
-    }
 }

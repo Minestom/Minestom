@@ -8,6 +8,8 @@ import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 
 public class AnimationListener {
 
+    private AnimationListener() { }
+
     public static void animationListener(ClientAnimationPacket packet, Player player) {
         final Player.Hand hand = packet.hand();
         final ItemStack itemStack = player.getItemInHand(hand);

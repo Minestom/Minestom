@@ -15,9 +15,11 @@ public class LivingEntityMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 7;
 
-    private final static byte IS_HAND_ACTIVE_BIT = 0x01;
-    private final static byte ACTIVE_HAND_BIT = 0x02;
-    private final static byte IS_IN_SPIN_ATTACK_BIT = 0x04;
+    //Microtus start - update java keyword usage
+    private static final byte IS_HAND_ACTIVE_BIT = 0x01;
+    private static final byte ACTIVE_HAND_BIT = 0x02;
+    private static final byte IS_IN_SPIN_ATTACK_BIT = 0x04;
+    //Microtus end - update java keyword usage
 
     protected LivingEntityMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);

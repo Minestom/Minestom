@@ -16,7 +16,7 @@ public abstract class BlockPlacementRule {
 
     protected BlockPlacementRule(@NotNull Block block) {
         this.block = block;
-    }
+    }  //Microtus - update java keyword usage
 
     /**
      * Called when the block state id can be updated (for instance if a neighbour block changed).

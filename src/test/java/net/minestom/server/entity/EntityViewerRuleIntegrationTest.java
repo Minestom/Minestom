@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class EntityViewerRuleIntegrationTest {
+class EntityViewerRuleIntegrationTest {
 
     @Test
-    public void viewableRule(Env env) {
+    void viewableRule(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         p1.updateViewableRule(p -> p.getEntityId() == p1.getEntityId() + 1);
@@ -30,7 +30,7 @@ public class EntityViewerRuleIntegrationTest {
     }
 
     @Test
-    public void viewableRuleUpdate(Env env) {
+    void viewableRuleUpdate(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
 
@@ -48,7 +48,7 @@ public class EntityViewerRuleIntegrationTest {
     }
 
     @Test
-    public void viewableRuleDouble(Env env) {
+    void viewableRuleDouble(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
@@ -80,7 +80,7 @@ public class EntityViewerRuleIntegrationTest {
     }
 
     @Test
-    public void viewerRule(Env env) {
+    void viewerRule(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         p1.updateViewerRule(e -> e.getEntityId() == p1.getEntityId() + 1);
@@ -97,7 +97,7 @@ public class EntityViewerRuleIntegrationTest {
     }
 
     @Test
-    public void viewerRuleUpdate(Env env) {
+    void viewerRuleUpdate(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         AtomicBoolean enabled = new AtomicBoolean(false);
@@ -114,7 +114,7 @@ public class EntityViewerRuleIntegrationTest {
     }
 
     @Test
-    public void viewerRuleDouble(Env env) {
+    void viewerRuleDouble(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         var p2 = env.createPlayer(instance, new Pos(0, 42, 0));

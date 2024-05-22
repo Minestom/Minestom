@@ -8,12 +8,14 @@ public class AbstractHorseMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    private final static byte TAMED_BIT = 0x02;
-    private final static byte SADDLED_BIT = 0x04;
-    private final static byte HAS_BRED_BIT = 0x08;
-    private final static byte EATING_BIT = 0x10;
-    private final static byte REARING_BIT = 0x20;
-    private final static byte MOUTH_OPEN_BIT = 0x40;
+    //Microtus start - update java keyword usage
+    private static final byte TAMED_BIT = 0x02;
+    private static final byte SADDLED_BIT = 0x04;
+    private static final byte HAS_BRED_BIT = 0x08;
+    private static final byte EATING_BIT = 0x10;
+    private static final byte REARING_BIT = 0x20;
+    private static final byte MOUTH_OPEN_BIT = 0x40;
+    //Microtus end - update java keyword usage
 
     protected AbstractHorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);

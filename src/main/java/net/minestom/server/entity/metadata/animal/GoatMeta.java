@@ -21,6 +21,7 @@ public class GoatMeta extends AnimalMeta {
         metadata.setIndex(OFFSET, Metadata.Boolean(screaming));
     }
 
+    // Microtus start - meta update
     public boolean hasLeftHorn() {
         return metadata.getIndex(OFFSET + 1, true);
     }
@@ -36,4 +37,5 @@ public class GoatMeta extends AnimalMeta {
     public void setRightHorn(boolean rightHorn) {
         metadata.setIndex(OFFSET + 2, Metadata.Boolean(rightHorn));
     }
+    // Microtus end - meta update
 }

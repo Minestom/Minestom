@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CommandPacketTest {
+class CommandPacketTest {
     @Test
-    public void singleCommandWithOneSyntax() {
+    void singleCommandWithOneSyntax() {
         final Command foo = new Command("foo");
         foo.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Integer("bar"));
 
@@ -34,7 +34,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void executeLike() {
+    void executeLike() {
         enum Dimension {OVERWORLD, THE_NETHER, THE_END}
         final Command execute = new Command("execute");
         execute.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Loop("params",
@@ -62,7 +62,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void singleCommandTwoEnum() {
+    void singleCommandTwoEnum() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Enum("baz", B.class)))
                 .build();
@@ -76,7 +76,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void singleCommandRestrictedWord() {
+    void singleCommandRestrictedWord() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Word("bar").from("A", "B", "C"))
                 .build();
@@ -89,7 +89,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void singleCommandWord() {
+    void singleCommandWord() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Word("bar"))
                 .build();
@@ -102,7 +102,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void singleCommandCommandAfterEnum() {
+    void singleCommandCommandAfterEnum() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))
                 .build();
@@ -117,7 +117,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void twoCommandIntEnumInt() {
+    void twoCommandIntEnumInt() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", A.class), c -> c.append(ArgumentType.Integer("int2"))))
                 .build();
@@ -139,7 +139,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void singleCommandTwoGroupOfIntInt() {
+    void singleCommandTwoGroupOfIntInt() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Group("1", ArgumentType.Integer("int1"), ArgumentType.Integer("int2")),
                         b -> b.append(ArgumentType.Group("2", ArgumentType.Integer("int3"), ArgumentType.Integer("int4"))))
@@ -155,7 +155,7 @@ public class CommandPacketTest {
                 """, graph);
     }
     @Test
-    public void twoEnumAndOneLiteralChild() {
+    void twoEnumAndOneLiteralChild() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Enum("a", A.class))
                 .append(ArgumentType.Literal("l"))
@@ -170,7 +170,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void commandAliasWithoutArg() {
+    void commandAliasWithoutArg() {
         var graph = Graph.builder(ArgumentType.Word("foo").from("foo", "bar"))
                 .build();
         assertPacketGraph("""
@@ -180,7 +180,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void commandAliasWithArg() {
+    void commandAliasWithArg() {
         var graph = Graph.builder(ArgumentType.Word("foo").from("foo", "bar"))
                 .append(ArgumentType.Literal("l"))
                 .build();
@@ -192,7 +192,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void cmdArgShortcut() {
+    void cmdArgShortcut() {
         var foo = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.String("msg"))
                 .build();
@@ -210,7 +210,7 @@ public class CommandPacketTest {
     }
 
     @Test
-    public void cmdArgShortcutWithPartialArg() {
+    void cmdArgShortcutWithPartialArg() {
         var foo = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.String("msg"))
                 .build();

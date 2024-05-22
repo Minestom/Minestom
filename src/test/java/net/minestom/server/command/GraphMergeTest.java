@@ -8,10 +8,10 @@ import java.util.List;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GraphMergeTest {
+class GraphMergeTest {
 
     @Test
-    public void commands() {
+    void commands() {
         var foo = new Command("foo");
         var bar = new Command("bar");
         var result = Graph.builder(Literal(""))
@@ -22,7 +22,7 @@ public class GraphMergeTest {
     }
 
     @Test
-    public void empty() {
+    void empty() {
         var graph1 = Graph.builder(Literal("foo")).build();
         var graph2 = Graph.builder(Literal("bar")).build();
         var result = Graph.builder(Literal(""))
@@ -33,7 +33,7 @@ public class GraphMergeTest {
     }
 
     @Test
-    public void literals() {
+    void literals() {
         var graph1 = Graph.builder(Literal("foo")).append(Literal("1")).build();
         var graph2 = Graph.builder(Literal("bar")).append(Literal("2")).build();
         var result = Graph.builder(Literal(""))

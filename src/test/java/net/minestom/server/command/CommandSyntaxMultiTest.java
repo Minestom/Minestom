@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.lang.String;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
@@ -16,10 +15,10 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class CommandSyntaxMultiTest {
+class CommandSyntaxMultiTest {
 
     @Test
-    public void integerFloat() {
+    void integerFloat() {
         List<List<Argument<?>>> args = List.of(
                 List.of(Literal("integer"), Integer("number")),
                 List.of(Literal("float"), Float("number"))
@@ -29,7 +28,7 @@ public class CommandSyntaxMultiTest {
     }
 
     @Test
-    public void argPriority() {
+    void argPriority() {
         List<List<Argument<?>>> args = List.of(
                 List.of(Word("word")),
                 List.of(Literal("literal"))
@@ -38,7 +37,7 @@ public class CommandSyntaxMultiTest {
     }
 
     @Test
-    public void similarArgs() {
+    void similarArgs() {
         List<List<Argument<?>>> args = List.of(
                 List.of(Word("a")),
                 List.of(Word("b"), Word("a"))

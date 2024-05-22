@@ -38,9 +38,10 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      *
      * @param player the player who clicked
      * @param slot   the slot number
+     * @param button the primary mouse or secondary mouse button
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean shiftClick(@NotNull Player player, int slot); // shift + left/right click have the same behavior
+    boolean shiftClick(@NotNull Player player, int slot, int button); // shift + left/right click have the same behavior // Microtus
 
     /**
      * Called when a {@link Player} held click in the inventory

@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ItemAirTest {
+class ItemAirTest {
     @Test
-    public void testAir() {
+    void testAir() {
         var item = ItemStack.of(Material.DIAMOND_SWORD);
         assertFalse(item.isAir());
         assertTrue(ItemStack.AIR.isAir());

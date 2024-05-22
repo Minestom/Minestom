@@ -2,6 +2,11 @@ plugins {
     application
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
 dependencies {
     // Provides the input JSON to generate from
     implementation(libs.minestomData)

@@ -15,10 +15,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class BlockClientNbtTest {
+class BlockClientNbtTest {
 
     @Test
-    public void basic() {
+    void basic() {
         assertNull(BlockUtils.extractClientNbt(Block.STONE));
         assertNull(BlockUtils.extractClientNbt(Block.GRASS_BLOCK));
         assertEquals(CompoundBinaryTag.empty(), BlockUtils.extractClientNbt(Block.CHEST));
@@ -28,7 +28,7 @@ public class BlockClientNbtTest {
     }
 
     @Test
-    public void handler() {
+    void handler() {
         var handler = new BlockHandler() {
             @Override
             public @NotNull Collection<Tag<?>> getBlockEntityTags() {

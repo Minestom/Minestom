@@ -28,7 +28,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     private final int numberCount;
 
-    public ArgumentRelativeVec(@NotNull String id, int numberCount) {
+    ArgumentRelativeVec(@NotNull String id, int numberCount) { //Microtus - update java keyword usage
         super(id, true);
         this.numberCount = numberCount;
     }

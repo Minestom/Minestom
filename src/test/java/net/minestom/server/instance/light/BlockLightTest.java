@@ -13,10 +13,10 @@ import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class BlockLightTest {
+class BlockLightTest {
 
     @Test
-    public void empty() {
+    void empty() {
         var palette = Palette.blocks();
         var result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
         for (byte light : result) {
@@ -25,7 +25,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void glowstone() {
+    void glowstone() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         assertLight(palette, Map.of(
@@ -35,7 +35,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void doubleGlowstone() {
+    void doubleGlowstone() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
@@ -48,7 +48,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void glowstoneBorder() {
+    void glowstoneBorder() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         assertLight(palette, Map.of(
@@ -65,7 +65,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void glowstoneBlock() {
+    void glowstoneBlock() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         palette.set(0, 1, 1, Block.STONE.stateId());
@@ -76,7 +76,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void isolated() {
+    void isolated() {
         var palette = Palette.blocks();
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
 
@@ -102,7 +102,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void isolatedStair() {
+    void isolatedStair() {
         var palette = Palette.blocks();
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
         palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(
@@ -123,7 +123,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void isolatedStairOpposite() {
+    void isolatedStairOpposite() {
         var palette = Palette.blocks();
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
         palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(
@@ -149,7 +149,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void isolatedStairWest() {
+    void isolatedStairWest() {
         var palette = Palette.blocks();
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
         palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(
@@ -178,7 +178,7 @@ public class BlockLightTest {
     }
 
     @Test
-    public void isolatedStairSouth() {
+    void isolatedStairSouth() {
         var palette = Palette.blocks();
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
         palette.set(3, 1, 4, Block.OAK_STAIRS.withProperties(Map.of(

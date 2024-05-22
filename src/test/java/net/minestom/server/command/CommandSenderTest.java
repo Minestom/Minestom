@@ -17,10 +17,10 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CommandSenderTest {
+class CommandSenderTest {
 
     @Test
-    public void testSenderPermissions() {
+    void testSenderPermissions() {
 
         CommandSender sender = new SenderTest();
 
@@ -37,7 +37,7 @@ public class CommandSenderTest {
     }
 
     @Test
-    public void testMessageSending() {
+    void testMessageSending() {
         SenderTest sender = new SenderTest();
 
         assertNull(sender.getMostRecentMessage());

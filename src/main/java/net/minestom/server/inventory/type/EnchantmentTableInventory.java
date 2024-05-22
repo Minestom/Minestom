@@ -22,10 +22,6 @@ public class EnchantmentTableInventory extends Inventory {
         super(InventoryType.ENCHANTMENT, title);
     }
 
-    public EnchantmentTableInventory(@NotNull String title) {
-        super(InventoryType.ENCHANTMENT, title);
-    }
-
     /**
      * Gets the level requirement in a slot.
      *

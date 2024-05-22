@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 /**
  * Test string version of arguments.
  */
-public class ArgumentParserTest {
+class ArgumentParserTest {
 
     @Test
-    public void testArgumentParser() {
+    void testArgumentParser() {
         // Test each argument
         assertParserEquals("Literal<example>", ArgumentType.Literal("example"));
         assertParserEquals("Boolean<example>", ArgumentType.Boolean("example"));

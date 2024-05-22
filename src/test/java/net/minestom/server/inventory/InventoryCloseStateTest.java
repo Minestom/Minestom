@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class InventoryCloseStateTest {
+class InventoryCloseStateTest {
 
 
     @Test
-    public void doNotReceiveClosePacketFromServerWhenSendingClientCloseWindowPacket(Env env) {
+    void doNotReceiveClosePacketFromServerWhenSendingClientCloseWindowPacket(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();

@@ -13,6 +13,7 @@ import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
@@ -22,6 +23,7 @@ import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.instance.InstanceWorldPositionChangeEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -31,6 +33,7 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
+import net.minestom.server.network.packet.server.play.SpawnPositionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.snapshot.*;
@@ -115,6 +118,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // Adventure
     private final Pointers pointers;
+
+    private Pos worldSpawnPosition = Pos.ZERO;
 
     /**
      * Creates a new instance.
@@ -433,6 +438,44 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public long getWorldAge() {
         return worldAge;
     }
+
+    //Microtus start - integrate world spawn position
+    /**
+     * Updates the spawn position of the instance.
+     * This method <STRONG>doesn't</STRONG> send the SpawnPositionPacket to the players.
+     * @param spawnPosition the new spawn position
+     */
+    public boolean setWorldSpawnPosition(@NotNull Pos spawnPosition) {
+        return this.setWorldSpawnPosition(spawnPosition, false);
+    }
+
+    /**
+     * Updates the spawn position of the instance.
+     * The underlying spawn position will only be updated if the new position is different from the current one.
+     * It sends the SpawnPositionPacket when the boolean option is true and the instance has players.
+     * @param spawnPosition the new spawn position
+     * @param sendPacket if true, the new spawn position will be sent to all players in the instance
+     */
+    public boolean setWorldSpawnPosition(@NotNull Pos spawnPosition, boolean sendPacket) {
+        if (this.worldSpawnPosition.samePoint(spawnPosition)) return false;
+        final Pos oldPosition = this.worldSpawnPosition;
+        this.worldSpawnPosition = spawnPosition;
+        EventDispatcher.call(new InstanceWorldPositionChangeEvent(this, oldPosition));
+        if (!sendPacket || getPlayers().isEmpty()) return false;
+        var spawnPositionPacket = new SpawnPositionPacket(spawnPosition, spawnPosition.yaw());
+        PacketUtils.sendGroupedPacket(getPlayers(), spawnPositionPacket);
+        return true;
+    }
+
+    /**
+     * Gets the spawn position of the instance.
+     * If the position is not set, it will return {@link Pos#ZERO}
+     * @return the spawn position of the instance
+     */
+    public @NotNull Pos getWorldSpawnPosition() {
+        return this.worldSpawnPosition;
+    }
+    //Microtus end - integrate world spawn position
 
     /**
      * Sets the age of this instance in tick. It will send the age to all players.

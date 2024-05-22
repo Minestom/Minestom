@@ -32,10 +32,10 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class PlayerMovementIntegrationTest {
+class PlayerMovementIntegrationTest {
 
     @Test
-    public void teleportConfirm(Env env) {
+    void teleportConfirm(Env env) {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
         // No confirmation
@@ -51,7 +51,7 @@ public class PlayerMovementIntegrationTest {
 
     // FIXME
     //@Test
-    public void singleTickMovementUpdate(Env env) {
+    void singleTickMovementUpdate(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
@@ -68,7 +68,7 @@ public class PlayerMovementIntegrationTest {
     }
 
     @Test
-    public void chunkUpdateDebounceTest(Env env) {
+    void chunkUpdateDebounceTest(Env env) {
         final Instance flatInstance = env.createFlatInstance();
         final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading

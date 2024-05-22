@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // TODO: more tests
-public class TestPermissions {
+class TestPermissions {
 
     private Player player;
 
     private Permission permission1, permission2, permission3, wildcard;
 
     @BeforeEach
-    public void init() {
+    void init() {
         MinecraftServer.init(); // for entity manager
         player = new Player(UUID.randomUUID(), "TestPlayer", null) {
             @Override
@@ -49,13 +49,13 @@ public class TestPermissions {
     }
 
     @Test
-    public void noPermission() {
+    void noPermission() {
         assertFalse(player.hasPermission(""));
         assertFalse(player.hasPermission("random.permission"));
     }
 
     @Test
-    public void hasPermissionClass() {
+    void hasPermissionClass() {
 
         assertFalse(player.hasPermission(permission1));
         player.addPermission(permission1);
@@ -67,7 +67,7 @@ public class TestPermissions {
     }
 
     @Test
-    public void hasPermissionNameNbt() {
+    void hasPermissionNameNbt() {
         player.addPermission(permission1);
         assertTrue(player.hasPermission("perm.name"));
         assertTrue(player.hasPermission("perm.name",
@@ -81,7 +81,7 @@ public class TestPermissions {
     }
 
     @Test
-    public void hasPatternMatchingWildcard() {
+    void hasPatternMatchingWildcard() {
         Permission permission = new Permission("foo.b*r.baz");
         Permission match = new Permission("foo.baaar.baz");
         Permission match2 = new Permission("foo.br.baz");
@@ -105,7 +105,7 @@ public class TestPermissions {
     }
 
     @Test
-    public void hasPermissionWildcard() {
+    void hasPermissionWildcard() {
         Permission permission = new Permission("foo.b*");
         Permission match = new Permission("foo.baaar.baz");
         Permission match2 = new Permission("foo.b");
@@ -129,7 +129,7 @@ public class TestPermissions {
     }
 
     @Test
-    public void hasAllPermissionsWithWildcard() {
+    void hasAllPermissionsWithWildcard() {
         assertFalse(player.hasPermission(permission2));
         assertFalse(player.hasPermission(permission3));
         player.addPermission(wildcard);
@@ -138,7 +138,7 @@ public class TestPermissions {
     }
 
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
 
     }
 }

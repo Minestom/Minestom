@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class AdvancementIntegrationTest {
+class AdvancementIntegrationTest {
 
     @Test
-    public void addAndRemoveViewer(Env env) {
+    void addAndRemoveViewer(Env env) {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
 
@@ -46,7 +46,7 @@ public class AdvancementIntegrationTest {
     }
 
     @Test
-    public void removeViewerOnDisconnect(Env env) {
+    void removeViewerOnDisconnect(Env env) {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
 

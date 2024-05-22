@@ -11,16 +11,16 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.Literal
 import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandParseTest {
+class CommandParseTest {
 
     @Test
-    public void emptyCommand() {
+    void emptyCommand() {
         var graph = Graph.merge(Graph.builder(Literal("foo"), createExecutor(new AtomicBoolean())).build());
         assertUnknown(graph, "");
     }
 
     @Test
-    public void singleParameterlessCommand() {
+    void singleParameterlessCommand() {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Literal("foo"), createExecutor(b)).build());
         assertValid(foo, "foo", b);
@@ -29,7 +29,7 @@ public class CommandParseTest {
     }
 
     @Test
-    public void twoParameterlessCommand() {
+    void twoParameterlessCommand() {
         final AtomicBoolean b = new AtomicBoolean();
         final AtomicBoolean b1 = new AtomicBoolean();
         var graph = Graph.merge(
@@ -44,7 +44,7 @@ public class CommandParseTest {
     }
 
     @Test
-    public void singleCommandWithMultipleSyntax() {
+    void singleCommandWithMultipleSyntax() {
         final AtomicBoolean add = new AtomicBoolean();
         final AtomicBoolean action = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Literal("foo"))
@@ -69,7 +69,7 @@ public class CommandParseTest {
     }
 
     @Test
-    public void singleCommandOptionalArgs() {
+    void singleCommandOptionalArgs() {
         final AtomicBoolean b = new AtomicBoolean();
         final AtomicReference<String> expectedFirstArg = new AtomicReference<>("T");
         var foo = Graph.merge(Graph.builder(Literal("foo"))
@@ -92,7 +92,7 @@ public class CommandParseTest {
     }
 
     @Test
-    public void singleCommandSingleEnumArg() {
+    void singleCommandSingleEnumArg() {
         enum A {a, b}
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Literal("foo"))
@@ -105,7 +105,7 @@ public class CommandParseTest {
     }
 
     @Test
-    public void aliasWithoutArgs() {
+    void aliasWithoutArgs() {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Word("").from("foo", "bar"), createExecutor(b))
                 .build());
@@ -115,7 +115,7 @@ public class CommandParseTest {
     }
 
     @Test
-    public void aliasWithArgs() {
+    void aliasWithArgs() {
         final AtomicBoolean b = new AtomicBoolean();
         var foo = Graph.merge(Graph.builder(Word("").from("foo", "bar"))
                 .append(ArgumentType.Integer("test"), createExecutor(b))

@@ -117,10 +117,12 @@ public final class InventoryClickProcessor {
     public @NotNull InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
                                                     int start, int end, int step,
                                                     @NotNull Player player, int slot,
-                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
+                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor, int button) { // Microtus
+        ClickType startShiftClick = button == 0 ? ClickType.START_SHIFT_LEFT_CLICK : ClickType.START_SHIFT_RIGHT_CLICK; // Microtus
+        InventoryClickResult clickResult = startCondition(player, inventory, slot, startShiftClick, clicked, cursor); // Microtus
         if (clickResult.isCancel()) return clickResult;
         if (clicked.isAir()) return clickResult.cancelled();
+        ClickType shiftClick = button == 0 ? ClickType.SHIFT_LEFT_CLICK : ClickType.SHIFT_RIGHT_CLICK; // Microtus
 
         // Handle armor equip
         if (inventory instanceof PlayerInventory && targetInventory instanceof PlayerInventory) {
@@ -131,7 +133,7 @@ public final class InventoryClickProcessor {
                 final ItemStack currentArmor = player.getEquipment(equipmentSlot);
                 if (currentArmor.isAir()) {
                     final int armorSlot = equipmentSlot.armorSlot();
-                    InventoryClickResult result = startCondition(player, targetInventory, armorSlot, ClickType.SHIFT_CLICK, clicked, cursor);
+                    InventoryClickResult result = startCondition(player, targetInventory, armorSlot, shiftClick, clicked, cursor); // Microtus
                     if (result.isCancel()) return clickResult;
                     result.setClicked(ItemStack.AIR);
                     result.setCursor(cursor);
@@ -145,7 +147,7 @@ public final class InventoryClickProcessor {
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
-            InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            InventoryClickResult result = startCondition(player, targetInventory, index, shiftClick, itemStack, cursor); // Microtus
             if (result.isCancel()) {
                 return false;
             }
@@ -157,7 +159,7 @@ public final class InventoryClickProcessor {
         final Map<Integer, ItemStack> itemChangesMap = pair.right();
         itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {
             targetInventory.setItemStack(s, itemStack);
-            callClickEvent(player, targetInventory, s, ClickType.SHIFT_CLICK, itemStack, cursor);
+            callClickEvent(player, targetInventory, s, shiftClick, itemStack, cursor); // Microtus
         });
         clickResult.setClicked(itemResult);
         return clickResult;

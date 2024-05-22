@@ -11,10 +11,12 @@ public class ArmorStandMeta extends LivingEntityMeta {
     public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 7;
 
-    private final static byte IS_SMALL_BIT = 0x01;
-    private final static byte HAS_ARMS_BIT = 0x04;
-    private final static byte HAS_NO_BASE_PLATE_BIT = 0x08;
-    private final static byte IS_MARKER_BIT = 0x10;
+    //Microtus start - update java keyword usage
+    private static final byte IS_SMALL_BIT = 0x01;
+    private static final byte HAS_ARMS_BIT = 0x04;
+    private static final byte HAS_NO_BASE_PLATE_BIT = 0x08;
+    private static final byte IS_MARKER_BIT = 0x10;
+    //Microtus end - update java keyword usage
 
     public ArmorStandMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);

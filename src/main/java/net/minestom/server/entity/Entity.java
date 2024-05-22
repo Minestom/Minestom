@@ -1143,7 +1143,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPose(Pose.FALL_FLYING);
         } else if (entityMeta.isSwimming()) {
             setPose(Pose.SWIMMING);
-        } else if (entityMeta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
+        } else if (this instanceof LivingEntity && entityMeta instanceof LivingEntityMeta && ((LivingEntityMeta) entityMeta).isInRiptideSpinAttack()) {
             setPose(Pose.SPIN_ATTACK);
         } else if (entityMeta.isSneaking()) {
             setPose(Pose.SNEAKING);
