@@ -13,11 +13,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class ChunkViewerIntegrationTest {
+class ChunkViewerIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void basicJoin(boolean sharedInstance, Env env) {
+    void basicJoin(boolean sharedInstance, Env env) {
         Instance instance = env.createFlatInstance();
         if (sharedInstance) {
             // Chunks get their viewers from the instance
@@ -36,7 +36,7 @@ public class ChunkViewerIntegrationTest {
     }
 
     @Test
-    public void renderDistance(Env env) {
+    void renderDistance(Env env) {
         final int viewRadius = MinecraftServer.getChunkViewDistance();
         final int count = ChunkUtils.getChunkCount(viewRadius);
         var instance = env.createFlatInstance();

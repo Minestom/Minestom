@@ -1,5 +1,6 @@
 package net.minestom.server.world.biome;
 
+import java.util.Locale;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;

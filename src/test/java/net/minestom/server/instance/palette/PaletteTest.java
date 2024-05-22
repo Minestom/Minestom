@@ -11,17 +11,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PaletteTest {
+class PaletteTest {
 
     @Test
-    public void singlePlacement() {
+    void singlePlacement() {
         var palette = Palette.blocks();
         palette.set(0, 0, 1, 1);
         assertEquals(1, palette.get(0, 0, 1));
     }
 
     @Test
-    public void placement() {
+    void placement() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             final int dimension = palette.dimension();
@@ -56,7 +56,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void placementHighValue() {
+    void placementHighValue() {
         final int value = 250_000;
         for (Palette palette : testPalettes()) {
             palette.set(0, 0, 1, value);
@@ -65,7 +65,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void negPlacement() {
+    void negPlacement() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             assertThrows(IllegalArgumentException.class, () -> palette.set(-1, 0, 0, 64));
@@ -79,7 +79,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void resize() {
+    void resize() {
         Palette palette = Palette.newPalette(16, 5, 2);
         palette.set(0, 0, 0, 1);
         assertEquals(2, palette.bitsPerEntry());
@@ -98,7 +98,7 @@ public class PaletteTest {
 
 
     @Test
-    public void fill() {
+    void fill() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             assertEquals(0, palette.count());
@@ -129,7 +129,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void bulk() {
+    void bulk() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             final int dimension = palette.dimension();
@@ -154,7 +154,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void bulkAll() {
+    void bulkAll() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             // Fill all entries
@@ -172,7 +172,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void bulkAllOrder() {
+    void bulkAllOrder() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             AtomicInteger count = new AtomicInteger();
@@ -210,7 +210,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void setAllConstant() {
+    void setAllConstant() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             palette.setAll((x, y, z) -> 1);
@@ -219,7 +219,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void getAllPresent() {
+    void getAllPresent() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             palette.getAllPresent((x, y, z, value) -> fail("The palette should be empty"));
@@ -234,7 +234,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void replaceAll() {
+    void replaceAll() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             palette.setAll((x, y, z) -> x + y + z + 1);
@@ -247,7 +247,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void replace() {
+    void replace() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
             palette.set(0, 0, 0, 1);
@@ -260,7 +260,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void replaceLoop() {
+    void replaceLoop() {
         var palette = Palette.newPalette(2, 15, 4);
         palette.setAll((x, y, z) -> x + y + z);
         final int dimension = palette.dimension();
@@ -274,7 +274,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void dimension() {
+    void dimension() {
         assertThrows(Exception.class, () -> Palette.newPalette(-4, 5, 3));
         assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3));
         assertThrows(Exception.class, () -> Palette.newPalette(1, 5, 3));

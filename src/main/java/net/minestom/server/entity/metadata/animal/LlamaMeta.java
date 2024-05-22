@@ -43,7 +43,6 @@ public class LlamaMeta extends ChestedHorseMeta {
         BROWN,
         GRAY;
 
-        private final static Variant[] VALUES = values();
+        private static final Variant[] VALUES = values(); //Microtus - update java keyword usage
     }
-
 }

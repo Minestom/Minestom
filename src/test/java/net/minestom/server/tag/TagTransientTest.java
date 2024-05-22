@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagTransientTest {
+class TagTransientTest {
 
     @Test
-    public void twoTransientTags() {
+    void twoTransientTags() {
         var tagHandler = TagHandler.newHandler();
         Tag<String> tag1 = Tag.Transient("a");
         Tag<String> tag2 = Tag.Transient("b");
@@ -19,7 +19,7 @@ public class TagTransientTest {
     }
 
     @Test
-    public void twoTransientTagsEqual() {
+    void twoTransientTagsEqual() {
         var tagHandler = TagHandler.newHandler();
         Tag<String> tag1 = Tag.Transient("a");
         Tag<String> tag2 = Tag.Transient("a");
@@ -30,7 +30,7 @@ public class TagTransientTest {
     }
 
     @Test
-    public void tagHandlerCopyPreservesTransient() {
+    void tagHandlerCopyPreservesTransient() {
         var tagHandler = TagHandler.newHandler();
         Tag<String> tag = Tag.Transient("a");
         tagHandler.setTag(tag, "abcdef");
@@ -41,7 +41,7 @@ public class TagTransientTest {
     }
 
     @Test
-    public void asCompoundDoesNotPreserveTransient() {
+    void asCompoundDoesNotPreserveTransient() {
         var tagHandler = TagHandler.newHandler();
         Tag<String> tag = Tag.Transient("a");
         tagHandler.setTag(tag, "abcdef");

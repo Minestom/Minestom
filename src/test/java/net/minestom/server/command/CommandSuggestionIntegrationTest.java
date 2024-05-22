@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
-public class CommandSuggestionIntegrationTest {
+class CommandSuggestionIntegrationTest {
 
     @Test
-    public void suggestion(Env env) {
+    void suggestion(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -50,7 +50,7 @@ public class CommandSuggestionIntegrationTest {
     }
 
     @Test
-    public void suggestionWithDefaults(Env env) {
+    void suggestionWithDefaults(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -62,16 +62,16 @@ public class CommandSuggestionIntegrationTest {
 
         var command = new Command("foo");
 
-        command.addSyntax((sender,context)->{}, suggestArg, defaultArg);
+        command.addSyntax((sender, context) -> {
+        }, suggestArg, defaultArg);
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo 1"));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket ->
+                assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches()));
     }
 
     @Test

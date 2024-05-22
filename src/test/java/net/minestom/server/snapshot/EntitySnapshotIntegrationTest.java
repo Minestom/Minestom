@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
-public class EntitySnapshotIntegrationTest {
+class EntitySnapshotIntegrationTest {
 
     @Test
-    public void basic(Env env) {
+    void basic(Env env) {
         var instance = env.createFlatInstance();
         var ent = new Entity(EntityType.ZOMBIE);
         ent.setInstance(instance).join();

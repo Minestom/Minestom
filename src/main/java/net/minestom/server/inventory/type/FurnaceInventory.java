@@ -17,10 +17,6 @@ public class FurnaceInventory extends Inventory {
         super(InventoryType.FURNACE, title);
     }
 
-    public FurnaceInventory(@NotNull String title) {
-        super(InventoryType.FURNACE, title);
-    }
-
     /**
      * Represents the amount of tick until the fire icon come empty.
      *

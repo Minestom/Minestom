@@ -4,12 +4,18 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
-public class TadpoleMeta extends AbstractFishMeta {
-    public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+// Microtus - entity meta update
+/**
+ * Metadata implementation for a Tadpole entity.
+ */
+public final class TadpoleMeta extends AbstractFishMeta {
 
+    /**
+     * Creates a new reference from this meta.
+     * @param entity the involved entity
+     * @param metadata the involved metadata
+     */
     public TadpoleMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
-
 }

@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class EntityBoundingBoxIntegrationTest {
+class EntityBoundingBoxIntegrationTest {
     @Test
-    public void pose(Env env) {
+    void pose(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -36,7 +36,7 @@ public class EntityBoundingBoxIntegrationTest {
     }
 
     @Test
-    public void eyeHeight(Env env) {
+    void eyeHeight(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -54,7 +54,7 @@ public class EntityBoundingBoxIntegrationTest {
     }
 
     @Test
-    public void pickupItem(Env env) {
+    void pickupItem(Env env) {
         final var instance = env.createFlatInstance();
         final var listener = env.listen(PickupItemEvent.class);
         final var spawnPos = new Pos(0, 42, 0);

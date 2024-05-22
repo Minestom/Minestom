@@ -9,10 +9,10 @@ import java.util.List;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagListTest {
+class TagListTest {
 
     @Test
-    public void basic() {
+    void basic() {
         var handler = TagHandler.newHandler();
         Tag<Integer> tag = Tag.Integer("number");
         Tag<List<Integer>> list = tag.list();
@@ -27,7 +27,7 @@ public class TagListTest {
     }
 
     @Test
-    public void cache() {
+    void cache() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").list();
         var val = List.of(1, 2, 3);
@@ -37,7 +37,7 @@ public class TagListTest {
     }
 
     @Test
-    public void recursiveCache() {
+    void recursiveCache() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").list().list();
         var val = List.of(List.of(1, 2, 3), List.of(4, 5, 6));
@@ -49,7 +49,7 @@ public class TagListTest {
     }
 
     @Test
-    public void recursiveCacheIncorrect() {
+    void recursiveCacheIncorrect() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").list().list();
         var val = List.of(List.of(1, 2, 3), new ArrayList<>(Arrays.asList(4, 5, 6)));
@@ -62,7 +62,7 @@ public class TagListTest {
     }
 
     @Test
-    public void snbt() {
+    void snbt() {
         var handler = TagHandler.newHandler();
         Tag<List<Integer>> tag = Tag.Integer("numbers").list();
 
@@ -75,7 +75,7 @@ public class TagListTest {
     }
 
     @Test
-    public void empty() {
+    void empty() {
         var handler = TagHandler.newHandler();
         Tag<List<Integer>> tag = Tag.Integer("numbers").list();
         handler.setTag(tag, List.of());
@@ -83,7 +83,7 @@ public class TagListTest {
     }
 
     @Test
-    public void emptySnbt() {
+    void emptySnbt() {
         var handler = TagHandler.newHandler();
         Tag<List<Integer>> tag = Tag.Integer("numbers").list();
         handler.setTag(tag, List.of());
@@ -95,7 +95,7 @@ public class TagListTest {
     }
 
     @Test
-    public void removal() {
+    void removal() {
         var handler = TagHandler.newHandler();
         Tag<List<Integer>> tag = Tag.Integer("numbers").list();
         handler.setTag(tag, List.of(1));
@@ -105,7 +105,7 @@ public class TagListTest {
     }
 
     @Test
-    public void removalSnbt() {
+    void removalSnbt() {
         var handler = TagHandler.newHandler();
         Tag<List<Integer>> tag = Tag.Integer("numbers").list();
         handler.setTag(tag, List.of(1));
@@ -119,7 +119,7 @@ public class TagListTest {
     }
 
     @Test
-    public void chaining() {
+    void chaining() {
         var handler = TagHandler.newHandler();
         Tag<List<List<Integer>>> tag = Tag.Integer("numbers").list().list();
         var integers = List.of(List.of(1, 2, 3), List.of(4, 5, 6));
@@ -130,7 +130,7 @@ public class TagListTest {
     }
 
     @Test
-    public void chainingSnbt() {
+    void chainingSnbt() {
         var handler = TagHandler.newHandler();
         Tag<List<List<Integer>>> tag = Tag.Integer("numbers").list().list();
         var integers = List.of(List.of(1, 2, 3), List.of(4, 5, 6));
@@ -148,7 +148,7 @@ public class TagListTest {
     }
 
     @Test
-    public void defaultValue() {
+    void defaultValue() {
         var handler = TagHandler.newHandler();
         var val = List.of(1, 2, 3);
         var tag = Tag.Integer("number").list().defaultValue(val);
@@ -156,7 +156,7 @@ public class TagListTest {
     }
 
     @Test
-    public void defaultValueReset() {
+    void defaultValueReset() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").defaultValue(5);
         var list = tag.list();
@@ -165,7 +165,7 @@ public class TagListTest {
     }
 
     @Test
-    public void immutability() {
+    void immutability() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").list();
         List<Integer> val = new ArrayList<>();
@@ -181,7 +181,7 @@ public class TagListTest {
     }
 
     @Test
-    public void chainingImmutability() {
+    void chainingImmutability() {
         var handler = TagHandler.newHandler();
         Tag<List<List<Integer>>> tag = Tag.Integer("numbers").list().list();
         List<List<Integer>> val = new ArrayList<>();
@@ -201,7 +201,7 @@ public class TagListTest {
     }
 
     @Test
-    public void immutabilitySnbt() {
+    void immutabilitySnbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("numbers").list();
         List<Integer> val = new ArrayList<>();
@@ -223,7 +223,7 @@ public class TagListTest {
     }
 
     @Test
-    public void chainingImmutabilitySnbt() {
+    void chainingImmutabilitySnbt() {
         var handler = TagHandler.newHandler();
         Tag<List<List<Integer>>> tag = Tag.Integer("numbers").list().list();
         List<List<Integer>> val = new ArrayList<>();

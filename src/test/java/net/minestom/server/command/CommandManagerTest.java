@@ -11,10 +11,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandManagerTest {
+class CommandManagerTest {
 
     @Test
-    public void testCommandRegistration() {
+    void testCommandRegistration() {
         var manager = new CommandManager();
 
         var command = new Command("name1", "name2");
@@ -33,7 +33,7 @@ public class CommandManagerTest {
     }
 
     @Test
-    public void testUnknownCommandCallback() {
+    void testUnknownCommandCallback() {
         var manager = new CommandManager();
 
         AtomicBoolean check = new AtomicBoolean(false);
@@ -49,7 +49,7 @@ public class CommandManagerTest {
     }
 
     @Test
-    public void testSharedArgumentSyntaxABFirst() {
+    void testSharedArgumentSyntaxABFirst() {
         var manager = new CommandManager();
 
         var checkA = new AtomicBoolean(false);
@@ -77,7 +77,7 @@ public class CommandManagerTest {
     }
 
     @Test
-    public void testSharedArgumentSyntaxAFirst() {
+    void testSharedArgumentSyntaxAFirst() {
         var manager = new CommandManager();
 
         var checkA = new AtomicBoolean(false);

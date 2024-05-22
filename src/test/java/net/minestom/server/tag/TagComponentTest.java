@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagComponentTest {
+class TagComponentTest {
 
     @Test
-    public void get() {
+    void get() {
         var component = Component.text("Hey");
         var tag = Tag.Component("component");
         var handler = TagHandler.newHandler();
@@ -18,14 +18,14 @@ public class TagComponentTest {
     }
 
     @Test
-    public void empty() {
+    void empty() {
         var tag = Tag.Component("component");
         var handler = TagHandler.newHandler();
         assertNull(handler.getTag(tag));
     }
 
     @Test
-    public void invalidTag() {
+    void invalidTag() {
         var tag = Tag.Component("entry");
         var handler = TagHandler.newHandler();
         handler.setTag(Tag.Integer("entry"), 1);
@@ -33,7 +33,7 @@ public class TagComponentTest {
     }
 
     @Test
-    public void nbtFallback() {
+    void nbtFallback() {
         var component = Component.text("Hey");
         var tag = Tag.Component("component");
         var handler = TagHandler.newHandler();

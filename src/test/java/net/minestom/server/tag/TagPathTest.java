@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagPathTest {
+class TagPathTest {
 
     @Test
-    public void basic() {
+    void basic() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number");
         var path = tag.path("display");
@@ -28,13 +28,13 @@ public class TagPathTest {
     }
 
     @Test
-    public void invalidPath() {
+    void invalidPath() {
         assertThrows(IllegalArgumentException.class, () -> Tag.Integer("number").path(""));
         assertThrows(IllegalArgumentException.class, () -> Tag.Integer("number").path("path", null));
     }
 
     @Test
-    public void emptyRemoval() {
+    void emptyRemoval() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
         handler.removeTag(tag);
@@ -43,7 +43,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void snbt() {
+    void snbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
         handler.setTag(tag, 5);
@@ -60,7 +60,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void doubleSnbt() {
+    void doubleSnbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number").path("display");
         var tag1 = Tag.String("string").path("display");
@@ -90,7 +90,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void secondPathClearSnbt() {
+    void secondPathClearSnbt() {
         var handler = TagHandler.newHandler();
         var numberTag = Tag.Integer("number").path("path1", "path2");
         var stringTag = Tag.String("string").path("path1");
@@ -118,7 +118,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void differentPath() {
+    void differentPath() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("number");
         var path = tag.path("display");
@@ -150,7 +150,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void overrideSnbt() {
+    void overrideSnbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("key");
         var tag1 = Tag.Integer("value").path("key");
@@ -172,7 +172,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void forgetPath() {
+    void forgetPath() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("key");
         var path = Tag.Integer("value").path("key");
@@ -181,7 +181,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void pathInvalidClear() {
+    void pathInvalidClear() {
         var handler = TagHandler.newHandler();
         var tag1 = Tag.Integer("pathInvalidClear1").path("key");
         var tag2 = Tag.Integer("pathInvalidClear2").path("key");
@@ -190,7 +190,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void chaining() {
+    void chaining() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("key");
         var path = Tag.Integer("key").path("first", "second");
@@ -213,7 +213,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void chainingDouble() {
+    void chainingDouble() {
         var handler = TagHandler.newHandler();
         var path = Tag.Integer("key").path("first", "second");
         var path1 = Tag.Integer("key").path("first");
@@ -257,7 +257,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void structureObstruction() {
+    void structureObstruction() {
         record Entry(int value) {
         }
 
@@ -311,7 +311,7 @@ public class TagPathTest {
     }
 
     @Test
-    public void tagObstruction() {
+    void tagObstruction() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Integer("key");
         var path = Tag.Integer("value").path("key", "second");

@@ -1,6 +1,12 @@
 package net.minestom.server;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.io.IOException;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
@@ -12,6 +18,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
+import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -33,6 +40,7 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
+import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.thread.ThreadProvider;
@@ -45,13 +53,6 @@ import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 final class ServerProcessImpl implements ServerProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
@@ -75,6 +76,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
 
+    private final ExtensionManager extension;
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
     private final PacketProcessor packetProcessor;
@@ -91,6 +93,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final TagManager tag;
 
     private final Server server;
+    private final Metrics metrics;
 
     private final ThreadDispatcher<Chunk> dispatcher;
     private final Ticker ticker;
@@ -98,11 +101,13 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
+    private static boolean bstatsEnabled = System.getProperty("minestom.bstats.enabled") == null;
+
+
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
-
+        this.extension = new ExtensionManager(this);
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
-
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
@@ -139,6 +144,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
         this.ticker = new TickerImpl();
+        this.metrics = new Metrics();
     }
 
     @Override
@@ -262,6 +268,11 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public @NotNull ExtensionManager extension() {
+        return extension;
+    }
+
+    @Override
     public @NotNull TagManager tag() {
         return tag;
     }
@@ -312,7 +323,12 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
+        extension.start();
+        extension.gotoPreInit();
+
         LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+
+        extension.gotoInit();
 
         // Init server
         try {
@@ -325,7 +341,16 @@ final class ServerProcessImpl implements ServerProcess {
         // Start server
         server.start();
 
+        extension.gotoPostInit();
+
         LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
+
+        if (ServerFlag.TERMINAL_ENABLED) {
+            MinestomTerminal.start();
+        }
+        if (bstatsEnabled) {
+            this.metrics.start();
+        }
 
         // Stop the server on SIGINT
         if (ServerFlag.SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
@@ -336,12 +361,16 @@ final class ServerProcessImpl implements ServerProcess {
         if (!stopped.compareAndSet(false, true))
             return;
         LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Unloading all extensions.");
+        extension.shutdown();
         scheduler.shutdown();
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
+        MinestomTerminal.stop();
         dispatcher.shutdown();
+        this.metrics.shutdown();
         LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
     }
 

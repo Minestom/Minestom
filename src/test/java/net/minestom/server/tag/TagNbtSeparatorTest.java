@@ -9,10 +9,10 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TagNbtSeparatorTest {
+class TagNbtSeparatorTest {
 
     @Test
-    public void primitives() {
+    void primitives() {
         assertSeparation(new TagNbtSeparator.Entry<>(Tag.Byte("key"), (byte) 1),
                 "key", ByteBinaryTag.byteBinaryTag((byte) 1));
         assertSeparation(new TagNbtSeparator.Entry<>(Tag.Short("key"), (short) 1),
@@ -28,20 +28,20 @@ public class TagNbtSeparatorTest {
     }
 
     @Test
-    public void compound() {
+    void compound() {
         assertSeparation(new TagNbtSeparator.Entry<>(Tag.Byte("key").path("path"), (byte) 1),
                 "path", CompoundBinaryTag.builder().putByte("key", (byte) 1).build());
     }
 
     @Test
-    public void compoundMultiple() {
+    void compoundMultiple() {
         assertSeparation(Set.of(new TagNbtSeparator.Entry<>(Tag.Byte("key").path("path"), (byte) 1),
                         new TagNbtSeparator.Entry<>(Tag.Integer("key2").path("path"), 2)),
                 "path", CompoundBinaryTag.builder().putByte("key", (byte) 1).putInt("key2", 2).build());
     }
 
     @Test
-    public void list() {
+    void list() {
         assertSeparation(new TagNbtSeparator.Entry<>(Tag.Integer("key").list(), List.of(1)),
                 "key", ListBinaryTag.listBinaryTag(BinaryTagTypes.INT, List.of(IntBinaryTag.intBinaryTag(1))));
     }

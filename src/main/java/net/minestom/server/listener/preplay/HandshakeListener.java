@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public final class HandshakeListener {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(HandshakeListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HandshakeListener.class);
 
     /**
      * Text sent if a player tries to connect with an invalid version of the client
@@ -138,4 +138,5 @@ public final class HandshakeListener {
         disconnect(connection, INVALID_BUNGEE_FORWARDING);
     }
 
+    private HandshakeListener() { }
 }

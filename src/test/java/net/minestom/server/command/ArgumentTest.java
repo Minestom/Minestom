@@ -11,16 +11,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ArgumentTest {
+class ArgumentTest {
 
     @Test
-    public void testParseSelf() {
+    void testParseSelf() {
         assertEquals("example", Argument.parse(new ServerSender(), ArgumentType.String("example")));
         assertEquals(55, Argument.parse(new ServerSender(), ArgumentType.Integer("55")));
     }
 
     @Test
-    public void testCallback() {
+    void testCallback() {
         var arg = ArgumentType.String("id");
 
         assertFalse(arg.hasErrorCallback());
@@ -30,7 +30,7 @@ public class ArgumentTest {
     }
 
     @Test
-    public void testDefaultValue() {
+    void testDefaultValue() {
         var arg = ArgumentType.String("id");
 
         assertFalse(arg.isOptional());
@@ -40,7 +40,7 @@ public class ArgumentTest {
     }
 
     @Test
-    public void testSuggestionCallback() {
+    void testSuggestionCallback() {
         var arg = ArgumentType.String("id");
 
         assertFalse(arg.hasSuggestion());

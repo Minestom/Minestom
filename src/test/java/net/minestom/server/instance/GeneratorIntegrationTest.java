@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 @EnvTest
-public class GeneratorIntegrationTest {
+class GeneratorIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    public void loader(boolean data, Env env) {
+    void loader(boolean data, Env env) {
         var manager = env.process().instance();
         var block = data ? Block.STONE.withNbt(CompoundBinaryTag.builder().putString("key", "value").build()) : Block.STONE;
         var instance = manager.createInstanceContainer();
@@ -31,7 +31,7 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
-    public void exceptionCatch(Env env) {
+    void exceptionCatch(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
 
@@ -49,7 +49,7 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
-    public void fillHeightNegative(Env env) {
+    void fillHeightNegative(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> unit.modifier().fillHeight(-64, -60, Block.STONE));
@@ -63,7 +63,7 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
-    public void fillHeightSingleSectionFull(Env env) {
+    void fillHeightSingleSectionFull(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> unit.modifier().fillHeight(0, 16, Block.GRASS_BLOCK));
@@ -74,7 +74,7 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
-    public void fillHeightSingleSection(Env env) {
+    void fillHeightSingleSection(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> unit.modifier().fillHeight(4, 5, Block.GRASS_BLOCK));
@@ -85,7 +85,7 @@ public class GeneratorIntegrationTest {
     }
 
     @Test
-    public void fillHeightOverride(Env env) {
+    void fillHeightOverride(Env env) {
         var manager = env.process().instance();
         var instance = manager.createInstanceContainer();
         instance.setGenerator(unit -> {

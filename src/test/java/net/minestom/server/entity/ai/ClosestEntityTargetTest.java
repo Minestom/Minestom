@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
-public class ClosestEntityTargetTest {
+class ClosestEntityTargetTest {
 
     @Test
-    public void validFindTarget(Env env) {
+    void validFindTarget(Env env) {
         var instance = env.createFlatInstance();
 
         var self = new EntityCreature(EntityType.ZOMBIE);

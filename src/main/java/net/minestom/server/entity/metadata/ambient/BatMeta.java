@@ -8,7 +8,7 @@ public class BatMeta extends AmbientCreatureMeta {
     public static final byte OFFSET = AmbientCreatureMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 0;
 
-    private final static byte IS_HANGING_BIT = 0x01;
+    private static final byte IS_HANGING_BIT = 0x01; //Microtus - update java keyword usage
 
     public BatMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);

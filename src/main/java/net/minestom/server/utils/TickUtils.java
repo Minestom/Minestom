@@ -43,4 +43,9 @@ public final class TickUtils {
         Check.argCondition(duration.isNegative(), "Duration cannot be negative");
         return (int) (duration.toMillis() / msPerTick);
     }
+
+    /**
+     * Default private default constructor.
+     */
+    private TickUtils() { }
 }

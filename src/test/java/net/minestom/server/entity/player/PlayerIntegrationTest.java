@@ -26,14 +26,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class PlayerIntegrationTest {
+class PlayerIntegrationTest {
 
     /**
      * Test to see whether player abilities are updated correctly and events
      * are handled properly when changing gamemode.
      */
     @Test
-    public void gamemodeTest(Env env) {
+    void gamemodeTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -74,7 +74,7 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void handSwapTest(Env env) {
+    void handSwapTest(Env env) {
         ClientSettingsPacket packet = new ClientSettingsPacket("en_us", (byte) 16, ChatMessageType.FULL,
                 true, (byte) 127, Player.MainHand.LEFT, true, true);
 
@@ -112,7 +112,7 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void playerJoinPackets(Env env) {
+    void playerJoinPackets(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
 
@@ -143,7 +143,7 @@ public class PlayerIntegrationTest {
      * when changing dimensions
      */
     @Test
-    public void refreshPlayerTest(Env env) {
+    void refreshPlayerTest(Env env) {
         final int TEST_PERMISSION_LEVEL = 2;
         final var testDimension = env.process().dimensionType().register(NamespaceID.from("minestom:test_dimension"), DimensionType.builder().build());
 
@@ -178,7 +178,7 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void deathLocationTest(Env env) {
+    void deathLocationTest(Env env) {
         String dimensionNamespace = "minestom:test_dimension";
         final var testDimension = env.process().dimensionType().register(NamespaceID.from(dimensionNamespace), DimensionType.builder().build());
 
@@ -195,7 +195,7 @@ public class PlayerIntegrationTest {
     }
 
     @Test
-    public void displayNameTest(Env env) {
+    void displayNameTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);

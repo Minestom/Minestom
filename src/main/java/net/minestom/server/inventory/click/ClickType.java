@@ -6,8 +6,10 @@ public enum ClickType {
     RIGHT_CLICK,
     CHANGE_HELD,
 
-    START_SHIFT_CLICK,
-    SHIFT_CLICK,
+    START_SHIFT_LEFT_CLICK, // Microtus
+    START_SHIFT_RIGHT_CLICK, // Microtus
+    SHIFT_LEFT_CLICK, // Microtus
+    SHIFT_RIGHT_CLICK, // Microtus
 
     START_LEFT_DRAGGING,
     START_RIGHT_DRAGGING,

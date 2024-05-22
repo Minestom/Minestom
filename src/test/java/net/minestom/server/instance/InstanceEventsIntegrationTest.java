@@ -7,9 +7,9 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 @EnvTest
-public class InstanceEventsIntegrationTest {
+class InstanceEventsIntegrationTest {
     @Test
-    public void registerAndUnregisterInstance(Env env) {
+    void registerAndUnregisterInstance(Env env) {
         var registerListener = env.listen(InstanceRegisterEvent.class);
         var unregisterListener = env.listen(InstanceUnregisterEvent.class);
 

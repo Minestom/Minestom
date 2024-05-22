@@ -112,14 +112,4 @@ public final class NamespaceID implements CharSequence, Key {
     public @NotNull String asString() {
         return this.full;
     }
-
-    @Deprecated
-    public String getDomain() {
-        return domain();
-    }
-
-    @Deprecated
-    public String getPath() {
-        return path();
-    }
 }

@@ -23,7 +23,7 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
     private final Function<String, N> parser;
     private final BiFunction<N, N, T> rangeConstructor;
 
-    public ArgumentRange(@NotNull String id, N min, N max, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
+    ArgumentRange(@NotNull String id, N min, N max, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
         super(id);
         this.min = min;
         this.max = max;

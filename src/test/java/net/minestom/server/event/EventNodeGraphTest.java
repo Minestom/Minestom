@@ -6,16 +6,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EventNodeGraphTest {
+class EventNodeGraphTest {
 
     @Test
-    public void single() {
+    void single() {
         EventNode<Event> node = EventNode.all("main");
         verifyGraph(node, new EventNodeImpl.Graph("main", "Event", 0, List.of()));
     }
 
     @Test
-    public void singleChild() {
+    void singleChild() {
         EventNode<Event> node = EventNode.all("main");
         node.addChild(EventNode.all("child"));
         verifyGraph(node, new EventNodeImpl.Graph("main", "Event", 0,
@@ -24,7 +24,7 @@ public class EventNodeGraphTest {
     }
 
     @Test
-    public void childrenPriority() {
+    void childrenPriority() {
         {
             EventNode<Event> node = EventNode.all("main");
             node.addChild(EventNode.all("child1").setPriority(5));

@@ -12,13 +12,15 @@ public class PlayerMeta extends LivingEntityMeta {
     public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 5;
 
-    private final static byte CAPE_BIT = 0x01;
-    private final static byte JACKET_BIT = 0x02;
-    private final static byte LEFT_SLEEVE_BIT = 0x04;
-    private final static byte RIGHT_SLEEVE_BIT = 0x08;
-    private final static byte LEFT_LEG_BIT = 0x10;
-    private final static byte RIGHT_LEG_BIT = 0x20;
-    private final static byte HAT_BIT = 0x40;
+    //Microtus start - update java keyword usage
+    private static final byte CAPE_BIT = 0x01;
+    private static final byte JACKET_BIT = 0x02;
+    private static final byte LEFT_SLEEVE_BIT = 0x04;
+    private static final byte RIGHT_SLEEVE_BIT = 0x08;
+    private static final byte LEFT_LEG_BIT = 0x10;
+    private static final byte RIGHT_LEG_BIT = 0x20;
+    private static final byte HAT_BIT = 0x40;
+    //Microtus end - update java keyword usage
 
     public PlayerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);

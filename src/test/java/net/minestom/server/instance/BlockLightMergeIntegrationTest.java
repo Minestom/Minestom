@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @EnvTest
 public class BlockLightMergeIntegrationTest {
     @Test
-    public void testPropagationAir(Env env) {
+    void testPropagationAir(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -39,7 +39,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testTorch(Env env) {
+    void testTorch(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         instance.setGenerator(unit -> {
@@ -65,7 +65,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testTorch2(Env env) {
+    void testTorch2(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
 
@@ -91,7 +91,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testPropagationAir2(Env env) {
+    void testPropagationAir2(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -116,7 +116,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testPropagationAirRemoval(Env env) {
+    void testPropagationAirRemoval(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -145,7 +145,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testBorderOcclusion(Env env) {
+    void testBorderOcclusion(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -178,7 +178,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testBorderOcclusion2(Env env) {
+    void testBorderOcclusion2(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -210,7 +210,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testBorderOcclusion3(Env env) {
+    void testBorderOcclusion3(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -241,7 +241,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testBorderCrossing(Env env) {
+    void testBorderCrossing(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -293,7 +293,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testBorderOcclusionRemoval(Env env) {
+    void testBorderOcclusionRemoval(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -332,7 +332,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void chunkIntersection(Env env) {
+    void chunkIntersection(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = 4; x <= 7; x++) {
@@ -397,7 +397,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void skylight(Env env) {
+    void skylight(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = 4; x <= 7; x++) {
@@ -434,7 +434,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void skylightContained(Env env) {
+    void skylightContained(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = 4; x <= 7; x++) {
@@ -460,7 +460,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testDiagonalRemoval(Env env) {
+    void testDiagonalRemoval(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -494,7 +494,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testDiagonalRemoval2(Env env) {
+    void testDiagonalRemoval2(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -520,7 +520,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testDouble(Env env) {
+    void testDouble(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {
@@ -554,7 +554,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void testBlockRemoval(Env env) {
+    void testBlockRemoval(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = -3; x <= 3; x++) {

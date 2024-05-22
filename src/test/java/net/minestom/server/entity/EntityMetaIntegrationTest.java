@@ -14,10 +14,10 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class EntityMetaIntegrationTest {
+class EntityMetaIntegrationTest {
 
     @Test
-    public void notifyAboutChanges(Env env) {
+    void notifyAboutChanges(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var otherPlayer = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -85,7 +85,7 @@ public class EntityMetaIntegrationTest {
     }
 
     @Test
-    public void customName(Env env) {
+    void customName(Env env) {
         //Base things.
         var connection = env.createConnection();
         var instance = env.createFlatInstance();

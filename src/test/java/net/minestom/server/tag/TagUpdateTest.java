@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagUpdateTest {
+class TagUpdateTest {
 
     @Test
-    public void update() {
+    void update() {
         var tag = Tag.Integer("coin");
         var handler = TagHandler.newHandler();
         handler.updateTag(tag, integer -> {
@@ -25,7 +25,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateDefault() {
+    void updateDefault() {
         var tag = Tag.Integer("coin").defaultValue(25);
         var handler = TagHandler.newHandler();
         handler.updateTag(tag, integer -> {
@@ -41,7 +41,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateRemoval() {
+    void updateRemoval() {
         var tag = Tag.Integer("coin");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, 5);
@@ -54,7 +54,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateRemovalPath() {
+    void updateRemovalPath() {
         var tag = Tag.Integer("coin").path("path");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, 5);
@@ -67,7 +67,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateAndGet() {
+    void updateAndGet() {
         var tag = Tag.Integer("coin");
         var handler = TagHandler.newHandler();
         var result = handler.updateAndGetTag(tag, integer -> {
@@ -83,7 +83,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void getAndUpdate() {
+    void getAndUpdate() {
         var tag = Tag.Integer("coin");
         var handler = TagHandler.newHandler();
         var result = handler.getAndUpdateTag(tag, integer -> {
@@ -99,7 +99,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateHiddenSimilarity() {
+    void updateHiddenSimilarity() {
         var tag1 = Tag.Integer("coin");
         var tag2 = Tag.Integer("coin").map(i -> i + 1, i -> i - 1);
         var handler = TagHandler.newHandler();
@@ -110,7 +110,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateStructureConversion() {
+    void updateStructureConversion() {
         record Test(int coin) {
         }
 
@@ -131,7 +131,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateStructureConversionPath() {
+    void updateStructureConversionPath() {
         record Test(int coin) {
         }
 
@@ -152,7 +152,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateStructureConversionPathDouble() {
+    void updateStructureConversionPathDouble() {
         record Test(int coin) {
         }
         record Structure(Test test) {
@@ -176,7 +176,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateViewConversion() {
+    void updateViewConversion() {
         record Test(int coin) {
         }
 
@@ -194,7 +194,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateIncompatible() {
+    void updateIncompatible() {
         var tagI = Tag.Integer("coin");
         var tagD = Tag.Double("coin");
         var handler = TagHandler.newHandler();
@@ -203,7 +203,7 @@ public class TagUpdateTest {
     }
 
     @Test
-    public void updateInner() {
+    void updateInner() {
         var tag = Tag.Structure("vec", Vec.class);
         var tagX = Tag.Double("x").path("vec");
         var handler = TagHandler.newHandler();

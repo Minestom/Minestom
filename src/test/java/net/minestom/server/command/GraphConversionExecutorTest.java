@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphConversionExecutorTest {
+class GraphConversionExecutorTest {
     @Test
-    public void defaultCondition() {
+    void defaultCondition() {
         final Command foo = new Command("foo");
         // Constant true
         {
@@ -31,7 +31,7 @@ public class GraphConversionExecutorTest {
     }
 
     @Test
-    public void emptySyntaxCondition() {
+    void emptySyntaxCondition() {
         final Command foo = new Command("foo");
         foo.addSyntax(GraphConversionExecutorTest::dummyExecutor, Literal("first"));
 
@@ -44,7 +44,7 @@ public class GraphConversionExecutorTest {
     }
 
     @Test
-    public void syntaxConditionTrue() {
+    void syntaxConditionTrue() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, context) -> true,
                 GraphConversionExecutorTest::dummyExecutor, Literal("first"));
@@ -57,7 +57,7 @@ public class GraphConversionExecutorTest {
     }
 
     @Test
-    public void syntaxConditionFalse() {
+    void syntaxConditionFalse() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, context) -> false,
                 GraphConversionExecutorTest::dummyExecutor, Literal("first"));
@@ -70,7 +70,7 @@ public class GraphConversionExecutorTest {
     }
 
     @Test
-    public void commandConditionFalse() {
+    void commandConditionFalse() {
         final Command foo = new Command("foo");
         foo.setCondition((sender, commandString) -> false);
         final Graph graph = Graph.fromCommand(foo);

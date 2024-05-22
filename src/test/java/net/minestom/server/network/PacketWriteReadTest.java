@@ -161,12 +161,12 @@ public class PacketWriteReadTest {
     }
 
     @Test
-    public void serverTest() {
+    void serverTest() {
         SERVER_PACKETS.forEach(PacketWriteReadTest::testPacket);
     }
 
     @Test
-    public void clientTest() {
+    void clientTest() {
         CLIENT_PACKETS.forEach(PacketWriteReadTest::testPacket);
     }
 

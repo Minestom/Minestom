@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 @EnvTest
-public class EntityTrackerIntegrationTest {
+class EntityTrackerIntegrationTest {
 
     @Test
-    public void maxDistance(Env env) {
+    void maxDistance(Env env) {
         final Instance instance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
         final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
@@ -53,7 +53,7 @@ public class EntityTrackerIntegrationTest {
     }
 
     @Test
-    public void cornerInstanceSwap(Env env) {
+    void cornerInstanceSwap(Env env) {
         final Instance instance = env.createFlatInstance();
         final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
@@ -83,7 +83,7 @@ public class EntityTrackerIntegrationTest {
     }
 
     @Test
-    public void viewable(Env env) {
+    void viewable(Env env) {
         final Instance instance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
         var viewable = instance.getEntityTracker().viewable(spawnPos.chunkX(), spawnPos.chunkZ());
@@ -101,7 +101,7 @@ public class EntityTrackerIntegrationTest {
     }
 
     @Test
-    public void viewableShared(Env env) {
+    void viewableShared(Env env) {
         final InstanceContainer instance = (InstanceContainer) env.createFlatInstance();
         var shared = env.process().instance().createSharedInstance(instance);
         var sharedList = instance.getSharedInstances();
