@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
+import net.minestom.codegen.util.GenerationHelper;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -18,12 +20,21 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class DyeColorGenerator extends MinestomCodeGenerator {
+@ApiStatus.NonExtendable
+@ApiStatus.Internal
+public final class DyeColorGenerator extends MinestomCodeGenerator {
+
+    private static final String CLASS_NAME = "DyeColor"; // Microtus - Banner and shield meta
+    private static final String TEXTURE_DIFFUSE_COLOR = "textureDiffuseColor";
+    private static final String TEXT_COLOR = "textColor";
+    private static final String FIREWORK_COLOR = "fireworkColor";
+    private static final String MAP_COLOR_ID = "mapColorId";
     private static final Logger LOGGER = LoggerFactory.getLogger(DyeColorGenerator.class);
     private final InputStream dyeColorsFile;
     private final File outputFolder;
 
     public DyeColorGenerator(@Nullable InputStream dyeColorsFile, @NotNull File outputFolder) {
+        super("net.minestom.server.color");
         this.dyeColorsFile = dyeColorsFile;
         this.outputFolder = outputFolder;
     }
@@ -39,11 +50,11 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
             LOGGER.error("Output folder for code generation does not exist and could not be created.");
             return;
         }
-        // Important classes we use alot
-        ClassName colorCN = ClassName.get("net.minestom.server.color", "Color");
+        // Important classes we use a lot
+        ClassName colorCN = ClassName.get(packageName, "Color");
 
         JsonArray dyeColors = GSON.fromJson(new InputStreamReader(dyeColorsFile), JsonArray.class);
-        ClassName dyeColorCN = ClassName.get("net.minestom.server.color", "DyeColor");
+        ClassName dyeColorCN = ClassName.get(packageName, CLASS_NAME);
         // Dye Color Enum
         TypeSpec.Builder dyeColorEnum = TypeSpec.enumBuilder(dyeColorCN)
                 .addSuperinterface(ClassName.get("net.kyori.adventure.util", "RGBLike"))
@@ -63,10 +74,11 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
                         FieldSpec.builder(binaryTagSerializerTypeCN, "NBT_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.fromEnumStringable($T.class)", binaryTagSerializerCN, dyeColorCN)
                                 .build(),
-                        FieldSpec.builder(colorCN, "textureDiffuseColor", Modifier.PRIVATE, Modifier.FINAL).build(),
-                        FieldSpec.builder(colorCN, "textColor", Modifier.PRIVATE, Modifier.FINAL).build(),
-                        FieldSpec.builder(colorCN, "fireworkColor", Modifier.PRIVATE, Modifier.FINAL).build(),
-                        FieldSpec.builder(TypeName.INT, "mapColorId", Modifier.PRIVATE, Modifier.FINAL).build()
+                        FieldSpec.builder(colorCN, TEXTURE_DIFFUSE_COLOR, PRIVATE_FINAL_MODIFIERS).build(),
+                        FieldSpec.builder(colorCN, TEXT_COLOR, PRIVATE_FINAL_MODIFIERS).build(),
+                        FieldSpec.builder(colorCN, FIREWORK_COLOR, PRIVATE_FINAL_MODIFIERS).build(),
+                        FieldSpec.builder(TypeName.INT, MAP_COLOR_ID, PRIVATE_FINAL_MODIFIERS).build(),
+                        FieldSpec.builder(ArrayTypeName.of(dyeColorCN), "VALUES", CONSTANT_MODIFIERS).initializer(CLASS_NAME + ".values()").build()  // Microtus - Banner and shield meta
                 )
         );
 
@@ -77,28 +89,28 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
                         MethodSpec.constructorBuilder()
                                 .addParameters(
                                         List.of(
-                                                ParameterSpec.builder(colorCN, "textureDiffuseColor").addAnnotation(NotNull.class).build(),
-                                                ParameterSpec.builder(colorCN, "textColor").addAnnotation(NotNull.class).build(),
-                                                ParameterSpec.builder(colorCN, "fireworkColor").addAnnotation(NotNull.class).build(),
-                                                ParameterSpec.builder(TypeName.INT, "mapColorId").build()
+                                                ParameterSpec.builder(colorCN, TEXTURE_DIFFUSE_COLOR).addAnnotation(NotNull.class).build(),
+                                                ParameterSpec.builder(colorCN, TEXT_COLOR).addAnnotation(NotNull.class).build(),
+                                                ParameterSpec.builder(colorCN, FIREWORK_COLOR).addAnnotation(NotNull.class).build(),
+                                                ParameterSpec.builder(TypeName.INT, MAP_COLOR_ID).build()
                                         )
                                 )
-                                .addStatement("this.textureDiffuseColor = textureDiffuseColor")
-                                .addStatement("this.textColor = textColor")
-                                .addStatement("this.fireworkColor = fireworkColor")
-                                .addStatement("this.mapColorId = mapColorId")
+                                .addStatement(GenerationHelper.VARIABLE_SETTER, TEXTURE_DIFFUSE_COLOR)
+                                .addStatement(GenerationHelper.VARIABLE_SETTER, TEXT_COLOR)
+                                .addStatement(GenerationHelper.VARIABLE_SETTER, FIREWORK_COLOR)
+                                .addStatement(GenerationHelper.VARIABLE_SETTER, MAP_COLOR_ID)
                                 .build(),
                         MethodSpec.methodBuilder("color")
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
                                 .addStatement("return this.textureDiffuseColor")
                                 .build(),
-                        MethodSpec.methodBuilder("textColor")
+                        MethodSpec.methodBuilder(TEXT_COLOR)
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
                                 .addStatement("return this.textColor")
                                 .build(),
-                        MethodSpec.methodBuilder("fireworkColor")
+                        MethodSpec.methodBuilder(FIREWORK_COLOR)
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
                                 .addStatement("return this.fireworkColor")
@@ -121,23 +133,30 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
                                 .addAnnotation(Override.class)
                                 .addStatement("return this.textureDiffuseColor.blue()")
                                 .build(),
-                        MethodSpec.methodBuilder("mapColorId")
+                        MethodSpec.methodBuilder(MAP_COLOR_ID)
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(TypeName.INT)
                                 .addStatement("return this.mapColorId")
-                                .build()
+                                .build(),
+                        MethodSpec.methodBuilder("getValue") // Microtus start - Banner and shield meta
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .addParameter(ParameterSpec.builder(TypeName.INT, "id").build())
+                                .addAnnotation(Nullable.class)
+                                .returns(ClassName.get(packageName, CLASS_NAME))
+                                .addCode("return VALUES[$L];", "id")
+                                .build() // Microtus end - Banner and shield meta
                 )
         );
 
         // Use data
         for (JsonObject dyeColorObject : StreamSupport.stream(dyeColors.spliterator(), true).map(JsonElement::getAsJsonObject).sorted(Comparator.comparingInt(o -> o.get("id").getAsInt())).toList()) {
             String dyeColorName = dyeColorObject.get("name").getAsString();
-            dyeColorEnum.addEnumConstant(toConstant(dyeColorName), TypeSpec.anonymousClassBuilder(
+            dyeColorEnum.addEnumConstant(extractNamespace(dyeColorName), TypeSpec.anonymousClassBuilder(
                             "new $T(0x$L), new $T(0x$L), new $T(0x$L), $L",
-                            colorCN, Integer.toString(dyeColorObject.get("textureDiffuseColor").getAsInt(), 16),
-                            colorCN, Integer.toString(dyeColorObject.get("textColor").getAsInt(), 16),
-                            colorCN, Integer.toString(dyeColorObject.get("fireworkColor").getAsInt(), 16),
-                            dyeColorObject.get("mapColorId").getAsInt()
+                            colorCN, Integer.toString(dyeColorObject.get(TEXTURE_DIFFUSE_COLOR).getAsInt(), 16),
+                            colorCN, Integer.toString(dyeColorObject.get(TEXT_COLOR).getAsInt(), 16),
+                            colorCN, Integer.toString(dyeColorObject.get(FIREWORK_COLOR).getAsInt(), 16),
+                            dyeColorObject.get(MAP_COLOR_ID).getAsInt()
                     ).build()
             );
         }
@@ -145,8 +164,8 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
         // Write files to outputFolder
         writeFiles(
                 List.of(
-                        JavaFile.builder("net.minestom.server.color", dyeColorEnum.build())
-                                .indent("    ")
+                        JavaFile.builder(packageName, dyeColorEnum.build())
+                                .indent(DEFAULT_INDENT)
                                 .skipJavaLangImports(true)
                                 .build()
                 ),

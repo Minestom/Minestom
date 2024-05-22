@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class InsideTest {
+class InsideTest {
     @Test
-    public void inside() {
+    void inside() {
         assertTrue(ServerFlag.INSIDE_TEST);
     }
 }

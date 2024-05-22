@@ -29,6 +29,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
     private final File outputFolder;
 
     public VillagerTypeGenerator(@Nullable InputStream villagerTypesFile, @NotNull File outputFolder) {
+        super("");
         this.villagerTypesFile = villagerTypesFile;
         this.outputFolder = outputFolder;
     }

@@ -35,14 +35,22 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ArgumentTypeTest {
+class ArgumentTypeTest {
 
     static {
         MinecraftServer.init();
     }
 
     @Test
-    public void testArgumentEntityType() {
+    void testArgumentEnchantment() {
+        var arg = ArgumentType.Enchantment("enchantment");
+        assertInvalidArg(arg, "minecraft:invalid_enchantment");
+        assertArg(arg, Enchantment.SWEEPING, Enchantment.SWEEPING.name());
+        assertArg(arg, Enchantment.MENDING, Enchantment.MENDING.name());
+    }
+
+    @Test
+    void testArgumentEntityType() {
         var arg = ArgumentType.EntityType("entity_type");
         assertInvalidArg(arg, "minecraft:invalid_entity_type");
         assertArg(arg, EntityType.ARMOR_STAND, EntityType.ARMOR_STAND.name());
@@ -50,7 +58,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentParticle() {
+    void testArgumentParticle() {
         var arg = ArgumentType.Particle("particle");
         assertInvalidArg(arg, "minecraft:invalid_particle");
         assertArg(arg, Particle.BLOCK, Particle.BLOCK.name());
@@ -58,7 +66,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentBlockState() {
+    void testArgumentBlockState() {
         var arg = ArgumentType.BlockState("block_state");
         assertInvalidArg(arg, "minecraft:invalid_block[invalid_property=invalid_key]");
         assertInvalidArg(arg, "minecraft:stone[invalid_property=invalid_key]");
@@ -69,7 +77,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentColor() {
+    void testArgumentColor() {
         var arg = ArgumentType.Color("color");
         assertInvalidArg(arg, "invalid_color");
         assertArg(arg, Style.style(NamedTextColor.DARK_PURPLE), "dark_purple");
@@ -77,7 +85,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentComponent() {
+    void testArgumentComponent() {
         var arg = ArgumentType.Component("component");
         var component1 = Component.text("Example text", NamedTextColor.DARK_AQUA);
         var component2 = Component.text("Other example text", Style.style(TextDecoration.OBFUSCATED));
@@ -90,7 +98,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentEntity() {
+    void testArgumentEntity() {
         var arg = ArgumentType.Entity("entity");
 
         assertValidArg(arg, "@a");
@@ -127,7 +135,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentFloatRange() {
+    void testArgumentFloatRange() {
         var arg = ArgumentType.FloatRange("float_range");
         assertArg(arg, new FloatRange(0f, 50f), "0..50");
         assertArg(arg, new FloatRange(0f, 0f), "0..0");
@@ -142,7 +150,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentIntRange() {
+    void testArgumentIntRange() {
         var arg = ArgumentType.IntRange("int_range");
 
         assertArg(arg, new IntRange(0, 50), "0..50");
@@ -161,7 +169,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentItemStack() {
+    void testArgumentItemStack() {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
@@ -172,7 +180,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentNbtCompoundTag() {
+    void testArgumentNbtCompoundTag() {
         var arg = ArgumentType.NbtCompound("nbt_compound");
         assertArg(arg, CompoundBinaryTag.builder().putLongArray("long_array", new long[]{12, 49, 119}).build(),
                 "{\"long_array\":[L;12L,49L,119L]}");
@@ -186,7 +194,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentNbtTag() {
+    void testArgumentNbtTag() {
         var arg = ArgumentType.NBT("nbt");
         assertArg(arg, StringBinaryTag.stringBinaryTag("string"), "string");
         assertArg(arg, StringBinaryTag.stringBinaryTag("string"), "\"string\"");
@@ -202,14 +210,14 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentResource() {
+    void testArgumentResource() {
         var arg = ArgumentType.Resource("resource", "minecraft:block");
         assertArg(arg, "minecraft:resource_example", "minecraft:resource_example");
         assertInvalidArg(arg, "minecraft:invalid resource");
     }
 
     @Test
-    public void testArgumentResourceLocation() {
+    void testArgumentResourceLocation() {
         var arg = ArgumentType.ResourceLocation("resource_location");
         assertArg(arg, "minecraft:resource_location_example", "minecraft:resource_location_example");
         assertInvalidArg(arg, "minecraft:invalid resource location");
@@ -217,14 +225,14 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentResourceOrTag() {
+    void testArgumentResourceOrTag() {
         var arg = ArgumentType.ResourceOrTag("resource_or_tag", "data/minecraft/tags/blocks");
         assertArg(arg, "minecraft:resource_or_tag_example", "minecraft:resource_or_tag_example");
         assertInvalidArg(arg, "minecraft:invalid resource or tag");
     }
 
     @Test
-    public void testArgumentTime() {
+    void testArgumentTime() {
         var arg = ArgumentType.Time("time");
         assertArg(arg, Duration.of(20, TimeUnit.SERVER_TICK), "20");
         assertArg(arg, Duration.of(40, TimeUnit.SERVER_TICK), "40t");
@@ -236,14 +244,14 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentUUID() {
+    void testArgumentUUID() {
         var arg = ArgumentType.UUID("uuid");
         assertInvalidArg(arg, "invalid_uuid");
         assertArg(arg, UUID.fromString("10515090-26f2-49fa-b2ba-9594d4d0451f"), "10515090-26f2-49fa-b2ba-9594d4d0451f");
     }
 
     @Test
-    public void testArgumentDouble() {
+    void testArgumentDouble() {
         var arg = ArgumentType.Double("double");
         assertArg(arg, 2564d, "2564");
         assertArg(arg, -591.981d, "-591.981");
@@ -252,7 +260,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentFloat() {
+    void testArgumentFloat() {
         var arg = ArgumentType.Float("float");
         assertArg(arg, 2564f, "2564");
         assertArg(arg, -591.981f, "-591.981");
@@ -261,7 +269,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentInteger() {
+    void testArgumentInteger() {
         var arg = ArgumentType.Integer("integer");
         assertArg(arg, 2564, "2564");
         assertInvalidArg(arg, "256.4");
@@ -269,15 +277,15 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentLong() {
+    void testArgumentLong() {
         var arg = ArgumentType.Long("long");
-        assertArg(arg, 2564l, "2564");
+        assertArg(arg, 2564L, "2564");
         assertInvalidArg(arg, "256.4");
         assertInvalidArg(arg, "9223372036854775808");
     }
 
     @Test
-    public void testArgumentRelativeBlockPosition() {
+    void testArgumentRelativeBlockPosition() {
         var arg = ArgumentType.RelativeBlockPosition("relative_block_position");
         var vec = new Vec(-3, 14, 255);
 
@@ -301,7 +309,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentRelativeVec2() {
+    void testArgumentRelativeVec2() {
         var arg = ArgumentType.RelativeVec2("relative_vec_2");
         var vec = new Vec(-3, 14.25);
 
@@ -322,7 +330,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentRelativeVec3() {
+    void testArgumentRelativeVec3() {
         var arg = ArgumentType.RelativeVec3("relative_vec_3");
         var vec = new Vec(-3, 14.25, 255);
 
@@ -343,7 +351,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentBoolean() {
+    void testArgumentBoolean() {
         var arg = ArgumentType.Boolean("boolean");
         assertArg(arg, true, "true");
         assertArg(arg, false, "false");
@@ -351,7 +359,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentEnum() {
+    void testArgumentEnum() {
         enum ExampleEnum {FIRST, SECOND, Third, fourth}
 
         var arg = ArgumentType.Enum("enum", ExampleEnum.class);
@@ -379,7 +387,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentGroup() {
+    void testArgumentGroup() {
         var arg = ArgumentType.Group("group", ArgumentType.Integer("integer"), ArgumentType.String("string"), ArgumentType.Double("double"));
 
         // Test normal input
@@ -405,7 +413,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentLiteral() {
+    void testArgumentLiteral() {
         var arg = ArgumentType.Literal("literal");
         assertArg(arg, "literal", "literal");
         assertInvalidArg(arg, "not_literal");
@@ -413,7 +421,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentLoop() {
+    void testArgumentLoop() {
         var arg = ArgumentType.Loop("loop", ArgumentType.String("string"), ArgumentType.String("string2").map(s -> {
             throw new IllegalArgumentException("This argument should never be triggered");
         }));
@@ -423,7 +431,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentString() {
+    void testArgumentString() {
         var arg = ArgumentType.String("string");
         assertArg(arg, "text", "text");
         assertArg(arg, "more text", "\"more text\"");
@@ -433,7 +441,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentStringArray() {
+    void testArgumentStringArray() {
         var arg = ArgumentType.StringArray("string_array");
         assertArrayArg(arg, new String[]{"example", "text"}, "example text");
         assertArrayArg(arg, new String[]{"some", "more", "placeholder", "text"}, "some more placeholder text");
@@ -443,7 +451,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentWord() {
+    void testArgumentWord() {
         var arg = ArgumentType.Word("word").from("word1", "word2", "word3");
 
         assertArg(arg, "word1", "word1");
@@ -455,7 +463,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentMapWithSender() {
+    void testArgumentMapWithSender() {
         var serverSender = new ServerSender();
 
         var arg = ArgumentType.Word("word").from("word1", "word2", "word3")

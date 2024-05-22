@@ -16,12 +16,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class InventoryIntegrationTest {
+class InventoryIntegrationTest {
 
+    private static final Component TITLE = Component.text("title");
     private static final ItemStack MAGIC_STACK = ItemStack.of(Material.DIAMOND, 3);
 
     @Test
-    public void setSlotDuplicateTest(Env env) {
+    void setSlotDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -45,7 +46,7 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void setCursorItemDuplicateTest(Env env) {
+    void setCursorItemDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -69,7 +70,7 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void clearInventoryTest(Env env) {
+    void clearInventoryTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -145,11 +146,11 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void closeInventoryTest(Env env) {
+    void closeInventoryTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
-        final var inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
+        final var inventory = new Inventory(InventoryType.CHEST_1_ROW, TITLE);
         player.openInventory(inventory);
         assertSame(inventory, player.getOpenInventory());
         player.closeInventory();
@@ -157,12 +158,12 @@ public class InventoryIntegrationTest {
     }
 
     @Test
-    public void openInventoryOnItemDropFromInventoryClosingTest(Env env) {
+    void openInventoryOnItemDropFromInventoryClosingTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         var listener = env.listen(ItemDropEvent.class);
-        final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
+        final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, TITLE);
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
         player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
@@ -172,8 +173,8 @@ public class InventoryIntegrationTest {
         assertNull(player.getOpenInventory());
 
         player.openInventory(firstInventory);
-        player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
-        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
+        firstInventory.setCursorItem(player, ItemStack.of(Material.STONE));
+        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, TITLE);
         listener.followup(event -> event.getPlayer().openInventory(secondInventory));
         player.closeInventory();
         assertSame(secondInventory, player.getOpenInventory());
