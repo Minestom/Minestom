@@ -1,0 +1,18 @@
+daysUntilStale: 30
+daysUntilClose: 7
+only: issues
+exemptLabels:
+  - "Bug"
+  - "Enhancement"
+  - "Approved"
+  - "Priority"
+  - "Under investigation"
+staleLabel: "resolution: stale"
+markComment: >
+  This issue has been automatically marked as stale because it has not had
+  recent activity. It will be closed if no further activity occurs. If the issue is still present and can be reproduced, please let the team know.
+  Thank you for your contributions.
+closeComment: >
+  This issue has been automatically closed because it has not had activity in
+  a long time. If the issue still applies to the most recent supported
+  version, please reply to this issue and the team will reopen it.

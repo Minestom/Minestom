@@ -1,0 +1,33 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[Feature]: "
+labels: [ "type: feature" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an idea to make Microtus better!
+        Please fill out the information below to help us understand your idea.
+  - type: textarea
+    attributes:
+      label: Is your feature request related to a problem?
+      description: Please give some context for this request. Why do you want it added?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the solution you'd like
+      description: Give us a clear description of what you want
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe alternatives you've considered
+      description: A clear and concise description of any alternative solutions or features you've considered.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting your feature request, please make sure you have done the following:
+        - [ ] Searched for existing feature requests
