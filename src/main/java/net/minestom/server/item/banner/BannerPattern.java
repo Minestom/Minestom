@@ -2,6 +2,7 @@ package net.minestom.server.item.banner;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 // Microtus -  Banner and Shield Meta
-public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
+public sealed interface BannerPattern extends StaticProtocolObject, BannerPatterns permits BannerPatternImpl {
     static @NotNull Collection<@NotNull BannerPattern> values() {
         return BannerPatternImpl.values();
     }
@@ -32,7 +33,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
 
     @Override
     default @NotNull Key key() {
-        return ProtocolObject.super.key();
+        return StaticProtocolObject.super.key();
     }
 
     @NotNull String identifier();
