@@ -1,28 +1,27 @@
-## How to contribute to Minestom
-#### **Did you find a bug?**
-* Open a new GitHub issue if it's not already reported.
+Contributing to Microtus
+========================
 
-* Explain it clearly, with steps (or code) to reproduce it. 
+We (the Microtus team) would be very glad if you want to contribute to the project.
+The process to contribute requires some guidelines that you need to follow.
+These help us to improve the project and maintain a consistent style for each contributor
 
-#### **Did you write some code that fixes a bug?**
-* Open a new GitHub pull-request with the commits if it hasn't already been proposed.
+## Use a Personal Fork and not an Organization
 
-* Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
+If you want to contribute to Microtus, please fork the repository to your personal account and not to an organization.
+This is because GitHub does not allow to push as maintainer of our fork into a repository from an organization to another organization.
+If you fork the repository to an organization, you can open a pr, but we want to accept it.
 
-#### **Do you intend to add a new feature or change an existing one?**
-* Do not open a pull-request on GitHub until you have collected positive feedback about the change from a maintainer.
+We much prefer to have PRs show as merged, so please do not use repositories
+on organizations for PRs.
 
-#### **Do you have questions about the source code?**
-* Ask any question about how to use Minestom in the GitHub issues section or the community portals.
+See <https://github.com/isaacs/github/issues/1681> for more information on the
+issue.
 
-#### **Do you want to contribute to the Minestom documentation?**
-* Feel free to do so! Just make sure to conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification when editing the README.md.
+## Requirements
 
-## General Contribution Rules
-* By contributing to the Minestom project your code/contribution will be licensed under the [Apache Version 2.0](../LICENSE) license.
+To get started with the contributing of change, you will need some additional software.
+Most of them can be obtained in (most) package managers on different platforms.
 
-Minestom is a community project. We encourage you to contribute! :)
-
-Thanks! :heart: :heart: :heart:
-
-~Minestom Community
+- `git` - Version control system
+- A Java 21 or later JDK:
+    - [Adoptium](https://adoptium.net/) has builds for most operating systems

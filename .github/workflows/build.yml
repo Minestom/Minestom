@@ -1,0 +1,55 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    # Run on all label events (won't be duplicated) or all push events or on PR syncs not from the same repo
+    if: github.repository_owner == 'OneLiteFeatherNET'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v2
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          cache: gradle
+          java-version: 21
+      - name: Clean Build
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "Github Actions"
+          git submodule init
+          git submodule update --init
+          ./gradlew applyPatches
+          ./gradlew :patched-minestom:jar
+      - name: Determine release status
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          if [ "$(./gradlew properties | awk '/^version:/ { print $2; }' | grep '\-SNAPSHOT')" ]; then
+            echo "STATUS=snapshot" >> $GITHUB_ENV
+          else
+            echo "STATUS=release" >> $GITHUB_ENV
+          fi
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Minestom Archive
+          path: patched-minestom/build/libs/minestom-*.jar
+      - name: Publish to Central
+        run: |
+          ./gradlew :patched-minestom:publishToSonatype :patched-minestom:testing:publishToSonatype :patched-minestom:closeAndReleaseSonatypeStagingRepository -PforceSign=true
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.ONELITEFEATHER_GPG_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.ONELITEFEATHER_GPG_PASSWORD }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: "${{ secrets.SONATYPE_USERNAME }}"
+          ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
+          ORG_GRADLE_PROJECT_onelitefeatherSigningKey: "${{ secrets.ONELITEFEATHER_GPG_KEY }}"
+          ORG_GRADLE_PROJECT_onelitefeatherSigningPassword: "${{ secrets.ONELITEFEATHER_GPG_PASSWORD }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
