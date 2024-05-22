@@ -35,14 +35,9 @@ jobs:
           else
             echo "STATUS=release" >> $GITHUB_ENV
           fi
-      - name: Archive Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Minestom Archive
-          path: patched-minestom/build/libs/minestom-*.jar
       - name: Publish to Central
         run: |
-          ./gradlew :patched-minestom:publishToSonatype :patched-minestom:testing:publishToSonatype :patched-minestom:closeAndReleaseSonatypeStagingRepository -PforceSign=true
+          ./gradlew publishToSonatype :testing:publishToSonatype closeAndReleaseSonatypeStagingRepository -PforceSign=true
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}

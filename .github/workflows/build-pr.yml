@@ -21,7 +21,4 @@ jobs:
         run: |
           git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
-          git submodule init
-          git submodule update --init
-          ./gradlew applyPatches
-          ./gradlew :patched-minestom:classes
+          ./gradlew classes
