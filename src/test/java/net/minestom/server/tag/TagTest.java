@@ -11,10 +11,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagTest {
+class TagTest {
 
     @Test
-    public void intGet() {
+    void intGet() {
         var mutable = new MutableNBTCompound().setInt("key", 5);
         var tag = Tag.Integer("key");
         var handler = TagHandler.fromCompound(new MutableNBTCompound());
@@ -28,7 +28,7 @@ public class TagTest {
     }
 
     @Test
-    public void intNull() {
+    void intNull() {
         var handler = TagHandler.fromCompound(new MutableNBTCompound().set("key", NBT.Int(5)));
         // Removal
         var tag = Tag.Integer("key");
@@ -38,7 +38,7 @@ public class TagTest {
     }
 
     @Test
-    public void intRemove() {
+    void intRemove() {
         var handler = TagHandler.fromCompound(new MutableNBTCompound().set("key", NBT.Int(5)));
         // Removal
         var tag = Tag.Integer("key");
@@ -48,14 +48,14 @@ public class TagTest {
     }
 
     @Test
-    public void snbt() {
+    void snbt() {
         var mutable = new MutableNBTCompound().setInt("key", 5);
         var reader = TagHandler.fromCompound(mutable);
         assertEquals(reader.asCompound().toSNBT(), mutable.toCompound().toSNBT(), "SNBT is not the same");
     }
 
     @Test
-    public void fromNbt() {
+    void fromNbt() {
         var mutable = new MutableNBTCompound().setInt("key", 5);
         var handler = TagHandler.fromCompound(mutable);
         assertEquals(5, handler.getTag(Tag.Integer("key")));
@@ -63,7 +63,7 @@ public class TagTest {
     }
 
     @Test
-    public void fromNbtCache() {
+    void fromNbtCache() {
         // Ensure that TagHandler#asCompound reuse the same compound used for construction
         var compound = NBT.Compound(Map.of("key", NBT.Int(5)));
         var handler = TagHandler.fromCompound(compound);
@@ -71,7 +71,7 @@ public class TagTest {
     }
 
     @Test
-    public void defaultValue() {
+    void defaultValue() {
         var nullable = Tag.String("key");
         var notNull = nullable.defaultValue("Hey");
         assertNotSame(nullable, notNull);
@@ -86,7 +86,7 @@ public class TagTest {
     }
 
     @Test
-    public void invalidType() {
+    void invalidType() {
         var tag1 = Tag.Integer("key");
         var tag2 = Tag.String("key");
 
@@ -99,7 +99,7 @@ public class TagTest {
     }
 
     @Test
-    public void item() {
+    void item() {
         var item = ItemStack.of(Material.DIAMOND);
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
@@ -108,7 +108,7 @@ public class TagTest {
     }
 
     @Test
-    public void tagResizing() {
+    void tagResizing() {
         var tag1 = Tag.Integer("tag1");
         var tag2 = Tag.Integer("tag2");
         var handler = TagHandler.newHandler();
@@ -121,7 +121,7 @@ public class TagTest {
     }
 
     @Test
-    public void nbtResizing() {
+    void nbtResizing() {
         var handler = TagHandler.fromCompound(NBT.Compound(Map.of(
                 "tag1", NBT.Int(5),
                 "tag2", NBT.Int(1))));
@@ -131,7 +131,7 @@ public class TagTest {
     }
 
     @Test
-    public void rehashing() {
+    void rehashing() {
         var handler = TagHandler.newHandler();
         for (int i = 0; i < 1000; i++) {
             handler.setTag(Tag.Integer("rehashing" + i), i);

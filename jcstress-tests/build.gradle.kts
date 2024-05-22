@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.reyerizo.gradle.jcstress") version "0.8.13"
+    id("io.github.reyerizo.gradle.jcstress") version "0.8.15"
     id("minestom.common-conventions")
 }
 

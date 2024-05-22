@@ -11,10 +11,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SendablePacketTest {
+class SendablePacketTest {
 
     @Test
-    public void lazy() {
+    void lazy() {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);
         AtomicBoolean called = new AtomicBoolean(false);
         var lazy = new LazyPacket(() -> {
@@ -27,7 +27,7 @@ public class SendablePacketTest {
     }
 
     @Test
-    public void cached() {
+    void cached() {
         var packet = new SystemChatPacket(Component.text("Hello World!"), false);
         var cached = new CachedPacket(packet);
         assertSame(packet, cached.packet(ConnectionState.PLAY));

@@ -11,9 +11,9 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EntityTrackerTest {
+class EntityTrackerTest {
     @Test
-    public void register() {
+    void register() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
@@ -40,7 +40,7 @@ public class EntityTrackerTest {
     }
 
     @Test
-    public void move() {
+    void move() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override
@@ -65,7 +65,7 @@ public class EntityTrackerTest {
     }
 
     @Test
-    public void tracking() {
+    void tracking() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var ent2 = new Entity(EntityType.ZOMBIE);
 
@@ -124,7 +124,7 @@ public class EntityTrackerTest {
     }
 
     @Test
-    public void nearby() {
+    void nearby() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var ent2 = new Entity(EntityType.ZOMBIE);
         var ent3 = new Entity(EntityType.ZOMBIE);
@@ -177,7 +177,7 @@ public class EntityTrackerTest {
     }
 
     @Test
-    public void nearbySingleChunk() {
+    void nearbySingleChunk() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var ent2 = new Entity(EntityType.ZOMBIE);
         var ent3 = new Entity(EntityType.ZOMBIE);
@@ -217,7 +217,7 @@ public class EntityTrackerTest {
     }
 
     @Test
-    public void collectionView() {
+    void collectionView() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var updater = new EntityTracker.Update<>() {
             @Override

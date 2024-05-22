@@ -11,10 +11,10 @@ import java.util.List;
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CoordinateTest {
+class CoordinateTest {
 
     @Test
-    public void chunkIndex() {
+    void chunkIndex() {
         var index = getChunkIndex(2, 5);
         assertEquals(2, getChunkCoordX(index));
         assertEquals(5, getChunkCoordZ(index));
@@ -29,7 +29,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void chunkCoordinate() {
+    void chunkCoordinate() {
         assertEquals(0, getChunkCoordinate(15));
         assertEquals(1, getChunkCoordinate(16));
         assertEquals(-1, getChunkCoordinate(-16));
@@ -43,7 +43,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void chunkCount() {
+    void chunkCount() {
         assertEquals(289, getChunkCount(8));
         assertEquals(169, getChunkCount(6));
         assertEquals(121, getChunkCount(5));
@@ -53,7 +53,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void vecAddition() {
+    void vecAddition() {
         Vec temp = Vec.ZERO;
         assertEquals(0, temp.x());
         assertEquals(0, temp.y());
@@ -81,7 +81,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void vecWith() {
+    void vecWith() {
         Vec temp = Vec.ZERO.withX(1);
         assertEquals(1, temp.x());
         assertEquals(0, temp.y());
@@ -94,7 +94,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void toSectionRelativeCoordinate() {
+    void toSectionRelativeCoordinate() {
         assertEquals(8, ChunkUtils.toSectionRelativeCoordinate(-40));
         assertEquals(12, ChunkUtils.toSectionRelativeCoordinate(-20));
         assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(0));
@@ -107,7 +107,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void blockIndex() {
+    void blockIndex() {
         // Test if the block index is correctly converted back and forth
 
         List<Vec> tempEquals = List.of(
@@ -151,7 +151,7 @@ public class CoordinateTest {
     }
 
     @Test
-    public void blockIndexDuplicate() {
+    void blockIndexDuplicate() {
         LongSet temp = new LongOpenHashSet();
 
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {

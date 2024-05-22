@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestScheduler {
+class TestScheduler {
 
     @Test
-    public void tickTask() {
+    void tickTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         Task task = scheduler.scheduleNextTick(() -> result.set(true));
@@ -30,7 +30,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void durationTask() throws InterruptedException {
+    void durationTask() throws InterruptedException {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.buildTask(() -> result.set(true))
@@ -45,7 +45,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void immediateTask() {
+    void immediateTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.scheduleNextProcess(() -> result.set(true));
@@ -61,7 +61,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void cancelTask() {
+    void cancelTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         var task = scheduler.buildTask(() -> result.set(true))
@@ -74,7 +74,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void cancelAsyncDelayedTask() throws InterruptedException {
+    void cancelAsyncDelayedTask() throws InterruptedException {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         var task = scheduler.buildTask(() -> result.set(true))
@@ -90,7 +90,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void parkTask() {
+    void parkTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         // Ignored parked task
         scheduler.buildTask(() -> fail("This parked task should never be executed"))
@@ -114,7 +114,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void futureTask() {
+    void futureTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         CompletableFuture<Void> future = new CompletableFuture<>();
         AtomicBoolean result = new AtomicBoolean(false);
@@ -129,7 +129,7 @@ public class TestScheduler {
     }
 
     @Test
-    public void asyncTask() throws InterruptedException {
+    void asyncTask() throws InterruptedException {
         final Thread currentThread = Thread.currentThread();
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);

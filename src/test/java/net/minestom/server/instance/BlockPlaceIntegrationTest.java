@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
-public class BlockPlaceIntegrationTest {
+class BlockPlaceIntegrationTest {
 
     @Test
     void testPlacementOutOfLimit(Env env) {

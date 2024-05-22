@@ -13,29 +13,64 @@ public class FrogMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    public Variant getVariant() {
+    /**
+     * Get the current {@link Variant} from a frog.
+     * @return the given variant entry
+     */
+    public @NotNull Variant getVariant() {
         return super.metadata.getIndex(OFFSET, Variant.TEMPERATE);
     }
 
+    /**
+     * Set the variant for a frog.
+     * @param value the value to set
+     */
     public void setVariant(@NotNull Variant value) {
         super.metadata.setIndex(OFFSET, Metadata.FrogVariant(value));
     }
 
-    public @Nullable Integer getTongueTarget() {
-        return super.metadata.getIndex(OFFSET + 1, null);
+    /**
+     * Get the current tongue target value.
+     * @return the given value
+     */
+    public int getTongueTarget() {
+        return super.metadata.getIndex(OFFSET + 1, 0);
     }
 
+    /**
+     * Set's the current tongue target back to the default value from the protocol.
+     */
+    public void resetTongueTarget() {
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(0));
+    }
 
-    public void setTongueTarget(@Nullable Integer value) {
+    /**
+     * Set the target value for a tongue.
+     * @param value the target to set
+     */
+    public void setTongueTarget(int value) {
         super.metadata.setIndex(OFFSET + 1, Metadata.OptVarInt(value));
     }
 
-
+    /**
+     * The enum contains all variants from a frog which are currently implemented in the game.
+     */
     public enum Variant {
         TEMPERATE,
         WARM,
         COLD;
 
-        private final static FrogMeta.Variant[] VALUES = values();
+        private static final FrogMeta.Variant[] VALUES = values();
+
+        // Microtus start - meta update
+        /**
+         * Add method to get a variant from a frog over the ordinal id
+         * @param id the ordinal id
+         * @return the entry which matches with the id
+         */
+        public static @Nullable FrogMeta.Variant getVariant(int id) {
+            return id >= 0 && id <= VALUES.length ? VALUES[id] : null;
+        }
+        // Microtus end - meta update
     }
 }

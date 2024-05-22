@@ -1,6 +1,9 @@
 package net.minestom.codegen;
 
+import net.minestom.codegen.attribute.AttributeGenerator;
+import net.minestom.codegen.biome.BiomeGenerator;
 import net.minestom.codegen.color.DyeColorGenerator;
+import net.minestom.codegen.feature.FeatureFlagGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,8 @@ public class Generators {
 
         // Generate DyeColors
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
+        new BiomeGenerator(resource("biomes.json"), outputFolder).generate();
+        new FeatureFlagGenerator(resource("feature_flags.json"), outputFolder).generate();
 
 
         var generator = new CodeGenerator(outputFolder);
@@ -37,16 +42,16 @@ public class Generators {
         generator.generate(resource("damage_types.json"), "net.minestom.server.entity.damage", "DamageType", "DamageTypeImpl", "DamageTypes");
         generator.generate(resource("trim_materials.json"), "net.minestom.server.item.armor", "TrimMaterial", "TrimMaterialImpl", "TrimMaterials");
         generator.generate(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatternImpl", "TrimPatterns");
+        generator.generate(resource("banner_patterns.json"), "net.minestom.server.item.banner", "BannerPattern", "BannerPatternImpl", "BannerPatterns"); // Microtus - Banner and Shield Meta
 
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
 
-        // TODO: Generate attributes
-//        new AttributeGenerator(
-//                new File(inputFolder, targetVersion + "_attributes.json"),
-//                outputFolder
-//        ).generate();
+        new AttributeGenerator(
+                resource("attributes.json"),
+                outputFolder
+        ).generate();
         // TODO: Generate villager professions
 //        new VillagerProfessionGenerator(
 //                new File(inputFolder, targetVersion + "_villager_professions.json"),

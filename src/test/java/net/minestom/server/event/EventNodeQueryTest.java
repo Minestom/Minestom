@@ -9,10 +9,10 @@ import java.util.List;
 import static net.minestom.testing.TestUtils.assertEqualsIgnoreOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EventNodeQueryTest {
+class EventNodeQueryTest {
 
     @Test
-    public void find() {
+    void find() {
         var node = EventNode.all("main");
         assertEquals(List.of(), node.findChildren("test"));
 
@@ -33,7 +33,7 @@ public class EventNodeQueryTest {
     }
 
     @Test
-    public void findType() {
+    void findType() {
         var node = EventNode.all("main");
         assertEquals(List.of(), node.findChildren("test", Event.class));
 
@@ -58,7 +58,7 @@ public class EventNodeQueryTest {
     }
 
     @Test
-    public void replace() {
+    void replace() {
         var node = EventNode.all("main");
 
         var child1 = EventNode.all("test");

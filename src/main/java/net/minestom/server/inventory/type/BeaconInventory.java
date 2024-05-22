@@ -17,10 +17,6 @@ public class BeaconInventory extends Inventory {
         super(InventoryType.BEACON, title);
     }
 
-    public BeaconInventory(@NotNull String title) {
-        super(InventoryType.BEACON, title);
-    }
-
     /**
      * Gets the beacon power level.
      *

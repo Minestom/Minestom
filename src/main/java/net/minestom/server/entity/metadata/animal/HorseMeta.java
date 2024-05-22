@@ -68,7 +68,7 @@ public class HorseMeta extends AbstractHorseMeta {
         WHITE_DOTS,
         BLACK_DOTS;
 
-        private final static Marking[] VALUES = values();
+        private static final Marking[] VALUES = values(); //Microtus - update java keyword usage
     }
 
     public enum Color {
@@ -80,7 +80,6 @@ public class HorseMeta extends AbstractHorseMeta {
         GRAY,
         DARK_BROWN;
 
-        private final static Color[] VALUES = values();
+        private static final Color[] VALUES = values(); //Microtus - update java keyword usage
     }
-
 }

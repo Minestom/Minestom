@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.item.attribute.AttributeSlot;
@@ -57,7 +58,7 @@ public final class ItemSerializers {
             final int operation = reader.getTag(OPERATION);
             final String name = reader.getTag(NAME);
 
-            final Attribute attribute = Attribute.fromKey(attributeName.toLowerCase(Locale.ROOT));
+            final Attribute attribute = MinecraftServer.getAttributeManager().fromKey(attributeName.toLowerCase(Locale.ROOT));
             // Wrong attribute name, stop here
             if (attribute == null) return null;
             final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);

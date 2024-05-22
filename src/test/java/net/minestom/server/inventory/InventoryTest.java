@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InventoryTest {
+class InventoryTest {
+
+    private static final Component TITLE = Component.text("title");
 
     static {
         // Required to prevent initialization error during event call
@@ -16,8 +18,8 @@ public class InventoryTest {
     }
 
     @Test
-    public void testCreation() {
-        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+    void testCreation() {
+        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, TITLE);
         assertEquals(InventoryType.CHEST_1_ROW, inventory.getInventoryType());
         assertEquals(Component.text("title"), inventory.getTitle());
 
@@ -26,11 +28,11 @@ public class InventoryTest {
     }
 
     @Test
-    public void testEntry() {
+    void testEntry() {
         var item1 = ItemStack.of(Material.DIAMOND);
         var item2 = ItemStack.of(Material.GOLD_INGOT);
 
-        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, TITLE);
         assertSame(ItemStack.AIR, inventory.getItemStack(0));
         inventory.setItemStack(0, item1);
         assertSame(item1, inventory.getItemStack(0));
@@ -52,9 +54,9 @@ public class InventoryTest {
     }
 
     @Test
-    public void testTake() {
+    void testTake() {
         ItemStack item = ItemStack.of(Material.DIAMOND, 32);
-        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, TITLE);
         inventory.setItemStack(0, item);
         assertTrue(inventory.takeItemStack(item, TransactionOption.DRY_RUN));
         assertTrue(inventory.takeItemStack(item.withAmount(31), TransactionOption.DRY_RUN));
@@ -66,8 +68,8 @@ public class InventoryTest {
     }
 
     @Test
-    public void testAdd() {
-        Inventory inventory = new Inventory(InventoryType.HOPPER, "title");
+    void testAdd() {
+        Inventory inventory = new Inventory(InventoryType.HOPPER, TITLE);
         assertTrue(inventory.addItemStack(ItemStack.of(Material.DIAMOND, 32), TransactionOption.ALL_OR_NOTHING));
         assertTrue(inventory.addItemStack(ItemStack.of(Material.GOLD_BLOCK, 32), TransactionOption.ALL_OR_NOTHING));
         assertTrue(inventory.addItemStack(ItemStack.of(Material.MAP, 32), TransactionOption.ALL_OR_NOTHING));
@@ -77,9 +79,9 @@ public class InventoryTest {
     }
 
     @Test
-    public void testIds() {
+    void testIds() {
         for (int i = 0; i <= 1000; ++i) {
-            final byte windowId = new Inventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
+            final byte windowId = new Inventory(InventoryType.CHEST_1_ROW, TITLE).getWindowId();
             assertTrue(windowId > 0);
         }
     }

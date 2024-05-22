@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class InstanceSnapshotIntegrationTest {
+class InstanceSnapshotIntegrationTest {
 
     @Test
-    public void basic(Env env) {
+    void basic(Env env) {
         env.createFlatInstance();
         var snapshot = ServerSnapshot.update();
 

@@ -15,10 +15,10 @@ import java.util.UUID;
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 
 @EnvTest
-public class InstanceUnregisterIntegrationTest {
+class InstanceUnregisterIntegrationTest {
 
     @Test
-    public void sharedInstance(Env env) {
+    void sharedInstance(Env env) {
         // Ensure that unregistering a shared instance does not unload the container chunks
         var instanceManager = env.process().instance();
         var instance = instanceManager.createInstanceContainer();
@@ -40,7 +40,7 @@ public class InstanceUnregisterIntegrationTest {
     }
 
     @Test
-    public void instanceGC(Env env) {
+    void instanceGC(Env env) {
         var instance = env.createFlatInstance();
         var ref = new WeakReference<>(instance);
         env.process().instance().unregisterInstance(instance);
@@ -51,7 +51,7 @@ public class InstanceUnregisterIntegrationTest {
     }
 
     @Test
-    public void instanceNodeGC(Env env) {
+    void instanceNodeGC(Env env) {
         final class Game {
             final Instance instance;
 
@@ -70,7 +70,7 @@ public class InstanceUnregisterIntegrationTest {
     }
 
     @Test
-    public void chunkGC(Env env) {
+    void chunkGC(Env env) {
         // Ensure that unregistering an instance does release its chunks
         var instance = env.createFlatInstance();
         var chunk = instance.loadChunk(0, 0).join();
@@ -85,7 +85,7 @@ public class InstanceUnregisterIntegrationTest {
     }
 
     @Test
-    public void testGCWithEventsLambda(Env env) {
+    void testGCWithEventsLambda(Env env) {
         var ref = new WeakReference<>(new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD));
         env.process().instance().registerInstance(ref.get());
 

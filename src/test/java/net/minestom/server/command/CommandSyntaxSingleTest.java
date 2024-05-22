@@ -18,9 +18,9 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class CommandSyntaxSingleTest {
+class CommandSyntaxSingleTest {
     @Test
-    public void singleInteger() {
+    void singleInteger() {
         List<Argument<?>> args = List.of(Integer("number"));
         assertSyntax(args, "5", ExpectedExecution.SYNTAX, Map.of("number", 5));
         assertSyntax(args, "5 5", ExpectedExecution.DEFAULT);
@@ -28,7 +28,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleIntegerInteger() {
+    void singleIntegerInteger() {
         List<Argument<?>> args = List.of(Integer("number"), Integer("number2"));
         assertSyntax(args, "5", ExpectedExecution.DEFAULT);
         assertSyntax(args, "5 6", ExpectedExecution.SYNTAX, Map.of("number", 5, "number2", 6));
@@ -36,7 +36,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleString() {
+    void singleString() {
         List<Argument<?>> args = List.of(String("string"));
         assertSyntax(args, """
                 "value"
@@ -46,7 +46,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleStringString() {
+    void singleStringString() {
         List<Argument<?>> args = List.of(String("string"), String("string2"));
         assertSyntax(args, "test", ExpectedExecution.DEFAULT);
         assertSyntax(args, """
@@ -60,7 +60,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleGroup() {
+    void singleGroup() {
         List<Argument<?>> args = List.of(Group("loop", Integer("first"), Integer("second")));
         // 1 2
         {
@@ -74,7 +74,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleLoop() {
+    void singleLoop() {
         List<Argument<?>> stringLoop = List.of(Loop("loop", String("value")));
         assertSyntax(stringLoop, "one two three", ExpectedExecution.SYNTAX, Map.of("loop", List.of("one", "two", "three")));
 
@@ -83,7 +83,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleLoopGroup() {
+    void singleLoopGroup() {
         List<Argument<?>> groupLoop = List.of(Loop("loop", Group("group", Integer("first"), Integer("second"))));
         // 1 2
         {
@@ -112,7 +112,7 @@ public class CommandSyntaxSingleTest {
     }
 
     @Test
-    public void singleLoopDoubleGroup() {
+    void singleLoopDoubleGroup() {
         List<Argument<?>> groupLoop = List.of(
                 Loop("loop",
                         Group("group", BlockState("block"), Enchantment("enchant")),

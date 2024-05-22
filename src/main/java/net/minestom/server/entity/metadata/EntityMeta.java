@@ -13,13 +13,15 @@ public class EntityMeta {
     public static final byte OFFSET = 0;
     public static final byte MAX_OFFSET = OFFSET + 8;
 
-    private final static byte ON_FIRE_BIT = 0x01;
-    private final static byte CROUCHING_BIT = 0x02;
-    private final static byte SPRINTING_BIT = 0x08;
-    private final static byte SWIMMING_BIT = 0x10;
-    private final static byte INVISIBLE_BIT = 0x20;
-    private final static byte HAS_GLOWING_EFFECT_BIT = 0x40;
-    private final static byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
+    //Microtus start - update java keyword usage
+    private static final byte ON_FIRE_BIT = 0x01;
+    private static final byte CROUCHING_BIT = 0x02;
+    private static final byte SPRINTING_BIT = 0x08;
+    private static final byte SWIMMING_BIT = 0x10;
+    private static final byte INVISIBLE_BIT = 0x20;
+    private static final byte HAS_GLOWING_EFFECT_BIT = 0x40;
+    private static final byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
+    //Microtus end - update java keyword usage
 
     private final WeakReference<Entity> entityRef;
     protected final Metadata metadata;

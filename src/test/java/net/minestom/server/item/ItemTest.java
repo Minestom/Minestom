@@ -10,40 +10,40 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ItemTest {
+class ItemTest {
 
     @Test
-    public void testFields() {
+    void testFields() {
         var item = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(item.material(), Material.DIAMOND_SWORD, "Material must be the same");
-        assertEquals(item.amount(), 1, "Default item amount must be 1");
+        assertEquals(1, item.amount(), "Default item amount must be 1");
         assertNull(item.getDisplayName(), "Default item display name must be null");
         assertTrue(item.getLore().isEmpty(), "Default item lore must be empty");
         ItemStack finalItem = item;
         assertThrows(Exception.class, () -> finalItem.getLore().add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
-        assertEquals(item.amount(), 5, "Items with different amount should not be equals");
-        assertEquals(item.withAmount(amount -> amount * 2).amount(), 10, "Amount must be multiplied by 2");
+        assertEquals(5, item.amount(), "Items with different amount should not be equals");
+        assertEquals(10,item.withAmount(amount -> amount * 2).amount(), "Amount must be multiplied by 2");
     }
 
     @Test
-    public void defaultBuilder() {
+    void defaultBuilder() {
         var item = ItemStack.builder(Material.DIAMOND_SWORD).build();
         assertEquals(item.material(), Material.DIAMOND_SWORD, "Material must be the same");
-        assertEquals(item.amount(), 1, "Default item amount must be 1");
+        assertEquals(1, item.amount(), "Default item amount must be 1");
         assertNull(item.getDisplayName(), "Default item display name must be null");
         assertTrue(item.getLore().isEmpty(), "Default item lore must be empty");
         ItemStack finalItem = item;
         assertThrows(Exception.class, () -> finalItem.getLore().add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
-        assertEquals(item.amount(), 5, "Items with different amount should not be equals");
-        assertEquals(item.withAmount(amount -> amount * 2).amount(), 10, "Amount must be multiplied by 2");
+        assertEquals(5, item.amount(), "Items with different amount should not be equals");
+        assertEquals(10, item.withAmount(amount -> amount * 2).amount(), "Amount must be multiplied by 2");
     }
 
     @Test
-    public void testEquality() {
+    void testEquality() {
         var item1 = ItemStack.of(Material.DIAMOND_SWORD);
         var item2 = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(item1, item2);
@@ -55,7 +55,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testItemNbt() {
+    void testItemNbt() {
         var itemNbt = createItem().toItemNBT();
         assertEquals(itemNbt.getString("id"), createItem().material().name(), "id string should be the material name");
         assertEquals(itemNbt.getByte("Count"), (byte) createItem().amount(), "Count byte should be the item amount");
@@ -65,7 +65,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testFromNbt() {
+    void testFromNbt() {
         var itemNbt = createItem().toItemNBT();
         var item = ItemStack.fromItemNBT(itemNbt);
         assertEquals(createItem(), item, "Items must be equal if created from the same item nbt");
@@ -77,7 +77,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testBuilderReuse() {
+    void testBuilderReuse() {
         var builder = ItemStack.builder(Material.DIAMOND);
         var item1 = builder.build();
         var item2 = builder.displayName(Component.text("Name")).build();
@@ -87,7 +87,7 @@ public class ItemTest {
     }
 
     @Test
-    public void materialUpdate() {
+    void materialUpdate() {
         var nbt = NBT.Compound(Map.of("key", NBT.String("value")));
         var item1 = ItemStack.fromNBT(Material.DIAMOND, nbt, 5);
         var item2 = item1.withMaterial(Material.GOLD_INGOT);
@@ -103,7 +103,7 @@ public class ItemTest {
     }
 
     @Test
-    public void amountUpdate() {
+    void amountUpdate() {
         var item1 = ItemStack.of(Material.DIAMOND, 5);
         assertEquals(5, item1.amount());
         assertEquals(6, item1.withAmount(6).amount());

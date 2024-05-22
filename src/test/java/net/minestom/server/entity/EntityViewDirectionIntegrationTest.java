@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
-public class EntityViewDirectionIntegrationTest {
+class EntityViewDirectionIntegrationTest {
     private static final float EPSILON = 0.01f;
 
     @Test
-    public void viewYawAndPitch(Env env) {
+    void viewYawAndPitch(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -48,7 +48,7 @@ public class EntityViewDirectionIntegrationTest {
     }
 
     @Test
-    public void lookAtPos(Env env) {
+    void lookAtPos(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
         double eyeHeight = entity.getEyeHeight(); // adding this to some position Y coordinates, to look horizontally
@@ -87,7 +87,7 @@ public class EntityViewDirectionIntegrationTest {
     }
 
     @Test
-    public void lookAtEntitySameType(Env env) {
+    void lookAtEntitySameType(Env env) {
         var instance = env.createFlatInstance();
         // same type, same eye height
         var e1 = new Entity(EntityType.ZOMBIE);
@@ -121,7 +121,7 @@ public class EntityViewDirectionIntegrationTest {
     }
 
     @Test
-    public void lookAtEntityDifferentType(Env env) {
+    void lookAtEntityDifferentType(Env env) {
         var instance = env.createFlatInstance();
         // same type, same eye height
         var e1 = new Entity(EntityType.ZOMBIE);

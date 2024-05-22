@@ -16,7 +16,8 @@ final class ItemTags {
     static final Tag<Boolean> UNBREAKABLE = Tag.Boolean("Unbreakable").defaultValue(false);
     static final Tag<Integer> HIDE_FLAGS = Tag.Integer("HideFlags").defaultValue(0);
     static final Tag<Integer> CUSTOM_MODEL_DATA = Tag.Integer("CustomModelData").defaultValue(0);
-    static final Tag<Component> NAME = Tag.Component("Name").path("display");
+    // Microtus - Rename name tag to DISPLAY_NAME for consistency
+    static final Tag<Component> DISPLAY_NAME = Tag.Component("Name").path("display");
     static final Tag<List<Component>> LORE = Tag.Component("Lore").path("display").list().defaultValue(List.of());
     static final Tag<Map<Enchantment, Short>> ENCHANTMENTS = Tag.Structure("Enchantments", ENCHANTMENT_SERIALIZER).list().map(enchantmentEntry -> {
         Map<Enchantment, Short> map = new HashMap<>();
@@ -30,4 +31,7 @@ final class ItemTags {
     static final Tag<List<ItemAttribute>> ATTRIBUTES = Tag.Structure("AttributeModifiers", ATTRIBUTE_SERIALIZER).list().defaultValue(List.of());
     static final Tag<List<String>> CAN_PLACE_ON = Tag.String("CanPlaceOn").list().defaultValue(List.of());
     static final Tag<List<String>> CAN_DESTROY = Tag.String("CanDestroy").list().defaultValue(List.of());
+
+    // Microtus - Rename name tag to DISPLAY_NAME for consistency
+    private ItemTags () { }
 }

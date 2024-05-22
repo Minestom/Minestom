@@ -102,19 +102,4 @@ public record Color(int red, int green, int blue) implements RGBLike {
         b = Math.round(averageBlue * gainFactor);
         return new Color(r, g, b);
     }
-
-    @Deprecated
-    public int getRed() {
-        return this.red;
-    }
-
-    @Deprecated
-    public int getGreen() {
-        return this.green;
-    }
-
-    @Deprecated
-    public int getBlue() {
-        return this.blue;
-    }
 }

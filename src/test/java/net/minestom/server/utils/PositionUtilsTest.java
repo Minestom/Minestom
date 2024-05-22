@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PositionUtilsTest {
+class PositionUtilsTest {
 
     @Test
-    public void yaw() {
+    void yaw() {
         float plusX = PositionUtils.getLookYaw(10, 0);
         assertEquals(-90, plusX, 1E-5);
 
@@ -34,7 +34,7 @@ public class PositionUtilsTest {
     }
 
     @Test
-    public void highPitch() {
+    void highPitch() {
         float high = PositionUtils.getLookPitch(0, 999999, 0);
         assertEquals(-90, high, 1E-5);
 

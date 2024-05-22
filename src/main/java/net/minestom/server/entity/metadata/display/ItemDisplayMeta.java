@@ -40,7 +40,7 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
         GROUND,
         FIXED;
 
-        private final static DisplayContext[] VALUES = values();
+        private static final DisplayContext[] VALUES = values(); //Microtus - update java keyword usage
 
     }
 }

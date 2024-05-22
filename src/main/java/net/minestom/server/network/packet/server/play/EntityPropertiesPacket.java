@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.AttributeModifier;
@@ -23,7 +24,7 @@ public record EntityPropertiesPacket(int entityId, List<AttributeInstance> prope
 
     public EntityPropertiesPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.readCollection(r -> {
-            final Attribute attribute = Attribute.fromKey(reader.read(STRING));
+            final Attribute attribute = MinecraftServer.getAttributeManager().fromKey(reader.read(STRING));
             final double value = reader.read(DOUBLE);
             int modifierCount = reader.read(VAR_INT);
             AttributeInstance instance = new AttributeInstance(attribute, null);

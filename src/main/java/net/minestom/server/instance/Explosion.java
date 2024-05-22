@@ -19,7 +19,7 @@ public abstract class Explosion {
     private final float centerZ;
     private final float strength;
 
-    public Explosion(float centerX, float centerY, float centerZ, float strength) {
+    protected Explosion(float centerX, float centerY, float centerZ, float strength) {  //Microtus - update java keyword usage
         this.centerX = centerX;
         this.centerY = centerY;
         this.centerZ = centerZ;

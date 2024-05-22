@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
-public class EntityBlockTouchTickIntegrationTest {
+class EntityBlockTouchTickIntegrationTest {
     @Test
-    public void entityPhysicsCheckTouchTick(Env env) {
+    void entityPhysicsCheckTouchTick(Env env) {
         var instance = env.createFlatInstance();
 
         Set<Point> positions = new HashSet<>();
@@ -60,7 +60,7 @@ public class EntityBlockTouchTickIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFarZ(Env env) {
+    void entityPhysicsCheckTouchTickFarZ(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(1000, 1000, 1000));
 
@@ -100,7 +100,7 @@ public class EntityBlockTouchTickIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFarX(Env env) {
+    void entityPhysicsCheckTouchTickFarX(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(1000, 1000, 1000));
 
@@ -148,7 +148,7 @@ public class EntityBlockTouchTickIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFarNegative(Env env) {
+    void entityPhysicsCheckTouchTickFarNegative(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(-1000, 44, -1000));
 

@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class IronGolemMeta extends AbstractGolemMeta {
     public static final byte OFFSET = AbstractGolemMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
-
-    private final static byte PLAYER_CREATED_BIT = 0x01;
+    private static final byte PLAYER_CREATED_BIT = 0x01; //Microtus - update java keyword usage
 
     public IronGolemMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

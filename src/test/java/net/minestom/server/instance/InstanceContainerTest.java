@@ -9,14 +9,14 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class InstanceContainerTest {
+class InstanceContainerTest {
 
     static {
         new DimensionTypeManager().addDimension(DimensionType.OVERWORLD);
     }
 
     @Test
-    public void copyPreservesTag() {
+    void copyPreservesTag() {
         var tag = Tag.String("test");
         var instance = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD);
         instance.setTag(tag, "123");

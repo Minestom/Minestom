@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class SpiderMeta extends MonsterMeta {
     public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
-
-    private final static byte CLIMBING_BIT = 0x01;
+    private static final byte CLIMBING_BIT = 0x01; //Microtus - update java keyword usage
 
     public SpiderMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

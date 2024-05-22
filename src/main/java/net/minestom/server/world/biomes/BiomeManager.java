@@ -7,11 +7,15 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -20,7 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  */
 public final class BiomeManager {
-    private final Map<Integer, Biome> biomes = new ConcurrentHashMap<>();
+    private final List<Biome> biomes = new ArrayList<>();
+    private final static Logger LOGGER = LoggerFactory.getLogger(BiomeManager.class);
     private final Map<NamespaceID, Biome> biomesByName = new ConcurrentHashMap<>();
     private final Map<NamespaceID, Integer> idMappings = new ConcurrentHashMap<>();
 
@@ -75,8 +80,8 @@ public final class BiomeManager {
      *
      * @return an immutable copy of the biomes already registered
      */
-    public Collection<Biome> unmodifiableCollection() {
-        return Collections.unmodifiableCollection(biomes.values());
+    public synchronized Collection<Biome> unmodifiableCollection() {
+        return Collections.unmodifiableCollection(biomes);
     }
 
     /**
@@ -86,7 +91,7 @@ public final class BiomeManager {
      * @return the {@link Biome} linked to this id
      */
     @Nullable
-    public Biome getById(int id) {
+    public synchronized Biome getById(int id) {
         return biomes.get(id);
     }
 

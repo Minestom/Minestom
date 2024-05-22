@@ -180,25 +180,6 @@ public sealed interface ItemStack extends TagReadable, HoverEventSource<HoverEve
     @ApiStatus.Experimental
     @NotNull NBTCompound toItemNBT();
 
-
-    @Deprecated
-    @Contract(pure = true)
-    default @NotNull Material getMaterial() {
-        return material();
-    }
-
-    @Deprecated
-    @Contract(pure = true)
-    default int getAmount() {
-        return amount();
-    }
-
-    @Deprecated
-    @Contract(pure = true)
-    default @NotNull ItemMeta getMeta() {
-        return meta();
-    }
-
     sealed interface Builder extends TagWritable
             permits ItemStackImpl.Builder {
         @Contract(value = "_ -> this")

@@ -15,10 +15,6 @@ public class BrewingStandInventory extends Inventory {
         super(InventoryType.BREWING_STAND, title);
     }
 
-    public BrewingStandInventory(@NotNull String title) {
-        super(InventoryType.BREWING_STAND, title);
-    }
-
     /**
      * Gets the brewing stand brew time.
      *

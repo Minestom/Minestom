@@ -14,10 +14,10 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ThreadDispatcherTest {
+class ThreadDispatcherTest {
 
     @Test
-    public void elementTick() {
+    void elementTick() {
         final AtomicInteger counter = new AtomicInteger();
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
         assertEquals(1, dispatcher.threads().size());
@@ -45,7 +45,7 @@ public class ThreadDispatcherTest {
     }
 
     @Test
-    public void partitionTick() {
+    void partitionTick() {
         // Partitions implementing Tickable should be ticked same as elements
         final AtomicInteger counter1 = new AtomicInteger();
         final AtomicInteger counter2 = new AtomicInteger();
@@ -74,7 +74,7 @@ public class ThreadDispatcherTest {
     }
 
     @Test
-    public void uniqueThread() {
+    void uniqueThread() {
         // Ensure that partitions are properly dispatched across threads
         final int threadCount = 10;
         ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), threadCount);
@@ -103,7 +103,7 @@ public class ThreadDispatcherTest {
     }
 
     @Test
-    public void threadUpdate() {
+    void threadUpdate() {
         // Ensure that partitions threads are properly updated every tick
         // when RefreshType.ALWAYS is used
         interface Updater extends Tickable {

@@ -23,8 +23,8 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable
-        permits Inventory, PlayerInventory {
+public abstract sealed class AbstractInventory implements InventoryClickHandler, Taggable
+        permits Inventory, PlayerInventory {  //Microtus - update java keyword usage
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 

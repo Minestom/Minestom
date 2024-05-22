@@ -9,8 +9,6 @@ public class CatMeta extends TameableAnimalMeta {
     public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 4;
 
-    private static final DyeColor[] DYE_VALUES = DyeColor.values();
-
     public CatMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
@@ -41,7 +39,7 @@ public class CatMeta extends TameableAnimalMeta {
     }
 
     public @NotNull DyeColor getCollarColor() {
-        return DYE_VALUES[super.metadata.getIndex(OFFSET + 3, DyeColor.RED.ordinal())];
+        return DyeColor.getValue(super.metadata.getIndex(OFFSET + 3, DyeColor.RED.ordinal())); // Microtus -  Banner and Shield Meta
     }
 
     public void setCollarColor(@NotNull DyeColor value) {

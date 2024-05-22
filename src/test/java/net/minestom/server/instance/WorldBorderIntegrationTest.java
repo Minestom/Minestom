@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class WorldBorderIntegrationTest {
+class WorldBorderIntegrationTest {
 
     @Test
-    public void setWorldborderSize(Env env) {
+    void setWorldborderSize(Env env) {
         Instance instance = env.createFlatInstance();
 
         instance.getWorldBorder().setDiameter(50.0);
@@ -20,7 +20,7 @@ public class WorldBorderIntegrationTest {
     }
 
     @Test
-    public void resizeWorldBorder(Env env) throws InterruptedException {
+    void resizeWorldBorder(Env env) throws InterruptedException {
         Instance instance = env.createFlatInstance();
 
         instance.getWorldBorder().setDiameter(50.0);

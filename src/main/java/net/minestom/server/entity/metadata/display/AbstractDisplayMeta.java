@@ -144,7 +144,6 @@ public class AbstractDisplayMeta extends EntityMeta {
         HORIZONTAL,
         CENTER;
 
-        private final static BillboardConstraints[] VALUES = values();
+        private static final BillboardConstraints[] VALUES = values(); //Microtus - update java keyword usage
     }
-
 }

@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Assertions;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ChunkUtilsTest {
+class ChunkUtilsTest {
 
     @ParameterizedTest
     @MethodSource("testForDifferingChunksInRangeParams")
-    public void testForDifferingChunksInRange(int nx, int nz, int ox, int oz, int r) {
+    void testForDifferingChunksInRange(int nx, int nz, int ox, int oz, int r) {
         final Set<ChunkCoordinate> n = new HashSet<>();
         final Set<ChunkCoordinate> o = new HashSet<>();
         ChunkUtils.forChunksInRange(nx, nz, r, (x, z) -> n.add(new ChunkCoordinate(x, z)));

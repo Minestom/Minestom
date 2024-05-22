@@ -8,9 +8,11 @@ public class MobMeta extends LivingEntityMeta {
     public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    private final static byte NO_AI_BIT = 0x01;
-    private final static byte IS_LEFT_HANDED_BIT = 0x02;
-    private final static byte IS_AGGRESSIVE_BIT = 0x04;
+    //Microtus start - update java keyword usage
+    private static final byte NO_AI_BIT = 0x01;
+    private static final byte IS_LEFT_HANDED_BIT = 0x02;
+    private static final byte IS_AGGRESSIVE_BIT = 0x04;
+    //Microtus end - update java keyword usage
 
     protected MobMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

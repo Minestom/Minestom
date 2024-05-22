@@ -11,10 +11,10 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class EntityInstanceIntegrationTest {
+class EntityInstanceIntegrationTest {
 
     @Test
-    public void entityJoin(Env env) {
+    void entityJoin(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityTypes.ZOMBIE);
         entity.setInstance(instance, new Pos(0, 42, 0)).join();
@@ -23,7 +23,7 @@ public class EntityInstanceIntegrationTest {
     }
 
     @Test
-    public void playerJoin(Env env) {
+    void playerJoin(Env env) {
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
@@ -31,7 +31,7 @@ public class EntityInstanceIntegrationTest {
     }
 
     @Test
-    public void playerSwitch(Env env) {
+    void playerSwitch(Env env) {
         var instance = env.createFlatInstance();
         var instance2 = env.createFlatInstance();
         var connection = env.createConnection();

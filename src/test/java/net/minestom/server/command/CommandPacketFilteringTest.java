@@ -10,18 +10,18 @@ import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("ConstantConditions")
-public class CommandPacketFilteringTest {
+class CommandPacketFilteringTest {
     private static final Player PLAYER = new Player(UUID.randomUUID(), "", null);
 
     @Test
-    public void singleCommandFilteredFalse() {
+    void singleCommandFilteredFalse() {
         final Command foo = new Command("foo");
         foo.setCondition(((sender, commandString) -> false));
         assertFiltering(foo, "");
     }
 
     @Test
-    public void singleCommandFilteredTrue() {
+    void singleCommandFilteredTrue() {
         final Command foo = new Command("foo");
         foo.setCondition(((sender, commandString) -> true));
         assertFiltering(foo, """
@@ -31,7 +31,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandUnfiltered() {
+    void singleCommandUnfiltered() {
         final Command foo = new Command("foo");
         assertFiltering(foo, """
                 foo=%
@@ -40,7 +40,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandFilteredTrueWithFilteredSubcommandTrueWithFilteredSyntaxFalse() {
+    void singleCommandFilteredTrueWithFilteredSubcommandTrueWithFilteredSyntaxFalse() {
         final Command foo = new Command("foo");
         foo.setCondition((sender, commandString) -> true);
         final Command bar = new Command("bar");
@@ -55,7 +55,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandFilteredTrueWithFilteredSubcommandFalse() {
+    void singleCommandFilteredTrueWithFilteredSubcommandFalse() {
         final Command foo = new Command("foo");
         foo.setCondition((sender, commandString) -> true);
         final Command bar = new Command("bar");
@@ -68,7 +68,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandFilteredTrueWithFilteredSubcommandTrue() {
+    void singleCommandFilteredTrueWithFilteredSubcommandTrue() {
         final Command foo = new Command("foo");
         foo.setCondition((sender, commandString) -> true);
         final Command bar = new Command("bar");
@@ -82,7 +82,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandFilteredTrueWithFilteredSubcommandTrueWithFilteredSyntaxBoth() {
+    void singleCommandFilteredTrueWithFilteredSubcommandTrueWithFilteredSyntaxBoth() {
         final Command foo = new Command("foo");
         foo.setCondition((sender, commandString) -> true);
         final Command bar = new Command("bar");
@@ -99,7 +99,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandConditionalArgGroupTrue() {
+    void singleCommandConditionalArgGroupTrue() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Group("test", ArgumentType.Literal("bar")));
         assertFiltering(foo, """
@@ -110,7 +110,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandConditionalArgGroupFalse() {
+    void singleCommandConditionalArgGroupFalse() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Group("test", ArgumentType.Literal("foo")));
         assertFiltering(foo, """
@@ -120,7 +120,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandUnconditionalArgGroup() {
+    void singleCommandUnconditionalArgGroup() {
         final Command foo = new Command("foo");
         foo.addSyntax(null, ArgumentType.Group("test", ArgumentType.Literal("bar")));
         assertFiltering(foo, """
@@ -131,7 +131,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandConditionalArgGroupTrue2() {
+    void singleCommandConditionalArgGroupTrue2() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Group("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
         assertFiltering(foo, """
@@ -143,7 +143,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandConditionalArgGroupFalse2() {
+    void singleCommandConditionalArgGroupFalse2() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Group("test", ArgumentType.Literal("foo"), ArgumentType.Literal("baz")));
         assertFiltering(foo, """
@@ -153,7 +153,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandUnconditionalArgGroup2() {
+    void singleCommandUnconditionalArgGroup2() {
         final Command foo = new Command("foo");
         foo.addSyntax(null, ArgumentType.Group("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
         assertFiltering(foo, """
@@ -165,7 +165,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandUnconditionalArgLoop() {
+    void singleCommandUnconditionalArgLoop() {
         final Command foo = new Command("foo");
         foo.addSyntax(null, ArgumentType.Loop("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
         assertFiltering(foo, """
@@ -177,7 +177,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandConditionalArgLoopTrue() {
+    void singleCommandConditionalArgLoopTrue() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, commandString) -> true, null, ArgumentType.Loop("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
         assertFiltering(foo, """
@@ -189,7 +189,7 @@ public class CommandPacketFilteringTest {
     }
 
     @Test
-    public void singleCommandConditionalArgLoopFalse() {
+    void singleCommandConditionalArgLoopFalse() {
         final Command foo = new Command("foo");
         foo.addConditionalSyntax((sender, commandString) -> false, null, ArgumentType.Loop("test", ArgumentType.Literal("bar"), ArgumentType.Literal("baz")));
         assertFiltering(foo, """

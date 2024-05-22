@@ -9,16 +9,16 @@ import static net.minestom.server.command.builder.arguments.ArgumentType.Integer
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GraphConversionTest {
+class GraphConversionTest {
     @Test
-    public void empty() {
+    void empty() {
         final Command foo = new Command("foo");
         var graph = Graph.builder(Literal("foo")).build();
         assertEqualsGraph(graph, foo);
     }
 
     @Test
-    public void singleLiteral() {
+    void singleLiteral() {
         final Command foo = new Command("foo");
         var first = Literal("first");
         foo.addSyntax(GraphConversionTest::dummyExecutor, first);
@@ -28,7 +28,7 @@ public class GraphConversionTest {
     }
 
     @Test
-    public void literalsPath() {
+    void literalsPath() {
         final Command foo = new Command("foo");
         var first = Literal("first");
         var second = Literal("second");
@@ -43,7 +43,7 @@ public class GraphConversionTest {
     }
 
     @Test
-    public void doubleSyntax() {
+    void doubleSyntax() {
         enum A {A, B, C, D, E}
         final Command foo = new Command("foo");
 
@@ -64,7 +64,7 @@ public class GraphConversionTest {
     }
 
     @Test
-    public void doubleSyntaxMerge() {
+    void doubleSyntaxMerge() {
         final Command foo = new Command("foo");
 
         var bar = Literal("bar");
@@ -81,7 +81,7 @@ public class GraphConversionTest {
     }
 
     @Test
-    public void subcommand() {
+    void subcommand() {
         final Command main = new Command("main");
         final Command sub = new Command("sub");
 
@@ -107,14 +107,14 @@ public class GraphConversionTest {
     }
 
     @Test
-    public void alias() {
+    void alias() {
         final Command main = new Command("main", "alias");
         var graph = Graph.builder(Word("main").from("main", "alias")).build();
         assertEqualsGraph(graph, main);
     }
 
     @Test
-    public void aliases() {
+    void aliases() {
         final Command main = new Command("main", "first", "second");
         var graph = Graph.builder(Word("main").from("main", "first", "second")).build();
         assertEqualsGraph(graph, main);

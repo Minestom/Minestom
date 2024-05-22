@@ -10,6 +10,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.Biomes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;

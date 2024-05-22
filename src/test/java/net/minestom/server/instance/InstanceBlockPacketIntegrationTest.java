@@ -22,10 +22,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class InstanceBlockPacketIntegrationTest {
+class InstanceBlockPacketIntegrationTest {
 
     @Test
-    public void replaceAir(Env env) {
+    void replaceAir(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -45,7 +45,7 @@ public class InstanceBlockPacketIntegrationTest {
     }
 
     @Test
-    public void placeBlockEntity(Env env) {
+    void placeBlockEntity(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         connection.connect(instance, new Pos(0, 40, 0)).join();

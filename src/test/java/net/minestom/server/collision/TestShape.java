@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestShape {
+class TestShape {
 
     private static @NotNull Stream<Arguments> isFullFaceCases() {
         return Stream.of(

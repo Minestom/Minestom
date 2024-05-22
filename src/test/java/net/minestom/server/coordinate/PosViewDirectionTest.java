@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PosViewDirectionTest {
+class PosViewDirectionTest {
     private static final float EPSILON = 0.01f;
 
     @Test
-    public void withLookAtPos() {
+    void withLookAtPos() {
         Pos initialPosition = new Pos(0, 40, 0);
         Pos position;
 

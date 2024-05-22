@@ -8,10 +8,10 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TagUuidTest {
+class TagUuidTest {
 
     @Test
-    public void get() {
+    void get() {
         var uuid = UUID.randomUUID();
         var tag = Tag.UUID("uuid");
         var handler = TagHandler.newHandler();
@@ -20,14 +20,14 @@ public class TagUuidTest {
     }
 
     @Test
-    public void empty() {
+    void empty() {
         var tag = Tag.UUID("uuid");
         var handler = TagHandler.newHandler();
         assertNull(handler.getTag(tag));
     }
 
     @Test
-    public void invalidTag() {
+    void invalidTag() {
         var tag = Tag.UUID("entry");
         var handler = TagHandler.newHandler();
         handler.setTag(Tag.Integer("entry"), 1);
@@ -35,7 +35,7 @@ public class TagUuidTest {
     }
 
     @Test
-    public void toNbt() {
+    void toNbt() {
         var tag = Tag.UUID("uuid");
         var handler = TagHandler.newHandler();
         handler.setTag(tag, UUID.fromString("9ab8ca63-3d7b-43ba-b805-a20a352dae9c"));
@@ -46,7 +46,7 @@ public class TagUuidTest {
     }
 
     @Test
-    public void fromNbt() {
+    void fromNbt() {
         var tag = Tag.UUID("uuid");
         var handler = TagHandler.newHandler();
         handler.setTag(Tag.NBT("uuid"), NBT.IntArray(-1699165597, 1031488442, -1207590390, 892186268));

@@ -13,10 +13,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EventNodeMapTest {
+class EventNodeMapTest {
 
     @Test
-    public void uniqueMapping() {
+    void uniqueMapping() {
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
         var itemNode1 = node.map(item, EventFilter.ITEM);
@@ -31,7 +31,7 @@ public class EventNodeMapTest {
     }
 
     @Test
-    public void lazyRegistration() {
+    void lazyRegistration() {
         var item = ItemStack.of(Material.DIAMOND);
         var node = (EventNodeImpl<Event>) EventNode.all("main");
         var itemNode = node.map(item, EventFilter.ITEM);
@@ -42,7 +42,7 @@ public class EventNodeMapTest {
     }
 
     @Test
-    public void secondMap() {
+    void secondMap() {
         var item = ItemStack.of(Material.DIAMOND);
         var node = (EventNodeImpl<Event>) EventNode.all("main");
         var itemNode = node.map(item, EventFilter.ITEM);
@@ -51,7 +51,7 @@ public class EventNodeMapTest {
     }
 
     @Test
-    public void map() {
+    void map() {
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
 
@@ -76,7 +76,7 @@ public class EventNodeMapTest {
     }
 
     @Test
-    public void entityLocal() {
+    void entityLocal() {
         var process = MinecraftServer.updateProcess();
         var node = process.eventHandler();
         var entity = new Entity(EntityType.ZOMBIE);
@@ -102,7 +102,7 @@ public class EventNodeMapTest {
     }
 
     @Test
-    public void ownerGC() {
+    void ownerGC() {
         // Ensure that the mapped object gets GCed
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");

@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandTest {
+class CommandTest {
 
     @Test
-    public void testNames() {
+    void testNames() {
         Command command = new Command("name1", "name2", "name3");
 
         assertEquals("name1", command.getName());
@@ -27,7 +27,7 @@ public class CommandTest {
     }
 
     @Test
-    public void testGlobalListener() {
+    void testGlobalListener() {
         var manager = new CommandManager();
 
         AtomicBoolean hasRun = new AtomicBoolean(false);

@@ -3,9 +3,11 @@ package net.minestom.server;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.attribute.AttributeManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
+import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -21,6 +23,7 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -28,6 +31,7 @@ import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.IOException;
@@ -248,8 +252,16 @@ public final class MinecraftServer {
         return serverProcess.biome();
     }
 
+    public static AttributeManager getAttributeManager() {
+        return serverProcess.attribute();
+    }
+
     public static AdvancementManager getAdvancementManager() {
         return serverProcess.advancement();
+    }
+
+    public static @Nullable ExtensionManager getExtensionManager() {
+        return serverProcess.extension();
     }
 
     public static TagManager getTagManager() {

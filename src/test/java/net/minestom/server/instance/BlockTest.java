@@ -13,10 +13,10 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BlockTest {
+class BlockTest {
 
     @Test
-    public void testNBT() {
+    void testNBT() {
         Block block = Block.CHEST;
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
@@ -35,7 +35,7 @@ public class BlockTest {
     }
 
     @Test
-    public void validProperties() {
+    void validProperties() {
         Block block = Block.CHEST;
         assertEquals(block.properties(), Objects.requireNonNull(Block.fromBlockId(block.id())).properties());
 
@@ -53,14 +53,14 @@ public class BlockTest {
     }
 
     @Test
-    public void invalidProperties() {
+    void invalidProperties() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
         assertThrows(Exception.class, () -> block.withProperties(Map.of("random", "randomKey")));
     }
 
     @Test
-    public void testEquality() {
+    void testEquality() {
         var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
         Block b1 = Block.CHEST;
         Block b2 = Block.CHEST;
@@ -71,14 +71,14 @@ public class BlockTest {
     }
 
     @Test
-    public void testMutability() {
+    void testMutability() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.properties().put("facing", "north"));
         assertThrows(Exception.class, () -> block.withProperty("facing", "north").properties().put("facing", "south"));
     }
 
     @Test
-    public void testShape() {
+    void testShape() {
         Point start = Block.LANTERN.registry().collisionShape().relativeStart();
         Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
 

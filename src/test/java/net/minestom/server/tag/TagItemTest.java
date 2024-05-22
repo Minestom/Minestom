@@ -11,10 +11,10 @@ import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagItemTest {
+class TagItemTest {
 
     @Test
-    public void get() {
+    void get() {
         var item = ItemStack.of(Material.DIAMOND);
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
@@ -24,7 +24,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void getDifferentObject() {
+    void getDifferentObject() {
         var item = ItemStack.of(Material.DIAMOND);
         var handler = TagHandler.newHandler();
         handler.setTag(Tag.ItemStack("item"), item);
@@ -33,7 +33,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void remove() {
+    void remove() {
         var item = ItemStack.of(Material.DIAMOND);
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
@@ -45,7 +45,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void gc() {
+    void gc() {
         var item = ItemStack.of(Material.DIAMOND);
         var tag = Tag.ItemStack("item");
         var handler = TagHandler.newHandler();
@@ -60,7 +60,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void invalidation() {
+    void invalidation() {
         var item = ItemStack.of(Material.DIAMOND);
         var item2 = ItemStack.of(Material.DIAMOND, 2);
         var handler = TagHandler.newHandler();
@@ -73,7 +73,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void differentTagInvalidation() {
+    void differentTagInvalidation() {
         var item = ItemStack.of(Material.DIAMOND);
         var item2 = ItemStack.of(Material.DIAMOND, 2);
         var handler = TagHandler.newHandler();
@@ -95,7 +95,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void snbt() {
+    void snbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.ItemStack("item");
         handler.setTag(tag, ItemStack.of(Material.DIAMOND));

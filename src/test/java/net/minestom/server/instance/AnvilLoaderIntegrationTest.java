@@ -1,9 +1,11 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.Biomes;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.AfterAll;
@@ -19,14 +21,14 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class AnvilLoaderIntegrationTest {
+class AnvilLoaderIntegrationTest {
 
     private static final Path testRoot = Path.of("src", "test", "resources", "net", "minestom", "server", "instance", "anvil_loader");
     private static final Path worldFolder = Path.of("integration_test_world");
 
 
     @BeforeAll
-    public static void prepareTest() throws IOException {
+    static void prepareTest() throws IOException {
         // https://stackoverflow.com/a/60621544
         Files.walkFileTree(testRoot, new SimpleFileVisitor<>() {
 
@@ -48,7 +50,8 @@ public class AnvilLoaderIntegrationTest {
 
 
     @Test
-    public void loadHouse(Env env) {
+    void loadHouse(Env env) {
+        MinecraftServer.getBiomeManager().addBiome(Biomes.PLAINS.biome());
         // load a world that contains only a basic house and make sure it is loaded properly
 
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
@@ -143,7 +146,8 @@ public class AnvilLoaderIntegrationTest {
     }
 
     @Test
-    public void loadAndSaveChunk(Env env) throws InterruptedException {
+    void loadAndSaveChunk(Env env) throws InterruptedException {
+        MinecraftServer.getBiomeManager().addBiome(Biomes.PLAINS.biome());
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
@@ -181,7 +185,7 @@ public class AnvilLoaderIntegrationTest {
     }
 
     @AfterAll
-    public static void cleanupTest() throws IOException {
+    static void cleanupTest() throws IOException {
         Files.walkFileTree(worldFolder, new SimpleFileVisitor<>() {
 
             @Override

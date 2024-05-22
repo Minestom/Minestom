@@ -11,40 +11,40 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test tags that can share cached values.
  */
-public class TagValueShareTest {
+class TagValueShareTest {
 
     record Entry(int value) {
     }
 
     @Test
-    public void same() {
+    void same() {
         var tag = Tag.String("test");
         assertTrue(tag.shareValue(tag));
     }
 
     @Test
-    public void similar() {
+    void similar() {
         var tag = Tag.String("test");
         var tag2 = Tag.String("test");
         assertTrue(tag.shareValue(tag2));
     }
 
     @Test
-    public void differentDefault() {
+    void differentDefault() {
         var tag = Tag.String("test").defaultValue("test2");
         var tag2 = Tag.String("test").defaultValue("test3");
         assertTrue(tag.shareValue(tag2));
     }
 
     @Test
-    public void differentType() {
+    void differentType() {
         var tag = Tag.String("test");
         var tag2 = Tag.Integer("test");
         assertFalse(tag.shareValue(tag2));
     }
 
     @Test
-    public void mapSame() {
+    void mapSame() {
         // Force identical functions
         Function<Integer, Entry> t1 = Entry::new;
         Function<Entry, Integer> t2 = Entry::value;
@@ -56,26 +56,26 @@ public class TagValueShareTest {
     }
 
     @Test
-    public void mapChild() {
+    void mapChild() {
         var intTag = Tag.Integer("key");
         var tag = intTag.map(Entry::new, Entry::value);
         assertFalse(intTag.shareValue(tag));
     }
 
     @Test
-    public void list() {
+    void list() {
         var tag = Tag.String("test").list();
         assertTrue(tag.shareValue(tag));
     }
 
     @Test
-    public void listScope() {
+    void listScope() {
         var tag = Tag.String("test");
         assertFalse(tag.shareValue(tag.list()));
     }
 
     @Test
-    public void similarList() {
+    void similarList() {
         var tag = Tag.String("test").list();
         var tag2 = Tag.String("test").list();
         assertTrue(tag.shareValue(tag2));
@@ -83,7 +83,7 @@ public class TagValueShareTest {
     }
 
     @Test
-    public void differentList() {
+    void differentList() {
         var tag = Tag.String("test").list();
         var tag2 = Tag.String("test").list();
         assertFalse(tag.shareValue(tag2.list()));
@@ -91,7 +91,7 @@ public class TagValueShareTest {
     }
 
     @Test
-    public void differentListType() {
+    void differentListType() {
         var tag = Tag.String("test").list();
         var tag2 = Tag.Integer("test").list();
         assertFalse(tag.shareValue(tag2));
@@ -99,14 +99,14 @@ public class TagValueShareTest {
     }
 
     @Test
-    public void recordStructure() {
+    void recordStructure() {
         var tag = Tag.Structure("test", Vec.class);
         var tag2 = Tag.Structure("test", Vec.class);
         assertTrue(tag.shareValue(tag2));
     }
 
     @Test
-    public void recordStructureList() {
+    void recordStructureList() {
         var tag = Tag.Structure("test", Vec.class).list();
         var tag2 = Tag.Structure("test", Vec.class).list();
         assertTrue(tag.shareValue(tag2));

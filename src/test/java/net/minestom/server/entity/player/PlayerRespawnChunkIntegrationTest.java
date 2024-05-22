@@ -19,12 +19,11 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 @EnvTest
-public class PlayerRespawnChunkIntegrationTest {
+class PlayerRespawnChunkIntegrationTest {
 
     @Test
-    public void testChunkUnloadsOnRespawn(Env env) {
+    void testChunkUnloadsOnRespawn(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -38,7 +37,7 @@ public class PlayerRespawnChunkIntegrationTest {
     }
 
     @Test
-    public void testChunkReloadCount(Env env) {
+    void testChunkReloadCount(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -52,7 +51,7 @@ public class PlayerRespawnChunkIntegrationTest {
     }
 
     @Test
-    public void testPlayerTryRespawn(Env env) {
+    void testPlayerTryRespawn(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(instance, new Pos(0, 40, 0)).join();

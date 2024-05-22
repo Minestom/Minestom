@@ -18,9 +18,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ItemMetaWrittenBookTest {
+class ItemMetaWrittenBookTest {
     @Test
-    public void testPages() {
+    void testPages() {
         ItemStack book = ItemStack.of(Material.WRITTEN_BOOK);
 
         Component pageA = Component.text("Page A");
@@ -36,7 +36,7 @@ public class ItemMetaWrittenBookTest {
     }
 
     @Test
-    public void testStyleComponents() {
+    void testStyleComponents() {
         List<TextColor> colors = List.of(NamedTextColor.BLUE, NamedTextColor.WHITE, NamedTextColor.DARK_BLUE);
         List<TextDecoration> decorations = List.of(TextDecoration.UNDERLINED, TextDecoration.STRIKETHROUGH, TextDecoration.ITALIC);
         List<ClickEvent> clicks = List.of(
@@ -79,7 +79,7 @@ public class ItemMetaWrittenBookTest {
     }
 
     @Test
-    public void buildFromVanillSNBT() {
+    void buildFromVanillSNBT() {
         String vanillaSNBT = """
 {
     pages:['[

@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -419,21 +420,21 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}.
+     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attributes#GENERIC_MAX_HEALTH}.
      *
      * @return the entity max health
      */
     public float getMaxHealth() {
-        return getAttributeValue(Attribute.MAX_HEALTH);
+        return getAttributeValue(Attributes.GENERIC_MAX_HEALTH.attribute());
     }
 
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#GENERIC_MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth(getAttributeValue(Attributes.GENERIC_MAX_HEALTH.attribute()));
     }
 
     /**
@@ -667,7 +668,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        strength *= 1 - getAttributeValue(Attributes.GENERIC_KNOCKBACK_RESISTANCE.attribute());
         super.takeKnockback(strength, x, z);
     }
 }

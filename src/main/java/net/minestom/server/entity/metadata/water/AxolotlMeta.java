@@ -44,6 +44,6 @@ public class AxolotlMeta extends AnimalMeta {
         CYAN,
         BLUE;
 
-        private final static AxolotlMeta.Variant[] VALUES = values();
+        private static final AxolotlMeta.Variant[] VALUES = values();  //Microtus - update java keyword usage
     }
 }

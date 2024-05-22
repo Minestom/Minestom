@@ -9,9 +9,9 @@ import java.util.List;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphTest {
+class GraphTest {
     @Test
-    public void empty() {
+    void empty() {
         var result = Graph.builder(Literal(""))
                 .build();
         var node = result.root();
@@ -20,7 +20,7 @@ public class GraphTest {
     }
 
     @Test
-    public void next() {
+    void next() {
         var result = Graph.builder(Literal(""))
                 .append(Literal("foo"))
                 .build();
@@ -31,7 +31,7 @@ public class GraphTest {
     }
 
     @Test
-    public void immutableNextBuilder() {
+    void immutableNextBuilder() {
         var result = Graph.builder(Literal(""))
                 .append(Literal("foo"))
                 .append(Literal("bar"))
@@ -42,7 +42,7 @@ public class GraphTest {
     }
 
     @Test
-    public void immutableNextCommand() {
+    void immutableNextCommand() {
         final Command foo = new Command("foo");
         var first = Literal("first");
         foo.addSyntax(GraphTest::dummyExecutor, first);
@@ -54,7 +54,7 @@ public class GraphTest {
     }
 
     @Test
-    public void immutableNextCommands() {
+    void immutableNextCommands() {
         final Command foo, bar;
 
         {

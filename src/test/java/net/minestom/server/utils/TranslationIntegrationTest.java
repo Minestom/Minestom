@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @EnvTest
-public class TranslationIntegrationTest {
+class TranslationIntegrationTest {
 
     @BeforeAll
     static void translator() {
@@ -30,7 +30,7 @@ public class TranslationIntegrationTest {
     }
 
     @Test
-    public void testTranslationEnabled(final Env env) {
+    void testTranslationEnabled(final Env env) {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
@@ -49,7 +49,7 @@ public class TranslationIntegrationTest {
     }
 
     @Test
-    public void testTranslationDisabled(final Env env) {
+    void testTranslationDisabled(final Env env) {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0)).join();

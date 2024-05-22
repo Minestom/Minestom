@@ -8,9 +8,11 @@ public class BeeMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 2;
 
-    private final static byte ANGRY_BIT = 0x02;
-    private final static byte HAS_STUNG_BIT = 0x04;
-    private final static byte HAS_NECTAR_BIT = 0x08;
+    //Microtus start - update java keyword usage
+    private static final byte ANGRY_BIT = 0x02;
+    private static final byte HAS_STUNG_BIT = 0x04;
+    private static final byte HAS_NECTAR_BIT = 0x08;
+    //Microtus end - update java keyword usage
 
     public BeeMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

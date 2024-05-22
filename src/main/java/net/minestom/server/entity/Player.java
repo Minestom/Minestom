@@ -25,7 +25,7 @@ import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Point;
@@ -249,7 +249,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attributes.GENERIC_MOVEMENT_SPEED.attribute()).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -1036,7 +1036,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * been changed with {@link #switchEntityType(EntityType)}. It is wise to check
      * {@link #getEntityType()} first.</p>
      */
-    public @NotNull PlayerMeta getPlayerMeta() {
+    public @NotNull PlayerMeta getUnsafeEntityMeta() {
         return (PlayerMeta) super.getEntityMeta();
     }
 
@@ -1049,7 +1049,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the player additional hearts
      */
     public float getAdditionalHearts() {
-        return getPlayerMeta().getAdditionalHearts();
+        return getUnsafeEntityMeta().getAdditionalHearts();
     }
 
     /**
@@ -1061,7 +1061,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param additionalHearts the count of additional hearts
      */
     public void setAdditionalHearts(float additionalHearts) {
-        getPlayerMeta().setAdditionalHearts(additionalHearts);
+        getUnsafeEntityMeta().setAdditionalHearts(additionalHearts);
     }
 
     /**
@@ -2401,16 +2401,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setUuid(uuid);
         // update identity
         this.identity = Identity.identity(uuid);
-    }
-
-    @Override
-    public boolean isPlayer() {
-        return true;
-    }
-
-    @Override
-    public Player asPlayer() {
-        return this;
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
