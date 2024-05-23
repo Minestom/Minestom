@@ -15,8 +15,32 @@ import java.util.Collection;
  */
 public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
-    @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = NetworkBuffer.lazy(() -> BuiltinSoundEvent.NETWORK_TYPE); //todo what is the init issue here??
+    @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, SoundEvent value) {
+            switch (value) {
+                case BuiltinSoundEvent soundEvent -> buffer.write(NetworkBuffer.VAR_INT, soundEvent.id() + 1);
+                case CustomSoundEvent soundEvent -> {
+                    buffer.write(NetworkBuffer.VAR_INT, 0); // Custom sound
+                    buffer.write(NetworkBuffer.STRING, soundEvent.name());
+                    buffer.writeOptional(NetworkBuffer.FLOAT, soundEvent.range());
+                }
+            }
+        }
 
+        @Override
+        public SoundEvent read(@NotNull NetworkBuffer buffer) {
+            int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
+            if (id != -1) return BuiltinSoundEvent.getId(id);
+
+            NamespaceID namespace = NamespaceID.from(buffer.read(NetworkBuffer.STRING));
+            return new CustomSoundEvent(namespace, buffer.readOptional(NetworkBuffer.FLOAT));
+        }
+    };
+
+    /**
+     * Get all the builtin sound events. Resource pack sounds will never be returned from this method.
+     */
     static @NotNull Collection<? extends SoundEvent> values() {
         return BuiltinSoundEvent.values();
     }

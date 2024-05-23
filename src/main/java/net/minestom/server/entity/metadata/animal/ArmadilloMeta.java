@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmadilloMeta extends AnimalMeta {
@@ -27,6 +28,6 @@ public class ArmadilloMeta extends AnimalMeta {
         SCARED,
         UNROLLING;
 
-        private static final State[] VALUES = values();
+        public static final NetworkBuffer.Type<State> NETWORK_TYPE = NetworkBuffer.Enum(State.class);
     }
 }

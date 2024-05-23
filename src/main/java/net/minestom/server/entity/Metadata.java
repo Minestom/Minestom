@@ -148,7 +148,7 @@ public final class Metadata {
     }
 
     public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, NetworkBuffer.CAT_VARIANT);
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatMeta.Variant.NETWORK_TYPE);
     }
 
     public static Entry<DynamicRegistry.Key<WolfMeta.Variant>> WolfVariant(@NotNull DynamicRegistry.Key<WolfMeta.Variant> value) {
@@ -158,19 +158,19 @@ public final class Metadata {
     // WOLF VARIANT
 
     public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, FrogMeta.Variant.NETWORK_TYPE);
     }
 
     public static Entry<PaintingMeta.Variant> PaintingVariant(@NotNull PaintingMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, NetworkBuffer.PAINTING_VARIANT);
+        return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingMeta.Variant.NETWORK_TYPE);
     }
 
     public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, NetworkBuffer.SNIFFER_STATE);
+        return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, SnifferMeta.State.NETWORK_TYPE);
     }
 
     public static Entry<ArmadilloMeta.State> ArmadilloState(@NotNull ArmadilloMeta.State value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, NetworkBuffer.ARMADILLO_STATE);
+        return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, ArmadilloMeta.State.NETWORK_TYPE);
     }
 
     public static Entry<Point> Vector3(@NotNull Point value) {
