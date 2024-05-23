@@ -14,6 +14,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
+          cache: gradle
           java-version: 21
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
