@@ -1,7 +1,6 @@
 package net.minestom.server.world;
 
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -33,7 +32,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return new DynamicRegistryImpl<>(
+        return DynamicRegistry.create(
                 "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
                 (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
         );
