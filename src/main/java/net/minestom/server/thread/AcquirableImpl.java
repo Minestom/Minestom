@@ -13,7 +13,12 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     /**
      * Global lock used for synchronization.
      */
-    private static final ReentrantLock GLOBAL_LOCK = new ReentrantLock();
+    static final ReentrantLock GLOBAL_LOCK = new ReentrantLock();
+
+    /**
+     * Lock used specifically for uninitialized elements (null thread).
+     */
+    static final ReentrantLock UNINITIALIZED_LOCK = new ReentrantLock();
 
     private final T value;
     private TickThread assignedThread;
@@ -38,16 +43,27 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         VarHandle.releaseFence();
     }
 
-    static @Nullable ReentrantLock enter(@NotNull Thread currentThread, @Nullable TickThread elementThread) {
-        if (elementThread == null) return null;
-        if (currentThread == elementThread) return null;
-        final ReentrantLock currentLock = currentThread instanceof TickThread ? ((TickThread) currentThread).lock() : null;
-        final ReentrantLock targetLock = elementThread.lock();
-        if (targetLock.isHeldByCurrentThread()) return null;
+    static boolean isOwnedImpl(@Nullable TickThread elementThread) {
+        if (elementThread == null) return false; // Element doesn't have a thread yet, cannot be owned.
+        if (Thread.currentThread() == elementThread) return true; // Element is from the current thread.
+        return elementThread.lock().isHeldByCurrentThread();
+    }
+
+    static @Nullable ReentrantLock enter(@Nullable TickThread elementThread) {
+        if (isOwnedImpl(elementThread)) return null; // Nothing to lock, already owned by the current thread.
 
         // Monitoring
         final long time = System.nanoTime();
 
+        if (elementThread == null) {
+            // Element isn't initialized yet, use uninitialized lock
+            UNINITIALIZED_LOCK.lock();
+            WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
+            return UNINITIALIZED_LOCK;
+        }
+
+        final ReentrantLock targetLock = elementThread.lock();
+        final ReentrantLock currentLock = Thread.currentThread() instanceof TickThread tickThread ? tickThread.lock() : null;
         // Enter the target thread
         // TODO reduce global lock scope
         if (currentLock != null) {
@@ -66,8 +82,10 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     static void leave(@Nullable ReentrantLock lock) {
-        if (lock != null) {
-            lock.unlock();
+        if (lock == UNINITIALIZED_LOCK) {
+            UNINITIALIZED_LOCK.unlock();
+        } else {
+            if (lock != null) lock.unlock();
             GLOBAL_LOCK.unlock();
         }
     }
