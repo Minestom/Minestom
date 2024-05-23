@@ -1,7 +1,6 @@
 package net.minestom.server.message;
 
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -34,7 +33,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return new DynamicRegistryImpl<>(
+        return DynamicRegistry.create(
                 "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
                 (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
         );

@@ -15,6 +15,7 @@ public record ClientSelectKnownPacksPacket(
 
     public ClientSelectKnownPacksPacket {
         Check.argCondition(entries.size() > MAX_ENTRIES, "Too many known packs: {0} > {1}", entries.size(), MAX_ENTRIES);
+        entries = List.copyOf(entries);
     }
 
     public ClientSelectKnownPacksPacket(@NotNull NetworkBuffer reader) {

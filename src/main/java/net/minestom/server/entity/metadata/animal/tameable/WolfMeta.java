@@ -6,7 +6,10 @@ import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -87,7 +90,7 @@ public class WolfMeta extends TameableAnimalMeta {
          */
         @ApiStatus.Internal
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
-            return new DynamicRegistryImpl<>(
+            return DynamicRegistry.create(
                     "minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.WOLF_VARIANTS,
                     (namespace, props) -> new WolfMeta.VariantImpl(Registry.wolfVariant(namespace, props))
             );

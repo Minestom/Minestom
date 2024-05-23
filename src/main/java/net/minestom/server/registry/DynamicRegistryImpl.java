@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApiStatus.Internal
-public final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
+final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-remove' to 'true'");
 
     record KeyImpl<T extends ProtocolObject>(NamespaceID namespace) implements Key<T> {
@@ -44,23 +44,23 @@ public final class DynamicRegistryImpl<T extends ProtocolObject> implements Dyna
     private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(true));
 
     private final ReentrantLock lock = new ReentrantLock(); // Protects writes
-    private final List<T> entryById = new CopyOnWriteArrayList<>(); // We use a CopyOnWriteArrayList even with the lock above because it handles concurrent iteration
+    private final List<T> entryById = new CopyOnWriteArrayList<>();
     private final Map<NamespaceID, T> entryByName = new ConcurrentHashMap<>();
     private final List<NamespaceID> idByName = new CopyOnWriteArrayList<>();
 
     private final String id;
     private final BinaryTagSerializer<T> nbtType;
 
-    public DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType) {
+    DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType) {
         this.id = id;
         this.nbtType = nbtType;
     }
 
-    public DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
+    DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
         this(id, nbtType, resource, loader, null);
     }
 
-    public DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
+    DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
         this(id, nbtType);
         loadStaticRegistry(resource, loader, idComparator);
     }

@@ -1,7 +1,6 @@
 package net.minestom.server.entity.damage;
 
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -35,7 +34,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return new DynamicRegistryImpl<>(
+        return DynamicRegistry.create(
                 "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
                 (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
         );
