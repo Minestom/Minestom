@@ -56,6 +56,7 @@ public final class BiomeManager {
         var id = ID_COUNTER.getAndIncrement();
         this.biomesByName.put(biome.namespace(), biome);
         this.idMappings.put(biome.namespace(), id);
+        this.biomes.add(biome);
         nbtCache = null;
     }
 
