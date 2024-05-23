@@ -48,7 +48,7 @@ import java.util.Collection;
 
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
 
-    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.lazy(() -> MaterialImpl.NETWORK_TYPE);
+    NetworkBuffer.Type<Material> NETWORK_TYPE = MaterialImpl.NETWORK_TYPE;
     BinaryTagSerializer<Material> NBT_TYPE = BinaryTagSerializer.lazy(() -> MaterialImpl.NBT_TYPE);
 
     /**
