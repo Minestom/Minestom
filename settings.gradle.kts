@@ -3,6 +3,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 dependencyResolutionManagement {
     repositories {
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+        maven("https://s01.oss.sonatype.org/content/groups/public/")
         maven("https://jitpack.io")
         mavenCentral()
     }
@@ -13,7 +14,7 @@ dependencyResolutionManagement {
             version("kotlin", "1.9.22")
             version("hydrazine", "1.7.2")
             version("dependencyGetter", "v1.0.1")
-            version("data", "1.20.4-rv4")
+            version("data", "1.20.4-rv9")
             version("hephaistos", "2.6.1")
             version("jetbrainsAnnotations", "24.1.0")
             version("logback", "1.4.5")
