@@ -39,7 +39,7 @@ public final class ThreadDispatcher<P> {
     private final ArrayDeque<P> partitionUpdateQueue = new ArrayDeque<>();
 
     // Requests consumed at the end of each tick
-    private final MessagePassingQueue<DispatchUpdate<P>> updates = new MpscUnboundedArrayQueue<>(1024);
+    private final MessagePassingQueue<Update<P>> updates = new MpscUnboundedArrayQueue<>(1024);
 
     private ThreadDispatcher(ThreadProvider<P> provider, int threadCount,
                              @NotNull IntFunction<? extends TickThread> threadGenerator) {
@@ -114,12 +114,11 @@ public final class ThreadDispatcher<P> {
         // Update dispatcher
         this.updates.drain(update -> {
             switch (update) {
-                case DispatchUpdate.PartitionLoad<P> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
-                case DispatchUpdate.PartitionUnload<P> partitionUnload ->
-                        processUnloadedPartition(partitionUnload.partition());
-                case DispatchUpdate.ElementUpdate<P> elementUpdate ->
+                case Update.PartitionLoad<P> chunkUpdate -> processLoadedPartition(chunkUpdate.partition());
+                case Update.PartitionUnload<P> partitionUnload -> processUnloadedPartition(partitionUnload.partition());
+                case Update.ElementUpdate<P> elementUpdate ->
                         processUpdatedElement(elementUpdate.tickable(), elementUpdate.partition());
-                case DispatchUpdate.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
+                case Update.ElementRemove<P> elementRemove -> processRemovedElement(elementRemove.tickable());
                 case null, default -> throw new IllegalStateException("Unknown update type: " +
                         (update == null ? "null" : update.getClass().getSimpleName()));
             }
@@ -184,7 +183,7 @@ public final class ThreadDispatcher<P> {
      * @param partition the partition to register
      */
     public void createPartition(@NotNull P partition) {
-        signalUpdate(new DispatchUpdate.PartitionLoad<>(partition));
+        signalUpdate(new Update.PartitionLoad<>(partition));
     }
 
     /**
@@ -193,7 +192,7 @@ public final class ThreadDispatcher<P> {
      * @param partition the partition to delete
      */
     public void deletePartition(@NotNull P partition) {
-        signalUpdate(new DispatchUpdate.PartitionUnload<>(partition));
+        signalUpdate(new Update.PartitionUnload<>(partition));
     }
 
     /**
@@ -203,7 +202,7 @@ public final class ThreadDispatcher<P> {
      * @param partition the partition the Tickable is part of
      */
     public void updateElement(@NotNull Tickable tickable, @NotNull P partition) {
-        signalUpdate(new DispatchUpdate.ElementUpdate<>(tickable, partition));
+        signalUpdate(new Update.ElementUpdate<>(tickable, partition));
     }
 
     /**
@@ -212,7 +211,7 @@ public final class ThreadDispatcher<P> {
      * @param tickable the Tickable to remove
      */
     public void removeElement(@NotNull Tickable tickable) {
-        signalUpdate(new DispatchUpdate.ElementRemove<>(tickable));
+        signalUpdate(new Update.ElementRemove<>(tickable));
     }
 
     /**
@@ -253,7 +252,7 @@ public final class ThreadDispatcher<P> {
         return threads.get(index);
     }
 
-    private void signalUpdate(@NotNull DispatchUpdate<P> update) {
+    private void signalUpdate(@NotNull ThreadDispatcher.Update<P> update) {
         this.updates.relaxedOffer(update);
     }
 
@@ -302,7 +301,7 @@ public final class ThreadDispatcher<P> {
             this.elements.put(tickable, partitionEntry);
             partitionEntry.elements.add(tickable);
             if (tickable instanceof AcquirableSource<?> acquirableSource) {
-                ((AcquirableImpl<?>) acquirableSource.acquirable()).updateThread(partitionEntry.thread());
+                ((AcquirableImpl<?>) acquirableSource.acquirable()).assign(partitionEntry.thread());
             }
         }
     }
@@ -341,19 +340,17 @@ public final class ThreadDispatcher<P> {
     }
 
     @ApiStatus.Internal
-    sealed interface DispatchUpdate<P> permits
-            DispatchUpdate.PartitionLoad, DispatchUpdate.PartitionUnload,
-            DispatchUpdate.ElementUpdate, DispatchUpdate.ElementRemove {
-        record PartitionLoad<P>(@NotNull P partition) implements DispatchUpdate<P> {
+    sealed interface Update<P> {
+        record PartitionLoad<P>(@NotNull P partition) implements Update<P> {
         }
 
-        record PartitionUnload<P>(@NotNull P partition) implements DispatchUpdate<P> {
+        record PartitionUnload<P>(@NotNull P partition) implements Update<P> {
         }
 
-        record ElementUpdate<P>(@NotNull Tickable tickable, P partition) implements DispatchUpdate<P> {
+        record ElementUpdate<P>(@NotNull Tickable tickable, P partition) implements Update<P> {
         }
 
-        record ElementRemove<P>(@NotNull Tickable tickable) implements DispatchUpdate<P> {
+        record ElementRemove<P>(@NotNull Tickable tickable) implements Update<P> {
         }
     }
 }
