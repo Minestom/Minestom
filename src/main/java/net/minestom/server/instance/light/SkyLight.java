@@ -25,7 +25,7 @@ final class SkyLight implements Light {
     private byte[] contentPropagationSwap;
 
     private boolean isValidBorders = true;
-    private boolean needsSend = true;
+    private boolean needsSend = false;
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
