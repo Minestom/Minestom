@@ -11,7 +11,7 @@ public final class ConfigListener {
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     public static void selectKnownPacks(@NotNull ClientSelectKnownPacksPacket packet, @NotNull Player player) {
-        System.out.println("SelectKnownPacksPacket: " + packet);
+        player.getPlayerConnection().receiveKnownPacksResponse(packet.entries());
     }
 
     public static void finishConfigListener(@NotNull ClientFinishConfigurationPacket packet, @NotNull Player player) {
