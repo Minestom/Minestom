@@ -14,47 +14,13 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 
-/**
- *
- * Component notes
- * todo delete me
- *
- * ItemComponent.DYED_ITEM -> record DyedItemComponent.class
- *
- * itemStack.with(ItemComponent.DYED_ITEM, new DyedItemComponent(Color.RED))
- * itemStack.get(ItemComponent.DYED_ITEM)
- * itemStack.getOrDefault(ItemComponent.DYED_ITEM, new DyedItemComponent(Color.RED))
- *
- * material.prototype() -> some component list?
- *
- *
- *
- * // NEW WIRE FORMAT
- * count | varint
- * material id | varint
- * components | SEE BELOW
- *
- * DataComponentPatch
- * additions | varint
- * removals | varint
- * for each addition
- *   varint | data component id
- *   data component | data component (depends)
- * for each removal
- *   varint | data component id
- *
- *
- */
-
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
 
     NetworkBuffer.Type<Material> NETWORK_TYPE = MaterialImpl.NETWORK_TYPE;
     BinaryTagSerializer<Material> NBT_TYPE = BinaryTagSerializer.lazy(() -> MaterialImpl.NBT_TYPE);
 
     /**
-     * Returns the material registry.
-     *
-     * @return the material registry
+     * Returns the raw registry data for the material.
      */
     @Contract(pure = true)
     @NotNull Registry.MaterialEntry registry();

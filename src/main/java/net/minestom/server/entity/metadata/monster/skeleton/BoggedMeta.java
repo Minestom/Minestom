@@ -6,9 +6,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class BoggedMeta extends AbstractSkeletonMeta {
     public static final byte OFFSET = AbstractSkeletonMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     public BoggedMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
+    }
+
+    public boolean isSheared() {
+        return super.metadata.getIndex(OFFSET, false);
+    }
+
+    public void setSheared(boolean value) {
+        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }
 }
