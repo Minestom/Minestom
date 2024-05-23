@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
@@ -14,13 +15,13 @@ public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, C
     private final Player player;
     private final Block block;
     private Block resultBlock;
-    private final Point blockPosition;
+    private final BlockVec blockPosition;
     private final BlockFace blockFace;
 
     private boolean cancelled;
 
     public PlayerBlockBreakEvent(@NotNull Player player,
-                                 @NotNull Block block, @NotNull Block resultBlock, @NotNull Point blockPosition,
+                                 @NotNull Block block, @NotNull Block resultBlock, @NotNull BlockVec blockPosition,
                                  @NotNull BlockFace blockFace) {
         this.player = player;
 
@@ -72,7 +73,8 @@ public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, C
      *
      * @return the block position
      */
-    public @NotNull Point getBlockPosition() {
+    @Override
+    public @NotNull BlockVec getBlockPosition() {
         return blockPosition;
     }
 
