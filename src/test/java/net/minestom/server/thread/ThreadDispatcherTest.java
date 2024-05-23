@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -15,6 +16,64 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ThreadDispatcherTest {
+
+    @Test
+    public void basic() {
+        record World() {
+        }
+        final class Element implements Tickable {
+            int value;
+
+            @Override
+            public void tick(long time) {
+                value++;
+            }
+        }
+        World world = new World();
+        Element element = new Element();
+
+        ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.createPartition(world);
+        dispatcher.updateElement(element, world);
+        dispatcher.start();
+
+        assertEquals(0, element.value);
+        dispatcher.updateAndAwait(0);
+        assertEquals(1, element.value);
+
+        dispatcher.shutdown();
+    }
+
+    @Test
+    public void basicAcquirable() {
+        record World() {
+        }
+        final class Element implements Tickable, AcquirableSource<Element> {
+            final Acquirable<Element> acquirable = Acquirable.unassigned(this);
+
+            @Override
+            public void tick(long time) {
+            }
+
+            @Override
+            public @NotNull Acquirable<? extends Element> acquirable() {
+                return acquirable;
+            }
+        }
+        World world = new World();
+        Element element = new Element();
+
+        ThreadDispatcher<World> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.createPartition(world);
+        dispatcher.updateElement(element, world);
+        dispatcher.start();
+
+        assertNull(element.acquirable().assignedThread());
+        dispatcher.updateAndAwait(0);
+        assertNotNull(element.acquirable().assignedThread());
+
+        dispatcher.shutdown();
+    }
 
     @Test
     public void elementTick() {
@@ -41,6 +100,57 @@ public class ThreadDispatcherTest {
         dispatcher.removeElement(element);
         dispatcher.updateAndAwait(System.nanoTime());
         assertEquals(2, counter.get());
+
+        dispatcher.shutdown();
+    }
+
+    @Test
+    public void elementTickLoop() {
+        final AtomicInteger counter = new AtomicInteger();
+        ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
+
+        var partition = new Object();
+        Tickable element = (time) -> counter.incrementAndGet();
+        dispatcher.createPartition(partition);
+        dispatcher.updateElement(element, partition);
+        assertEquals(0, counter.get());
+
+        for (int i = 0; i < 100; i++) {
+            dispatcher.updateAndAwait(System.nanoTime());
+            assertEquals(i + 1, counter.get());
+        }
+
+        dispatcher.shutdown();
+    }
+
+    @Test
+    public void elementTickLoopAsync() {
+        final AtomicInteger counter = new AtomicInteger();
+        ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
+
+        var partition = new Object();
+        Tickable element = (time) -> counter.incrementAndGet();
+        dispatcher.createPartition(partition);
+        dispatcher.updateElement(element, partition);
+        assertEquals(0, counter.get());
+
+        final int count = 100;
+        CountDownLatch latch = new CountDownLatch(count);
+        for (int i = 0; i < count; i++) {
+            Thread.startVirtualThread(() -> {
+                dispatcher.updateAndAwait(System.nanoTime());
+                latch.countDown();
+            });
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            fail("Latch was interrupted");
+        }
+        assertEquals(count, counter.get());
 
         dispatcher.shutdown();
     }
