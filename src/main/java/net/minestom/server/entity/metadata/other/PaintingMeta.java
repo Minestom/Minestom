@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
@@ -104,6 +105,8 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         WATER(32, 32),
         FIRE(32, 32),
         DONKEY_KONG(64, 48);
+
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
 
         private static final Variant[] VALUES = values();
 
