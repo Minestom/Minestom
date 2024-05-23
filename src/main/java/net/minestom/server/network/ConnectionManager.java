@@ -34,10 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 /**
@@ -261,17 +258,24 @@ public final class ConnectionManager {
         configurationPlayers.add(player);
     }
 
+    /**
+     * Return value exposed for testing
+     */
     @ApiStatus.Internal
-    public void doConfiguration(@NotNull Player player, boolean isFirstConfig) {
+    public CompletableFuture<Void> doConfiguration(@NotNull Player player, boolean isFirstConfig) {
         if (isFirstConfig) {
             configurationPlayers.add(player);
             keepAlivePlayers.add(player);
         }
 
-        player.getPlayerConnection().setConnectionState(ConnectionState.CONFIGURATION);
-        CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
-            player.sendPacket(PluginMessagePacket.getBrandPacket());
+        final PlayerConnection connection = player.getPlayerConnection();
+        connection.setConnectionState(ConnectionState.CONFIGURATION);
 
+        player.sendPacket(PluginMessagePacket.getBrandPacket());
+        // Request known packs immediately, but don't wait for the response until required (sending registry data).
+        final var knownPacksFuture = connection.requestKnownPacks(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
+
+        return AsyncUtils.runAsync(() -> {
             var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
@@ -285,10 +289,16 @@ public final class ConnectionManager {
 
             // Registry data (if it should be sent)
             if (event.willSendRegistryData()) {
+                List<SelectKnownPacksPacket.Entry> knownPacks;
+                try {
+                    knownPacks = knownPacksFuture.get(5, TimeUnit.SECONDS);
+                } catch (InterruptedException | TimeoutException e) {
+                    throw new RuntimeException("Client failed to respond to known packs request", e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("Error receiving known packs", e);
+                }
+                boolean excludeVanilla = !knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
-                player.sendPacket(new SelectKnownPacksPacket(List.of(SelectKnownPacksPacket.MINECRAFT_CORE)));
-
-                boolean excludeVanilla = false;
                 var serverProcess = MinecraftServer.process();
                 player.sendPacket(serverProcess.chatType().registryDataPacket(excludeVanilla));
                 player.sendPacket(serverProcess.dimensionType().registryDataPacket(excludeVanilla));
@@ -310,7 +320,6 @@ public final class ConnectionManager {
             player.setPendingOptions(spawningInstance, event.isHardcore());
             player.sendPacket(new FinishConfigurationPacket());
         });
-        if (DebugUtils.INSIDE_TEST) configFuture.join();
     }
 
     @ApiStatus.Internal
