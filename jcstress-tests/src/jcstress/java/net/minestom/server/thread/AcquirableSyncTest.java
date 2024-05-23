@@ -26,11 +26,8 @@ public class AcquirableSyncTest {
         TickThread tickThread = new TickThread(1) {
             @Override
             public void run() {
-                super.run();
                 for (int i = 0; i < 10_000; i++) {
-                    acquirable.sync(test -> {
-                        test.value = test.value + 1;
-                    });
+                    acquirable.sync(test -> test.value++);
                 }
             }
         };
@@ -47,11 +44,8 @@ public class AcquirableSyncTest {
         TickThread tickThread = new TickThread(2) {
             @Override
             public void run() {
-                super.run();
                 for (int i = 0; i < 10_000; i++) {
-                    acquirable.sync(test -> {
-                        test.value = test.value + 1;
-                    });
+                    acquirable.sync(test -> test.value++);
                 }
             }
         };
@@ -68,11 +62,8 @@ public class AcquirableSyncTest {
         TickThread tickThread = new TickThread(3) {
             @Override
             public void run() {
-                super.run();
                 for (int i = 0; i < 10_000; i++) {
-                    acquirable.sync(test -> {
-                        test.value = test.value + 1;
-                    });
+                    acquirable.sync(test -> test.value++);
                 }
             }
         };
