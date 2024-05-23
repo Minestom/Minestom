@@ -9,15 +9,22 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.data.ParticleData;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -580,31 +587,95 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    static <T extends Enum<?>> NetworkBufferTypeImpl<T> fromEnum(Class<T> enumClass) {
-        return new NetworkBufferTypeImpl<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                buffer.writeEnum(enumClass, value);
-            }
+    // Combinators
 
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                return buffer.readEnum(enumClass);
-            }
-        };
+    record EnumType<E extends Enum<?>>(@NotNull Class<E> enumClass) implements NetworkBufferTypeImpl<E> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, E value) {
+            buffer.writeEnum(enumClass, value);
+        }
+
+        @Override
+        public E read(@NotNull NetworkBuffer buffer) {
+            return buffer.readEnum(enumClass);
+        }
     }
 
-    static <T> NetworkBufferTypeImpl<T> fromOptional(Type<T> optionalType) {
-        return new NetworkBufferTypeImpl<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                buffer.writeOptional(optionalType, value);
-            }
+    record OptionalType<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            buffer.writeOptional(parent, value);
+        }
 
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                return buffer.readOptional(optionalType);
-            }
-        };
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            return buffer.readOptional(parent);
+        }
+    }
+
+    final class LazyType<T> implements NetworkBufferTypeImpl<T> {
+        private final @NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier;
+        private Type<T> type;
+
+        public LazyType(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
+            this.supplier = supplier;
+        }
+
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            if (type == null) type = supplier.get();
+            type.write(buffer, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            if (type == null) type = supplier.get();
+            return null;
+        }
+    }
+
+    record MappedType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to, @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, S value) {
+            parent.write(buffer, from.apply(value));
+        }
+
+        @Override
+        public S read(@NotNull NetworkBuffer buffer) {
+            return to.apply(parent.read(buffer));
+        }
+    }
+
+    record ListType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, List<T> value) {
+            buffer.writeCollection(parent, value);
+        }
+
+        @Override
+        public List<T> read(@NotNull NetworkBuffer buffer) {
+            return buffer.readCollection(parent, maxSize);
+        }
+    }
+
+    record RegistryTypeType<T extends ProtocolObject>(@NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
+            Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
+            final DynamicRegistry<T> registry = selector.apply(buffer.registries);
+            final int id = registry.getId(value);
+            Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
+            buffer.write(VAR_INT, id);
+        }
+
+        @Override
+        public DynamicRegistry.Key<T> read(@NotNull NetworkBuffer buffer) {
+            Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
+            DynamicRegistry<T> registry = selector.apply(buffer.registries);
+            final int id = buffer.read(VAR_INT);
+            final DynamicRegistry.Key<T> key = registry.getKey(id);
+            Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
+            return key;
+        }
     }
 }
