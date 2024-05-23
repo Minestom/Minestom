@@ -8,8 +8,10 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.CookieRequestPacket;
 import net.minestom.server.network.packet.server.common.CookieStorePacket;
+import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +35,8 @@ public abstract class PlayerConnection {
     volatile boolean online;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
+
+    private CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.
 
     private final Map<NamespaceID, CompletableFuture<byte @Nullable []>> pendingCookieRequests = new ConcurrentHashMap<>();
 
@@ -202,6 +206,22 @@ public abstract class PlayerConnection {
     public @NotNull LoginPluginMessageProcessor loginPluginMessageProcessor() {
         return Objects.requireNonNull(this.loginPluginMessageProcessor,
                 "Login plugin message processor is only available during the login state.");
+    }
+
+    @ApiStatus.Internal
+    public @NotNull CompletableFuture<List<SelectKnownPacksPacket.Entry>> requestKnownPacks(@NotNull List<SelectKnownPacksPacket.Entry> serverPacks) {
+        Check.stateCondition(knownPacksFuture != null, "Known packs already pending");
+        sendPacket(new SelectKnownPacksPacket(serverPacks));
+        return knownPacksFuture = new CompletableFuture<>();
+    }
+
+    @ApiStatus.Internal
+    public void receiveKnownPacksResponse(@NotNull List<SelectKnownPacksPacket.Entry> clientPacks) {
+        final var future = knownPacksFuture;
+        if (future != null) {
+            future.complete(clientPacks);
+            knownPacksFuture = null;
+        }
     }
 
     @Override
