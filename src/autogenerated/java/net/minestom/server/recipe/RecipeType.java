@@ -55,7 +55,7 @@ public enum RecipeType implements StaticProtocolObject {
 
     DECORATED_POT(NamespaceID.from("minecraft:crafting_decorated_pot"));
 
-    public static final NetworkBuffer.Type<RecipeType> NETWORK_TYPE = NetworkBuffer.fromEnum(RecipeType.class);
+    public static final NetworkBuffer.Type<RecipeType> NETWORK_TYPE = NetworkBuffer.Enum(RecipeType.class);
 
     private final NamespaceID namespace;
 

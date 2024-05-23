@@ -11,6 +11,6 @@ public enum ItemRarity {
 
     private static final ItemRarity[] VALUES = values();
 
-    public static final NetworkBuffer.Type<ItemRarity> NETWORK_TYPE = NetworkBuffer.fromEnum(ItemRarity.class);
+    public static final NetworkBuffer.Type<ItemRarity> NETWORK_TYPE = NetworkBuffer.Enum(ItemRarity.class);
     public static final BinaryTagSerializer<ItemRarity> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(ItemRarity.class);
 }
