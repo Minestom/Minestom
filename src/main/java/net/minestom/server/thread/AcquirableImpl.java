@@ -44,8 +44,11 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     static boolean isOwnedImpl(@Nullable TickThread elementThread) {
-        if (elementThread == null) return false; // Element doesn't have a thread yet, cannot be owned.
         if (Thread.currentThread() == elementThread) return true; // Element is from the current thread.
+        if (elementThread == null) {
+            // Uninitialized entity, must check the dedicated lock
+            return UNINITIALIZED_LOCK.isHeldByCurrentThread();
+        }
         return elementThread.lock().isHeldByCurrentThread();
     }
 

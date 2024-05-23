@@ -26,14 +26,14 @@ public class AcquirableIntegrationTest {
         };
         zombie.setInstance(instance, new Pos(1, 41, 1)).join();
         var acquirable = zombie.getAcquirable();
-        // Check ownership before initialization
+        // Check local state before initialization
         assertFalse(acquirable.isOwned());
         acquirable.sync(entity -> assertFalse(acquirable.isLocal()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isLocal()));
 
         env.tick(); // Ensure the entity can access itself
 
-        // Check ownership after initialization
+        // Check local state after initialization
         assertFalse(acquirable.isOwned());
         acquirable.sync(entity -> assertFalse(acquirable.isLocal()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isLocal()));
