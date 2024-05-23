@@ -98,6 +98,14 @@ public class AcquirableSyncBenchmark {
     }
 
     @Benchmark
+    public void foreignSync() {
+        // Single thread (not main) acquiring the element
+        launch(tickThreads.subList(0, 1), (acquirable) -> {
+            for (int i = 0; i < 10_000; i++) acquirable.sync(test -> test.value++);
+        });
+    }
+
+    @Benchmark
     public void unsafe() {
         launch(threads, (acquirable) -> {
             for (int i = 0; i < 10_000; i++) acquirable.unwrap().value++;
@@ -138,7 +146,12 @@ public class AcquirableSyncBenchmark {
     }
 
     private void launch(List<Thread> threads, Consumer<Acquirable<Test>> consumer) {
-        this.consumer = consumer;
+        final int factor = THREAD_COUNT / threads.size();
+        this.consumer = acquirable -> {
+            for (int i = 0; i < factor; i++) {
+                consumer.accept(acquirable);
+            }
+        };
         // Start all
         for (Thread thread : threads) thread.start();
         // Wait for all to finish
