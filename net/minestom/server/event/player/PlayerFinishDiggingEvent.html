@@ -109,9 +109,9 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point)" class="member-name-link">PlayerFinishDiggingEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.BlockVec)" class="member-name-link">PlayerFinishDiggingEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
- @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</code></div>
+ @NotNull <a href="../../coordinate/BlockVec.html" title="class in net.minestom.server.coordinate">BlockVec</a>&nbsp;blockPosition)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -132,7 +132,7 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the block which was dug.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/BlockVec.html" title="class in net.minestom.server.coordinate">BlockVec</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBlockPosition()" class="member-name-link">getBlockPosition</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the block position.</div>
@@ -171,14 +171,14 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.BlockVec)">
 <h3>PlayerFinishDiggingEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerFinishDiggingEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull
  @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  @NotNull
- @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</span></div>
+ @NotNull <a href="../../coordinate/BlockVec.html" title="class in net.minestom.server.coordinate">BlockVec</a>&nbsp;blockPosition)</span></div>
 </section>
 </li>
 </ul>
@@ -225,9 +225,11 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <section class="detail" id="getBlockPosition()">
 <h3>getBlockPosition</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getBlockPosition</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/BlockVec.html" title="class in net.minestom.server.coordinate">BlockVec</a></span>&nbsp;<span class="element-name">getBlockPosition</span>()</div>
 <div class="block">Gets the block position.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../trait/BlockEvent.html#getBlockPosition()">getBlockPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a></code></dd>
 <dt>Returns:</dt>
 <dd>the block position</dd>
 </dl>
