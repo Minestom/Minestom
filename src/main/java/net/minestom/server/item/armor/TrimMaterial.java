@@ -3,7 +3,10 @@ package net.minestom.server.item.armor;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -47,7 +50,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
-        return new DynamicRegistryImpl<>(
+        return DynamicRegistry.create(
                 "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
                 (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
         );
