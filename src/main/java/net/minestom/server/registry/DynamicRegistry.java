@@ -4,11 +4,13 @@ import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.List;
 
 public sealed interface DynamicRegistry<T extends ProtocolObject> permits DynamicRegistryImpl {
@@ -41,6 +43,27 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
         default @NotNull net.kyori.adventure.key.Key key() {
             return namespace();
         }
+    }
+
+    @ApiStatus.Internal
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
+            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType) {
+        return new DynamicRegistryImpl<>(id, nbtType);
+    }
+
+    @ApiStatus.Internal
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
+            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
+        return new DynamicRegistryImpl<>(id, nbtType, resource, loader);
+    }
+
+    @ApiStatus.Internal
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
+            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
+            @Nullable Comparator<String> idComparator) {
+        return new DynamicRegistryImpl<>(id, nbtType, resource, loader, idComparator);
     }
 
     @Nullable T get(int id);
