@@ -28,8 +28,8 @@ public class CommandBenchmark {
     public void setup() {
         var graph = Graph.merge(Set.of(
                 new Command("tp", "teleport") {{
-                    addSyntax((sender, context) -> {}, Potion("pos"));
-                    addSyntax((sender, context) -> {}, Entity("entity"), Potion("pos"));
+                    addSyntax((sender, context) -> {}, RelativeVec3("pos"));
+                    addSyntax((sender, context) -> {}, Entity("entity"), RelativeVec3("pos"));
                 }},
                 new Command("setblock", "set") {{
                     addSyntax((sender, context) -> {}, RelativeBlockPosition("pos"), BlockState("block"));
@@ -56,7 +56,7 @@ public class CommandBenchmark {
                 }}
         ));
         final CommandParser commandParser = CommandParser.parser();
-        this.parser = input -> commandParser.parse(graph, input);
+        this.parser = input -> commandParser.parse(null, graph, input);
     }
 
     @Benchmark
