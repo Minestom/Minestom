@@ -88,8 +88,10 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         if (lock == UNINITIALIZED_LOCK) {
             UNINITIALIZED_LOCK.unlock();
         } else {
-            if (lock != null) lock.unlock();
-            GLOBAL_LOCK.unlock();
+            if (lock != null) {
+                lock.unlock();
+                GLOBAL_LOCK.unlock();
+            }
         }
     }
 }

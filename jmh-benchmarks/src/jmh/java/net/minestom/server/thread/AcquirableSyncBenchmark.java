@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
 public class AcquirableSyncBenchmark {
+    private static final int THREAD_COUNT = 10;
 
     TickThread mainThread;
     Acquirable<Test> acquirable;
@@ -29,13 +30,23 @@ public class AcquirableSyncBenchmark {
 
     @Setup(Level.Invocation)
     public void setup() {
-        mainThread = new TickThread(0);
-        acquirable = Acquirable.of(new Test());
+        this.mainThread = new TickThread(0) {
+            @Override
+            public void run() {
+                this.lock().lock();
+                try {
+                    consumer.accept(acquirable);
+                } finally {
+                    this.lock().unlock();
+                }
+            }
+        };
+        this.acquirable = Acquirable.of(new Test());
         ((AcquirableImpl<Test>) acquirable).updateThread(mainThread);
 
         {
-            this.tickThreads = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            this.tickThreads = new ArrayList<>(THREAD_COUNT);
+            for (int i = 0; i < THREAD_COUNT; i++) {
                 TickThread thread = new TickThread(i + 1) {
                     @Override
                     public void run() {
@@ -52,8 +63,8 @@ public class AcquirableSyncBenchmark {
         }
 
         {
-            this.threads = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            this.threads = new ArrayList<>(THREAD_COUNT);
+            for (int i = 0; i < THREAD_COUNT; i++) {
                 Thread thread = new Thread(() -> consumer.accept(acquirable));
                 threads.add(thread);
             }
@@ -61,9 +72,47 @@ public class AcquirableSyncBenchmark {
     }
 
     @Benchmark
+    public void localUnsafe() {
+        launchLocal((acquirable) -> {
+            for (int i = 0; i < 10_000; i++) acquirable.unwrap().value++;
+        });
+    }
+
+    @Benchmark
+    public void localSync() {
+        launchLocal((acquirable) -> {
+            for (int i = 0; i < 10_000; i++) acquirable.sync(test -> test.value++);
+        });
+    }
+
+    @Benchmark
+    public void localSynchronizedKeyword() {
+        Object object = new Object();
+        launchLocal((acquirable) -> {
+            for (int i = 0; i < 10_000; i++) {
+                synchronized (object) {
+                    acquirable.unwrap().value++;
+                }
+            }
+        });
+    }
+
+    @Benchmark
     public void unsafe() {
         launch(threads, (acquirable) -> {
             for (int i = 0; i < 10_000; i++) acquirable.unwrap().value++;
+        });
+    }
+
+    @Benchmark
+    public void synchronizedKeyword() {
+        Object object = new Object();
+        launch(threads, (acquirable) -> {
+            for (int i = 0; i < 10_000; i++) {
+                synchronized (object) {
+                    acquirable.unwrap().value++;
+                }
+            }
         });
     }
 
@@ -81,6 +130,13 @@ public class AcquirableSyncBenchmark {
         });
     }
 
+    @Benchmark
+    public void multiDoubleAcquireTickThread() {
+        launch(tickThreads, (acquirable) -> {
+            for (int i = 0; i < 10_000; i++) acquirable.sync(t -> acquirable.sync(test -> test.value++));
+        });
+    }
+
     private void launch(List<Thread> threads, Consumer<Acquirable<Test>> consumer) {
         this.consumer = consumer;
         // Start all
@@ -92,6 +148,21 @@ public class AcquirableSyncBenchmark {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private void launchLocal(Consumer<Acquirable<Test>> consumer) {
+        // Multiply by thread count to simulate the same amount of operations
+        this.consumer = acquirable -> {
+            for (int i = 0; i < THREAD_COUNT; i++) {
+                consumer.accept(acquirable);
+            }
+        };
+        this.mainThread.start();
+        try {
+            this.mainThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
