@@ -1,7 +1,10 @@
 package net.minestom.server.instance.block.banner;
 
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -36,7 +39,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
-        return new DynamicRegistryImpl<>(
+        return DynamicRegistry.create(
                 "minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.BANNER_PATTERNS,
                 (namespace, props) -> new BannerPatternImpl(Registry.bannerPattern(namespace, props))
         );

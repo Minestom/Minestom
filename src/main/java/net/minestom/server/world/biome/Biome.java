@@ -2,7 +2,6 @@ package net.minestom.server.world.biome;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.DynamicRegistryImpl;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -28,7 +27,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
-        return new DynamicRegistryImpl<>(
+        return DynamicRegistry.create(
                 "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
                 (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props)),
                 // We force plains to be first because it allows convenient palette initialization.
