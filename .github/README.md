@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/OneLiteFeatherNET/Microtus?style=for-the-badge&color=b2204c)](../LICENSE)
 [![wiki](https://img.shields.io/badge/documentation-wiki-74aad6?style=for-the-badge)](https://wiki.minestom.net/)
 
-[Microtus](https://en.wikipedia.org/wiki/Microtus) is a fork of the original minestom but patch based.
+[Microtus](https://en.wikipedia.org/wiki/Microtus) is a fork of the original minestom.
 
 Our projects get names of animals but in latin.
 
