@@ -37,67 +37,9 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
     // Block id -> valid property keys (order is important for lookup)
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
-    // Block id -> Map<Properties, Block>
+    // Block id -> Map<PropertiesValues, Block>
     private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS,
-            (namespace, properties) -> {
-                final int blockId = properties.getInt("id");
-                final Registry.Properties stateObject = properties.section("states");
-
-                // Retrieve properties
-                PropertyType[] propertyTypes;
-                {
-                    Registry.Properties stateProperties = properties.section("properties");
-                    if (stateProperties != null) {
-                        final int stateCount = stateProperties.size();
-                        if (stateCount > MAX_STATES) {
-                            throw new IllegalStateException("Too many properties for block " + namespace);
-                        }
-                        propertyTypes = new PropertyType[stateCount];
-                        int i = 0;
-                        for (var entry : stateProperties) {
-                            final var k = entry.getKey();
-                            final var v = (List<String>) entry.getValue();
-                            assert v.size() < MAX_VALUES;
-                            propertyTypes[i++] = new PropertyType(k, v);
-                        }
-                    } else {
-                        propertyTypes = new PropertyType[0];
-                    }
-                }
-                PROPERTIES_TYPE.set(blockId, propertyTypes);
-
-                // Retrieve block states
-                {
-                    final int propertiesCount = stateObject.size();
-                    long[] propertiesKeys = new long[propertiesCount];
-                    BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
-                    int propertiesOffset = 0;
-                    for (var stateEntry : stateObject) {
-                        final String query = stateEntry.getKey();
-                        final var stateOverride = (Map<String, Object>) stateEntry.getValue();
-                        final var propertyMap = BlockUtils.parseProperties(query);
-                        assert propertyTypes.length == propertyMap.size();
-                        long propertiesValue = 0;
-                        for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
-                            final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
-                            final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
-                            propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
-                        }
-
-                        var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
-                        final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
-                                propertiesValue, null, null);
-                        BLOCK_STATE_MAP.set(block.stateId(), block);
-                        propertiesKeys[propertiesOffset] = propertiesValue;
-                        blocksValues[propertiesOffset++] = block;
-                    }
-                    POSSIBLE_STATES.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
-                }
-                // Register default state
-                final int defaultState = properties.getInt("defaultStateId");
-                return getState(defaultState);
-            });
+    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS, BlockImpl::createImpl);
 
     static {
         PROPERTIES_TYPE.trim();
@@ -230,6 +172,65 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         if (nbt == null && handler == null) return block;
         // Otherwise copy with the nbt and handler
         return new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
+    }
+
+    private static Block createImpl(String namespace, Registry.Properties properties) {
+        final int blockId = properties.getInt("id");
+        final Registry.Properties stateObject = properties.section("states");
+
+        // Retrieve properties
+        PropertyType[] propertyTypes;
+        {
+            Registry.Properties stateProperties = properties.section("properties");
+            if (stateProperties != null) {
+                final int stateCount = stateProperties.size();
+                if (stateCount > MAX_STATES) {
+                    throw new IllegalStateException("Too many properties for block " + namespace);
+                }
+                propertyTypes = new PropertyType[stateCount];
+                int i = 0;
+                for (var entry : stateProperties) {
+                    final var k = entry.getKey();
+                    final var v = (List<String>) entry.getValue();
+                    assert v.size() < MAX_VALUES;
+                    propertyTypes[i++] = new PropertyType(k, v);
+                }
+            } else {
+                propertyTypes = new PropertyType[0];
+            }
+        }
+        PROPERTIES_TYPE.set(blockId, propertyTypes);
+
+        // Retrieve block states
+        {
+            final int propertiesCount = stateObject.size();
+            long[] propertiesKeys = new long[propertiesCount];
+            BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
+            int propertiesOffset = 0;
+            for (var stateEntry : stateObject) {
+                final String query = stateEntry.getKey();
+                final var stateOverride = (Map<String, Object>) stateEntry.getValue();
+                final var propertyMap = BlockUtils.parseProperties(query);
+                assert propertyTypes.length == propertyMap.size();
+                long propertiesValue = 0;
+                for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
+                    final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
+                    final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
+                    propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
+                }
+
+                var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
+                final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
+                        propertiesValue, null, null);
+                BLOCK_STATE_MAP.set(block.stateId(), block);
+                propertiesKeys[propertiesOffset] = propertiesValue;
+                blocksValues[propertiesOffset++] = block;
+            }
+            POSSIBLE_STATES.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
+        }
+        // Register default state
+        final int defaultState = properties.getInt("defaultStateId");
+        return getState(defaultState);
     }
 
     private static byte findKeyIndex(PropertyType[] properties, String key, BlockImpl block) {
