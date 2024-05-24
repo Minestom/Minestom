@@ -58,7 +58,7 @@ tasks {
             addStringOption("-release", "21")
             // Links to external javadocs
             links("https://docs.oracle.com/en/java/javase/21/docs/api/")
-            links("https://jd.adventure.kyori.net/api/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
         }
     }
     withType<Zip> {
