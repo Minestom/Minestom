@@ -12,8 +12,12 @@ final class BiomeImpl implements ProtocolObject, Biome {
     // https://minecraft.wiki/w/Rain
     private final static Double SNOW_TEMPERATURE = 0.15;
 
-    private static final Registry.DynamicContainer<BiomeImpl> CONTAINER = Registry.createDynamicContainer(Registry.Resource.BIOMES,
-            (namespace, properties) -> new BiomeImpl(Registry.biome(namespace, properties)));
+    private static final Registry.DynamicContainer<BiomeImpl> CONTAINER = Registry.createDynamicContainer(Registry.Resource.BIOMES, BiomeImpl::createImpl);
+
+    private static BiomeImpl createImpl(String namespace, Registry.Properties properties) {
+        return new BiomeImpl(Registry.biome(namespace, properties));
+    }
+
 
     static Collection<BiomeImpl> values() {
         return CONTAINER.values();

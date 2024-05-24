@@ -12,12 +12,15 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 record DamageTypeImpl(Registry.DamageTypeEntry registry, int id) implements DamageType {
-    private static final Registry.Container<DamageType> CONTAINER;
+    private static final AtomicInteger INDEX = new AtomicInteger();
+    private static final Registry.Container<DamageType> CONTAINER = Registry.createStaticContainer(Registry.Resource.DAMAGE_TYPES, DamageTypeImpl::createImpl);
 
-    static {
-        AtomicInteger i = new AtomicInteger();
-        CONTAINER = Registry.createStaticContainer(Registry.Resource.DAMAGE_TYPES,
-                (namespace, properties) -> new DamageTypeImpl(Registry.damageType(namespace, properties), i.getAndIncrement()));
+    private DamageTypeImpl(Registry.DamageTypeEntry registry) {
+        this(registry, INDEX.getAndIncrement());
+    }
+
+    private static DamageType createImpl(String namespace, Registry.Properties properties) {
+        return new DamageTypeImpl(Registry.damageType(namespace, properties));
     }
 
     static DamageType get(@NotNull String namespace) {

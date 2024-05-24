@@ -11,16 +11,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 record TrimMaterialImpl(Registry.TrimMaterialEntry registry, int id) implements TrimMaterial {
-    static final AtomicInteger i = new AtomicInteger();
-    private static final Registry.Container<TrimMaterial> CONTAINER;
-
-    static {
-        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_MATERIALS,
-                (namespace, properties) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, properties)));
-    }
+    private static final AtomicInteger INDEX = new AtomicInteger();
+    private static final Registry.Container<TrimMaterial> CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_MATERIALS, TrimMaterialImpl::createImpl);
 
     public TrimMaterialImpl(Registry.TrimMaterialEntry registry) {
-        this(registry, i.getAndIncrement());
+        this(registry, INDEX.getAndIncrement());
+    }
+
+    private static TrimMaterial createImpl(String namespace, Registry.Properties properties) {
+        return new TrimMaterialImpl(Registry.trimMaterial(namespace, properties));
     }
 
     public static TrimMaterial get(String namespace) {
