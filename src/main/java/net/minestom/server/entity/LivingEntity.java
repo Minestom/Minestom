@@ -1,9 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.sound.Sound.Source;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.*;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -28,6 +26,7 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -55,7 +54,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
+    private final Map<NamespaceID, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
 
     // Abilities
     protected boolean invulnerable;
@@ -420,21 +419,21 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attributes#GENERIC_MAX_HEALTH}.
+     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link VanillaAttribute#GENERIC_MAX_HEALTH}.
      *
      * @return the entity max health
      */
     public float getMaxHealth() {
-        return getAttributeValue(Attributes.GENERIC_MAX_HEALTH.attribute());
+        return getAttributeValue(VanillaAttribute.GENERIC_MAX_HEALTH);
     }
 
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#GENERIC_MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link VanillaAttribute#GENERIC_MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attributes.GENERIC_MAX_HEALTH.attribute()));
+        setHealth(getAttributeValue(VanillaAttribute.GENERIC_MAX_HEALTH));
     }
 
     /**
@@ -444,7 +443,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the attribute instance
      */
     public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        return attributeModifiers.computeIfAbsent(attribute.key(),
+        return attributeModifiers.computeIfAbsent(attribute.namespace(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
@@ -475,7 +474,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the attribute value
      */
     public float getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.key());
+        AttributeInstance instance = attributeModifiers.get(attribute.namespace());
         return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
 
@@ -668,7 +667,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= 1 - getAttributeValue(Attributes.GENERIC_KNOCKBACK_RESISTANCE.attribute());
+        strength *= 1 - getAttributeValue(VanillaAttribute.GENERIC_KNOCKBACK_RESISTANCE);
         super.takeKnockback(strength, x, z);
     }
 }

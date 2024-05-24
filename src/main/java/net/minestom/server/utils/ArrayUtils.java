@@ -15,7 +15,7 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
-    public static boolean isEmpty(@Nullable Object @NotNull [] array) {
+    public static boolean isEmpty(@Nullable Object[] array) {
         for (Object object : array) {
             if (object != null) return false;
         }

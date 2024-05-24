@@ -1,13 +1,25 @@
 package net.minestom.server.attribute;
 
-/**
- * Represents a {@link net.minestom.server.entity.LivingEntity living entity} attribute.
- */
-public record Attribute(String key, float defaultValue, float maxValue) {
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    public Attribute {
-        if (defaultValue > maxValue) {
-            throw new IllegalArgumentException("Default value cannot be greater than the maximum allowed");
-        }
-    }
+public sealed interface Attribute extends ProtocolObject permits AttributeImpl {
+    @Contract(pure = true)
+    @Nullable
+    Registry.AttributeEntry registry();
+
+    @Override
+    @NotNull
+    NamespaceID namespace();
+
+    float defaultValue();
+    float maxValue();
+    float mineValue();
+    boolean clientSync();
+    @NotNull
+    String translationKey();
 }

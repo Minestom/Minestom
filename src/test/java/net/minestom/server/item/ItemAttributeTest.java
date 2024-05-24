@@ -1,7 +1,7 @@
 package net.minestom.server.item;
 
 import net.minestom.server.attribute.AttributeOperation;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.VanillaAttribute;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.TagHandler;
@@ -21,7 +21,7 @@ class ItemAttributeTest {
     @Test
     void attribute(Env env) {
         var attributes = List.of(new ItemAttribute(
-                new UUID(0, 0), "generic.attack_damage", Attributes.GENERIC_ATTACK_DAMAGE.attribute(),
+                new UUID(0, 0), "generic.attack_damage", VanillaAttribute.GENERIC_ATTACK_DAMAGE,
                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND));
         var item = ItemStack.builder(Material.STICK)
                 .meta(builder -> builder.attributes(attributes))
@@ -31,9 +31,8 @@ class ItemAttributeTest {
 
     @Test
     void attributeReader(Env env) {
-        Attributes.registerAttributes();
         var attributes = List.of(new ItemAttribute(
-                new UUID(0, 0), "generic.attack_damage", Attributes.GENERIC_ATTACK_DAMAGE.attribute(),
+                new UUID(0, 0), "generic.attack_damage", VanillaAttribute.GENERIC_ATTACK_DAMAGE,
                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND));
 
         TagHandler handler = TagHandler.newHandler();
@@ -48,7 +47,7 @@ class ItemAttributeTest {
         var item = ItemStack.builder(Material.STICK)
                 .meta(builder -> builder.attributes(
                         List.of(new ItemAttribute(
-                                new UUID(0, 0), "generic.attack_damage", Attributes.GENERIC_ATTACK_DAMAGE.attribute(),
+                                new UUID(0, 0), "generic.attack_damage", VanillaAttribute.GENERIC_ATTACK_DAMAGE,
                                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND))))
                 .build();
         assertEqualsSNBT("""

@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.attribute.AttributeManager;
-import net.minestom.server.attribute.Attributes;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
@@ -258,9 +257,9 @@ final class ServerProcessImpl implements ServerProcess {
         LOGGER.info(MinecraftServer.getBrandName() + " server started successfully.");
 
         if (ServerFlag.ATTRIBUTES_ENABLED) {
-            Attributes.registerAttributes();
+            attribute.loadVanillaAttributes();
         }
-        LOGGER.info("Register Attributes({})", attribute.values().size());
+        LOGGER.info("Register Attributes({})", attribute.unmodifiableCollection().size());
 
         if (ServerFlag.BIOMES_ENABLED) {
             biome.loadVanillaBiomes();

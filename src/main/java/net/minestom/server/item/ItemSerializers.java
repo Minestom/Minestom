@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeImpl;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
@@ -58,7 +59,7 @@ public final class ItemSerializers {
             final int operation = reader.getTag(OPERATION);
             final String name = reader.getTag(NAME);
 
-            final Attribute attribute = MinecraftServer.getAttributeManager().fromKey(attributeName.toLowerCase(Locale.ROOT));
+            final Attribute attribute = MinecraftServer.getAttributeManager().getByName(attributeName.toLowerCase(Locale.ROOT));
             // Wrong attribute name, stop here
             if (attribute == null) return null;
             final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);
@@ -80,7 +81,7 @@ public final class ItemSerializers {
             writer.setTag(ID, value.uuid());
             writer.setTag(AMOUNT, value.amount());
             writer.setTag(SLOT, value.slot().name().toLowerCase(Locale.ROOT));
-            writer.setTag(ATTRIBUTE_NAME, value.attribute().key());
+            writer.setTag(ATTRIBUTE_NAME, value.attribute().namespace().toString());
             writer.setTag(OPERATION, value.operation().getId());
             writer.setTag(NAME, value.name());
         }

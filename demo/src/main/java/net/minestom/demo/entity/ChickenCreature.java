@@ -1,7 +1,6 @@
 package net.minestom.demo.entity;
 
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.VanillaAttribute;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
@@ -36,7 +35,7 @@ public class ChickenCreature extends EntityCreature {
 //                        .build()
 //        );
 
-        getAttribute(Attributes.GENERIC_MOVEMENT_SPEED.attribute()).setBaseValue(0.1f);
+        getAttribute(VanillaAttribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1f);
     }
 
     @Override
