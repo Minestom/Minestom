@@ -27,8 +27,6 @@ public class FeatureFlagGenerator extends MinestomCodeGenerator {
 
     /**
      * Creates a new code generator.
-     *
-     * @param packageName the package name of the generated class
      */
     public FeatureFlagGenerator(InputStream featureFlagFile, File outputFolder) {
         super(FEATURE_FLAG_FILE_PACKAGE);
