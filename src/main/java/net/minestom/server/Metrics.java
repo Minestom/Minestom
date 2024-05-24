@@ -69,8 +69,8 @@ public class Metrics {
                 return "offline";
             }
         }));
-        final String paperVersion = "git-Microtus-%s-%s".formatted(Git.branch(), Git.commit());
-        metrics.addCustomChart(new SimplePie("minestom_version", () -> paperVersion));
+        final String version = "%s-%s-@%s".formatted(MinecraftServer.VERSION_NAME,Git.branch(), Git.commit());
+        metrics.addCustomChart(new SimplePie("minestom_version", () -> version));
         metrics.addCustomChart(new DrilldownPie("java_version", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             String javaVersion = System.getProperty("java.version");
