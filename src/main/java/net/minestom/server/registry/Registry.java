@@ -236,7 +236,9 @@ public final class Registry {
         CHAT_TYPES("chat_types.json"),
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
-        JUKEBOX_SONGS("jukebox_songs.json");
+        JUKEBOX_SONGS("jukebox_songs.json"),
+        VILLAGER_PROFESSION("villager_professions.json"),
+        VILLAGER_TYPES("villager_types.json");
 
         private final String name;
 
@@ -776,6 +778,25 @@ public final class Registry {
                     main.getBoolean("decal"),
                     custom
             );
+        }
+    }
+
+    public record VillagerProfession(NamespaceID namespace, int id, SoundEvent soundEvent, Properties custom) implements Entry {
+        public VillagerProfession(String namespace,
+                                  Properties main,
+                                  Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    SoundEvent.fromNamespaceId(main.getString("workSound")),
+                    custom);
+        }
+    }
+
+    public record VillagerType(NamespaceID namespace, int id, Properties custom) implements Entry {
+        public VillagerType(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    custom);
         }
     }
 
