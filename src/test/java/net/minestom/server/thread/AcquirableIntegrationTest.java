@@ -8,6 +8,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,16 +68,31 @@ public class AcquirableIntegrationTest {
     }
 
     @Test
-    public void uninitializedEmptyLock(Env env) {
+    public void acquireSingleThreadInit(Env env) {
         // Ensure that acquisition before and after initialization are properly handled
         var instance = env.createFlatInstance();
 
-        var zombie = new Entity(EntityType.ZOMBIE) {
-            @Override
-            public void tick(long time) {
-                super.tick(time);
-            }
-        };
+        var zombie = new Entity(EntityType.ZOMBIE);
+        var acquirable = zombie.getAcquirable();
+
+        zombie.setInstance(instance, new Pos(1, 41, 1)).join();
+        env.tick(); // Init entity
+
+        AtomicInteger counter = new AtomicInteger(0);
+
+        acquirable.sync(entity -> counter.incrementAndGet());
+        assertEquals(1, counter.get());
+
+        acquirable.sync(entity -> counter.incrementAndGet());
+        assertEquals(2, counter.get());
+    }
+
+    @Test
+    public void acquireBeforeAfterInit(Env env) {
+        // Ensure that acquisition before and after initialization are properly handled
+        var instance = env.createFlatInstance();
+
+        var zombie = new Entity(EntityType.ZOMBIE);
         var acquirable = zombie.getAcquirable();
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -108,7 +124,42 @@ public class AcquirableIntegrationTest {
         latch.countDown();
 
         assertTrue(runTimeout(() -> acquirable.sync(entity -> {
-        }), 500, TimeUnit.MILLISECONDS), "Entity didn't get acquired even after the pre-init acquire ended.");
+        }), 500, TimeUnit.MILLISECONDS), "Entity didn't get acquired after the pre-init acquire ended.");
+    }
+
+    @Test
+    public void acquireBeforeInit(Env env) {
+        // Ensure that acquisition before initialization are properly handled
+        var zombie = new Entity(EntityType.ZOMBIE);
+        var acquirable = zombie.getAcquirable();
+
+        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch latch2 = new CountDownLatch(1);
+        Thread.startVirtualThread(() -> {
+            acquirable.sync(entity -> {
+                try {
+                    latch2.countDown();
+                    latch.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
+
+        try {
+            final boolean success = latch2.await(500, TimeUnit.MILLISECONDS);
+            if (!success) fail("Timeout");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertFalse(runTimeout(() -> acquirable.sync(entity -> {
+        }), 500, TimeUnit.MILLISECONDS), "Initialization lock failed.");
+
+        latch.countDown();
+
+        assertTrue(runTimeout(() -> acquirable.sync(entity -> {
+        }), 500, TimeUnit.MILLISECONDS), "Entity didn't get acquired after the pre-init acquire ended.");
     }
 
     private boolean runTimeout(Runnable runnable, long timeout, TimeUnit timeUnit) {
