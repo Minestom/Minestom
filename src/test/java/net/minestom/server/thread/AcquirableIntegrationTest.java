@@ -7,8 +7,9 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.concurrent.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class AcquirableIntegrationTest {
@@ -63,5 +64,60 @@ public class AcquirableIntegrationTest {
         assertFalse(acquirable.isOwned());
         acquirable.sync(entity -> assertTrue(acquirable.isOwned()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isOwned()));
+    }
+
+    @Test
+    public void uninitializedEmptyLock(Env env) {
+        // Ensure that acquisition before and after initialization are properly handled
+        var instance = env.createFlatInstance();
+
+        var zombie = new Entity(EntityType.ZOMBIE) {
+            @Override
+            public void tick(long time) {
+                super.tick(time);
+            }
+        };
+        var acquirable = zombie.getAcquirable();
+
+        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch latch2 = new CountDownLatch(1);
+        Thread.startVirtualThread(() -> {
+            acquirable.sync(entity -> {
+                try {
+                    latch2.countDown();
+                    latch.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
+
+        try {
+            final boolean success = latch2.await(500, TimeUnit.MILLISECONDS);
+            if (!success) fail("Timeout");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        zombie.setInstance(instance, new Pos(1, 41, 1)).join();
+        env.tick(); // Init entity
+
+        assertFalse(runTimeout(() -> acquirable.sync(entity -> {
+        }), 500, TimeUnit.MILLISECONDS), "Entity has been wrongly acquired twice due to the first acquisition being done before initialization.");
+
+        latch.countDown();
+
+        assertTrue(runTimeout(() -> acquirable.sync(entity -> {
+        }), 500, TimeUnit.MILLISECONDS), "Entity didn't get acquired even after the pre-init acquire ended.");
+    }
+
+    private boolean runTimeout(Runnable runnable, long timeout, TimeUnit timeUnit) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            executor.submit(runnable).get(timeout, timeUnit);
+            return true;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return false;
+        }
     }
 }
