@@ -10,15 +10,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 record TrimPatternImpl(Registry.TrimPatternEntry registry, int id) implements TrimPattern {
     static final AtomicInteger i = new AtomicInteger();
-    private static final Registry.Container<TrimPattern> CONTAINER;
-
-    static {
-        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_PATTERNS,
-                (namespace, properties) -> new TrimPatternImpl(Registry.trimPattern(namespace, properties)));
-    }
+    private static final Registry.Container<TrimPattern> CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_PATTERNS, TrimPatternImpl::createImpl);
 
     public TrimPatternImpl(Registry.TrimPatternEntry registry) {
         this(registry, i.getAndIncrement());
+    }
+
+    private static TrimPattern createImpl(String namespace, Registry.Properties properties) {
+        return new TrimPatternImpl(Registry.trimPattern(namespace, properties));
     }
 
     public static TrimPattern get(String namespace) {

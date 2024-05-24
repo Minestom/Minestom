@@ -12,14 +12,15 @@ import java.util.Map;
 public record BannerPatternImpl(NamespaceID namespace, int id, String identifier) implements BannerPattern {
 
     private static Map<String, BannerPatternImpl> IDENTIFIERS = new HashMap<>();
-    private static final Registry.Container<BannerPattern> CONTAINER = Registry.createStaticContainer(Registry.Resource.BANNER_PATTERNS,
-            (namespace, properties) -> {
-                int id = properties.getInt("id");
-                String identifier = properties.getString("identifier");
-                BannerPatternImpl bannerPattern = new BannerPatternImpl(NamespaceID.from(namespace), id, identifier);
-                IDENTIFIERS.put(identifier, bannerPattern);
-                return bannerPattern;
-            });
+    private static final Registry.Container<BannerPattern> CONTAINER = Registry.createStaticContainer(Registry.Resource.BANNER_PATTERNS, BannerPatternImpl::createImpl);
+
+    private static BannerPattern createImpl(String namespace, Registry.Properties properties) {
+        int id = properties.getInt("id");
+        String identifier = properties.getString("identifier");
+        BannerPatternImpl bannerPattern = new BannerPatternImpl(NamespaceID.from(namespace), id, identifier);
+        IDENTIFIERS.put(identifier, bannerPattern);
+        return bannerPattern;
+    }
 
     static BannerPattern get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

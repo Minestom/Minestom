@@ -9,8 +9,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 record ParticleImpl(NamespaceID namespace, int id, ParticleData data) implements Particle {
-    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
-            (namespace, properties) -> new ParticleImpl(NamespaceID.from(namespace), properties.getInt("id"), ParticleData.defaultData(namespace)));
+    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES, ParticleImpl::createImpl);
+
+    private static Particle createImpl(String namespace, Registry.Properties properties) {
+        return new ParticleImpl(NamespaceID.from(namespace), properties.getInt("id"), ParticleData.defaultData(namespace));
+    }
 
     static Particle get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

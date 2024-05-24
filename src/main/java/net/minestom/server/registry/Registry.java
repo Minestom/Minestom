@@ -95,7 +95,7 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
@@ -156,7 +156,7 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Loader<T> loader) {
         var entries = Registry.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         for (var entry : entries.entrySet()) {
@@ -201,6 +201,11 @@ public final class Registry {
         public interface Loader<T extends ProtocolObject> {
             T get(String namespace, Properties properties);
         }
+    }
+
+    @FunctionalInterface
+    public interface Loader<T extends ProtocolObject> {
+        T get(String namespace, Properties properties);
     }
 
     @ApiStatus.Internal
