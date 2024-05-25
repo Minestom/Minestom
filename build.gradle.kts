@@ -8,8 +8,8 @@ plugins {
     signing
 }
 
-var baseVersion by extra("1.3.2")
-var snapshot by extra("-SNAPSHOT")
+var baseVersion by extra("1.4.0")
+var snapshot by extra("")
 
 group = "net.onelitefeather.microtus"
 
