@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.arguments.ArgumentType.Literal;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphTest {

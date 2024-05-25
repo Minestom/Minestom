@@ -1,14 +1,14 @@
 package net.minestom.server.command;
 
-import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.arguments.ArgumentType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
+import static net.minestom.server.command.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.arguments.ArgumentType.Word;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandParseTest {

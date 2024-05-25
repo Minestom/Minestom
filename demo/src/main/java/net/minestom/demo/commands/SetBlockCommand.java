@@ -2,13 +2,13 @@ package net.minestom.demo.commands;
 
 import net.minestom.demo.block.TestBlockHandler;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockState;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
+import net.minestom.server.command.arguments.minecraft.ArgumentBlockState;
+import net.minestom.server.command.arguments.relative.ArgumentRelativeBlockPosition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.BlockState;
-import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeBlockPosition;
+import static net.minestom.server.command.arguments.ArgumentType.BlockState;
+import static net.minestom.server.command.arguments.ArgumentType.RelativeBlockPosition;
 
 public class SetBlockCommand extends Command {
     public SetBlockCommand() {

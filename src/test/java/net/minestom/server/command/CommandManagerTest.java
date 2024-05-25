@@ -2,9 +2,8 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandResult;
-import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.arguments.ArgumentType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;

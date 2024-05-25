@@ -8,8 +8,8 @@ import net.minestom.server.entity.Player;
 
 import java.util.Collection;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.arguments.ArgumentType.Float;
+import static net.minestom.server.command.arguments.ArgumentType.Literal;
 
 public class FindCommand extends Command {
     public FindCommand() {

@@ -5,6 +5,7 @@ metadata.format.version = "1.1"
 # Important dependencies
 data = "1.20.4-rv4"
 adventure = "4.15.0"
+brigadier = "1.0.18"
 kotlin = "1.7.22"
 dependencyGetter = "v1.0.1"
 hydrazine = "1.7.2"
@@ -45,6 +46,9 @@ adventure-serializer-gson = { group = "net.kyori", name = "adventure-text-serial
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logger-slf4j", version.ref = "adventure" }
+
+# Brigadier
+brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 
 # Kotlin
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }

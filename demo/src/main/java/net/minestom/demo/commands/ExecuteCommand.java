@@ -1,7 +1,7 @@
 package net.minestom.demo.commands;
 
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentCommand;
+import net.minestom.server.command.arguments.ArgumentCommand;
 
 public class ExecuteCommand extends Command {
 

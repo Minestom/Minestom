@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.arguments.ArgumentType.Literal;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GraphConversionExecutorTest {

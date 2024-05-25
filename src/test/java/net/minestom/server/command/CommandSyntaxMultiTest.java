@@ -1,18 +1,17 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.arguments.Argument;
 import org.junit.jupiter.api.Test;
 
 import java.lang.String;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.arguments.ArgumentType.Float;
+import static net.minestom.server.command.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 

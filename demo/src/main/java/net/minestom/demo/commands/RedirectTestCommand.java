@@ -1,8 +1,8 @@
 package net.minestom.demo.commands;
 
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentLiteral;
-import net.minestom.server.command.builder.arguments.ArgumentLoop;
+import net.minestom.server.command.arguments.ArgumentLiteral;
+import net.minestom.server.command.arguments.ArgumentLoop;
 
 public class RedirectTestCommand extends Command {
     public RedirectTestCommand() {

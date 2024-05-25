@@ -1,7 +1,7 @@
 package net.minestom.server.command;
 
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.arguments.Argument;
+import net.minestom.server.command.arguments.ArgumentType;
 import net.minestom.server.command.builder.parser.ArgumentParser;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;

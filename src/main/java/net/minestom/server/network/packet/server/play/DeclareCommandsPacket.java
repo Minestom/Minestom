@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.arguments.Argument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;

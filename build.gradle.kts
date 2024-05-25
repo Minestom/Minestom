@@ -25,6 +25,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven(url = "https://jitpack.io")
+        maven(url = "https://libraries.minecraft.net")
     }
 
     configurations.all {
@@ -71,6 +72,7 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
+    api(libs.brigadier)
     api(libs.hydrazine)
     api(libs.bundles.kotlin)
     api(libs.bundles.hephaistos)

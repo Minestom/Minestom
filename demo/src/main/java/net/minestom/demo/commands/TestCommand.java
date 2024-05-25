@@ -7,7 +7,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.arguments.ArgumentType;
 import net.minestom.server.sound.SoundEvent;
 
 public class TestCommand extends Command {
