@@ -72,7 +72,7 @@ final class TagNbtSeparator {
                     }
                     consumer.accept(makeEntry(path, Tag.class.cast(tag), List.of(values)));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                     consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
                 }
             }
