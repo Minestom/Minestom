@@ -31,6 +31,7 @@ class ItemAttributeTest {
 
     @Test
     void attributeReader(Env env) {
+        env.process().attribute().loadVanillaAttributes();
         var attributes = List.of(new ItemAttribute(
                 new UUID(0, 0), "generic.attack_damage", VanillaAttribute.GENERIC_ATTACK_DAMAGE,
                 AttributeOperation.ADDITION, 2, AttributeSlot.MAINHAND));
