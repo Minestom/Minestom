@@ -99,7 +99,7 @@ public final class BoundingBox implements Shape {
      * @return a new {@link BoundingBox} expanded
      */
     public @NotNull BoundingBox expand(double x, double y, double z) {
-        return new BoundingBox(this.width + x, this.height + y, this.depth + z);
+        return new BoundingBox(this.width + x, this.height + y, this.depth + z, offset);
     }
 
     /**
@@ -111,7 +111,7 @@ public final class BoundingBox implements Shape {
      * @return a new bounding box contracted
      */
     public @NotNull BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(this.width - x, this.height - y, this.depth - z);
+        return new BoundingBox(this.width - x, this.height - y, this.depth - z, offset);
     }
 
     /**
