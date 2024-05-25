@@ -51,7 +51,6 @@ class AnvilLoaderIntegrationTest {
 
     @Test
     void loadHouse(Env env) {
-        MinecraftServer.getBiomeManager().addBiome(VanillaBiome.PLAINS);
         // load a world that contains only a basic house and make sure it is loaded properly
 
         AnvilLoader chunkLoader = new AnvilLoader(worldFolder) {
@@ -147,7 +146,6 @@ class AnvilLoaderIntegrationTest {
 
     @Test
     void loadAndSaveChunk(Env env) throws InterruptedException {
-        MinecraftServer.getBiomeManager().addBiome(VanillaBiome.PLAINS);
         Instance instance = env.createFlatInstance(new AnvilLoader(worldFolder) {
             // Force loads inside current thread
             @Override
