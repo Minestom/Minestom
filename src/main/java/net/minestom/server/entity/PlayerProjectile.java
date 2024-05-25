@@ -98,7 +98,7 @@ public class PlayerProjectile extends LivingEntity {
 
         this.setInstance(instance, new Pos(from.x(), from.y(), from.z(), yaw, pitch)).whenComplete((result, throwable) -> {
             if (throwable != null) {
-                throwable.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(throwable);
             } else {
                 this.setVelocity(v);
             }

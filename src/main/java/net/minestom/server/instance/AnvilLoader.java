@@ -316,7 +316,7 @@ public class AnvilLoader implements IChunkLoader {
         try (NBTWriter writer = new NBTWriter(Files.newOutputStream(levelPath))) {
             writer.writeNamed("", nbt);
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         return AsyncUtils.VOID_FUTURE;
     }

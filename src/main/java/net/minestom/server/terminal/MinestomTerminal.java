@@ -31,7 +31,7 @@ public class MinestomTerminal {
             try {
                 terminal = TerminalBuilder.terminal();
             } catch (IOException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
             reader = LineReaderBuilder.builder()
                     .completer(new MinestomCompleter())
@@ -65,7 +65,7 @@ public class MinestomTerminal {
             try {
                 terminal.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
             reader = null;
         }

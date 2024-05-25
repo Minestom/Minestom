@@ -2,11 +2,15 @@ package net.minestom.server.exception;
 
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages the handling of exceptions.
  */
 public final class ExceptionManager {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionManager.class);
 
     private ExceptionHandler exceptionHandler;
 
@@ -18,7 +22,7 @@ public final class ExceptionManager {
     public void handleException(Throwable e) {
         if (e instanceof OutOfMemoryError) {
             // OOM should be handled manually
-            e.printStackTrace();
+            LOGGER.error("OOM error", e);
             MinecraftServer.stopCleanly();
             return;
         }
