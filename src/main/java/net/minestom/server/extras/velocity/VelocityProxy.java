@@ -1,5 +1,6 @@
 package net.minestom.server.extras.velocity;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
@@ -66,7 +67,7 @@ public final class VelocityProxy {
                 return false;
             }
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         final int version = buffer.read(VAR_INT);
         return version == SUPPORTED_FORWARDING_VERSION;

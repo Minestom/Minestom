@@ -1,5 +1,7 @@
 package net.minestom.server.tag;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.exception.ExceptionManager;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
@@ -74,7 +76,7 @@ final class TagNbtSeparator {
                     }
                     consumer.accept(makeEntry(path, Tag.class.cast(tag), List.of(values)));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                     consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
                 }
             }

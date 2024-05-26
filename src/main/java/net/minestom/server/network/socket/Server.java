@@ -85,7 +85,7 @@ public final class Server {
                             final SocketChannel client = serverSocket.accept();
                             worker.receiveConnection(client);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            MinecraftServer.getExceptionManager().handleException(e);
                         }
                     });
                 } catch (IOException e) {
