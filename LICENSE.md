@@ -16,5 +16,4 @@ should submit a pull request to this project to add their name.
 ```text
 Phillipp Glanz <p.glanz@madfix.me>
 Steffen Wonning <steffenwx@gmail.com>
-
 ```
