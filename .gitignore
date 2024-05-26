@@ -60,3 +60,4 @@ gradle-app.setting
 # When saving the world in the demo we generate the world folder
 # Incase people are using IntelliJ to run the server, this will exclude the world folder.
 /demo/world
+.bstats
