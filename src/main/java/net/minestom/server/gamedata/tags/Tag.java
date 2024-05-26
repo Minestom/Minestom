@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.fluid.Fluid;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.DynamicRegistry;
@@ -93,11 +94,11 @@ public final class Tag implements ProtocolObject, Keyed {
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
                 name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal()),
+                name -> Fluid.fromNamespaceId(name).id()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal()),
+                name -> Fluid.fromNamespaceId(name).id()),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
         POTION_EFFECTS("minecraft:sound_event", null, null), // Seems not to be included in server data
 
