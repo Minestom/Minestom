@@ -8,7 +8,6 @@ import net.minestom.server.fluid.Fluid;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.FluidRegistries;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -94,11 +93,11 @@ public final class Tag implements ProtocolObject, Keyed {
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
                 name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> Fluid.fromNamespaceId(name).id()),
+                name -> Objects.requireNonNull(Fluid.fromNamespaceId(name)).id()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
-        GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name -> Fluid.fromNamespaceId(name).id()),
+        /*GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
+                name -> Objects.requireNonNull(Fluid.fromNamespaceId(name)).id());*/
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
         POTION_EFFECTS("minecraft:sound_event", null, null), // Seems not to be included in server data
 
