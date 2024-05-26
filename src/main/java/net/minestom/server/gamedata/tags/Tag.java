@@ -71,11 +71,11 @@ public final class Tag {
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
                 name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> Fluid.fromNamespaceId(name).id()),
+                name -> Objects.requireNonNull(Fluid.fromNamespaceId(name)).id()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
-                name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id());/*
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name ->Fluid.fromNamespaceId(name).id());
+                name -> Objects.requireNonNull(Fluid.fromNamespaceId(name)).id());*/
 
         private final static BasicType[] VALUES = values();
         private final String identifier;
