@@ -88,6 +88,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static FeatureFlagEntry featureFlag(String namespace, @NotNull Properties main) {
+        return new FeatureFlagEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static VillagerProfession villagerProfession(String namespace, @NotNull Properties main) {
         return new VillagerProfession(namespace, main, null);
     }
@@ -258,12 +263,23 @@ public final class Registry {
         VILLAGER_PROFESSION("villager_professions.json"),
         VILLAGER_TYPES("villager_types.json"),
         FLUIDS("fluids.json"),
+        FEATURE_FLAGS("feature_flags.json"),
         ;
 
         private final String name;
 
         Resource(String name) {
             this.name = name;
+        }
+    }
+
+    public record FeatureFlagEntry(
+            @NotNull NamespaceID namespace,
+            @Nullable Properties custom
+    ) implements Entry {
+
+        public FeatureFlagEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace), custom);
         }
     }
 

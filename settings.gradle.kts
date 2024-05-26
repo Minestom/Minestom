@@ -12,7 +12,7 @@ dependencyResolutionManagement {
             version("kotlin", "1.9.22")
             version("hydrazine", "1.7.2")
             version("dependencyGetter", "v1.0.1")
-            version("data", "1.20.4-rv9")
+            version("data", "1.20.4-rv10")
             version("hephaistos", "2.6.1")
             version("jetbrainsAnnotations", "24.1.0")
             version("logback", "1.4.5")

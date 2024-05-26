@@ -6,6 +6,7 @@ import java.util.Set;
 import net.kyori.adventure.key.Namespaced;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.featureflag.FeatureFlag;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +28,9 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private boolean hardcore;
     private boolean sendRegistryData;
     private Instance spawningInstance;
-    private Set<NamespaceID> enabledFeatures;
+    private Set<FeatureFlag> enabledFeatures;
 
-    public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig, @NotNull Set<NamespaceID> enabledFeatures) {
+    public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig, @NotNull Set<FeatureFlag> enabledFeatures) {
         this.player = player;
         this.isFirstConfig = isFirstConfig;
         this.enabledFeatures = enabledFeatures;
@@ -75,11 +76,11 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
         this.spawningInstance = spawningInstance;
     }
 
-    public void setEnabledFeatures(Set<NamespaceID> enabledFeatures) {
+    public void setEnabledFeatures(Set<FeatureFlag> enabledFeatures) {
         this.enabledFeatures = enabledFeatures;
     }
 
-    public Set<NamespaceID> getEnabledFeatures() {
+    public Set<FeatureFlag> getEnabledFeatures() {
         return enabledFeatures;
     }
 }

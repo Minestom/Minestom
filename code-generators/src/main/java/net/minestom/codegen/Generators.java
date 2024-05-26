@@ -1,7 +1,6 @@
 package net.minestom.codegen;
 
 import net.minestom.codegen.color.DyeColorGenerator;
-import net.minestom.codegen.feature.FeatureFlagGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,6 @@ public class Generators {
 
         // Generate DyeColors
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
-        new FeatureFlagGenerator(resource("feature_flags.json"), outputFolder).generate();
 
 
         var generator = new CodeGenerator(outputFolder);
@@ -43,6 +41,7 @@ public class Generators {
         generator.generate(resource("villager_types.json"), "net.minestom.server.entity.villager", "VillagerType", "VillagerTypeImpl", "VillagerTypes");
         generator.generate(resource("attributes.json"), "net.minestom.server.attribute", "Attribute", "AttributeImpl", "Attributes");
         generator.generate(resource("fluids.json"), "net.minestom.server.fluid", "Fluid", "FluidImpl", "Fluids");
+        generator.generate(resource("feature_flags.json"), "net.minestom.server.featureflag", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
 
         LOGGER.info("Finished generating code");
     }
