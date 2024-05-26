@@ -65,8 +65,8 @@ For example: `1.1.0`
 ### Dependency Section
 ```kt
 dependencies {
-    implementation("net.onelitefeather.microtus:Minestom:1.3.1")
-    testImplementation("net.onelitefeather.microtus.testing:testing:1.3.1")
+    implementation("net.onelitefeather.microtus:Microtus:1.4.1")
+    testImplementation("net.onelitefeather.microtus.testing:testing:1.4.1")
 }
 ```
 </details>
