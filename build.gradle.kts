@@ -9,7 +9,7 @@ plugins {
 }
 
 var baseVersion by extra("1.4.0")
-var snapshot by extra("-SNAPSHOT")
+var snapshot by extra("")
 
 group = "net.onelitefeather.microtus"
 
