@@ -1063,18 +1063,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Sets the entity in fire visually.
-     * <p>
-     * WARNING: if you want to apply damage or specify a duration,
-     * see {@link LivingEntity#setFireForDuration(int, TemporalUnit)}.
-     *
-     * @param fire should the entity be set in fire
-     */
-    public void setOnFire(boolean fire) {
-        this.entityMeta.setOnFire(fire);
-    }
-
-    /**
      * Gets if the entity is sneaking.
      * <p>
      * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
