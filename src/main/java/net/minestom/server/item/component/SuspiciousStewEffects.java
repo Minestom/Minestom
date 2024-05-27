@@ -6,16 +6,28 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
     public static final int DEFAULT_DURATION = 160;
+    public static final SuspiciousStewEffects EMPTY = new SuspiciousStewEffects(List.of());
 
     public static final NetworkBuffer.Type<SuspiciousStewEffects> NETWORK_TYPE = Effect.NETWORK_TYPE.list(Short.MAX_VALUE).map(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
     public static final BinaryTagSerializer<SuspiciousStewEffects> NBT_TYPE = Effect.NBT_TYPE.list().map(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
 
     public SuspiciousStewEffects {
         effects = List.copyOf(effects);
+    }
+
+    public SuspiciousStewEffects(@NotNull Effect effect) {
+        this(List.of(effect));
+    }
+
+    public @NotNull SuspiciousStewEffects with(@NotNull Effect effect) {
+        List<Effect> newEffects = new ArrayList<>(effects);
+        newEffects.add(effect);
+        return new SuspiciousStewEffects(newEffects);
     }
 
     public record Effect(@NotNull PotionEffect id, int durationTicks) {

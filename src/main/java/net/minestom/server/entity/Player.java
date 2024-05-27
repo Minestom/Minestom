@@ -1640,15 +1640,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets if this player is in creative. Used for code readability.
-     *
-     * @return true if the player is in creative mode
-     */
-    public boolean isCreative() {
-        return gameMode == GameMode.CREATIVE;
-    }
-
-    /**
      * Changes the dimension of the player.
      * Mostly unsafe since it requires sending chunks after.
      *

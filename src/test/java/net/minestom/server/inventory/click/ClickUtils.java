@@ -1,5 +1,6 @@
 package net.minestom.server.inventory.click;
 
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.Inventory;
@@ -13,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 import static net.minestom.server.utils.inventory.ClickUtils.consolidate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class ClickUtils {
@@ -82,7 +83,7 @@ public final class ClickUtils {
     }
 
     public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
-        assertEquals(info, preprocessor.processClick(packet, player.isCreative(), createInventory().getSize()));
+        assertEquals(info, preprocessor.processClick(packet, player.getGameMode() == GameMode.CREATIVE, createInventory().getSize()));
     }
 
     public static void assertProcessed(@NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {

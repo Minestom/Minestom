@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryButtonClickEvent;
@@ -26,7 +27,7 @@ public class WindowListener {
         if (inventory == null || packet.slot() == -1) return;
 
         Click.Preprocessor preprocessor = player.clickPreprocessor();
-        final Click.Info info = preprocessor.processClick(packet, player.isCreative(), playerInventory ? null : inventory.getSize());
+        final Click.Info info = preprocessor.processClick(packet, player.getGameMode() == GameMode.CREATIVE, playerInventory ? null : inventory.getSize());
         if (info != null) {
             Click.Getter getter = ClickUtils.makeGetter(inventory, player.getInventory());
             List<Click.Change> clientPrediction = ClickUtils.packetToChanges(packet, info, getter, playerInventory);
