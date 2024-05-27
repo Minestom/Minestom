@@ -27,6 +27,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
+import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.snapshot.*;
@@ -72,7 +73,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final DimensionType cachedDimensionType; // Cached to prevent self-destruction if the registry is changed, and to avoid the lookups.
     private final String dimensionName;
 
-    private final WorldBorder worldBorder;
+    // World border of the instance
+    private WorldBorder worldBorder;
+    private double targetBorderDiameter;
+    private long remainingWorldBorderTransitionTicks;
 
     // Tick since the creation of the instance
     private long worldAge;
@@ -145,7 +149,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
 
-        this.worldBorder = new WorldBorder(this);
+        this.worldBorder = WorldBorder.DEFAULT_BORDER;
+        targetBorderDiameter = this.worldBorder.diameter();
 
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
@@ -521,12 +526,65 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Gets the instance {@link WorldBorder};
+     * Gets the current state of the instance {@link WorldBorder}.
      *
-     * @return the {@link WorldBorder} linked to the instance
+     * @return the {@link WorldBorder} for the instance of the current tick
      */
     public @NotNull WorldBorder getWorldBorder() {
         return worldBorder;
+    }
+
+    /**
+     * Set the instance {@link WorldBorder} with a smooth transition.
+     *
+     * @param worldBorder the desired final state of the world border
+     * @param transitionTime the time in seconds this world border's diameter
+     *                       will transition for (0 makes this instant)
+     *
+     */
+    public void setWorldBorder(@NotNull WorldBorder worldBorder, double transitionTime) {
+        Check.stateCondition(transitionTime < 0, "Transition time cannot be lower than 0");
+        long transitionMilliseconds = (long) (transitionTime * 1000);
+        sendNewWorldBorderPackets(worldBorder, transitionMilliseconds);
+
+        this.targetBorderDiameter = worldBorder.diameter();
+        long transitionTicks = transitionMilliseconds / MinecraftServer.TICK_MS;
+        remainingWorldBorderTransitionTicks = transitionTicks;
+        if (transitionTicks == 0) this.worldBorder = worldBorder;
+        else this.worldBorder = worldBorder.withDiameter(this.worldBorder.diameter());
+    }
+
+    /**
+     * Set the instance {@link WorldBorder} with an instant transition.
+     * see {@link Instance#setWorldBorder(WorldBorder, double)}.
+     */
+    public void setWorldBorder(@NotNull WorldBorder worldBorder) {
+        setWorldBorder(worldBorder, 0);
+    }
+
+    /**
+     * Creates the {@link InitializeWorldBorderPacket} sent to players who join this instance.
+     */
+    public @NotNull InitializeWorldBorderPacket createInitializeWorldBorderPacket() {
+        return worldBorder.createInitializePacket(targetBorderDiameter, remainingWorldBorderTransitionTicks * MinecraftServer.TICK_MS);
+    }
+
+    private void sendNewWorldBorderPackets(@NotNull WorldBorder newBorder, long transitionMilliseconds) {
+        // Only send the relevant border packets
+        if (this.worldBorder.diameter() != newBorder.diameter()) {
+            if (transitionMilliseconds == 0) sendGroupedPacket(newBorder.createSizePacket());
+            else sendGroupedPacket(this.worldBorder.createLerpSizePacket(newBorder.diameter(), transitionMilliseconds));
+        }
+        if (this.worldBorder.centerX() != newBorder.centerX() || this.worldBorder.centerZ() != newBorder.centerZ()) {
+            sendGroupedPacket(newBorder.createCenterPacket());
+        }
+        if (this.worldBorder.warningTime() != newBorder.warningTime()) sendGroupedPacket(newBorder.createWarningDelayPacket());
+        if (this.worldBorder.warningDistance() != newBorder.warningDistance()) sendGroupedPacket(newBorder.createWarningReachPacket());
+    }
+
+    private @NotNull WorldBorder transitionWorldBorder(long remainingTicks) {
+        if (remainingTicks <= 1) return worldBorder.withDiameter(targetBorderDiameter);
+        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double)remainingTicks));
     }
 
     /**
@@ -692,7 +750,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             // Set last tick age
             this.lastTickAge = time;
         }
-        this.worldBorder.update();
+        // World border
+        if (remainingWorldBorderTransitionTicks > 0) {
+            worldBorder = transitionWorldBorder(remainingWorldBorderTransitionTicks);
+            if (worldBorder.diameter() == targetBorderDiameter) remainingWorldBorderTransitionTicks = 0;
+            else remainingWorldBorderTransitionTicks--;
+        }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
     }

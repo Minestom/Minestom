@@ -758,7 +758,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
-            instance.getWorldBorder().init(this);
+            sendPacket(instance.createInitializeWorldBorderPacket());
             sendPacket(new TimeUpdatePacket(instance.getWorldAge(), instance.getTime()));
         }
 

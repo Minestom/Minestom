@@ -811,7 +811,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
-                    instance.getWorldBorder().init(player);
+                    player.sendPacket(instance.createInitializeWorldBorderPacket());
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
