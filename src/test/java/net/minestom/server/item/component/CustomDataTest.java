@@ -11,9 +11,18 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
+    // This is not a test, but it creates a compile error if the component type is changed away,
+    // as a reminder that tests should be added for that new component type.
+    private static final List<DataComponent<CustomData>> SHARED_COMPONENTS = List.of(
+            ItemComponent.CUSTOM_DATA,
+            ItemComponent.ENTITY_DATA,
+            ItemComponent.BUCKET_ENTITY_DATA,
+            ItemComponent.BLOCK_ENTITY_DATA
+    );
+
     @Override
     protected @NotNull DataComponent<CustomData> component() {
-        return ItemComponent.CUSTOM_DATA;
+        return SHARED_COMPONENTS.getFirst();
     }
 
     @Override

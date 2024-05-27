@@ -1,7 +1,6 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.ByteBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
 import net.kyori.adventure.util.RGBLike;
@@ -39,8 +38,7 @@ public record DyedItemColor(@NotNull RGBLike color, boolean showInTooltip) {
         public @NotNull DyedItemColor read(@NotNull BinaryTag tag) {
             if (tag instanceof CompoundBinaryTag compoundTag) {
                 int color = compoundTag.getInt("color");
-                // https://github.com/KyoriPowered/adventure/issues/1068
-                boolean showInTooltip = !(compoundTag.get("show_in_tooltip") instanceof ByteBinaryTag showInTooltipTag) || showInTooltipTag.value() != 0;
+                boolean showInTooltip = compoundTag.getBoolean("show_in_tooltip", true);
                 return new DyedItemColor(new Color(color), showInTooltip);
             } else if (tag instanceof IntBinaryTag intTag) {
                 return new DyedItemColor(new Color(intTag.intValue()), true);
