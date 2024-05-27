@@ -155,10 +155,8 @@ public class AdvancementTab implements Viewable {
      */
     private void removePlayer(@NotNull Player player) {
         final UUID uuid = player.getUuid();
-        if (!PLAYER_TAB_MAP.containsKey(uuid)) {
-            return;
-        }
         Set<AdvancementTab> tabs = PLAYER_TAB_MAP.get(uuid);
+        if (tabs == null) return;
         tabs.remove(this);
         if (tabs.isEmpty()) {
             PLAYER_TAB_MAP.remove(uuid);
