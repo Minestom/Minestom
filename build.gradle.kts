@@ -70,7 +70,6 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
-    api(libs.hydrazine)
     implementation(libs.minestomData)
 
     // Performance/data structures
