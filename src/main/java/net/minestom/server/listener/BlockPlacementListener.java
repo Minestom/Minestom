@@ -124,7 +124,7 @@ public class BlockPlacementListener {
         }
 
         // Ensure that the final placement position is inside the world border.
-        if (!instance.getWorldBorder().isInside(placementPosition)) {
+        if (!instance.getWorldBorder().inBounds(placementPosition)) {
             canPlaceBlock = false;
         }
 
