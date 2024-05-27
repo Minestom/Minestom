@@ -43,8 +43,6 @@ public class PathfinderIntegrationTest {
     @Test
     public void testTall(Env env) {
         var i = env.createFlatInstance();
-        i.getWorldBorder().setCenter(0, 0);
-        i.getWorldBorder().setDiameter(10000);
 
         ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
@@ -67,8 +65,6 @@ public class PathfinderIntegrationTest {
     @Test
     public void testStraightLine(Env env) {
         var i = env.createFlatInstance();
-        i.getWorldBorder().setCenter(0, 0);
-        i.getWorldBorder().setDiameter(10000);
 
         ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
@@ -88,8 +84,6 @@ public class PathfinderIntegrationTest {
     @Test
     public void testShort(Env env) {
         var i = env.createFlatInstance();
-        i.getWorldBorder().setCenter(0, 0);
-        i.getWorldBorder().setDiameter(10000);
 
         ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
@@ -110,8 +104,6 @@ public class PathfinderIntegrationTest {
     @Test
     public void testBug(Env env) {
         var i = env.createFlatInstance();
-        i.getWorldBorder().setCenter(0, 0);
-        i.getWorldBorder().setDiameter(10000);
 
         ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
@@ -149,8 +141,6 @@ public class PathfinderIntegrationTest {
     @Test
     public void testStraightLineBlocked(Env env) {
         var i = env.createFlatInstance();
-        i.getWorldBorder().setCenter(0, 0);
-        i.getWorldBorder().setDiameter(10000);
 
         ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
@@ -201,8 +191,6 @@ public class PathfinderIntegrationTest {
     @Test
     public void testGravitySnap(Env env) {
         var i = env.createFlatInstance();
-        i.getWorldBorder().setCenter(0, 0);
-        i.getWorldBorder().setDiameter(10000);
 
         ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
@@ -213,6 +201,6 @@ public class PathfinderIntegrationTest {
         var nodeGenerator = new GroundNodeGenerator();
 
         var snapped = nodeGenerator.gravitySnap(i, -140.74433362614695, 40.58268292446131, 18.87966960447388, zombie.getBoundingBox(), 100);
-        assertEquals(40.0, snapped);
+        assertEquals(40.0, snapped.getAsDouble());
     }
 }
