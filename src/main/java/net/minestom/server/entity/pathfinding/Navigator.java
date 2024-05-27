@@ -104,7 +104,7 @@ public final class Navigator {
         }
         // Can't path outside the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
-        if (!worldBorder.isInside(point)) {
+        if (!worldBorder.inBounds(point)) {
             return false;
         }
         // Can't path in an unloaded chunk
