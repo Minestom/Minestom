@@ -811,7 +811,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
-                    instance.getWorldBorder().init(player);
+                    player.sendPacket(instance.createInitializeWorldBorderPacket());
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
@@ -1060,18 +1060,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public boolean isOnFire() {
         return this.entityMeta.isOnFire();
-    }
-
-    /**
-     * Sets the entity in fire visually.
-     * <p>
-     * WARNING: if you want to apply damage or specify a duration,
-     * see {@link LivingEntity#setFireForDuration(int, TemporalUnit)}.
-     *
-     * @param fire should the entity be set in fire
-     */
-    public void setOnFire(boolean fire) {
-        this.entityMeta.setOnFire(fire);
     }
 
     /**

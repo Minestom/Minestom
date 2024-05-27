@@ -5,13 +5,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.preplay.LoginListener;
-import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
@@ -19,6 +17,7 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
+import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -35,10 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 /**
@@ -262,17 +258,24 @@ public final class ConnectionManager {
         configurationPlayers.add(player);
     }
 
+    /**
+     * Return value exposed for testing
+     */
     @ApiStatus.Internal
-    public void doConfiguration(@NotNull Player player, boolean isFirstConfig) {
+    public CompletableFuture<Void> doConfiguration(@NotNull Player player, boolean isFirstConfig) {
         if (isFirstConfig) {
             configurationPlayers.add(player);
             keepAlivePlayers.add(player);
         }
 
-        player.getPlayerConnection().setConnectionState(ConnectionState.CONFIGURATION);
-        CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
-            player.sendPacket(PluginMessagePacket.getBrandPacket());
+        final PlayerConnection connection = player.getPlayerConnection();
+        connection.setConnectionState(ConnectionState.CONFIGURATION);
 
+        player.sendPacket(PluginMessagePacket.getBrandPacket());
+        // Request known packs immediately, but don't wait for the response until required (sending registry data).
+        final var knownPacksFuture = connection.requestKnownPacks(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
+
+        return AsyncUtils.runAsync(() -> {
             var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
@@ -286,15 +289,25 @@ public final class ConnectionManager {
 
             // Registry data (if it should be sent)
             if (event.willSendRegistryData()) {
+                List<SelectKnownPacksPacket.Entry> knownPacks;
+                try {
+                    knownPacks = knownPacksFuture.get(5, TimeUnit.SECONDS);
+                } catch (InterruptedException | TimeoutException e) {
+                    throw new RuntimeException("Client failed to respond to known packs request", e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("Error receiving known packs", e);
+                }
+                boolean excludeVanilla = !knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
-                // minecraft:trim_pattern, minecraft:trim_material, minecraft:wolf_variant, and minecraft:banner_pattern.
-
-                player.sendPacket(Messenger.registryDataPacket());
-                player.sendPacket(MinecraftServer.getDimensionTypeManager().registryDataPacket());
-                player.sendPacket(MinecraftServer.getBiomeManager().registryDataPacket());
-                player.sendPacket(DamageType.registryDataPacket());
-//                registry.put("minecraft:trim_material", MinecraftServer.getTrimManager().getTrimMaterialNBT());
-//                registry.put("minecraft:trim_pattern", MinecraftServer.getTrimManager().getTrimPatternNBT());
+                var serverProcess = MinecraftServer.process();
+                player.sendPacket(serverProcess.chatType().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.dimensionType().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.biome().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.damageType().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.trimMaterial().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.trimPattern().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.bannerPattern().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.wolfVariant().registryDataPacket(excludeVanilla));
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }
@@ -307,7 +320,6 @@ public final class ConnectionManager {
             player.setPendingOptions(spawningInstance, event.isHardcore());
             player.sendPacket(new FinishConfigurationPacket());
         });
-        if (DebugUtils.INSIDE_TEST) configFuture.join();
     }
 
     @ApiStatus.Internal

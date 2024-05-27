@@ -25,7 +25,7 @@ final class BlockLight implements Light {
     private byte[] contentPropagationSwap;
 
     private boolean isValidBorders = true;
-    private boolean needsSend = true;
+    private boolean needsSend = false;
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
@@ -195,14 +195,12 @@ final class BlockLight implements Light {
     }
 
     @Override
+    @ApiStatus.Internal
     public void set(byte[] copyArray) {
-        if (copyArray.length == 0) {
-            this.content = emptyContent;
-            this.contentPropagation = emptyContent;
-        } else {
-            this.content = copyArray.clone();
-            this.contentPropagation = this.content;
-        }
+        this.content = copyArray.clone();
+        this.contentPropagation = this.content;
+        this.isValidBorders = true;
+        this.needsSend = true;
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
@@ -25,7 +26,9 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
+import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -38,15 +41,12 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -68,10 +68,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private boolean registered;
 
-    private final DimensionType dimensionType;
+    private final DynamicRegistry.Key<DimensionType> dimensionType;
+    private final DimensionType cachedDimensionType; // Cached to prevent self-destruction if the registry is changed, and to avoid the lookups.
     private final String dimensionName;
 
-    private final WorldBorder worldBorder;
+    // World border of the instance
+    private WorldBorder worldBorder;
+    private double targetBorderDiameter;
+    private long remainingWorldBorderTransitionTicks;
 
     // Tick since the creation of the instance
     private long worldAge;
@@ -79,8 +83,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     // The time of the instance
     private long time;
     private int timeRate = 1;
-    private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
-    private long lastTimeUpdate;
+    private int timeSynchronizationTicks = ServerFlag.SERVER_TICKS_PER_SECOND;
 
     // Weather of the instance
     private Weather weather = Weather.CLEAR;
@@ -115,8 +118,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
-        this(uniqueId, dimensionType, dimensionType.getName());
+    public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+        this(uniqueId, dimensionType, dimensionType.namespace());
     }
 
     /**
@@ -125,14 +128,25 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
-        Check.argCondition(!dimensionType.isRegistered(),
-                "The dimension " + dimensionType.getName() + " is not registered! Please use DimensionTypeManager#addDimension");
+    public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, dimensionName);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param uniqueId      the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
+     */
+    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;
+        this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
+        Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
         this.dimensionName = dimensionName.asString();
 
-        this.worldBorder = new WorldBorder(this);
+        this.worldBorder = WorldBorder.DEFAULT_BORDER;
+        targetBorderDiameter = this.worldBorder.diameter();
 
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
@@ -391,8 +405,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the dimension of the instance
      */
-    public DimensionType getDimensionType() {
+    public DynamicRegistry.Key<DimensionType> getDimensionType() {
         return dimensionType;
+    }
+
+    @ApiStatus.Internal
+    public @NotNull DimensionType getCachedDimensionType() {
+        return cachedDimensionType;
     }
 
     /**
@@ -433,7 +452,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * <p>
      * This method is unaffected by {@link #getTimeRate()}
      * <p>
-     * It does send the new time to all players in the instance, unaffected by {@link #getTimeUpdate()}
+     * It does send the new time to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
      *
      * @param time the new time of the instance
      */
@@ -469,20 +488,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the client update rate for time related packet
      */
-    public @Nullable Duration getTimeUpdate() {
-        return timeUpdate;
+    public int getTimeSynchronizationTicks() {
+        return timeSynchronizationTicks;
     }
 
     /**
-     * Changes the rate at which the client is updated about the time
+     * Changes the natural client time packet synchronization period, defaults to {@link ServerFlag#SERVER_TICKS_PER_SECOND}.
      * <p>
-     * Setting it to null means that the client will never know about time change
-     * (but will still change server-side)
+     * Supplying 0 means that the client will never be synchronized with the current natural instance time
+     * (time will still change server-side)
      *
-     * @param timeUpdate the new update rate concerning time
+     * @param timeSynchronizationTicks the rate to update time in ticks
      */
-    public void setTimeUpdate(@Nullable Duration timeUpdate) {
-        this.timeUpdate = timeUpdate;
+    public void setTimeSynchronizationTicks(int timeSynchronizationTicks) {
+        Check.stateCondition(timeSynchronizationTicks < 0, "The time Synchronization ticks cannot be lower than 0");
+        this.timeSynchronizationTicks = timeSynchronizationTicks;
     }
 
     /**
@@ -502,12 +522,65 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
-     * Gets the instance {@link WorldBorder};
+     * Gets the current state of the instance {@link WorldBorder}.
      *
-     * @return the {@link WorldBorder} linked to the instance
+     * @return the {@link WorldBorder} for the instance of the current tick
      */
     public @NotNull WorldBorder getWorldBorder() {
         return worldBorder;
+    }
+
+    /**
+     * Set the instance {@link WorldBorder} with a smooth transition.
+     *
+     * @param worldBorder the desired final state of the world border
+     * @param transitionTime the time in seconds this world border's diameter
+     *                       will transition for (0 makes this instant)
+     *
+     */
+    public void setWorldBorder(@NotNull WorldBorder worldBorder, double transitionTime) {
+        Check.stateCondition(transitionTime < 0, "Transition time cannot be lower than 0");
+        long transitionMilliseconds = (long) (transitionTime * 1000);
+        sendNewWorldBorderPackets(worldBorder, transitionMilliseconds);
+
+        this.targetBorderDiameter = worldBorder.diameter();
+        long transitionTicks = transitionMilliseconds / MinecraftServer.TICK_MS;
+        remainingWorldBorderTransitionTicks = transitionTicks;
+        if (transitionTicks == 0) this.worldBorder = worldBorder;
+        else this.worldBorder = worldBorder.withDiameter(this.worldBorder.diameter());
+    }
+
+    /**
+     * Set the instance {@link WorldBorder} with an instant transition.
+     * see {@link Instance#setWorldBorder(WorldBorder, double)}.
+     */
+    public void setWorldBorder(@NotNull WorldBorder worldBorder) {
+        setWorldBorder(worldBorder, 0);
+    }
+
+    /**
+     * Creates the {@link InitializeWorldBorderPacket} sent to players who join this instance.
+     */
+    public @NotNull InitializeWorldBorderPacket createInitializeWorldBorderPacket() {
+        return worldBorder.createInitializePacket(targetBorderDiameter, remainingWorldBorderTransitionTicks * MinecraftServer.TICK_MS);
+    }
+
+    private void sendNewWorldBorderPackets(@NotNull WorldBorder newBorder, long transitionMilliseconds) {
+        // Only send the relevant border packets
+        if (this.worldBorder.diameter() != newBorder.diameter()) {
+            if (transitionMilliseconds == 0) sendGroupedPacket(newBorder.createSizePacket());
+            else sendGroupedPacket(this.worldBorder.createLerpSizePacket(newBorder.diameter(), transitionMilliseconds));
+        }
+        if (this.worldBorder.centerX() != newBorder.centerX() || this.worldBorder.centerZ() != newBorder.centerZ()) {
+            sendGroupedPacket(newBorder.createCenterPacket());
+        }
+        if (this.worldBorder.warningTime() != newBorder.warningTime()) sendGroupedPacket(newBorder.createWarningDelayPacket());
+        if (this.worldBorder.warningDistance() != newBorder.warningDistance()) sendGroupedPacket(newBorder.createWarningReachPacket());
+    }
+
+    private @NotNull WorldBorder transitionWorldBorder(long remainingTicks) {
+        if (remainingTicks <= 1) return worldBorder.withDiameter(targetBorderDiameter);
+        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double)remainingTicks));
     }
 
     /**
@@ -653,9 +726,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.worldAge++;
             this.time += timeRate;
             // time needs to be sent to players
-            if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
+            if (timeSynchronizationTicks > 0 && this.worldAge % timeSynchronizationTicks == 0) {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
-                this.lastTimeUpdate = time;
             }
 
         }
@@ -674,7 +746,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             // Set last tick age
             this.lastTickAge = time;
         }
-        this.worldBorder.update();
+        // World border
+        if (remainingWorldBorderTransitionTicks > 0) {
+            worldBorder = transitionWorldBorder(remainingWorldBorderTransitionTicks);
+            if (worldBorder.diameter() == targetBorderDiameter) remainingWorldBorderTransitionTicks = 0;
+            else remainingWorldBorderTransitionTicks--;
+        }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
     }

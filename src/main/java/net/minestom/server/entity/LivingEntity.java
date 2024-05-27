@@ -12,7 +12,8 @@ import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
-import net.minestom.server.event.entity.EntityFireEvent;
+import net.minestom.server.event.entity.EntityFireExtinguishEvent;
+import net.minestom.server.event.entity.EntitySetFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.EntityTracker;
@@ -20,8 +21,12 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.CollectItemPacket;
+import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
+import net.minestom.server.network.packet.server.play.EntityAttributesPacket;
+import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.block.BlockIterator;
@@ -57,14 +62,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected boolean invulnerable;
 
     /**
-     * Time at which this entity must be extinguished
+     * Ticks until this entity must be extinguished
      */
-    private long fireExtinguishTime;
-
-    /**
-     * Period, in ms, between two fire damage applications
-     */
-    private long fireDamagePeriod = 1000L;
+    private int remainingFireTicks;
 
     private Team team;
 
@@ -182,8 +182,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void update(long time) {
-        if (isOnFire() && time > fireExtinguishTime) {
-            setOnFire(false);
+        // Fire
+        if (remainingFireTicks > 0 && --remainingFireTicks == 0) {
+            EventDispatcher.callCancellable(new EntityFireExtinguishEvent(this, true), () -> entityMeta.setOnFire(false));
         }
 
         // Items picking
@@ -268,47 +269,43 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Sets fire to this entity for a given duration.
+     * Gets the amount of ticks this entity is on fire for.
      *
-     * @param duration duration in ticks of the effect
+     * @return the remaining duration of fire in ticks, 0 if not on fire
      */
-    public void setFireForDuration(int duration) {
-        setFireForDuration(duration, TimeUnit.SERVER_TICK);
+    public int getFireTicks() {
+        return remainingFireTicks;
     }
 
     /**
-     * Sets fire to this entity for a given duration.
+     * Sets this entity on fire for the given ticks.
      *
-     * @param duration     duration of the effect
-     * @param temporalUnit unit used to express the duration
-     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
+     * @param ticks duration of fire in ticks
      */
-    public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
-        setFireForDuration(Duration.of(duration, temporalUnit));
-    }
+    public void setFireTicks(int ticks) {
+        int fireTicks = Math.max(0, ticks);
+        if (fireTicks > 0) {
+            EntitySetFireEvent entitySetFireEvent = new EntitySetFireEvent(this, ticks);
+            EventDispatcher.call(entitySetFireEvent);
+            if (entitySetFireEvent.isCancelled()) return;
 
-    /**
-     * Sets fire to this entity for a given duration.
-     *
-     * @param duration duration of the effect
-     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
-     */
-    public void setFireForDuration(Duration duration) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration);
-
-        // Do not start fire event if the fire needs to be removed (< 0 duration)
-        if (duration.toMillis() > 0) {
-            EventDispatcher.callCancellable(entityFireEvent, () -> {
-                final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
-                setOnFire(true);
-                fireExtinguishTime = System.currentTimeMillis() + fireTime;
-            });
-        } else {
-            fireExtinguishTime = System.currentTimeMillis();
+            fireTicks = Math.max(0, entitySetFireEvent.getFireTicks());
+            if (fireTicks > 0) {
+                remainingFireTicks = fireTicks;
+                entityMeta.setOnFire(true);
+                return;
+            }
         }
+
+        if (remainingFireTicks != 0) {
+            EntityFireExtinguishEvent entityFireExtinguishEvent = new EntityFireExtinguishEvent(this, false);
+            EventDispatcher.callCancellable(entityFireExtinguishEvent, () -> entityMeta.setOnFire(false));
+        }
+
+        remainingFireTicks = fireTicks;
     }
 
-    public boolean damage(@NotNull DamageType type, float amount) {
+    public boolean damage(@NotNull DynamicRegistry.Key<DamageType> type, float amount) {
         return damage(new Damage(type, null, null, null, amount));
     }
 
@@ -336,7 +333,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
             }
 
-            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getType().id(), 0, 0, null));
+            //todo
+//            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getType().id(), 0, 0, null));
 
             // Additional hearts support
             if (this instanceof Player player) {
@@ -378,7 +376,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param type the type of damage
      * @return true if this entity is immune to the given type of damage
      */
-    public boolean isImmune(@NotNull DamageType type) {
+    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
         return false;
     }
 
@@ -561,35 +559,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     protected @NotNull EntityAttributesPacket getPropertiesPacket() {
         return new EntityAttributesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
-    }
-
-    /**
-     * Gets the time in ms between two fire damage applications.
-     *
-     * @return the time in ms
-     * @see #setFireDamagePeriod(Duration)
-     */
-    public long getFireDamagePeriod() {
-        return fireDamagePeriod;
-    }
-
-    /**
-     * Changes the delay between two fire damage applications.
-     *
-     * @param fireDamagePeriod the delay
-     * @param temporalUnit     the time unit
-     */
-    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TemporalUnit temporalUnit) {
-        setFireDamagePeriod(Duration.of(fireDamagePeriod, temporalUnit));
-    }
-
-    /**
-     * Changes the delay between two fire damage applications.
-     *
-     * @param fireDamagePeriod the delay
-     */
-    public void setFireDamagePeriod(Duration fireDamagePeriod) {
-        this.fireDamagePeriod = fireDamagePeriod.toMillis();
     }
 
     /**

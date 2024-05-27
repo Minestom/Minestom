@@ -302,4 +302,12 @@ public final class BoundingBox implements Shape {
             default -> null;
         };
     }
+
+    public static @NotNull BoundingBox fromPoints(@NotNull Point a, @NotNull Point b) {
+        Vec aVec = Vec.fromPoint(a);
+        Vec min = aVec.min(b);
+        Vec max = aVec.max(b);
+        Vec dimensions = max.sub(min);
+        return new BoundingBox(dimensions.x(), dimensions.y(), dimensions.z(), min);
+    }
 }

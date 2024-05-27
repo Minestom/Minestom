@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.configuration;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -13,8 +14,11 @@ public record SelectKnownPacksPacket(
 ) implements ServerPacket.Configuration {
     private static final int MAX_ENTRIES = 64;
 
+    public static final Entry MINECRAFT_CORE = new Entry("minecraft", "core", MinecraftServer.VERSION_NAME);
+
     public SelectKnownPacksPacket {
         Check.argCondition(entries.size() > MAX_ENTRIES, "Too many known packs: {0} > {1}", entries.size(), MAX_ENTRIES);
+        entries = List.copyOf(entries);
     }
 
     public SelectKnownPacksPacket(@NotNull NetworkBuffer reader) {

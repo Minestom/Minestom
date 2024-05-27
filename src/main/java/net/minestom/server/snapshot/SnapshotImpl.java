@@ -8,12 +8,14 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.collection.IntMappedArray;
 import net.minestom.server.utils.collection.MappedCollection;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +46,7 @@ public final class SnapshotImpl {
     }
 
     public record Instance(AtomicReference<ServerSnapshot> serverRef,
-                           DimensionType dimensionType, long worldAge, long time,
+                           DynamicRegistry.Key<DimensionType> dimensionType, long worldAge, long time,
                            Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
                            int[] entitiesIds,
                            TagReadable tagReadable) implements InstanceSnapshot {
@@ -99,11 +101,13 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public @NotNull Biome getBiome(int x, int y, int z) {
+        public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
             final Section section = sections[getChunkCoordinate(y) - minSection];
             final int id = section.biomePalette()
                     .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
-            return MinecraftServer.getBiomeManager().getById(id);
+            DynamicRegistry.Key<Biome> key = MinecraftServer.getBiomeRegistry().getKey(id);
+            Check.notNull(key, "Biome with id {0} is not registered", id);
+            return key;
         }
 
         @Override

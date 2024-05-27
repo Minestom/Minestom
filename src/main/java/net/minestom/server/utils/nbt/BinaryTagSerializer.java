@@ -2,10 +2,20 @@ package net.minestom.server.utils.nbt;
 
 import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.UniqueIdUtils;
 import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -14,6 +24,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * <p>API Note: This class and associated types are currently considered an internal api. It is likely there will be
+ * significant changes in the future, and there will not be backwards compatibility for this. Use at your own risk.</p>
+ */
+@ApiStatus.Internal
 public interface BinaryTagSerializer<T> {
 
     static <T> @NotNull BinaryTagSerializer<T> recursive(@NotNull Function<BinaryTagSerializer<T>, BinaryTagSerializer<T>> self) {
@@ -176,6 +191,28 @@ public interface BinaryTagSerializer<T> {
             s -> GsonComponentSerializer.gson().deserialize(s),
             c -> GsonComponentSerializer.gson().serialize(c)
     );
+    BinaryTagSerializer<Component> NBT_COMPONENT = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Component value) {
+            return NbtComponentSerializer.nbt().serialize(value);
+        }
+
+        @Override
+        public @NotNull Component read(@NotNull BinaryTag tag) {
+            return NbtComponentSerializer.nbt().deserialize(tag);
+        }
+    };
+    BinaryTagSerializer<Style> NBT_COMPONENT_STYLE = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Style value) {
+            return NbtComponentSerializer.nbt().serializeStyle(value);
+        }
+
+        @Override
+        public @NotNull Style read(@NotNull BinaryTag tag) {
+            return NbtComponentSerializer.nbt().deserializeStyle(tag);
+        }
+    };
     BinaryTagSerializer<ItemStack> ITEM = COMPOUND.map(ItemStack::fromItemNBT, ItemStack::toItemNBT);
 
     BinaryTagSerializer<UUID> UUID = new BinaryTagSerializer<>() {
@@ -192,6 +229,34 @@ public interface BinaryTagSerializer<T> {
             return UniqueIdUtils.fromNbt(intArrayTag);
         }
     };
+
+    BinaryTagSerializer<Point> BLOCK_POSITION = new BinaryTagSerializer<Point>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Point value) {
+            return IntArrayBinaryTag.intArrayBinaryTag(value.blockX(), value.blockY(), value.blockZ());
+        }
+
+        @Override
+        public @NotNull Point read(@NotNull BinaryTag tag) {
+            if (!(tag instanceof IntArrayBinaryTag intArrayTag))
+                return Vec.ZERO;
+            int[] value = intArrayTag.value();
+            return new Vec(value[0], value[1], value[2]);
+        }
+    };
+
+    static <T extends ProtocolObject> @NotNull BinaryTagSerializer<DynamicRegistry.Key<T>> registryKey(@NotNull Function<Registries, DynamicRegistry<T>> registrySelector) {
+        //todo need to pass Registries as context here somehow.
+        return STRING.map(
+                s -> {
+                    final DynamicRegistry<T> registry = registrySelector.apply(MinecraftServer.process());
+                    final DynamicRegistry.Key<T> key = DynamicRegistry.Key.of(s);
+                    Check.argCondition(registry.get(key) == null, "Key is not registered: {0} > {1}", registry, s);
+                    return key;
+                },
+                DynamicRegistry.Key::name
+        );
+    }
 
     @NotNull BinaryTag write(@NotNull T value);
     @NotNull T read(@NotNull BinaryTag tag);

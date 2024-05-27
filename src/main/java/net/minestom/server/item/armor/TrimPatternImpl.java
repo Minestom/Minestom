@@ -1,48 +1,45 @@
 package net.minestom.server.item.armor;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.concurrent.atomic.AtomicInteger;
+record TrimPatternImpl(
+        @NotNull NamespaceID namespace,
+        @NotNull NamespaceID assetId,
+        @NotNull Material template,
+        @NotNull Component description,
+        boolean isDecal,
+        @Nullable Registry.TrimPatternEntry registry
+) implements TrimPattern {
 
-record TrimPatternImpl(Registry.TrimPatternEntry registry, int id) implements TrimPattern {
-    static final AtomicInteger i = new AtomicInteger();
-    private static final Registry.Container<TrimPattern> CONTAINER;
+    static final BinaryTagSerializer<TrimPattern> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+            tag -> {
+                throw new UnsupportedOperationException("TrimMaterial is read-only");
+            },
+            trimPattern -> CompoundBinaryTag.builder()
+                    .putString("asset_id", trimPattern.assetId().asString())
+                    .put("template_item", Material.NBT_TYPE.write(trimPattern.template()))
+                    .put("description", BinaryTagSerializer.NBT_COMPONENT.write(trimPattern.description()))
+                    .putBoolean("decal", trimPattern.isDecal())
+                    .build()
+    );
 
-    static {
-        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_PATTERNS,
-                (namespace, properties) -> new TrimPatternImpl(Registry.trimPattern(namespace, properties)));
+    TrimPatternImpl {
+        Check.notNull(namespace, "Namespace cannot be null");
+        Check.notNull(assetId, "missing asset id: {0}", namespace);
+        Check.notNull(template, "missing template: {0}", namespace);
+        Check.notNull(description, "missing description: {0}", namespace);
     }
 
-    public TrimPatternImpl(Registry.TrimPatternEntry registry) {
-        this(registry, i.getAndIncrement());
+    TrimPatternImpl(@NotNull Registry.TrimPatternEntry registry) {
+        this(registry.namespace(), registry.assetID(), registry.template(),
+                registry.description(), registry.decal(), registry);
     }
-
-    public static TrimPattern fromId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    public static TrimPattern fromNamespaceId(String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    public static TrimPattern get(String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Collection<TrimPattern> values() {
-        return CONTAINER.values();
-    }
-
-    public CompoundBinaryTag asNBT() {
-        return CompoundBinaryTag.builder()
-                .putString("asset_id", assetID().asString())
-                .putString("template_item", template().namespace().asString())
-                .put("description", NbtComponentSerializer.nbt().serialize(description()))
-                .putBoolean("decal", decal())
-                .build();
-    }
-
 }

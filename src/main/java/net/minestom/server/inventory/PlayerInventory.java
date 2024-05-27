@@ -1,6 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
@@ -163,7 +164,7 @@ public non-sealed class PlayerInventory extends InventoryImpl {
         // We can use the client prediction if it's conservative (i.e. doesn't create or delete items) or the client is in creative.
         // Otherwise, we make our own.
         List<Click.Change> changes;
-        if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, this) || player.isCreative())) {
+        if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, this) || player.getGameMode() == GameMode.CREATIVE)) {
             changes = ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
         } else {
             changes = ContainerInventory.handleClick(this, player, info, ClickProcessors.PLAYER_PROCESSOR);

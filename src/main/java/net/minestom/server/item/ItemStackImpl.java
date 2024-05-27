@@ -1,9 +1,8 @@
 package net.minestom.server.item;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.component.DataComponentPatch;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, DataComponentPatch components) implements ItemStack {
+record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
 
     static final NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -27,7 +26,7 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
 
             buffer.write(NetworkBuffer.VAR_INT, value.amount());
             buffer.write(NetworkBuffer.VAR_INT, value.material().id());
-            buffer.write(DataComponentPatch.NETWORK_TYPE, ((ItemStackImpl) value).components);
+            buffer.write(DataComponentMap.PATCH_NETWORK_TYPE, ((ItemStackImpl) value).components);
         }
 
         @Override
@@ -35,8 +34,8 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
             int amount = buffer.read(NetworkBuffer.VAR_INT);
             if (amount <= 0) return ItemStack.AIR;
             Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
-            DataComponentPatch components = buffer.read(DataComponentPatch.NETWORK_TYPE);
-            return new ItemStackImpl(material, amount, components);
+            DataComponentMap components = buffer.read(DataComponentMap.PATCH_NETWORK_TYPE);
+            return create(material, amount, components);
         }
     };
     static final NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
@@ -48,17 +47,28 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
     });
     static final BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
-    static ItemStack create(Material material, int amount, DataComponentPatch components) {
+    static ItemStack create(Material material, int amount, DataComponentMap components) {
         if (amount <= 0) return AIR;
         return new ItemStackImpl(material, amount, components);
     }
 
     static ItemStack create(Material material, int amount) {
-        return create(material, amount, DataComponentPatch.EMPTY);
+        return create(material, amount, DataComponentMap.EMPTY);
     }
 
     public ItemStackImpl {
         Check.notNull(material, "Material cannot be null");
+
+        // It is relevant to create the minimal diff of the prototype so that #isSimilar returns consistent
+        // results for ItemStacks which would resolve to the same thing. For example, consider two items
+        // (name indicating prototype, brackets showing the components given during construction):
+        // 1: apple[max_stack_size=64, custom_name=Hello]
+        // 2: apple[custom_name=Hello]
+        // After resolution the first set of components would turn into the second one because apple already has a
+        // max stack size of 64. If we did not do this, #isSimilar would return false for these two items because of
+        // their different patches.
+        // It is worth noting that the client would handle both cases perfectly fine.
+        components = DataComponentMap.diff(material.prototype(), components);
     }
 
     @Override
@@ -90,13 +100,16 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
     }
 
     @Override
-    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, T value) {
-        return new ItemStackImpl(material, amount, components.with(component, value));
+    public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, @NotNull T value) {
+        return new ItemStackImpl(material, amount, components.set(component, value));
     }
 
     @Override
     public @NotNull ItemStack without(@NotNull DataComponent<?> component) {
-        return new ItemStackImpl(material, amount, components.without(component));
+        // We can be slightly smart here. If the component is not present, this will always be a noop.
+        // No need to make a new patch with the removal only for it to be removed again when doing a diff.
+        if (get(component) == null) return this;
+        return new ItemStackImpl(material, amount, components.remove(component));
     }
 
     @Override
@@ -116,7 +129,7 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, components.builder());
+        return new Builder(material, amount, components.toBuilder());
     }
 
     private static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
@@ -124,7 +137,7 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
         Material material = Material.fromNamespaceId(id);
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
-        DataComponentPatch patch = DataComponentPatch.NBT_TYPE.read(tag.getCompound("components"));
+        DataComponentMap patch = DataComponentMap.PATCH_NBT_TYPE.read(tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
 
@@ -133,7 +146,7 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
         tag.putString("id", itemStack.material().name());
         tag.putInt("count", itemStack.amount());
 
-        CompoundBinaryTag components = (CompoundBinaryTag) DataComponentPatch.NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        CompoundBinaryTag components = (CompoundBinaryTag) DataComponentMap.PATCH_NBT_TYPE.write(((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();
@@ -142,9 +155,9 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
     static final class Builder implements ItemStack.Builder {
         final Material material;
         int amount;
-        DataComponentPatch.Builder components;
+        DataComponentMap.Builder components;
 
-        Builder(Material material, int amount, DataComponentPatch.Builder components) {
+        Builder(Material material, int amount, DataComponentMap.Builder components) {
             this.material = material;
             this.amount = amount;
             this.components = components;
@@ -153,7 +166,7 @@ record ItemStackImpl(Material material, int amount, DataComponentPatch component
         Builder(Material material, int amount) {
             this.material = material;
             this.amount = amount;
-            this.components = new DataComponentPatch.Builder(new Int2ObjectArrayMap<>());
+            this.components = DataComponentMap.builder();
         }
 
         @Override

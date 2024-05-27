@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -29,6 +30,7 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.DimensionType;
 
 public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -57,7 +59,7 @@ public class BlockPlacementListener {
 
         // Interact at block
         // FIXME: onUseOnBlock
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, cursorPosition, blockFace);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, new BlockVec(blockPosition), cursorPosition, blockFace);
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
@@ -116,11 +118,13 @@ public class BlockPlacementListener {
             }
         }
 
-        if (placementPosition.y() >= instance.getDimensionType().getMaxY()
-                || placementPosition.y() < instance.getDimensionType().getMinY()) return;
+        final DimensionType instanceDim = instance.getCachedDimensionType();
+        if (placementPosition.y() >= instanceDim.maxY() || placementPosition.y() < instanceDim.minY()) {
+            return;
+        }
 
         // Ensure that the final placement position is inside the world border.
-        if (!instance.getWorldBorder().isInside(placementPosition)) {
+        if (!instance.getWorldBorder().inBounds(placementPosition)) {
             canPlaceBlock = false;
         }
 
@@ -157,7 +161,7 @@ public class BlockPlacementListener {
         }
 
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand());
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, new BlockVec(placementPosition), packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {

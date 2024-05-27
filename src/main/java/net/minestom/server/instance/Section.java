@@ -5,6 +5,10 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
+import static net.minestom.server.instance.light.LightCompute.contentFullyLit;
+import static net.minestom.server.instance.light.LightCompute.emptyContent;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 
 public final class Section implements NetworkBuffer.Writer {
@@ -49,8 +53,8 @@ public final class Section implements NetworkBuffer.Writer {
         final Light skyLight = Light.sky(blockPalette);
         final Light blockLight = Light.block(blockPalette);
 
-        skyLight.set(this.skyLight.array());
-        blockLight.set(this.blockLight.array());
+        setSkyLight(this.skyLight.array());
+        setBlockLight(this.blockLight.array());
 
         return new Section(this.blockPalette.clone(), this.biomePalette.clone(), skyLight, blockLight);
     }
@@ -63,11 +67,17 @@ public final class Section implements NetworkBuffer.Writer {
     }
 
     public void setSkyLight(byte[] copyArray) {
-        this.skyLight.set(copyArray);
+        if (copyArray == null || copyArray.length == 0) this.skyLight.set(emptyContent);
+        else if (Arrays.equals(copyArray, emptyContent)) this.skyLight.set(emptyContent);
+        else if (Arrays.equals(copyArray, contentFullyLit)) this.skyLight.set(contentFullyLit);
+        else this.skyLight.set(copyArray);
     }
 
     public void setBlockLight(byte[] copyArray) {
-        this.blockLight.set(copyArray);
+        if (copyArray == null || copyArray.length == 0) this.blockLight.set(emptyContent);
+        else if (Arrays.equals(copyArray, emptyContent)) this.blockLight.set(emptyContent);
+        else if (Arrays.equals(copyArray, contentFullyLit)) this.blockLight.set(contentFullyLit);
+        else this.blockLight.set(copyArray);
     }
 
     public Light skyLight() {

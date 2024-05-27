@@ -7,7 +7,6 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.component.DataComponentPatch;
 import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
@@ -31,17 +30,17 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEventSource<HoverEvent.ShowItem>
+public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
+
+    @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
+    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = ItemStackImpl.STRICT_NETWORK_TYPE;
+    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = ItemStackImpl.NBT_TYPE;
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
     @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
-
-    @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
-    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = ItemStackImpl.STRICT_NETWORK_TYPE;
-    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = ItemStackImpl.NBT_TYPE;
 
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Builder builder(@NotNull Material material) {
@@ -60,12 +59,12 @@ public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEv
 
     @Contract(value = "_ ,_ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material, @NotNull DataComponentMap components) {
-        return ItemStackImpl.create(material, 1, DataComponentPatch.from(material.registry().prototype(), components));
+        return ItemStackImpl.create(material, 1, components);
     }
 
     @Contract(value = "_ ,_, _ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material, int amount, @NotNull DataComponentMap components) {
-        return ItemStackImpl.create(material, amount, DataComponentPatch.from(material.registry().prototype(), components));
+        return ItemStackImpl.create(material, amount, components);
     }
 
     /**
@@ -98,14 +97,33 @@ public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEv
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, T value);
+    <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, @NotNull T value);
 
+    /**
+     * Applies a transformation to the value of a component, only if present.
+     *
+     * @param component The component type to modify
+     * @param operator The transformation function
+     * @return A new ItemStack if the component was transformed, otherwise this.
+     * @param <T> The component type
+     */
     default <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, @NotNull UnaryOperator<T> operator) {
         T value = get(component);
         if (value == null) return this;
         return with(component, operator.apply(value));
     }
 
+    /**
+     * <p>Removes the given component from this item. This will explicitly remove the component from the item, as opposed
+     * to reverting back to the default.</p>
+     *
+     * <p>For example, if {@link ItemComponent#FOOD} is applied to an apple, and then this method is called,
+     * the resulting itemstack will not be a food item at all, as opposed to returning to the default apple
+     * food type. Likewise, if this method is called on a default apple, it will no longer be a food item.</p>
+     *
+     * @param component The component to remove
+     * @return A new ItemStack without the given component
+     */
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack without(@NotNull DataComponent<?> component);
 
@@ -153,8 +171,7 @@ public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEv
         }
     }
 
-    sealed interface Builder extends TagWritable
-            permits ItemStackImpl.Builder {
+    sealed interface Builder extends TagWritable permits ItemStackImpl.Builder {
 
         @Contract(value = "_ -> this")
         @NotNull Builder amount(int amount);

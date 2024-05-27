@@ -1,8 +1,10 @@
 package net.minestom.server.entity.attribute;
 
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public sealed interface Attribute extends StaticProtocolObject, Attributes permits AttributeImpl {
+    @NotNull NetworkBuffer.Type<Attribute> NETWORK_TYPE = AttributeImpl.NETWORK_TYPE;
+    @NotNull BinaryTagSerializer<Attribute> NBT_TYPE = AttributeImpl.NBT_TYPE;
 
     @Contract(pure = true)
     @NotNull Registry.AttributeEntry registry();

@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
@@ -91,7 +92,7 @@ public final class PlayerDiggingListener {
         // FIXME: verify mineable tag and enchantment
         final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition, blockFace);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
@@ -101,7 +102,7 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
-        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, blockPosition);
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
@@ -113,7 +114,7 @@ public final class PlayerDiggingListener {
             return new DiggingResult(block, false);
         }
 
-        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, blockPosition);
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerFinishDiggingEvent);
 
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);

@@ -2,15 +2,14 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
-import net.minestom.server.entity.metadata.animal.FrogMeta;
-import net.minestom.server.entity.metadata.animal.SnifferMeta;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
@@ -54,6 +53,10 @@ public final class NetworkBuffer {
     public static final Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
     public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
+    public static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {
+        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector);
+    }
+
     // METADATA
     public static final Type<Integer> BLOCK_STATE = new NetworkBufferTypeImpl.BlockStateType();
     public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
@@ -63,40 +66,27 @@ public final class NetworkBuffer {
     public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
     public static final Type<Particle> PARTICLE = new NetworkBufferTypeImpl.ParticleType();
 
-    public static final Type<Component> OPT_CHAT = NetworkBufferTypeImpl.fromOptional(COMPONENT);
-    public static final Type<Point> OPT_BLOCK_POSITION = NetworkBufferTypeImpl.fromOptional(BLOCK_POSITION);
-    public static final Type<UUID> OPT_UUID = NetworkBufferTypeImpl.fromOptional(UUID);
+    public static final Type<@Nullable Component> OPT_CHAT = Optional(COMPONENT);
+    public static final Type<@Nullable Point> OPT_BLOCK_POSITION = Optional(BLOCK_POSITION);
+    public static final Type<@Nullable UUID> OPT_UUID = Optional(UUID);
 
-    public static final Type<Direction> DIRECTION = NetworkBufferTypeImpl.fromEnum(Direction.class);
-    public static final Type<Entity.Pose> POSE = NetworkBufferTypeImpl.fromEnum(Entity.Pose.class);
+    public static final Type<Direction> DIRECTION = new NetworkBufferTypeImpl.EnumType<>(Direction.class);
+    public static final Type<Entity.Pose> POSE = new NetworkBufferTypeImpl.EnumType<>(Entity.Pose.class);
 
-    public static final Type<CatMeta.Variant> CAT_VARIANT = NetworkBufferTypeImpl.fromEnum(CatMeta.Variant.class);
-    public static final Type<FrogMeta.Variant> FROG_VARIANT = NetworkBufferTypeImpl.fromEnum(FrogMeta.Variant.class);
-    public static final Type<PaintingMeta.Variant> PAINTING_VARIANT = NetworkBufferTypeImpl.fromEnum(PaintingMeta.Variant.class);
-    public static final Type<SnifferMeta.State> SNIFFER_STATE = NetworkBufferTypeImpl.fromEnum(SnifferMeta.State.class);
-    public static final Type<ArmadilloMeta.State> ARMADILLO_STATE = NetworkBufferTypeImpl.fromEnum(ArmadilloMeta.State.class);
+    // Combinators
 
-    public static <E extends Enum<E>> Type<E> fromEnum(@NotNull Class<E> enumClass) {
-        return NetworkBufferTypeImpl.fromEnum(enumClass);
+    public static <T> @NotNull Type<@Nullable T> Optional(@NotNull Type<T> type) {
+        return new NetworkBufferTypeImpl.OptionalType<>(type);
     }
 
-    public static <T> Type<T> lazy(@NotNull Supplier<Type<T>> supplier) {
-        return new NetworkBuffer.Type<>() {
-            private Type<T> type;
-
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                if (type == null) type = supplier.get();
-                type.write(buffer, value);
-            }
-
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                if (type == null) type = supplier.get();
-                return null;
-            }
-        };
+    public static <E extends Enum<E>> @NotNull Type<E> Enum(@NotNull Class<E> enumClass) {
+        return new NetworkBufferTypeImpl.EnumType<>(enumClass);
     }
+
+    public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
+        return new NetworkBufferTypeImpl.LazyType<>(supplier);
+    }
+
 
     ByteBuffer nioBuffer;
     final boolean resizable;
@@ -105,6 +95,9 @@ public final class NetworkBuffer {
 
     BinaryTagWriter nbtWriter;
     BinaryTagReader nbtReader;
+
+    // In the future, this should be passed as a parameter.
+    final Registries registries = MinecraftServer.process();
 
     public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
@@ -318,31 +311,11 @@ public final class NetworkBuffer {
         T read(@NotNull NetworkBuffer buffer);
 
         default <S> @NotNull Type<S> map(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
-            return new Type<S>() {
-                @Override
-                public void write(@NotNull NetworkBuffer buffer, S value) {
-                    Type.this.write(buffer, from.apply(value));
-                }
-
-                @Override
-                public S read(@NotNull NetworkBuffer buffer) {
-                    return to.apply(Type.this.read(buffer));
-                }
-            };
+            return new NetworkBufferTypeImpl.MappedType<>(this, to, from);
         }
 
         default @NotNull Type<List<T>> list(int maxSize) {
-            return new NetworkBuffer.Type<>() {
-                @Override
-                public void write(@NotNull NetworkBuffer buffer, List<T> value) {
-                    buffer.writeCollection(Type.this, value);
-                }
-
-                @Override
-                public List<T> read(@NotNull NetworkBuffer buffer) {
-                    return buffer.readCollection(Type.this, maxSize);
-                }
-            };
+            return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
         }
     }
 

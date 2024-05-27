@@ -10,8 +10,8 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,17 +25,11 @@ final class SkyLight implements Light {
     private byte[] contentPropagationSwap;
 
     private boolean isValidBorders = true;
-    private boolean needsSend = true;
+    private boolean needsSend = false;
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
-
     private boolean fullyLit = false;
-    private static final byte[] contentFullyLit = new byte[LIGHT_LENGTH];
-
-    static {
-        Arrays.fill(contentFullyLit, (byte) -1);
-    }
 
     SkyLight(Palette blockPalette) {
         this.blockPalette = blockPalette;
@@ -57,7 +51,7 @@ final class SkyLight implements Light {
 
         if (c instanceof LightingChunk lc) {
             int[] heightmap = lc.getOcclusionMap();
-            int maxY = c.getInstance().getDimensionType().getMinY() + c.getInstance().getDimensionType().getHeight();
+            int maxY = c.getInstance().getCachedDimensionType().minY() + c.getInstance().getCachedDimensionType().height();
             int sectionMaxY = (sectionY + 1) * 16 - 1;
             int sectionMinY = sectionY * 16;
 
@@ -220,14 +214,12 @@ final class SkyLight implements Light {
     }
 
     @Override
+    @ApiStatus.Internal
     public void set(byte[] copyArray) {
-        if (copyArray.length == 0) {
-            this.content = emptyContent;
-            this.contentPropagation = emptyContent;
-        } else {
-            this.content = copyArray.clone();
-            this.contentPropagation = this.content;
-        }
+        this.content = copyArray.clone();
+        this.contentPropagation = this.content;
+        this.isValidBorders = true;
+        this.needsSend = true;
     }
 
     @Override

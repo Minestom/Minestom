@@ -13,6 +13,17 @@ import java.util.Collection;
 
 public sealed interface DataComponent<T> extends StaticProtocolObject permits DataComponentImpl {
 
+    interface Holder {
+        boolean has(@NotNull DataComponent<?> component);
+
+        <T> @Nullable T get(@NotNull DataComponent<T> component);
+
+        default <T> @NotNull T get(@NotNull DataComponent<T> component, @NotNull T defaultValue) {
+            final T value = get(component);
+            return value != null ? value : defaultValue;
+        }
+    }
+
     boolean isSynced();
     boolean isSerialized();
 

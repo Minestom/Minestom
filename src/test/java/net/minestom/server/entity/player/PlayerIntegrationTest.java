@@ -145,8 +145,7 @@ public class PlayerIntegrationTest {
     @Test
     public void refreshPlayerTest(Env env) {
         final int TEST_PERMISSION_LEVEL = 2;
-        final var testDimension = DimensionType.builder(NamespaceID.from("minestom:test_dimension")).build();
-        env.process().dimension().addDimension(testDimension);
+        final var testDimension = env.process().dimensionType().register(DimensionType.builder(NamespaceID.from("minestom:test_dimension")).build());
 
         var instance = env.createFlatInstance();
         var instance2 = env.process().instance().createInstanceContainer(testDimension);
@@ -181,8 +180,7 @@ public class PlayerIntegrationTest {
     @Test
     public void deathLocationTest(Env env) {
         String dimensionNamespace = "minestom:test_dimension";
-        final var testDimension = DimensionType.builder(NamespaceID.from(dimensionNamespace)).build();
-        env.process().dimension().addDimension(testDimension);
+        final var testDimension = env.process().dimensionType().register(DimensionType.builder(NamespaceID.from(dimensionNamespace)).build());
 
         var instance = env.process().instance().createInstanceContainer(testDimension);
         var connection = env.createConnection();
@@ -193,7 +191,7 @@ public class PlayerIntegrationTest {
 
         assertNotNull(player.getDeathLocation());
         assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
-        assertEquals(5, player.getDeathLocation().position().x());
+        assertEquals(5, player.getDeathLocation().blockPosition().x());
     }
 
     @Test

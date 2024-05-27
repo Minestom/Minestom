@@ -1,10 +1,14 @@
 package net.minestom.server.registry;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
@@ -17,6 +21,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
@@ -40,6 +45,11 @@ public final class Registry {
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Properties main) {
         return new BlockEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static DimensionTypeEntry dimensionType(String namespace, @NotNull Properties main) {
+        return new DimensionTypeEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -85,6 +95,21 @@ public final class Registry {
     @ApiStatus.Internal
     public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
         return new AttributeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static BannerPatternEntry bannerPattern(String namespace, @NotNull Properties main) {
+        return new BannerPatternEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static WolfVariantEntry wolfVariant(String namespace, @NotNull Properties main) {
+        return new WolfVariantEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static ChatTypeEntry chatType(String namespace, @NotNull Properties main) {
+        return new ChatTypeEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -232,8 +257,12 @@ public final class Registry {
         FLUID_TAGS("tags/fluid_tags.json"),
         GAMEPLAY_TAGS("tags/gameplay_tags.json"),
         ITEM_TAGS("tags/item_tags.json"),
+        DIMENSION_TYPES("dimension_types.json"),
         BIOMES("biomes.json"),
-        ATTRIBUTES("attributes.json");
+        ATTRIBUTES("attributes.json"),
+        BANNER_PATTERNS("banner_patterns.json"),
+        WOLF_VARIANTS("wolf_variants.json"),
+        CHAT_TYPES("chat_types.json");
 
         private final String name;
 
@@ -397,6 +426,49 @@ public final class Registry {
         @Override
         public Properties custom() {
             return custom;
+        }
+    }
+
+    public record DimensionTypeEntry(
+            NamespaceID namespace,
+            boolean ultrawarm,
+            boolean natural,
+            double coordinateScale,
+            boolean hasSkylight,
+            boolean hasCeiling,
+            float ambientLight,
+            Long fixedTime,
+            boolean piglinSafe,
+            boolean bedWorks,
+            boolean respawnAnchorWorks,
+            boolean hasRaids,
+            int logicalHeight,
+            int minY,
+            int height,
+            String infiniburn,
+            String effects,
+            Properties custom
+    ) implements Entry {
+
+        public DimensionTypeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getBoolean("ultrawarm"),
+                    main.getBoolean("natural"),
+                    main.getDouble("coordinate_scale"),
+                    main.getBoolean("has_skylight"),
+                    main.getBoolean("has_ceiling"),
+                    main.getFloat("ambient_light"),
+                    (Long) main.asMap().get("fixed_time"),
+                    main.getBoolean("piglin_safe"),
+                    main.getBoolean("bed_works"),
+                    main.getBoolean("respawn_anchor_works"),
+                    main.getBoolean("has_raids"),
+                    main.getInt("logical_height"),
+                    main.getInt("min_y"),
+                    main.getInt("height"),
+                    main.getString("infiniburn"),
+                    main.getString("effects"),
+                    custom);
         }
     }
 
@@ -772,6 +844,89 @@ public final class Registry {
         }
     }
 
+    public record BannerPatternEntry(NamespaceID namespace, NamespaceID assetId, String translationKey, Properties custom) implements Entry {
+        public BannerPatternEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    main.getString("translation_key"),
+                    custom);
+        }
+    }
+
+    public record WolfVariantEntry(NamespaceID namespace, NamespaceID wildTexture, NamespaceID tameTexture, NamespaceID angryTexture, List<String> biomes, Properties custom) implements Entry {
+        public WolfVariantEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("wild_texture")),
+                    NamespaceID.from(main.getString("tame_texture")),
+                    NamespaceID.from(main.getString("angry_texture")),
+                    readBiomesList(main.asMap().get("biomes")),
+                    custom);
+        }
+
+        private static @NotNull List<String> readBiomesList(Object biomes) {
+            if (biomes instanceof List<?> list) {
+                return list.stream().map(Object::toString).collect(Collectors.toList());
+            } else if (biomes instanceof String single) {
+                return List.of(single);
+            } else {
+                throw new IllegalArgumentException("invalid biomes entry: " + biomes);
+            }
+        }
+    }
+
+    public static final class ChatTypeEntry implements Entry {
+        private final NamespaceID namespace;
+        private final ChatTypeDecoration chat;
+        private final ChatTypeDecoration narration;
+        private final Properties custom;
+
+        public ChatTypeEntry(String namespace, Properties main, Properties custom) {
+            this.namespace = NamespaceID.from(namespace);
+            this.chat = readChatTypeDecoration(main.section("chat"));
+            this.narration = readChatTypeDecoration(main.section("narration"));
+            this.custom = custom;
+        }
+
+        public NamespaceID namespace() {
+            return namespace;
+        }
+
+        public ChatTypeDecoration chat() {
+            return chat;
+        }
+
+        public ChatTypeDecoration narration() {
+            return narration;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
+
+        private static @NotNull ChatTypeDecoration readChatTypeDecoration(Properties properties) {
+            List<ChatTypeDecoration.Parameter> parameters = new ArrayList<>();
+            if (properties.asMap().get("parameters") instanceof List<?> paramList) {
+                for (Object param : paramList) {
+                    parameters.add(ChatTypeDecoration.Parameter.valueOf(param.toString().toUpperCase(Locale.ROOT)));
+                }
+            }
+            Style style = Style.empty();
+            if (properties.containsKey("style")) {
+                // This is admittedly a pretty cursed way to handle deserialization here, however I do not want to
+                // write a standalone JSON style deserializer for this one use case.
+                // The methodology is to just convert it to a valid text component and deserialize that, then take the style.
+                Gson gson = GsonComponentSerializer.gson().serializer();
+                JsonObject textComponentJson = gson.toJsonTree(properties.section("style").asMap()).getAsJsonObject();
+                textComponentJson.addProperty("text", "IGNORED_VALUE");
+                Component textComponent = GsonComponentSerializer.gson().deserializeFromTree(textComponentJson);
+                style = textComponent.style();
+            }
+            return new ChatTypeDecoration(properties.getString("translation_key"), parameters, style);
+        }
+
+    }
+
     public interface Entry {
         @ApiStatus.Experimental
         Properties custom();
@@ -835,6 +990,17 @@ public final class Registry {
         }
 
         @Override
+        public float getFloat(String name, float defaultValue) {
+            var element = element(name);
+            return element != null ? ((Number) element).floatValue() : defaultValue;
+        }
+
+        @Override
+        public float getFloat(String name) {
+            return ((Number) element(name)).floatValue();
+        }
+
+        @Override
         public boolean getBoolean(String name, boolean defaultValue) {
             var element = element(name);
             return element != null ? (boolean) element : defaultValue;
@@ -892,6 +1058,10 @@ public final class Registry {
         int getInt(String name, int defaultValue);
 
         int getInt(String name);
+
+        float getFloat(String name, float defaultValue);
+
+        float getFloat(String name);
 
         boolean getBoolean(String name, boolean defaultValue);
 

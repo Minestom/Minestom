@@ -1,60 +1,81 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
 
-public sealed interface DamageType extends StaticProtocolObject, DamageTypes permits DamageTypeImpl {
+    static @NotNull DamageType create(
+            @NotNull NamespaceID namespace,
+            float exhaustion,
+            @NotNull String messageId,
+            @NotNull String scaling
+    ) {
+        return new DamageTypeImpl(namespace, exhaustion, messageId, scaling, null);
+    }
+
+    static @NotNull Builder builder(@NotNull String namespace) {
+        return builder(NamespaceID.from(namespace));
+    }
+
+    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
+        return new Builder(namespace);
+    }
+
     /**
-     * Returns the damage type registry.
+     * <p>Creates a new registry for damage types, loading the vanilla damage types.</p>
      *
-     * @return the damage type registry
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
-    @Contract(pure = true)
-    @NotNull Registry.DamageTypeEntry registry();
-
-    @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
+        return DynamicRegistry.create(
+                "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
+                (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
+        );
     }
 
-    default double exhaustion() {
-        return registry().exhaustion();
+    float exhaustion();
+
+    @NotNull String messageId();
+
+    @NotNull String scaling();
+
+    @Nullable Registry.DamageTypeEntry registry();
+
+    final class Builder {
+        private final NamespaceID namespace;
+        private float exhaustion = 0f;
+        private String messageId;
+        private String scaling;
+
+        public Builder(@NotNull NamespaceID namespace) {
+            this.namespace = namespace;
+        }
+
+        public @NotNull Builder exhaustion(float exhaustion) {
+            this.exhaustion = exhaustion;
+            return this;
+        }
+
+        public @NotNull Builder messageId(@NotNull String messageId) {
+            this.messageId = messageId;
+            return this;
+        }
+
+        public @NotNull Builder scaling(@NotNull String scaling) {
+            this.scaling = scaling;
+            return this;
+        }
+
+        public @NotNull DamageType build() {
+            return new DamageTypeImpl(namespace, exhaustion, messageId, scaling, null);
+        }
     }
 
-    default String messageId() {
-        return registry().messageId();
-    }
-
-    default String scaling() {
-        return registry().scaling();
-    }
-
-    @NotNull RegistryDataPacket.Entry toRegistryEntry();
-
-    static @NotNull Collection<@NotNull DamageType> values() {
-        return DamageTypeImpl.values();
-    }
-
-    static DamageType fromNamespaceId(@NotNull String namespaceID) {
-        return DamageTypeImpl.getSafe(namespaceID);
-    }
-
-    static DamageType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
-    }
-
-    static @Nullable DamageType fromId(int id) {
-        return DamageTypeImpl.getId(id);
-    }
-
-    static @NotNull RegistryDataPacket registryDataPacket() {
-        return DamageTypeImpl.registryDataPacket();
-    }
 }
