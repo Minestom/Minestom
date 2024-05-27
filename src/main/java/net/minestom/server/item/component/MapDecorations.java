@@ -10,14 +10,11 @@ import java.util.Map;
 
 public record MapDecorations(@NotNull Map<String, Entry> decorations) {
 
-    public record Entry(@NotNull String type, double x, double z, float rotation) {
-    }
-
     public static final BinaryTagSerializer<MapDecorations> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 Map<String, Entry> map = new HashMap<>(tag.size());
                 for (Map.Entry<String, ? extends BinaryTag> entry : tag) {
-                    if (!(entry instanceof CompoundBinaryTag entryTag)) continue;
+                    if (!(entry.getValue() instanceof CompoundBinaryTag entryTag)) continue;
                     map.put(entry.getKey(), new Entry(
                             entryTag.getString("type"),
                             entryTag.getDouble("x"),
@@ -41,4 +38,27 @@ public record MapDecorations(@NotNull Map<String, Entry> decorations) {
                 return builder.build();
             }
     );
+
+    public MapDecorations {
+        decorations = Map.copyOf(decorations);
+    }
+
+    public @NotNull MapDecorations with(@NotNull String id, @NotNull String type, double x, double z, float rotation) {
+        return with(id, new Entry(type, x, z, rotation));
+    }
+
+    public @NotNull MapDecorations with(@NotNull String id, @NotNull Entry entry) {
+        Map<String, Entry> newDecorations = new HashMap<>(decorations);
+        newDecorations.put(id, entry);
+        return new MapDecorations(newDecorations);
+    }
+
+    public @NotNull MapDecorations remove(@NotNull String id) {
+        Map<String, Entry> newDecorations = new HashMap<>(decorations);
+        newDecorations.remove(id);
+        return new MapDecorations(newDecorations);
+    }
+
+    public record Entry(@NotNull String type, double x, double z, float rotation) {
+    }
 }

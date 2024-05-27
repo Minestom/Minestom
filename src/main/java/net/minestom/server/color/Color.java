@@ -3,6 +3,7 @@ package net.minestom.server.color;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,8 @@ public record Color(int red, int green, int blue) implements RGBLike {
             return new Color(buffer.read(NetworkBuffer.INT));
         }
     };
+    public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
+            .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
 
     public static @NotNull Color fromRGBLike(@NotNull RGBLike rgbLike) {
         if (rgbLike instanceof Color color) return color;

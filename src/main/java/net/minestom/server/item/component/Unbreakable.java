@@ -6,7 +6,7 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public record Unbreakable(boolean showInTooltip) {
-    public static final Unbreakable DEFAULT = new Unbreakable(false);
+    public static final Unbreakable DEFAULT = new Unbreakable();
 
     public static final NetworkBuffer.Type<Unbreakable> NETWORK_TYPE = new NetworkBuffer.Type<Unbreakable>() {
         @Override
@@ -20,8 +20,12 @@ public record Unbreakable(boolean showInTooltip) {
         }
     };
 
+    public Unbreakable() {
+        this(true);
+    }
+
     public static final BinaryTagSerializer<Unbreakable> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> new Unbreakable(tag.getBoolean("showInTooltip", false)),
+            tag -> new Unbreakable(tag.getBoolean("showInTooltip", true)),
             unbreakable -> CompoundBinaryTag.builder().putBoolean("showInTooltip", unbreakable.showInTooltip()).build()
     );
 
