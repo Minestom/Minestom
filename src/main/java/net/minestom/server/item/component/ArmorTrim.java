@@ -39,4 +39,6 @@ public record ArmorTrim(@NotNull DynamicRegistry.Key<TrimMaterial> material, @No
                     .putBoolean("show_in_tooltip", value.showInTooltip)
                     .build()
     );
+
+
 }

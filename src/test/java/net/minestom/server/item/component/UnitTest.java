@@ -11,9 +11,19 @@ import java.util.Map;
 import static java.util.Map.entry;
 
 public class UnitTest extends AbstractItemComponentTest<Unit> {
+    // This is not a test, but it creates a compile error if the component type is changed away from Unit,
+    // as a reminder that tests should be added for that new component type.
+    private static final List<DataComponent<Unit>> UNIT_COMPONENTS = List.of(
+            ItemComponent.HIDE_ADDITIONAL_TOOLTIP,
+            ItemComponent.HIDE_TOOLTIP,
+            ItemComponent.CREATIVE_SLOT_LOCK,
+            ItemComponent.INTANGIBLE_PROJECTILE,
+            ItemComponent.FIRE_RESISTANT
+    );
+
     @Override
     protected @NotNull DataComponent<Unit> component() {
-        return ItemComponent.HIDE_TOOLTIP;
+        return UNIT_COMPONENTS.getFirst();
     }
 
     @Override

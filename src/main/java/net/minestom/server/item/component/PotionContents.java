@@ -44,7 +44,25 @@ public record PotionContents(
     public static final BinaryTagSerializer<PotionContents> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull PotionContents value) {
-            throw new UnsupportedOperationException();
+            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+
+            if (value.potion != null) {
+                builder.put("potion", StringBinaryTag.stringBinaryTag(value.potion.name()));
+            }
+
+            if (value.customColor != null) {
+                builder.put("custom_color", Color.NBT_TYPE.write(value.customColor));
+            }
+
+            if (!value.customEffects.isEmpty()) {
+                ListBinaryTag.Builder<BinaryTag> effectsBuilder = ListBinaryTag.builder();
+                for (CustomPotionEffect effect : value.customEffects) {
+                    effectsBuilder.add(CustomPotionEffect.NBT_TYPE.write(effect));
+                }
+                builder.put("custom_effects", effectsBuilder.build());
+            }
+
+            return builder.build();
         }
 
         @Override
@@ -84,4 +102,21 @@ public record PotionContents(
     public PotionContents {
         customEffects = List.copyOf(customEffects);
     }
+
+    public PotionContents(@NotNull PotionType potion) {
+        this(potion, null, List.of());
+    }
+
+    public PotionContents(@NotNull PotionType potion, @NotNull RGBLike customColor) {
+        this(potion, customColor, List.of());
+    }
+
+    public PotionContents(@NotNull List<CustomPotionEffect> customEffects) {
+        this(null, null, customEffects);
+    }
+
+    public PotionContents(@NotNull CustomPotionEffect customEffect) {
+        this(null, null, List.of(customEffect));
+    }
+
 }

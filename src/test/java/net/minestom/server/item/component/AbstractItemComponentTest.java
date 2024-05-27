@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractItemComponentTest<T> {
@@ -30,29 +29,25 @@ public abstract class AbstractItemComponentTest<T> {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("directReadWriteMethodSource")
-    public void directReadWriteNbt(String testName, @NotNull T entry) {
-        assumeTrue(component().isSerialized());
+    public void directReadWriteTest(String testName, @NotNull T entry) {
+        if (component().isSerialized()) {
+            var written1 = component().write(entry);
 
-        var written1 = component().write(entry);
+            var read = component().read(written1);
+            assertEquals(entry, read);
 
-        var read = component().read(written1);
-        assertEquals(entry, read);
+            var written2 = component().write(read);
+            assertEquals(written1, written2);
+        }
 
-        var written2 = component().write(read);
-        assertEquals(written1, written2);
-    }
+        if (component().isSynced()) {
+            var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry));
 
-    @ParameterizedTest(name = "{0}")
-    @MethodSource("directReadWriteMethodSource")
-    public void directReadWriteNetwork(String testName, @NotNull T entry) {
-        assumeTrue(component().isSynced());
+            var read = component().read(new NetworkBuffer(ByteBuffer.wrap(written1)));
+            assertEquals(entry, read);
 
-        var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry));
-
-        var read = component().read(new NetworkBuffer(ByteBuffer.wrap(written1)));
-        assertEquals(entry, read);
-
-        var written2 = NetworkBuffer.makeArray(b -> component().write(b, entry));
-        assertArrayEquals(written1, written2);
+            var written2 = NetworkBuffer.makeArray(b -> component().write(b, entry));
+            assertArrayEquals(written1, written2);
+        }
     }
 }

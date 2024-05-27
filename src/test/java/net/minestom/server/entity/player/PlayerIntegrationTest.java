@@ -191,7 +191,7 @@ public class PlayerIntegrationTest {
 
         assertNotNull(player.getDeathLocation());
         assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
-        assertEquals(5, player.getDeathLocation().position().x());
+        assertEquals(5, player.getDeathLocation().blockPosition().x());
     }
 
     @Test

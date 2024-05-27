@@ -6,6 +6,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -225,6 +227,21 @@ public interface BinaryTagSerializer<T> {
                 throw new IllegalArgumentException("unexpected uuid type: " + tag.type());
             }
             return UniqueIdUtils.fromNbt(intArrayTag);
+        }
+    };
+
+    BinaryTagSerializer<Point> BLOCK_POSITION = new BinaryTagSerializer<Point>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Point value) {
+            return IntArrayBinaryTag.intArrayBinaryTag(value.blockX(), value.blockY(), value.blockZ());
+        }
+
+        @Override
+        public @NotNull Point read(@NotNull BinaryTag tag) {
+            if (!(tag instanceof IntArrayBinaryTag intArrayTag))
+                return Vec.ZERO;
+            int[] value = intArrayTag.value();
+            return new Vec(value[0], value[1], value[2]);
         }
     };
 
