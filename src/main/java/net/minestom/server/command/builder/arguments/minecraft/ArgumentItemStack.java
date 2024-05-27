@@ -74,7 +74,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 reader.consume('=');
 
                 final BinaryTag nbt = reader.readTag();
-                components.set(component, component.read(nbt));
+                //noinspection unchecked
+                components.set((DataComponent<Object>) component, component.read(nbt));
 
                 if (reader.peek() != ']')
                     reader.consume(',');
