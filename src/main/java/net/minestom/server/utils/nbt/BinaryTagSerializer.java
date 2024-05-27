@@ -13,6 +13,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.UniqueIdUtils;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -21,6 +22,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * <p>API Note: This class and associated types are currently considered an internal api. It is likely there will be
+ * significant changes in the future, and there will not be backwards compatibility for this. Use at your own risk.</p>
+ */
+@ApiStatus.Internal
 public interface BinaryTagSerializer<T> {
 
     static <T> @NotNull BinaryTagSerializer<T> recursive(@NotNull Function<BinaryTagSerializer<T>, BinaryTagSerializer<T>> self) {

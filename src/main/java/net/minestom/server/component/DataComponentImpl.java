@@ -2,6 +2,7 @@ package net.minestom.server.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.item.ItemComponent;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -66,6 +67,7 @@ record DataComponentImpl<T>(
         try {
             // Force init of item component for the weird edge case of tests which reference a component by
             // loading it (with fromNamespaceId) before referencing a component by name
+            Class.forName(Material.class.getName());
             Class.forName(ItemComponent.class.getName());
         } catch (ClassNotFoundException e) {
             // Ignored

@@ -7,7 +7,6 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.component.DataComponentPatch;
 import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
@@ -31,7 +30,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEventSource<HoverEvent.ShowItem>
+public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 
     @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
@@ -60,12 +59,12 @@ public sealed interface ItemStack extends TagReadable, DataComponentMap, HoverEv
 
     @Contract(value = "_ ,_ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material, @NotNull DataComponentMap components) {
-        return ItemStackImpl.create(material, 1, DataComponentPatch.from(material.registry().prototype(), components));
+        return ItemStackImpl.create(material, 1, components);
     }
 
     @Contract(value = "_ ,_, _ -> new", pure = true)
     static @NotNull ItemStack of(@NotNull Material material, int amount, @NotNull DataComponentMap components) {
-        return ItemStackImpl.create(material, amount, DataComponentPatch.from(material.registry().prototype(), components));
+        return ItemStackImpl.create(material, amount, components);
     }
 
     /**
