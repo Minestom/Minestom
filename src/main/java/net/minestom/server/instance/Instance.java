@@ -5,6 +5,7 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
@@ -40,15 +41,12 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
@@ -82,8 +80,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     // The time of the instance
     private long time;
     private int timeRate = 1;
-    private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
-    private long lastTimeUpdate;
+    private int timeSynchronizationTicks = ServerFlag.SERVER_TICKS_PER_SECOND;
 
     // Weather of the instance
     private Weather weather = Weather.CLEAR;
@@ -454,7 +451,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * <p>
      * This method is unaffected by {@link #getTimeRate()}
      * <p>
-     * It does send the new time to all players in the instance, unaffected by {@link #getTimeUpdate()}
+     * It does send the new time to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
      *
      * @param time the new time of the instance
      */
@@ -490,20 +487,21 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the client update rate for time related packet
      */
-    public @Nullable Duration getTimeUpdate() {
-        return timeUpdate;
+    public int getTimeSynchronizationTicks() {
+        return timeSynchronizationTicks;
     }
 
     /**
-     * Changes the rate at which the client is updated about the time
+     * Changes the natural client time packet synchronization period, defaults to {@link ServerFlag#SERVER_TICKS_PER_SECOND}.
      * <p>
-     * Setting it to null means that the client will never know about time change
-     * (but will still change server-side)
+     * Supplying 0 means that the client will never be synchronized with the current natural instance time
+     * (time will still change server-side)
      *
-     * @param timeUpdate the new update rate concerning time
+     * @param timeSynchronizationTicks the rate to update time in ticks
      */
-    public void setTimeUpdate(@Nullable Duration timeUpdate) {
-        this.timeUpdate = timeUpdate;
+    public void setTimeSynchronizationTicks(int timeSynchronizationTicks) {
+        Check.stateCondition(timeSynchronizationTicks < 0, "The time Synchronization ticks cannot be lower than 0");
+        this.timeSynchronizationTicks = timeSynchronizationTicks;
     }
 
     /**
@@ -674,9 +672,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.worldAge++;
             this.time += timeRate;
             // time needs to be sent to players
-            if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
+            if (timeSynchronizationTicks > 0 && this.worldAge % timeSynchronizationTicks == 0) {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
-                this.lastTimeUpdate = time;
             }
 
         }
