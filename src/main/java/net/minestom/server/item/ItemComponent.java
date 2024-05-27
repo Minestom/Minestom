@@ -41,7 +41,7 @@ public final class ItemComponent {
     public static final DataComponent<Tool> TOOL = DataComponent.register("tool", Tool.NETWORK_TYPE, Tool.NBT_TYPE);
     public static final DataComponent<EnchantmentList> STORED_ENCHANTMENTS = DataComponent.register("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
     public static final DataComponent<DyedItemColor> DYED_COLOR = DataComponent.register("dyed_color", DyedItemColor.NETWORK_TYPE, DyedItemColor.NBT_TYPE);
-    public static final DataComponent<RGBLike> MAP_COLOR = DataComponent.register("map_color", Color.NETWORK_TYPE, BinaryTagSerializer.INT.map(Color::new, color -> Color.fromRGBLike(color).asRGB()));
+    public static final DataComponent<RGBLike> MAP_COLOR = DataComponent.register("map_color", Color.NETWORK_TYPE, Color.NBT_TYPE);
     public static final DataComponent<Integer> MAP_ID = DataComponent.register("map_id", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     public static final DataComponent<MapDecorations> MAP_DECORATIONS = DataComponent.register("map_decorations", null, MapDecorations.NBT_TYPE);
     public static final DataComponent<MapPostProcessing> MAP_POST_PROCESSING = DataComponent.register("map_post_processing", MapPostProcessing.NETWORK_TYPE, null);

@@ -450,8 +450,7 @@ public class AnvilLoader implements IChunkLoader {
 
             // Save the block and biome palettes
             final CompoundBinaryTag.Builder blockStates = CompoundBinaryTag.builder();
-            // Pre-copy because adventure does not -- https://github.com/KyoriPowered/adventure/issues/1070
-            blockStates.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.COMPOUND, List.copyOf(blockPaletteEntries)));
+            blockStates.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.COMPOUND, blockPaletteEntries));
             if (blockPaletteEntries.size() > 1) {
                 // If there is only one entry we do not need to write the packed indices
                 var bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
@@ -460,8 +459,7 @@ public class AnvilLoader implements IChunkLoader {
             sectionData.put("block_states", blockStates.build());
 
             final CompoundBinaryTag.Builder biomes = CompoundBinaryTag.builder();
-            // Pre-copy because adventure does not -- https://github.com/KyoriPowered/adventure/issues/1070
-            biomes.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.STRING, List.copyOf(biomePalette)));
+            biomes.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.STRING, biomePalette));
             if (biomePalette.size() > 1) {
                 // If there is only one entry we do not need to write the packed indices
                 var bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(biomePalette.size()) / Math.log(2)));

@@ -23,6 +23,10 @@ public record PotDecorations(
         this(getOrAir(list, 0), getOrAir(list, 1), getOrAir(list, 2), getOrAir(list, 3));
     }
 
+    public PotDecorations(@NotNull Material material) {
+        this(material, material, material, material);
+    }
+
     public @NotNull List<Material> asList() {
         return List.of(back, left, right, front);
     }

@@ -1,7 +1,6 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.ByteBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
@@ -58,9 +57,7 @@ public record BlockPredicates(@NotNull List<BlockPredicate> predicates, boolean 
 
             // This default is fine in either case because the single predicate shouldnt have this key anyway.
             // https://github.com/KyoriPowered/adventure/issues/1068
-            boolean showInTooltip = true;
-            if (compound.get("show_in_tooltip") instanceof ByteBinaryTag showInTooltipTag)
-                showInTooltip = showInTooltipTag.value() != 0;
+            boolean showInTooltip = compound.getBoolean("show_in_tooltip", true);
 
             return new BlockPredicates(predicates, showInTooltip);
         }

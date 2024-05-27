@@ -1,7 +1,6 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.ByteBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.NetworkBuffer;
@@ -54,11 +53,8 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
                 }
 
                 // Doesnt matter which variant we chose, the default will work.
-                // https://github.com/KyoriPowered/adventure/issues/1068
-                boolean showInTooltip = true;
-                if (tag.get("show_in_tooltip") instanceof ByteBinaryTag byteTag) {
-                    showInTooltip = byteTag.value() != 0;
-                }
+                boolean showInTooltip = tag.getBoolean("show_in_tooltip", true);
+
                 return new EnchantmentList(enchantments, showInTooltip);
             },
             value -> {
@@ -78,6 +74,14 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
         enchantments = Map.copyOf(enchantments);
     }
 
+    public EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments) {
+        this(enchantments, true);
+    }
+
+    public EnchantmentList(@NotNull Enchantment enchantment, int level) {
+        this(Map.of(enchantment, level), true);
+    }
+
     public boolean has(@NotNull Enchantment enchantment) {
         return enchantments.containsKey(enchantment);
     }
@@ -89,6 +93,12 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
     public @NotNull EnchantmentList with(@NotNull Enchantment enchantment, int level) {
         Map<Enchantment, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.put(enchantment, level);
+        return new EnchantmentList(newEnchantments, showInTooltip);
+    }
+
+    public @NotNull EnchantmentList remove(@NotNull Enchantment enchantment) {
+        Map<Enchantment, Integer> newEnchantments = new HashMap<>(enchantments);
+        newEnchantments.remove(enchantment);
         return new EnchantmentList(newEnchantments, showInTooltip);
     }
 

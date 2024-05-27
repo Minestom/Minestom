@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public final class CreativeInventoryActionListener {
     public static void listener(ClientCreativeInventoryActionPacket packet, Player player) {
-        if (!player.isCreative()) return;
+        if (player.getGameMode() != GameMode.CREATIVE) return;
 
         ItemStack item = packet.item();
 
