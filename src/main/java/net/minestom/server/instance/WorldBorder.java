@@ -20,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
  * @param warningTime               the length of time the warning indicator
  *                                  is displayed
  * @param dimensionTeleportBoundary restricts the distance travelled when entering
- *                                  this world from another dimension (has no use)
+ *                                  this world from another dimension (should be at
+ *                                  least the diameter of the world border)
  */
 public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime, int dimensionTeleportBoundary) {
     public static final WorldBorder DEFAULT_BORDER = new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
@@ -30,6 +31,10 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      */
     public WorldBorder {
         Check.argCondition(diameter < 0, "Diameter should be >= 0");
+    }
+
+    public WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime) {
+        this(diameter, centerX, centerZ, warningDistance, warningTime, ServerFlag.WORLD_BORDER_SIZE);
     }
 
     @Contract(pure = true)
