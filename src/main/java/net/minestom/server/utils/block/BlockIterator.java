@@ -15,8 +15,8 @@ import java.util.NoSuchElementException;
  */
 public class BlockIterator implements Iterator<Point> {
     private final short[] signums = new short[3];
-    private final Vec end;
-    private final boolean smooth;
+    private Vec end;
+    private boolean smooth;
 
     private boolean foundEnd = false;
 
@@ -26,9 +26,9 @@ public class BlockIterator implements Iterator<Point> {
     double sideDistZ;
 
     //length of ray from one x or y-side to next x or y-side
-    private final double deltaDistX;
-    private final double deltaDistY;
-    private final double deltaDistZ;
+    private double deltaDistX;
+    private double deltaDistY;
+    private double deltaDistZ;
 
     //which box of the map we're in
     int mapX;
@@ -53,6 +53,15 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance, boolean smooth) {
+        reset(start, direction, yOffset, maxDistance, smooth);
+    }
+
+    public BlockIterator() {}
+
+    public void reset(@NotNull Vec start, @NotNull Vec direction, double yOffset, double maxDistance, boolean smooth) {
+        extraPoints.clear();
+        foundEnd = false;
+
         start = start.add(0, yOffset, 0);
 
         if (maxDistance != 0) end = start.add(direction.normalize().mul(maxDistance));
