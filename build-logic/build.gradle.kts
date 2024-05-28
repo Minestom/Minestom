@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     val indraVersion = "3.1.3"
-    implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "1.9.20")
+    implementation("org.jetbrains.kotlin", "kotlin-gradle-plugin", "2.0.0")
     implementation("net.kyori", "indra-common", indraVersion)
     implementation("net.kyori", "indra-common", indraVersion)
     implementation("net.kyori", "indra-publishing-sonatype", indraVersion)
