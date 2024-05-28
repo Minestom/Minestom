@@ -56,4 +56,14 @@ public interface Env {
     default void destroyInstance(Instance instance) {
         process().instance().unregisterInstance(instance);
     }
+
+    /**
+     * Cleanup the test environment
+     * @since 1.4.1
+     */
+    void cleanup();
+
+    static Env createInstance(ServerProcess process) {
+        return new EnvImpl(process);
+    }
 }
