@@ -15,6 +15,42 @@ dependencies {
     constraints {
         api(project(":testing"))
         api(rootProject)
+
+        // Logging
+        api(libs.bundles.logging)
+        // Libraries required for the terminal
+        api(libs.bundles.terminal)
+
+        // Performance improving libraries
+        api(libs.caffeine)
+        api(libs.fastutil)
+        api(libs.bundles.flare)
+
+        // Libraries
+        api(libs.gson)
+        api(libs.jcTools)
+        // Path finding
+        api(libs.hydrazine)
+
+        // Adventure, for user-interface
+        api(libs.bundles.adventure)
+
+        // Kotlin Libraries
+        api(libs.bundles.kotlin)
+
+        api(libs.maven.resolver)
+        api(libs.maven.connector)
+        api(libs.maven.transport.http)
+
+        // Minestom Data (From MinestomDataGenerator)
+        api(libs.minestomData)
+
+        // NBT parsing/manipulation/saving
+        api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
+        api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
+
+        // BStats
+        api(libs.bstats.base)
     }
 }
 javaPlatform {
