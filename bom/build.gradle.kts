@@ -1,6 +1,8 @@
+import java.net.URI
+
 plugins {
-    id("io.github.gradlebom.generator-plugin") version "1.0.0.Final"
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
+    `java-platform`
+    `maven-publish`
     signing
 }
 
@@ -11,11 +13,11 @@ repositories {
     mavenCentral()
     maven(url = "https://jitpack.io")
 }
-
-bomGenerator {
-    val version = rootProject.version as String
-    includeDependency("net.onelitefeather.microtus", "Microtus", version)
-    includeDependency("net.onelitefeather.microtus.testing", "testing", version)
+dependencies {
+    constraints {
+        api(project(":testing"))
+        api(rootProject)
+    }
 }
 
 signing {
@@ -29,8 +31,23 @@ signing {
 }
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        repositories {
+            maven {
+                name = "sonatype"
+                url = uri(if (version.toString().endsWith("SNAPSHOT")) {
+                    "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                } else {
+                    "https://s01.oss.sonatype.org/service/local/"
+                })
 
+                credentials {
+                    username = project.findProperty("sonatypeUsername") as String? ?: ""
+                    password = project.findProperty("sonatypePassword") as String? ?: ""
+                }
+            }
+        }
+        create<MavenPublication>("maven") {
+            from(components["javaPlatform"])
             pom {
                 name.set(project.name)
                 description.set("Bill of materials for Microtus projects.")
