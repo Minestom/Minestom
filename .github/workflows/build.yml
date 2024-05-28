@@ -32,7 +32,7 @@ jobs:
           git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
           ./gradlew jar
-      - name: Publish to Central via Tag
+      - name: Publish to Central via Build
         run: |
           ./gradlew publishToSonatype :testing:publishToSonatype closeAndReleaseSonatypeStagingRepository -PforceSign=true
         env:
