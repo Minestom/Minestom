@@ -1,5 +1,3 @@
-import java.net.URI
-
 plugins {
     `java-platform`
     `maven-publish`
@@ -18,6 +16,9 @@ dependencies {
         api(project(":testing"))
         api(rootProject)
     }
+}
+javaPlatform {
+    allowDependencies()
 }
 
 signing {
