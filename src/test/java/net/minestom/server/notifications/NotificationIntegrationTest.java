@@ -8,18 +8,18 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.annotations.EnvironmentTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
+@EnvironmentTest
 class NotificationIntegrationTest {
 
     @Test
-    void testBuilder(Env env) {
+    void testBuilder() {
         var notification = Notification.builder()
                 .icon(Material.ITEM_FRAME)
                 .title(Component.text("unit test"))

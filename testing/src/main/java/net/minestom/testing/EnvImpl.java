@@ -48,7 +48,8 @@ final class EnvImpl implements Env {
         return flexible;
     }
 
-    void cleanup() {
+    @Override
+    public void cleanup() {
         this.listeners.forEach(FlexibleListenerImpl::check);
     }
 
