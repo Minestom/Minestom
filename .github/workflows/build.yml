@@ -44,4 +44,6 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypePassword: "${{ secrets.SONATYPE_PASSWORD }}"
           ORG_GRADLE_PROJECT_onelitefeatherSigningKey: "${{ secrets.ONELITEFEATHER_GPG_KEY }}"
           ORG_GRADLE_PROJECT_onelitefeatherSigningPassword: "${{ secrets.ONELITEFEATHER_GPG_PASSWORD }}"
+          ORG_GRADLE_PROJECT_signingKey: "${{ secrets.ONELITEFEATHER_GPG_KEY }}"
+          ORG_GRADLE_PROJECT_signingPassword: "${{ secrets.ONELITEFEATHER_GPG_PASSWORD }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
