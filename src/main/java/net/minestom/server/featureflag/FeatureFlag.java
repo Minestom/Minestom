@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface FeatureFlag extends StaticProtocolObject permits FeatureFlagImpl {
+public sealed interface FeatureFlag extends StaticProtocolObject, FeatureFlags permits FeatureFlagImpl {
 
     /**
      * Returns the entity registry.
