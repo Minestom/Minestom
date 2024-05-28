@@ -1,0 +1,25 @@
+package net.minestom.testing.environment;
+
+import net.minestom.testing.Env;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.InvocationInterceptor;
+import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+/**
+ * Handles {@link Env} to clean the Test Environment after usage
+ * @since 1.4.2
+ */
+public final class TestEnvironmentCleaner implements InvocationInterceptor {
+    @Override
+    public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
+        invocation.proceed();
+        List<Object> arguments = invocationContext.getArguments();
+        arguments.stream().filter(Env.class::isInstance).findFirst().ifPresent(o -> {
+            Env env = (Env) o;
+            env.cleanup();
+        });
+    }
+}

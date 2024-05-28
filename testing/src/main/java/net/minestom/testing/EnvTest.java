@@ -10,11 +10,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 
+/**
+ * @deprecated As of Microtus 1.4.2, because this version don't support Non Env tests and env tests at the same time use {@link net.minestom.testing.annotations.EnvironmentTest} instead.
+ */
 @ExtendWith(EnvTest.EnvParameterResolver.class)
 @ExtendWith(EnvTest.EnvBefore.class)
 @ExtendWith(EnvTest.EnvCleaner.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
+@Deprecated(since = "1.4.2", forRemoval = true)
 public @interface EnvTest {
 
     final class EnvBefore implements BeforeEachCallback {
