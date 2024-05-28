@@ -27,7 +27,7 @@ dependencyResolutionManagement {
             version("caffeine", "3.1.8")
             version("fastutil", "8.5.12")
             version("flare", "2.0.1")
-            version("gson", "2.10.1")
+            version("gson", "2.11.0")
             version("jcTools", "4.0.2")
 
             // Test
