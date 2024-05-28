@@ -9,6 +9,7 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
+import net.minestom.server.featureflag.FeatureFlag;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.message.Messenger;
@@ -275,7 +276,7 @@ public final class ConnectionManager {
         CompletableFuture<Void> configFuture = AsyncUtils.runAsync(() -> {
             player.sendPacket(PluginMessagePacket.getBrandPacket());
 
-            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig, Set.of());
+            var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig, Set.of(FeatureFlag.VANILLA));
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
 
