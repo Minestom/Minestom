@@ -20,11 +20,6 @@ bomGenerator {
 }
 
 indra {
-    javaVersions {
-        target(21)
-        testWith(21)
-    }
-
     github("OneLiteFeatherNET", "Microtus") {
         ci(true)
         publishing(false)
