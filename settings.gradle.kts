@@ -8,7 +8,7 @@ dependencyResolutionManagement {
         create("libs") {
             // Important dependencies
             version("adventure", "4.17.0")
-            version("kotlin", "1.9.22")
+            version("kotlin", "2.0.0")
             version("data", "1.21-rv3")
             version("jetbrainsAnnotations", "24.1.0")
             version("logback", "1.4.5")
