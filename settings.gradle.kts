@@ -33,7 +33,7 @@ dependencyResolutionManagement {
             // Test
             version("junit-jupiter", "5.10.1")
             version("junit-platform", "1.10.1")
-            version("mockito", "5.9.0")
+            version("mockito", "5.12.0")
 
             // Code Generation
             version("javaPoet", "1.13.0")
