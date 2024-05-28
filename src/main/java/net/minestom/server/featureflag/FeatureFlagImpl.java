@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public record FeatureFlagImpl(Registry.FeatureFlagEntry registry, NamespaceID namespace, int id) implements FeatureFlag {
-    private static final Registry.DynamicContainer<FeatureFlag> CONTAINER = Registry.createDynamicContainer(Registry.Resource.FEATURE_FLAGS, FeatureFlagImpl::createImpl);
     private static final AtomicInteger INDEX = new AtomicInteger();
+    private static final Registry.DynamicContainer<FeatureFlag> CONTAINER = Registry.createDynamicContainer(Registry.Resource.FEATURE_FLAGS, FeatureFlagImpl::createImpl);
 
     private static FeatureFlagImpl createImpl(String namespace, Registry.Properties properties) {
         return new FeatureFlagImpl(Registry.featureFlag(namespace, properties));
