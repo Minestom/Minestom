@@ -1,8 +1,8 @@
 name: Build
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
 jobs:
   build:
     # Run on all label events (won't be duplicated) or all push events or on PR syncs not from the same repo
@@ -36,6 +36,7 @@ jobs:
         run: |
           ./gradlew publishToSonatype :testing:publishToSonatype closeAndReleaseSonatypeStagingRepository -PforceSign=true
         env:
+          TAG_VERSION: ${{ github.ref_name }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GPG_PRIVATE_KEY: ${{ secrets.ONELITEFEATHER_GPG_KEY }}

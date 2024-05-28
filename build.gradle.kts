@@ -8,17 +8,13 @@ plugins {
     signing
 }
 
-var baseVersion by extra("1.4.2")
-var snapshot by extra("-SNAPSHOT")
-
 group = "net.onelitefeather.microtus"
 
-
-version = "%s%s".format(Locale.ROOT, baseVersion, snapshot)
+version = System.getenv("TAG_VERSION") ?: "1.4.2-SNAPSHOT"
 
 allprojects {
     group = "net.onelitefeather.microtus"
-    version = "%s%s".format(Locale.ROOT, baseVersion, snapshot)
+    version = rootProject.version
     description = "Lightweight and multi-threaded Minecraft server implementation"
 }
 
