@@ -12,7 +12,7 @@ final class EntityCollision {
         double minimumRes = res != null ? res.res().res : Double.MAX_VALUE;
 
         if (instance == null) return null;
-        SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, null);
+        SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0);
 
         double closestDistance = minimumRes;
         Entity closestEntity = null;
