@@ -7,6 +7,12 @@ plugins {
 
 group = "net.onelitefeather.microtus"
 
+repositories {
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    mavenCentral()
+    maven(url = "https://jitpack.io")
+}
+
 bomGenerator {
     val version = rootProject.version as String
     includeDependency("net.onelitefeather.microtus", "Microtus", version)
