@@ -80,6 +80,7 @@ public class Main {
         commandManager.register(new WeatherCommand());
         commandManager.register(new PotionCommand());
         commandManager.register(new CookieCommand());
+        commandManager.register(new WorldBorderCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
