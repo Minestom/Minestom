@@ -11,7 +11,6 @@ dependencyResolutionManagement {
             version("adventure", "4.15.0")
             version("kotlin", "1.9.22")
             version("hydrazine", "1.7.2")
-            version("dependencyGetter", "v1.0.1")
             version("data", "1.20.4-rv10")
             version("hephaistos", "2.6.1")
             version("jetbrainsAnnotations", "24.1.0")
@@ -73,7 +72,6 @@ dependencyResolutionManagement {
 
             // Miscellaneous
             library("hydrazine", "com.github.MadMartian", "hydrazine-path-finding").versionRef("hydrazine")
-            library("dependencyGetter", "com.github.Minestom", "DependencyGetter").versionRef("dependencyGetter")
             library("minestomData", "net.onelitefeather.microtus", "data").versionRef("data")
             library("jetbrainsAnnotations", "org.jetbrains", "annotations").versionRef("jetbrainsAnnotations");
 
