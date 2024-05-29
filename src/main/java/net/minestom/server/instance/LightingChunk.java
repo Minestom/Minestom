@@ -112,7 +112,7 @@ public class LightingChunk extends DynamicChunk {
         this.freezeInvalidation = freezeInvalidation;
     }
 
-    public void invalidateSection(int coordinate) {
+    public void invalidateNeighborsSection(int coordinate) {
         if (freezeInvalidation) {
             return;
         }
@@ -143,8 +143,6 @@ public class LightingChunk extends DynamicChunk {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                if (neighborChunk == null) continue;
-
                 if (neighborChunk instanceof LightingChunk light) {
                     light.resendTimer.set(resendDelay);
                 }
@@ -162,7 +160,7 @@ public class LightingChunk extends DynamicChunk {
         // Invalidate neighbor chunks, since they can be updated by this block change
         int coordinate = ChunkUtils.getChunkCoordinate(y);
         if (chunkLoaded && !freezeInvalidation) {
-            invalidateSection(coordinate);
+            invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
             this.lightCache.invalidate();
         }
