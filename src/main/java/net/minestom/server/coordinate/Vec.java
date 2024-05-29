@@ -487,6 +487,12 @@ public record Vec(double x, double y, double z) implements Point {
                 Math.floor(z)
         );
 
+        Operator SIGNUM = (x, y, z) -> new Vec(
+                Math.signum(x),
+                Math.signum(y),
+                Math.signum(z)
+        );
+
         @NotNull Vec apply(double x, double y, double z);
     }
 
