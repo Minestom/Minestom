@@ -136,7 +136,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     public void invalidateResendDelay() {
-        if (!doneInit) {
+        if (!doneInit || freezeInvalidation) {
             return;
         }
 
