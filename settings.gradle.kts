@@ -9,7 +9,7 @@ dependencyResolutionManagement {
         create("libs") {
             // Important dependencies
             version("adventure", "4.15.0")
-            version("kotlin", "1.9.22")
+            version("kotlin", "2.0.0")
             version("hydrazine", "1.7.2")
             version("data", "1.20.4-rv10")
             version("hephaistos", "2.6.1")
