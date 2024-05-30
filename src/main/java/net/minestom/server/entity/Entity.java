@@ -1437,7 +1437,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         remove(true);
     }
 
-    public void remove(boolean permanent) {
+    protected void remove(boolean permanent) {
         if (isRemoved()) return;
         EventDispatcher.call(new EntityDespawnEvent(this));
         try {
