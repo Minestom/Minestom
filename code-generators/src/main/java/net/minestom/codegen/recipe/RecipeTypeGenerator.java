@@ -55,7 +55,7 @@ public class RecipeTypeGenerator extends MinestomCodeGenerator {
         recipeTypeEnum.addFields(
                 List.of(
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer("$T.fromEnum($T.class)", networkBufferCN, recipeTypeCN)
+                                .initializer("$T.Enum($T.class)", networkBufferCN, recipeTypeCN)
                                 .build(),
                         FieldSpec.builder(namespaceIdCN, "namespace", Modifier.PRIVATE, Modifier.FINAL).build()
                 )

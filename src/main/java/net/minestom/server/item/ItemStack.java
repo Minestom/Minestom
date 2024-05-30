@@ -14,6 +14,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +34,36 @@ import java.util.function.UnaryOperator;
 public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 
-    @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = ItemStackImpl.NETWORK_TYPE;
-    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = ItemStackImpl.STRICT_NETWORK_TYPE;
-    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = ItemStackImpl.NBT_TYPE;
+    @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+            if (value.isAir()) {
+                buffer.write(NetworkBuffer.VAR_INT, 0);
+                return;
+            }
+
+            buffer.write(NetworkBuffer.VAR_INT, value.amount());
+            buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+            buffer.write(DataComponentMap.PATCH_NETWORK_TYPE, ((ItemStackImpl) value).components());
+        }
+
+        @Override
+        public ItemStack read(@NotNull NetworkBuffer buffer) {
+            int amount = buffer.read(NetworkBuffer.VAR_INT);
+            if (amount <= 0) return ItemStack.AIR;
+            Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+            DataComponentMap components = buffer.read(DataComponentMap.PATCH_NETWORK_TYPE);
+            return ItemStackImpl.create(material, amount, components);
+        }
+    };
+    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
+        Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
+        return itemStack;
+    }, itemStack -> {
+        Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
+        return itemStack;
+    });
+    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
