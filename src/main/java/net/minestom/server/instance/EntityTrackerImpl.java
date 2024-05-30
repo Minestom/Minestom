@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -40,9 +41,11 @@ final class EntityTrackerImpl implements EntityTracker {
     public <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
                                             @NotNull Target<T> target, @Nullable Update<T> update) {
         EntityTrackerEntry newEntry = new EntityTrackerEntry(entity, point);
-        EntityTrackerEntry prevEntry = entriesByEntityId.putIfAbsent(entity.getEntityId(), newEntry);
-        if (prevEntry != null) return;
-        entriesByEntityUuid.put(entity.getUuid(), newEntry);
+
+        EntityTrackerEntry prevEntryWithId = entriesByEntityId.putIfAbsent(entity.getEntityId(), newEntry);
+        Check.stateCondition(prevEntryWithId == null, "There is already an entity registered with id {0}", entity.getEntityId());
+        EntityTrackerEntry prevEntryWithUuid = entriesByEntityUuid.putIfAbsent(entity.getUuid(), newEntry);
+        Check.stateCondition(prevEntryWithUuid == null, "There is already an entity registered with uuid {0}", entity.getUuid());
 
         final long index = getChunkIndex(point);
         for (TargetEntry<Entity> targetEntry : targetEntries) {
@@ -99,7 +102,8 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                         @NotNull Target<T> target, @Nullable Update<T> update) {
-        EntityTrackerEntry entry = entriesByEntityId.computeIfAbsent(entity.getEntityId(), id -> new EntityTrackerEntry(entity, entity.getPosition()));
+        EntityTrackerEntry entry = entriesByEntityId.get(entity.getEntityId());
+        if (entry == null) return;
         Point oldPoint = entry.getLastPosition();
         entry.setLastPosition(newPoint);
         if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
@@ -130,7 +134,7 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public void changeUuid(@NotNull Entity entity, UUID oldUuid) {
         entriesByEntityUuid.remove(oldUuid);
-        entriesByEntityUuid.put(entity.getUuid(), new EntityTrackerEntry(entity));
+        entriesByEntityUuid.put(entity.getUuid(), new EntityTrackerEntry(entity, entity.getPosition()));
     }
 
     @Override
@@ -209,7 +213,7 @@ final class EntityTrackerImpl implements EntityTracker {
         private final Entity entity;
         private Point lastPosition;
 
-        private EntityTrackerEntry(Entity entity, Point lastPosition) {
+        private EntityTrackerEntry(Entity entity, @Nullable Point lastPosition) {
             this.entity = entity;
             this.lastPosition = lastPosition;
         }
@@ -218,6 +222,7 @@ final class EntityTrackerImpl implements EntityTracker {
             return entity;
         }
 
+        @Nullable
         public Point getLastPosition() {
             return lastPosition;
         }
