@@ -173,6 +173,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Invalidate the chunk caches</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidateNeighborsSection(int)" class="member-name-link">invalidateNeighborsSection</a><wbr>(int&nbsp;coordinate)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidateResendDelay()" class="member-name-link">invalidateResendDelay</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onGenerate()" class="member-name-link">onGenerate</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when the chunk generator has finished generating the chunk.</div>
@@ -200,8 +206,11 @@ loadScripts(document, 'script');</script>
  <a href="block/BlockHandler.Destroy.html" title="class in net.minestom.server.instance.block">BlockHandler.Destroy</a>&nbsp;destroy)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFreezeInvalidation(boolean)" class="member-name-link">setFreezeInvalidation</a><wbr>(boolean&nbsp;freezeInvalidation)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes a chunk tick.</div>
 </div>
 </div>
@@ -272,6 +281,24 @@ loadScripts(document, 'script');</script>
 <dt>Overrides:</dt>
 <dd><code><a href="DynamicChunk.html#invalidate()">invalidate</a></code>&nbsp;in class&nbsp;<code><a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></code></dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setFreezeInvalidation(boolean)">
+<h3>setFreezeInvalidation</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setFreezeInvalidation</span><wbr><span class="parameters">(boolean&nbsp;freezeInvalidation)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="invalidateNeighborsSection(int)">
+<h3>invalidateNeighborsSection</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">invalidateNeighborsSection</span><wbr><span class="parameters">(int&nbsp;coordinate)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="invalidateResendDelay()">
+<h3>invalidateResendDelay</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">invalidateResendDelay</span>()</div>
 </section>
 </li>
 <li>
