@@ -224,7 +224,7 @@ final class SkyLight implements Light {
         this.content = copyArray.clone();
         this.contentPropagation = this.content;
         this.isValidBorders.set(true);
-        this.needsSend.set(false);
+        this.needsSend.set(true);
     }
 
     @Override

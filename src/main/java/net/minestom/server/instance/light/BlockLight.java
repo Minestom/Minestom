@@ -24,8 +24,8 @@ final class BlockLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private AtomicBoolean isValidBorders = new AtomicBoolean(true);
-    private AtomicBoolean needsSend = new AtomicBoolean(false);
+    private final AtomicBoolean isValidBorders = new AtomicBoolean(true);
+    private final AtomicBoolean needsSend = new AtomicBoolean(false);
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
@@ -202,7 +202,7 @@ final class BlockLight implements Light {
         this.content = copyArray.clone();
         this.contentPropagation = this.content;
         this.isValidBorders.set(true);
-        this.needsSend.set(false);
+        this.needsSend.set(true);
     }
 
     @Override

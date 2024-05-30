@@ -191,7 +191,15 @@ public class LightingChunk extends DynamicChunk {
                 if (neighborChunk == null) continue;
 
                 if (neighborChunk instanceof LightingChunk light) {
-                    if (light.doneInit) light.resendTimer.set(20);
+                    if (light.doneInit) {
+                        light.resendTimer.set(20);
+                        light.invalidate();
+
+                        for (int section = minSection; section < maxSection; section++) {
+                            light.getSection(section).blockLight().invalidate();
+                            light.getSection(section).skyLight().invalidate();
+                        }
+                    }
                 }
             }
         }
@@ -316,13 +324,6 @@ public class LightingChunk extends DynamicChunk {
 
         if (doneInit && resendTimer.get() > 0) {
             if (resendTimer.decrementAndGet() == 0) {
-                invalidate();
-
-                for (int section = minSection; section < maxSection; section++) {
-                    getSection(section).blockLight().invalidate();
-                    getSection(section).skyLight().invalidate();
-                }
-
                 sendLighting();
             }
         }
@@ -519,5 +520,10 @@ public class LightingChunk extends DynamicChunk {
         lightingChunk.sections = sections.stream().map(Section::clone).toList();
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
+    }
+
+    @Override
+    public boolean isLoaded() {
+        return super.isLoaded() && doneInit;
     }
 }
