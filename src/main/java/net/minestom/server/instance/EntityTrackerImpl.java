@@ -39,7 +39,7 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
                                             @NotNull Target<T> target, @Nullable Update<T> update) {
-        EntityTrackerEntry newEntry = new EntityTrackerEntry(entity);
+        EntityTrackerEntry newEntry = new EntityTrackerEntry(entity, point);
         EntityTrackerEntry prevEntry = entriesByEntityId.putIfAbsent(entity.getEntityId(), newEntry);
         if (prevEntry != null) return;
         entriesByEntityUuid.put(entity.getUuid(), newEntry);
@@ -99,7 +99,7 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                         @NotNull Target<T> target, @Nullable Update<T> update) {
-        EntityTrackerEntry entry = entriesByEntityId.computeIfAbsent(entity.getEntityId(), id -> new EntityTrackerEntry(entity));
+        EntityTrackerEntry entry = entriesByEntityId.computeIfAbsent(entity.getEntityId(), id -> new EntityTrackerEntry(entity, entity.getPosition()));
         Point oldPoint = entry.getLastPosition();
         entry.setLastPosition(newPoint);
         if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
@@ -209,8 +209,9 @@ final class EntityTrackerImpl implements EntityTracker {
         private final Entity entity;
         private Point lastPosition;
 
-        private EntityTrackerEntry(Entity entity) {
+        private EntityTrackerEntry(Entity entity, Point lastPosition) {
             this.entity = entity;
+            this.lastPosition = lastPosition;
         }
 
         public Entity getEntity() {
