@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
@@ -24,6 +25,9 @@ import java.util.function.BiPredicate;
  * Implementations are expected to be immutable.
  */
 public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks permits BlockImpl {
+
+    @NotNull
+    NetworkBuffer.Type<Block> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(Block::fromStateId, Block::stateId);
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
@@ -145,8 +149,8 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
         return registry().id();
     }
 
-    default short stateId() {
-        return (short) registry().stateId();
+    default int stateId() {
+        return registry().stateId();
     }
 
     default boolean isAir() {
@@ -181,7 +185,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
         return fromNamespaceId(namespaceID.asString());
     }
 
-    static @Nullable Block fromStateId(short stateId) {
+    static @Nullable Block fromStateId(int stateId) {
         return BlockImpl.getState(stateId);
     }
 

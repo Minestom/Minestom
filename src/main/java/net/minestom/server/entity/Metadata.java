@@ -9,6 +9,7 @@ import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
@@ -82,8 +83,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_OPT_UUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Integer> BlockState(@NotNull Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, NetworkBuffer.BLOCK_STATE);
+    public static Entry<Block> BlockState(@NotNull Block value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, Block.NETWORK_TYPE);
     }
 
     public static Entry<Integer> OptBlockState(@Nullable Integer value) {
@@ -106,21 +107,11 @@ public final class Metadata {
     }
 
     public static Entry<Particle> Particle(@NotNull Particle particle) {
-        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, NetworkBuffer.PARTICLE);
+        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, Particle.NETWORK_TYPE);
     }
 
     public static Entry<List<Particle>> ParticleList(@NotNull List<Particle> particles) {
-        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, List<Particle> value) {
-                buffer.writeCollection(NetworkBuffer.PARTICLE, value);
-            }
-
-            @Override
-            public List<Particle> read(@NotNull NetworkBuffer buffer) {
-                return buffer.readCollection(NetworkBuffer.PARTICLE, Integer.MAX_VALUE);
-            }
-        });
+        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, Particle.NETWORK_TYPE.list(Short.MAX_VALUE));
     }
 
     public static Entry<int[]> VillagerData(int villagerType, int villagerProfession, int level) {

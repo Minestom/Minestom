@@ -6,13 +6,14 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record RespawnPacket(
-        int dimensionType, String worldName,
-        long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-        boolean isDebug, boolean isFlat, WorldPos deathLocation,
+        int dimensionType, @NotNull String worldName,
+        long hashedSeed, @NotNull GameMode gameMode, @NotNull GameMode previousGameMode,
+        boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
         int portalCooldown, int copyData
 ) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
@@ -25,7 +26,7 @@ public record RespawnPacket(
                 reader.read(LONG), GameMode.fromId(reader.read(BYTE)),
                 GameMode.fromId(reader.read(BYTE)),
                 reader.read(BOOLEAN), reader.read(BOOLEAN),
-                reader.read(DEATH_LOCATION),
+                reader.readOptional(WorldPos.NETWORK_TYPE),
                 reader.read(VAR_INT), reader.read(BYTE));
     }
 
@@ -38,7 +39,7 @@ public record RespawnPacket(
         writer.write(BYTE, previousGameMode.id());
         writer.write(BOOLEAN, isDebug);
         writer.write(BOOLEAN, isFlat);
-        writer.write(DEATH_LOCATION, deathLocation);
+        writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
         writer.write(VAR_INT, portalCooldown);
         writer.write(BYTE, (byte) copyData);
     }

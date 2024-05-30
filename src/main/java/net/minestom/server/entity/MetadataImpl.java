@@ -41,7 +41,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_OPT_BLOCK_POSITION, OptBlockPosition(null));
         EMPTY_VALUES.set(TYPE_DIRECTION, Direction(Direction.DOWN));
         EMPTY_VALUES.set(TYPE_OPT_UUID, OptUUID(null));
-        EMPTY_VALUES.set(TYPE_BLOCKSTATE, BlockState(Block.AIR.id()));
+        EMPTY_VALUES.set(TYPE_BLOCKSTATE, BlockState(Block.AIR));
         EMPTY_VALUES.set(TYPE_OPT_BLOCKSTATE, OptBlockState(null));
         EMPTY_VALUES.set(TYPE_NBT, NBT(EndBinaryTag.endBinaryTag()));
         EMPTY_VALUES.set(TYPE_PARTICLE, Particle(Particle.DUST));

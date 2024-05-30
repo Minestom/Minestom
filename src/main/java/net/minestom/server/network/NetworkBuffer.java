@@ -5,8 +5,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.network.packet.server.play.data.WorldPos;
-import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
@@ -58,13 +56,10 @@ public final class NetworkBuffer {
     }
 
     // METADATA
-    public static final Type<Integer> BLOCK_STATE = new NetworkBufferTypeImpl.BlockStateType();
     public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
-    public static final Type<WorldPos> DEATH_LOCATION = new NetworkBufferTypeImpl.DeathLocationType();
     public static final Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
     public static final Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
     public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
-    public static final Type<Particle> PARTICLE = new NetworkBufferTypeImpl.ParticleType();
 
     public static final Type<@Nullable Component> OPT_CHAT = Optional(COMPONENT);
     public static final Type<@Nullable Point> OPT_BLOCK_POSITION = Optional(BLOCK_POSITION);
