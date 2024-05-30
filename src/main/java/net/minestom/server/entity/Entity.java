@@ -1453,11 +1453,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the level of the specified effect.
      *
      * @param effect the effect type
-     * @return the effect level, 0 if not found
+     * @return the effect level, -1 if not found
      */
     public int getEffectLevel(@NotNull PotionEffect effect) {
         TimedPotion timedPotion = getEffect(effect);
-        return timedPotion == null ? 0 : timedPotion.potion().amplifier();
+        return timedPotion == null ? -1 : timedPotion.potion().amplifier();
     }
 
     /**
