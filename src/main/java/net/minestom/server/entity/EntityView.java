@@ -166,7 +166,7 @@ final class EntityView {
         }
 
         public void register(T entity) {
-            assert entity.getInstance() != null : "Unregistered entity shouldn't be registered as viewer";
+            assert entity.getInstance() != null : "Instance-less entity shouldn't be registered as viewer";
             this.bitSet.add(entity.getEntityId());
         }
 
