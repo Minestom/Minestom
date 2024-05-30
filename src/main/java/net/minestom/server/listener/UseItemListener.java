@@ -22,7 +22,10 @@ public class UseItemListener {
         ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();
 
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, material.isFood() ? player.getDefaultEatingTime() : 0);
+
+        final Food food = itemStack.get(ItemComponent.FOOD);
+        int defaultEatingTime = food != null ? food.eatDurationTicks() : PotionContents.POTION_DRINK_TIME;
+        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, defaultEatingTime);
         EventDispatcher.call(useItemEvent);
 
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
@@ -31,9 +34,6 @@ public class UseItemListener {
             playerInventory.update();
             return;
         }
-
-        itemStack = useItemEvent.getItemStack();
-        final Material material = itemStack.material();
 
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
@@ -65,9 +65,6 @@ public class UseItemListener {
         } else if (itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
-            // Eating code, contains the eating time customisation
-            final Food food = itemStack.get(ItemComponent.FOOD);
-            int defaultEatingTime = food != null ? food.eatDurationTicks() : PotionContents.POTION_DRINK_TIME;
             PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, itemUseTime);
             EventDispatcher.call(playerPreEatEvent);
             if (playerPreEatEvent.isCancelled()) return;
