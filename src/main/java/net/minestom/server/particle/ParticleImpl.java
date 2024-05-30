@@ -4,14 +4,13 @@ import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-sealed class ParticleImpl implements Particle permits BlockMarkerParticle, BlockParticle, DustColorTransitionParticle, DustParticle, DustPillarParticle, EntityEffectParticle, FallingDustParticle, ItemParticle, SculkChargeParticle, ShriekParticle, VibrationParticle {
+final class ParticleImpl {
     private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
             (namespace, properties) -> defaultParticle(NamespaceID.from(namespace), properties.getInt("id")));
 
@@ -31,53 +30,24 @@ sealed class ParticleImpl implements Particle permits BlockMarkerParticle, Block
         return CONTAINER.values();
     }
 
-    private final NamespaceID namespace;
-    private final int id;
-
-    ParticleImpl(@NotNull NamespaceID namespace, int id) {
-        this.namespace = namespace;
-        this.id = id;
-    }
-
-    @Override
-    public @NotNull NamespaceID namespace() {
-        return namespace;
-    }
-
-    @Override
-    public int id() {
-        return id;
-    }
-
-    @Override
-    public @NotNull ParticleImpl readData(@NotNull NetworkBuffer reader) {
-        return this;
-    }
-
-    @Override
-    public void writeData(@NotNull NetworkBuffer writer) {
-    }
-
-    @Override
-    public @NotNull String toString() {
-        return name();
-    }
-
     private static Particle defaultParticle(@NotNull NamespaceID namespace, int id) {
         return switch (namespace.asString()) {
-            case "minecraft:block" -> new BlockParticle(namespace, id, Block.STONE);
-            case "minecraft:block_marker" -> new BlockMarkerParticle(namespace, id, Block.STONE);
-            case "minecraft:falling_dust" -> new FallingDustParticle(namespace, id, Block.STONE);
-            case "minecraft:dust_pillar" -> new DustPillarParticle(namespace, id, Block.STONE);
-            case "minecraft:dust" -> new DustParticle(namespace, id, new Color(255, 255, 255), 1);
-            case "minecraft:dust_color_transition" -> new DustColorTransitionParticle(namespace, id, new Color(255, 255, 255),
+            case "minecraft:block" -> new Particle.Block(namespace, id, Block.STONE);
+            case "minecraft:block_marker" -> new Particle.BlockMarker(namespace, id, Block.STONE);
+            case "minecraft:falling_dust" -> new Particle.FallingDust(namespace, id, Block.STONE);
+            case "minecraft:dust_pillar" -> new Particle.DustPillar(namespace, id, Block.STONE);
+            case "minecraft:dust" -> new Particle.Dust(namespace, id, new Color(255, 255, 255), 1);
+            case "minecraft:dust_color_transition" -> new Particle.DustColorTransition(namespace, id, new Color(255, 255, 255),
                     1, new Color(255, 255, 255));
-            case "minecraft:sculk_charge" -> new SculkChargeParticle(namespace, id, 0);
-            case "minecraft:item" -> new ItemParticle(namespace, id, ItemStack.AIR);
-            case "minecraft:vibration" -> new VibrationParticle(namespace, id, VibrationParticle.SourceType.BLOCK, Vec.ZERO, 0, 0, 0);
-            case "minecraft:shriek" -> new ShriekParticle(namespace, id, 0);
-            case "minecraft:entity_effect" -> new EntityEffectParticle(namespace, id, new Color(0));
-            default -> new ParticleImpl(namespace, id);
+            case "minecraft:sculk_charge" -> new Particle.SculkCharge(namespace, id, 0);
+            case "minecraft:item" -> new Particle.Item(namespace, id, ItemStack.AIR);
+            case "minecraft:vibration" -> new Particle.Vibration(namespace, id, Particle.Vibration.SourceType.BLOCK, Vec.ZERO, 0, 0, 0);
+            case "minecraft:shriek" -> new Particle.Shriek(namespace, id, 0);
+            case "minecraft:entity_effect" -> new Particle.EntityEffect(namespace, id, new Color(0));
+            default -> new Particle.Simple(namespace, id);
         };
+    }
+
+    private ParticleImpl() {
     }
 }

@@ -65,14 +65,14 @@ public class ParticleGenerator extends MinestomCodeGenerator {
             ClassName fieldCN = particleCN;
             if (value.get("hasData").getAsBoolean()) {
                 // This particle has data, use the particle implementation class
-                fieldCN = ClassName.get("net.minestom.server.particle",
-                        toPascalCase(key.replace("minecraft:", "")) + "Particle");
+                fieldCN = ClassName.get("net.minestom.server.particle", "Particle",
+                        toPascalCase(key.replace("minecraft:", "")));
             }
 
             String cast = "";
             if (!fieldCN.equals(particleCN)) {
                 // This is one of the unique particle classes with particle data, cast this
-                cast = "(" + fieldCN.simpleName() + ") ";
+                cast = "(Particle." + fieldCN.simpleName() + ") ";
             }
 
             String fieldName = key.replace("minecraft:", "").toUpperCase();
