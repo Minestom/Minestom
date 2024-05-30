@@ -2,7 +2,10 @@ package net.minestom.codegen.particle;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,26 +16,13 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ParticleGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticleGenerator.class);
-
-    // Maintenance note: all you should need to do is add/remove an entry on this map
-    private static final Map<String, ClassName> PARTICLE_DATA_CLASS_NAMES = Map.of(
-            "minecraft:block", ClassName.get("net.minestom.server.particle", "BlockParticle"),
-            "minecraft:block_marker", ClassName.get("net.minestom.server.particle", "BlockParticle"),
-            "minecraft:dust", ClassName.get("net.minestom.server.particle", "DustParticle"),
-            "minecraft:dust_color_transition", ClassName.get("net.minestom.server.particle", "DustColorTransitionParticle"),
-            "minecraft:falling_dust", ClassName.get("net.minestom.server.particle", "BlockParticle"),
-            "minecraft:sculk_charge", ClassName.get("net.minestom.server.particle", "SculkChargeParticle"),
-            "minecraft:item", ClassName.get("net.minestom.server.particle", "ItemParticle"),
-            "minecraft:vibration", ClassName.get("net.minestom.server.particle", "VibrationParticle"),
-            "minecraft:shriek", ClassName.get("net.minestom.server.particle", "ShriekParticle")
-    );
 
     private final InputStream particlesFile;
     private final File outputFolder;
@@ -54,9 +44,6 @@ public class ParticleGenerator extends MinestomCodeGenerator {
             return;
         }
 
-        // Notify us if not all unique particle data key ids were found and stop the generation
-        List<String> remainingParticleDataClasses = new ArrayList<>(PARTICLE_DATA_CLASS_NAMES.keySet());
-
         // Important classes we use alot
         ClassName particleCN = ClassName.get("net.minestom.server.particle", "Particle");
         ClassName particleImplCN = ClassName.get("net.minestom.server.particle", "ParticleImpl");
@@ -73,12 +60,19 @@ public class ParticleGenerator extends MinestomCodeGenerator {
 
         for (Map.Entry<String, JsonElement> particleIdObjectEntry : orderedParticleIdObjectEntries) {
             final String key = particleIdObjectEntry.getKey();
-            ClassName fieldCN = PARTICLE_DATA_CLASS_NAMES.getOrDefault(key, particleCN);
+            final JsonObject value = particleIdObjectEntry.getValue().getAsJsonObject();
+
+            ClassName fieldCN = particleCN;
+            if (value.get("hasData").getAsBoolean()) {
+                // This particle has data, use the particle implementation class
+                fieldCN = ClassName.get("net.minestom.server.particle",
+                        toPascalCase(key.replace("minecraft:", "")) + "Particle");
+            }
+
             String cast = "";
             if (!fieldCN.equals(particleCN)) {
                 // This is one of the unique particle classes with particle data, cast this
                 cast = "(" + fieldCN.simpleName() + ") ";
-                remainingParticleDataClasses.remove(key);
             }
 
             String fieldName = key.replace("minecraft:", "").toUpperCase();
@@ -88,19 +82,18 @@ public class ParticleGenerator extends MinestomCodeGenerator {
                     .initializer("$L$T.get($S)", cast, particleImplCN, key).build());
         }
 
-        if (!remainingParticleDataClasses.isEmpty()) {
-            remainingParticleDataClasses.forEach(key -> {
-                LOGGER.error("Could not find unique particle data key: " + key + " in particles.json, was this key name changed?");
-            });
-            LOGGER.error("Stopped code generation for particles.");
-            return;
-        }
-
         writeFiles(
                 List.of(JavaFile.builder("net.minestom.server.particle", particlesInterface.build())
                         .indent("    ")
                         .skipJavaLangImports(true)
                         .build()),
                 outputFolder);
+    }
+
+    private static String toPascalCase(@NotNull String input) {
+        String camelCase = Pattern.compile("_([a-z])")
+                .matcher(input)
+                .replaceAll(m -> m.group(1).toUpperCase());
+        return camelCase.substring(0, 1).toUpperCase() + camelCase.substring(1);
     }
 }
