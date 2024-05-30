@@ -5,7 +5,7 @@ import net.minestom.server.entity.metadata.other.AreaEffectCloudMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.particle.*;
+import net.minestom.server.particle.Particle;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,7 +30,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        DustParticle gotData = (DustParticle) gotParticle;
+        Particle.Dust gotData = (Particle.Dust) gotParticle;
         assertNotNull(gotData);
         assert gotData.color().red() == r;
         assert gotData.color().green() == g;
@@ -62,7 +62,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        DustColorTransitionParticle gotData = (DustColorTransitionParticle) gotParticle;
+        Particle.DustColorTransition gotData = (Particle.DustColorTransition) gotParticle;
         assertNotNull(gotData);
         assert gotData.color().red() == r;
         assert gotData.color().green() == g;
@@ -85,7 +85,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        BlockParticle gotBlock = (BlockParticle) gotParticle;
+        Particle.Block gotBlock = (Particle.Block) gotParticle;
         assert gotBlock.block() == block;
     }
 
@@ -101,7 +101,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        BlockMarkerParticle gotBlock = (BlockMarkerParticle) gotParticle;
+        Particle.BlockMarker gotBlock = (Particle.BlockMarker) gotParticle;
         assert gotBlock.block() == block;
     }
 
@@ -116,7 +116,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        ItemParticle gotBlock = (ItemParticle) gotParticle;
+        Particle.Item gotBlock = (Particle.Item) gotParticle;
         assert gotBlock.item().material() == Material.ACACIA_LOG;
     }
 
@@ -131,7 +131,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        SculkChargeParticle gotBlock = (SculkChargeParticle) gotParticle;
+        Particle.SculkCharge gotBlock = (Particle.SculkCharge) gotParticle;
         assert gotBlock.roll() == 3;
     }
 }
