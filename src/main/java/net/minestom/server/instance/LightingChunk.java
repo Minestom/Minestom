@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
@@ -41,7 +40,6 @@ public class LightingChunk extends DynamicChunk {
     final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
     private LightData lightData;
 
-    boolean chunkLoaded = false;
     private int highestBlock;
     private boolean freezeInvalidation = false;
 
@@ -159,7 +157,7 @@ public class LightingChunk extends DynamicChunk {
 
         // Invalidate neighbor chunks, since they can be updated by this block change
         int coordinate = ChunkUtils.getChunkCoordinate(y);
-        if (chunkLoaded && !freezeInvalidation) {
+        if (doneInit && !freezeInvalidation) {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
             this.lightCache.invalidate();
@@ -173,7 +171,6 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     protected void onLoad() {
-        chunkLoaded = true;
         doneInit = true;
     }
 
@@ -188,27 +185,16 @@ public class LightingChunk extends DynamicChunk {
 
         invalidate();
 
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                    if (neighborChunk == null) continue;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (neighborChunk == null) continue;
 
-                    if (neighborChunk instanceof LightingChunk light) {
-                        for (int section = light.minSection; section < light.maxSection; section++) {
-                            light.getSection(section).blockLight().invalidate();
-                            light.getSection(section).skyLight().invalidate();
-                        }
-
-                        light.invalidate();
-
-                        light.resendTimer.set(20);
-                    }
+                if (neighborChunk instanceof LightingChunk light) {
+                    if (light.doneInit) light.resendTimer.set(20);
                 }
             }
-        });
-
-        doneInit = true;
+        }
     }
 
     // Lazy compute occlusion map
@@ -330,6 +316,13 @@ public class LightingChunk extends DynamicChunk {
 
         if (doneInit && resendTimer.get() > 0) {
             if (resendTimer.decrementAndGet() == 0) {
+                invalidate();
+
+                for (int section = minSection; section < maxSection; section++) {
+                    getSection(section).blockLight().invalidate();
+                    getSection(section).skyLight().invalidate();
+                }
+
                 sendLighting();
             }
         }
@@ -349,11 +342,16 @@ public class LightingChunk extends DynamicChunk {
             var section = chunk.getSection(point.blockY());
             responseChunks.add(chunk);
 
-            var light = type == LightType.BLOCK ? section.blockLight() : section.skyLight();
+            Light light = switch(type) {
+                case BLOCK -> section.blockLight();
+                case SKY -> section.skyLight();
+            };
 
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
-                if (queueType == QueueType.INTERNAL) light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ());
-                else light.calculateExternal(instance, chunk, point.blockY());
+                switch (queueType) {
+                    case INTERNAL -> light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ());
+                    case EXTERNAL -> light.calculateExternal(instance, chunk, point.blockY());
+                }
 
                 sections.add(light);
 
@@ -461,7 +459,8 @@ public class LightingChunk extends DynamicChunk {
 
                     if (sectionPosition.blockY() < chunkCheck.getMaxSection() && sectionPosition.blockY() >= chunkCheck.getMinSection()) {
                         Section s = chunkCheck.getSection(sectionPosition.blockY());
-                        if (!s.blockLight().requiresUpdate() && !s.skyLight().requiresUpdate()) continue;
+                        if (type == LightType.BLOCK && !s.blockLight().requiresUpdate()) continue;
+                        if (type == LightType.SKY && !s.skyLight().requiresUpdate()) continue;
 
                         collected.add(sectionPosition);
                     }
