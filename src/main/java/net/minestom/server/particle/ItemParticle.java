@@ -25,11 +25,11 @@ public final class ItemParticle extends ParticleImpl {
 
     @Override
     public @NotNull ItemParticle readData(@NotNull NetworkBuffer reader) {
-        return this.withItem(reader.read(NetworkBuffer.ITEM));
+        return this.withItem(reader.read(ItemStack.NETWORK_TYPE));
     }
 
     @Override
     public void writeData(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.ITEM, item);
+        writer.write(ItemStack.NETWORK_TYPE, item);
     }
 }

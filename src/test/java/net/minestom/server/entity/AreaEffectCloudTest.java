@@ -5,11 +5,10 @@ import net.minestom.server.entity.metadata.other.AreaEffectCloudMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AreaEffectCloudTest {
     @Test
@@ -102,7 +101,7 @@ public class AreaEffectCloudTest {
         var gotParticle = meta.getParticle();
         assert gotParticle == particle;
 
-        BlockParticle gotBlock = (BlockParticle) gotParticle;
+        BlockMarkerParticle gotBlock = (BlockMarkerParticle) gotParticle;
         assert gotBlock.block() == block;
     }
 
