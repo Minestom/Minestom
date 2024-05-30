@@ -9,11 +9,9 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.Collection;
 
-sealed class ParticleImpl implements Particle permits BlockParticle, DustParticle, DustColorTransitionParticle,
-        SculkChargeParticle, ItemParticle, VibrationParticle, ShriekParticle {
+sealed class ParticleImpl implements Particle permits BlockMarkerParticle, BlockParticle, DustColorTransitionParticle, DustParticle, DustPillarParticle, EntityEffectParticle, FallingDustParticle, ItemParticle, SculkChargeParticle, ShriekParticle, VibrationParticle {
     private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
             (namespace, properties) -> defaultParticle(NamespaceID.from(namespace), properties.getInt("id")));
 
@@ -67,7 +65,10 @@ sealed class ParticleImpl implements Particle permits BlockParticle, DustParticl
 
     private static Particle defaultParticle(@NotNull NamespaceID namespace, int id) {
         return switch (namespace.asString()) {
-            case "minecraft:block", "minecraft:block_marker", "minecraft:falling_dust" -> new BlockParticle(namespace, id, Block.STONE);
+            case "minecraft:block" -> new BlockParticle(namespace, id, Block.STONE);
+            case "minecraft:block_marker" -> new BlockMarkerParticle(namespace, id, Block.STONE);
+            case "minecraft:falling_dust" -> new FallingDustParticle(namespace, id, Block.STONE);
+            case "minecraft:dust_pillar" -> new DustPillarParticle(namespace, id, Block.STONE);
             case "minecraft:dust" -> new DustParticle(namespace, id, new Color(255, 255, 255), 1);
             case "minecraft:dust_color_transition" -> new DustColorTransitionParticle(namespace, id, new Color(255, 255, 255),
                     1, new Color(255, 255, 255));
@@ -75,6 +76,7 @@ sealed class ParticleImpl implements Particle permits BlockParticle, DustParticl
             case "minecraft:item" -> new ItemParticle(namespace, id, ItemStack.AIR);
             case "minecraft:vibration" -> new VibrationParticle(namespace, id, VibrationParticle.SourceType.BLOCK, Vec.ZERO, 0, 0, 0);
             case "minecraft:shriek" -> new ShriekParticle(namespace, id, 0);
+            case "minecraft:entity_effect" -> new EntityEffectParticle(namespace, id, new Color(0));
             default -> new ParticleImpl(namespace, id);
         };
     }

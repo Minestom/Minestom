@@ -8,7 +8,7 @@ interface Particles {
 
     BlockParticle BLOCK = (BlockParticle) ParticleImpl.get("minecraft:block");
 
-    BlockParticle BLOCK_MARKER = (BlockParticle) ParticleImpl.get("minecraft:block_marker");
+    BlockMarkerParticle BLOCK_MARKER = (BlockMarkerParticle) ParticleImpl.get("minecraft:block_marker");
 
     Particle BUBBLE = ParticleImpl.get("minecraft:bubble");
 
@@ -44,7 +44,7 @@ interface Particles {
 
     Particle END_ROD = ParticleImpl.get("minecraft:end_rod");
 
-    Particle ENTITY_EFFECT = ParticleImpl.get("minecraft:entity_effect");
+    EntityEffectParticle ENTITY_EFFECT = (EntityEffectParticle) ParticleImpl.get("minecraft:entity_effect");
 
     Particle EXPLOSION_EMITTER = ParticleImpl.get("minecraft:explosion_emitter");
 
@@ -60,7 +60,7 @@ interface Particles {
 
     Particle SONIC_BOOM = ParticleImpl.get("minecraft:sonic_boom");
 
-    BlockParticle FALLING_DUST = (BlockParticle) ParticleImpl.get("minecraft:falling_dust");
+    FallingDustParticle FALLING_DUST = (FallingDustParticle) ParticleImpl.get("minecraft:falling_dust");
 
     Particle FIREWORK = ParticleImpl.get("minecraft:firework");
 
@@ -214,7 +214,7 @@ interface Particles {
 
     Particle VAULT_CONNECTION = ParticleImpl.get("minecraft:vault_connection");
 
-    Particle DUST_PILLAR = ParticleImpl.get("minecraft:dust_pillar");
+    DustPillarParticle DUST_PILLAR = (DustPillarParticle) ParticleImpl.get("minecraft:dust_pillar");
 
     Particle OMINOUS_SPAWNING = ParticleImpl.get("minecraft:ominous_spawning");
 

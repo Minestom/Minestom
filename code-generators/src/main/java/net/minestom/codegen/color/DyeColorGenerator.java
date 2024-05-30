@@ -58,7 +58,7 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
         dyeColorEnum.addFields(
                 List.of(
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer("$T.fromEnum($T.class)", networkBufferCN, dyeColorCN)
+                                .initializer("$T.Enum($T.class)", networkBufferCN, dyeColorCN)
                                 .build(),
                         FieldSpec.builder(binaryTagSerializerTypeCN, "NBT_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.fromEnumStringable($T.class)", binaryTagSerializerCN, dyeColorCN)

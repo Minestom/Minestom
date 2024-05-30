@@ -46,7 +46,7 @@ public record ParticlePacket(@NotNull Particle particle, boolean longDistance, d
         Particle particle = Particle.fromId(reader.read(VAR_INT));
         Objects.requireNonNull(particle);
 
-        return new ParticlePacket(particle.readData(reader), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, data);
+        return new ParticlePacket(particle.readData(reader), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
     }
 
     @Override

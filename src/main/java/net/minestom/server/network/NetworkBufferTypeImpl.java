@@ -8,7 +8,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;

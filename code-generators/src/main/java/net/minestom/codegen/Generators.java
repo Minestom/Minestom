@@ -2,8 +2,8 @@ package net.minestom.codegen;
 
 import net.minestom.codegen.color.DyeColorGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
-import net.minestom.codegen.recipe.RecipeTypeGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
+import net.minestom.codegen.recipe.RecipeTypeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,6 @@ public class Generators {
         generator.generate(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "EnchantmentImpl", "Enchantments");
         generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffects");
         generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypes");
-        generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleImpl", "Particles");
         generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents");
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
         generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
