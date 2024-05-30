@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
@@ -28,6 +30,8 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class EntityTrackerImpl implements EntityTracker {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityTrackerImpl.class);
+
     static final AtomicInteger TARGET_COUNTER = new AtomicInteger();
 
     // Store all data associated to a Target
@@ -103,7 +107,10 @@ final class EntityTrackerImpl implements EntityTracker {
     public <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                         @NotNull Target<T> target, @Nullable Update<T> update) {
         EntityTrackerEntry entry = entriesByEntityId.get(entity.getEntityId());
-        if (entry == null) return;
+        if (entry == null) {
+            LOGGER.warn("Attempted to move unregistered entity {} in the entity tracker", entity.getEntityId());
+            return;
+        }
         Point oldPoint = entry.getLastPosition();
         entry.setLastPosition(newPoint);
         if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
