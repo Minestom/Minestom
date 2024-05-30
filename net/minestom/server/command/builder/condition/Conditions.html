@@ -120,14 +120,28 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#all(net.minestom.server.command.builder.condition.CommandCondition...)" class="member-name-link">all</a><wbr>(<a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>...&nbsp;conditions)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Will only execute if all command conditions succeed.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#any(net.minestom.server.command.builder.condition.CommandCondition...)" class="member-name-link">any</a><wbr>(<a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>...&nbsp;conditions)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Will execute if one or more command conditions succeed.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#consoleOnly(net.minestom.server.command.CommandSender,java.lang.String)" class="member-name-link">consoleOnly</a><wbr>(<a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandString)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Will succeed if the command sender is the server console.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#playerOnly(net.minestom.server.command.CommandSender,java.lang.String)" class="member-name-link">playerOnly</a><wbr>(<a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandString)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Will succeed if the command sender is a player.</div>
+</div>
 </div>
 </div>
 </div>
@@ -160,10 +174,25 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="all(net.minestom.server.command.builder.condition.CommandCondition...)">
+<h3>all</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a></span>&nbsp;<span class="element-name">all</span><wbr><span class="parameters">(<a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>...&nbsp;conditions)</span></div>
+<div class="block">Will only execute if all command conditions succeed.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="any(net.minestom.server.command.builder.condition.CommandCondition...)">
+<h3>any</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a></span>&nbsp;<span class="element-name">any</span><wbr><span class="parameters">(<a href="CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>...&nbsp;conditions)</span></div>
+<div class="block">Will execute if one or more command conditions succeed.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="playerOnly(net.minestom.server.command.CommandSender,java.lang.String)">
 <h3>playerOnly</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">playerOnly</span><wbr><span class="parameters">(<a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandString)</span></div>
+<div class="block">Will succeed if the command sender is a player.</div>
 </section>
 </li>
 <li>
@@ -171,6 +200,7 @@ loadScripts(document, 'script');</script>
 <h3>consoleOnly</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">consoleOnly</span><wbr><span class="parameters">(<a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandString)</span></div>
+<div class="block">Will succeed if the command sender is the server console.</div>
 </section>
 </li>
 </ul>
