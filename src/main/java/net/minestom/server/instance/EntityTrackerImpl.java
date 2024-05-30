@@ -43,9 +43,9 @@ final class EntityTrackerImpl implements EntityTracker {
         EntityTrackerEntry newEntry = new EntityTrackerEntry(entity, point);
 
         EntityTrackerEntry prevEntryWithId = entriesByEntityId.putIfAbsent(entity.getEntityId(), newEntry);
-        Check.stateCondition(prevEntryWithId == null, "There is already an entity registered with id {0}", entity.getEntityId());
+        Check.isTrue(prevEntryWithId == null, "There is already an entity registered with id {0}", entity.getEntityId());
         EntityTrackerEntry prevEntryWithUuid = entriesByEntityUuid.putIfAbsent(entity.getUuid(), newEntry);
-        Check.stateCondition(prevEntryWithUuid == null, "There is already an entity registered with uuid {0}", entity.getUuid());
+        Check.isTrue(prevEntryWithUuid == null, "There is already an entity registered with uuid {0}", entity.getUuid());
 
         final long index = getChunkIndex(point);
         for (TargetEntry<Entity> targetEntry : targetEntries) {
