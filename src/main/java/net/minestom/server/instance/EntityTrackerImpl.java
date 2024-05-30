@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
@@ -32,19 +31,24 @@ final class EntityTrackerImpl implements EntityTracker {
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
-    final TargetEntry<Entity>[] entries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
-    private final Int2ObjectSyncMap<Point> entityPositions = Int2ObjectSyncMap.hashmap();
+    final TargetEntry<Entity>[] targetEntries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
+
+    private final Int2ObjectSyncMap<EntityTrackerEntry> entriesByEntityId = Int2ObjectSyncMap.hashmap();
+    private final Map<UUID, EntityTrackerEntry> entriesByEntityUuid = new ConcurrentHashMap<>();
 
     @Override
     public <T extends Entity> void register(@NotNull Entity entity, @NotNull Point point,
                                             @NotNull Target<T> target, @Nullable Update<T> update) {
-        var prevPoint = entityPositions.putIfAbsent(entity.getEntityId(), point);
-        if (prevPoint != null) return;
+        EntityTrackerEntry newEntry = new EntityTrackerEntry(entity);
+        EntityTrackerEntry prevEntry = entriesByEntityId.putIfAbsent(entity.getEntityId(), newEntry);
+        if (prevEntry != null) return;
+        entriesByEntityUuid.put(entity.getUuid(), newEntry);
+
         final long index = getChunkIndex(point);
-        for (TargetEntry<Entity> entry : entries) {
-            if (entry.target.type().isInstance(entity)) {
-                entry.entities.add(entity);
-                entry.addToChunk(index, entity);
+        for (TargetEntry<Entity> targetEntry : targetEntries) {
+            if (targetEntry.target.type().isInstance(entity)) {
+                targetEntry.entities.add(entity);
+                targetEntry.addToChunk(index, entity);
             }
         }
         if (update != null) {
@@ -59,13 +63,16 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void unregister(@NotNull Entity entity,
                                               @NotNull Target<T> target, @Nullable Update<T> update) {
-        final Point point = entityPositions.remove(entity.getEntityId());
+        EntityTrackerEntry entry = entriesByEntityId.remove(entity.getEntityId());
+        entriesByEntityUuid.remove(entity.getUuid());
+        final Point point = entry == null ? null : entry.getLastPosition();
         if (point == null) return;
+
         final long index = getChunkIndex(point);
-        for (TargetEntry<Entity> entry : entries) {
-            if (entry.target.type().isInstance(entity)) {
-                entry.entities.remove(entity);
-                entry.removeFromChunk(index, entity);
+        for (TargetEntry<Entity> targetEntry : targetEntries) {
+            if (targetEntry.target.type().isInstance(entity)) {
+                targetEntry.entities.remove(entity);
+                targetEntry.removeFromChunk(index, entity);
             }
         }
         if (update != null) {
@@ -78,16 +85,30 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
+    public @Nullable Entity getEntityById(int id) {
+        EntityTrackerEntry entry = entriesByEntityId.get(id);
+        return entry == null ? null : entry.getEntity();
+    }
+
+    @Override
+    public @Nullable Entity getEntityByUuid(UUID uuid) {
+        EntityTrackerEntry entry = entriesByEntityUuid.get(uuid);
+        return entry == null ? null : entry.getEntity();
+    }
+
+    @Override
     public <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                         @NotNull Target<T> target, @Nullable Update<T> update) {
-        Point oldPoint = entityPositions.put(entity.getEntityId(), newPoint);
+        EntityTrackerEntry entry = entriesByEntityId.computeIfAbsent(entity.getEntityId(), id -> new EntityTrackerEntry(entity));
+        Point oldPoint = entry.getLastPosition();
+        entry.setLastPosition(newPoint);
         if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
         final long oldIndex = getChunkIndex(oldPoint);
         final long newIndex = getChunkIndex(newPoint);
-        for (TargetEntry<Entity> entry : entries) {
-            if (entry.target.type().isInstance(entity)) {
-                entry.addToChunk(newIndex, entity);
-                entry.removeFromChunk(oldIndex, entity);
+        for (TargetEntry<Entity> targetEntry : targetEntries) {
+            if (targetEntry.target.type().isInstance(entity)) {
+                targetEntry.addToChunk(newIndex, entity);
+                targetEntry.removeFromChunk(oldIndex, entity);
             }
         }
         if (update != null) {
@@ -108,7 +129,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
+        final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
         //noinspection unchecked
         var chunkEntities = (List<T>) entry.chunkEntities(getChunkIndex(chunkX, chunkZ));
         return Collections.unmodifiableList(chunkEntities);
@@ -116,7 +137,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void nearbyEntitiesByChunkRange(@NotNull Point point, int chunkRange, @NotNull Target<T> target, @NotNull Consumer<T> query) {
-        final Long2ObjectSyncMap<List<Entity>> entities = entries[target.ordinal()].chunkEntities;
+        final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
         if (chunkRange == 0) {
             // Single chunk
             final var chunkEntities = (List<T>) entities.get(getChunkIndex(point));
@@ -135,7 +156,7 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Consumer<T> query) {
-        final Long2ObjectSyncMap<List<Entity>> entities = entries[target.ordinal()].chunkEntities;
+        final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
         final int minChunkX = ChunkUtils.getChunkCoordinate(point.x() - range);
         final int minChunkZ = ChunkUtils.getChunkCoordinate(point.z() - range);
         final int maxChunkX = ChunkUtils.getChunkCoordinate(point.x() + range);
@@ -146,7 +167,7 @@ final class EntityTrackerImpl implements EntityTracker {
             final var chunkEntities = (List<T>) entities.get(getChunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(entity -> {
-                    final Point position = entityPositions.get(entity.getEntityId());
+                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
                     if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
                 });
             }
@@ -157,7 +178,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
-                    final Point position = entityPositions.get(entity.getEntityId());
+                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
                     if (point.distanceSquared(position) <= squaredRange) {
                         query.accept(entity);
                     }
@@ -169,18 +190,39 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public @UnmodifiableView @NotNull <T extends Entity> Set<@NotNull T> entities(@NotNull Target<T> target) {
         //noinspection unchecked
-        return (Set<T>) entries[target.ordinal()].entitiesView;
+        return (Set<T>) targetEntries[target.ordinal()].entitiesView;
     }
 
     @Override
     public @NotNull Viewable viewable(@NotNull List<@NotNull SharedInstance> sharedInstances, int chunkX, int chunkZ) {
-        var entry = entries[Target.PLAYERS.ordinal()];
+        var entry = targetEntries[Target.PLAYERS.ordinal()];
         return entry.viewers.computeIfAbsent(new ChunkViewKey(sharedInstances, chunkX, chunkZ), ChunkView::new);
+    }
+
+    private static class EntityTrackerEntry {
+        private final Entity entity;
+        private Point lastPosition;
+
+        private EntityTrackerEntry(Entity entity) {
+            this.entity = entity;
+        }
+
+        public Entity getEntity() {
+            return entity;
+        }
+
+        public Point getLastPosition() {
+            return lastPosition;
+        }
+
+        public void setLastPosition(Point lastPosition) {
+            this.lastPosition = lastPosition;
+        }
     }
 
     private <T extends Entity> void difference(Point oldPoint, Point newPoint,
                                                @NotNull Target<T> target, @NotNull Update<T> update) {
-        final TargetEntry<Entity> entry = entries[target.ordinal()];
+        final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
         forDifferingChunksInRange(newPoint.chunkX(), newPoint.chunkZ(), oldPoint.chunkX(), oldPoint.chunkZ(),
                 ServerFlag.ENTITY_VIEW_DISTANCE, (chunkX, chunkZ) -> {
                     // Add

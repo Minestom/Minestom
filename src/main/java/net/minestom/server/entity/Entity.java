@@ -60,13 +60,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
-import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,8 +79,6 @@ import java.util.function.UnaryOperator;
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
         PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
-    private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
-    private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     // Certain entities should only have their position packets sent during synchronization
@@ -184,9 +180,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         setBoundingBox(entityType.registry().boundingBox());
 
-        Entity.ENTITY_BY_ID.put(id, this);
-        Entity.ENTITY_BY_UUID.put(uuid, this);
-
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = new Aerodynamics(entityType.registry().acceleration(),
                 type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
@@ -212,29 +205,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
-
-    /**
-     * Gets an entity based on its id (from {@link #getEntityId()}).
-     * <p>
-     * Entity id are unique server-wide.
-     *
-     * @param id the entity unique id
-     * @return the entity having the specified id, null if not found
-     */
-    public static @Nullable Entity getEntity(int id) {
-        return Entity.ENTITY_BY_ID.get(id);
-    }
-
-    /**
-     * Gets an entity based on its UUID (from {@link #getUuid()}).
-     *
-     * @param uuid the entity UUID
-     * @return the entity having the specified uuid, null if not found
-     */
-    public static @Nullable Entity getEntity(@NotNull UUID uuid) {
-        return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
-    }
-
 
     /**
      * Generate and return a new unique entity id.
@@ -672,7 +642,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Each entity has an unique id (server-wide) which will change after a restart.
      *
      * @return the unique entity id
-     * @see Entity#getEntity(int) to retrive an entity based on its id
+     * @see Instance#getEntityById(int) to retrieve an entity based on its id
      */
     public int getEntityId() {
         return id;
@@ -702,10 +672,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param uuid the new entity uuid
      */
     public void setUuid(@NotNull UUID uuid) {
-        // Refresh internal map
-        Entity.ENTITY_BY_UUID.remove(this.uuid);
-        Entity.ENTITY_BY_UUID.put(uuid, this);
+        if (instance != null) {
+            instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
+        }
+
         this.uuid = uuid;
+
+        if (instance != null) {
+            instance.getEntityTracker().register(this, position, trackingTarget, trackingUpdate);
+        }
     }
 
     /**
@@ -1466,7 +1441,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         remove(true);
     }
 
-    protected void remove(boolean permanent) {
+    public void remove(boolean permanent) {
         if (isRemoved()) return;
         EventDispatcher.call(new EntityDespawnEvent(this));
         try {
@@ -1486,11 +1461,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         MinecraftServer.process().dispatcher().removeElement(this);
         this.removed = true;
-        if (permanent) {
-            Entity.ENTITY_BY_ID.remove(id);
-            Entity.ENTITY_BY_UUID.remove(uuid);
-        } else {
-            // Reset some other state
+        if (!permanent) {
+            // Reset some state to be ready for re-use
             this.position = Pos.ZERO;
             this.previousPosition = Pos.ZERO;
             this.lastSyncedPosition = Pos.ZERO;
@@ -1500,7 +1472,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             removeFromInstance(currentInstance);
             this.instance = null;
         }
-
     }
 
     /**
