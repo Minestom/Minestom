@@ -44,7 +44,7 @@ public record JoinGamePacket(
                 getNullableGameMode(reader.read(BYTE)),
                 reader.read(BOOLEAN),
                 reader.read(BOOLEAN),
-                reader.read(DEATH_LOCATION),
+                reader.readOptional(WorldPos.NETWORK_TYPE),
                 reader.read(VAR_INT),
                 reader.read(BOOLEAN)
         );
@@ -72,7 +72,7 @@ public record JoinGamePacket(
         }
         writer.write(BOOLEAN, isDebug);
         writer.write(BOOLEAN, isFlat);
-        writer.write(DEATH_LOCATION, deathLocation);
+        writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
         writer.write(VAR_INT, portalCooldown);
         writer.write(BOOLEAN, enforcesSecureChat);
     }

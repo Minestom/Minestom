@@ -15,9 +15,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+
 public sealed interface Particle extends StaticProtocolObject, Particles permits Particle.Block, Particle.BlockMarker,
         Particle.Dust, Particle.DustColorTransition, Particle.DustPillar, Particle.EntityEffect, Particle.FallingDust,
         Particle.Item, Particle.SculkCharge, Particle.Shriek, Particle.Simple, Particle.Vibration {
+
+    @NotNull NetworkBuffer.Type<Particle> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Particle value) {
+            buffer.write(VAR_INT, value.id());
+            value.writeData(buffer);
+        }
+
+        @Override
+        public Particle read(@NotNull NetworkBuffer buffer) {
+            final int id = buffer.read(VAR_INT);
+            final Particle particle = Objects.requireNonNull(fromId(id), () -> "unknown particle id: " + id);
+            return particle.readData(buffer);
+        }
+    };
 
     static @NotNull Collection<@NotNull Particle> values() {
         return ParticleImpl.values();
@@ -309,26 +326,6 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Contract(pure = true)
         public @NotNull Vibration withSourceEntity(int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
             return new Vibration(namespace(), id(), SourceType.ENTITY, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
-        }
-
-        public @NotNull SourceType sourceType() {
-            return sourceType;
-        }
-
-        public @Nullable Point sourceBlockPosition() {
-            return sourceBlockPosition;
-        }
-
-        public int sourceEntityId() {
-            return sourceEntityId;
-        }
-
-        public float sourceEntityEyeHeight() {
-            return sourceEntityEyeHeight;
-        }
-
-        public int travelTick() {
-            return travelTicks;
         }
 
         @Override

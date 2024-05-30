@@ -7,7 +7,6 @@ import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
-import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
@@ -568,19 +567,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final float z = buffer.read(FLOAT);
             final float w = buffer.read(FLOAT);
             return new float[]{x, y, z, w};
-        }
-    }
-
-    record ParticleType() implements NetworkBufferTypeImpl<Particle> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Particle value) {
-            buffer.write(VAR_INT, value.id());
-            value.writeData(buffer);
-        }
-
-        @Override
-        public Particle read(@NotNull NetworkBuffer buffer) {
-            throw new UnsupportedOperationException("Cannot read a particle from the network buffer");
         }
     }
 
