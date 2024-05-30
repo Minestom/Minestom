@@ -43,6 +43,7 @@ public class LightingChunk extends DynamicChunk {
 
     boolean chunkLoaded = false;
     private int highestBlock;
+    private boolean freezeInvalidation = false;
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
     private final AtomicInteger resendTimer = new AtomicInteger(-1);
@@ -107,7 +108,15 @@ public class LightingChunk extends DynamicChunk {
         return occludesBottom || occludesTop;
     }
 
-    private void invalidateSection(int coordinate) {
+    public void setFreezeInvalidation(boolean freezeInvalidation) {
+        this.freezeInvalidation = freezeInvalidation;
+    }
+
+    public void invalidateNeighborsSection(int coordinate) {
+        if (freezeInvalidation) {
+            return;
+        }
+
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
@@ -126,6 +135,21 @@ public class LightingChunk extends DynamicChunk {
         }
     }
 
+    public void invalidateResendDelay() {
+        if (!doneInit || freezeInvalidation) {
+            return;
+        }
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                if (neighborChunk instanceof LightingChunk light) {
+                    light.resendTimer.set(resendDelay);
+                }
+            }
+        }
+    }
+
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block,
                          @Nullable BlockHandler.Placement placement,
@@ -135,22 +159,10 @@ public class LightingChunk extends DynamicChunk {
 
         // Invalidate neighbor chunks, since they can be updated by this block change
         int coordinate = ChunkUtils.getChunkCoordinate(y);
-        if (chunkLoaded) {
-            invalidateSection(coordinate);
+        if (chunkLoaded && !freezeInvalidation) {
+            invalidateNeighborsSection(coordinate);
+            invalidateResendDelay();
             this.lightCache.invalidate();
-
-            if (doneInit) {
-                for (int i = -1; i <= 1; i++) {
-                    for (int j = -1; j <= 1; j++) {
-                        Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                        if (neighborChunk == null) continue;
-
-                        if (neighborChunk instanceof LightingChunk light) {
-                            light.resendTimer.set(resendDelay);
-                        }
-                    }
-                }
-            }
         }
     }
 
