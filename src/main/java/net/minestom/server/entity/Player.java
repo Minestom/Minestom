@@ -459,7 +459,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 var itemUsageCompleteEvent = new ItemUsageCompleteEvent(this, itemUseHand, item);
                 EventDispatcher.call(itemUsageCompleteEvent);
 
-                refreshItemUse(null);
+                clearItemUse();
             }
         }
 
@@ -1135,7 +1135,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return isUsingItem() && getItemInHand(itemUseHand).material().isFood();
+        if (!isUsingItem()) return false;
+        final ItemStack itemStack = getItemInHand(itemUseHand);
+        return itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION;
     }
 
     /**
@@ -2170,7 +2172,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
-        refreshItemUse(null);
+        clearItemUse();
     }
 
     public void refreshItemUse(@Nullable Hand itemUseHand, long itemUseTimeTicks) {
@@ -2183,8 +2185,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
-    public void refreshItemUse(@Nullable Hand eatingHand) {
-        refreshItemUse(eatingHand, defaultEatingTime);
+    public void clearItemUse() {
+        refreshItemUse(null, 0);
     }
 
     /**
