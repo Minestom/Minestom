@@ -673,14 +673,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setUuid(@NotNull UUID uuid) {
         if (instance != null) {
-            instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
+            instance.getEntityTracker().changeUuid(this, this.uuid);
         }
 
         this.uuid = uuid;
-
-        if (instance != null) {
-            instance.getEntityTracker().register(this, position, trackingTarget, trackingUpdate);
-        }
     }
 
     /**
