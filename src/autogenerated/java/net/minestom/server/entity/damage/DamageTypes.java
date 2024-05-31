@@ -25,6 +25,8 @@ interface DamageTypes {
 
     DynamicRegistry.Key<DamageType> MOB_PROJECTILE = DynamicRegistry.Key.of("minecraft:mob_projectile");
 
+    DynamicRegistry.Key<DamageType> CAMPFIRE = DynamicRegistry.Key.of("minecraft:campfire");
+
     DynamicRegistry.Key<DamageType> THROWN = DynamicRegistry.Key.of("minecraft:thrown");
 
     DynamicRegistry.Key<DamageType> FALLING_STALACTITE = DynamicRegistry.Key.of("minecraft:falling_stalactite");
@@ -32,6 +34,8 @@ interface DamageTypes {
     DynamicRegistry.Key<DamageType> FIREBALL = DynamicRegistry.Key.of("minecraft:fireball");
 
     DynamicRegistry.Key<DamageType> FALLING_BLOCK = DynamicRegistry.Key.of("minecraft:falling_block");
+
+    DynamicRegistry.Key<DamageType> WIND_CHARGE = DynamicRegistry.Key.of("minecraft:wind_charge");
 
     DynamicRegistry.Key<DamageType> PLAYER_EXPLOSION = DynamicRegistry.Key.of("minecraft:player_explosion");
 

@@ -1,8 +1,6 @@
 package net.minestom.server.entity.attribute;
 
-import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

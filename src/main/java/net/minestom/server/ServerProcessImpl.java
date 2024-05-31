@@ -7,6 +7,7 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -17,8 +18,10 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
+import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -63,6 +66,9 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<TrimPattern> trimPattern;
     private final DynamicRegistry<BannerPattern> bannerPattern;
     private final DynamicRegistry<WolfMeta.Variant> wolfVariant;
+    private final DynamicRegistry<Enchantment> enchantment;
+    private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
+    private final DynamicRegistry<JukeboxSong> jukeboxSong;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -98,6 +104,9 @@ final class ServerProcessImpl implements ServerProcess {
         this.trimPattern = TrimPattern.createDefaultRegistry();
         this.bannerPattern = BannerPattern.createDefaultRegistry();
         this.wolfVariant = WolfMeta.Variant.createDefaultRegistry();
+        this.enchantment = Enchantment.createDefaultRegistry();
+        this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
+        this.jukeboxSong = JukeboxSong.createDefaultRegistry();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -148,6 +157,21 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
         return wolfVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Enchantment> enchantment() {
+        return enchantment;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant() {
+        return paintingVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
+        return jukeboxSong;
     }
 
     @Override

@@ -6,14 +6,17 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
+import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -46,13 +49,9 @@ import java.net.SocketAddress;
  * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
-public final class MinecraftServer {
+public final class MinecraftServer implements MinecraftConstants {
 
     public static final ComponentLogger LOGGER = ComponentLogger.logger(MinecraftServer.class);
-
-    public static final String VERSION_NAME = "1.20.6";
-    public static final int PROTOCOL_VERSION = 766;
-    public static final int DATA_VERSION = 3839;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -285,6 +284,18 @@ public final class MinecraftServer {
 
     public static @NotNull DynamicRegistry<WolfMeta.Variant> getWolfVariantRegistry() {
         return serverProcess.wolfVariant();
+    }
+
+    public static @NotNull DynamicRegistry<Enchantment> getEnchantmentRegistry() {
+        return serverProcess.enchantment();
+    }
+
+    public static @NotNull DynamicRegistry<PaintingMeta.Variant> getPaintingVariantRegistry() {
+        return serverProcess.paintingVariant();
+    }
+
+    public static @NotNull DynamicRegistry<JukeboxSong> getJukeboxSongRegistry() {
+        return serverProcess.jukeboxSong();
     }
 
     public static Server getServer() {
