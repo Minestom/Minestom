@@ -1,32 +1,29 @@
 package net.minestom.server.item.enchant;
 
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+record EnchantmentImpl(@NotNull NamespaceID namespace, @Nullable Registry.EnchantmentEntry registry) implements Enchantment {
 
-record EnchantmentImpl(Registry.EnchantmentEntry registry) implements Enchantment {
-    private static final Registry.Container<Enchantment> CONTAINER = Registry.createStaticContainer(Registry.Resource.ENCHANTMENTS,
-            (namespace, properties) -> new EnchantmentImpl(Registry.enchantment(namespace, properties)));
+    static final BinaryTagSerializer<Enchantment> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+            tag -> {
+                throw new UnsupportedOperationException("BannerPattern is read-only");
+            },
+            bannerPattern -> {
+                throw new UnsupportedOperationException("todo");
+            }
+    );
 
-    static Enchantment get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    EnchantmentImpl {
+        Check.notNull(namespace, "Namespace cannot be null");
     }
 
-    static Enchantment getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    EnchantmentImpl(@NotNull Registry.EnchantmentEntry registry) {
+        this(registry.namespace(), registry);
     }
 
-    static Enchantment getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<Enchantment> values() {
-        return CONTAINER.values();
-    }
-
-    @Override
-    public String toString() {
-        return name();
-    }
 }

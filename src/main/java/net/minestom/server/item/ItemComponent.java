@@ -58,6 +58,7 @@ public final class ItemComponent {
     public static final DataComponent<CustomData> BLOCK_ENTITY_DATA = DataComponent.register("block_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<String> INSTRUMENT = DataComponent.register("instrument", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     public static final DataComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = DataComponent.register("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
+    public static final DataComponent<JukeboxPlayable> JUKEBOX_PLAYABLE = DataComponent.register("jukebox_playable", JukeboxPlayable.NETWORK_TYPE, JukeboxPlayable.NBT_TYPE);
     public static final DataComponent<List<String>> RECIPES = DataComponent.register("recipes", NetworkBuffer.STRING.list(Short.MAX_VALUE), BinaryTagSerializer.STRING.list());
     public static final DataComponent<LodestoneTracker> LODESTONE_TRACKER = DataComponent.register("lodestone_tracker", LodestoneTracker.NETWORK_TYPE, LodestoneTracker.NBT_TYPE);
     public static final DataComponent<FireworkExplosion> FIREWORK_EXPLOSION = DataComponent.register("firework_explosion", FireworkExplosion.NETWORK_TYPE, FireworkExplosion.NBT_TYPE);

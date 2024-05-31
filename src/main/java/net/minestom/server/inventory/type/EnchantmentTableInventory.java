@@ -76,7 +76,8 @@ public class EnchantmentTableInventory extends Inventory {
         final short id = enchantmentShown[enchantmentSlot.ordinal()];
         if (id == -1)
             return null;
-        return Enchantment.fromId(id);
+//        return Enchantment.fromId(id);
+        throw new UnsupportedOperationException("todo");
     }
 
     /**
@@ -88,13 +89,13 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantment     the enchantment
      */
     public void setEnchantmentShown(EnchantmentSlot enchantmentSlot, Enchantment enchantment) {
-        final short id = enchantment == null ? -1 : (short) enchantment.id();
-        switch (enchantmentSlot) {
-            case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);
-            case MIDDLE -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_MIDDLE, id);
-            case BOTTOM -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_BOTTOM, id);
-        }
-        this.enchantmentShown[enchantmentSlot.ordinal()] = id;
+//        final short id = enchantment == null ? -1 : (short) enchantment.id();
+//        switch (enchantmentSlot) {
+//            case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);
+//            case MIDDLE -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_MIDDLE, id);
+//            case BOTTOM -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_BOTTOM, id);
+//        }
+//        this.enchantmentShown[enchantmentSlot.ordinal()] = id;
     }
 
     /**

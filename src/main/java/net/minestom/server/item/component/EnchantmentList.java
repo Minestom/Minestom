@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -11,15 +12,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, boolean showInTooltip) {
+public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Integer> enchantments, boolean showInTooltip) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of(), true);
 
     public static NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, @NotNull EnchantmentList value) {
             buffer.write(NetworkBuffer.VAR_INT, value.enchantments.size());
-            for (Map.Entry<Enchantment, Integer> entry : value.enchantments.entrySet()) {
-                buffer.write(NetworkBuffer.VAR_INT, entry.getKey().id());
+            for (Map.Entry<DynamicRegistry.Key<Enchantment>, Integer> entry : value.enchantments.entrySet()) {
+//                buffer.write(NetworkBuffer.VAR_INT, entry.getKey().id());
                 buffer.write(NetworkBuffer.VAR_INT, entry.getValue());
             }
             buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
@@ -29,11 +30,11 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
         public @NotNull EnchantmentList read(@NotNull NetworkBuffer buffer) {
             int size = buffer.read(NetworkBuffer.VAR_INT);
             Check.argCondition(size < 0 || size > Short.MAX_VALUE, "Invalid enchantment list size: {0}", size);
-            Map<Enchantment, Integer> enchantments = new HashMap<>(size);
+            Map<DynamicRegistry.Key<Enchantment>, Integer> enchantments = new HashMap<>(size);
             for (int i = 0; i < size; i++) {
-                Enchantment enchantment = Enchantment.fromId(buffer.read(NetworkBuffer.VAR_INT));
-                int level = buffer.read(NetworkBuffer.VAR_INT);
-                enchantments.put(enchantment, level);
+//                Enchantment enchantment = Enchantment.fromId(buffer.read(NetworkBuffer.VAR_INT));
+//                int level = buffer.read(NetworkBuffer.VAR_INT);
+//                enchantments.put(enchantment, level);
             }
             boolean showInTooltip = buffer.read(NetworkBuffer.BOOLEAN);
             return new EnchantmentList(enchantments, showInTooltip);
@@ -44,12 +45,12 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
             tag -> {
                 // We have two variants of the enchantment list, one with {levels: {...}, show_in_tooltip: boolean} and one with {...}.
                 CompoundBinaryTag levels = tag.keySet().contains("levels") ? tag.getCompound("levels") : tag;
-                Map<Enchantment, Integer> enchantments = new HashMap<>(levels.size());
+                Map<DynamicRegistry.Key<Enchantment>, Integer> enchantments = new HashMap<>(levels.size());
                 for (Map.Entry<String, ? extends BinaryTag> entry : levels) {
-                    Enchantment enchantment = Enchantment.fromNamespaceId(entry.getKey());
-                    Check.notNull(enchantment, "Unknown enchantment: {0}", entry.getKey());
-                    int level = BinaryTagSerializer.INT.read(entry.getValue());
-                    if (level > 0) enchantments.put(enchantment, level);
+//                    Enchantment enchantment = Enchantment.fromNamespaceId(entry.getKey());
+//                    Check.notNull(enchantment, "Unknown enchantment: {0}", entry.getKey());
+//                    int level = BinaryTagSerializer.INT.read(entry.getValue());
+//                    if (level > 0) enchantments.put(enchantment, level);
                 }
 
                 // Doesnt matter which variant we chose, the default will work.
@@ -59,7 +60,7 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
             },
             value -> {
                 CompoundBinaryTag.Builder levels = CompoundBinaryTag.builder();
-                for (Map.Entry<Enchantment, Integer> entry : value.enchantments.entrySet()) {
+                for (Map.Entry<DynamicRegistry.Key<Enchantment>, Integer> entry : value.enchantments.entrySet()) {
                     levels.put(entry.getKey().name(), BinaryTagSerializer.INT.write(entry.getValue()));
                 }
 
@@ -74,30 +75,30 @@ public record EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments, b
         enchantments = Map.copyOf(enchantments);
     }
 
-    public EnchantmentList(@NotNull Map<Enchantment, Integer> enchantments) {
+    public EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Integer> enchantments) {
         this(enchantments, true);
     }
 
-    public EnchantmentList(@NotNull Enchantment enchantment, int level) {
+    public EnchantmentList(@NotNull DynamicRegistry.Key<Enchantment> enchantment, int level) {
         this(Map.of(enchantment, level), true);
     }
 
-    public boolean has(@NotNull Enchantment enchantment) {
+    public boolean has(@NotNull DynamicRegistry.Key<Enchantment> enchantment) {
         return enchantments.containsKey(enchantment);
     }
 
-    public int level(@NotNull Enchantment enchantment) {
+    public int level(@NotNull DynamicRegistry.Key<Enchantment> enchantment) {
         return enchantments.getOrDefault(enchantment, 0);
     }
 
-    public @NotNull EnchantmentList with(@NotNull Enchantment enchantment, int level) {
-        Map<Enchantment, Integer> newEnchantments = new HashMap<>(enchantments);
+    public @NotNull EnchantmentList with(@NotNull DynamicRegistry.Key<Enchantment> enchantment, int level) {
+        Map<DynamicRegistry.Key<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.put(enchantment, level);
         return new EnchantmentList(newEnchantments, showInTooltip);
     }
 
-    public @NotNull EnchantmentList remove(@NotNull Enchantment enchantment) {
-        Map<Enchantment, Integer> newEnchantments = new HashMap<>(enchantments);
+    public @NotNull EnchantmentList remove(@NotNull DynamicRegistry.Key<Enchantment> enchantment) {
+        Map<DynamicRegistry.Key<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.remove(enchantment);
         return new EnchantmentList(newEnchantments, showInTooltip);
     }

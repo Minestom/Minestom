@@ -1371,11 +1371,11 @@ interface SoundEvents {
 
     SoundEvent BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = BuiltinSoundEvent.get("minecraft:block.trial_spawner.detect_player");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_CHARGE_ACTIVATE = BuiltinSoundEvent.get("minecraft:block.trial_spawner.charge_activate");
+    SoundEvent BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ominous_activate");
 
     SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ambient");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT_CHARGED = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ambient_charged");
+    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ambient_ominous");
 
     SoundEvent BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = BuiltinSoundEvent.get("minecraft:block.trial_spawner.open_shutter");
 
@@ -1776,6 +1776,12 @@ interface SoundEvents {
     SoundEvent MUSIC_DISC_OTHERSIDE = BuiltinSoundEvent.get("minecraft:music_disc.otherside");
 
     SoundEvent MUSIC_DISC_RELIC = BuiltinSoundEvent.get("minecraft:music_disc.relic");
+
+    SoundEvent MUSIC_DISC_CREATOR = BuiltinSoundEvent.get("minecraft:music_disc.creator");
+
+    SoundEvent MUSIC_DISC_CREATOR_MUSIC_BOX = BuiltinSoundEvent.get("minecraft:music_disc.creator_music_box");
+
+    SoundEvent MUSIC_DISC_PRECIPICE = BuiltinSoundEvent.get("minecraft:music_disc.precipice");
 
     SoundEvent MUSIC_DRAGON = BuiltinSoundEvent.get("minecraft:music.dragon");
 
@@ -2882,6 +2888,8 @@ interface SoundEvents {
     SoundEvent BLOCK_VAULT_DEACTIVATE = BuiltinSoundEvent.get("minecraft:block.vault.deactivate");
 
     SoundEvent BLOCK_VAULT_EJECT_ITEM = BuiltinSoundEvent.get("minecraft:block.vault.eject_item");
+
+    SoundEvent BLOCK_VAULT_REJECT_REWARDED_PLAYER = BuiltinSoundEvent.get("minecraft:block.vault.reject_rewarded_player");
 
     SoundEvent BLOCK_VAULT_FALL = BuiltinSoundEvent.get("minecraft:block.vault.fall");
 

@@ -1,47 +1,56 @@
 package net.minestom.server.item.enchant;
 
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Contract;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+public sealed interface Enchantment extends ProtocolObject, Enchantments permits EnchantmentImpl {
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Enchantment>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::enchantment);
+    @NotNull BinaryTagSerializer<DynamicRegistry.Key<Enchantment>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::enchantment);
 
-public sealed interface Enchantment extends StaticProtocolObject, Enchantments permits EnchantmentImpl {
+    static @NotNull Builder builder(@NotNull String namespace) {
+        return builder(NamespaceID.from(namespace));
+    }
+
+    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
+        return new Builder(namespace);
+    }
 
     /**
-     * Returns the enchantment registry.
+     * <p>Creates a new registry for enchantments, loading the vanilla enchantments.</p>
      *
-     * @return the enchantment registry
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
-    @Contract(pure = true)
-    @NotNull Registry.EnchantmentEntry registry();
-
-    @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry() {
+        return DynamicRegistry.create(
+                "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE
+                //todo reenable to load vanilla enchants.
+//                Registry.Resource.ENCHANTMENTS,
+//                (namespace, props) -> new EnchantmentImpl(Registry.enchantment(namespace, props))
+        );
     }
 
     @Override
-    default int id() {
-        return registry().id();
+    @Nullable Registry.EnchantmentEntry registry();
+
+    class Builder {
+        private final NamespaceID namespace;
+
+        private Builder(@NotNull NamespaceID namespace) {
+            this.namespace = namespace;
+        }
+
+        public @NotNull Enchantment build() {
+            return new EnchantmentImpl(namespace, null);
+        }
     }
 
-    static @NotNull Collection<@NotNull Enchantment> values() {
-        return EnchantmentImpl.values();
-    }
-
-    static @Nullable Enchantment fromNamespaceId(@NotNull String namespaceID) {
-        return EnchantmentImpl.getSafe(namespaceID);
-    }
-
-    static @Nullable Enchantment fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
-    }
-
-    static @Nullable Enchantment fromId(int id) {
-        return EnchantmentImpl.getId(id);
-    }
 }

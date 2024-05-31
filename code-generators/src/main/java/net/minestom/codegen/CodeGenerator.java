@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
@@ -90,10 +91,13 @@ public class CodeGenerator {
 
         // Use data
         json.keySet().forEach(namespace -> {
-            final String constantName = namespace
+            String constantName = namespace
                     .replace("minecraft:", "")
                     .replace(".", "_")
                     .toUpperCase(Locale.ROOT);
+            if (!SourceVersion.isName(constantName)) {
+                constantName = "_" + constantName;
+            }
             blockConstantsClass.addField(
                     FieldSpec.builder(typedRegistryKeyClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

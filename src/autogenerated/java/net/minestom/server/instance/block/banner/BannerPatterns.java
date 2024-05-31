@@ -13,6 +13,8 @@ interface BannerPatterns {
 
     DynamicRegistry.Key<BannerPattern> STRIPE_RIGHT = DynamicRegistry.Key.of("minecraft:stripe_right");
 
+    DynamicRegistry.Key<BannerPattern> FLOW = DynamicRegistry.Key.of("minecraft:flow");
+
     DynamicRegistry.Key<BannerPattern> RHOMBUS = DynamicRegistry.Key.of("minecraft:rhombus");
 
     DynamicRegistry.Key<BannerPattern> TRIANGLES_TOP = DynamicRegistry.Key.of("minecraft:triangles_top");
@@ -52,6 +54,8 @@ interface BannerPatterns {
     DynamicRegistry.Key<BannerPattern> SQUARE_TOP_RIGHT = DynamicRegistry.Key.of("minecraft:square_top_right");
 
     DynamicRegistry.Key<BannerPattern> STRIPE_DOWNRIGHT = DynamicRegistry.Key.of("minecraft:stripe_downright");
+
+    DynamicRegistry.Key<BannerPattern> GUSTER = DynamicRegistry.Key.of("minecraft:guster");
 
     DynamicRegistry.Key<BannerPattern> GRADIENT_UP = DynamicRegistry.Key.of("minecraft:gradient_up");
 

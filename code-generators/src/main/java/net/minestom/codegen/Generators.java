@@ -24,6 +24,7 @@ public class Generators {
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
         new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
         new ParticleGenerator(resource("particles.json"), outputFolder).generate();
+        new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 
@@ -31,7 +32,6 @@ public class Generators {
         generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "Blocks");
         generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "Materials");
         generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypes");
-        generator.generate(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "EnchantmentImpl", "Enchantments");
         generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffects");
         generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypes");
         generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents");
@@ -47,6 +47,9 @@ public class Generators {
         generator.generateKeys(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatterns");
         generator.generateKeys(resource("banner_patterns.json"), "net.minestom.server.instance.block.banner", "BannerPattern", "BannerPatterns");
         generator.generateKeys(resource("wolf_variants.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfMeta.Variant", "WolfVariants");
+        generator.generateKeys(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "Enchantments");
+        generator.generateKeys(resource("painting_variants.json"), "net.minestom.server.entity.metadata.other", "PaintingMeta.Variant", "PaintingVariants");
+        generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong", "JukeboxSongs");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();

@@ -11,6 +11,8 @@ interface TrimPatterns {
 
     DynamicRegistry.Key<TrimPattern> RIB = DynamicRegistry.Key.of("minecraft:rib");
 
+    DynamicRegistry.Key<TrimPattern> BOLT = DynamicRegistry.Key.of("minecraft:bolt");
+
     DynamicRegistry.Key<TrimPattern> HOST = DynamicRegistry.Key.of("minecraft:host");
 
     DynamicRegistry.Key<TrimPattern> SILENCE = DynamicRegistry.Key.of("minecraft:silence");
@@ -18,6 +20,8 @@ interface TrimPatterns {
     DynamicRegistry.Key<TrimPattern> WILD = DynamicRegistry.Key.of("minecraft:wild");
 
     DynamicRegistry.Key<TrimPattern> WAYFINDER = DynamicRegistry.Key.of("minecraft:wayfinder");
+
+    DynamicRegistry.Key<TrimPattern> FLOW = DynamicRegistry.Key.of("minecraft:flow");
 
     DynamicRegistry.Key<TrimPattern> DUNE = DynamicRegistry.Key.of("minecraft:dune");
 

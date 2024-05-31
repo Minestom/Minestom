@@ -22,6 +22,7 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
@@ -68,11 +69,6 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
-        return new EnchantmentEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
     public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
         return new PotionEffectEntry(namespace, main, null);
     }
@@ -110,6 +106,21 @@ public final class Registry {
     @ApiStatus.Internal
     public static ChatTypeEntry chatType(String namespace, @NotNull Properties main) {
         return new ChatTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
+        return new EnchantmentEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static PaintingVariantEntry paintingVariant(String namespace, @NotNull Properties main) {
+        return new PaintingVariantEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
+        return new JukeboxSongEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -242,7 +253,6 @@ public final class Registry {
         BLOCKS("blocks.json"),
         ITEMS("items.json"),
         ENTITIES("entities.json"),
-        ENCHANTMENTS("enchantments.json"),
         SOUNDS("sounds.json"),
         COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
@@ -262,7 +272,10 @@ public final class Registry {
         ATTRIBUTES("attributes.json"),
         BANNER_PATTERNS("banner_patterns.json"),
         WOLF_VARIANTS("wolf_variants.json"),
-        CHAT_TYPES("chat_types.json");
+        CHAT_TYPES("chat_types.json"),
+        ENCHANTMENTS("enchantments.json"),
+        PAINTING_VARIANTS("painting_variants.json"),
+        JUKEBOX_SONGS("jukebox_songs.json");
 
         private final String name;
 
@@ -791,27 +804,6 @@ public final class Registry {
         }
     }
 
-    public record EnchantmentEntry(NamespaceID namespace, int id,
-                                   String translationKey,
-                                   double maxLevel,
-                                   boolean isCursed,
-                                   boolean isDiscoverable,
-                                   boolean isTradeable,
-                                   boolean isTreasureOnly,
-                                   Properties custom) implements Entry {
-        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    main.getString("translationKey"),
-                    main.getDouble("maxLevel"),
-                    main.getBoolean("curse", false),
-                    main.getBoolean("discoverable", true),
-                    main.getBoolean("tradeable", true),
-                    main.getBoolean("treasureOnly", false),
-                    custom);
-        }
-    }
-
     public record PotionEffectEntry(NamespaceID namespace, int id,
                                     String translationKey,
                                     int color,
@@ -925,6 +917,36 @@ public final class Registry {
             return new ChatTypeDecoration(properties.getString("translation_key"), parameters, style);
         }
 
+    }
+
+    public record EnchantmentEntry(NamespaceID namespace, Properties custom) implements Entry {
+        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    //todo
+                    custom);
+        }
+    }
+
+    public record PaintingVariantEntry(NamespaceID namespace, NamespaceID assetId, int width, int height, Properties custom) implements Entry {
+        public PaintingVariantEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    main.getInt("width"),
+                    main.getInt("height"),
+                    custom);
+        }
+    }
+
+    public record JukeboxSongEntry(NamespaceID namespace, SoundEvent soundEvent, Component description,
+                                   float lengthInSeconds, int comparatorOutput, Properties custom) implements Entry {
+        public JukeboxSongEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    SoundEvent.fromNamespaceId(main.getString("sound_event")),
+                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
+                    (float) main.getDouble("length_in_seconds"),
+                    main.getInt("comparator_output"),
+                    custom);
+        }
     }
 
     public interface Entry {

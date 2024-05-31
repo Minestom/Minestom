@@ -19,6 +19,10 @@ interface Attributes {
 
     Attribute PLAYER_BLOCK_INTERACTION_RANGE = AttributeImpl.get("minecraft:player.block_interaction_range");
 
+    Attribute GENERIC_BURNING_TIME = AttributeImpl.get("minecraft:generic.burning_time");
+
+    Attribute GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:generic.explosion_knockback_resistance");
+
     Attribute PLAYER_ENTITY_INTERACTION_RANGE = AttributeImpl.get("minecraft:player.entity_interaction_range");
 
     Attribute GENERIC_FALL_DAMAGE_MULTIPLIER = AttributeImpl.get("minecraft:generic.fall_damage_multiplier");
@@ -39,13 +43,27 @@ interface Attributes {
 
     Attribute GENERIC_MAX_HEALTH = AttributeImpl.get("minecraft:generic.max_health");
 
+    Attribute PLAYER_MINING_EFFICIENCY = AttributeImpl.get("minecraft:player.mining_efficiency");
+
+    Attribute GENERIC_MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:generic.movement_efficiency");
+
     Attribute GENERIC_MOVEMENT_SPEED = AttributeImpl.get("minecraft:generic.movement_speed");
+
+    Attribute GENERIC_OXYGEN_BONUS = AttributeImpl.get("minecraft:generic.oxygen_bonus");
 
     Attribute GENERIC_SAFE_FALL_DISTANCE = AttributeImpl.get("minecraft:generic.safe_fall_distance");
 
     Attribute GENERIC_SCALE = AttributeImpl.get("minecraft:generic.scale");
 
+    Attribute PLAYER_SNEAKING_SPEED = AttributeImpl.get("minecraft:player.sneaking_speed");
+
     Attribute ZOMBIE_SPAWN_REINFORCEMENTS = AttributeImpl.get("minecraft:zombie.spawn_reinforcements");
 
     Attribute GENERIC_STEP_HEIGHT = AttributeImpl.get("minecraft:generic.step_height");
+
+    Attribute PLAYER_SUBMERGED_MINING_SPEED = AttributeImpl.get("minecraft:player.submerged_mining_speed");
+
+    Attribute PLAYER_SWEEPING_DAMAGE_RATIO = AttributeImpl.get("minecraft:player.sweeping_damage_ratio");
+
+    Attribute GENERIC_WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:generic.water_movement_efficiency");
 }

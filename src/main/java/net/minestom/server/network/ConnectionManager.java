@@ -295,6 +295,7 @@ public final class ConnectionManager {
                     throw new RuntimeException("Error receiving known packs", e);
                 }
                 boolean excludeVanilla = !knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
+                excludeVanilla = false; //todo
 
                 var serverProcess = MinecraftServer.process();
                 player.sendPacket(serverProcess.chatType().registryDataPacket(excludeVanilla));
@@ -305,6 +306,9 @@ public final class ConnectionManager {
                 player.sendPacket(serverProcess.trimPattern().registryDataPacket(excludeVanilla));
                 player.sendPacket(serverProcess.bannerPattern().registryDataPacket(excludeVanilla));
                 player.sendPacket(serverProcess.wolfVariant().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.enchantment().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.paintingVariant().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.jukeboxSong().registryDataPacket(excludeVanilla));
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }

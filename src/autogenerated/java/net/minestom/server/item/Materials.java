@@ -1603,6 +1603,8 @@ interface Materials {
 
     Material FLINT_AND_STEEL = MaterialImpl.get("minecraft:flint_and_steel");
 
+    Material BOWL = MaterialImpl.get("minecraft:bowl");
+
     Material APPLE = MaterialImpl.get("minecraft:apple");
 
     Material BOW = MaterialImpl.get("minecraft:bow");
@@ -1700,8 +1702,6 @@ interface Materials {
     Material NETHERITE_HOE = MaterialImpl.get("minecraft:netherite_hoe");
 
     Material STICK = MaterialImpl.get("minecraft:stick");
-
-    Material BOWL = MaterialImpl.get("minecraft:bowl");
 
     Material MUSHROOM_STEW = MaterialImpl.get("minecraft:mushroom_stew");
 
@@ -2349,6 +2349,10 @@ interface Materials {
 
     Material MUSIC_DISC_CHIRP = MaterialImpl.get("minecraft:music_disc_chirp");
 
+    Material MUSIC_DISC_CREATOR = MaterialImpl.get("minecraft:music_disc_creator");
+
+    Material MUSIC_DISC_CREATOR_MUSIC_BOX = MaterialImpl.get("minecraft:music_disc_creator_music_box");
+
     Material MUSIC_DISC_FAR = MaterialImpl.get("minecraft:music_disc_far");
 
     Material MUSIC_DISC_MALL = MaterialImpl.get("minecraft:music_disc_mall");
@@ -2372,6 +2376,8 @@ interface Materials {
     Material MUSIC_DISC_5 = MaterialImpl.get("minecraft:music_disc_5");
 
     Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("minecraft:music_disc_pigstep");
+
+    Material MUSIC_DISC_PRECIPICE = MaterialImpl.get("minecraft:music_disc_precipice");
 
     Material DISC_FRAGMENT_5 = MaterialImpl.get("minecraft:disc_fragment_5");
 

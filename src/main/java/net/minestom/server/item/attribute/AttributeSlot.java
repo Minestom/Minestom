@@ -1,6 +1,8 @@
 package net.minestom.server.item.attribute;
 
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,6 +17,9 @@ public enum AttributeSlot {
     HEAD(EquipmentSlot.HELMET),
     ARMOR(EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS, EquipmentSlot.HELMET),
     BODY(EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS);
+
+    public static final NetworkBuffer.Type<AttributeSlot> NETWORK_TYPE = NetworkBuffer.Enum(AttributeSlot.class);
+    public static final BinaryTagSerializer<AttributeSlot> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(AttributeSlot.class);
 
     private final List<EquipmentSlot> equipmentSlots;
 
