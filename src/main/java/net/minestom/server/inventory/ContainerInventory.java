@@ -74,7 +74,11 @@ public non-sealed class ContainerInventory extends InventoryImpl {
                 }
                 case Click.Change.Player(int slot, ItemStack item) -> playerInventory.setItemStack(slot, item);
                 case Click.Change.Cursor(ItemStack item) -> playerInventory.setCursorItem(item);
-                case Click.Change.DropFromPlayer(ItemStack item) -> player.dropItem(item);
+                case Click.Change.DropFromPlayer(ItemStack item) -> {
+                    if (!player.dropItem(item)) {
+                        playerInventory.addItemStack(item, TransactionOption.ALL);
+                    }
+                }
             }
         }
     }
