@@ -202,6 +202,14 @@ public final class ClickProcessors {
         };
     }
 
+    /**
+     * Processes inventory clicks and converts them into a list of changes.
+     * <br>
+     * The difference between this and {@link net.minestom.server.inventory.Inventory#handleClick(net.minestom.server.entity.Player, Click.Info, List)}
+     * is that this is abstracted away from the inventory instance, and is only provided the required information about
+     * the click: the actual click slots, and a way to get items in the open inventory.
+     * It can handle generic logic, and instances of this are often stored as constants.
+     */
     public interface InventoryProcessor extends BiFunction<Click.Info, Click.Getter, List<Click.Change>> {
     }
 

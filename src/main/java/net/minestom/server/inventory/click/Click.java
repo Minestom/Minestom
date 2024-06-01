@@ -82,6 +82,29 @@ public final class Click {
     }
 
     /**
+     * An alternative to {@link Info}, containing only the type itself, without any data.
+     */
+    public enum Type {
+        LEFT,
+        RIGHT,
+        MIDDLE,
+        LEFT_SHIFT,
+        RIGHT_SHIFT,
+        DOUBLE,
+        LEFT_DRAG,
+        RIGHT_DRAG,
+        MIDDLE_DRAG,
+        LEFT_DROP_CURSOR,
+        RIGHT_DROP_CURSOR,
+        MIDDLE_DROP_CURSOR,
+        DROP_SLOT,
+        HOTBAR_SWAP,
+        OFFHAND_SWAP,
+        CREATIVE_SET_ITEM,
+        CREATIVE_DROP_ITEM
+    }
+
+    /**
      * Preprocesses click packets, turning them into {@link Info} instances for further processing.
      */
     public static final class Preprocessor {

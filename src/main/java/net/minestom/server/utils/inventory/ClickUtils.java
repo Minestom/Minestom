@@ -18,6 +18,85 @@ import java.util.function.BiConsumer;
 
 public class ClickUtils {
 
+    /**
+     * Gets the item that was clicked.
+     *
+     * For most clicks, this is straightforward; left clicks return the item in the slot, and drop clicks return the
+     * dropped item. Drag clicks return the cursor item, too, and hotbar swaps return the initial slot that was clicked
+     * (may not be a hotbar slot).
+     */
+    public static @NotNull ItemStack getItem(Click.Info info, Inventory inventory, PlayerInventory playerInventory) {
+        int raw = ClickUtils.getSlot(info);
+
+        int slot = PlayerInventoryUtils.protocolToMinestom(raw, inventory.getSize());
+        if (slot == -1) {
+            return info instanceof Click.Info.CreativeDropItem(ItemStack item) ? item :
+                    playerInventory.getCursorItem();
+        } else {
+            Inventory clicked = (inventory instanceof PlayerInventory || (raw != -1 && raw >= inventory.getSize()))
+                     ? playerInventory : inventory;
+
+            return clicked.getItemStack(slot);
+        }
+    }
+
+    /**
+     * Gets the slot from click info.
+     *
+     * If there is no slot, or there are arbitrarily many slots, -1 is returned.
+     */
+    public static int getSlot(@NotNull Click.Info info) {
+        return switch (info) {
+            // Single-slot clicks
+            case Click.Info.Left(int slot) -> slot;
+            case Click.Info.Right(int slot) -> slot;
+            case Click.Info.Middle(int slot) -> slot;
+            case Click.Info.LeftShift(int slot) -> slot;
+            case Click.Info.RightShift(int slot) -> slot;
+            case Click.Info.Double(int slot) -> slot;
+            case Click.Info.DropSlot(int slot, boolean ignored) -> slot;
+            case Click.Info.OffhandSwap(int slot) -> slot;
+            case Click.Info.CreativeSetItem(int slot, ItemStack ignored) -> slot;
+
+            // Zero-slot clicks
+            case Click.Info.LeftDropCursor() -> -1;
+            case Click.Info.RightDropCursor() -> -1;
+            case Click.Info.MiddleDropCursor() -> -1;
+            case Click.Info.CreativeDropItem(ItemStack ignored) -> -1;
+
+            // Multi-slot clicks
+            case Click.Info.HotbarSwap(int hotbarSlot, int clickedSlot) -> clickedSlot;
+            case Click.Info.LeftDrag(List<Integer> slots) -> -1;
+            case Click.Info.RightDrag(List<Integer> slots) -> -1;
+            case Click.Info.MiddleDrag(List<Integer> slots) -> -1;
+        };
+    }
+
+    /**
+     * Converts click info into its respective type. This is a simple 1:1 mapping.
+     */
+    public static @NotNull Click.Type getType(@NotNull Click.Info info) {
+        return switch (info) {
+            case Click.Info.CreativeDropItem ignored -> Click.Type.CREATIVE_DROP_ITEM;
+            case Click.Info.CreativeSetItem ignored -> Click.Type.CREATIVE_SET_ITEM;
+            case Click.Info.Double ignored -> Click.Type.DOUBLE;
+            case Click.Info.DropSlot ignored -> Click.Type.DROP_SLOT;
+            case Click.Info.HotbarSwap ignored -> Click.Type.HOTBAR_SWAP;
+            case Click.Info.Left ignored -> Click.Type.LEFT;
+            case Click.Info.LeftDrag ignored -> Click.Type.LEFT_DRAG;
+            case Click.Info.LeftDropCursor ignored -> Click.Type.LEFT_DROP_CURSOR;
+            case Click.Info.LeftShift ignored -> Click.Type.LEFT_SHIFT;
+            case Click.Info.Middle ignored -> Click.Type.MIDDLE;
+            case Click.Info.MiddleDrag ignored -> Click.Type.MIDDLE_DRAG;
+            case Click.Info.MiddleDropCursor ignored -> Click.Type.MIDDLE_DROP_CURSOR;
+            case Click.Info.OffhandSwap ignored -> Click.Type.OFFHAND_SWAP;
+            case Click.Info.Right ignored -> Click.Type.RIGHT;
+            case Click.Info.RightDrag ignored -> Click.Type.RIGHT_DRAG;
+            case Click.Info.RightDropCursor ignored -> Click.Type.RIGHT_DROP_CURSOR;
+            case Click.Info.RightShift ignored -> Click.Type.RIGHT_SHIFT;
+        };
+    }
+
     public static @NotNull Click.Getter makeGetter(@NotNull Inventory inventory, @NotNull PlayerInventory playerInventory) {
         return new Click.Getter(inventory::getItemStack, playerInventory::getItemStack, playerInventory.getCursorItem(), inventory.getSize());
     }

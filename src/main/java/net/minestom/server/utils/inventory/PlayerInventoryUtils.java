@@ -128,7 +128,7 @@ public final class PlayerInventoryUtils {
      * @return the player slot ID
      */
     public static int protocolToMinestom(int slot, int openInventorySize) {
-        if (slot < openInventorySize) return -1;
+        if (slot < openInventorySize) return slot;
         return PlayerInventoryUtils.protocolToMinestom(slot - openInventorySize + PROTOCOL_OFFSET);
     }
 }

@@ -7,6 +7,10 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.ClickProcessors;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.inventory.ClickUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -67,6 +71,48 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent,
      */
     public void setChanges(@NotNull List<Click.Change> changes) {
         this.changes = changes;
+    }
+
+    /**
+     * Updates the changes that will occur as a result of this click to the changes supplied by the provided
+     * {@link ClickProcessors.InventoryProcessor}.
+     * @param processor the processor that will immediately be used to supply changes
+     */
+    public void useClickProcessor(@NotNull ClickProcessors.InventoryProcessor processor) {
+        setChanges(processor.apply(info, ClickUtils.makeGetter(inventory, playerInventory)));
+    }
+
+    /**
+     * @return the click type of this click event
+     * @see ClickUtils#getType(Click.Info)
+     */
+    public @NotNull Click.Type getType() {
+        return ClickUtils.getType(info);
+    }
+
+    /**
+     * @return whether or not the slot from {@link #getSlot()} is in the player inventory (as opposed to the clicked
+     *         inventory)
+     */
+    public boolean isInPlayerInventory() {
+        int raw = ClickUtils.getSlot(info);
+        return inventory instanceof PlayerInventory || (raw != -1 && raw >= inventory.getSize());
+    }
+
+    /**
+     * @return the slot that was clicked
+     * @see ClickUtils#getSlot(Click.Info)
+     */
+    public int getSlot() {
+        return PlayerInventoryUtils.protocolToMinestom(ClickUtils.getSlot(info), inventory.getSize());
+    }
+
+    /**
+     * Gets the item that was clicked for this event.
+     * @see ClickUtils#getItem(Click.Info, Inventory, PlayerInventory)
+     */
+    public @NotNull ItemStack getClickedItem() {
+        return ClickUtils.getItem(info, inventory, playerInventory);
     }
 
     /**
