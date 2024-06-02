@@ -14,6 +14,7 @@ import net.minestom.server.item.component.Food;
 import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
+import org.jetbrains.annotations.NotNull;
 
 public class UseItemListener {
 
@@ -26,10 +27,7 @@ public class UseItemListener {
         ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();
 
-
-        final Food food = itemStack.get(ItemComponent.FOOD);
-        int defaultEatingTime = food != null ? food.eatDurationTicks() : PotionContents.POTION_DRINK_TIME;
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, defaultEatingTime);
+        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, defaultUseItemTime(itemStack));
         EventDispatcher.call(useItemEvent);
 
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
@@ -47,6 +45,9 @@ public class UseItemListener {
                 playerInventory.setEquipment(equipmentSlot, itemStack);
                 playerInventory.setItemInHand(hand, currentlyEquipped);
             }
+            final ItemStack currentlyEquipped = player.getEquipment(equipmentSlot);
+            player.setEquipment(equipmentSlot, itemStack);
+            player.setItemInHand(hand, currentlyEquipped);
         }
 
         long itemUseTime = useItemEvent.getItemUseTime();
@@ -86,5 +87,11 @@ public class UseItemListener {
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
         }
+    }
+
+    private static int defaultUseItemTime(@NotNull ItemStack itemStack) {
+        final Food food = itemStack.get(ItemComponent.FOOD);
+        if (food != null) return food.eatDurationTicks();
+        return itemStack.material() == Material.POTION ? PotionContents.POTION_DRINK_TIME : 0;
     }
 }
