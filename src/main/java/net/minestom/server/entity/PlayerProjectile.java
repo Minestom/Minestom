@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PlayerProjectile extends LivingEntity {
+public class PlayerProjectile extends Entity {
     private final Entity shooter;
     private long cooldown = 0;
 
