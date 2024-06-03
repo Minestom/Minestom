@@ -262,11 +262,12 @@ public final class Registry {
         DAMAGE_TYPES("damage_types.json"),
         TRIM_MATERIALS("trim_materials.json"),
         TRIM_PATTERNS("trim_patterns.json"),
-        BLOCK_TAGS("tags/block_tags.json"),
-        ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
-        FLUID_TAGS("tags/fluid_tags.json"),
-        GAMEPLAY_TAGS("tags/gameplay_tags.json"),
-        ITEM_TAGS("tags/item_tags.json"),
+        BLOCK_TAGS("tags/block.json"),
+        ENTITY_TYPE_TAGS("tags/entity_type.json"),
+        FLUID_TAGS("tags/fluid.json"),
+        GAMEPLAY_TAGS("tags/game_event.json"),
+        ITEM_TAGS("tags/item.json"),
+        ENCHANTMENT_TAGS("tags/enchantment.json"),
         DIMENSION_TYPES("dimension_types.json"),
         BIOMES("biomes.json"),
         ATTRIBUTES("attributes.json"),
@@ -919,11 +920,18 @@ public final class Registry {
 
     }
 
-    public record EnchantmentEntry(NamespaceID namespace, Properties custom) implements Entry {
+    public record EnchantmentEntry(NamespaceID namespace, Component description, Properties custom) implements Entry {
         public EnchantmentEntry(String namespace, Properties main, Properties custom) {
             this(NamespaceID.from(namespace),
+                    // Pretty gross, but I do not want to write a standalone serializer for this one thing.
+                    GsonComponentSerializer.gson().deserializeFromTree(new Gson().toJsonTree(main.section("description").asMap())),
                     //todo
                     custom);
+        }
+
+        // Reads either a single string entry, a list of string entries, or a tag
+        private static void readSingleOrListOrTag() {
+
         }
     }
 
