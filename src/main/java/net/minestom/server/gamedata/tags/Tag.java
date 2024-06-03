@@ -1,10 +1,12 @@
 package net.minestom.server.gamedata.tags;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.FluidRegistries;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -82,7 +84,11 @@ public final class Tag implements ProtocolObject {
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal());
+                name -> FluidRegistries.getFluid(name).ordinal()),
+
+        //todo this is cursed. it does not update as the registry changes. Fix later.
+        ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
+                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name)));
 
         private final static BasicType[] VALUES = values();
         private final String identifier;

@@ -1,5 +1,7 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.text.Component;
+import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -10,6 +12,9 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Set;
 
 public sealed interface Enchantment extends ProtocolObject, Enchantments permits EnchantmentImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Enchantment>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::enchantment);
@@ -38,18 +43,44 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
         );
     }
 
+    @NotNull Component description();
+
+    @NotNull Set<NamespaceID> exclusiveSet(); //todo read as list, single, or tag
+
+    @NotNull Set<NamespaceID> supportedItems(); //todo read as list, single, or tag
+
+    @NotNull Set<NamespaceID> primaryItems(); //todo read as list, single, or tag
+
+    int weight();
+
+    int maxLevel();
+
+//    @NotNull Object minCost(); // idk
+//
+//    @NotNull Object maxCost(); // same as minCost
+
+    int anvilCost();
+
+    @NotNull List<AttributeSlot> slots();
+
     @Override
     @Nullable Registry.EnchantmentEntry registry();
 
     class Builder {
         private final NamespaceID namespace;
+        private Component description = Component.empty();
 
         private Builder(@NotNull NamespaceID namespace) {
             this.namespace = namespace;
         }
 
+        public @NotNull Builder description(@NotNull Component description) {
+            this.description = description;
+            return this;
+        }
+
         public @NotNull Enchantment build() {
-            return new EnchantmentImpl(namespace, null);
+            return new EnchantmentImpl(namespace, description, null);
         }
     }
 
