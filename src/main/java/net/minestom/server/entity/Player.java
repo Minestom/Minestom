@@ -229,7 +229,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
 
     // Adventure
-    private Identity identity;
+    private final Identity identity;
     private final Pointers pointers;
 
     // Resource packs
@@ -544,7 +544,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getEffectiveViewDistance(),
                 EntityTracker.Target.ENTITIES, entity -> {
                     // Skip refreshing self with a new viewer
-                    if (!entity.getUuid().equals(uuid) && entity.isViewer(this)) {
+                    if (!entity.getUuid().equals(getUuid()) && entity.isViewer(this)) {
                         entity.updateNewViewer(this);
                     }
                 });
@@ -2238,7 +2238,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
-        return HoverEvent.showEntity(ShowEntity.showEntity(EntityType.PLAYER, this.uuid, this.displayName));
+        return HoverEvent.showEntity(ShowEntity.showEntity(EntityType.PLAYER, getUuid(), this.displayName));
     }
 
     /**
@@ -2380,13 +2380,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
-    }
-
-    @Override
-    public void setUuid(@NotNull UUID uuid) {
-        super.setUuid(uuid);
-        // update identity
-        this.identity = Identity.identity(uuid);
     }
 
     @Override

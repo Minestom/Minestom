@@ -233,9 +233,6 @@ public final class ConnectionManager {
                 if (!player.getUsername().equals(eventUsername)) {
                     player.setUsernameField(eventUsername);
                 }
-                if (!player.getUuid().equals(eventUuid)) {
-                    player.setUuid(eventUuid);
-                }
             }
 
             // Wait for pending login plugin messages

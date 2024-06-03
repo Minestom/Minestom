@@ -139,12 +139,6 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public void changeUuid(@NotNull Entity entity, UUID oldUuid) {
-        entriesByEntityUuid.remove(oldUuid);
-        entriesByEntityUuid.put(entity.getUuid(), new EntityTrackerEntry(entity, entity.getPosition()));
-    }
-
-    @Override
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
         //noinspection unchecked

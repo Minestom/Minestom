@@ -36,7 +36,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -568,7 +567,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setTeam(@Nullable Team team) {
         if (this.team == team) return;
-        String member = this instanceof Player player ? player.getUsername() : uuid.toString();
+        String member = this instanceof Player player ? player.getUsername() : getUuid().toString();
         if (this.team != null) {
             this.team.removeMember(member);
         }

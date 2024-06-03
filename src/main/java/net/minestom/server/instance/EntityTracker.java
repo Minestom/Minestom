@@ -62,11 +62,6 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                  @NotNull Target<T> target, @Nullable Update<T> update);
 
-    /**
-     * Called whenever the entity's uuid changes, can be called async
-     */
-    void changeUuid(@NotNull Entity entity, UUID oldUuid);
-
     @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
 
     @UnmodifiableView
