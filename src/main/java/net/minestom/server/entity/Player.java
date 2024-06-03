@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
@@ -56,8 +55,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.message.ChatPosition;
-import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -922,18 +919,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void sendPluginMessage(@NotNull String channel, @NotNull String message) {
         sendPluginMessage(channel, message.getBytes(StandardCharsets.UTF_8));
-    }
-
-    /**
-     * Deprecated, as the Adventure library has deprecated this method in the Audience class
-     * @param source the identity of the source of the message
-     * @param message a message
-     * @param type the type
-     */
-    @Override
-    @Deprecated
-    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
     }
 
     @Override
