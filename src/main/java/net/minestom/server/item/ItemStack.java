@@ -124,6 +124,11 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         return withAmount(intUnaryOperator.applyAsInt(amount()));
     }
 
+    /**
+     * <p>Returns a new ItemStack with the given component set to the given value.</p>
+     *
+     * <p>Note: this should not be used to remove components, see {@link #without(DataComponent)}.</p>
+     */
     @Contract(value = "_, _ -> new", pure = true)
     <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, @NotNull T value);
 

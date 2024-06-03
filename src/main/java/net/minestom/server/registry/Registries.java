@@ -11,7 +11,10 @@ import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Provides access to all the dynamic registries.
+ * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
+ * implementation of this interface.</p>
+ *
+ * @see net.minestom.server.MinecraftServer for static access to these
  */
 public interface Registries {
 

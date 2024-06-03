@@ -121,7 +121,7 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
 
     @Override
     public boolean remove(@NotNull T object) throws UnsupportedOperationException {
-        if (!ServerFlag.REGISTRY_UNSAFE_REMOVE) throw UNSAFE_REMOVE_EXCEPTION;
+        if (!ServerFlag.REGISTRY_UNSAFE_OPS) throw UNSAFE_REMOVE_EXCEPTION;
 
         lock.lock();
         try {
