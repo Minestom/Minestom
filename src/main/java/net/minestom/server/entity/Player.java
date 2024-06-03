@@ -127,7 +127,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private static final float MAX_CHUNKS_PER_TICK = PropertyUtils.getFloat("minestom.chunk-queue.max-per-tick", 64.0f);
     private static final float CHUNKS_PER_TICK_MULTIPLIER = PropertyUtils.getFloat("minestom.chunk-queue.multiplier", 1f);
 
-    public static final boolean EXPERIMENT_PERFORM_POSE_UPDATES = Boolean.getBoolean("minestom.experiment.pose-updates");
     // Magic values: https://wiki.vg/Entity_statuses#Player
     private static final int STATUS_ENABLE_REDUCED_DEBUG_INFO = 22;
     private static final int STATUS_DISABLE_REDUCED_DEBUG_INFO = 23;
@@ -456,7 +455,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        if (EXPERIMENT_PERFORM_POSE_UPDATES) updatePose();
+        updatePose();
 
         // Tick event
         EventDispatcher.call(new PlayerTickEvent(this));
