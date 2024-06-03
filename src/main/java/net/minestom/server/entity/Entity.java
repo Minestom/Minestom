@@ -143,7 +143,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final EventNode<EntityEvent> eventNode;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
-    protected UUID uuid;
+    private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     protected boolean removed;
 
@@ -664,19 +664,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public @NotNull UUID getUuid() {
         return uuid;
-    }
-
-    /**
-     * Changes the internal entity UUID, mostly unsafe.
-     *
-     * @param uuid the new entity uuid
-     */
-    public void setUuid(@NotNull UUID uuid) {
-        if (instance != null) {
-            instance.getEntityTracker().changeUuid(this, this.uuid);
-        }
-
-        this.uuid = uuid;
     }
 
     /**
