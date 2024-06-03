@@ -12,7 +12,6 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.validate.Check;
@@ -135,7 +134,8 @@ public class EntityFinder {
             return player != null ? List.of(player) : List.of();
         } else if (targetSelector == TargetSelector.MINESTOM_UUID) {
             Check.notNull(constantUuid, "The UUID should not be null when searching for it");
-            final Entity entity = Entity.getEntity(constantUuid);
+            Check.notNull(instance, "The instance should not be null when searching by UUID");
+            final Entity entity = instance.getEntityByUuid(constantUuid);
             return entity != null ? List.of(entity) : List.of();
         }
 

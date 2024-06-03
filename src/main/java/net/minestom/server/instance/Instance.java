@@ -593,6 +593,26 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
+     * Gets an entity based on its id (from {@link Entity#getEntityId()}).
+     *
+     * @param id the entity id
+     * @return the entity having the specified id, null if not found
+     */
+    public @Nullable Entity getEntityById(int id) {
+        return entityTracker.getEntityById(id);
+    }
+
+    /**
+     * Gets an entity based on its UUID (from {@link Entity#getUuid()}).
+     *
+     * @param uuid the entity UUID
+     * @return the entity having the specified uuid, null if not found
+     */
+    public @Nullable Entity getEntityByUuid(UUID uuid) {
+        return entityTracker.getEntityByUuid(uuid);
+    }
+
+    /**
      * Gets the players in the instance;
      *
      * @return an unmodifiable {@link Set} containing all the players in the instance

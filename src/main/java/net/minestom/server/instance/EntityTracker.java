@@ -14,6 +14,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -39,11 +40,32 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
     <T extends Entity> void unregister(@NotNull Entity entity, @NotNull Target<T> target, @Nullable Update<T> update);
 
     /**
+     * Gets an entity based on its id (from {@link Entity#getEntityId()}).
+     *
+     * @param id the entity id
+     * @return the entity having the specified id, null if not found
+     */
+    @Nullable Entity getEntityById(int id);
+
+    /**
+     * Gets an entity based on its UUID (from {@link Entity#getUuid()}).
+     *
+     * @param uuid the entity UUID
+     * @return the entity having the specified uuid, null if not found
+     */
+    @Nullable Entity getEntityByUuid(UUID uuid);
+
+    /**
      * Called every time an entity move, you may want to verify if the new
      * position is in a different chunk.
      */
     <T extends Entity> void move(@NotNull Entity entity, @NotNull Point newPoint,
                                  @NotNull Target<T> target, @Nullable Update<T> update);
+
+    /**
+     * Called whenever the entity's uuid changes, can be called async
+     */
+    void changeUuid(@NotNull Entity entity, UUID oldUuid);
 
     @UnmodifiableView <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target);
 
