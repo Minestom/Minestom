@@ -1,7 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.event.inventory.InventoryInteractEvent;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
@@ -219,7 +219,7 @@ public class InventoryIntegrationTest {
         packetTracker = connection.trackIncoming(WindowItemsPacket.class);
 
         // Cancelling the event should send a packet back
-        var listener = env.listen(InventoryPreClickEvent.class);
+        var listener = env.listen(InventoryInteractEvent.class);
         listener.followup(event -> event.setCancelled(true));
 
         inventory.handleClick(player, new Click.Info.Left(0), List.of(

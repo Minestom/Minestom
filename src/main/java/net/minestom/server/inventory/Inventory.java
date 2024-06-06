@@ -46,15 +46,14 @@ public sealed interface Inventory extends Taggable, Viewable permits InventoryIm
     byte getWindowId();
 
     /**
-     * Handles the provided click from the given player, returning the results after it is applied. If the results are
-     * null, this indicates that the click was cancelled or was otherwise not processed.
+     * Handles the provided click from the given player.
      *
      * @param player the player that clicked
      * @param info the information about the player's click
      * @param clientPrediction the client prediction (null if none)
-     * @return the results of the click, or null if the click was cancelled or otherwise was not handled
+     * @return whether or not the click was successful
      */
-    @Nullable List<Click.Change> handleClick(@NotNull Player player, @NotNull Click.Info info, @Nullable List<Click.Change> clientPrediction);
+    boolean handleClick(@NotNull Player player, @NotNull Click.Info info, @Nullable List<Click.Change> clientPrediction);
 
     /**
      * Gets all the {@link ItemStack} in the inventory.

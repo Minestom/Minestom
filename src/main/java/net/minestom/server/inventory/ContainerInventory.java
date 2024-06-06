@@ -3,15 +3,17 @@ package net.minestom.server.inventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPostClickEvent;
-import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.event.inventory.InventoryInteractEvent;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.ClickProcessors;
+import net.minestom.server.inventory.click.ButtonType;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.utils.inventory.ClickUtils;
+import net.minestom.server.utils.inventory.InventoryUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +41,7 @@ public non-sealed class ContainerInventory extends InventoryImpl {
                                                            @NotNull ClickProcessors.InventoryProcessor processor) {
         PlayerInventory playerInventory = player.getInventory();
 
-        InventoryPreClickEvent preClickEvent = new InventoryPreClickEvent(playerInventory, inventory, player, info);
+        InventoryInteractEvent preClickEvent = new InventoryInteractEvent(playerInventory, inventory, player, info);
         EventDispatcher.call(preClickEvent);
         if (preClickEvent.isCancelled()) return null;
 
@@ -136,22 +138,50 @@ public non-sealed class ContainerInventory extends InventoryImpl {
     }
 
     @Override
-    public @Nullable List<Click.Change> handleClick(@NotNull Player player, Click.@NotNull Info info, @Nullable List<Click.Change> clientPrediction) {
-        // We can use the client prediction if it's conservative (i.e. doesn't create or delete items) or the client is in creative.
-        // Otherwise, we make our own.
-        List<Click.Change> changes;
-        if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, player.getInventory()) || player.isCreative())) {
-            changes = ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
-        } else {
-            changes = ContainerInventory.handleClick(this, player, info,
-                    ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
-        }
+    public boolean handleClick(@NotNull Player player, Click.@NotNull Info info, @Nullable List<Click.Change> clientPrediction) {
+        boolean result = switch (info) {
+            case Click.Info.OffhandSwap(int slot) -> InventoryUtils.callOffhandSwap(player, this, slot);
+            case Click.Info.HotbarSwap(int hotbarSlot, int clickedSlot) -> InventoryUtils.callHotbarSwap(player, this, clickedSlot, hotbarSlot);
+            case Click.Info.LeftDrag(List<Integer> slots) -> InventoryUtils.callDrag(player, this, ButtonType.LEFT, slots);
+            case Click.Info.MiddleDrag(List<Integer> slots) -> InventoryUtils.callDrag(player, this, ButtonType.MIDDLE, slots);
+            case Click.Info.RightDrag(List<Integer> slots) -> InventoryUtils.callDrag(player, this, ButtonType.RIGHT, slots);
+            case Click.Info.LeftDropCursor() -> InventoryUtils.callDropCursor(player, this, ButtonType.LEFT);
+            case Click.Info.MiddleDropCursor() -> InventoryUtils.callDropCursor(player, this, ButtonType.MIDDLE);
+            case Click.Info.RightDropCursor() -> InventoryUtils.callDropCursor(player, this, ButtonType.RIGHT);
+            case Click.Info.DropSlot(int slot, boolean all) -> InventoryUtils.callDropSlot(player, this, all, slot);
+            case Click.Info.Left(int slot) -> InventoryUtils.callClick(player, this, ClickType.LEFT, slot);
+            case Click.Info.Right(int slot) -> InventoryUtils.callClick(player, this, ClickType.RIGHT, slot);
+            case Click.Info.Middle(int slot) -> InventoryUtils.callClick(player, this, ClickType.MIDDLE, slot);
+            case Click.Info.LeftShift(int slot) -> InventoryUtils.callClick(player, this, ClickType.LEFT_SHIFT, slot);
+            case Click.Info.RightShift(int slot) -> InventoryUtils.callClick(player, this, ClickType.RIGHT_SHIFT, slot);
+            case Click.Info.Double(int slot) -> InventoryUtils.callClick(player, this, ClickType.DOUBLE, slot);
+            case Click.Info.CreativeSetItem(int slot, ItemStack item) -> InventoryUtils.callCreativeAction(player, this, slot, item);
+            case Click.Info.CreativeDropItem(ItemStack item) -> InventoryUtils.callCreativeAction(player, this, -1, item);
+//            default -> {
+//                // We can use the client prediction if it's conservative (i.e. doesn't create or delete items) or the client is in creative.
+//                // Otherwise, we make our own.
+//                List<Click.Change> changes;
+//                if (clientPrediction != null && (ClickUtils.conservative(clientPrediction, this, player.getInventory()) || player.isCreative())) {
+//                    changes = ContainerInventory.handleClick(this, player, info, (i, g) -> clientPrediction);
+//                } else {
+//                    changes = ContainerInventory.handleClick(this, player, info,
+//                            ClickProcessors.PROCESSORS_MAP.getOrDefault(inventoryType, ClickProcessors.GENERIC_PROCESSOR));
+//                }
+//
+//                if (changes == null || !changes.equals(clientPrediction)) {
+//                    update(player);
+//                    player.getInventory().update(player);
+//                }
+//                yield changes != null;
+//            }
+        };
 
-        if (changes == null || !changes.equals(clientPrediction)) {
+        if (!result) {
             update(player);
             player.getInventory().update(player);
         }
-        return changes;
+
+        return result;
     }
 
     @Override

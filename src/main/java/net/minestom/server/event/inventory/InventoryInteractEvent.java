@@ -13,9 +13,9 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
+ * Called before other inventory click events. This is used to potentially cancel or modify the click.
  */
-public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
+public class InventoryInteractEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
     private final PlayerInventory playerInventory;
     private final Inventory inventory;
@@ -24,7 +24,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
 
     private boolean cancelled;
 
-    public InventoryPreClickEvent(@NotNull PlayerInventory playerInventory, @NotNull Inventory inventory,
+    public InventoryInteractEvent(@NotNull PlayerInventory playerInventory, @NotNull Inventory inventory,
                                   @NotNull Player player, @NotNull Click.Info info) {
         this.playerInventory = playerInventory;
         this.inventory = inventory;
