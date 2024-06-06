@@ -1,12 +1,12 @@
 package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
-public class BrewingStandInventory extends Inventory {
+public class BrewingStandInventory extends ContainerInventory {
 
     private short brewTime;
     private short fuelTime;

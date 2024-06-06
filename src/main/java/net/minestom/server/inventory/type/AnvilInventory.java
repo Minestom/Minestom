@@ -1,12 +1,12 @@
 package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
-public class AnvilInventory extends Inventory {
+public class AnvilInventory extends ContainerInventory {
 
     private short repairCost;
 
