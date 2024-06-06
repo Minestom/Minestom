@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
@@ -117,7 +118,8 @@ public final class InstanceManager {
      * @param instance the {@link Instance} to unregister
      */
     public void unregisterInstance(@NotNull Instance instance) {
-        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
+        long onlinePlayers = instance.getPlayers().stream().filter(Player::isOnline).count();
+        Check.stateCondition(onlinePlayers > 0, "You cannot unregister an instance with players inside.");
         synchronized (instance) {
             InstanceUnregisterEvent event = new InstanceUnregisterEvent(instance);
             EventDispatcher.call(event);
