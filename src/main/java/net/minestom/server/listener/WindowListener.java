@@ -53,7 +53,7 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
             successful = inventory.changeHeld(player, slot, button);
         } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
-            successful = player.isCreative();
+            successful = player.getGameMode() == GameMode.CREATIVE;
             if (successful) {
                 setCursor(player, inventory, packet.clickedItem());
             }

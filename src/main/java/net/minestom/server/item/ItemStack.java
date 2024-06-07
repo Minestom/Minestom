@@ -7,7 +7,6 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.inventory.ContainerInventory;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
