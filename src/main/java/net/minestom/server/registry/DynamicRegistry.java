@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
  * using a {@link Key} object as opposed to the record type. For example, a biome should be stored as
- * `DynamicRegistry.Key<Biome>`, as opposed to `Biome` directly.</p>
+ * `DynamicRegistry.Key Biome`, as opposed to `Biome` directly.</p>
  *
  * <p>Builtin registries should be accessed via a {@link Registries} instance (currently implemented by
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
