@@ -19,12 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand();
-        ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        //itemStack.onRightClick(player, hand);
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
-        ItemStack itemStack = player.getItemInHand(hand);
+        final ItemStack itemStack = player.getInventory().getItemInHand(hand);
         final Material material = itemStack.material();
 
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, defaultUseItemTime(itemStack));
@@ -40,11 +36,6 @@ public class UseItemListener {
         // Equip armor with right click
         final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
         if (equipmentSlot != null) {
-            final ItemStack currentlyEquipped = playerInventory.getEquipment(equipmentSlot);
-            if (currentlyEquipped.isAir()) {
-                playerInventory.setEquipment(equipmentSlot, itemStack);
-                playerInventory.setItemInHand(hand, currentlyEquipped);
-            }
             final ItemStack currentlyEquipped = player.getEquipment(equipmentSlot);
             player.setEquipment(equipmentSlot, itemStack);
             player.setItemInHand(hand, currentlyEquipped);

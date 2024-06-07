@@ -1792,7 +1792,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
             if (!fromClient) sendPacket(closeWindowPacket);
             inventory.update();
-            this.didCloseInventory = true;
+            this.skipClosePacket = true;
         }
     }
 

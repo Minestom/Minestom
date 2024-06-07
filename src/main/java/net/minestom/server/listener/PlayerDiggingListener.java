@@ -17,10 +17,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
@@ -134,16 +132,15 @@ public final class PlayerDiggingListener {
 
     private static void dropSingle(Player player) {
         final ItemStack handItem = player.getInventory().getItemInMainHand();
-        final StackingRule stackingRule = StackingRule.get();
-        final int handAmount = stackingRule.getAmount(handItem);
+        final int handAmount = handItem.amount();
         if (handAmount <= 1) {
             // Drop the whole item without copy
             dropItem(player, handItem, ItemStack.AIR);
         } else {
             // Drop a single item
             dropItem(player,
-                    stackingRule.apply(handItem, 1), // Single dropped item
-                    stackingRule.apply(handItem, handAmount - 1)); // Updated hand
+                    handItem.withAmount(1), // Single dropped item
+                    handItem.withAmount(handAmount - 1)); // Updated hand
         }
     }
 
