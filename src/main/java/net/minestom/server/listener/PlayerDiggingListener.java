@@ -7,6 +7,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerCancelDiggingEvent;
 import net.minestom.server.event.player.PlayerFinishDiggingEvent;
@@ -18,6 +19,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.item.drop.DropReason;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -127,7 +129,7 @@ public final class PlayerDiggingListener {
 
     private static void dropStack(Player player) {
         final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
-        dropItem(player, droppedItemStack, ItemStack.AIR);
+        dropItem(player, droppedItemStack, ItemStack.AIR, ItemDropEvent.DropAmount.STACK);
     }
 
     private static void dropSingle(Player player) {
@@ -136,12 +138,14 @@ public final class PlayerDiggingListener {
         final int handAmount = stackingRule.getAmount(handItem);
         if (handAmount <= 1) {
             // Drop the whole item without copy
-            dropItem(player, handItem, ItemStack.AIR);
+            dropItem(player, handItem, ItemStack.AIR, ItemDropEvent.DropAmount.SINGLE);
         } else {
             // Drop a single item
             dropItem(player,
                     stackingRule.apply(handItem, 1), // Single dropped item
-                    stackingRule.apply(handItem, handAmount - 1)); // Updated hand
+                    stackingRule.apply(handItem, handAmount - 1), // Updated hand
+                    ItemDropEvent.DropAmount.SINGLE
+            );
         }
     }
 
@@ -193,9 +197,9 @@ public final class PlayerDiggingListener {
     }
 
     private static void dropItem(@NotNull Player player,
-                                 @NotNull ItemStack droppedItem, @NotNull ItemStack handItem) {
+                                 @NotNull ItemStack droppedItem, @NotNull ItemStack handItem, @NotNull ItemDropEvent.DropAmount amount) {
         final PlayerInventory playerInventory = player.getInventory();
-        if (player.dropItem(droppedItem)) {
+        if (player.dropItem(droppedItem, DropReason.fromHotbar(player.getHeldSlot()), amount)) {
             playerInventory.setItemInMainHand(handItem);
         } else {
             playerInventory.update();
