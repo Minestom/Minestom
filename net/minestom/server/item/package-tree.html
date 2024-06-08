@@ -59,7 +59,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">net.minestom.server.item.<a href="ItemSerializers.html" class="type-name-link" title="class in net.minestom.server.item">ItemSerializers</a></li>
+<li class="circle">net.minestom.server.item.<a href="ItemComponent.html" class="type-name-link" title="class in net.minestom.server.item">ItemComponent</a></li>
 </ul>
 </li>
 </ul>
@@ -67,14 +67,14 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">net.minestom.server.item.Enchantments
+<li class="circle">net.minestom.server.component.<a href="../component/DataComponent.Holder.html" class="type-name-link" title="interface in net.minestom.server.component">DataComponent.Holder</a>
 <ul>
-<li class="circle">net.minestom.server.item.<a href="Enchantment.html" class="type-name-link" title="interface in net.minestom.server.item">Enchantment</a> (also extends net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a>)</li>
+<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.kyori.adventure.text.event.<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;V&gt;, net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
 </ul>
 </li>
-<li class="circle">net.kyori.adventure.text.event.<a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/text/event/HoverEventSource.html" class="type-name-link external-link" title="class or interface in net.kyori.adventure.text.event">HoverEventSource</a>&lt;V&gt;
+<li class="circle">net.kyori.adventure.text.event.<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" class="type-name-link external-link" title="class or interface in net.kyori.adventure.text.event">HoverEventSource</a>&lt;V&gt;
 <ul>
-<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
+<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.minestom.server.component.<a href="../component/DataComponent.Holder.html" title="interface in net.minestom.server.component">DataComponent.Holder</a>, net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
 </ul>
 </li>
 <li class="circle">net.kyori.adventure.key.Keyed
@@ -83,7 +83,6 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" class="type-name-link" title="interface in net.minestom.server.registry">StaticProtocolObject</a>
 <ul>
-<li class="circle">net.minestom.server.item.<a href="Enchantment.html" class="type-name-link" title="interface in net.minestom.server.item">Enchantment</a></li>
 <li class="circle">net.minestom.server.item.<a href="Material.html" class="type-name-link" title="interface in net.minestom.server.item">Material</a></li>
 </ul>
 </li>
@@ -96,68 +95,14 @@ loadScripts(document, 'script');</script>
 <li class="circle">net.minestom.server.item.<a href="Material.html" class="type-name-link" title="interface in net.minestom.server.item">Material</a> (also extends net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a>)</li>
 </ul>
 </li>
-<li class="circle">net.minestom.server.network.<a href="../network/NetworkBuffer.Writer.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMeta.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta</a> (also extends net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
-</ul>
-</li>
-<li class="circle">net.minestom.server.item.<a href="StackingRule.html" class="type-name-link" title="interface in net.minestom.server.item">StackingRule</a></li>
 <li class="circle">net.minestom.server.tag.<a href="../tag/TagReadable.html" class="type-name-link" title="interface in net.minestom.server.tag">TagReadable</a>
 <ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMeta.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta</a> (also extends net.minestom.server.network.<a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>)</li>
-<li class="circle">net.minestom.server.item.<a href="ItemMetaView.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaView</a>&lt;T&gt;</li>
-<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.kyori.adventure.text.event.<a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;V&gt;)</li>
-<li class="circle">net.minestom.server.tag.<a href="../tag/Taggable.html" class="type-name-link" title="interface in net.minestom.server.tag">Taggable</a> (also extends net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a>)
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMeta.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta.Builder</a>
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMetaView.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaView.Builder</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="circle">net.minestom.server.item.<a href="ItemStack.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack</a> (also extends net.minestom.server.component.<a href="../component/DataComponent.Holder.html" title="interface in net.minestom.server.component">DataComponent.Holder</a>, net.kyori.adventure.text.event.<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;V&gt;)</li>
 </ul>
 </li>
 <li class="circle">net.minestom.server.tag.<a href="../tag/TagWritable.html" class="type-name-link" title="interface in net.minestom.server.tag">TagWritable</a>
 <ul>
 <li class="circle">net.minestom.server.item.<a href="ItemStack.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemStack.Builder</a></li>
-<li class="circle">net.minestom.server.tag.<a href="../tag/Taggable.html" class="type-name-link" title="interface in net.minestom.server.tag">Taggable</a> (also extends net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMeta.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMeta.Builder</a>
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemMetaView.Builder.html" class="type-name-link" title="interface in net.minestom.server.item">ItemMetaView.Builder</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section class="hierarchy">
-<h2 title="Enum Class Hierarchy">Enum Class Hierarchy</h2>
-<ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
-<ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemHideFlag.html" class="type-name-link" title="enum class in net.minestom.server.item">ItemHideFlag</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section class="hierarchy">
-<h2 title="Record Class Hierarchy">Record Class Hierarchy</h2>
-<ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
-<ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
-<ul>
-<li class="circle">net.minestom.server.item.<a href="ItemSerializers.EnchantmentEntry.html" class="type-name-link" title="class in net.minestom.server.item">ItemSerializers.EnchantmentEntry</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>

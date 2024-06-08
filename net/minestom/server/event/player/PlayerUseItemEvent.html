@@ -109,9 +109,10 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)" class="member-name-link">PlayerUseItemEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,long)" class="member-name-link">PlayerUseItemEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
- @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
+ @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+ long&nbsp;itemUseTime)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -135,22 +136,32 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemStack()" class="member-name-link">getItemStack</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the item which have been used.</div>
+<div class="block">Gets the item which has been used.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemUseTime()" class="member-name-link">getItemUseTime</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the item usage duration.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCancelled(boolean)" class="member-name-link">setCancelled</a><wbr>(boolean&nbsp;cancel)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCancelled(boolean)" class="member-name-link">setCancelled</a><wbr>(boolean&nbsp;cancel)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemUseTime(long)" class="member-name-link">setItemUseTime</a><wbr>(long&nbsp;itemUseTime)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Changes the item usage duration.</div>
 </div>
 </div>
 </div>
@@ -176,14 +187,15 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,long)">
 <h3>PlayerUseItemEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerUseItemEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull
  <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
  @NotNull
- @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</span></div>
+ @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+ long&nbsp;itemUseTime)</span></div>
 </section>
 </li>
 </ul>
@@ -211,12 +223,35 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h3>getItemStack</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">getItemStack</span>()</div>
-<div class="block">Gets the item which have been used.</div>
+<div class="block">Gets the item which has been used.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../trait/ItemEvent.html#getItemStack()">getItemStack</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/ItemEvent.html" title="interface in net.minestom.server.event.trait">ItemEvent</a></code></dd>
 <dt>Returns:</dt>
 <dd>the item</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getItemUseTime()">
+<h3>getItemUseTime</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">getItemUseTime</span>()</div>
+<div class="block">Gets the item usage duration. After this amount of milliseconds,
+ the animation will stop automatically and <a href="../item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item"><code>ItemUpdateStateEvent</code></a> is called.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the item use time</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setItemUseTime(long)">
+<h3>setItemUseTime</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setItemUseTime</span><wbr><span class="parameters">(long&nbsp;itemUseTime)</span></div>
+<div class="block">Changes the item usage duration.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>itemUseTime</code> - the new item use time</dd>
 </dl>
 </section>
 </li>

@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RegistryDataPacket</span>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RegistryDataPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;registryId, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RegistryDataPacket.Entry.html" title="class in net.minestom.server.network.packet.server.configuration">RegistryDataPacket.Entry</a>&gt;&nbsp;entries)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a></span></div>
 </section>
@@ -106,6 +106,15 @@ implements <a href="../ServerPacket.Configuration.html" title="interface in net.
 <li>
 <section class="nested-class-summary" id="nested-class-summary">
 <h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="RegistryDataPacket.Entry.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.configuration">RegistryDataPacket.Entry</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
 <div class="inherited-list">
 <h2 id="nested-classes-inherited-from-class-net.minestom.server.network.packet.server.ServerPacket">Nested classes/interfaces inherited from interface&nbsp;net.minestom.server.network.packet.server.<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></h2>
 <code><a href="../ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a>, <a href="../ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a>, <a href="../ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a>, <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a>, <a href="../ServerPacket.Status.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Status</a></code></div>
@@ -119,12 +128,13 @@ implements <a href="../ServerPacket.Configuration.html" title="interface in net.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">RegistryDataPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">RegistryDataPacket</a><wbr>(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.util.List)" class="member-name-link">RegistryDataPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;registryId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RegistryDataPacket.Entry.html" title="class in net.minestom.server.network.packet.server.configuration">RegistryDataPacket.Entry</a>&gt;&nbsp;entries)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>RegistryDataPacket</code> record class.</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">RegistryDataPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -142,10 +152,10 @@ implements <a href="../ServerPacket.Configuration.html" title="interface in net.
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#configurationId()" class="member-name-link">configurationId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data()" class="member-name-link">data</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="RegistryDataPacket.Entry.html" title="class in net.minestom.server.network.packet.server.configuration">RegistryDataPacket.Entry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entries()" class="member-name-link">entries</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>data</code> record component.</div>
+<div class="block">Returns the value of the <code>entries</code> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -157,14 +167,19 @@ implements <a href="../ServerPacket.Configuration.html" title="interface in net.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registryId()" class="member-name-link">registryId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>registryId</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -193,14 +208,17 @@ implements <a href="../ServerPacket.Configuration.html" title="interface in net.
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.util.List)">
 <h3>RegistryDataPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RegistryDataPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;registryId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RegistryDataPacket.Entry.html" title="class in net.minestom.server.network.packet.server.configuration">RegistryDataPacket.Entry</a>&gt;&nbsp;entries)</span></div>
 <div class="block">Creates an instance of a <code>RegistryDataPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>data</code> - the value for the <code>data</code> record component</dd>
+<dd><code>registryId</code> - the value for the <code>registryId</code> record component</dd>
+<dd><code>entries</code> - the value for the <code>entries</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -275,14 +293,26 @@ implements <a href="../ServerPacket.Configuration.html" title="interface in net.
 </section>
 </li>
 <li>
-<section class="detail" id="data()">
-<h3>data</h3>
+<section class="detail" id="registryId()">
+<h3>registryId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">data</span>()</div>
-<div class="block">Returns the value of the <code>data</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">registryId</span>()</div>
+<div class="block">Returns the value of the <code>registryId</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>data</code> record component</dd>
+<dd>the value of the <code>registryId</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="entries()">
+<h3>entries</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RegistryDataPacket.Entry.html" title="class in net.minestom.server.network.packet.server.configuration">RegistryDataPacket.Entry</a>&gt;</span>&nbsp;<span class="element-name">entries</span>()</div>
+<div class="block">Returns the value of the <code>entries</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>entries</code> record component</dd>
 </dl>
 </section>
 </li>

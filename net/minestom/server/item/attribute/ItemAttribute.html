@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ItemAttribute</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, @NotNull <a href="../../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute, @NotNull <a href="../../attribute/AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation, double&nbsp;amount, @NotNull <a href="AttributeSlot.html" title="enum class in net.minestom.server.item.attribute">AttributeSlot</a>&nbsp;slot)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ItemAttribute</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute, @NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation, double&nbsp;amount, @NotNull <a href="AttributeSlot.html" title="enum class in net.minestom.server.item.attribute">AttributeSlot</a>&nbsp;slot)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
@@ -105,10 +105,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,net.minestom.server.attribute.Attribute,net.minestom.server.attribute.AttributeOperation,double,net.minestom.server.item.attribute.AttributeSlot)" class="member-name-link">ItemAttribute</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,net.minestom.server.entity.attribute.Attribute,net.minestom.server.entity.attribute.AttributeOperation,double,net.minestom.server.item.attribute.AttributeSlot)" class="member-name-link">ItemAttribute</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- @NotNull <a href="../../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
- @NotNull <a href="../../attribute/AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation,
+ @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute,
+ @NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation,
  double&nbsp;amount,
  @NotNull <a href="AttributeSlot.html" title="enum class in net.minestom.server.item.attribute">AttributeSlot</a>&nbsp;slot)</code></div>
 <div class="col-last even-row-color">
@@ -133,7 +133,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>amount</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attribute()" class="member-name-link">attribute</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>attribute</code> record component.</div>
@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>name</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../attribute/AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operation()" class="member-name-link">operation</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>operation</code> record component.</div>
@@ -191,16 +191,16 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,net.minestom.server.attribute.Attribute,net.minestom.server.attribute.AttributeOperation,double,net.minestom.server.item.attribute.AttributeSlot)">
+<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,net.minestom.server.entity.attribute.Attribute,net.minestom.server.entity.attribute.AttributeOperation,double,net.minestom.server.item.attribute.AttributeSlot)">
 <h3>ItemAttribute</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ItemAttribute</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  @NotNull
- @NotNull <a href="../../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
+ @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute,
  @NotNull
- @NotNull <a href="../../attribute/AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation,
+ @NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation,
  double&nbsp;amount,
  @NotNull
  @NotNull <a href="AttributeSlot.html" title="enum class in net.minestom.server.item.attribute">AttributeSlot</a>&nbsp;slot)</span></div>
@@ -293,7 +293,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="attribute()">
 <h3>attribute</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></span>&nbsp;<span class="element-name">attribute</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">attribute</span>()</div>
 <div class="block">Returns the value of the <code>attribute</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -305,7 +305,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="operation()">
 <h3>operation</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../attribute/AttributeOperation.html" title="enum class in net.minestom.server.attribute">AttributeOperation</a></span>&nbsp;<span class="element-name">operation</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a></span>&nbsp;<span class="element-name">operation</span>()</div>
 <div class="block">Returns the value of the <code>operation</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

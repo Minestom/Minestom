@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LoginSuccessPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username, int&nbsp;properties)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LoginSuccessPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username, int&nbsp;properties, boolean&nbsp;strictErrorHandling)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a></span></div>
 </section>
@@ -119,9 +119,10 @@ implements <a href="../ServerPacket.Login.html" title="interface in net.minestom
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,int)" class="member-name-link">LoginSuccessPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,int,boolean)" class="member-name-link">LoginSuccessPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- int&nbsp;properties)</code></div>
+ int&nbsp;properties,
+ boolean&nbsp;strictErrorHandling)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>LoginSuccessPacket</code> record class.</div>
 </div>
@@ -159,24 +160,29 @@ implements <a href="../ServerPacket.Login.html" title="interface in net.minestom
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>properties</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strictErrorHandling()" class="member-name-link">strictErrorHandling</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>strictErrorHandling</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#username()" class="member-name-link">username</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#username()" class="member-name-link">username</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>username</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#uuid()" class="member-name-link">uuid</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#uuid()" class="member-name-link">uuid</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>uuid</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -205,19 +211,21 @@ implements <a href="../ServerPacket.Login.html" title="interface in net.minestom
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,int)">
+<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,int,boolean)">
 <h3>LoginSuccessPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LoginSuccessPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- int&nbsp;properties)</span></div>
+ int&nbsp;properties,
+ boolean&nbsp;strictErrorHandling)</span></div>
 <div class="block">Creates an instance of a <code>LoginSuccessPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>uuid</code> - the value for the <code>uuid</code> record component</dd>
 <dd><code>username</code> - the value for the <code>username</code> record component</dd>
 <dd><code>properties</code> - the value for the <code>properties</code> record component</dd>
+<dd><code>strictErrorHandling</code> - the value for the <code>strictErrorHandling</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -323,6 +331,17 @@ implements <a href="../ServerPacket.Login.html" title="interface in net.minestom
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>properties</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strictErrorHandling()">
+<h3>strictErrorHandling</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">strictErrorHandling</span>()</div>
+<div class="block">Returns the value of the <code>strictErrorHandling</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>strictErrorHandling</code> record component</dd>
 </dl>
 </section>
 </li>

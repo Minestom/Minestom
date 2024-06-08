@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">JoinGamePacket</span>(int&nbsp;entityId, boolean&nbsp;isHardcore, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds, int&nbsp;maxPlayers, int&nbsp;viewDistance, int&nbsp;simulationDistance, boolean&nbsp;reducedDebugInfo, boolean&nbsp;enableRespawnScreen, boolean&nbsp;doLimitedCrafting, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world, long&nbsp;hashedSeed, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode, boolean&nbsp;isDebug, boolean&nbsp;isFlat, <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation, int&nbsp;portalCooldown)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">JoinGamePacket</span>(int&nbsp;entityId, boolean&nbsp;isHardcore, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds, int&nbsp;maxPlayers, int&nbsp;viewDistance, int&nbsp;simulationDistance, boolean&nbsp;reducedDebugInfo, boolean&nbsp;enableRespawnScreen, boolean&nbsp;doLimitedCrafting, int&nbsp;dimensionType, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world, long&nbsp;hashedSeed, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode, boolean&nbsp;isDebug, boolean&nbsp;isFlat, @Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation, int&nbsp;portalCooldown, boolean&nbsp;enforcesSecureChat)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -134,7 +134,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,boolean,java.util.List,int,int,int,boolean,boolean,boolean,java.lang.String,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int)" class="member-name-link">JoinGamePacket</a><wbr>(int&nbsp;entityId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,boolean,java.util.List,int,int,int,boolean,boolean,boolean,int,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int,boolean)" class="member-name-link">JoinGamePacket</a><wbr>(int&nbsp;entityId,
  boolean&nbsp;isHardcore,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;worlds,
  int&nbsp;maxPlayers,
@@ -143,15 +143,16 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  boolean&nbsp;reducedDebugInfo,
  boolean&nbsp;enableRespawnScreen,
  boolean&nbsp;doLimitedCrafting,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType,
+ int&nbsp;dimensionType,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world,
  long&nbsp;hashedSeed,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
  boolean&nbsp;isDebug,
  boolean&nbsp;isFlat,
- <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
- int&nbsp;portalCooldown)</code></div>
+ @Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
+ int&nbsp;portalCooldown,
+ boolean&nbsp;enforcesSecureChat)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>JoinGamePacket</code> record class.</div>
 </div>
@@ -171,12 +172,12 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deathLocation()" class="member-name-link">deathLocation</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>deathLocation</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimensionType()" class="member-name-link">dimensionType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>dimensionType</code> record component.</div>
@@ -191,97 +192,102 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>enableRespawnScreen</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entityId()" class="member-name-link">entityId</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enforcesSecureChat()" class="member-name-link">enforcesSecureChat</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>enforcesSecureChat</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entityId()" class="member-name-link">entityId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>entityId</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#gameMode()" class="member-name-link">gameMode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#gameMode()" class="member-name-link">gameMode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>gameMode</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashedSeed()" class="member-name-link">hashedSeed</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashedSeed()" class="member-name-link">hashedSeed</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>hashedSeed</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDebug()" class="member-name-link">isDebug</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDebug()" class="member-name-link">isDebug</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>isDebug</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFlat()" class="member-name-link">isFlat</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFlat()" class="member-name-link">isFlat</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>isFlat</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isHardcore()" class="member-name-link">isHardcore</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isHardcore()" class="member-name-link">isHardcore</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>isHardcore</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxPlayers()" class="member-name-link">maxPlayers</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxPlayers()" class="member-name-link">maxPlayers</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>maxPlayers</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#portalCooldown()" class="member-name-link">portalCooldown</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#portalCooldown()" class="member-name-link">portalCooldown</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>portalCooldown</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#previousGameMode()" class="member-name-link">previousGameMode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#previousGameMode()" class="member-name-link">previousGameMode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>previousGameMode</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reducedDebugInfo()" class="member-name-link">reducedDebugInfo</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reducedDebugInfo()" class="member-name-link">reducedDebugInfo</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>reducedDebugInfo</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#simulationDistance()" class="member-name-link">simulationDistance</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#simulationDistance()" class="member-name-link">simulationDistance</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>simulationDistance</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#viewDistance()" class="member-name-link">viewDistance</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#viewDistance()" class="member-name-link">viewDistance</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>viewDistance</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#world()" class="member-name-link">world</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#world()" class="member-name-link">world</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>world</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#worlds()" class="member-name-link">worlds</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#worlds()" class="member-name-link">worlds</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>worlds</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -325,7 +331,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(int,boolean,java.util.List,int,int,int,boolean,boolean,boolean,java.lang.String,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int)">
+<section class="detail" id="&lt;init&gt;(int,boolean,java.util.List,int,int,int,boolean,boolean,boolean,int,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int,boolean)">
 <h3>JoinGamePacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JoinGamePacket</span><wbr><span class="parameters">(int&nbsp;entityId,
  boolean&nbsp;isHardcore,
@@ -336,15 +342,17 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  boolean&nbsp;reducedDebugInfo,
  boolean&nbsp;enableRespawnScreen,
  boolean&nbsp;doLimitedCrafting,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType,
+ int&nbsp;dimensionType,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;world,
  long&nbsp;hashedSeed,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
  boolean&nbsp;isDebug,
  boolean&nbsp;isFlat,
- <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
- int&nbsp;portalCooldown)</span></div>
+ @Nullable
+ @Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
+ int&nbsp;portalCooldown,
+ boolean&nbsp;enforcesSecureChat)</span></div>
 <div class="block">Creates an instance of a <code>JoinGamePacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -366,6 +374,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dd><code>isFlat</code> - the value for the <code>isFlat</code> record component</dd>
 <dd><code>deathLocation</code> - the value for the <code>deathLocation</code> record component</dd>
 <dd><code>portalCooldown</code> - the value for the <code>portalCooldown</code> record component</dd>
+<dd><code>enforcesSecureChat</code> - the value for the <code>enforcesSecureChat</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -548,7 +557,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="dimensionType()">
 <h3>dimensionType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">dimensionType</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">dimensionType</span>()</div>
 <div class="block">Returns the value of the <code>dimensionType</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -625,7 +634,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="deathLocation()">
 <h3>deathLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">deathLocation</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">deathLocation</span>()</div>
 <div class="block">Returns the value of the <code>deathLocation</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -641,6 +651,17 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>portalCooldown</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="enforcesSecureChat()">
+<h3>enforcesSecureChat</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">enforcesSecureChat</span>()</div>
+<div class="block">Returns the value of the <code>enforcesSecureChat</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>enforcesSecureChat</code> record component</dd>
 </dl>
 </section>
 </li>

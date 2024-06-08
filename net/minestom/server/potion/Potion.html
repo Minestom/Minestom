@@ -125,18 +125,23 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="block">A flag indicating that this Potion is ambient (it came from a beacon).</div>
 </div>
 <div class="col-first odd-row-color"><code>static final byte</code></div>
-<div class="col-second odd-row-color"><code><a href="#ICON_FLAG" class="member-name-link">ICON_FLAG</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#BLEND_FLAG" class="member-name-link">BLEND_FLAG</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">A flag instructing the client to use its builtin blending effect, only used with the darkness effect currently.</div>
+</div>
+<div class="col-first even-row-color"><code>static final byte</code></div>
+<div class="col-second even-row-color"><code><a href="#ICON_FLAG" class="member-name-link">ICON_FLAG</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">A flag indicating that this Potion has an icon.</div>
 </div>
-<div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#INFINITE_DURATION" class="member-name-link">INFINITE_DURATION</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#INFINITE_DURATION" class="member-name-link">INFINITE_DURATION</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">A duration constant which sets a Potion duration to infinite.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final byte</code></div>
-<div class="col-second odd-row-color"><code><a href="#PARTICLES_FLAG" class="member-name-link">PARTICLES_FLAG</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static final byte</code></div>
+<div class="col-second even-row-color"><code><a href="#PARTICLES_FLAG" class="member-name-link">PARTICLES_FLAG</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">A flag indicating that this Potion has particles.</div>
 </div>
 </div>
@@ -204,44 +209,47 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the flags that this Potion has.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasBlend()" class="member-name-link">hasBlend</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasIcon()" class="member-name-link">hasIcon</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasIcon()" class="member-name-link">hasIcon</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether this Potion has an icon or not.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasParticles()" class="member-name-link">hasParticles</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasParticles()" class="member-name-link">hasParticles</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether this Potion has particles or not.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAmbient()" class="member-name-link">isAmbient</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAmbient()" class="member-name-link">isAmbient</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether this Potion is ambient (it came from a beacon) or not.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendAddPacket(net.minestom.server.entity.Entity)" class="member-name-link">sendAddPacket</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendAddPacket(net.minestom.server.entity.Entity)" class="member-name-link">sendAddPacket</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a packet that a potion effect has been applied to the entity.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendRemovePacket(net.minestom.server.entity.Entity)" class="member-name-link">sendRemovePacket</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendRemovePacket(net.minestom.server.entity.Entity)" class="member-name-link">sendRemovePacket</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a packet that a potion effect has been removed from the entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -308,6 +316,21 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <li><a href="#PARTICLES_FLAG"><code>PARTICLES_FLAG</code></a></li>
 <li><a href="#flags()"><code>flags()</code></a></li>
 <li><a href="../../../../constant-values.html#net.minestom.server.potion.Potion.ICON_FLAG">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="BLEND_FLAG">
+<h3>BLEND_FLAG</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">byte</span>&nbsp;<span class="element-name">BLEND_FLAG</span></div>
+<div class="block">A flag instructing the client to use its builtin blending effect, only used with the darkness effect currently.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#net.minestom.server.potion.Potion.BLEND_FLAG">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -435,6 +458,12 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <dt>Returns:</dt>
 <dd><code>true</code> if the Potion has an icon</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="hasBlend()">
+<h3>hasBlend</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasBlend</span>()</div>
 </section>
 </li>
 <li>

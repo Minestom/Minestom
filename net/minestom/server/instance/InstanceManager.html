@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">InstanceManager</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.registry.Registries)" class="member-name-link">InstanceManager</a><wbr>(@NotNull <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -129,13 +129,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createInstanceContainer(net.minestom.server.instance.IChunkLoader)" class="member-name-link">createInstanceContainer</a><wbr>(@Nullable <a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a>&nbsp;loader)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createInstanceContainer(net.minestom.server.world.DimensionType)" class="member-name-link">createInstanceContainer</a><wbr>(@NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createInstanceContainer(net.minestom.server.registry.DynamicRegistry.Key)" class="member-name-link">createInstanceContainer</a><wbr>(<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;&nbsp;dimensionType)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createInstanceContainer(net.minestom.server.world.DimensionType,net.minestom.server.instance.IChunkLoader)" class="member-name-link">createInstanceContainer</a><wbr>(@NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createInstanceContainer(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.instance.IChunkLoader)" class="member-name-link">createInstanceContainer</a><wbr>(<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;&nbsp;dimensionType,
  @Nullable <a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a>&nbsp;loader)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a>.</div>
+<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../world/DimensionType.html" title="interface in net.minestom.server.world"><code>DimensionType</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createSharedInstance(net.minestom.server.instance.InstanceContainer)" class="member-name-link">createSharedInstance</a><wbr>(@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</code></div>
@@ -185,9 +185,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.registry.Registries)">
 <h3>InstanceManager</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InstanceManager</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InstanceManager</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
 </section>
 </li>
 </ul>
@@ -214,18 +215,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="createInstanceContainer(net.minestom.server.world.DimensionType,net.minestom.server.instance.IChunkLoader)">
+<section class="detail" id="createInstanceContainer(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.instance.IChunkLoader)">
 <h3>createInstanceContainer</h3>
 <div class="member-signature"><span class="annotations">@Experimental
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></span>&nbsp;<span class="element-name">createInstanceContainer</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType,
+ <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;&nbsp;dimensionType,
  @Nullable
  @Nullable <a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a>&nbsp;loader)</span></div>
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a>.</div>
+<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../world/DimensionType.html" title="interface in net.minestom.server.world"><code>DimensionType</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>dimensionType</code> - the <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a> of the instance</dd>
+<dd><code>dimensionType</code> - the <a href="../world/DimensionType.html" title="interface in net.minestom.server.world"><code>DimensionType</code></a> of the instance</dd>
 <dd><code>loader</code> - the chunk loader</dd>
 <dt>Returns:</dt>
 <dd>the created <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a></dd>
@@ -233,11 +234,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="createInstanceContainer(net.minestom.server.world.DimensionType)">
+<section class="detail" id="createInstanceContainer(net.minestom.server.registry.DynamicRegistry.Key)">
 <h3>createInstanceContainer</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></span>&nbsp;<span class="element-name">createInstanceContainer</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</span></div>
+ <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;&nbsp;dimensionType)</span></div>
 </section>
 </li>
 <li>

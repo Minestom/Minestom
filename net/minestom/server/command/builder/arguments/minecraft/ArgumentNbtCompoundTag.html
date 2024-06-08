@@ -86,15 +86,15 @@ loadScripts(document, 'script');</script>
 <h1 title="Class ArgumentNbtCompoundTag" class="title">Class ArgumentNbtCompoundTag</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;
+<div class="inheritance"><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;
 <div class="inheritance">net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtCompoundTag</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ArgumentNbtCompoundTag</span>
-<span class="extends-implements">extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;</span></div>
-<div class="block">Argument used to retrieve a <code>NBTCompound</code> if you need key-value data.
+<span class="extends-implements">extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</span></div>
+<div class="block">Argument used to retrieve a <code>CompoundBinaryTag</code> if you need key-value data.
  <p>
  Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}}</div>
 </section>
@@ -142,7 +142,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull net.kyori.adventure.nbt.CompoundBinaryTag</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parse(net.minestom.server.command.CommandSender,java.lang.String)" class="member-name-link">parse</a><wbr>(@NotNull <a href="../../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="parse(net.minestom.server.command.CommandSender,java.lang.String)">
 <h3>parse</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">parse</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull net.kyori.adventure.nbt.CompoundBinaryTag</span>&nbsp;<span class="element-name">parse</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
  if the input cannot be converted to <code>T</code></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Argument.html#parse(net.minestom.server.command.CommandSender,java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;</code></dd>
+<dd><code><a href="../Argument.html#parse(net.minestom.server.command.CommandSender,java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - the argument to parse</dd>
 <dt>Returns:</dt>
@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">parser</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Argument.html#parser()">parser</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;</code></dd>
+<dd><code><a href="../Argument.html#parser()">parser</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</code></dd>
 </dl>
 </section>
 </li>

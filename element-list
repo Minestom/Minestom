@@ -1,3 +1,4 @@
+net.kyori.adventure.nbt
 net.minestom.server
 net.minestom.server.advancements
 net.minestom.server.advancements.notifications
@@ -6,7 +7,6 @@ net.minestom.server.adventure.audience
 net.minestom.server.adventure.bossbar
 net.minestom.server.adventure.provider
 net.minestom.server.adventure.serializer.nbt
-net.minestom.server.attribute
 net.minestom.server.collision
 net.minestom.server.color
 net.minestom.server.command
@@ -20,6 +20,7 @@ net.minestom.server.command.builder.condition
 net.minestom.server.command.builder.exception
 net.minestom.server.command.builder.parser
 net.minestom.server.command.builder.suggestion
+net.minestom.server.component
 net.minestom.server.coordinate
 net.minestom.server.crypto
 net.minestom.server.effects
@@ -27,6 +28,7 @@ net.minestom.server.entity
 net.minestom.server.entity.ai
 net.minestom.server.entity.ai.goal
 net.minestom.server.entity.ai.target
+net.minestom.server.entity.attribute
 net.minestom.server.entity.damage
 net.minestom.server.entity.metadata
 net.minestom.server.entity.metadata.ambient
@@ -47,6 +49,8 @@ net.minestom.server.entity.metadata.villager
 net.minestom.server.entity.metadata.water
 net.minestom.server.entity.metadata.water.fish
 net.minestom.server.entity.pathfinding
+net.minestom.server.entity.pathfinding.followers
+net.minestom.server.entity.pathfinding.generators
 net.minestom.server.entity.vehicle
 net.minestom.server.event
 net.minestom.server.event.book
@@ -70,8 +74,11 @@ net.minestom.server.extras.velocity
 net.minestom.server.fluid
 net.minestom.server.gamedata.tags
 net.minestom.server.instance
+net.minestom.server.instance.anvil
 net.minestom.server.instance.batch
 net.minestom.server.instance.block
+net.minestom.server.instance.block.banner
+net.minestom.server.instance.block.predicate
 net.minestom.server.instance.block.rule
 net.minestom.server.instance.generator
 net.minestom.server.instance.heightmap
@@ -84,9 +91,9 @@ net.minestom.server.inventory.type
 net.minestom.server.item
 net.minestom.server.item.armor
 net.minestom.server.item.attribute
-net.minestom.server.item.firework
-net.minestom.server.item.metadata
-net.minestom.server.item.rule
+net.minestom.server.item.book
+net.minestom.server.item.component
+net.minestom.server.item.enchant
 net.minestom.server.listener
 net.minestom.server.listener.common
 net.minestom.server.listener.manager
@@ -114,7 +121,6 @@ net.minestom.server.network.player
 net.minestom.server.network.plugin
 net.minestom.server.network.socket
 net.minestom.server.particle
-net.minestom.server.particle.data
 net.minestom.server.permission
 net.minestom.server.ping
 net.minestom.server.potion
@@ -144,10 +150,11 @@ net.minestom.server.utils.inventory
 net.minestom.server.utils.location
 net.minestom.server.utils.math
 net.minestom.server.utils.mojang
+net.minestom.server.utils.nbt
 net.minestom.server.utils.player
 net.minestom.server.utils.position
 net.minestom.server.utils.time
 net.minestom.server.utils.url
 net.minestom.server.utils.validate
 net.minestom.server.world
-net.minestom.server.world.biomes
+net.minestom.server.world.biome

@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntitySoundEffectPacket</span>(@Nullable <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent, @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName, @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range, <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source, int&nbsp;entityId, float&nbsp;volume, float&nbsp;pitch, long&nbsp;seed)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntitySoundEffectPacket</span>(@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent, <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source, int&nbsp;entityId, float&nbsp;volume, float&nbsp;pitch, long&nbsp;seed)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -119,28 +119,10 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.Float,net.kyori.adventure.sound.Sound.Source,int,float,float,long)" class="member-name-link">EntitySoundEffectPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range,
- <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
- int&nbsp;entityId,
- float&nbsp;volume,
- float&nbsp;pitch,
- long&nbsp;seed)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">EntitySoundEffectPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">EntitySoundEffectPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.sound.SoundEvent,java.lang.Float,net.kyori.adventure.sound.Sound.Source,int,float,float,long)" class="member-name-link">EntitySoundEffectPacket</a><wbr>(@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range,
- <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
- int&nbsp;entityId,
- float&nbsp;volume,
- float&nbsp;pitch,
- long&nbsp;seed)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.sound.SoundEvent,java.lang.String,java.lang.Float,net.kyori.adventure.sound.Sound.Source,int,float,float,long)" class="member-name-link">EntitySoundEffectPacket</a><wbr>(@Nullable <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range,
- <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.sound.SoundEvent,net.kyori.adventure.sound.Sound.Source,int,float,float,long)" class="member-name-link">EntitySoundEffectPacket</a><wbr>(@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
+ <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
  int&nbsp;entityId,
  float&nbsp;volume,
  float&nbsp;pitch,
@@ -185,27 +167,17 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#range()" class="member-name-link">range</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seed()" class="member-name-link">seed</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>range</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seed()" class="member-name-link">seed</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>seed</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundEvent()" class="member-name-link">soundEvent</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundEvent()" class="member-name-link">soundEvent</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>soundEvent</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundName()" class="member-name-link">soundName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>soundName</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#source()" class="member-name-link">source</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>source</code> record component.</div>
@@ -244,16 +216,19 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.sound.SoundEvent,java.lang.String,java.lang.Float,net.kyori.adventure.sound.Sound.Source,int,float,float,long)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
 <h3>EntitySoundEffectPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntitySoundEffectPacket</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
- @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName,
- @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntitySoundEffectPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(net.minestom.server.sound.SoundEvent,net.kyori.adventure.sound.Sound.Source,int,float,float,long)">
+<h3>EntitySoundEffectPacket</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntitySoundEffectPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
  @NotNull
- <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
+ <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
  int&nbsp;entityId,
  float&nbsp;volume,
  float&nbsp;pitch,
@@ -262,51 +237,12 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>soundEvent</code> - the value for the <code>soundEvent</code> record component</dd>
-<dd><code>soundName</code> - the value for the <code>soundName</code> record component</dd>
-<dd><code>range</code> - the value for the <code>range</code> record component</dd>
 <dd><code>source</code> - the value for the <code>source</code> record component</dd>
 <dd><code>entityId</code> - the value for the <code>entityId</code> record component</dd>
 <dd><code>volume</code> - the value for the <code>volume</code> record component</dd>
 <dd><code>pitch</code> - the value for the <code>pitch</code> record component</dd>
 <dd><code>seed</code> - the value for the <code>seed</code> record component</dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.sound.SoundEvent,java.lang.Float,net.kyori.adventure.sound.Sound.Source,int,float,float,long)">
-<h3>EntitySoundEffectPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntitySoundEffectPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
- @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range,
- @NotNull
- <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
- int&nbsp;entityId,
- float&nbsp;volume,
- float&nbsp;pitch,
- long&nbsp;seed)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Float,net.kyori.adventure.sound.Sound.Source,int,float,float,long)">
-<h3>EntitySoundEffectPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntitySoundEffectPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName,
- @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;range,
- @NotNull
- <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a>&nbsp;source,
- int&nbsp;entityId,
- float&nbsp;volume,
- float&nbsp;pitch,
- long&nbsp;seed)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
-<h3>EntitySoundEffectPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntitySoundEffectPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
 </section>
 </li>
 </ul>
@@ -382,8 +318,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="soundEvent()">
 <h3>soundEvent</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></span>&nbsp;<span class="element-name">soundEvent</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></span>&nbsp;<span class="element-name">soundEvent</span>()</div>
 <div class="block">Returns the value of the <code>soundEvent</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -392,34 +328,10 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="soundName()">
-<h3>soundName</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">soundName</span>()</div>
-<div class="block">Returns the value of the <code>soundName</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>soundName</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="range()">
-<h3>range</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a></span>&nbsp;<span class="element-name">range</span>()</div>
-<div class="block">Returns the value of the <code>range</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>range</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="source()">
 <h3>source</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a></span>&nbsp;<span class="element-name">source</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Source.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Source</a></span>&nbsp;<span class="element-name">source</span>()</div>
 <div class="block">Returns the value of the <code>source</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

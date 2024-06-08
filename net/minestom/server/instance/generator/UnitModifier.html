@@ -88,11 +88,11 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="../../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></code>, <code><a href="../block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code></dd>
+<dd><code><a href="../../world/biome/Biome.Setter.html" title="interface in net.minestom.server.world.biome">Biome.Setter</a></code>, <code><a href="../block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">UnitModifier</span><span class="extends-implements">
-extends <a href="../block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a>, <a href="../../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></span></div>
+extends <a href="../block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a>, <a href="../../world/biome/Biome.Setter.html" title="interface in net.minestom.server.world.biome">Biome.Setter</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -135,7 +135,7 @@ extends <a href="../block/Block.Setter.html" title="interface in net.minestom.se
 <div class="block">Fills the unit with the given block.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#fillBiome(net.minestom.server.world.biomes.Biome)" class="member-name-link">fillBiome</a><wbr>(@NotNull <a href="../../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a>&nbsp;biome)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#fillBiome(net.minestom.server.registry.DynamicRegistry.Key)" class="member-name-link">fillBiome</a><wbr>(<a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../../world/biome/Biome.html" title="interface in net.minestom.server.world.biome">Biome</a>&gt;&nbsp;biome)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Fills the 3d rectangular area with the given biome.</div>
 </div>
@@ -168,8 +168,8 @@ extends <a href="../block/Block.Setter.html" title="interface in net.minestom.se
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.world.biomes.Biome.Setter">Methods inherited from interface&nbsp;net.minestom.server.world.biomes.<a href="../../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></h3>
-<code><a href="../../world/biomes/Biome.Setter.html#setBiome(int,int,int,net.minestom.server.world.biomes.Biome)">setBiome</a>, <a href="../../world/biomes/Biome.Setter.html#setBiome(net.minestom.server.coordinate.Point,net.minestom.server.world.biomes.Biome)">setBiome</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.world.biome.Biome.Setter">Methods inherited from interface&nbsp;net.minestom.server.world.biome.<a href="../../world/biome/Biome.Setter.html" title="interface in net.minestom.server.world.biome">Biome.Setter</a></h3>
+<code><a href="../../world/biome/Biome.Setter.html#setBiome(int,int,int,net.minestom.server.registry.DynamicRegistry.Key)">setBiome</a>, <a href="../../world/biome/Biome.Setter.html#setBiome(net.minestom.server.coordinate.Point,net.minestom.server.registry.DynamicRegistry.Key)">setBiome</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.instance.block.Block.Setter">Methods inherited from interface&nbsp;net.minestom.server.instance.block.<a href="../block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></h3>
 <code><a href="../block/Block.Setter.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)">setBlock</a>, <a href="../block/Block.Setter.html#setBlock(net.minestom.server.coordinate.Point,net.minestom.server.instance.block.Block)">setBlock</a></code></div>
@@ -273,10 +273,10 @@ extends <a href="../block/Block.Setter.html" title="interface in net.minestom.se
 </section>
 </li>
 <li>
-<section class="detail" id="fillBiome(net.minestom.server.world.biomes.Biome)">
+<section class="detail" id="fillBiome(net.minestom.server.registry.DynamicRegistry.Key)">
 <h3>fillBiome</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">fillBiome</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a>&nbsp;biome)</span></div>
+ <a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../../world/biome/Biome.html" title="interface in net.minestom.server.world.biome">Biome</a>&gt;&nbsp;biome)</span></div>
 <div class="block">Fills the 3d rectangular area with the given biome.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

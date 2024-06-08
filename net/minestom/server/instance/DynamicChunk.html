@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></code>, <code><a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code>, <code><a href="../world/biomes/Biome.Getter.html" title="interface in net.minestom.server.world.biomes">Biome.Getter</a></code>, <code><a href="../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></code></dd>
+<dd><code><a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></code>, <code><a href="block/Block.Setter.html" title="interface in net.minestom.server.instance.block">Block.Setter</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code>, <code><a href="../world/biome/Biome.Getter.html" title="interface in net.minestom.server.world.biome">Biome.Getter</a></code>, <code><a href="../world/biome/Biome.Setter.html" title="interface in net.minestom.server.world.biome">Biome.Setter</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -144,7 +144,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.instance.Chunk">Fields inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
-<code><a href="Chunk.html#CHUNK_SECTION_SIZE">CHUNK_SECTION_SIZE</a>, <a href="Chunk.html#CHUNK_SIZE_X">CHUNK_SIZE_X</a>, <a href="Chunk.html#CHUNK_SIZE_Z">CHUNK_SIZE_Z</a>, <a href="Chunk.html#chunkX">chunkX</a>, <a href="Chunk.html#chunkZ">chunkZ</a>, <a href="Chunk.html#columnarSpace">columnarSpace</a>, <a href="Chunk.html#instance">instance</a>, <a href="Chunk.html#loaded">loaded</a>, <a href="Chunk.html#maxSection">maxSection</a>, <a href="Chunk.html#minSection">minSection</a></code></div>
+<code><a href="Chunk.html#CHUNK_SECTION_SIZE">CHUNK_SECTION_SIZE</a>, <a href="Chunk.html#CHUNK_SIZE_X">CHUNK_SIZE_X</a>, <a href="Chunk.html#CHUNK_SIZE_Z">CHUNK_SIZE_Z</a>, <a href="Chunk.html#chunkX">chunkX</a>, <a href="Chunk.html#chunkZ">chunkZ</a>, <a href="Chunk.html#instance">instance</a>, <a href="Chunk.html#loaded">loaded</a>, <a href="Chunk.html#maxSection">maxSection</a>, <a href="Chunk.html#minSection">minSection</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../network/packet/server/play/data/LightData.html" title="class in net.minestom.server.network.packet.server.play.data">LightData</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createLightData()" class="member-name-link">createLightData</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="../world/biome/Biome.html" title="interface in net.minestom.server.world.biome">Biome</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBiome(int,int,int)" class="member-name-link">getBiome</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z)</code></div>
@@ -197,75 +197,78 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFullDataPacket()" class="member-name-link">getFullDataPacket</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastChangeTime()" class="member-name-link">getLastChangeTime</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected net.kyori.adventure.nbt.CompoundBinaryTag</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeightmapNBT()" class="member-name-link">getHeightmapNBT</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLastChangeTime()" class="member-name-link">getLastChangeTime</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the last time that this chunk changed.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Section.html" title="class in net.minestom.server.instance">Section</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSection(int)" class="member-name-link">getSection</a><wbr>(int&nbsp;section)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Section.html" title="class in net.minestom.server.instance">Section</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSections()" class="member-name-link">getSections</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Section.html" title="class in net.minestom.server.instance">Section</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSection(int)" class="member-name-link">getSection</a><wbr>(int&nbsp;section)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Section.html" title="class in net.minestom.server.instance">Section</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSections()" class="member-name-link">getSections</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate()" class="member-name-link">invalidate</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Invalidate the chunk caches</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadHeightmapsFromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">loadHeightmapsFromNBT</a><wbr>(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;heightmapsNBT)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#motionBlockingHeightmap()" class="member-name-link">motionBlockingHeightmap</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadHeightmapsFromNBT(net.kyori.adventure.nbt.CompoundBinaryTag)" class="member-name-link">loadHeightmapsFromNBT</a><wbr>(net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;heightmapsNBT)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset()" class="member-name-link">reset</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#motionBlockingHeightmap()" class="member-name-link">motionBlockingHeightmap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset()" class="member-name-link">reset</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Resets the chunk, this means clearing all the data making it empty.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBiome(int,int,int,net.minestom.server.world.biomes.Biome)" class="member-name-link">setBiome</a><wbr>(int&nbsp;x,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBiome(int,int,int,net.minestom.server.registry.DynamicRegistry.Key)" class="member-name-link">setBiome</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
- @NotNull <a href="../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a>&nbsp;biome)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)" class="member-name-link">setBlock</a><wbr>(int&nbsp;x,
+ <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/biome/Biome.html" title="interface in net.minestom.server.world.biome">Biome</a>&gt;&nbsp;biome)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockHandler.Placement,net.minestom.server.instance.block.BlockHandler.Destroy)" class="member-name-link">setBlock</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  @NotNull <a href="block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  <a href="block/BlockHandler.Placement.html" title="class in net.minestom.server.instance.block">BlockHandler.Placement</a>&nbsp;placement,
  <a href="block/BlockHandler.Destroy.html" title="class in net.minestom.server.instance.block">BlockHandler.Destroy</a>&nbsp;destroy)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes a chunk tick.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/ChunkSnapshot.html" title="interface in net.minestom.server.snapshot">ChunkSnapshot</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../snapshot/ChunkSnapshot.html" title="interface in net.minestom.server.snapshot">ChunkSnapshot</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)" class="member-name-link">updateSnapshot</a><wbr>(@NotNull <a href="../snapshot/SnapshotUpdater.html" title="interface in net.minestom.server.snapshot">SnapshotUpdater</a>&nbsp;updater)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates the currently cached snapshot if required.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#worldSurfaceHeightmap()" class="member-name-link">worldSurfaceHeightmap</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="heightmap/Heightmap.html" title="class in net.minestom.server.instance.heightmap">Heightmap</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#worldSurfaceHeightmap()" class="member-name-link">worldSurfaceHeightmap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.instance.Chunk">Methods inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
-<code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getInstance()">getInstance</a>, <a href="Chunk.html#getMaxSection()">getMaxSection</a>, <a href="Chunk.html#getMinSection()">getMinSection</a>, <a href="Chunk.html#getSectionAt(int)">getSectionAt</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#onGenerate()">onGenerate</a>, <a href="Chunk.html#onLoad()">onLoad</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk()">sendChunk</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)">setBlock</a>, <a href="Chunk.html#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#tagHandler()">tagHandler</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></div>
+<code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getInstance()">getInstance</a>, <a href="Chunk.html#getMaxSection()">getMaxSection</a>, <a href="Chunk.html#getMinSection()">getMinSection</a>, <a href="Chunk.html#getSectionAt(int)">getSectionAt</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#onGenerate()">onGenerate</a>, <a href="Chunk.html#onLoad()">onLoad</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk()">sendChunk</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)">setBlock</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#tagHandler()">tagHandler</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.world.biomes.Biome.Getter">Methods inherited from interface&nbsp;net.minestom.server.world.biomes.<a href="../world/biomes/Biome.Getter.html" title="interface in net.minestom.server.world.biomes">Biome.Getter</a></h3>
-<code><a href="../world/biomes/Biome.Getter.html#getBiome(net.minestom.server.coordinate.Point)">getBiome</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.world.biome.Biome.Getter">Methods inherited from interface&nbsp;net.minestom.server.world.biome.<a href="../world/biome/Biome.Getter.html" title="interface in net.minestom.server.world.biome">Biome.Getter</a></h3>
+<code><a href="../world/biome/Biome.Getter.html#getBiome(net.minestom.server.coordinate.Point)">getBiome</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.world.biomes.Biome.Setter">Methods inherited from interface&nbsp;net.minestom.server.world.biomes.<a href="../world/biomes/Biome.Setter.html" title="interface in net.minestom.server.world.biomes">Biome.Setter</a></h3>
-<code><a href="../world/biomes/Biome.Setter.html#setBiome(net.minestom.server.coordinate.Point,net.minestom.server.world.biomes.Biome)">setBiome</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.world.biome.Biome.Setter">Methods inherited from interface&nbsp;net.minestom.server.world.biome.<a href="../world/biome/Biome.Setter.html" title="interface in net.minestom.server.world.biome">Biome.Setter</a></h3>
+<code><a href="../world/biome/Biome.Setter.html#setBiome(net.minestom.server.coordinate.Point,net.minestom.server.registry.DynamicRegistry.Key)">setBiome</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.instance.block.Block.Getter">Methods inherited from interface&nbsp;net.minestom.server.instance.block.<a href="block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a></h3>
 <code><a href="block/Block.Getter.html#getBlock(int,int,int)">getBlock</a>, <a href="block/Block.Getter.html#getBlock(net.minestom.server.coordinate.Point)">getBlock</a>, <a href="block/Block.Getter.html#getBlock(net.minestom.server.coordinate.Point,net.minestom.server.instance.block.Block.Getter.Condition)">getBlock</a></code></div>
@@ -363,13 +366,13 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setBiome(int,int,int,net.minestom.server.world.biomes.Biome)">
+<section class="detail" id="setBiome(int,int,int,net.minestom.server.registry.DynamicRegistry.Key)">
 <h3>setBiome</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setBiome</span><wbr><span class="parameters">(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  @NotNull
- @NotNull <a href="../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a>&nbsp;biome)</span></div>
+ <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/biome/Biome.html" title="interface in net.minestom.server.world.biome">Biome</a>&gt;&nbsp;biome)</span></div>
 </section>
 </li>
 <li>
@@ -417,12 +420,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="loadHeightmapsFromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<section class="detail" id="loadHeightmapsFromNBT(net.kyori.adventure.nbt.CompoundBinaryTag)">
 <h3>loadHeightmapsFromNBT</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadHeightmapsFromNBT</span><wbr><span class="parameters">(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;heightmapsNBT)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loadHeightmapsFromNBT</span><wbr><span class="parameters">(net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;heightmapsNBT)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="Chunk.html#loadHeightmapsFromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)">loadHeightmapsFromNBT</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
+<dd><code><a href="Chunk.html#loadHeightmapsFromNBT(net.kyori.adventure.nbt.CompoundBinaryTag)">loadHeightmapsFromNBT</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
 </dl>
 </section>
 </li>
@@ -461,7 +464,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getBiome(int,int,int)">
 <h3>getBiome</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../world/biomes/Biome.html" title="interface in net.minestom.server.world.biomes">Biome</a></span>&nbsp;<span class="element-name">getBiome</span><wbr><span class="parameters">(int&nbsp;x,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../world/biome/Biome.html" title="interface in net.minestom.server.world.biome">Biome</a>&gt;</span>&nbsp;<span class="element-name">getBiome</span><wbr><span class="parameters">(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z)</span></div>
 </section>
@@ -547,6 +550,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="createLightData()">
 <h3>createLightData</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../network/packet/server/play/data/LightData.html" title="class in net.minestom.server.network.packet.server.play.data">LightData</a></span>&nbsp;<span class="element-name">createLightData</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getHeightmapNBT()">
+<h3>getHeightmapNBT</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">net.kyori.adventure.nbt.CompoundBinaryTag</span>&nbsp;<span class="element-name">getHeightmapNBT</span>()</div>
 </section>
 </li>
 <li>

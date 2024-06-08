@@ -116,7 +116,7 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.damage.DamageType,net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,float)" class="member-name-link">Damage</a><wbr>(@NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,float)" class="member-name-link">Damage</a><wbr>(<a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;&nbsp;type,
  @Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;source,
  @Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;attacker,
  @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;sourcePosition,
@@ -138,12 +138,12 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buildDeathMessage(net.minestom.server.entity.Player)" class="member-name-link">buildDeathMessage</a><wbr>(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the death message linked to this damage type.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buildDeathScreenText(net.minestom.server.entity.Player)" class="member-name-link">buildDeathScreenText</a><wbr>(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the text sent to a player in his death screen.</div>
@@ -161,7 +161,7 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="PositionalDamage.html" title="class in net.minestom.server.entity.damage">PositionalDamage</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromPosition(net.minestom.server.entity.damage.DamageType,net.minestom.server.coordinate.Point,float)" class="member-name-link">fromPosition</a><wbr>(@NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromPosition(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.coordinate.Point,float)" class="member-name-link">fromPosition</a><wbr>(<a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;&nbsp;type,
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;sourcePosition,
  float&nbsp;amount)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
@@ -201,7 +201,7 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the position of the source of the damage, or null if there is none.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getType()" class="member-name-link">getType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the type of this damage.</div>
@@ -233,10 +233,10 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.damage.DamageType,net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,float)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,float)">
 <h3>Damage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Damage</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
+ <a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;&nbsp;type,
  @Nullable
  @Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;source,
  @Nullable
@@ -264,7 +264,7 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <section class="detail" id="getType()">
 <h3>getType</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a></span>&nbsp;<span class="element-name">getType</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;</span>&nbsp;<span class="element-name">getType</span>()</div>
 <div class="block">Gets the type of this damage.
  <p>
  It does not have to be unique to this object.o</div>
@@ -317,7 +317,7 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <section class="detail" id="buildDeathMessage(net.minestom.server.entity.Player)">
 <h3>buildDeathMessage</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">buildDeathMessage</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">buildDeathMessage</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</span></div>
 <div class="block">Builds the death message linked to this damage type.
  <p>
@@ -385,11 +385,11 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 </section>
 </li>
 <li>
-<section class="detail" id="fromPosition(net.minestom.server.entity.damage.DamageType,net.minestom.server.coordinate.Point,float)">
+<section class="detail" id="fromPosition(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.coordinate.Point,float)">
 <h3>fromPosition</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="PositionalDamage.html" title="class in net.minestom.server.entity.damage">PositionalDamage</a></span>&nbsp;<span class="element-name">fromPosition</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
+ <a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;&nbsp;type,
  @NotNull
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;sourcePosition,
  float&nbsp;amount)</span></div>
@@ -399,7 +399,7 @@ implements <a href="../../tag/Taggable.html" title="interface in net.minestom.se
 <section class="detail" id="buildDeathScreenText(net.minestom.server.entity.Player)">
 <h3>buildDeathScreenText</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.advntr.dev/api/4.15.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">buildDeathScreenText</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">buildDeathScreenText</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</span></div>
 <div class="block">Builds the text sent to a player in his death screen.</div>
 <dl class="notes">

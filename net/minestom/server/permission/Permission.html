@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Representation of a permission granted to a <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.
  Each permission has a string representation used as an identifier, and an optional
- <code>NBTCompound</code> used to store additional data.
+ <code>CompoundBinaryTag</code> used to store additional data.
  <p>
  The class is immutable.</div>
 </section>
@@ -112,8 +112,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Creates a new permission object without additional data</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">Permission</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;permissionName,
- @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,net.kyori.adventure.nbt.CompoundBinaryTag)" class="member-name-link">Permission</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;permissionName,
+ @Nullable net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;data)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a new permission object with optional data.</div>
 </div>
@@ -134,7 +134,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable net.kyori.adventure.nbt.CompoundBinaryTag</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNBTData()" class="member-name-link">getNBTData</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the data associated to this permission.</div>
@@ -165,12 +165,12 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,net.kyori.adventure.nbt.CompoundBinaryTag)">
 <h3>Permission</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Permission</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;permissionName,
  @Nullable
- @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</span></div>
+ @Nullable net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;data)</span></div>
 <div class="block">Creates a new permission object with optional data.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getNBTData()">
 <h3>getNBTData</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">getNBTData</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable net.kyori.adventure.nbt.CompoundBinaryTag</span>&nbsp;<span class="element-name">getNBTData</span>()</div>
 <div class="block">Gets the data associated to this permission.</div>
 <dl class="notes">
 <dt>Returns:</dt>

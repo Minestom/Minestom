@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code></dd>
+<dd><code><a href="registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a></code>, <code><a href="snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Experimental
 @NonExtendable
 </span><span class="modifiers">public interface </span><span class="element-name type-name-label">ServerProcess</span><span class="extends-implements">
-extends <a href="snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></span></div>
+extends <a href="registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>, <a href="snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -132,36 +132,26 @@ extends <a href="snapshot/Snapshotable.html" title="interface in net.minestom.se
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="monitoring/BenchmarkManager.html" title="class in net.minestom.server.monitoring">BenchmarkManager</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#benchmark()" class="member-name-link">benchmark</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="world/biomes/BiomeManager.html" title="class in net.minestom.server.world.biomes">BiomeManager</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#biome()" class="member-name-link">biome</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="instance/block/BlockManager.html" title="class in net.minestom.server.instance.block">BlockManager</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#block()" class="member-name-link">block</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Handles registered biomes.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="instance/block/BlockManager.html" title="class in net.minestom.server.instance.block">BlockManager</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#block()" class="member-name-link">block</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Handles <a href="instance/block/BlockHandler.html" title="interface in net.minestom.server.instance.block"><code>block handlers</code></a>
  and <a href="instance/block/rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>placement rules</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="adventure/bossbar/BossBarManager.html" title="class in net.minestom.server.adventure.bossbar">BossBarManager</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#bossBar()" class="member-name-link">bossBar</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="adventure/bossbar/BossBarManager.html" title="class in net.minestom.server.adventure.bossbar">BossBarManager</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#bossBar()" class="member-name-link">bossBar</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Handles registered boss bars.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="command/CommandManager.html" title="class in net.minestom.server.command">CommandManager</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#command()" class="member-name-link">command</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="command/CommandManager.html" title="class in net.minestom.server.command">CommandManager</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#command()" class="member-name-link">command</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Handles registered commands.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#connection()" class="member-name-link">connection</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Handles incoming connections/players.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="world/DimensionTypeManager.html" title="class in net.minestom.server.world">DimensionTypeManager</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#dimension()" class="member-name-link">dimension</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#connection()" class="member-name-link">connection</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Handles registered dimensions.</div>
+<div class="block">Handles incoming connections/players.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="thread/ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a><wbr>&lt;<a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#dispatcher()" class="member-name-link">dispatcher</a>()</code></div>
@@ -232,12 +222,12 @@ extends <a href="snapshot/Snapshotable.html" title="interface in net.minestom.se
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Handles the server ticks.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="item/armor/TrimManager.html" title="class in net.minestom.server.item.armor">TrimManager</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#trim()" class="member-name-link">trim</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-net.minestom.server.registry.Registries">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a></h3>
+<code><a href="registry/Registries.html#bannerPattern()">bannerPattern</a>, <a href="registry/Registries.html#biome()">biome</a>, <a href="registry/Registries.html#chatType()">chatType</a>, <a href="registry/Registries.html#damageType()">damageType</a>, <a href="registry/Registries.html#dimensionType()">dimensionType</a>, <a href="registry/Registries.html#trimMaterial()">trimMaterial</a>, <a href="registry/Registries.html#trimPattern()">trimPattern</a>, <a href="registry/Registries.html#wolfVariant()">wolfVariant</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.snapshot.Snapshotable">Methods inherited from interface&nbsp;net.minestom.server.snapshot.<a href="snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></h3>
 <code><a href="snapshot/Snapshotable.html#updateSnapshot(net.minestom.server.snapshot.SnapshotUpdater)">updateSnapshot</a></code></div>
@@ -327,22 +317,6 @@ extends <a href="snapshot/Snapshotable.html" title="interface in net.minestom.se
 </section>
 </li>
 <li>
-<section class="detail" id="dimension()">
-<h3>dimension</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="world/DimensionTypeManager.html" title="class in net.minestom.server.world">DimensionTypeManager</a></span>&nbsp;<span class="element-name">dimension</span>()</div>
-<div class="block">Handles registered dimensions.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="biome()">
-<h3>biome</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="world/biomes/BiomeManager.html" title="class in net.minestom.server.world.biomes">BiomeManager</a></span>&nbsp;<span class="element-name">biome</span>()</div>
-<div class="block">Handles registered biomes.</div>
-</section>
-</li>
-<li>
 <section class="detail" id="advancement()">
 <h3>advancement</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -364,13 +338,6 @@ extends <a href="snapshot/Snapshotable.html" title="interface in net.minestom.se
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="gamedata/tags/TagManager.html" title="class in net.minestom.server.gamedata.tags">TagManager</a></span>&nbsp;<span class="element-name">tag</span>()</div>
 <div class="block">Handles registry tags.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="trim()">
-<h3>trim</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="item/armor/TrimManager.html" title="class in net.minestom.server.item.armor">TrimManager</a></span>&nbsp;<span class="element-name">trim</span>()</div>
 </section>
 </li>
 <li>

@@ -101,8 +101,7 @@ loadScripts(document, 'script');</script>
  Permissions are in-memory only by default.
  You have however the capacity to store them persistently as the <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> object
  is serializer-friendly, <a href="Permission.html#getPermissionName()"><code>Permission.getPermissionName()</code></a> being a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>
- and <a href="Permission.html#getNBTData()"><code>Permission.getNBTData()</code></a> serializable into a string using <code>NBTCompound.toSNBT()</code>
- and deserialized back with <code>SNBTParser.parse()</code>.</div>
+ and <a href="Permission.html#getNBTData()"><code>Permission.getNBTData()</code></a> serializable into a string using <code>TagStringIO</code>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

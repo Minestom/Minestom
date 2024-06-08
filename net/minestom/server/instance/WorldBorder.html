@@ -5,7 +5,7 @@
 <title>WorldBorder (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.instance, class: WorldBorder">
+<meta name="description" content="declaration: package: net.minestom.server.instance, record: WorldBorder">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -38,8 +38,8 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Summary:</p>
 <ul>
-<li><a href="#nested-class-summary">Nested</a></li>
-<li>Field</li>
+<li>Nested</li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -58,14 +58,14 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -83,31 +83,46 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.instance</a></div>
-<h1 title="Class WorldBorder" class="title">Class WorldBorder</h1>
+<h1 title="Record Class WorldBorder" class="title">Record Class WorldBorder</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
+<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">java.lang.Record</a>
 <div class="inheritance">net.minestom.server.instance.WorldBorder</div>
 </div>
+</div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Record Components:</dt>
+<dd><code><span id="param-diameter">diameter</span></code> - the diameter of this world border</dd>
+<dd><code><span id="param-centerX">centerX</span></code> - the center x coordinate of this world border</dd>
+<dd><code><span id="param-centerZ">centerZ</span></code> - the center z coordinate of this world border</dd>
+<dd><code><span id="param-warningDistance">warningDistance</span></code> - the distance from this world border before
+                                  the warning indicator is displayed</dd>
+<dd><code><span id="param-warningTime">warningTime</span></code> - the length of time the warning indicator
+                                  is displayed</dd>
+<dd><code><span id="param-dimensionTeleportBoundary">dimensionTeleportBoundary</span></code> - restricts the distance travelled when entering
+                                  this world from another dimension (should be at
+                                  least the diameter of the world border)</dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">WorldBorder</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Represents the world border of an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>,
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">WorldBorder</span>(double&nbsp;diameter, double&nbsp;centerX, double&nbsp;centerZ, int&nbsp;warningDistance, int&nbsp;warningTime, int&nbsp;dimensionTeleportBoundary)
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
+<div class="block">Represents the world border state of an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>,
  can be retrieved with <a href="Instance.html#getWorldBorder()"><code>Instance.getWorldBorder()</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
+<!-- =========== FIELD SUMMARY =========== -->
 <li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
+<div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="WorldBorder.CollisionAxis.html" class="type-name-link" title="enum class in net.minestom.server.instance">WorldBorder.CollisionAxis</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_BORDER" class="member-name-link">DEFAULT_BORDER</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -117,13 +132,24 @@ loadScripts(document, 'script');</script>
 <section class="constructor-summary" id="constructor-summary">
 <h2>Constructor Summary</h2>
 <div class="caption"><span>Constructors</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier</div>
-<div class="table-header col-second">Constructor</div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.instance.Instance)" class="member-name-link">WorldBorder</a><wbr>(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(double,double,double,int,int)" class="member-name-link">WorldBorder</a><wbr>(double&nbsp;diameter,
+ double&nbsp;centerX,
+ double&nbsp;centerZ,
+ int&nbsp;warningDistance,
+ int&nbsp;warningTime)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(double,double,double,int,int,int)" class="member-name-link">WorldBorder</a><wbr>(double&nbsp;diameter,
+ double&nbsp;centerX,
+ double&nbsp;centerZ,
+ int&nbsp;warningDistance,
+ int&nbsp;warningTime,
+ int&nbsp;dimensionTeleportBoundary)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates an instance of a <code>WorldBorder</code> record class.</div>
+</div>
 </div>
 </section>
 </li>
@@ -138,112 +164,168 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCenterX()" class="member-name-link">getCenterX</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#centerX()" class="member-name-link">centerX</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the center X of the world border.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCenterZ()" class="member-name-link">getCenterZ</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the center Z of the world border.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="WorldBorder.CollisionAxis.html" title="enum class in net.minestom.server.instance">WorldBorder.CollisionAxis</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCollisionAxis(net.minestom.server.coordinate.Point)" class="member-name-link">getCollisionAxis</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to check at which axis does the position collides with the world border.</div>
+<div class="block">Returns the value of the <a href="#param-centerX"><code>centerX</code></a> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDiameter()" class="member-name-link">getDiameter</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#centerZ()" class="member-name-link">centerZ</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the diameter of the world border.</div>
+<div class="block">Returns the value of the <a href="#param-centerZ"><code>centerZ</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInstance()" class="member-name-link">getInstance</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/WorldBorderCenterPacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderCenterPacket</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createCenterPacket()" class="member-name-link">createCenterPacket</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> linked to this world border.</div>
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderSizePacket</code></a> which dictates the origin of the world border.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/InitializeWorldBorderPacket.html" title="class in net.minestom.server.network.packet.server.play">InitializeWorldBorderPacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createInitializePacket(double,long)" class="member-name-link">createInitializePacket</a><wbr>(double&nbsp;targetDiameter,
+ long&nbsp;transitionTime)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a <a href="../network/packet/server/play/InitializeWorldBorderPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>InitializeWorldBorderPacket</code></a> which dictates every property
+ of the world border.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/WorldBorderLerpSizePacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderLerpSizePacket</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createLerpSizePacket(double,long)" class="member-name-link">createLerpSizePacket</a><wbr>(double&nbsp;targetDiameter,
+ long&nbsp;transitionTime)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderLerpSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderLerpSizePacket</code></a> which lerps the border from its current
+ diameter to the target diameter over the given transition time.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderSizePacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createSizePacket()" class="member-name-link">createSizePacket</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderSizePacket</code></a> with this world border's diameter.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/WorldBorderWarningDelayPacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderWarningDelayPacket</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createWarningDelayPacket()" class="member-name-link">createWarningDelayPacket</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderWarningDelayPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderWarningDelayPacket</code></a> with this world border's warning time</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/WorldBorderWarningReachPacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderWarningReachPacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createWarningReachPacket()" class="member-name-link">createWarningReachPacket</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderWarningReachPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderWarningReachPacket</code></a> with this world border's warning distance</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#diameter()" class="member-name-link">diameter</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-diameter"><code>diameter</code></a> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWarningBlocks()" class="member-name-link">getWarningBlocks</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWarningTime()" class="member-name-link">getWarningTime</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#init(net.minestom.server.entity.Player)" class="member-name-link">init</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimensionTeleportBoundary()" class="member-name-link">dimensionTeleportBoundary</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sends the world border init packet to a player.</div>
+<div class="block">Returns the value of the <a href="#param-dimensionTeleportBoundary"><code>dimensionTeleportBoundary</code></a> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Indicates whether some other object is "equal to" this one.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a hash code value for this object.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isInside(net.minestom.server.coordinate.Point)" class="member-name-link">isInside</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inBounds(net.minestom.server.coordinate.Point)" class="member-name-link">inBounds</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to know if a position is located inside the world border or not.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isInside(net.minestom.server.entity.Entity)" class="member-name-link">isInside</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inBounds(net.minestom.server.entity.Entity)" class="member-name-link">inBounds</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to know if an entity is located inside the world border or not.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCenter(float,float)" class="member-name-link">setCenter</a><wbr>(float&nbsp;centerX,
- float&nbsp;centerZ)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the X and Z position of the center.</div>
+<div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCenterX(float)" class="member-name-link">setCenterX</a><wbr>(float&nbsp;centerX)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#warningDistance()" class="member-name-link">warningDistance</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the center X of the world border.</div>
+<div class="block">Returns the value of the <a href="#param-warningDistance"><code>warningDistance</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCenterZ(float)" class="member-name-link">setCenterZ</a><wbr>(float&nbsp;centerZ)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#warningTime()" class="member-name-link">warningTime</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the center Z of the world border.</div>
+<div class="block">Returns the value of the <a href="#param-warningTime"><code>warningTime</code></a> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDiameter(double)" class="member-name-link">setDiameter</a><wbr>(double&nbsp;diameter)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the diameter of the world border.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDiameter(double,long)" class="member-name-link">setDiameter</a><wbr>(double&nbsp;diameter,
- long&nbsp;speed)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the diameter to <code>diameter</code> in <code>speed</code> milliseconds (interpolation).</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setWarningBlocks(int)" class="member-name-link">setWarningBlocks</a><wbr>(int&nbsp;warningBlocks)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withCenter(double,double)" class="member-name-link">withCenter</a><wbr>(double&nbsp;centerX,
+ double&nbsp;centerZ)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setWarningTime(int)" class="member-name-link">setWarningTime</a><wbr>(int&nbsp;warningTime)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDiameter(double)" class="member-name-link">withDiameter</a><wbr>(double&nbsp;diameter)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to update in real-time the current diameter time.</div>
-</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withWarningDistance(int)" class="member-name-link">withWarningDistance</a><wbr>(int&nbsp;warningDistance)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withWarningTime(int)" class="member-name-link">withWarningTime</a><wbr>(int&nbsp;warningTime)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="DEFAULT_BORDER">
+<h3>DEFAULT_BORDER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></span>&nbsp;<span class="element-name">DEFAULT_BORDER</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.instance.Instance)">
+<section class="detail" id="&lt;init&gt;(double,double,double,int,int,int)">
 <h3>WorldBorder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">WorldBorder</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">WorldBorder</span><wbr><span class="parameters">(double&nbsp;diameter,
+ double&nbsp;centerX,
+ double&nbsp;centerZ,
+ int&nbsp;warningDistance,
+ int&nbsp;warningTime,
+ int&nbsp;dimensionTeleportBoundary)</span></div>
+<div class="block">Creates an instance of a <code>WorldBorder</code> record class.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>diameter</code> - the value for the <a href="#param-diameter"><code>diameter</code></a> record component</dd>
+<dd><code>centerX</code> - the value for the <a href="#param-centerX"><code>centerX</code></a> record component</dd>
+<dd><code>centerZ</code> - the value for the <a href="#param-centerZ"><code>centerZ</code></a> record component</dd>
+<dd><code>warningDistance</code> - the value for the <a href="#param-warningDistance"><code>warningDistance</code></a> record component</dd>
+<dd><code>warningTime</code> - the value for the <a href="#param-warningTime"><code>warningTime</code></a> record component</dd>
+<dd><code>dimensionTeleportBoundary</code> - the value for the <a href="#param-dimensionTeleportBoundary"><code>dimensionTeleportBoundary</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(double,double,double,int,int)">
+<h3>WorldBorder</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">WorldBorder</span><wbr><span class="parameters">(double&nbsp;diameter,
+ double&nbsp;centerX,
+ double&nbsp;centerZ,
+ int&nbsp;warningDistance,
+ int&nbsp;warningTime)</span></div>
 </section>
 </li>
 </ul>
@@ -255,149 +337,42 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="setCenter(float,float)">
-<h3>setCenter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCenter</span><wbr><span class="parameters">(float&nbsp;centerX,
- float&nbsp;centerZ)</span></div>
-<div class="block">Changes the X and Z position of the center.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>centerX</code> - the X center</dd>
-<dd><code>centerZ</code> - the Z center</dd>
-</dl>
+<section class="detail" id="withDiameter(double)">
+<h3>withDiameter</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></span>&nbsp;<span class="element-name">withDiameter</span><wbr><span class="parameters">(double&nbsp;diameter)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="getCenterX()">
-<h3>getCenterX</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">getCenterX</span>()</div>
-<div class="block">Gets the center X of the world border.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the X center</dd>
-</dl>
+<section class="detail" id="withCenter(double,double)">
+<h3>withCenter</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></span>&nbsp;<span class="element-name">withCenter</span><wbr><span class="parameters">(double&nbsp;centerX,
+ double&nbsp;centerZ)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="setCenterX(float)">
-<h3>setCenterX</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCenterX</span><wbr><span class="parameters">(float&nbsp;centerX)</span></div>
-<div class="block">Changes the center X of the world border.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>centerX</code> - the new center X</dd>
-</dl>
+<section class="detail" id="withWarningDistance(int)">
+<h3>withWarningDistance</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></span>&nbsp;<span class="element-name">withWarningDistance</span><wbr><span class="parameters">(int&nbsp;warningDistance)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="getCenterZ()">
-<h3>getCenterZ</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">getCenterZ</span>()</div>
-<div class="block">Gets the center Z of the world border.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the Z center</dd>
-</dl>
+<section class="detail" id="withWarningTime(int)">
+<h3>withWarningTime</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></span>&nbsp;<span class="element-name">withWarningTime</span><wbr><span class="parameters">(int&nbsp;warningTime)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="setCenterZ(float)">
-<h3>setCenterZ</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCenterZ</span><wbr><span class="parameters">(float&nbsp;centerZ)</span></div>
-<div class="block">Changes the center Z of the world border.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>centerZ</code> - the new center Z</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getWarningTime()">
-<h3>getWarningTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getWarningTime</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="setWarningTime(int)">
-<h3>setWarningTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setWarningTime</span><wbr><span class="parameters">(int&nbsp;warningTime)</span></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>warningTime</code> - In seconds as /worldborder warning time</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getWarningBlocks()">
-<h3>getWarningBlocks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getWarningBlocks</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="setWarningBlocks(int)">
-<h3>setWarningBlocks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setWarningBlocks</span><wbr><span class="parameters">(int&nbsp;warningBlocks)</span></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>warningBlocks</code> - In meters</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setDiameter(double,long)">
-<h3>setDiameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDiameter</span><wbr><span class="parameters">(double&nbsp;diameter,
- long&nbsp;speed)</span></div>
-<div class="block">Changes the diameter to <code>diameter</code> in <code>speed</code> milliseconds (interpolation).</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>diameter</code> - the diameter target</dd>
-<dd><code>speed</code> - the time it will take to reach <code>diameter</code> in milliseconds</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getDiameter()">
-<h3>getDiameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getDiameter</span>()</div>
-<div class="block">Gets the diameter of the world border.
- It takes lerp in consideration.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the current world border diameter</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setDiameter(double)">
-<h3>setDiameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDiameter</span><wbr><span class="parameters">(double&nbsp;diameter)</span></div>
-<div class="block">Changes the diameter of the world border.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>diameter</code> - the new diameter of the world border</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getCollisionAxis(net.minestom.server.coordinate.Point)">
-<h3>getCollisionAxis</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="WorldBorder.CollisionAxis.html" title="enum class in net.minestom.server.instance">WorldBorder.CollisionAxis</a></span>&nbsp;<span class="element-name">getCollisionAxis</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</span></div>
-<div class="block">Used to check at which axis does the position collides with the world border.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>point</code> - the point to check</dd>
-<dt>Returns:</dt>
-<dd>the axis where the position collides with the world border</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isInside(net.minestom.server.coordinate.Point)">
-<h3>isInside</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isInside</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="inBounds(net.minestom.server.coordinate.Point)">
+<h3>inBounds</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">inBounds</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</span></div>
 <div class="block">Used to know if a position is located inside the world border or not.</div>
 <dl class="notes">
@@ -409,9 +384,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="isInside(net.minestom.server.entity.Entity)">
-<h3>isInside</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isInside</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="inBounds(net.minestom.server.entity.Entity)">
+<h3>inBounds</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">inBounds</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</span></div>
 <div class="block">Used to know if an entity is located inside the world border or not.</div>
 <dl class="notes">
@@ -423,35 +398,193 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="update()">
-<h3>update</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">update</span>()</div>
-<div class="block">Used to update in real-time the current diameter time.
- Called in the instance tick update.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="init(net.minestom.server.entity.Player)">
-<h3>init</h3>
-<div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">init</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
-<div class="block">Sends the world border init packet to a player.</div>
+<section class="detail" id="createInitializePacket(double,long)">
+<h3>createInitializePacket</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/InitializeWorldBorderPacket.html" title="class in net.minestom.server.network.packet.server.play">InitializeWorldBorderPacket</a></span>&nbsp;<span class="element-name">createInitializePacket</span><wbr><span class="parameters">(double&nbsp;targetDiameter,
+ long&nbsp;transitionTime)</span></div>
+<div class="block">Creates a <a href="../network/packet/server/play/InitializeWorldBorderPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>InitializeWorldBorderPacket</code></a> which dictates every property
+ of the world border.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>player</code> - the player to send the packet to</dd>
+<dd><code>targetDiameter</code> - the target diameter if there is a current lerp in progress</dd>
+<dd><code>transitionTime</code> - the transition time in milliseconds of the current
+                       lerp in progress</dd>
+<dt>Returns:</dt>
+<dd>an <a href="../network/packet/server/play/InitializeWorldBorderPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>InitializeWorldBorderPacket</code></a> reflecting the
+                       properties of this border</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getInstance()">
-<h3>getInstance</h3>
+<section class="detail" id="createCenterPacket()">
+<h3>createCenterPacket</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></span>&nbsp;<span class="element-name">getInstance</span>()</div>
-<div class="block">Gets the <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> linked to this world border.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/WorldBorderCenterPacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderCenterPacket</a></span>&nbsp;<span class="element-name">createCenterPacket</span>()</div>
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderSizePacket</code></a> which dictates the origin of the world border.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> of this world border</dd>
+<dd>the <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderSizePacket</code></a> with the center values of this world border</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createLerpSizePacket(double,long)">
+<h3>createLerpSizePacket</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/WorldBorderLerpSizePacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderLerpSizePacket</a></span>&nbsp;<span class="element-name">createLerpSizePacket</span><wbr><span class="parameters">(double&nbsp;targetDiameter,
+ long&nbsp;transitionTime)</span></div>
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderLerpSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderLerpSizePacket</code></a> which lerps the border from its current
+ diameter to the target diameter over the given transition time.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>targetDiameter</code> - the final diameter of the border after this transition</dd>
+<dd><code>transitionTime</code> - the transition time in milliseconds for this lerp</dd>
+<dt>Returns:</dt>
+<dd>the <a href="../network/packet/server/play/WorldBorderLerpSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderLerpSizePacket</code></a> representing this lerp</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createSizePacket()">
+<h3>createSizePacket</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderSizePacket</a></span>&nbsp;<span class="element-name">createSizePacket</span>()</div>
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderSizePacket</code></a> with this world border's diameter.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the <a href="../network/packet/server/play/WorldBorderSizePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderSizePacket</code></a> with this world border's diameter</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createWarningDelayPacket()">
+<h3>createWarningDelayPacket</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/WorldBorderWarningDelayPacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderWarningDelayPacket</a></span>&nbsp;<span class="element-name">createWarningDelayPacket</span>()</div>
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderWarningDelayPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderWarningDelayPacket</code></a> with this world border's warning time</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the <a href="../network/packet/server/play/WorldBorderWarningDelayPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderWarningDelayPacket</code></a> with this world border's warning time</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="createWarningReachPacket()">
+<h3>createWarningReachPacket</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/WorldBorderWarningReachPacket.html" title="class in net.minestom.server.network.packet.server.play">WorldBorderWarningReachPacket</a></span>&nbsp;<span class="element-name">createWarningReachPacket</span>()</div>
+<div class="block">Creates a <a href="../network/packet/server/play/WorldBorderWarningReachPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderWarningReachPacket</code></a> with this world border's warning distance</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the <a href="../network/packet/server/play/WorldBorderWarningReachPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>WorldBorderWarningReachPacket</code></a> with this world border's warning distance</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="toString()">
+<h3>toString</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
+<div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Returns:</dt>
+<dd>a string representation of this object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="hashCode()">
+<h3>hashCode</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
+<div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Returns:</dt>
+<dd>a hash code value for this object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="equals(java.lang.Object)">
+<h3>equals</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with '=='.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>o</code> - the object with which to compare</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="diameter()">
+<h3>diameter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">diameter</span>()</div>
+<div class="block">Returns the value of the <a href="#param-diameter"><code>diameter</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-diameter"><code>diameter</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="centerX()">
+<h3>centerX</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">centerX</span>()</div>
+<div class="block">Returns the value of the <a href="#param-centerX"><code>centerX</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-centerX"><code>centerX</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="centerZ()">
+<h3>centerZ</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">centerZ</span>()</div>
+<div class="block">Returns the value of the <a href="#param-centerZ"><code>centerZ</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-centerZ"><code>centerZ</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="warningDistance()">
+<h3>warningDistance</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">warningDistance</span>()</div>
+<div class="block">Returns the value of the <a href="#param-warningDistance"><code>warningDistance</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-warningDistance"><code>warningDistance</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="warningTime()">
+<h3>warningTime</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">warningTime</span>()</div>
+<div class="block">Returns the value of the <a href="#param-warningTime"><code>warningTime</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-warningTime"><code>warningTime</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="dimensionTeleportBoundary()">
+<h3>dimensionTeleportBoundary</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">dimensionTeleportBoundary</span>()</div>
+<div class="block">Returns the value of the <a href="#param-dimensionTeleportBoundary"><code>dimensionTeleportBoundary</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-dimensionTeleportBoundary"><code>dimensionTeleportBoundary</code></a> record component</dd>
 </dl>
 </section>
 </li>

@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BlockEntityDataPacket</span>(@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition, int&nbsp;action, @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BlockEntityDataPacket</span>(@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition, int&nbsp;action, @Nullable net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;data)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -119,9 +119,9 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,int,org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">BlockEntityDataPacket</a><wbr>(@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,int,net.kyori.adventure.nbt.CompoundBinaryTag)" class="member-name-link">BlockEntityDataPacket</a><wbr>(@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
  int&nbsp;action,
- @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</code></div>
+ @Nullable net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;data)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>BlockEntityDataPacket</code> record class.</div>
 </div>
@@ -151,7 +151,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>blockPosition</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable net.kyori.adventure.nbt.CompoundBinaryTag</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data()" class="member-name-link">data</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>data</code> record component.</div>
@@ -205,13 +205,13 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Point,int,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Point,int,net.kyori.adventure.nbt.CompoundBinaryTag)">
 <h3>BlockEntityDataPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BlockEntityDataPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
  int&nbsp;action,
  @Nullable
- @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</span></div>
+ @Nullable net.kyori.adventure.nbt.CompoundBinaryTag&nbsp;data)</span></div>
 <div class="block">Creates an instance of a <code>BlockEntityDataPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -318,7 +318,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <section class="detail" id="data()">
 <h3>data</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">data</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable net.kyori.adventure.nbt.CompoundBinaryTag</span>&nbsp;<span class="element-name">data</span>()</div>
 <div class="block">Returns the value of the <code>data</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

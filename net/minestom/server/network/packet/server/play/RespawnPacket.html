@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RespawnPacket</span>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;worldName, long&nbsp;hashedSeed, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode, boolean&nbsp;isDebug, boolean&nbsp;isFlat, <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation, int&nbsp;portalCooldown, int&nbsp;copyData)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RespawnPacket</span>(int&nbsp;dimensionType, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;worldName, long&nbsp;hashedSeed, @NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, @NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode, boolean&nbsp;isDebug, boolean&nbsp;isFlat, @Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation, int&nbsp;portalCooldown, int&nbsp;copyData)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -143,14 +143,14 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int,int)" class="member-name-link">RespawnPacket</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;worldName,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int,int)" class="member-name-link">RespawnPacket</a><wbr>(int&nbsp;dimensionType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;worldName,
  long&nbsp;hashedSeed,
- <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
- <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
+ @NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
+ @NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
  boolean&nbsp;isDebug,
  boolean&nbsp;isFlat,
- <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
+ @Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
  int&nbsp;portalCooldown,
  int&nbsp;copyData)</code></div>
 <div class="col-last even-row-color">
@@ -177,12 +177,12 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>copyData</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deathLocation()" class="member-name-link">deathLocation</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>deathLocation</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dimensionType()" class="member-name-link">dimensionType</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>dimensionType</code> record component.</div>
@@ -192,7 +192,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#gameMode()" class="member-name-link">gameMode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>gameMode</code> record component.</div>
@@ -225,7 +225,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>portalCooldown</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#previousGameMode()" class="member-name-link">previousGameMode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>previousGameMode</code> record component.</div>
@@ -235,7 +235,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#worldName()" class="member-name-link">worldName</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>worldName</code> record component.</div>
@@ -335,16 +335,20 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int,int)">
+<section class="detail" id="&lt;init&gt;(int,java.lang.String,long,net.minestom.server.entity.GameMode,net.minestom.server.entity.GameMode,boolean,boolean,net.minestom.server.network.packet.server.play.data.WorldPos,int,int)">
 <h3>RespawnPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RespawnPacket</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimensionType,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;worldName,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RespawnPacket</span><wbr><span class="parameters">(int&nbsp;dimensionType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;worldName,
  long&nbsp;hashedSeed,
- <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
- <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
+ @NotNull
+ @NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
+ @NotNull
+ @NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;previousGameMode,
  boolean&nbsp;isDebug,
  boolean&nbsp;isFlat,
- <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
+ @Nullable
+ @Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;deathLocation,
  int&nbsp;portalCooldown,
  int&nbsp;copyData)</span></div>
 <div class="block">Creates an instance of a <code>RespawnPacket</code> record class.</div>
@@ -436,7 +440,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="dimensionType()">
 <h3>dimensionType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">dimensionType</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">dimensionType</span>()</div>
 <div class="block">Returns the value of the <code>dimensionType</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -447,7 +451,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="worldName()">
 <h3>worldName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">worldName</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">worldName</span>()</div>
 <div class="block">Returns the value of the <code>worldName</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -469,7 +474,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="gameMode()">
 <h3>gameMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></span>&nbsp;<span class="element-name">gameMode</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></span>&nbsp;<span class="element-name">gameMode</span>()</div>
 <div class="block">Returns the value of the <code>gameMode</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -480,7 +486,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="previousGameMode()">
 <h3>previousGameMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></span>&nbsp;<span class="element-name">previousGameMode</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a></span>&nbsp;<span class="element-name">previousGameMode</span>()</div>
 <div class="block">Returns the value of the <code>previousGameMode</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -513,7 +520,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="detail" id="deathLocation()">
 <h3>deathLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">deathLocation</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">deathLocation</span>()</div>
 <div class="block">Returns the value of the <code>deathLocation</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

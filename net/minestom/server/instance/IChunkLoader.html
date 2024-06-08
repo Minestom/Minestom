@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="AnvilLoader.html" title="class in net.minestom.server.instance">AnvilLoader</a></code></dd>
+<dd><code><a href="anvil/AnvilLoader.html" title="class in net.minestom.server.instance.anvil">AnvilLoader</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IChunkLoader</span></div>
 <div class="block">Interface implemented to change the way chunks are loaded/saved.
  <p>
- See <a href="AnvilLoader.html" title="class in net.minestom.server.instance"><code>AnvilLoader</code></a> for the default implementation used in <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>.</div>
+ See <a href="anvil/AnvilLoader.html" title="class in net.minestom.server.instance.anvil"><code>AnvilLoader</code></a> for the default implementation used in <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -114,7 +114,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> is not applied.</div>
+<div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="generator/Generator.html" title="interface in net.minestom.server.instance.generator"><code>Generator</code></a> is not applied.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#loadInstance(net.minestom.server.instance.Instance)" class="member-name-link">loadInstance</a><wbr>(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></div>
@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</span></div>
-<div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> is not applied.</div>
+<div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="generator/Generator.html" title="interface in net.minestom.server.instance.generator"><code>Generator</code></a> is not applied.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>instance</code> - the <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> where the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> belong</dd>

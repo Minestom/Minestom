@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li>Field</li>
 <li><a href="#constructor-detail">Constr</a></li>
-<li><a href="#method-detail">Method</a></li>
+<li>Method</li>
 </ul>
 </li>
 </ul>
@@ -67,7 +67,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method-detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <div class="nav-list-search"><a href="../../../../../search.html">SEARCH</a>
@@ -110,7 +110,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.damage.DamageType,net.minestom.server.coordinate.Point,float)" class="member-name-link">PositionalDamage</a><wbr>(@NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.coordinate.Point,float)" class="member-name-link">PositionalDamage</a><wbr>(<a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;&nbsp;type,
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;sourcePosition,
  float&nbsp;amount)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -121,24 +121,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
-<div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
-<div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSourcePosition()" class="member-name-link">getSourcePosition</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the position of the source of the damage, or null if there is none.</div>
-</div>
-</div>
-</div>
-</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.entity.damage.Damage">Methods inherited from class&nbsp;net.minestom.server.entity.damage.<a href="Damage.html" title="class in net.minestom.server.entity.damage">Damage</a></h3>
-<code><a href="Damage.html#buildDeathMessage(net.minestom.server.entity.Player)">buildDeathMessage</a>, <a href="Damage.html#buildDeathScreenText(net.minestom.server.entity.Player)">buildDeathScreenText</a>, <a href="Damage.html#fromEntity(net.minestom.server.entity.Entity,float)">fromEntity</a>, <a href="Damage.html#fromPlayer(net.minestom.server.entity.Player,float)">fromPlayer</a>, <a href="Damage.html#fromPosition(net.minestom.server.entity.damage.DamageType,net.minestom.server.coordinate.Point,float)">fromPosition</a>, <a href="Damage.html#fromProjectile(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,float)">fromProjectile</a>, <a href="Damage.html#getAmount()">getAmount</a>, <a href="Damage.html#getAttacker()">getAttacker</a>, <a href="Damage.html#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound</a>, <a href="Damage.html#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound</a>, <a href="Damage.html#getSound(net.minestom.server.entity.LivingEntity)">getSound</a>, <a href="Damage.html#getSource()">getSource</a>, <a href="Damage.html#getType()">getType</a>, <a href="Damage.html#setAmount(float)">setAmount</a>, <a href="Damage.html#tagHandler()">tagHandler</a></code></div>
+<code><a href="Damage.html#buildDeathMessage(net.minestom.server.entity.Player)">buildDeathMessage</a>, <a href="Damage.html#buildDeathScreenText(net.minestom.server.entity.Player)">buildDeathScreenText</a>, <a href="Damage.html#fromEntity(net.minestom.server.entity.Entity,float)">fromEntity</a>, <a href="Damage.html#fromPlayer(net.minestom.server.entity.Player,float)">fromPlayer</a>, <a href="Damage.html#fromPosition(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.coordinate.Point,float)">fromPosition</a>, <a href="Damage.html#fromProjectile(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,float)">fromProjectile</a>, <a href="Damage.html#getAmount()">getAmount</a>, <a href="Damage.html#getAttacker()">getAttacker</a>, <a href="Damage.html#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound</a>, <a href="Damage.html#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound</a>, <a href="Damage.html#getSound(net.minestom.server.entity.LivingEntity)">getSound</a>, <a href="Damage.html#getSource()">getSource</a>, <a href="Damage.html#getSourcePosition()">getSourcePosition</a>, <a href="Damage.html#getType()">getType</a>, <a href="Damage.html#setAmount(float)">setAmount</a>, <a href="Damage.html#tagHandler()">tagHandler</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -157,37 +142,13 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.damage.DamageType,net.minestom.server.coordinate.Point,float)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.registry.DynamicRegistry.Key,net.minestom.server.coordinate.Point,float)">
 <h3>PositionalDamage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PositionalDamage</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
+ <a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DamageType.html" title="interface in net.minestom.server.entity.damage">DamageType</a>&gt;&nbsp;type,
  @NotNull
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;sourcePosition,
  float&nbsp;amount)</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<!-- ============ METHOD DETAIL ========== -->
-<li>
-<section class="method-details" id="method-detail">
-<h2>Method Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="getSourcePosition()">
-<h3>getSourcePosition</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getSourcePosition</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from class:&nbsp;<code><a href="Damage.html#getSourcePosition()">Damage</a></code></span></div>
-<div class="block">Gets the position of the source of the damage, or null if there is none.
- This may differ from the source entity's position.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="Damage.html#getSourcePosition()">getSourcePosition</a></code>&nbsp;in class&nbsp;<code><a href="Damage.html" title="class in net.minestom.server.entity.damage">Damage</a></code></dd>
-<dt>Returns:</dt>
-<dd>The source position</dd>
-</dl>
 </section>
 </li>
 </ul>

@@ -100,12 +100,19 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#list(int)" class="member-name-link">list</a><wbr>(int&nbsp;maxSize)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;S&gt;&nbsp;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;S&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#map(java.util.function.Function,java.util.function.Function)" class="member-name-link">map</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>,<wbr>S&gt;&nbsp;to,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;S,<wbr><a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>&gt;&nbsp;from)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(net.minestom.server.network.NetworkBuffer)" class="member-name-link">read</a><wbr>(@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
@@ -140,6 +147,23 @@ loadScripts(document, 'script');</script>
 <h3>read</h3>
 <div class="member-signature"><span class="return-type"><a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a></span>&nbsp;<span class="element-name">read</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="map(java.util.function.Function,java.util.function.Function)">
+<h3>map</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;S&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;S&gt;</span>&nbsp;<span class="element-name">map</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>,<wbr>S&gt;&nbsp;to,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;S,<wbr><a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>&gt;&nbsp;from)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="list(int)">
+<h3>list</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>&gt;&gt;</span>&nbsp;<span class="element-name">list</span><wbr><span class="parameters">(int&nbsp;maxSize)</span></div>
 </section>
 </li>
 </ul>

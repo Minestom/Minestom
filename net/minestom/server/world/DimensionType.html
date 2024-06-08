@@ -5,7 +5,7 @@
 <title>DimensionType (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.world, class: DimensionType">
+<meta name="description" content="declaration: package: net.minestom.server.world, interface: DimensionType">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -83,15 +83,16 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.world</a></div>
-<h1 title="Class DimensionType" class="title">Class DimensionType</h1>
-</div>
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">net.minestom.server.world.DimensionType</div>
+<h1 title="Interface DimensionType" class="title">Interface DimensionType</h1>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Superinterfaces:</dt>
+<dd><code>net.kyori.adventure.key.Keyed</code>, <code><a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DimensionType</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">DimensionType</span><span class="extends-implements">
+extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></span></div>
 <div class="block">https://minecraft.wiki/w/Custom_dimension</div>
 </section>
 <section class="summary">
@@ -103,10 +104,10 @@ loadScripts(document, 'script');</script>
 <div class="caption"><span>Nested Classes</span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
+<div class="table-header col-second">Interface</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DimensionType.DimensionTypeBuilder.html" class="type-name-link" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="DimensionType.Builder.html" class="type-name-link" title="class in net.minestom.server.world">DimensionType.Builder</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -120,11 +121,23 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#OVERWORLD" class="member-name-link">OVERWORLD</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#registered" class="member-name-link">registered</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#OVERWORLD_CAVES" class="member-name-link">OVERWORLD_CAVES</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#THE_END" class="member-name-link">THE_END</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#THE_NETHER" class="member-name-link">THE_NETHER</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#VANILLA_MAX_Y" class="member-name-link">VANILLA_MAX_Y</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#VANILLA_MIN_Y" class="member-name-link">VANILLA_MIN_Y</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -134,105 +147,83 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#builder(net.minestom.server.utils.NamespaceID)" class="member-name-link">builder</a><wbr>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)" class="member-name-link">fromNBT</a><wbr>(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAmbientLight()" class="member-name-link">getAmbientLight</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCoordinateScale()" class="member-name-link">getCoordinateScale</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEffects()" class="member-name-link">getEffects</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFixedTime()" class="member-name-link">getFixedTime</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeight()" class="member-name-link">getHeight</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getId()" class="member-name-link">getId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInfiniburn()" class="member-name-link">getInfiniburn</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLogicalHeight()" class="member-name-link">getLogicalHeight</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaxY()" class="member-name-link">getMaxY</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMinY()" class="member-name-link">getMinY</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTotalHeight()" class="member-name-link">getTotalHeight</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#hiddenBuilder()" class="member-name-link">hiddenBuilder</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isBedSafe()" class="member-name-link">isBedSafe</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCeilingEnabled()" class="member-name-link">isCeilingEnabled</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isNatural()" class="member-name-link">isNatural</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPiglinSafe()" class="member-name-link">isPiglinSafe</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRaidCapable()" class="member-name-link">isRaidCapable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRegistered()" class="member-name-link">isRegistered</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRespawnAnchorSafe()" class="member-name-link">isRespawnAnchorSafe</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSkylightEnabled()" class="member-name-link">isSkylightEnabled</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUltrawarm()" class="member-name-link">isUltrawarm</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toIndexedNBT()" class="member-name-link">toIndexedNBT</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toNBT()" class="member-name-link">toNBT</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#ambientLight()" class="member-name-link">ambientLight</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#bedWorks()" class="member-name-link">bedWorks</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="DimensionType.Builder.html" title="class in net.minestom.server.world">DimensionType.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder(java.lang.String)" class="member-name-link">builder</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="DimensionType.Builder.html" title="class in net.minestom.server.world">DimensionType.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder(net.minestom.server.utils.NamespaceID)" class="member-name-link">builder</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#coordinateScale()" class="member-name-link">coordinateScale</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#createDefaultRegistry()" class="member-name-link">createDefaultRegistry</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Creates a new registry for dimension types, loading the vanilla dimension types.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#effects()" class="member-name-link">effects</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#fixedTime()" class="member-name-link">fixedTime</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasCeiling()" class="member-name-link">hasCeiling</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasRaids()" class="member-name-link">hasRaids</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasSkylight()" class="member-name-link">hasSkylight</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#height()" class="member-name-link">height</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#infiniburn()" class="member-name-link">infiniburn</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#logicalHeight()" class="member-name-link">logicalHeight</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#maxY()" class="member-name-link">maxY</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#minY()" class="member-name-link">minY</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#natural()" class="member-name-link">natural</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#piglinSafe()" class="member-name-link">piglinSafe</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#respawnAnchorWorks()" class="member-name-link">respawnAnchorWorks</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#totalHeight()" class="member-name-link">totalHeight</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#ultrawarm()" class="member-name-link">ultrawarm</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.registry.ProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></h3>
+<code><a href="../registry/ProtocolObject.html#key()">key</a>, <a href="../registry/ProtocolObject.html#name()">name</a>, <a href="../registry/ProtocolObject.html#namespace()">namespace</a>, <a href="../registry/ProtocolObject.html#registry()">registry</a></code></div>
 </section>
 </li>
 </ul>
@@ -245,15 +236,55 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="OVERWORLD">
-<h3>OVERWORLD</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></span>&nbsp;<span class="element-name">OVERWORLD</span></div>
+<section class="detail" id="VANILLA_MIN_Y">
+<h3>VANILLA_MIN_Y</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">VANILLA_MIN_Y</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#net.minestom.server.world.DimensionType.VANILLA_MIN_Y">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="registered">
-<h3>registered</h3>
-<div class="member-signature"><span class="modifiers">protected volatile</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">registered</span></div>
+<section class="detail" id="VANILLA_MAX_Y">
+<h3>VANILLA_MAX_Y</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">VANILLA_MAX_Y</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#net.minestom.server.world.DimensionType.VANILLA_MAX_Y">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="THE_END">
+<h3>THE_END</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</span>&nbsp;<span class="element-name">THE_END</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="OVERWORLD_CAVES">
+<h3>OVERWORLD_CAVES</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</span>&nbsp;<span class="element-name">OVERWORLD_CAVES</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="THE_NETHER">
+<h3>THE_NETHER</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</span>&nbsp;<span class="element-name">THE_NETHER</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="OVERWORLD">
+<h3>OVERWORLD</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</span>&nbsp;<span class="element-name">OVERWORLD</span></div>
 </section>
 </li>
 </ul>
@@ -265,192 +296,147 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="builder(java.lang.String)">
+<h3>builder</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="DimensionType.Builder.html" title="class in net.minestom.server.world">DimensionType.Builder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="builder(net.minestom.server.utils.NamespaceID)">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="hiddenBuilder()">
-<h3>hiddenBuilder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></span>&nbsp;<span class="element-name">hiddenBuilder</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="fromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
-<h3>fromNBT</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></span>&nbsp;<span class="element-name">fromNBT</span><wbr><span class="parameters">(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="toIndexedNBT()">
-<h3>toIndexedNBT</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">toIndexedNBT</span>()</div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="DimensionType.Builder.html" title="class in net.minestom.server.world">DimensionType.Builder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="toNBT()">
-<h3>toNBT</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</span>&nbsp;<span class="element-name">toNBT</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="toString()">
-<h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
+<section class="detail" id="createDefaultRegistry()">
+<h3>createDefaultRegistry</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;<a href="DimensionType.html" title="interface in net.minestom.server.world">DimensionType</a>&gt;</span>&nbsp;<span class="element-name">createDefaultRegistry</span>()</div>
+<div class="block"><p>Creates a new registry for dimension types, loading the vanilla dimension types.</p></div>
 <dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list-long">
+<li><a href="../MinecraftServer.html" title="class in net.minestom.server"><code>to get an existing instance of the registry</code></a></li>
+</ul>
+</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getId()">
-<h3>getId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getId</span>()</div>
+<section class="detail" id="ultrawarm()">
+<h3>ultrawarm</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">ultrawarm</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isRegistered()">
-<h3>isRegistered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isRegistered</span>()</div>
+<section class="detail" id="natural()">
+<h3>natural</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">natural</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getName()">
-<h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">getName</span>()</div>
+<section class="detail" id="coordinateScale()">
+<h3>coordinateScale</h3>
+<div class="member-signature"><span class="return-type">double</span>&nbsp;<span class="element-name">coordinateScale</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isNatural()">
-<h3>isNatural</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isNatural</span>()</div>
+<section class="detail" id="hasSkylight()">
+<h3>hasSkylight</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hasSkylight</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getAmbientLight()">
-<h3>getAmbientLight</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">getAmbientLight</span>()</div>
+<section class="detail" id="hasCeiling()">
+<h3>hasCeiling</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hasCeiling</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isCeilingEnabled()">
-<h3>isCeilingEnabled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isCeilingEnabled</span>()</div>
+<section class="detail" id="ambientLight()">
+<h3>ambientLight</h3>
+<div class="member-signature"><span class="return-type">float</span>&nbsp;<span class="element-name">ambientLight</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isSkylightEnabled()">
-<h3>isSkylightEnabled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isSkylightEnabled</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getFixedTime()">
-<h3>getFixedTime</h3>
+<section class="detail" id="fixedTime()">
+<h3>fixedTime</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">getFixedTime</span>()</div>
+</span><span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">fixedTime</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isRaidCapable()">
-<h3>isRaidCapable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isRaidCapable</span>()</div>
+<section class="detail" id="piglinSafe()">
+<h3>piglinSafe</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">piglinSafe</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isRespawnAnchorSafe()">
-<h3>isRespawnAnchorSafe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isRespawnAnchorSafe</span>()</div>
+<section class="detail" id="bedWorks()">
+<h3>bedWorks</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">bedWorks</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isUltrawarm()">
-<h3>isUltrawarm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isUltrawarm</span>()</div>
+<section class="detail" id="respawnAnchorWorks()">
+<h3>respawnAnchorWorks</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">respawnAnchorWorks</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isBedSafe()">
-<h3>isBedSafe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isBedSafe</span>()</div>
+<section class="detail" id="hasRaids()">
+<h3>hasRaids</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hasRaids</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getEffects()">
-<h3>getEffects</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getEffects</span>()</div>
+<section class="detail" id="logicalHeight()">
+<h3>logicalHeight</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">logicalHeight</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="isPiglinSafe()">
-<h3>isPiglinSafe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isPiglinSafe</span>()</div>
+<section class="detail" id="minY()">
+<h3>minY</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">minY</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMinY()">
-<h3>getMinY</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getMinY</span>()</div>
+<section class="detail" id="maxY()">
+<h3>maxY</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">maxY</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getHeight()">
-<h3>getHeight</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getHeight</span>()</div>
+<section class="detail" id="height()">
+<h3>height</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">height</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getMaxY()">
-<h3>getMaxY</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getMaxY</span>()</div>
+<section class="detail" id="infiniburn()">
+<h3>infiniburn</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">infiniburn</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getLogicalHeight()">
-<h3>getLogicalHeight</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getLogicalHeight</span>()</div>
+<section class="detail" id="effects()">
+<h3>effects</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">effects</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getCoordinateScale()">
-<h3>getCoordinateScale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getCoordinateScale</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getInfiniburn()">
-<h3>getInfiniburn</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">getInfiniburn</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getTotalHeight()">
-<h3>getTotalHeight</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getTotalHeight</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="equals(java.lang.Object)">
-<h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="hashCode()">
-<h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
+<section class="detail" id="totalHeight()">
+<h3>totalHeight</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">totalHeight</span>()</div>
 </section>
 </li>
 </ul>

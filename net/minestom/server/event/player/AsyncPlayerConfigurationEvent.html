@@ -149,14 +149,25 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isHardcore()" class="member-name-link">isHardcore</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHardcore(boolean)" class="member-name-link">setHardcore</a><wbr>(boolean&nbsp;hardcore)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClearChat(boolean)" class="member-name-link">setClearChat</a><wbr>(boolean&nbsp;clearChat)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Set whether the player's chat will be cleared when exiting the configuration state.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSendRegistryData(boolean)" class="member-name-link">setSendRegistryData</a><wbr>(boolean&nbsp;sendRegistryData)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHardcore(boolean)" class="member-name-link">setHardcore</a><wbr>(boolean&nbsp;hardcore)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSpawningInstance(net.minestom.server.instance.Instance)" class="member-name-link">setSpawningInstance</a><wbr>(@Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawningInstance)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSendRegistryData(boolean)" class="member-name-link">setSendRegistryData</a><wbr>(boolean&nbsp;sendRegistryData)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSpawningInstance(net.minestom.server.instance.Instance)" class="member-name-link">setSpawningInstance</a><wbr>(@Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawningInstance)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#willClearChat()" class="member-name-link">willClearChat</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">If true, the player's chat will be cleared when exiting the configuration state, otherwise
+ it will be preserved.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#willSendRegistryData()" class="member-name-link">willSendRegistryData</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -228,6 +239,41 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <section class="detail" id="setHardcore(boolean)">
 <h3>setHardcore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setHardcore</span><wbr><span class="parameters">(boolean&nbsp;hardcore)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="willClearChat()">
+<h3>willClearChat</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">willClearChat</span>()</div>
+<div class="block">If true, the player's chat will be cleared when exiting the configuration state, otherwise
+ it will be preserved. The default is not to clear the chat.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if the chat will be cleared, false otherwise</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../network/packet/server/configuration/ResetChatPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>ResetChatPacket</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setClearChat(boolean)">
+<h3>setClearChat</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setClearChat</span><wbr><span class="parameters">(boolean&nbsp;clearChat)</span></div>
+<div class="block">Set whether the player's chat will be cleared when exiting the configuration state.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>clearChat</code> - true to clear the chat, false otherwise</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../network/packet/server/configuration/ResetChatPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>ResetChatPacket</code></a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>

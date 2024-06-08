@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">BlockPlacementRule.PlacementState</span>(<a href="../Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;instance, @NotNull <a href="../Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block, @Nullable <a href="../BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace, @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;placePosition, @Nullable <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition, @Nullable <a href="../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;playerPosition, @Nullable <a href="../../../item/ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a>&nbsp;usedItemMeta, boolean&nbsp;isPlayerShifting)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">BlockPlacementRule.PlacementState</span>(<a href="../Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;instance, @NotNull <a href="../Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block, @Nullable <a href="../BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace, @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;placePosition, @Nullable <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition, @Nullable <a href="../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;playerPosition, @Nullable <a href="../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usedItemStack, boolean&nbsp;isPlayerShifting)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
@@ -109,13 +109,13 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.instance.block.Block.Getter,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Pos,net.minestom.server.item.ItemMeta,boolean)" class="member-name-link">PlacementState</a><wbr>(<a href="../Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;instance,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.instance.block.Block.Getter,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Pos,net.minestom.server.item.ItemStack,boolean)" class="member-name-link">PlacementState</a><wbr>(<a href="../Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;instance,
  @NotNull <a href="../Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  @Nullable <a href="../BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;placePosition,
  @Nullable <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition,
  @Nullable <a href="../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;playerPosition,
- @Nullable <a href="../../../item/ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a>&nbsp;usedItemMeta,
+ @Nullable <a href="../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usedItemStack,
  boolean&nbsp;isPlayerShifting)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>PlacementState</code> record class.</div>
@@ -184,10 +184,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../item/ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#usedItemMeta()" class="member-name-link">usedItemMeta</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#usedItemStack()" class="member-name-link">usedItemStack</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>usedItemMeta</code> record component.</div>
+<div class="block">Returns the value of the <code>usedItemStack</code> record component.</div>
 </div>
 </div>
 </div>
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.instance.block.Block.Getter,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Pos,net.minestom.server.item.ItemMeta,boolean)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.instance.block.Block.Getter,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Pos,net.minestom.server.item.ItemStack,boolean)">
 <h3>PlacementState</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlacementState</span><wbr><span class="parameters">(@NotNull
  <a href="../Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;instance,
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
  @Nullable
  @Nullable <a href="../../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;playerPosition,
  @Nullable
- @Nullable <a href="../../../item/ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a>&nbsp;usedItemMeta,
+ @Nullable <a href="../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usedItemStack,
  boolean&nbsp;isPlayerShifting)</span></div>
 <div class="block">Creates an instance of a <code>PlacementState</code> record class.</div>
 <dl class="notes">
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <dd><code>placePosition</code> - the value for the <code>placePosition</code> record component</dd>
 <dd><code>cursorPosition</code> - the value for the <code>cursorPosition</code> record component</dd>
 <dd><code>playerPosition</code> - the value for the <code>playerPosition</code> record component</dd>
-<dd><code>usedItemMeta</code> - the value for the <code>usedItemMeta</code> record component</dd>
+<dd><code>usedItemStack</code> - the value for the <code>usedItemStack</code> record component</dd>
 <dd><code>isPlayerShifting</code> - the value for the <code>isPlayerShifting</code> record component</dd>
 </dl>
 </section>
@@ -360,14 +360,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="usedItemMeta()">
-<h3>usedItemMeta</h3>
+<section class="detail" id="usedItemStack()">
+<h3>usedItemStack</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../item/ItemMeta.html" title="interface in net.minestom.server.item">ItemMeta</a></span>&nbsp;<span class="element-name">usedItemMeta</span>()</div>
-<div class="block">Returns the value of the <code>usedItemMeta</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">usedItemStack</span>()</div>
+<div class="block">Returns the value of the <code>usedItemStack</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>usedItemMeta</code> record component</dd>
+<dd>the value of the <code>usedItemStack</code> record component</dd>
 </dl>
 </section>
 </li>

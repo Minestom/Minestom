@@ -89,9 +89,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">net.minestom.server.gamedata.tags.Tag</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code>net.kyori.adventure.key.Keyed</code>, <code><a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">Tag</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></span></div>
 <div class="block">Represents a group of items, blocks, fluids, entity types or function.
  Immutable by design</div>
 </section>
@@ -120,12 +125,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID)" class="member-name-link">Tag</a><wbr>(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID)" class="member-name-link">Tag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new empty tag.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,java.util.Set)" class="member-name-link">Tag</a><wbr>(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;values)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,java.util.Set)" class="member-name-link">Tag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a new tag with the given values.</div>
 </div>
@@ -137,33 +142,39 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button><button id="method-summary-table-tab6" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab6', 3)" class="table-tab">Deprecated Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contains(net.minestom.server.utils.NamespaceID)" class="member-name-link">contains</a><wbr>(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contains(net.minestom.server.utils.NamespaceID)" class="member-name-link">contains</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks whether the given id in inside this tag.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the name of this tag</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="block"><span class="deprecated-label">Deprecated.</span></div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getValues()" class="member-name-link">getValues</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns an immutable set of values present in this tag</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-net.minestom.server.registry.ProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></h3>
+<code><a href="../../registry/ProtocolObject.html#key()">key</a>, <a href="../../registry/ProtocolObject.html#name()">name</a>, <a href="../../registry/ProtocolObject.html#registry()">registry</a></code></div>
 </section>
 </li>
 </ul>
@@ -178,15 +189,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID)">
 <h3>Tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Tag</span><wbr><span class="parameters">(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Tag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</span></div>
 <div class="block">Creates a new empty tag. This does not cache the tag.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,java.util.Set)">
 <h3>Tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Tag</span><wbr><span class="parameters">(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Tag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;values)</span></div>
 <div class="block">Creates a new tag with the given values. This does not cache the tag.</div>
 </section>
 </li>
@@ -201,7 +215,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contains(net.minestom.server.utils.NamespaceID)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">contains</span><wbr><span class="parameters">(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">contains</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</span></div>
 <div class="block">Checks whether the given id in inside this tag.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -214,7 +229,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getValues()">
 <h3>getValues</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</span>&nbsp;<span class="element-name">getValues</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</span>&nbsp;<span class="element-name">getValues</span>()</div>
 <div class="block">Returns an immutable set of values present in this tag</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -223,9 +239,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="namespace()">
+<h3>namespace</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../registry/ProtocolObject.html#namespace()">namespace</a></code>&nbsp;in interface&nbsp;<code><a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">getName</span>()</div>
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">getName</span>()</div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Returns the name of this tag</div>
 </section>
 </li>

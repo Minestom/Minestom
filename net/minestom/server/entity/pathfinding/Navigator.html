@@ -122,38 +122,52 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEntity()" class="member-name-link">getEntity</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPathingEntity()" class="member-name-link">getPathingEntity</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPathPosition()" class="member-name-link">getPathPosition</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the entity which is navigating.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGoalPosition()" class="member-name-link">getGoalPosition</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the target pathfinder position.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jump(float)" class="member-name-link">jump</a><wbr>(float&nbsp;height)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNodes()" class="member-name-link">getNodes</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPathPosition()" class="member-name-link">getPathPosition</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../collision/PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#moveTowards(net.minestom.server.coordinate.Point,double)" class="member-name-link">moveTowards</a><wbr>(@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;direction,
- double&nbsp;speed)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to move the entity toward <code>direction</code> in the X and Z axis
- Gravity is still applied but the entity will not attempt to jump
- Also update the yaw/pitch of the entity to look along 'direction'</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPathFinder(com.extollit.gaming.ai.path.HydrazinePathFinder)" class="member-name-link">setPathFinder</a><wbr>(@Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;pathFinder)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPathTo(net.minestom.server.coordinate.Point)" class="member-name-link">setPathTo</a><wbr>(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PPath.PathState.html" title="enum class in net.minestom.server.entity.pathfinding">PPath.PathState</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getState()" class="member-name-link">getState</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPathTo(net.minestom.server.coordinate.Point,boolean)" class="member-name-link">setPathTo</a><wbr>(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
- boolean&nbsp;bestEffort)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isComplete()" class="member-name-link">isComplete</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset()" class="member-name-link">reset</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNodeFollower(java.util.function.Supplier)" class="member-name-link">setNodeFollower</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="followers/NodeFollower.html" title="interface in net.minestom.server.entity.pathfinding.followers">NodeFollower</a>&gt;&nbsp;nodeFollower)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNodeGenerator(java.util.function.Supplier)" class="member-name-link">setNodeGenerator</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="generators/NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a>&gt;&nbsp;nodeGenerator)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPathTo(net.minestom.server.coordinate.Point)" class="member-name-link">setPathTo</a><wbr>(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPathTo(net.minestom.server.coordinate.Point,double,double,double,java.lang.Runnable)" class="member-name-link">setPathTo</a><wbr>(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+ double&nbsp;minimumDistance,
+ double&nbsp;maxDistance,
+ double&nbsp;pathVariance,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;onComplete)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the path to <code>position</code> and ask the entity to follow the path.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPathTo(net.minestom.server.coordinate.Point,double,java.lang.Runnable)" class="member-name-link">setPathTo</a><wbr>(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+ double&nbsp;minimumDistance,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;onComplete)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick()" class="member-name-link">tick</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -190,61 +204,49 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="moveTowards(net.minestom.server.coordinate.Point,double)">
-<h3>moveTowards</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../collision/PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">moveTowards</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;direction,
- double&nbsp;speed)</span></div>
-<div class="block">Used to move the entity toward <code>direction</code> in the X and Z axis
- Gravity is still applied but the entity will not attempt to jump
- Also update the yaw/pitch of the entity to look along 'direction'</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>direction</code> - the targeted position</dd>
-<dd><code>speed</code> - define how far the entity will move</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="jump(float)">
-<h3>jump</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">jump</span><wbr><span class="parameters">(float&nbsp;height)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="setPathTo(net.minestom.server.coordinate.Point,boolean)">
-<h3>setPathTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">setPathTo</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
- boolean&nbsp;bestEffort)</span></div>
-<div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.
- <p>
- Can be set to null to reset the pathfinder.
- <p>
- The position is cloned, if you want the entity to continually follow this position object
- you need to call this when you want the path to update.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>point</code> - the position to find the path to, null to reset the pathfinder</dd>
-<dd><code>bestEffort</code> - whether to use the best-effort algorithm to the destination,
-                   if false then this method is more likely to return immediately</dd>
-<dt>Returns:</dt>
-<dd>true if a path has been found</dd>
-</dl>
+<section class="detail" id="getState()">
+<h3>getState</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PPath.PathState.html" title="enum class in net.minestom.server.entity.pathfinding">PPath.PathState</a></span>&nbsp;<span class="element-name">getState</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="setPathTo(net.minestom.server.coordinate.Point)">
 <h3>setPathTo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">setPathTo</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position)</span></div>
+ @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setPathTo(net.minestom.server.coordinate.Point,double,java.lang.Runnable)">
+<h3>setPathTo</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">setPathTo</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+ double&nbsp;minimumDistance,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;onComplete)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setPathTo(net.minestom.server.coordinate.Point,double,double,double,java.lang.Runnable)">
+<h3>setPathTo</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">setPathTo</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
+ double&nbsp;minimumDistance,
+ double&nbsp;maxDistance,
+ double&nbsp;pathVariance,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;onComplete)</span></div>
+<div class="block">Sets the path to <code>position</code> and ask the entity to follow the path.</div>
 <dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="#setPathTo(net.minestom.server.coordinate.Point,boolean)"><code>with <code>bestEffort</code> sets to <code>true</code>.</code></a></li>
-</ul>
-</dd>
+<dt>Parameters:</dt>
+<dd><code>point</code> - the position to find the path to, null to reset the pathfinder</dd>
+<dd><code>minimumDistance</code> - distance to target when completed</dd>
+<dd><code>maxDistance</code> - maximum search distance</dd>
+<dd><code>pathVariance</code> - how far to search off of the direct path. For open worlds, this can be low (around 20) and for large mazes this needs to be very high.</dd>
+<dd><code>onComplete</code> - called when the path has been completed</dd>
+<dt>Returns:</dt>
+<dd>true if a path is being generated</dd>
 </dl>
 </section>
 </li>
@@ -256,10 +258,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getPathPosition()">
-<h3>getPathPosition</h3>
+<section class="detail" id="getGoalPosition()">
+<h3>getGoalPosition</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getPathPosition</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getGoalPosition</span>()</div>
 <div class="block">Gets the target pathfinder position.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -272,22 +274,49 @@ loadScripts(document, 'script');</script>
 <h3>getEntity</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></span>&nbsp;<span class="element-name">getEntity</span>()</div>
+<div class="block">Gets the entity which is navigating.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the entity</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getPathingEntity()">
-<h3>getPathingEntity</h3>
-<div class="member-signature"><span class="annotations">@Internal
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></span>&nbsp;<span class="element-name">getPathingEntity</span>()</div>
+<section class="detail" id="reset()">
+<h3>reset</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reset</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="setPathFinder(com.extollit.gaming.ai.path.HydrazinePathFinder)">
-<h3>setPathFinder</h3>
-<div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setPathFinder</span><wbr><span class="parameters">(@Nullable
- @Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;pathFinder)</span></div>
+<section class="detail" id="isComplete()">
+<h3>isComplete</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isComplete</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getNodes()">
+<h3>getNodes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</span>&nbsp;<span class="element-name">getNodes</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getPathPosition()">
+<h3>getPathPosition</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getPathPosition</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setNodeFollower(java.util.function.Supplier)">
+<h3>setNodeFollower</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNodeFollower</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="followers/NodeFollower.html" title="interface in net.minestom.server.entity.pathfinding.followers">NodeFollower</a>&gt;&nbsp;nodeFollower)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="setNodeGenerator(java.util.function.Supplier)">
+<h3>setNodeGenerator</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNodeGenerator</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="generators/NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a>&gt;&nbsp;nodeGenerator)</span></div>
 </section>
 </li>
 </ul>

@@ -145,6 +145,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Gets all the entities tracked by this class.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getEntityById(int)" class="member-name-link">getEntityById</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets an entity based on its id (from <a href="../entity/Entity.html#getEntityId()"><code>Entity.getEntityId()</code></a>).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getEntityByUuid(java.util.UUID)" class="member-name-link">getEntityByUuid</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets an entity based on its UUID (from <a href="../entity/Entity.html#getUuid()"><code>Entity.getUuid()</code></a>).</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T extends <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;<br>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#move(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,net.minestom.server.instance.EntityTracker.Target,net.minestom.server.instance.EntityTracker.Update)" class="member-name-link">move</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;newPoint,
@@ -242,6 +252,34 @@ loadScripts(document, 'script');</script>
  @Nullable
  @Nullable <a href="EntityTracker.Update.html" title="interface in net.minestom.server.instance">EntityTracker.Update</a>&lt;T&gt;&nbsp;update)</span></div>
 <div class="block">Unregister an entity tracking.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getEntityById(int)">
+<h3>getEntityById</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></span>&nbsp;<span class="element-name">getEntityById</span><wbr><span class="parameters">(int&nbsp;id)</span></div>
+<div class="block">Gets an entity based on its id (from <a href="../entity/Entity.html#getEntityId()"><code>Entity.getEntityId()</code></a>).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - the entity id</dd>
+<dt>Returns:</dt>
+<dd>the entity having the specified id, null if not found</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getEntityByUuid(java.util.UUID)">
+<h3>getEntityByUuid</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></span>&nbsp;<span class="element-name">getEntityByUuid</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid)</span></div>
+<div class="block">Gets an entity based on its UUID (from <a href="../entity/Entity.html#getUuid()"><code>Entity.getUuid()</code></a>).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>uuid</code> - the entity UUID</dd>
+<dt>Returns:</dt>
+<dd>the entity having the specified uuid, null if not found</dd>
+</dl>
 </section>
 </li>
 <li>

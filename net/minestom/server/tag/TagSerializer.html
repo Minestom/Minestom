@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a><wbr>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;</code></div>
+<div class="col-first even-row-color"><code>static final <a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a><wbr>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#COMPOUND" class="member-name-link">COMPOUND</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -123,8 +123,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;<a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(java.util.function.Function,java.util.function.Function)" class="member-name-link">fromCompound</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,<wbr>T&gt;&nbsp;reader,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;writer)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromCompound(java.util.function.Function,java.util.function.Function)" class="member-name-link">fromCompound</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag,<wbr>T&gt;&nbsp;reader,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>net.kyori.adventure.nbt.CompoundBinaryTag&gt;&nbsp;writer)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="TagSerializer.html" title="type parameter in TagSerializer">T</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(net.minestom.server.tag.TagReadable)" class="member-name-link">read</a><wbr>(@NotNull <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>&nbsp;reader)</code></div>
@@ -155,7 +155,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="COMPOUND">
 <h3>COMPOUND</h3>
 <div class="member-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;</span>&nbsp;<span class="element-name">COMPOUND</span></div>
+</span><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</span>&nbsp;<span class="element-name">COMPOUND</span></div>
 </section>
 </li>
 </ul>
@@ -201,9 +201,9 @@ loadScripts(document, 'script');</script>
 <h3>fromCompound</h3>
 <div class="member-signature"><span class="annotations">@Experimental
 </span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="TagSerializer.html" title="interface in net.minestom.server.tag">TagSerializer</a>&lt;T&gt;</span>&nbsp;<span class="element-name">fromCompound</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,<wbr>T&gt;&nbsp;reader,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag,<wbr>T&gt;&nbsp;reader,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;writer)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>net.kyori.adventure.nbt.CompoundBinaryTag&gt;&nbsp;writer)</span></div>
 </section>
 </li>
 </ul>

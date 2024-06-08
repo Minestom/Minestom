@@ -124,7 +124,8 @@ implements <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface i
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>DeclaredBlastingRecipe</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">DeclaredBlastingRecipe</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.network.NetworkBuffer)" class="member-name-link">DeclaredBlastingRecipe</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipeId,
+ @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -190,7 +191,7 @@ implements <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface i
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../recipe/RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
@@ -214,9 +215,11 @@ implements <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface i
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,net.minestom.server.network.NetworkBuffer)">
 <h3>DeclaredBlastingRecipe</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeclaredBlastingRecipe</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipeId,
+ @NotNull
  @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
 </section>
 </li>
@@ -271,7 +274,7 @@ implements <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface i
 <section class="detail" id="type()">
 <h3>type</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">type</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../recipe/RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a></span>&nbsp;<span class="element-name">type</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="DeclareRecipesPacket.DeclaredRecipe.html#type()">type</a></code>&nbsp;in interface&nbsp;<code><a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a></code></dd>

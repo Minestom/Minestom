@@ -39,7 +39,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li><a href="#nested-class-summary">Nested</a></li>
-<li>Field</li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -59,13 +59,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ExplosionPacket</span>(double&nbsp;x, double&nbsp;y, double&nbsp;z, float&nbsp;radius, byte @NotNull []&nbsp;records, float&nbsp;playerMotionX, float&nbsp;playerMotionY, float&nbsp;playerMotionZ, @NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a>&nbsp;blockInteraction, int&nbsp;smallParticleId, byte @NotNull []&nbsp;smallParticleData, int&nbsp;largeParticleId, byte @NotNull []&nbsp;largeParticleData, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName, boolean&nbsp;hasFixedSoundRange, float&nbsp;soundRange)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ExplosionPacket</span>(double&nbsp;x, double&nbsp;y, double&nbsp;z, float&nbsp;radius, byte @NotNull []&nbsp;records, float&nbsp;playerMotionX, float&nbsp;playerMotionY, float&nbsp;playerMotionZ, @NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a>&nbsp;blockInteraction, int&nbsp;smallParticleId, byte @NotNull []&nbsp;smallParticleData, int&nbsp;largeParticleId, byte @NotNull []&nbsp;largeParticleData, @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -120,6 +120,21 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <code><a href="../ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a>, <a href="../ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a>, <a href="../ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a>, <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a>, <a href="../ServerPacket.Status.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Status</a></code></div>
 </section>
 </li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_SOUND" class="member-name-link">DEFAULT_SOUND</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -137,7 +152,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  float&nbsp;playerMotionY,
  float&nbsp;playerMotionZ)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(double,double,double,float,byte%5B%5D,float,float,float,net.minestom.server.network.packet.server.play.ExplosionPacket.BlockInteraction,int,byte%5B%5D,int,byte%5B%5D,java.lang.String,boolean,float)" class="member-name-link">ExplosionPacket</a><wbr>(double&nbsp;x,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(double,double,double,float,byte%5B%5D,float,float,float,net.minestom.server.network.packet.server.play.ExplosionPacket.BlockInteraction,int,byte%5B%5D,int,byte%5B%5D,net.minestom.server.sound.SoundEvent)" class="member-name-link">ExplosionPacket</a><wbr>(double&nbsp;x,
  double&nbsp;y,
  double&nbsp;z,
  float&nbsp;radius,
@@ -150,9 +165,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  byte @NotNull []&nbsp;smallParticleData,
  int&nbsp;largeParticleId,
  byte @NotNull []&nbsp;largeParticleData,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName,
- boolean&nbsp;hasFixedSoundRange,
- float&nbsp;soundRange)</code></div>
+ @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>ExplosionPacket</code> record class.</div>
 </div>
@@ -182,73 +195,63 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasFixedSoundRange()" class="member-name-link">hasFixedSoundRange</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>hasFixedSoundRange</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#largeParticleData()" class="member-name-link">largeParticleData</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#largeParticleData()" class="member-name-link">largeParticleData</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>largeParticleData</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#largeParticleId()" class="member-name-link">largeParticleId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#largeParticleId()" class="member-name-link">largeParticleId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>largeParticleId</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionX()" class="member-name-link">playerMotionX</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionX()" class="member-name-link">playerMotionX</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>playerMotionX</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionY()" class="member-name-link">playerMotionY</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionY()" class="member-name-link">playerMotionY</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>playerMotionY</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionZ()" class="member-name-link">playerMotionZ</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionZ()" class="member-name-link">playerMotionZ</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>playerMotionZ</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#radius()" class="member-name-link">radius</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#radius()" class="member-name-link">radius</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>radius</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#records()" class="member-name-link">records</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#records()" class="member-name-link">records</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>records</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smallParticleData()" class="member-name-link">smallParticleData</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smallParticleData()" class="member-name-link">smallParticleData</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>smallParticleData</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smallParticleId()" class="member-name-link">smallParticleId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smallParticleId()" class="member-name-link">smallParticleId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>smallParticleId</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundName()" class="member-name-link">soundName</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>soundName</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundRange()" class="member-name-link">soundRange</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sound()" class="member-name-link">sound</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>soundRange</code> record component.</div>
+<div class="block">Returns the value of the <code>sound</code> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -288,6 +291,20 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="DEFAULT_SOUND">
+<h3>DEFAULT_SOUND</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></span>&nbsp;<span class="element-name">DEFAULT_SOUND</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -314,7 +331,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(double,double,double,float,byte[],float,float,float,net.minestom.server.network.packet.server.play.ExplosionPacket.BlockInteraction,int,byte[],int,byte[],java.lang.String,boolean,float)">
+<section class="detail" id="&lt;init&gt;(double,double,double,float,byte[],float,float,float,net.minestom.server.network.packet.server.play.ExplosionPacket.BlockInteraction,int,byte[],int,byte[],net.minestom.server.sound.SoundEvent)">
 <h3>ExplosionPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ExplosionPacket</span><wbr><span class="parameters">(double&nbsp;x,
  double&nbsp;y,
@@ -331,9 +348,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
  int&nbsp;largeParticleId,
  byte @NotNull []&nbsp;largeParticleData,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;soundName,
- boolean&nbsp;hasFixedSoundRange,
- float&nbsp;soundRange)</span></div>
+ @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)</span></div>
 <div class="block">Creates an instance of a <code>ExplosionPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -350,9 +365,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dd><code>smallParticleData</code> - the value for the <code>smallParticleData</code> record component</dd>
 <dd><code>largeParticleId</code> - the value for the <code>largeParticleId</code> record component</dd>
 <dd><code>largeParticleData</code> - the value for the <code>largeParticleData</code> record component</dd>
-<dd><code>soundName</code> - the value for the <code>soundName</code> record component</dd>
-<dd><code>hasFixedSoundRange</code> - the value for the <code>hasFixedSoundRange</code> record component</dd>
-<dd><code>soundRange</code> - the value for the <code>soundRange</code> record component</dd>
+<dd><code>sound</code> - the value for the <code>sound</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -571,36 +584,14 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="soundName()">
-<h3>soundName</h3>
+<section class="detail" id="sound()">
+<h3>sound</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">soundName</span>()</div>
-<div class="block">Returns the value of the <code>soundName</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></span>&nbsp;<span class="element-name">sound</span>()</div>
+<div class="block">Returns the value of the <code>sound</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>soundName</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="hasFixedSoundRange()">
-<h3>hasFixedSoundRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasFixedSoundRange</span>()</div>
-<div class="block">Returns the value of the <code>hasFixedSoundRange</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>hasFixedSoundRange</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="soundRange()">
-<h3>soundRange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">soundRange</span>()</div>
-<div class="block">Returns the value of the <code>soundRange</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>soundRange</code> record component</dd>
+<dd>the value of the <code>sound</code> record component</dd>
 </dl>
 </section>
 </li>

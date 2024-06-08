@@ -133,7 +133,7 @@ implements <a href="../trait/ItemEvent.html" title="interface in net.minestom.se
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEatingTime()" class="member-name-link">getEatingTime</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the food eating time.</div>
+<div class="block">Gets the food eating time in ticks.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getFoodItem()" class="member-name-link">getFoodItem</a>()</code></div>
@@ -240,9 +240,7 @@ implements <a href="../trait/ItemEvent.html" title="interface in net.minestom.se
 <section class="detail" id="getEatingTime()">
 <h3>getEatingTime</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">getEatingTime</span>()</div>
-<div class="block">Gets the food eating time.
- <p>
- This is by default <a href="../../entity/Player.html#getDefaultEatingTime()"><code>Player.getDefaultEatingTime()</code></a>.</div>
+<div class="block">Gets the food eating time in ticks.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the eating time</dd>
@@ -256,7 +254,7 @@ implements <a href="../trait/ItemEvent.html" title="interface in net.minestom.se
 <div class="block">Changes the food eating time.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>eatingTime</code> - the new eating time</dd>
+<dd><code>eatingTime</code> - the new eating time in ticks</dd>
 </dl>
 </section>
 </li>
