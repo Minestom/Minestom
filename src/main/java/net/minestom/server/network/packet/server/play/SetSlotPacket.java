@@ -38,8 +38,10 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
     @Override
     public @NotNull Collection<Component> components() {
         final var components = new ArrayList<>(this.itemStack.get(ItemComponent.LORE, List.of()));
-        final var displayname = this.itemStack.get(ItemComponent.CUSTOM_NAME);
-        if (displayname != null) components.add(displayname);
+        final var displayName = this.itemStack.get(ItemComponent.CUSTOM_NAME);
+        if (displayName != null) components.add(displayName);
+        final var itemName = this.itemStack.get(ItemComponent.ITEM_NAME);
+        if (itemName != null) components.add(itemName);
         return List.copyOf(components);
     }
 
@@ -47,6 +49,7 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         return new SetSlotPacket(this.windowId, this.stateId, this.slot, this.itemStack
                 .with(ItemComponent.CUSTOM_NAME, operator)
+                .with(ItemComponent.ITEM_NAME, operator)
                 .with(ItemComponent.LORE, (UnaryOperator<List<Component>>) lines -> {
                     final var translatedComponents = new ArrayList<Component>();
                     lines.forEach(component -> translatedComponents.add(operator.apply(component)));
