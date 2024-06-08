@@ -4,9 +4,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.collections.ImmutableLongArray;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTLongArray;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
@@ -19,7 +16,7 @@ public abstract class Heightmap {
 
     public Heightmap(Chunk chunk) {
         this.chunk = chunk;
-        minHeight = chunk.getInstance().getDimensionType().getMinY() - 1;
+        minHeight = chunk.getInstance().getCachedDimensionType().minY() - 1;
     }
 
     protected abstract boolean checkBlock(@NotNull Block block);
@@ -59,14 +56,14 @@ public abstract class Heightmap {
         setHeightY(x, z, y);
     }
 
-    public NBTLongArray getNBT() {
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
+    public long[] getNBT() {
+        final int dimensionHeight = chunk.getInstance().getCachedDimensionType().height();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return NBT.LongArray(encode(heights, bitsForHeight));
+        return encode(heights, bitsForHeight);
     }
 
-    public void loadFrom(ImmutableLongArray data) {
-        final int dimensionHeight = chunk.getInstance().getDimensionType().getHeight();
+    public void loadFrom(long[] data) {
+        final int dimensionHeight = chunk.getInstance().getCachedDimensionType().height();
         final int bitsPerEntry = MathUtils.bitsToRepresent(dimensionHeight);
 
         final int entriesPerLong = 64 / bitsPerEntry;
@@ -78,7 +75,7 @@ public abstract class Heightmap {
         for (int i = 0; i < heights.length; i++) {
             final int indexInContainer = i % entriesPerLong;
 
-            heights[i] = (short) ((int)(data.get(containerIndex) >> (indexInContainer * bitsPerEntry)) & entryMask);
+            heights[i] = (short) ((int)(data[containerIndex] >> (indexInContainer * bitsPerEntry)) & entryMask);
 
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }
@@ -97,7 +94,7 @@ public abstract class Heightmap {
     }
 
     public static int getHighestBlockSection(Chunk chunk) {
-        int y = chunk.getInstance().getDimensionType().getMaxY();
+        int y = chunk.getInstance().getCachedDimensionType().maxY();
 
         final int sectionsCount = chunk.getMaxSection() - chunk.getMinSection();
         for (int i = 0; i < sectionsCount; i++) {

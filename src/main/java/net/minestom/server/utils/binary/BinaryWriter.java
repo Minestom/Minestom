@@ -1,5 +1,6 @@
 package net.minestom.server.utils.binary;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -8,7 +9,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -164,10 +164,10 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeItemStack(@NotNull ItemStack itemStack) {
-        this.buffer.write(ITEM, itemStack);
+        this.buffer.write(ItemStack.NETWORK_TYPE, itemStack);
     }
 
-    public void writeNBT(@NotNull String name, @NotNull NBT tag) {
+    public void writeNBT(@NotNull String name, @NotNull BinaryTag tag) {
         this.buffer.write(NBT, tag);
     }
 

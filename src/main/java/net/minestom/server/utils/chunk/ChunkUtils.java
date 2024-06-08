@@ -1,6 +1,5 @@
 package net.minestom.server.utils.chunk;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
@@ -287,6 +286,14 @@ public final class ChunkUtils {
      */
     public static int toSectionRelativeCoordinate(int xyz) {
         return xyz & 0xF;
+    }
+
+    public static int toRegionCoordinate(int chunkCoordinate) {
+        return chunkCoordinate >> 5;
+    }
+
+    public static int toRegionLocal(int chunkCoordinate) {
+        return chunkCoordinate & 0x1F;
     }
 
     public static int floorSection(int coordinate) {

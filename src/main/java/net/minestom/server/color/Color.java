@@ -1,7 +1,9 @@
 package net.minestom.server.color;
 
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +14,25 @@ import org.jetbrains.annotations.NotNull;
  */
 public record Color(int red, int green, int blue) implements RGBLike {
     private static final int BIT_MASK = 0xff;
+
+    public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = new NetworkBuffer.Type<RGBLike>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, RGBLike value) {
+            buffer.write(NetworkBuffer.INT, Color.fromRGBLike(value).asRGB());
+        }
+
+        @Override
+        public RGBLike read(@NotNull NetworkBuffer buffer) {
+            return new Color(buffer.read(NetworkBuffer.INT));
+        }
+    };
+    public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
+            .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
+
+    public static @NotNull Color fromRGBLike(@NotNull RGBLike rgbLike) {
+        if (rgbLike instanceof Color color) return color;
+        return new Color(rgbLike.red(), rgbLike.green(), rgbLike.blue());
+    }
 
     public Color {
         Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);

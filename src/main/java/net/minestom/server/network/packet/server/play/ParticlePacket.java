@@ -5,28 +5,23 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(int particleId, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount, @Nullable ParticleData data) implements ServerPacket.Play {
+public record ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) implements ServerPacket.Play {
     private ParticlePacket(ParticlePacket copy) {
-        this(copy.particleId, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount, copy.data);
+        this(copy.particle, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount);
     }
 
     public ParticlePacket(@NotNull NetworkBuffer reader) {
         this(readPacket(reader));
     }
 
-    public ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
-        this(particle.id(), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
-    }
-
     public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
-        this(particle.id(), false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, particle.data());
+        this(particle, false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
     }
 
     public ParticlePacket(@NotNull Particle particle, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
@@ -38,7 +33,6 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
     }
 
     private static ParticlePacket readPacket(NetworkBuffer reader) {
-        int particleId = reader.read(VAR_INT);
         Boolean longDistance = reader.read(BOOLEAN);
         Double x = reader.read(DOUBLE);
         Double y = reader.read(DOUBLE);
@@ -48,17 +42,15 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         Float offsetZ = reader.read(FLOAT);
         Float maxSpeed = reader.read(FLOAT);
         Integer particleCount = reader.read(INT);
-        ParticleData data = ParticleData.read(particleId, reader);
 
-        return new ParticlePacket(particleId, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount, data);
+        Particle particle = Particle.fromId(reader.read(VAR_INT));
+        Objects.requireNonNull(particle);
+
+        return new ParticlePacket(particle.readData(reader), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        Check.stateCondition(data != null && !data.validate(particleId), "Particle data {0} is not valid for this particle type {1}", data, Particle.fromId(particleId));
-        Check.stateCondition(data == null && ParticleData.requiresData(particleId), "Particle data is required for this particle type {0}", Particle.fromId(particleId));
-
-        writer.write(VAR_INT, particleId);
         writer.write(BOOLEAN, longDistance);
         writer.write(DOUBLE, x);
         writer.write(DOUBLE, y);
@@ -68,8 +60,8 @@ public record ParticlePacket(int particleId, boolean longDistance, double x, dou
         writer.write(FLOAT, offsetZ);
         writer.write(FLOAT, maxSpeed);
         writer.write(INT, particleCount);
-
-        if (data != null) data.write(writer);
+        writer.write(VAR_INT, particle.id());
+        particle.writeData(writer);
     }
 
     @Override

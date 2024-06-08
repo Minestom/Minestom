@@ -1,16 +1,21 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.StringReader;
+import java.io.IOException;
 
 /**
  * Argument which can be used to retrieve an {@link ItemStack} from its material and with NBT data.
@@ -24,6 +29,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static final int NO_MATERIAL = 1;
     public static final int INVALID_NBT = 2;
     public static final int INVALID_MATERIAL = 3;
+    public static final int INVALID_COMPONENT = 4;
 
     public ArgumentItemStack(String id) {
         super(id, true);
@@ -45,39 +51,109 @@ public class ArgumentItemStack extends Argument<ItemStack> {
      */
     @Deprecated
     public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
-        final int nbtIndex = input.indexOf("{");
+        var reader = new StringReader(input);
 
-        if (nbtIndex == 0)
-            throw new ArgumentSyntaxException("The item needs a material", input, NO_MATERIAL);
-
-        if (nbtIndex == -1) {
-            // Only material name
-            final Material material = Material.fromNamespaceId(input);
-            if (material == null)
-                throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
-            return ItemStack.of(material);
-        } else {
-            // Material plus additional NBT
-            final String materialName = input.substring(0, nbtIndex);
-            final Material material = Material.fromNamespaceId(materialName);
-            if (material == null)
-                throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
-
-            final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
-
-            NBTCompound compound;
-            try {
-                compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
-            } catch (NBTException e) {
-                throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
-            }
-
-            return ItemStack.fromNBT(material, compound);
+        final Material material = Material.fromNamespaceId(reader.readNamespaceId());
+        if (material == null)
+            throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
+        if (!reader.hasMore()) {
+            return ItemStack.of(material); // Nothing else, we have our item
         }
+
+        DataComponentMap.Builder components = DataComponentMap.builder();
+
+        // Parse the declared components
+        if (reader.peek() == '[') {
+            reader.consume('[');
+            do {
+                final NamespaceID componentId = reader.readNamespaceId();
+                final DataComponent<?> component = DataComponent.fromNamespaceId(componentId);
+                if (component == null)
+                    throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
+
+                reader.consume('=');
+
+                final BinaryTag nbt = reader.readTag();
+                //noinspection unchecked
+                components.set((DataComponent<Object>) component, component.read(nbt));
+
+                if (reader.peek() != ']')
+                    reader.consume(',');
+            } while (reader.peek() != ']');
+            reader.consume(']');
+        }
+
+        // Parse the NBT
+        if (reader.hasMore() && reader.peek() == '{') {
+            final BinaryTag nbt = reader.readTag();
+            if (!(nbt instanceof CompoundBinaryTag compound))
+                throw new ArgumentSyntaxException("Item NBT must be compound", input, INVALID_NBT);
+
+            final CompoundBinaryTag customData = CompoundBinaryTag.builder()
+                    .put(components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).nbt())
+                    .put(compound)
+                    .build();
+            components.set(ItemComponent.CUSTOM_DATA, new CustomData(customData));
+        }
+
+        if (reader.hasMore())
+            throw new ArgumentSyntaxException("Unexpected remaining input", input, INVALID_NBT);
+
+        return ItemStack.of(material, components.build());
     }
 
     @Override
     public String toString() {
         return String.format("ItemStack<%s>", getId());
+    }
+
+    private static class StringReader {
+        private String input;
+        private int index = 0;
+
+        public StringReader(@NotNull String input) {
+            this.input = input;
+        }
+
+        public boolean hasMore() {
+            return index < input.length();
+        }
+
+        public char peek() {
+            if (!hasMore()) {
+                throw new ArgumentSyntaxException("Unexpected end of input", input, INVALID_NBT);
+            }
+
+            return input.charAt(index);
+        }
+
+        public void consume(char c) {
+            char next = peek();
+            if (next != c) {
+                throw new ArgumentSyntaxException("Expected '" + c + "', got '" + next + "'", input, INVALID_NBT);
+            }
+            index++;
+        }
+
+        public @NotNull NamespaceID readNamespaceId() {
+            char c;
+            int start = index;
+            while (hasMore() && (c = peek()) != '{' && c != '[' && c != '=') {
+                index++;
+            }
+            return NamespaceID.from(input.substring(start, index));
+        }
+
+        public @NotNull BinaryTag readTag() {
+            try {
+                var result = TagStringIOExt.readTagEmbedded(input.substring(index));
+                this.input = result.getValue();
+                this.index = 0;
+
+                return result.getKey();
+            } catch (IOException e) {
+                throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
+            }
+        }
     }
 }

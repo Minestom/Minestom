@@ -8,9 +8,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +47,10 @@ final class TestConnectionImpl implements TestConnection {
         });
 
         // Force the player through the entirety of the login process manually
-        process.connection().doConfiguration(player, true);
+        var configFuture = process.connection().doConfiguration(player, true);
+        playerConnection.receiveKnownPacksResponse(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
+        configFuture.join();
+
         process.connection().transitionConfigToPlay(player);
         process.connection().updateWaitingPlayers();
         return CompletableFuture.completedFuture(player);

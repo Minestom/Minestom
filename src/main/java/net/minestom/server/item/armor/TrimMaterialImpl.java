@@ -1,49 +1,61 @@
 package net.minestom.server.item.armor;
 
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
-record TrimMaterialImpl(Registry.TrimMaterialEntry registry, int id) implements TrimMaterial {
-    static final AtomicInteger i = new AtomicInteger();
-    private static final Registry.Container<TrimMaterial> CONTAINER;
+record TrimMaterialImpl(
+        @NotNull NamespaceID namespace,
+        @NotNull String assetName,
+        @NotNull Material ingredient,
+        float itemModelIndex,
+        @NotNull Map<String, String> overrideArmorMaterials,
+        @NotNull Component description,
+        @Nullable Registry.TrimMaterialEntry registry
+) implements TrimMaterial {
 
-    static {
-        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_MATERIALS,
-                (namespace, properties) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, properties)));
+    static final BinaryTagSerializer<TrimMaterial> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+            tag -> {
+                throw new UnsupportedOperationException("TrimMaterial is read-only");
+            },
+            trimMaterial -> {
+                CompoundBinaryTag.Builder overrideArmorMaterials = CompoundBinaryTag.builder();
+                for (Map.Entry<String, String> entry : trimMaterial.overrideArmorMaterials().entrySet()) {
+                    overrideArmorMaterials.putString(entry.getKey(), entry.getValue());
+                }
+
+                return CompoundBinaryTag.builder()
+                        .putString("asset_name", trimMaterial.assetName())
+                        .put("ingredient", Material.NBT_TYPE.write(trimMaterial.ingredient()))
+                        .putFloat("item_model_index", trimMaterial.itemModelIndex())
+                        .put("override_armor_materials", overrideArmorMaterials.build())
+                        .put("description", BinaryTagSerializer.NBT_COMPONENT.write(trimMaterial.description()))
+                        .build();
+            }
+    );
+
+    @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
+    TrimMaterialImpl {
+        Check.notNull(namespace, "Namespace cannot be null");
+        Check.argCondition(assetName == null || assetName.isEmpty(), "missing asset name: {0}", namespace);
+        Check.argCondition(ingredient == null, "missing ingredient: {0}", namespace);
+        Check.argCondition(overrideArmorMaterials == null, "missing override armor materials: {0}", namespace);
+        Check.argCondition(description == null, "missing description: {0}", namespace);
+        overrideArmorMaterials = Map.copyOf(overrideArmorMaterials);
     }
 
-    public TrimMaterialImpl(Registry.TrimMaterialEntry registry) {
-        this(registry, i.getAndIncrement());
-    }
-
-    public static TrimMaterial get(String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Collection<TrimMaterial> values() {
-        return CONTAINER.values();
-    }
-
-    public NBTCompound asNBT() {
-        return NBT.Compound(nbt -> {
-            nbt.setString("asset_name", assetName());
-            nbt.setString("ingredient", ingredient().namespace().asString());
-            nbt.setFloat("item_model_index", itemModelIndex());
-            nbt.set("override_armor_materials", NBT.Compound(overrideArmorMaterials().entrySet().stream()
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            entry -> NBT.String(entry.getValue())
-                    ))
-            ));
-            nbt.set("description", NbtComponentSerializer.nbt().serialize(description()));
-        });
+    TrimMaterialImpl(@NotNull Registry.TrimMaterialEntry registry) {
+        this(registry.namespace(), registry.assetName(), registry.ingredient(),
+                registry.itemModelIndex(), registry.overrideArmorMaterials(),
+                registry.description(), registry);
     }
 
 }

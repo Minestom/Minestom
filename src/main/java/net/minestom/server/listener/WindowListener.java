@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
@@ -52,7 +53,7 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
             successful = inventory.changeHeld(player, slot, button);
         } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
-            successful = player.isCreative();
+            successful = player.getGameMode() == GameMode.CREATIVE;
             if (successful) {
                 setCursor(player, inventory, packet.clickedItem());
             }

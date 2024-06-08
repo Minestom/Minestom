@@ -18,7 +18,7 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
     }
 
     public void setItemStack(@NotNull ItemStack value) {
-        super.metadata.setIndex(OFFSET, Metadata.Slot(value));
+        super.metadata.setIndex(OFFSET, Metadata.ItemStack(value));
     }
 
     public @NotNull DisplayContext getDisplayContext() {

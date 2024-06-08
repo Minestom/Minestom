@@ -52,7 +52,7 @@ final class SkyLight implements Light {
 
         if (c instanceof LightingChunk lc) {
             int[] heightmap = lc.getOcclusionMap();
-            int maxY = c.getInstance().getDimensionType().getMinY() + c.getInstance().getDimensionType().getHeight();
+            int maxY = c.getInstance().getCachedDimensionType().minY() + c.getInstance().getCachedDimensionType().height();
             int sectionMaxY = (sectionY + 1) * 16 - 1;
             int sectionMinY = sectionY * 16;
 

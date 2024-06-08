@@ -4,13 +4,18 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.item.armor.TrimManager;
+import net.minestom.server.instance.block.banner.BannerPattern;
+import net.minestom.server.item.armor.TrimMaterial;
+import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
@@ -18,14 +23,15 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
-import net.minestom.server.world.DimensionTypeManager;
-import net.minestom.server.world.biomes.BiomeManager;
+import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
@@ -44,8 +50,9 @@ public final class MinecraftServer {
 
     public static final ComponentLogger LOGGER = ComponentLogger.logger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.20.4";
-    public static final int PROTOCOL_VERSION = 765;
+    public static final String VERSION_NAME = "1.20.6";
+    public static final int PROTOCOL_VERSION = 766;
+    public static final int DATA_VERSION = 3839;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -240,14 +247,6 @@ public final class MinecraftServer {
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
-    public static DimensionTypeManager getDimensionTypeManager() {
-        return serverProcess.dimension();
-    }
-
-    public static BiomeManager getBiomeManager() {
-        return serverProcess.biome();
-    }
-
     public static AdvancementManager getAdvancementManager() {
         return serverProcess.advancement();
     }
@@ -256,8 +255,36 @@ public final class MinecraftServer {
         return serverProcess.tag();
     }
 
-    public static TrimManager getTrimManager() {
-        return serverProcess.trim();
+    public static @NotNull DynamicRegistry<ChatType> getChatTypeRegistry() {
+        return serverProcess.chatType();
+    }
+
+    public static @NotNull DynamicRegistry<DimensionType> getDimensionTypeRegistry() {
+        return serverProcess.dimensionType();
+    }
+
+    public static @NotNull DynamicRegistry<Biome> getBiomeRegistry() {
+        return serverProcess.biome();
+    }
+
+    public static @NotNull DynamicRegistry<DamageType> getDamageTypeRegistry() {
+        return serverProcess.damageType();
+    }
+
+    public static @NotNull DynamicRegistry<TrimMaterial> getTrimMaterialRegistry() {
+        return serverProcess.trimMaterial();
+    }
+
+    public static @NotNull DynamicRegistry<TrimPattern> getTrimPatternRegistry() {
+        return serverProcess.trimPattern();
+    }
+
+    public static @NotNull DynamicRegistry<BannerPattern> getBannerPatternRegistry() {
+        return serverProcess.bannerPattern();
+    }
+
+    public static @NotNull DynamicRegistry<WolfMeta.Variant> getWolfVariantRegistry() {
+        return serverProcess.wolfVariant();
     }
 
     public static Server getServer() {

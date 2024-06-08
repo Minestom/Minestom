@@ -162,23 +162,17 @@ public final class CollisionUtils {
      * @param newPosition     the future target position
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
-    public static @NotNull Pos applyWorldBorder(@NotNull WorldBorder worldBorder,
-                                                @NotNull Pos currentPosition, @NotNull Pos newPosition) {
-        final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
-        return switch (collisionAxis) {
-            case NONE ->
-                // Apply velocity + gravity
-                    newPosition;
-            case BOTH ->
-                // Apply Y velocity/gravity
-                    new Pos(currentPosition.x(), newPosition.y(), currentPosition.z());
-            case X ->
-                // Apply Y/Z velocity/gravity
-                    new Pos(currentPosition.x(), newPosition.y(), newPosition.z());
-            case Z ->
-                // Apply X/Y velocity/gravity
-                    new Pos(newPosition.x(), newPosition.y(), currentPosition.z());
-        };
+    public static @NotNull Pos applyWorldBorder(@NotNull WorldBorder worldBorder, @NotNull Pos currentPosition, @NotNull Pos newPosition) {
+        double radius = worldBorder.diameter() / 2;
+        // If there is a collision on a given axis prevent the entity
+        // from moving forward by supplying their previous position's value
+        boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
+        boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
+        if (xCollision || zCollision)  {
+            return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
+                    zCollision ? currentPosition.z() : newPosition.z());
+        }
+        return newPosition;
     }
 
     public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {

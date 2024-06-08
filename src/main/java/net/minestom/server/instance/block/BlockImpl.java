@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.ArrayUtils;
@@ -14,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
@@ -23,7 +22,7 @@ import java.util.function.Function;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
                  byte @NotNull [] propertiesArray,
-                 @Nullable NBTCompound nbt,
+                 @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
     // Block state -> block object
     private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
@@ -86,7 +85,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                 final int defaultState = properties.getInt("defaultStateId");
                 return getState(defaultState);
             });
-    private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
+    private static final Cache<CompoundBinaryTag, CompoundBinaryTag> NBT_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofMinutes(5))
             .weakValues()
             .build();
@@ -144,14 +143,16 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     @Override
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var temporaryNbt = new MutableNBTCompound(Objects.requireNonNullElse(nbt, NBTCompound.EMPTY));
-        tag.write(temporaryNbt, value);
-        final var finalNbt = temporaryNbt.getSize() > 0 ? NBT_CACHE.get(temporaryNbt.toCompound(), Function.identity()) : null;
+        var builder = CompoundBinaryTag.builder();
+        if (nbt != null) builder.put(nbt);
+        tag.write(builder, value);
+        var temporaryNbt = builder.build();
+        final var finalNbt = temporaryNbt.size() > 0 ? NBT_CACHE.get(temporaryNbt, Function.identity()) : null;
         return new BlockImpl(registry, propertiesArray, finalNbt, handler);
     }
 
     @Override
-    public @NotNull Block withNbt(@Nullable NBTCompound compound) {
+    public @NotNull Block withNbt(@Nullable CompoundBinaryTag compound) {
         return new BlockImpl(registry, propertiesArray, compound, handler);
     }
 
@@ -183,7 +184,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return tag.read(Objects.requireNonNullElse(nbt, NBTCompound.EMPTY));
+        return tag.read(Objects.requireNonNullElse(nbt, CompoundBinaryTag.empty()));
     }
 
     private Map<PropertiesHolder, BlockImpl> possibleProperties() {

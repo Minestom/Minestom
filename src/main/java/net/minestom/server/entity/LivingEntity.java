@@ -1,18 +1,19 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.sound.Sound.Source;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
-import net.minestom.server.event.entity.EntityFireEvent;
+import net.minestom.server.event.entity.EntityFireExtinguishEvent;
+import net.minestom.server.event.entity.EntitySetFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.EntityTracker;
@@ -22,9 +23,10 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
+import net.minestom.server.network.packet.server.play.EntityAttributesPacket;
 import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.block.BlockIterator;
@@ -34,7 +36,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -60,14 +61,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected boolean invulnerable;
 
     /**
-     * Time at which this entity must be extinguished
+     * Ticks until this entity must be extinguished
      */
-    private long fireExtinguishTime;
-
-    /**
-     * Period, in ms, between two fire damage applications
-     */
-    private long fireDamagePeriod = 1000L;
+    private int remainingFireTicks;
 
     private Team team;
 
@@ -185,8 +181,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void update(long time) {
-        if (isOnFire() && time > fireExtinguishTime) {
-            setOnFire(false);
+        // Fire
+        if (remainingFireTicks > 0 && --remainingFireTicks == 0) {
+            EventDispatcher.callCancellable(new EntityFireExtinguishEvent(this, true), () -> entityMeta.setOnFire(false));
         }
 
         // Items picking
@@ -271,47 +268,43 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Sets fire to this entity for a given duration.
+     * Gets the amount of ticks this entity is on fire for.
      *
-     * @param duration duration in ticks of the effect
+     * @return the remaining duration of fire in ticks, 0 if not on fire
      */
-    public void setFireForDuration(int duration) {
-        setFireForDuration(duration, TimeUnit.SERVER_TICK);
+    public int getFireTicks() {
+        return remainingFireTicks;
     }
 
     /**
-     * Sets fire to this entity for a given duration.
+     * Sets this entity on fire for the given ticks.
      *
-     * @param duration     duration of the effect
-     * @param temporalUnit unit used to express the duration
-     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
+     * @param ticks duration of fire in ticks
      */
-    public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
-        setFireForDuration(Duration.of(duration, temporalUnit));
-    }
+    public void setFireTicks(int ticks) {
+        int fireTicks = Math.max(0, ticks);
+        if (fireTicks > 0) {
+            EntitySetFireEvent entitySetFireEvent = new EntitySetFireEvent(this, ticks);
+            EventDispatcher.call(entitySetFireEvent);
+            if (entitySetFireEvent.isCancelled()) return;
 
-    /**
-     * Sets fire to this entity for a given duration.
-     *
-     * @param duration duration of the effect
-     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
-     */
-    public void setFireForDuration(Duration duration) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration);
-
-        // Do not start fire event if the fire needs to be removed (< 0 duration)
-        if (duration.toMillis() > 0) {
-            EventDispatcher.callCancellable(entityFireEvent, () -> {
-                final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
-                setOnFire(true);
-                fireExtinguishTime = System.currentTimeMillis() + fireTime;
-            });
-        } else {
-            fireExtinguishTime = System.currentTimeMillis();
+            fireTicks = Math.max(0, entitySetFireEvent.getFireTicks());
+            if (fireTicks > 0) {
+                remainingFireTicks = fireTicks;
+                entityMeta.setOnFire(true);
+                return;
+            }
         }
+
+        if (remainingFireTicks != 0) {
+            EntityFireExtinguishEvent entityFireExtinguishEvent = new EntityFireExtinguishEvent(this, false);
+            EventDispatcher.callCancellable(entityFireExtinguishEvent, () -> entityMeta.setOnFire(false));
+        }
+
+        remainingFireTicks = fireTicks;
     }
 
-    public boolean damage(@NotNull DamageType type, float amount) {
+    public boolean damage(@NotNull DynamicRegistry.Key<DamageType> type, float amount) {
         return damage(new Damage(type, null, null, null, amount));
     }
 
@@ -338,6 +331,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             if (entityDamageEvent.shouldAnimate()) {
                 sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
             }
+
+            //todo
+//            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getType().id(), 0, 0, null));
 
             // Additional hearts support
             if (this instanceof Player player) {
@@ -366,8 +362,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, null, soundCategory,
-                        getPosition(), 1.0f, 1.0f, 0));
+                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory, getPosition(), 1.0f, 1.0f, 0));
             }
         });
 
@@ -380,7 +375,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param type the type of damage
      * @return true if this entity is immune to the given type of damage
      */
-    public boolean isImmune(@NotNull DamageType type) {
+    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
         return false;
     }
 
@@ -399,7 +394,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        this.health = Math.min(health, getMaxHealth());
+        this.health = Math.min(health, (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
         if (this.health <= 0 && !isDead) {
             kill();
         }
@@ -419,21 +414,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}.
-     *
-     * @return the entity max health
-     */
-    public float getMaxHealth() {
-        return getAttributeValue(Attribute.MAX_HEALTH);
-    }
-
-    /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth((float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
     }
 
     /**
@@ -443,7 +429,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the attribute instance
      */
     public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        return attributeModifiers.computeIfAbsent(attribute.key(),
+        return attributeModifiers.computeIfAbsent(attribute.name(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
@@ -459,7 +445,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             // connection null during Player initialization (due to #super call)
             self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
         }
-        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket(getEntityId(), List.of(attributeInstance));
+        EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(attributeInstance));
         if (self) {
             sendPacketToViewersAndSelf(propertiesPacket);
         } else {
@@ -473,8 +459,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute value to get
      * @return the attribute value
      */
-    public float getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.key());
+    public double getAttributeValue(@NotNull Attribute attribute) {
+        AttributeInstance instance = attributeModifiers.get(attribute.name());
         return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
 
@@ -595,41 +581,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets an {@link EntityPropertiesPacket} for this entity with all of its attributes values.
+     * Gets an {@link EntityAttributesPacket} for this entity with all of its attributes values.
      *
-     * @return an {@link EntityPropertiesPacket} linked to this entity
+     * @return an {@link EntityAttributesPacket} linked to this entity
      */
-    protected @NotNull EntityPropertiesPacket getPropertiesPacket() {
-        return new EntityPropertiesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
-    }
-
-    /**
-     * Gets the time in ms between two fire damage applications.
-     *
-     * @return the time in ms
-     * @see #setFireDamagePeriod(Duration)
-     */
-    public long getFireDamagePeriod() {
-        return fireDamagePeriod;
-    }
-
-    /**
-     * Changes the delay between two fire damage applications.
-     *
-     * @param fireDamagePeriod the delay
-     * @param temporalUnit     the time unit
-     */
-    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TemporalUnit temporalUnit) {
-        setFireDamagePeriod(Duration.of(fireDamagePeriod, temporalUnit));
-    }
-
-    /**
-     * Changes the delay between two fire damage applications.
-     *
-     * @param fireDamagePeriod the delay
-     */
-    public void setFireDamagePeriod(Duration fireDamagePeriod) {
-        this.fireDamagePeriod = fireDamagePeriod.toMillis();
+    protected @NotNull EntityAttributesPacket getPropertiesPacket() {
+        return new EntityAttributesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
     }
 
     /**
@@ -639,7 +596,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setTeam(@Nullable Team team) {
         if (this.team == team) return;
-        String member = this instanceof Player player ? player.getUsername() : uuid.toString();
+        String member = this instanceof Player player ? player.getUsername() : getUuid().toString();
         if (this.team != null) {
             this.team.removeMember(member);
         }
@@ -696,7 +653,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
     }
 }
