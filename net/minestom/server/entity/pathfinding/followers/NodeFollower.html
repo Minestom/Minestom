@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="FlyingNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">FlyingNodeFollower</a></code>, <code><a href="GroundNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">GroundNodeFollower</a></code>, <code><a href="WaterNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">WaterNodeFollower</a></code></dd>
+<dd><code><a href="FlyingNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">FlyingNodeFollower</a></code>, <code><a href="GroundNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">GroundNodeFollower</a></code>, <code><a href="NoPhysicsNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">NoPhysicsNodeFollower</a></code>, <code><a href="WaterNodeFollower.html" title="class in net.minestom.server.entity.pathfinding.followers">WaterNodeFollower</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">NodeFollower</span></div>
@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Get the movement speed of the follower</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../../../collision/PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#moveTowards(net.minestom.server.coordinate.Point,double,net.minestom.server.coordinate.Point)" class="member-name-link">moveTowards</a><wbr>(@NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;target,
  double&nbsp;speed,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;lookAt)</code></div>
@@ -146,8 +146,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="moveTowards(net.minestom.server.coordinate.Point,double,net.minestom.server.coordinate.Point)">
 <h3>moveTowards</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="../../../collision/PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">moveTowards</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">moveTowards</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;target,
  double&nbsp;speed,
  @NotNull
@@ -158,8 +157,6 @@ loadScripts(document, 'script');</script>
 <dd><code>target</code> - the point to move towards</dd>
 <dd><code>speed</code> - the speed to move at</dd>
 <dd><code>lookAt</code> - the point to look at</dd>
-<dt>Returns:</dt>
-<dd>the result of the movement</dd>
 </dl>
 </section>
 </li>
