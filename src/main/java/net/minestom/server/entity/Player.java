@@ -184,7 +184,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected PlayerInventory inventory;
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
-    private boolean skipClosePacket;
+    private boolean didCloseInventory;
 
     private byte heldSlot;
 
@@ -1720,19 +1720,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return openInventory;
     }
 
-    private void tryCloseInventory(boolean skipClosePacket) {
-        var closedInventory = getOpenInventory();
-        if (closedInventory == null) return;
-
-        this.skipClosePacket = skipClosePacket;
-
-        if (closedInventory.removeViewer(this)) {
-            if (closedInventory == getOpenInventory()) {
-                this.openInventory = null;
-            }
-        }
-    }
-
     /**
      * Opens the specified Inventory, close the previous inventory if existing.
      *
@@ -1743,12 +1730,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            tryCloseInventory(true);
+            Inventory openInventory = getOpenInventory();
+            if (openInventory != null) {
+                openInventory.removeViewer(this);
+            }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory.addViewer(this)) {
-                this.openInventory = newInventory;
+            if (newInventory == null) {
+                // just close the inventory
+                return;
             }
+
+            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
+                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
+            newInventory.addViewer(this);
+            this.openInventory = newInventory;
         });
         return !inventoryOpenEvent.isCancelled();
     }
@@ -1792,15 +1788,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
             if (!fromClient) sendPacket(closeWindowPacket);
             inventory.update();
-            this.skipClosePacket = true;
+            this.didCloseInventory = true;
         }
     }
 
     /**
      * Used internally to determine when sending the close inventory packet should be skipped.
      */
-    public boolean skipClosePacket() {
-        return skipClosePacket;
+    public boolean didCloseInventory() {
+        return didCloseInventory;
     }
 
     /**
@@ -1809,11 +1805,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * Shouldn't be used externally without proper understanding of its consequence.
      *
-     * @param skipClosePacket the new skipClosePacket field
+     * @param didCloseInventory the new didCloseInventory field
      */
     @ApiStatus.Internal
-    public void UNSAFE_changeSkipClosePacket(boolean skipClosePacket) {
-        this.skipClosePacket = skipClosePacket;
+    public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
+        this.didCloseInventory = didCloseInventory;
     }
 
     public int getNextTeleportId() {

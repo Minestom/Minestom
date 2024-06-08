@@ -416,7 +416,7 @@ public final class InventoryClickProcessor {
 
         // Reset the didCloseInventory field
         // Wait for inventory conditions + events to possibly close the inventory
-        player.UNSAFE_changeSkipClosePacket(false);
+        player.UNSAFE_changeDidCloseInventory(false);
         // InventoryPreClickEvent
         {
             InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(eventInventory, player, slot, clickType,
@@ -444,9 +444,9 @@ public final class InventoryClickProcessor {
                         }
                     }
                     // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
-                    if (player.skipClosePacket()) {
+                    if (player.didCloseInventory()) {
                         clickResult.setCancel(true);
-                        player.UNSAFE_changeSkipClosePacket(false);
+                        player.UNSAFE_changeDidCloseInventory(false);
                     }
                 }
             }
