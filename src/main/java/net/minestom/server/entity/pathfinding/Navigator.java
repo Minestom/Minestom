@@ -157,12 +157,6 @@ public final class Navigator {
         Point currentTarget = path.getCurrent();
         Point nextTarget = path.getNext();
 
-        // If we're at the end of the path, navigate directly to the entity
-        if (nextTarget == null) {
-            path.setState(PPath.PathState.INVALID);
-            return;
-        }
-
         // Repath
         if (currentTarget == null || path.getCurrentType() == PNode.NodeType.REPATH || path.getCurrentType() == null) {
             if (computingPath != null && computingPath.getState() == PPath.PathState.CALCULATING) return;
@@ -173,6 +167,11 @@ public final class Navigator {
                     minimumDistance, path.maxDistance(),
                     path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, null);
 
+            return;
+        }
+
+        if (nextTarget == null) {
+            path.setState(PPath.PathState.INVALID);
             return;
         }
 

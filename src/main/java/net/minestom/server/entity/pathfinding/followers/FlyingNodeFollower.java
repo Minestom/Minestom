@@ -27,7 +27,7 @@ public class FlyingNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public @NotNull PhysicsResult moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
+    public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
@@ -56,8 +56,6 @@ public class FlyingNodeFollower implements NodeFollower {
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
         this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
-
-        return physicsResult;
     }
 
     @Override

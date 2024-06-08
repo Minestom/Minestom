@@ -1,7 +1,5 @@
 package net.minestom.server.entity.pathfinding.followers;
 
-import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -12,11 +10,10 @@ import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class WaterNodeFollower implements NodeFollower {
+public class NoPhysicsNodeFollower implements NodeFollower {
     private final Entity entity;
-    private static final double WATER_SPEED_MULTIPLIER = 0.5;
 
-    public WaterNodeFollower(@NotNull Entity entity) {
+    public NoPhysicsNodeFollower(@NotNull Entity entity) {
         this.entity = entity;
     }
 
@@ -34,6 +31,8 @@ public class WaterNodeFollower implements NodeFollower {
         final double dy = direction.y() - position.y();
         final double dz = direction.z() - position.z();
 
+        if (dy > 0 && entity.isOnGround()) jump(4f);
+
         final double dxLook = lookAt.x() - position.x();
         final double dyLook = lookAt.y() - position.y();
         final double dzLook = lookAt.z() - position.z();
@@ -44,34 +43,30 @@ public class WaterNodeFollower implements NodeFollower {
             speed = distSquared;
         }
 
-        var instance = entity.getInstance();
-        if (instance != null)
-            if (instance.getBlock(position).isLiquid()) {
-                speed *= WATER_SPEED_MULTIPLIER;
-            }
-
         final double radians = Math.atan2(dz, dx);
         final double speedX = Math.cos(radians) * speed;
         final double speedZ = Math.sin(radians) * speed;
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        double speedY = Math.signum(dy) * 0.5 * speed;
-        if (Math.min(Math.abs(dy), Math.abs(speedY)) == Math.abs(dy)) {
-            speedY = dy;
-        }
-
-        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
+        var newPosition = position.add(speedX, 0, speedZ);
+        this.entity.refreshPosition(newPosition.withView(yaw, pitch));
     }
 
     @Override
     public void jump(@Nullable Point point, @Nullable Point target) {
+        if (entity.isOnGround()) {
+            jump(4f);
+        }
     }
 
     @Override
     public boolean isAtPoint(@NotNull Point point) {
         return entity.getPosition().sameBlock(point);
+    }
+
+    public void jump(float height) {
+        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
     }
 
     @Override

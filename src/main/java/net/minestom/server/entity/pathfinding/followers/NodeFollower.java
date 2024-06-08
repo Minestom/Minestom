@@ -12,9 +12,8 @@ public interface NodeFollower {
      * @param target the point to move towards
      * @param speed  the speed to move at
      * @param lookAt the point to look at
-     * @return the result of the movement
      */
-    @NotNull PhysicsResult moveTowards(@NotNull Point target, double speed, @NotNull Point lookAt);
+    void moveTowards(@NotNull Point target, double speed, @NotNull Point lookAt);
 
     /**
      * Jump
