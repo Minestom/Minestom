@@ -127,7 +127,7 @@ public interface BinaryTagSerializer<T> {
     BinaryTagSerializer<Unit> UNIT = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Unit value) {
-            return EndBinaryTag.endBinaryTag();
+            return CompoundBinaryTag.empty();
         }
 
         @Override
