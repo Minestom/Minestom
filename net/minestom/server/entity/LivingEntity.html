@@ -389,7 +389,19 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
  (can be used for attack animation).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand()" class="member-name-link">swingOffHand</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingMainHand(boolean)" class="member-name-link">swingMainHand</a><wbr>(boolean&nbsp;fromClient)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the main hand
+ (can be used for attack animation).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand()" class="member-name-link">swingOffHand</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
+ (can be used for attack animation).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand(boolean)" class="member-name-link">swingOffHand</a><wbr>(boolean&nbsp;fromClient)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
  (can be used for attack animation).</div>
@@ -985,6 +997,32 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swingOffHand</span>()</div>
 <div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
  (can be used for attack animation).</div>
+</section>
+</li>
+<li>
+<section class="detail" id="swingMainHand(boolean)">
+<h3>swingMainHand</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swingMainHand</span><wbr><span class="parameters">(boolean&nbsp;fromClient)</span></div>
+<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the main hand
+ (can be used for attack animation).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>fromClient</code> - if true, broadcast only to viewers</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="swingOffHand(boolean)">
+<h3>swingOffHand</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swingOffHand</span><wbr><span class="parameters">(boolean&nbsp;fromClient)</span></div>
+<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
+ (can be used for attack animation).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>fromClient</code> - if true, broadcast only to viewers</dd>
+</dl>
 </section>
 </li>
 <li>
