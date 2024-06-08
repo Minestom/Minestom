@@ -32,6 +32,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -526,6 +527,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param fromClient if true, broadcast only to viewers
      */
+    @ApiStatus.Internal
     public void swingMainHand(boolean fromClient) {
         swingHand(fromClient, EntityAnimationPacket.Animation.SWING_MAIN_ARM);
     }
@@ -536,6 +538,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param fromClient if true, broadcast only to viewers
      */
+    @ApiStatus.Internal
     public void swingOffHand(boolean fromClient) {
         swingHand(fromClient, EntityAnimationPacket.Animation.SWING_OFF_HAND);
     }
