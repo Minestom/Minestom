@@ -32,6 +32,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -509,7 +510,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingMainHand() {
-        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
+        swingMainHand(false);
     }
 
     /**
@@ -517,7 +518,38 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingOffHand() {
-        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
+        swingOffHand(false);
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to swing the main hand
+     * (can be used for attack animation).
+     *
+     * @param fromClient if true, broadcast only to viewers
+     */
+    @ApiStatus.Internal
+    public void swingMainHand(boolean fromClient) {
+        swingHand(fromClient, EntityAnimationPacket.Animation.SWING_MAIN_ARM);
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to swing the off hand
+     * (can be used for attack animation).
+     *
+     * @param fromClient if true, broadcast only to viewers
+     */
+    @ApiStatus.Internal
+    public void swingOffHand(boolean fromClient) {
+        swingHand(fromClient, EntityAnimationPacket.Animation.SWING_OFF_HAND);
+    }
+
+    private void swingHand(boolean fromClient, EntityAnimationPacket.Animation animation) {
+        EntityAnimationPacket packet = new EntityAnimationPacket(getEntityId(), animation);
+        if (fromClient) {
+            sendPacketToViewers(packet);
+        } else {
+            sendPacketToViewersAndSelf(packet);
+        }
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
