@@ -5,6 +5,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.item.ItemComponent;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
@@ -62,6 +66,27 @@ public class TranslationIntegrationTest {
 
         collector.assertSingle(received -> {
             assertEquals(message, received.message());
+        });
+    }
+
+    @Test
+    public void testItemStackTranslation(final Env env) {
+        final var instance = env.createFlatInstance();
+        final var connection = env.createConnection();
+        final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        final var collector = connection.trackIncoming(SetSlotPacket.class);
+
+        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
+        final var message = Component.translatable("test.key");
+        final var itemStack = ItemStack.of(Material.STONE)
+                .with(ItemComponent.ITEM_NAME, message)
+                .with(ItemComponent.CUSTOM_NAME, message);
+        final var packet = new SetSlotPacket((byte) 0x01, 1, (short) 1, itemStack);
+        PacketUtils.sendGroupedPacket(List.of(player), packet);
+
+        collector.assertSingle(received -> {
+            assertNotEquals(message, received.itemStack().get(ItemComponent.ITEM_NAME));
+            assertNotEquals(message, received.itemStack().get(ItemComponent.CUSTOM_NAME));
         });
     }
 }
