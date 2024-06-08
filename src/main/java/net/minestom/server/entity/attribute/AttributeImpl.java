@@ -11,9 +11,6 @@ record AttributeImpl(@NotNull Registry.AttributeEntry registry) implements Attri
     private static final Registry.Container<Attribute> CONTAINER = Registry.createStaticContainer(Registry.Resource.ATTRIBUTES,
             (namespace, properties) -> new AttributeImpl(Registry.attribute(namespace, properties)));
 
-    public static final NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(AttributeImpl::getId, Attribute::id);
-    public static final BinaryTagSerializer<Attribute> NBT_TYPE = BinaryTagSerializer.STRING.map(AttributeImpl::get, Attribute::name);
-
     static Attribute get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
     }
