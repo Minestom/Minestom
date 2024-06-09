@@ -79,10 +79,19 @@ public final class LoginListener {
         } else {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
-            final UUID playerUuid = bungee && isSocketConnection ?
-                    ((PlayerSocketConnection) connection).gameProfile().uuid() :
-                    CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
-            CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
+            AsyncUtils.runAsync(() -> {
+                try {
+                    final UUID playerUuid;
+                    if (bungee && isSocketConnection)
+                        playerUuid = ((PlayerSocketConnection) connection).gameProfile().uuid();
+                    else playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
+                    CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
+
+                } catch (Exception exception) {
+                    connection.sendPacket(new LoginDisconnectPacket(Component.text(exception.getClass().getSimpleName() + ": " + exception.getMessage())));
+                    connection.disconnect();
+                }
+            });
         }
     }
 
