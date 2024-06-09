@@ -23,9 +23,9 @@ public class PlayerChangeHeldSlotEvent implements PlayerInstanceEvent, Cancellab
     }
 
     /**
-     * Gets the slot which the player will held.
+     * Gets the slot which the player will hold.
      *
-     * @return the held slot
+     * @return the future slot
      */
     public byte getSlot() {
         return slot;
