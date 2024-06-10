@@ -128,6 +128,8 @@ public class PlayerProjectile extends Entity {
     public void tick(long time) {
         final Pos posBefore = getPosition();
         super.tick(time);
+        if (super.isRemoved()) return;
+
         final Pos posNow = getPosition();
 
         Vec diff = Vec.fromPoint(posNow.sub(posBefore));
