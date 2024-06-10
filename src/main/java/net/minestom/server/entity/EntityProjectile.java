@@ -91,6 +91,8 @@ public class EntityProjectile extends Entity {
     public void tick(long time) {
         final Pos posBefore = getPosition();
         super.tick(time);
+        if (super.isRemoved()) return;
+
         final Pos posNow = getPosition();
         if (isStuck(posBefore, posNow)) {
             if (super.onGround) {
