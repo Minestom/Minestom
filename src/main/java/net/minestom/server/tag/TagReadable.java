@@ -18,6 +18,19 @@ public interface TagReadable {
     <T> @UnknownNullability T getTag(@NotNull Tag<T> tag);
 
     /**
+     * Returns the specified tag or a default value if it doesn't exist.
+     *
+     * @param tag the tag to read
+     * @param defaultValue the fallback value if the tag isn't present
+     * @param <T> the tag type
+     * @return the read tag or the default value
+     */
+    default <T> T getTag(@NotNull Tag<T> tag, T defaultValue) {
+        T value = getTag(tag);
+        return value == null ? defaultValue : value;
+    }
+
+    /**
      * Returns if a tag is present.
      *
      * @param tag the tag to check
