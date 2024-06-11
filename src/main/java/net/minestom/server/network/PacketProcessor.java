@@ -7,6 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
@@ -23,6 +24,8 @@ public class PacketProcessor {
     private final ClientPacketsHandler playHandler;
 
     private final PacketListenerManager packetListenerManager;
+
+    private PacketPreProcessor packetPreProcessor;
 
     public PacketProcessor(@NotNull PacketListenerManager packetListenerManager) {
         statusHandler = new ClientPacketsHandler.Status();
@@ -50,7 +53,11 @@ public class PacketProcessor {
     }
 
     public ClientPacket process(@NotNull PlayerConnection connection, int packetId, ByteBuffer body) {
-        final ClientPacket packet = create(connection.getConnectionState(), packetId, body);
+        ClientPacket packet = create(connection.getConnectionState(), packetId, body);
+
+        if (packetPreProcessor != null) {
+            packet = packetPreProcessor.process(packet, connection);
+        }
 
         switch (connection.getConnectionState()) {
             // Process all pre-config packets immediately
@@ -63,5 +70,23 @@ public class PacketProcessor {
             }
         }
         return packet;
+    }
+
+    /**
+     * Retrieves the current packet pre-processor
+     *
+     * @return the current packet pre-processor, or null if none is set
+     */
+    public @Nullable PacketPreProcessor getPacketPreProcessor() {
+        return packetPreProcessor;
+    }
+
+    /**
+     * Sets a new packet pre-processor.
+     *
+     * @param packetPreProcessor packet preprocessor
+     * */
+    public void setPacketPreProcessor(PacketPreProcessor packetPreProcessor) {
+        this.packetPreProcessor = packetPreProcessor;
     }
 }
