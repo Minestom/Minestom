@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -191,7 +192,10 @@ public class AnvilLoader implements IChunkLoader {
                     final long[] packedIndices = biomesTag.getLongArray("data");
                     Check.stateCondition(packedIndices.length == 0, "Missing packed biomes data");
                     int[] biomeIndices = new int[64];
-                    ArrayUtils.unpack(biomeIndices, packedIndices, packedIndices.length * 64 / biomeIndices.length);
+
+                    int bitsPerEntry = packedIndices.length * 64 / biomeIndices.length;
+                    if (bitsPerEntry > 3) bitsPerEntry = MathUtils.bitsToRepresent(convertedBiomePalette.length);
+                    ArrayUtils.unpack(biomeIndices, packedIndices, bitsPerEntry);
 
                     section.biomePalette().setAll((x, y, z) -> {
                         final int index = x + z * 4 + y * 16;
