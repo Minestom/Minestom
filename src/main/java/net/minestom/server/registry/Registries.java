@@ -8,7 +8,9 @@ import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.item.enchant.ValueEffect;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -42,5 +44,9 @@ public interface Registries {
     @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant();
 
     @NotNull DynamicRegistry<JukeboxSong> jukeboxSong();
+
+    default @NotNull DynamicRegistry<BinaryTagSerializer<ValueEffect>> enchantmentValueEffects() {
+
+    }
 
 }

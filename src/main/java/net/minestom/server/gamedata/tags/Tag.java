@@ -85,6 +85,7 @@ public final class Tag implements ProtocolObject {
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
+        SOUND_EVENTS("minecraft:sound_event", ), //todo
 
         //todo this is cursed. it does not update as the registry changes. Fix later.
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,

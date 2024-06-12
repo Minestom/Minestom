@@ -1,6 +1,7 @@
 package net.minestom.server.component;
 
 import net.kyori.adventure.nbt.BinaryTag;
+import net.minestom.server.item.enchant.EffectComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> The value type of the component
  *
  * @see net.minestom.server.item.ItemComponent
- * @see net.minestom.server.item.enchant.EnchantmentEffectComponent
+ * @see EffectComponent
  */
 public sealed interface DataComponent<T> extends StaticProtocolObject permits DataComponentImpl {
 

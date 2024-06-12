@@ -23,7 +23,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
             buffer.write(NetworkBuffer.FLOAT, value.saturationModifier);
             buffer.write(NetworkBuffer.BOOLEAN, value.canAlwaysEat);
             buffer.write(NetworkBuffer.FLOAT, value.eatSeconds);
-            buffer.write(ItemStack.OPTIONAL_NETWORK_TYPE, value.usingConvertsTo);
+            buffer.write(ItemStack.NETWORK_TYPE, value.usingConvertsTo);
             buffer.writeCollection(EffectChance.NETWORK_TYPE, value.effects);
         }
 
@@ -34,7 +34,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
                     buffer.read(NetworkBuffer.FLOAT),
                     buffer.read(NetworkBuffer.BOOLEAN),
                     buffer.read(NetworkBuffer.FLOAT),
-                    buffer.read(ItemStack.OPTIONAL_NETWORK_TYPE),
+                    buffer.read(ItemStack.NETWORK_TYPE),
                     buffer.readCollection(EffectChance.NETWORK_TYPE, Short.MAX_VALUE)
             );
         }

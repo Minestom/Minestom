@@ -67,7 +67,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             reader.consume('[');
             do {
                 final NamespaceID componentId = reader.readNamespaceId();
-                final DataComponent<?> component = DataComponent.fromNamespaceId(componentId);
+                final DataComponent<?> component = ItemComponent.fromNamespaceId(componentId);
                 if (component == null)
                     throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
 
