@@ -9,17 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ProtocolObject extends Keyed {
 
-    /**
-     * A set of some protocol objects. May contain a single element, multiple elements, or a single tag (which itself contains multiple elements).
-     *
-     * @param <T> The type of protocol object represented by this set.
-     */
-    interface Set<T extends ProtocolObject> {
-
-
-
-    }
-
     @Contract(pure = true)
     @NotNull NamespaceID namespace();
 

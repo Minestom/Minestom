@@ -68,6 +68,11 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
     }
 
     @Override
+    public @NotNull String id() {
+        return id;
+    }
+
+    @Override
     public @Nullable T get(int id) {
         if (id < 0 || id >= entryById.size()) {
             return null;
@@ -106,7 +111,7 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
 
     @Override
     public @NotNull DynamicRegistry.Key<T> register(@NotNull T object) {
-        Check.stateCondition(MinecraftServer.isStarted() && !ServerFlag.REGISTRY_LATE_REGISTER,
+        Check.stateCondition((MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
                 "Registering an object to a dynamic registry ({0}) after the server is started can lead to " +
                         "registry desync between the client and server. This is usually unwanted behavior. If you " +
                         "know what you're doing and would like this behavior, set the `minestom.registry.late-register` " +

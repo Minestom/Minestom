@@ -96,7 +96,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Contract(value = "-> new", pure = true)
     private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, components.toBuilder());
+        return new Builder(material, amount, components.toPatchBuilder());
     }
 
     static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
@@ -120,11 +120,11 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     static final class Builder implements ItemStack.Builder {
-        final Material material;
-        int amount;
-        DataComponentMap.Builder components;
+        private final Material material;
+        private int amount;
+        private DataComponentMap.PatchBuilder components;
 
-        Builder(Material material, int amount, DataComponentMap.Builder components) {
+        Builder(Material material, int amount, DataComponentMap.PatchBuilder components) {
             this.material = material;
             this.amount = amount;
             this.components = components;
@@ -133,7 +133,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         Builder(Material material, int amount) {
             this.material = material;
             this.amount = amount;
-            this.components = DataComponentMap.builder();
+            this.components = DataComponentMap.patchBuilder();
         }
 
         @Override

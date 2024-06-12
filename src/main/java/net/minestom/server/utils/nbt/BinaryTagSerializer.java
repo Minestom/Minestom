@@ -258,6 +258,38 @@ public interface BinaryTagSerializer<T> {
         );
     }
 
+    interface Function3<P1, P2, P3, R> {
+        R apply(P1 p1, P2 p2, P3 p3);
+    }
+
+    static <P1, P2, P3, R> @NotNull BinaryTagSerializer<R> object(
+            @NotNull String param1, @NotNull BinaryTagSerializer<P1> serializer1, @NotNull Function<R, P1> getter1,
+            @NotNull String param2, @NotNull BinaryTagSerializer<P2> serializer2, @NotNull Function<R, P2> getter2,
+            @NotNull String param3, @NotNull BinaryTagSerializer<P3> serializer3, @NotNull Function<R, P3> getter3,
+            @NotNull Function3<P1, P2, P3, R> constructor
+    ) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull R value) {
+                return CompoundBinaryTag.builder()
+                        .put(param1, serializer1.write(getter1.apply(value)))
+                        .put(param2, serializer2.write(getter2.apply(value)))
+                        .put(param3, serializer3.write(getter3.apply(value)))
+                        .build();
+            }
+
+            @Override
+            public @NotNull R read(@NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound)) return constructor.apply(null, null, null);
+                return constructor.apply(
+                        serializer1.read(compound.get(param1)),
+                        serializer2.read(compound.get(param2)),
+                        serializer3.read(compound.get(param3))
+                );
+            }
+        };
+    }
+
     @NotNull BinaryTag write(@NotNull T value);
     @NotNull T read(@NotNull BinaryTag tag);
 

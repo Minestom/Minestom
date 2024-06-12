@@ -20,6 +20,7 @@ import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
@@ -629,7 +630,7 @@ public final class Registry {
                     DataComponentMap.Builder builder = DataComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
-                        DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromNamespaceId(entry.getKey());
+                        DataComponent<Object> component = (DataComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
@@ -920,18 +921,9 @@ public final class Registry {
 
     }
 
-    public record EnchantmentEntry(NamespaceID namespace, Component description, Properties custom) implements Entry {
+    public record EnchantmentEntry(NamespaceID namespace, String raw, Properties custom) implements Entry {
         public EnchantmentEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    // Pretty gross, but I do not want to write a standalone serializer for this one thing.
-                    GsonComponentSerializer.gson().deserializeFromTree(new Gson().toJsonTree(main.section("description").asMap())),
-                    //todo
-                    custom);
-        }
-
-        // Reads either a single string entry, a list of string entries, or a tag
-        private static void readSingleOrListOrTag() {
-
+            this(NamespaceID.from(namespace), main.getString("raw"), custom);
         }
     }
 

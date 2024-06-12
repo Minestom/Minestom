@@ -7,6 +7,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+import java.util.function.IntFunction;
+
 /**
  * <p>Represents any container of {@link DataComponent}s.</p>
  *
@@ -29,32 +32,30 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull NetworkBuffer.Type<DataComponentMap> networkType(@NotNull NetworkBuffer.Type<DataComponent<?>> type) {
-
+    static @NotNull BinaryTagSerializer<DataComponentMap> nbtType(
+            @NotNull IntFunction<DataComponent<?>> idToType,
+            @NotNull Function<String, DataComponent<?>> nameToType
+    ) {
+        return new DataComponentMapImpl.NbtType(idToType, nameToType, false);
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull BinaryTagSerializer<DataComponentMap> nbtType(@NotNull BinaryTagSerializer<DataComponent<?>> type) {
-
+    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) {
+        return new DataComponentMapImpl.PatchNetworkType(idToType);
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull NetworkBuffer.Type<DataComponent<?>> type) {
-
-    }
-
-    /**
-     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
-     */
-    @ApiStatus.Internal
-    static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(@NotNull BinaryTagSerializer<DataComponent<?>> type) {
-
+    static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(
+            @NotNull IntFunction<DataComponent<?>> idToType,
+            @NotNull Function<String, DataComponent<?>> nameToType
+    ) {
+        return new DataComponentMapImpl.NbtType(idToType, nameToType, true);
     }
 
     static @NotNull DataComponentMap diff(@NotNull DataComponentMap prototype, @NotNull DataComponentMap patch) {
@@ -119,6 +120,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     @NotNull DataComponentMap remove(@NotNull DataComponent<?> component);
 
     @NotNull Builder toBuilder();
+
+    @NotNull PatchBuilder toPatchBuilder();
 
     sealed interface Builder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
 

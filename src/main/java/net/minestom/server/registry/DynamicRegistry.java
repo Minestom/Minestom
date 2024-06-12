@@ -93,6 +93,8 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
         return new DynamicRegistryImpl<>(id, nbtType, resource, loader, idComparator);
     }
 
+    @NotNull String id();
+
     @Nullable T get(int id);
     @Nullable T get(@NotNull NamespaceID namespace);
     default @Nullable T get(@NotNull Key<T> key) {
