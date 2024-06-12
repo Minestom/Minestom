@@ -1,7 +1,9 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.attribute.AttributeSlot;
+import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -20,19 +22,33 @@ record EnchantmentImpl(
         @NotNull Set<NamespaceID> primaryItems,
         int weight,
         int maxLevel,
-        // min/max cost
+        @NotNull Cost minCost,
+        @NotNull Cost maxCost,
         int anvilCost,
-        @NotNull List<AttributeSlot> slots,
+        @NotNull List<EquipmentSlotGroup> slots,
+        @NotNull DataComponentMap effects,
         @Nullable Registry.EnchantmentEntry registry
 ) implements Enchantment {
 
+    private static final BinaryTagSerializer<List<EquipmentSlotGroup>> SLOTS_NBT_TYPE = EquipmentSlotGroup.NBT_TYPE.list();
     static final BinaryTagSerializer<Enchantment> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 throw new UnsupportedOperationException("BannerPattern is read-only");
             },
-            bannerPattern -> {
-                throw new UnsupportedOperationException("todo");
-            }
+            value -> CompoundBinaryTag.builder()
+                    .put("description", BinaryTagSerializer.NBT_COMPONENT.write(value.description()))
+                    //todo exclusive_set
+                    //todo supported_items
+                    //todo primary_items
+                    .putInt("weight", value.weight())
+                    .putInt("max_level", value.maxLevel())
+                    .put("min_cost", Cost.NBT_TYPE.write(value.minCost()))
+                    .put("max_cost", Cost.NBT_TYPE.write(value.maxCost()))
+                    .putInt("anvil_cost", value.anvilCost())
+                    .put("slots", SLOTS_NBT_TYPE.write(value.slots()))
+//                    .put("effects", )
+                    //todo effects
+                    .build()
     );
 
     EnchantmentImpl {

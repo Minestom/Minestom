@@ -1,7 +1,9 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.attribute.AttributeSlot;
+import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -55,16 +57,28 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     int maxLevel();
 
-//    @NotNull Object minCost(); // idk
-//
-//    @NotNull Object maxCost(); // same as minCost
+    @NotNull Cost minCost();
+
+    @NotNull Cost maxCost();
 
     int anvilCost();
 
-    @NotNull List<AttributeSlot> slots();
+    @NotNull List<EquipmentSlotGroup> slots();
+
+    @NotNull DataComponentMap effects();
 
     @Override
     @Nullable Registry.EnchantmentEntry registry();
+
+    record Cost(int base, int perLevelAboveFirst) {
+        public static final BinaryTagSerializer<Cost> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+                tag -> new Cost(tag.getInt("base"), tag.getInt("per_level_above_first")),
+                cost -> CompoundBinaryTag.builder()
+                        .putInt("base", cost.base)
+                        .putInt("per_level_above_first", cost.perLevelAboveFirst)
+                        .build()
+        );
+    }
 
     class Builder {
         private final NamespaceID namespace;

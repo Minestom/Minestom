@@ -158,7 +158,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         return new BuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
-    record BuilderImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap.Builder {
+    record BuilderImpl(@NotNull Int2ObjectMap<Object> components, boolean isPatch) implements DataComponentMap.Builder, DataComponentMap.PatchBuilder {
 
         @Override
         public boolean has(@NotNull DataComponent<?> component) {
@@ -179,6 +179,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
 
         @Override
         public @NotNull Builder remove(@NotNull DataComponent<?> component) {
+            Check.stateCondition(!isPatch, "Cannot remove components in a non-patch builder");
             components.put(component.id(), null);
             return this;
         }

@@ -1,5 +1,6 @@
 package net.minestom.server.item.attribute;
 
+import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeOperation;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,6 @@ public record ItemAttribute(
         @NotNull Attribute attribute,
         @NotNull AttributeOperation operation,
         double amount,
-        @NotNull AttributeSlot slot
+        @NotNull EquipmentSlotGroup slot
 ) {
 }
