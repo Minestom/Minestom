@@ -5,6 +5,7 @@ import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
@@ -84,6 +85,11 @@ public final class ItemComponent {
     public static final DataComponent<String> LOCK = register("lock", null, BinaryTagSerializer.STRING);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
+    private static final NetworkBuffer.Type<DataComponent<?>> COMPONENT_NETWORK_TYPE = NetworkBuffer.VAR_INT.map(ItemComponent::fromId, DataComponent::id);
+    private static final BinaryTagSerializer<DataComponent<?>> COMPONENT_NBT_TYPE = BinaryTagSerializer.STRING.map(ItemComponent::fromNamespaceId, DataComponent::name);
+
+    public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(COMPONENT_NETWORK_TYPE);
+    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(COMPONENT_NBT_TYPE);
 
     public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
         return NAMESPACES.get(namespaceId);

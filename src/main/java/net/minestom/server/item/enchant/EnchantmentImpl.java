@@ -46,8 +46,7 @@ record EnchantmentImpl(
                     .put("max_cost", Cost.NBT_TYPE.write(value.maxCost()))
                     .putInt("anvil_cost", value.anvilCost())
                     .put("slots", SLOTS_NBT_TYPE.write(value.slots()))
-//                    .put("effects", )
-                    //todo effects
+                    .put("effects", EnchantmentEffectComponent.NBT_TYPE.write(value.effects()))
                     .build()
     );
 

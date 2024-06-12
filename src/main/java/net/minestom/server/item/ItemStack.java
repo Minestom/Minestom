@@ -43,7 +43,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
             buffer.write(NetworkBuffer.VAR_INT, value.amount());
             buffer.write(NetworkBuffer.VAR_INT, value.material().id());
-            buffer.write(DataComponentMap.PATCH_NETWORK_TYPE, ((ItemStackImpl) value).components());
+            buffer.write(ItemComponent.PATCH_NETWORK_TYPE, ((ItemStackImpl) value).components());
         }
 
         @Override
@@ -51,7 +51,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
             int amount = buffer.read(NetworkBuffer.VAR_INT);
             if (amount <= 0) return ItemStack.AIR;
             Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
-            DataComponentMap components = buffer.read(DataComponentMap.PATCH_NETWORK_TYPE);
+            DataComponentMap components = buffer.read(ItemComponent.PATCH_NETWORK_TYPE);
             return ItemStackImpl.create(material, amount, components);
         }
     };
