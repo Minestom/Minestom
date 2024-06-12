@@ -17,11 +17,26 @@ import org.jetbrains.annotations.Nullable;
 public sealed interface DataComponentMap extends DataComponent.Holder permits DataComponentMapImpl {
     @NotNull DataComponentMap EMPTY = new DataComponentMapImpl(new Int2ObjectArrayMap<>(0));
 
-    @NotNull NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMapImpl.PATCH_NETWORK_TYPE;
-    @NotNull BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMapImpl.PATCH_NBT_TYPE;
+    static @NotNull NetworkBuffer.Type<DataComponentMap> networkType(@NotNull NetworkBuffer.Type<DataComponent<?>> type) {
+
+    }
+
+    static @NotNull BinaryTagSerializer<DataComponentMap> nbtType(@NotNull BinaryTagSerializer<DataComponent<?>> type) {
+
+    }
 
     static @NotNull DataComponentMap.Builder builder() {
-        return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
+        return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>(), false);
+    }
+
+    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull NetworkBuffer.Type<DataComponent<?>> type) {
+
+    }
+
+    static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(@NotNull BinaryTagSerializer<DataComponent<?>> type)
+
+    static @NotNull DataComponentMap.PatchBuilder patchBuilder() {
+        return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>(), true);
     }
 
     static @NotNull DataComponentMap diff(@NotNull DataComponentMap prototype, @NotNull DataComponentMap patch) {
@@ -88,6 +103,14 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     @NotNull Builder toBuilder();
 
     sealed interface Builder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
+
+        <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value);
+
+        @NotNull DataComponentMap build();
+
+    }
+
+    sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
 
         <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value);
 

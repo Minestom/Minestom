@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.item.attribute.AttributeSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

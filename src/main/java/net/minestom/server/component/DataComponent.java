@@ -9,8 +9,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 /**
  * A common type to represent all forms of component in the game. Each group of component types has its own declaration
  * file (see {@link net.minestom.server.item.ItemComponent} for example).
@@ -18,6 +16,7 @@ import java.util.Collection;
  * @param <T> The value type of the component
  *
  * @see net.minestom.server.item.ItemComponent
+ * @see net.minestom.server.item.enchant.EnchantmentEffectComponent
  */
 public sealed interface DataComponent<T> extends StaticProtocolObject permits DataComponentImpl {
 
@@ -46,32 +45,12 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
     @NotNull T read(@NotNull NetworkBuffer reader);
     void write(@NotNull NetworkBuffer writer, @NotNull T value);
 
-
-    static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
-        return DataComponentImpl.NAMESPACES.get(namespaceId);
-    }
-
-    static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
-    }
-
-    static @Nullable DataComponent<?> fromId(int id) {
-        return DataComponentImpl.IDS.get(id);
-    }
-
-    static @NotNull Collection<DataComponent<?>> values() {
-        return DataComponentImpl.NAMESPACES.values();
-    }
-
-    /**
-     * Used to register new data component types. This should not be used externally, instead you should reference the
-     * constants for existing component types, such as {@link net.minestom.server.item.ItemComponent}.
-     */
     @ApiStatus.Internal
-    static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = new DataComponentImpl<>(DataComponentImpl.NAMESPACES.size(), NamespaceID.from(name), network, nbt);
-        DataComponentImpl.NAMESPACES.put(impl.name(), impl);
-        DataComponentImpl.IDS.set(impl.id(), impl);
-        return impl;
+    static <T> DataComponent<T> createHeadless(
+            int id, @NotNull NamespaceID namespace,
+            @Nullable NetworkBuffer.Type<T> network,
+            @Nullable BinaryTagSerializer<T> nbt
+    ) {
+        return new DataComponentImpl<>(id, namespace, network, nbt);
     }
 }
