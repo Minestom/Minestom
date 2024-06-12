@@ -188,7 +188,7 @@ final class RegionFile implements AutoCloseable {
                     break;
                 }
             }
-            if (found) return start;
+            if (found) return start - length;
         }
         return -1;
     }

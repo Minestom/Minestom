@@ -361,7 +361,6 @@ public class AnvilLoader implements IChunkLoader {
 
             saveSectionData(chunk, chunkData);
 
-            LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
             mcaFile.writeChunkData(chunkX, chunkZ, chunkData.build());
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
