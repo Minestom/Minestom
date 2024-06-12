@@ -1,12 +1,14 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -104,6 +106,12 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
 
     @Override
     public @NotNull DynamicRegistry.Key<T> register(@NotNull T object) {
+        Check.stateCondition(MinecraftServer.isStarted() && !ServerFlag.REGISTRY_LATE_REGISTER,
+                "Registering an object to a dynamic registry ({0}) after the server is started can lead to " +
+                        "registry desync between the client and server. This is usually unwanted behavior. If you " +
+                        "know what you're doing and would like this behavior, set the `minestom.registry.late-register` " +
+                        "system property.", id);
+
         lock.lock();
         try {
             int id = idByName.indexOf(object.namespace());

@@ -104,7 +104,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         Material material = Material.fromNamespaceId(id);
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
-        DataComponentMap patch = DataComponentMap.PATCH_NBT_TYPE.read(tag.getCompound("components"));
+        DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
 
@@ -113,7 +113,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         tag.putString("id", itemStack.material().name());
         tag.putInt("count", itemStack.amount());
 
-        CompoundBinaryTag components = (CompoundBinaryTag) DataComponentMap.PATCH_NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();
