@@ -121,6 +121,12 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 <div class="col-second even-row-color"><code><a href="#GENERIC_ATTACK_SPEED" class="member-name-link">GENERIC_ATTACK_SPEED</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#GENERIC_BURNING_TIME" class="member-name-link">GENERIC_BURNING_TIME</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second even-row-color"><code><a href="#GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE" class="member-name-link">GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#GENERIC_FALL_DAMAGE_MULTIPLIER" class="member-name-link">GENERIC_FALL_DAMAGE_MULTIPLIER</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
@@ -148,7 +154,13 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 <div class="col-second odd-row-color"><code><a href="#GENERIC_MAX_HEALTH" class="member-name-link">GENERIC_MAX_HEALTH</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
-<div class="col-second even-row-color"><code><a href="#GENERIC_MOVEMENT_SPEED" class="member-name-link">GENERIC_MOVEMENT_SPEED</a></code></div>
+<div class="col-second even-row-color"><code><a href="#GENERIC_MOVEMENT_EFFICIENCY" class="member-name-link">GENERIC_MOVEMENT_EFFICIENCY</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#GENERIC_MOVEMENT_SPEED" class="member-name-link">GENERIC_MOVEMENT_SPEED</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second even-row-color"><code><a href="#GENERIC_OXYGEN_BONUS" class="member-name-link">GENERIC_OXYGEN_BONUS</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#GENERIC_SAFE_FALL_DISTANCE" class="member-name-link">GENERIC_SAFE_FALL_DISTANCE</a></code></div>
@@ -159,24 +171,39 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 <div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#GENERIC_STEP_HEIGHT" class="member-name-link">GENERIC_STEP_HEIGHT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final @NotNull <a href="../../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#NBT_TYPE" class="member-name-link">NBT_TYPE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#NETWORK_TYPE" class="member-name-link">NETWORK_TYPE</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
-<div class="col-second even-row-color"><code><a href="#PLAYER_BLOCK_BREAK_SPEED" class="member-name-link">PLAYER_BLOCK_BREAK_SPEED</a></code></div>
+<div class="col-second even-row-color"><code><a href="#GENERIC_WATER_MOVEMENT_EFFICIENCY" class="member-name-link">GENERIC_WATER_MOVEMENT_EFFICIENCY</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final @NotNull <a href="../../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#NBT_TYPE" class="member-name-link">NBT_TYPE</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#NETWORK_TYPE" class="member-name-link">NETWORK_TYPE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#PLAYER_BLOCK_INTERACTION_RANGE" class="member-name-link">PLAYER_BLOCK_INTERACTION_RANGE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PLAYER_BLOCK_BREAK_SPEED" class="member-name-link">PLAYER_BLOCK_BREAK_SPEED</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
-<div class="col-second even-row-color"><code><a href="#PLAYER_ENTITY_INTERACTION_RANGE" class="member-name-link">PLAYER_ENTITY_INTERACTION_RANGE</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PLAYER_BLOCK_INTERACTION_RANGE" class="member-name-link">PLAYER_BLOCK_INTERACTION_RANGE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#ZOMBIE_SPAWN_REINFORCEMENTS" class="member-name-link">ZOMBIE_SPAWN_REINFORCEMENTS</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PLAYER_ENTITY_INTERACTION_RANGE" class="member-name-link">PLAYER_ENTITY_INTERACTION_RANGE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PLAYER_MINING_EFFICIENCY" class="member-name-link">PLAYER_MINING_EFFICIENCY</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PLAYER_SNEAKING_SPEED" class="member-name-link">PLAYER_SNEAKING_SPEED</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PLAYER_SUBMERGED_MINING_SPEED" class="member-name-link">PLAYER_SUBMERGED_MINING_SPEED</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PLAYER_SWEEPING_DAMAGE_RATIO" class="member-name-link">PLAYER_SWEEPING_DAMAGE_RATIO</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ZOMBIE_SPAWN_REINFORCEMENTS" class="member-name-link">ZOMBIE_SPAWN_REINFORCEMENTS</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -228,8 +255,8 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.registry.ProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></h3>
-<code><a href="../../registry/ProtocolObject.html#key()">key</a>, <a href="../../registry/ProtocolObject.html#name()">name</a></code></div>
+<h3 id="methods-inherited-from-class-net.minestom.server.registry.StaticProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></h3>
+<code><a href="../../registry/StaticProtocolObject.html#key()">key</a>, <a href="../../registry/StaticProtocolObject.html#name()">name</a></code></div>
 </section>
 </li>
 </ul>
@@ -298,6 +325,18 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 </section>
 </li>
 <li>
+<section class="detail" id="GENERIC_BURNING_TIME">
+<h3>GENERIC_BURNING_TIME</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_BURNING_TIME</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE">
+<h3>GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="PLAYER_ENTITY_INTERACTION_RANGE">
 <h3>PLAYER_ENTITY_INTERACTION_RANGE</h3>
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">PLAYER_ENTITY_INTERACTION_RANGE</span></div>
@@ -358,9 +397,27 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 </section>
 </li>
 <li>
+<section class="detail" id="PLAYER_MINING_EFFICIENCY">
+<h3>PLAYER_MINING_EFFICIENCY</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">PLAYER_MINING_EFFICIENCY</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="GENERIC_MOVEMENT_EFFICIENCY">
+<h3>GENERIC_MOVEMENT_EFFICIENCY</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_MOVEMENT_EFFICIENCY</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="GENERIC_MOVEMENT_SPEED">
 <h3>GENERIC_MOVEMENT_SPEED</h3>
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_MOVEMENT_SPEED</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="GENERIC_OXYGEN_BONUS">
+<h3>GENERIC_OXYGEN_BONUS</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_OXYGEN_BONUS</span></div>
 </section>
 </li>
 <li>
@@ -376,6 +433,12 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 </section>
 </li>
 <li>
+<section class="detail" id="PLAYER_SNEAKING_SPEED">
+<h3>PLAYER_SNEAKING_SPEED</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">PLAYER_SNEAKING_SPEED</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="ZOMBIE_SPAWN_REINFORCEMENTS">
 <h3>ZOMBIE_SPAWN_REINFORCEMENTS</h3>
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">ZOMBIE_SPAWN_REINFORCEMENTS</span></div>
@@ -385,6 +448,24 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 <section class="detail" id="GENERIC_STEP_HEIGHT">
 <h3>GENERIC_STEP_HEIGHT</h3>
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_STEP_HEIGHT</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="PLAYER_SUBMERGED_MINING_SPEED">
+<h3>PLAYER_SUBMERGED_MINING_SPEED</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">PLAYER_SUBMERGED_MINING_SPEED</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="PLAYER_SWEEPING_DAMAGE_RATIO">
+<h3>PLAYER_SWEEPING_DAMAGE_RATIO</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">PLAYER_SWEEPING_DAMAGE_RATIO</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="GENERIC_WATER_MOVEMENT_EFFICIENCY">
+<h3>GENERIC_WATER_MOVEMENT_EFFICIENCY</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a></span>&nbsp;<span class="element-name">GENERIC_WATER_MOVEMENT_EFFICIENCY</span></div>
 </section>
 </li>
 </ul>
@@ -414,7 +495,7 @@ extends <a href="../../registry/StaticProtocolObject.html" title="interface in n
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../registry/ProtocolObject.html#namespace()">namespace</a></code>&nbsp;in interface&nbsp;<code><a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></code></dd>
+<dd><code><a href="../../registry/StaticProtocolObject.html#namespace()">namespace</a></code>&nbsp;in interface&nbsp;<code><a href="../../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code></dd>
 </dl>
 </section>
 </li>

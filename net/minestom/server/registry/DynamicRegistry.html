@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.registry</a></div>
-<h1 title="Interface DynamicRegistry" class="title">Interface DynamicRegistry&lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</h1>
+<h1 title="Interface DynamicRegistry" class="title">Interface DynamicRegistry&lt;T&gt;</h1>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The type of the registry entries</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">DynamicRegistry&lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">DynamicRegistry&lt;T&gt;</span></div>
 <div class="block"><p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
  using a <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry"><code>DynamicRegistry.Key</code></a> object as opposed to the record type. For example, a biome should be stored as
  `DynamicRegistry.Key Biome`, as opposed to `Biome` directly.</p>
@@ -119,7 +119,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Interface</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DynamicRegistry.Key.html" class="type-name-link" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.Key.html" title="type parameter in DynamicRegistry.Key">T</a> extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="DynamicRegistry.Key.html" class="type-name-link" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.Key.html" title="type parameter in DynamicRegistry.Key">T</a>&gt;</code></div>
 <div class="col-last even-row-color">
 <div class="block">A key for a <a href="ProtocolObject.html" title="interface in net.minestom.server.registry"><code>ProtocolObject</code></a> in a <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry"><code>DynamicRegistry</code></a>.</div>
 </div>
@@ -137,9 +137,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br>@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(java.lang.String,net.minestom.server.utils.nbt.BinaryTagSerializer)" class="member-name-link">create</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(java.lang.String)" class="member-name-link">create</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(java.lang.String,net.minestom.server.utils.nbt.BinaryTagSerializer)" class="member-name-link">create</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;T&gt;&nbsp;nbtType)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Creates a new empty registry of the given type.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br>@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(java.lang.String,net.minestom.server.utils.nbt.BinaryTagSerializer,net.minestom.server.registry.Registries,net.minestom.server.registry.Registry.Resource)" class="member-name-link">create</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;T&gt;&nbsp;nbtType,
+ @NotNull <a href="Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries,
+ <a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates a new empty registry of the given type.</div>
 </div>
@@ -182,27 +193,54 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getKey(int)" class="member-name-link">getKey</a><wbr>(int&nbsp;id)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getName(int)" class="member-name-link">getName</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getKey(T)" class="member-name-link">getKey</a><wbr>(<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(T)" class="member-name-link">register</a><wbr>(<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getName(int)" class="member-name-link">getName</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getPack(int)" class="member-name-link">getPack</a><wbr>(int&nbsp;id)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getPack(net.minestom.server.registry.DynamicRegistry.Key)" class="member-name-link">getPack</a><wbr>(@NotNull <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;&nbsp;key)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#register(java.lang.String,T)" class="member-name-link">register</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Register an object to this registry, overwriting the previous entry if any is present.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registryDataPacket(boolean)" class="member-name-link">registryDataPacket</a><wbr>(boolean&nbsp;excludeVanilla)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#register(java.lang.String,T,net.minestom.server.gamedata.DataPack)" class="member-name-link">register</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object,
+ @Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a>&nbsp;pack)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#register(net.minestom.server.utils.NamespaceID,T)" class="member-name-link">register</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#register(net.minestom.server.utils.NamespaceID,T,net.minestom.server.gamedata.DataPack)" class="member-name-link">register</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object,
+ @Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a>&nbsp;pack)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registryDataPacket(boolean)" class="member-name-link">registryDataPacket</a><wbr>(boolean&nbsp;excludeVanilla)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns a <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server"><code>SendablePacket</code></a> potentially excluding vanilla entries if possible.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#remove(T)" class="member-name-link">remove</a><wbr>(<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#remove(net.minestom.server.utils.NamespaceID)" class="member-name-link">remove</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Removes an object from this registry.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns the entries in this registry as an immutable list.</div>
 </div>
 </div>
@@ -220,12 +258,20 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="create(java.lang.String)">
+<h3>create</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="create(java.lang.String,net.minestom.server.utils.nbt.BinaryTagSerializer)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@Internal
 @NotNull
-</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span>
-<span class="return-type">@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull
  @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;T&gt;&nbsp;nbtType)</span></div>
@@ -293,6 +339,38 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="create(java.lang.String,net.minestom.server.utils.nbt.BinaryTagSerializer,net.minestom.server.registry.Registries,net.minestom.server.registry.Registry.Resource)">
+<h3>create</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span>
+<span class="return-type">@NotNull <a href="DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ @NotNull
+ @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;T&gt;&nbsp;nbtType,
+ @NotNull
+ @NotNull <a href="Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries,
+ @NotNull
+ <a href="Registry.Resource.html" title="enum class in net.minestom.server.registry">Registry.Resource</a>&nbsp;resource)</span></div>
+<div class="block">Creates a new empty registry of the given type. Should only be used internally.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="Registries.html" title="interface in net.minestom.server.registry"><code>Registries</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="id()">
+<h3>id</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">id</span>()</div>
+</section>
+</li>
+<li>
 <section class="detail" id="get(int)">
 <h3>get</h3>
 <div class="member-signature"><span class="annotations">@Nullable
@@ -323,10 +401,33 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="getKey(T)">
+<h3 id="getKey(java.lang.Object)">getKey</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</span>&nbsp;<span class="element-name">getKey</span><wbr><span class="parameters">(@NotNull
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;value)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="getName(int)">
 <h3>getName</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="return-type">@Nullable <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">getName</span><wbr><span class="parameters">(int&nbsp;id)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getPack(int)">
+<h3>getPack</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a></span>&nbsp;<span class="element-name">getPack</span><wbr><span class="parameters">(int&nbsp;id)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getPack(net.minestom.server.registry.DynamicRegistry.Key)">
+<h3>getPack</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a></span>&nbsp;<span class="element-name">getPack</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;&nbsp;key)</span></div>
 </section>
 </li>
 <li>
@@ -338,8 +439,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
-<ul class="tag-list">
-<li><a href="#register(T)"><code>register(ProtocolObject)</code></a></li>
+<ul class="tag-list-long">
+<li><a href="#register(net.minestom.server.utils.NamespaceID,T)"><code>register(NamespaceID, T)</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -354,8 +455,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
-<ul class="tag-list">
-<li><a href="#register(T)"><code>register(ProtocolObject)</code></a></li>
+<ul class="tag-list-long">
+<li><a href="#register(net.minestom.server.utils.NamespaceID,T)"><code>register(NamespaceID, T)</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -378,10 +479,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="register(T)">
-<h3 id="register(net.minestom.server.registry.ProtocolObject)">register</h3>
+<section class="detail" id="register(java.lang.String,T)">
+<h3 id="register(java.lang.String,java.lang.Object)">register</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type"><a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ @NotNull
  <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</span></div>
 <div class="block"><p>Register an object to this registry, overwriting the previous entry if any is present.</p>
 
@@ -400,10 +503,46 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="remove(T)">
-<h3 id="remove(net.minestom.server.registry.ProtocolObject)">remove</h3>
+<section class="detail" id="register(net.minestom.server.utils.NamespaceID,T)">
+<h3 id="register(net.minestom.server.utils.NamespaceID,java.lang.Object)">register</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+ @NotNull
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="register(java.lang.String,T,net.minestom.server.gamedata.DataPack)">
+<h3 id="register(java.lang.String,java.lang.Object,net.minestom.server.gamedata.DataPack)">register</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ @NotNull
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object,
+ @Nullable
+ @Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a>&nbsp;pack)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="register(net.minestom.server.utils.NamespaceID,T,net.minestom.server.gamedata.DataPack)">
+<h3 id="register(net.minestom.server.utils.NamespaceID,java.lang.Object,net.minestom.server.gamedata.DataPack)">register</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+ @NotNull
+ <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object,
+ @Nullable
+ @Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a>&nbsp;pack)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="remove(net.minestom.server.utils.NamespaceID)">
+<h3>remove</h3>
 <div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(@NotNull
- <a href="DynamicRegistry.html" title="type parameter in DynamicRegistry">T</a>&nbsp;object)</span>
+ @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceId)</span>
         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span></div>
 <div class="block"><p>Removes an object from this registry.</p>
 
@@ -417,7 +556,7 @@ loadScripts(document, 'script');</script>
  the configuration phase to receive new registry data. See <a href="../entity/Player.html#startConfigurationPhase()"><code>Player.startConfigurationPhase()</code></a>.</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>object</code> - The entry to remove</dd>
+<dd><code>namespaceId</code> - The id of the entry to remove</dd>
 <dt>Returns:</dt>
 <dd>True if the object was removed, false if it was not present</dd>
 <dt>Throws:</dt>
@@ -432,7 +571,7 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="return-type">@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span>&nbsp;<span class="element-name">registryDataPacket</span><wbr><span class="parameters">(boolean&nbsp;excludeVanilla)</span></div>
 <div class="block"><p>Returns a <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server"><code>SendablePacket</code></a> potentially excluding vanilla entries if possible. It is never possible to
- exclude vanilla entries if one has been overridden (e.g. via <a href="#register(T)"><code>register(ProtocolObject)</code></a>.</p></div>
+ exclude vanilla entries if one has been overridden (e.g. via <a href="#register(net.minestom.server.utils.NamespaceID,T)"><code>register(NamespaceID, T)</code></a>.</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>excludeVanilla</code> - Whether to exclude vanilla entries</dd>

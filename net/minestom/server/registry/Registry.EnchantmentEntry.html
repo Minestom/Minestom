@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Registry.html" title="class in net.minestom.server.registry">Registry</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Registry.EnchantmentEntry</span>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, int&nbsp;id, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey, double&nbsp;maxLevel, boolean&nbsp;isCursed, boolean&nbsp;isDiscoverable, boolean&nbsp;isTradeable, boolean&nbsp;isTreasureOnly, <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Registry.EnchantmentEntry</span>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw, <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="Registry.Entry.html" title="interface in net.minestom.server.registry">Registry.Entry</a></span></div>
 </section>
@@ -118,14 +118,8 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,int,java.lang.String,double,boolean,boolean,boolean,boolean,net.minestom.server.registry.Registry.Properties)" class="member-name-link">EnchantmentEntry</a><wbr>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
- int&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey,
- double&nbsp;maxLevel,
- boolean&nbsp;isCursed,
- boolean&nbsp;isDiscoverable,
- boolean&nbsp;isTradeable,
- boolean&nbsp;isTreasureOnly,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">EnchantmentEntry</a><wbr>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>EnchantmentEntry</code> record class.</div>
@@ -159,50 +153,20 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>id</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCursed()" class="member-name-link">isCursed</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>isCursed</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isDiscoverable()" class="member-name-link">isDiscoverable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>isDiscoverable</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTradeable()" class="member-name-link">isTradeable</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>isTradeable</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTreasureOnly()" class="member-name-link">isTreasureOnly</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>isTreasureOnly</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxLevel()" class="member-name-link">maxLevel</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>maxLevel</code> record component.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>namespace</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#raw()" class="member-name-link">raw</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a string representation of this record class.</div>
+<div class="block">Returns the value of the <code>raw</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#translationKey()" class="member-name-link">translationKey</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>translationKey</code> record component.</div>
+<div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
 </div>
@@ -230,28 +194,16 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,int,java.lang.String,double,boolean,boolean,boolean,boolean,net.minestom.server.registry.Registry.Properties)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,java.lang.String,net.minestom.server.registry.Registry.Properties)">
 <h3>EnchantmentEntry</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EnchantmentEntry</span><wbr><span class="parameters">(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
- int&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey,
- double&nbsp;maxLevel,
- boolean&nbsp;isCursed,
- boolean&nbsp;isDiscoverable,
- boolean&nbsp;isTradeable,
- boolean&nbsp;isTreasureOnly,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</span></div>
 <div class="block">Creates an instance of a <code>EnchantmentEntry</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>namespace</code> - the value for the <code>namespace</code> record component</dd>
-<dd><code>id</code> - the value for the <code>id</code> record component</dd>
-<dd><code>translationKey</code> - the value for the <code>translationKey</code> record component</dd>
-<dd><code>maxLevel</code> - the value for the <code>maxLevel</code> record component</dd>
-<dd><code>isCursed</code> - the value for the <code>isCursed</code> record component</dd>
-<dd><code>isDiscoverable</code> - the value for the <code>isDiscoverable</code> record component</dd>
-<dd><code>isTradeable</code> - the value for the <code>isTradeable</code> record component</dd>
-<dd><code>isTreasureOnly</code> - the value for the <code>isTreasureOnly</code> record component</dd>
+<dd><code>raw</code> - the value for the <code>raw</code> record component</dd>
 <dd><code>custom</code> - the value for the <code>custom</code> record component</dd>
 </dl>
 </section>
@@ -294,7 +246,7 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -317,79 +269,13 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 </section>
 </li>
 <li>
-<section class="detail" id="id()">
-<h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">id</span>()</div>
-<div class="block">Returns the value of the <code>id</code> record component.</div>
+<section class="detail" id="raw()">
+<h3>raw</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">raw</span>()</div>
+<div class="block">Returns the value of the <code>raw</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>id</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="translationKey()">
-<h3>translationKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">translationKey</span>()</div>
-<div class="block">Returns the value of the <code>translationKey</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>translationKey</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="maxLevel()">
-<h3>maxLevel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxLevel</span>()</div>
-<div class="block">Returns the value of the <code>maxLevel</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>maxLevel</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isCursed()">
-<h3>isCursed</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isCursed</span>()</div>
-<div class="block">Returns the value of the <code>isCursed</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>isCursed</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isDiscoverable()">
-<h3>isDiscoverable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isDiscoverable</span>()</div>
-<div class="block">Returns the value of the <code>isDiscoverable</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>isDiscoverable</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isTradeable()">
-<h3>isTradeable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isTradeable</span>()</div>
-<div class="block">Returns the value of the <code>isTradeable</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>isTradeable</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isTreasureOnly()">
-<h3>isTreasureOnly</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isTreasureOnly</span>()</div>
-<div class="block">Returns the value of the <code>isTreasureOnly</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>isTreasureOnly</code> record component</dd>
+<dd>the value of the <code>raw</code> record component</dd>
 </dl>
 </section>
 </li>

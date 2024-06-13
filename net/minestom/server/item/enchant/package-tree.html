@@ -55,22 +55,90 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../../overview-tree.html">All Packages</a></li>
 </ul>
 <section class="hierarchy">
-<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
+<h2 title="Class Hierarchy">Class Hierarchy</h2>
 <ul>
-<li class="circle">net.minestom.server.item.enchant.Enchantments
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">Enchantment</a> (also extends net.minestom.server.registry.<a href="../../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="DamageImmunityEffect.html" class="type-name-link" title="class in net.minestom.server.item.enchant">DamageImmunityEffect</a> (implements net.minestom.server.item.enchant.<a href="Enchantment.Effect.html" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EffectComponent.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EffectComponent</a></li>
+<li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.Builder.html" class="type-name-link" title="class in net.minestom.server.item.enchant">Enchantment.Builder</a></li>
 </ul>
 </li>
-<li class="circle">net.kyori.adventure.key.Keyed
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.Effect.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a>
+<ul>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">EntityEffect</a></li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LocationEffect.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">LocationEffect</a></li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ValueEffect.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">ValueEffect</a></li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.item.enchant.Enchantments
+<ul>
+<li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">Enchantment</a> (also extends net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>)</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a></li>
 <li class="circle">net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" class="type-name-link" title="interface in net.minestom.server.registry">ProtocolObject</a>
-<ul>
-<li class="circle">net.minestom.server.registry.<a href="../../registry/StaticProtocolObject.html" class="type-name-link" title="interface in net.minestom.server.registry">StaticProtocolObject</a>
 <ul>
 <li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.html" class="type-name-link" title="interface in net.minestom.server.item.enchant">Enchantment</a></li>
 </ul>
 </li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Enum Class Hierarchy">Enum Class Hierarchy</h2>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.Target.html" class="type-name-link" title="enum class in net.minestom.server.item.enchant">Enchantment.Target</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Record Class Hierarchy">Record Class Hierarchy</h2>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
+<ul>
+<li class="circle">net.minestom.server.item.enchant.<a href="AttributeEffect.html" class="type-name-link" title="class in net.minestom.server.item.enchant">AttributeEffect</a> (implements net.minestom.server.item.enchant.<a href="Enchantment.Effect.html" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ConditionalEffect.html" class="type-name-link" title="class in net.minestom.server.item.enchant">ConditionalEffect</a>&lt;E&gt; (implements net.minestom.server.item.enchant.<a href="Enchantment.Effect.html" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="Enchantment.Cost.html" class="type-name-link" title="class in net.minestom.server.item.enchant">Enchantment.Cost</a></li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.AllOf.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.AllOf</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.ApplyPotionEffect.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.ApplyPotionEffect</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.DamageEntity.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.DamageEntity</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.DamageItem.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.DamageItem</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.Explode.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.Explode</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.Ignite.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.Ignite</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.PlaySound.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.PlaySound</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.ReplaceBlock.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.ReplaceBlock</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.ReplaceDisc.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.ReplaceDisc</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.RunFunction.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.RunFunction</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.SetBlockProperties.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.SetBlockProperties</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.SpawnParticles.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.SpawnParticles</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="EntityEffect.SummonEntity.html" class="type-name-link" title="class in net.minestom.server.item.enchant">EntityEffect.SummonEntity</a> (implements net.minestom.server.item.enchant.<a href="EntityEffect.html" title="interface in net.minestom.server.item.enchant">EntityEffect</a>, net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.Clamped.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LevelBasedValue.Clamped</a> (implements net.minestom.server.item.enchant.<a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.Constant.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LevelBasedValue.Constant</a> (implements net.minestom.server.item.enchant.<a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.Fraction.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LevelBasedValue.Fraction</a> (implements net.minestom.server.item.enchant.<a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.LevelsSquared.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LevelBasedValue.LevelsSquared</a> (implements net.minestom.server.item.enchant.<a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.Linear.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LevelBasedValue.Linear</a> (implements net.minestom.server.item.enchant.<a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LevelBasedValue.Lookup.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LevelBasedValue.Lookup</a> (implements net.minestom.server.item.enchant.<a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="LocationEffect.AllOf.html" class="type-name-link" title="class in net.minestom.server.item.enchant">LocationEffect.AllOf</a> (implements net.minestom.server.item.enchant.<a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="TargetedConditionalEffect.html" class="type-name-link" title="class in net.minestom.server.item.enchant">TargetedConditionalEffect</a>&lt;E&gt; (implements net.minestom.server.item.enchant.<a href="Enchantment.Effect.html" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ValueEffect.Add.html" class="type-name-link" title="class in net.minestom.server.item.enchant">ValueEffect.Add</a> (implements net.minestom.server.item.enchant.<a href="ValueEffect.html" title="interface in net.minestom.server.item.enchant">ValueEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ValueEffect.AllOf.html" class="type-name-link" title="class in net.minestom.server.item.enchant">ValueEffect.AllOf</a> (implements net.minestom.server.item.enchant.<a href="ValueEffect.html" title="interface in net.minestom.server.item.enchant">ValueEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ValueEffect.Multiply.html" class="type-name-link" title="class in net.minestom.server.item.enchant">ValueEffect.Multiply</a> (implements net.minestom.server.item.enchant.<a href="ValueEffect.html" title="interface in net.minestom.server.item.enchant">ValueEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ValueEffect.RemoveBinomial.html" class="type-name-link" title="class in net.minestom.server.item.enchant">ValueEffect.RemoveBinomial</a> (implements net.minestom.server.item.enchant.<a href="ValueEffect.html" title="interface in net.minestom.server.item.enchant">ValueEffect</a>)</li>
+<li class="circle">net.minestom.server.item.enchant.<a href="ValueEffect.Set.html" class="type-name-link" title="class in net.minestom.server.item.enchant">ValueEffect.Set</a> (implements net.minestom.server.item.enchant.<a href="ValueEffect.html" title="interface in net.minestom.server.item.enchant">ValueEffect</a>)</li>
 </ul>
 </li>
 </ul>

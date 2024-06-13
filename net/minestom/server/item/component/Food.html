@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">Food</span>(int&nbsp;nutrition, float&nbsp;saturationModifier, boolean&nbsp;canAlwaysEat, float&nbsp;eatSeconds, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">Food</span>(int&nbsp;nutrition, float&nbsp;saturationModifier, boolean&nbsp;canAlwaysEat, float&nbsp;eatSeconds, @NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usingConvertsTo, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
@@ -141,10 +141,11 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,float,boolean,float,java.util.List)" class="member-name-link">Food</a><wbr>(int&nbsp;nutrition,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,float,boolean,float,net.minestom.server.item.ItemStack,java.util.List)" class="member-name-link">Food</a><wbr>(int&nbsp;nutrition,
  float&nbsp;saturationModifier,
  boolean&nbsp;canAlwaysEat,
  float&nbsp;eatSeconds,
+ @NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usingConvertsTo,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>Food</code> record class.</div>
@@ -206,6 +207,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#usingConvertsTo()" class="member-name-link">usingConvertsTo</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>usingConvertsTo</code> record component.</div>
+</div>
 </div>
 </div>
 </div>
@@ -258,12 +264,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(int,float,boolean,float,java.util.List)">
+<section class="detail" id="&lt;init&gt;(int,float,boolean,float,net.minestom.server.item.ItemStack,java.util.List)">
 <h3>Food</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Food</span><wbr><span class="parameters">(int&nbsp;nutrition,
  float&nbsp;saturationModifier,
  boolean&nbsp;canAlwaysEat,
  float&nbsp;eatSeconds,
+ @NotNull
+ @NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usingConvertsTo,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)</span></div>
 <div class="block">Creates an instance of a <code>Food</code> record class.</div>
@@ -273,6 +281,7 @@ loadScripts(document, 'script');</script>
 <dd><code>saturationModifier</code> - the value for the <code>saturationModifier</code> record component</dd>
 <dd><code>canAlwaysEat</code> - the value for the <code>canAlwaysEat</code> record component</dd>
 <dd><code>eatSeconds</code> - the value for the <code>eatSeconds</code> record component</dd>
+<dd><code>usingConvertsTo</code> - the value for the <code>usingConvertsTo</code> record component</dd>
 <dd><code>effects</code> - the value for the <code>effects</code> record component</dd>
 </dl>
 </section>
@@ -373,6 +382,18 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>eatSeconds</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="usingConvertsTo()">
+<h3>usingConvertsTo</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">usingConvertsTo</span>()</div>
+<div class="block">Returns the value of the <code>usingConvertsTo</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>usingConvertsTo</code> record component</dd>
 </dl>
 </section>
 </li>

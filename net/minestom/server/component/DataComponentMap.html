@@ -113,6 +113,9 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="DataComponentMap.Builder.html" class="type-name-link" title="interface in net.minestom.server.component">DataComponentMap.Builder</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="DataComponentMap.PatchBuilder.html" class="type-name-link" title="interface in net.minestom.server.component">DataComponentMap.PatchBuilder</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -128,12 +131,6 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 <div class="col-first even-row-color"><code>static final @NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></code></div>
 <div class="col-second even-row-color"><code><a href="#EMPTY" class="member-name-link">EMPTY</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#PATCH_NBT_TYPE" class="member-name-link">PATCH_NBT_TYPE</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#PATCH_NETWORK_TYPE" class="member-name-link">PATCH_NETWORK_TYPE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -142,7 +139,7 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -167,19 +164,45 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Does a 'patch'ed has against the given prototype.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#nbtType(java.util.function.IntFunction,java.util.function.Function)" class="member-name-link">nbtType</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;idToType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;nameToType)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Creates a network type for the given component type.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="DataComponentMap.PatchBuilder.html" title="interface in net.minestom.server.component">DataComponentMap.PatchBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#patchBuilder()" class="member-name-link">patchBuilder</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#patchNbtType(java.util.function.IntFunction,java.util.function.Function)" class="member-name-link">patchNbtType</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;idToType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;nameToType)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Creates a network type for the given component type.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#patchNetworkType(java.util.function.IntFunction)" class="member-name-link">patchNetworkType</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;idToType)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
+<div class="block">Creates a network type for the given component type.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#remove(net.minestom.server.component.DataComponent)" class="member-name-link">remove</a><wbr>(@NotNull <a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&nbsp;component)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Removes the component from the map (or patch).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#set(net.minestom.server.component.DataComponent,T)" class="member-name-link">set</a><wbr>(@NotNull <a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;T&gt;&nbsp;component,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#set(net.minestom.server.component.DataComponent)" class="member-name-link">set</a><wbr>(@NotNull <a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;<a href="../utils/Unit.html" title="class in net.minestom.server.utils">Unit</a>&gt;&nbsp;component)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#set(net.minestom.server.component.DataComponent,T)" class="member-name-link">set</a><wbr>(@NotNull <a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;T&gt;&nbsp;component,
  T&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Adds the component, overwriting any prior value if present.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="DataComponentMap.Builder.html" title="interface in net.minestom.server.component">DataComponentMap.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toBuilder()" class="member-name-link">toBuilder</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="DataComponentMap.Builder.html" title="interface in net.minestom.server.component">DataComponentMap.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toBuilder()" class="member-name-link">toBuilder</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="DataComponentMap.PatchBuilder.html" title="interface in net.minestom.server.component">DataComponentMap.PatchBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toPatchBuilder()" class="member-name-link">toPatchBuilder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
@@ -205,20 +228,6 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 </span><span class="modifiers">static final</span>&nbsp;<span class="return-type">@NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></span>&nbsp;<span class="element-name">EMPTY</span></div>
 </section>
 </li>
-<li>
-<section class="detail" id="PATCH_NETWORK_TYPE">
-<h3>PATCH_NETWORK_TYPE</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</span>&nbsp;<span class="element-name">PATCH_NETWORK_TYPE</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="PATCH_NBT_TYPE">
-<h3>PATCH_NBT_TYPE</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">static final</span>&nbsp;<span class="return-type">@NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</span>&nbsp;<span class="element-name">PATCH_NBT_TYPE</span></div>
-</section>
-</li>
 </ul>
 </section>
 </li>
@@ -232,6 +241,47 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 <h3>builder</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="DataComponentMap.Builder.html" title="interface in net.minestom.server.component">DataComponentMap.Builder</a></span>&nbsp;<span class="element-name">builder</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="patchBuilder()">
+<h3>patchBuilder</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="DataComponentMap.PatchBuilder.html" title="interface in net.minestom.server.component">DataComponentMap.PatchBuilder</a></span>&nbsp;<span class="element-name">patchBuilder</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="nbtType(java.util.function.IntFunction,java.util.function.Function)">
+<h3>nbtType</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</span>&nbsp;<span class="element-name">nbtType</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;idToType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;nameToType)</span></div>
+<div class="block">Creates a network type for the given component type. For internal use only, get the value from the target component class.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="patchNetworkType(java.util.function.IntFunction)">
+<h3>patchNetworkType</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</span>&nbsp;<span class="element-name">patchNetworkType</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;idToType)</span></div>
+<div class="block">Creates a network type for the given component type. For internal use only, get the value from the target component class.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="patchNbtType(java.util.function.IntFunction,java.util.function.Function)">
+<h3>patchNbtType</h3>
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;<a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a>&gt;</span>&nbsp;<span class="element-name">patchNbtType</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;idToType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;?&gt;&gt;&nbsp;nameToType)</span></div>
+<div class="block">Creates a network type for the given component type. For internal use only, get the value from the target component class.</div>
 </section>
 </li>
 <li>
@@ -299,6 +349,14 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 </section>
 </li>
 <li>
+<section class="detail" id="set(net.minestom.server.component.DataComponent)">
+<h3>set</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="DataComponentMap.html" title="interface in net.minestom.server.component">DataComponentMap</a></span>&nbsp;<span class="element-name">set</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;<a href="../utils/Unit.html" title="class in net.minestom.server.utils">Unit</a>&gt;&nbsp;component)</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="remove(net.minestom.server.component.DataComponent)">
 <h3>remove</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -318,6 +376,13 @@ extends <a href="DataComponent.Holder.html" title="interface in net.minestom.ser
 <h3>toBuilder</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="DataComponentMap.Builder.html" title="interface in net.minestom.server.component">DataComponentMap.Builder</a></span>&nbsp;<span class="element-name">toBuilder</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="toPatchBuilder()">
+<h3>toPatchBuilder</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="DataComponentMap.PatchBuilder.html" title="interface in net.minestom.server.component">DataComponentMap.PatchBuilder</a></span>&nbsp;<span class="element-name">toPatchBuilder</span>()</div>
 </section>
 </li>
 </ul>

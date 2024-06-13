@@ -158,8 +158,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the enchantment level shown on mouse hover.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot)" class="member-name-link">getEnchantmentShown</a><wbr>(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a><wbr>&lt;<a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot)" class="member-name-link">getEnchantmentShown</a><wbr>(@NotNull <a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the enchantment shown in a slot.</div>
 </div>
@@ -180,8 +180,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the enchantment level shown on mouse hover.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot,net.minestom.server.item.enchant.Enchantment)" class="member-name-link">setEnchantmentShown</a><wbr>(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot,
- <a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a>&nbsp;enchantment)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot,net.minestom.server.registry.DynamicRegistry.Key)" class="member-name-link">setEnchantmentShown</a><wbr>(@NotNull <a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot,
+ <a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a>&gt;&nbsp;enchantment)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the enchantment shown in a slot.</div>
 </div>
@@ -301,7 +301,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot)">
 <h3>getEnchantmentShown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a></span>&nbsp;<span class="element-name">getEnchantmentShown</span><wbr><span class="parameters">(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a>&gt;</span>&nbsp;<span class="element-name">getEnchantmentShown</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</span></div>
 <div class="block">Gets the enchantment shown in a slot.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -312,10 +313,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot,net.minestom.server.item.enchant.Enchantment)">
+<section class="detail" id="setEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot,net.minestom.server.registry.DynamicRegistry.Key)">
 <h3>setEnchantmentShown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEnchantmentShown</span><wbr><span class="parameters">(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot,
- <a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a>&nbsp;enchantment)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setEnchantmentShown</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum class in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot,
+ @Nullable
+ <a href="../../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;<a href="../../item/enchant/Enchantment.html" title="interface in net.minestom.server.item.enchant">Enchantment</a>&gt;&nbsp;enchantment)</span></div>
 <div class="block">Sets the enchantment shown in a slot.
  <p>
  Can be set to null to hide it.</div>

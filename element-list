@@ -21,6 +21,7 @@ net.minestom.server.command.builder.exception
 net.minestom.server.command.builder.parser
 net.minestom.server.command.builder.suggestion
 net.minestom.server.component
+net.minestom.server.condition
 net.minestom.server.coordinate
 net.minestom.server.crypto
 net.minestom.server.effects
@@ -72,12 +73,14 @@ net.minestom.server.extras.query.event
 net.minestom.server.extras.query.response
 net.minestom.server.extras.velocity
 net.minestom.server.fluid
+net.minestom.server.gamedata
 net.minestom.server.gamedata.tags
 net.minestom.server.instance
 net.minestom.server.instance.anvil
 net.minestom.server.instance.batch
 net.minestom.server.instance.block
 net.minestom.server.instance.block.banner
+net.minestom.server.instance.block.jukebox
 net.minestom.server.instance.block.predicate
 net.minestom.server.instance.block.rule
 net.minestom.server.instance.generator
@@ -93,6 +96,7 @@ net.minestom.server.item.armor
 net.minestom.server.item.attribute
 net.minestom.server.item.book
 net.minestom.server.item.component
+net.minestom.server.item.crossbow
 net.minestom.server.item.enchant
 net.minestom.server.listener
 net.minestom.server.listener.common

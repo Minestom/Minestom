@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code>net.kyori.adventure.key.Keyed</code>, <code><a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></code></dd>
+<dd><code><a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">ChatType</span><span class="extends-implements">
@@ -156,36 +156,29 @@ extends <a href="../registry/ProtocolObject.html" title="interface in net.minest
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ChatType.Builder.html" title="class in net.minestom.server.message">ChatType.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder(java.lang.String)" class="member-name-link">builder</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder()" class="member-name-link">builder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ChatType.Builder.html" title="class in net.minestom.server.message">ChatType.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder(net.minestom.server.utils.NamespaceID)" class="member-name-link">builder</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#chat()" class="member-name-link">chat</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ChatType.html" title="interface in net.minestom.server.message">ChatType</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(net.minestom.server.utils.NamespaceID,net.minestom.server.message.ChatTypeDecoration,net.minestom.server.message.ChatTypeDecoration)" class="member-name-link">create</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
- @NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a>&nbsp;chat,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#chat()" class="member-name-link">chat</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="ChatType.html" title="interface in net.minestom.server.message">ChatType</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(net.minestom.server.message.ChatTypeDecoration,net.minestom.server.message.ChatTypeDecoration)" class="member-name-link">create</a><wbr>(@NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a>&nbsp;chat,
  @NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a>&nbsp;narration)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;<a href="ChatType.html" title="interface in net.minestom.server.message">ChatType</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#createDefaultRegistry()" class="member-name-link">createDefaultRegistry</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;<a href="ChatType.html" title="interface in net.minestom.server.message">ChatType</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#createDefaultRegistry()" class="member-name-link">createDefaultRegistry</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates a new registry for chat types, loading the vanilla chat types.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#narration()" class="member-name-link">narration</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../registry/Registry.ChatTypeEntry.html" title="class in net.minestom.server.registry">Registry.ChatTypeEntry</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#narration()" class="member-name-link">narration</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../registry/Registry.ChatTypeEntry.html" title="class in net.minestom.server.registry">Registry.ChatTypeEntry</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.registry.ProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a></h3>
-<code><a href="../registry/ProtocolObject.html#key()">key</a>, <a href="../registry/ProtocolObject.html#name()">name</a>, <a href="../registry/ProtocolObject.html#namespace()">namespace</a></code></div>
 </section>
 </li>
 </ul>
@@ -248,31 +241,20 @@ extends <a href="../registry/ProtocolObject.html" title="interface in net.minest
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="create(net.minestom.server.utils.NamespaceID,net.minestom.server.message.ChatTypeDecoration,net.minestom.server.message.ChatTypeDecoration)">
+<section class="detail" id="create(net.minestom.server.message.ChatTypeDecoration,net.minestom.server.message.ChatTypeDecoration)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ChatType.html" title="interface in net.minestom.server.message">ChatType</a></span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
- @NotNull
  @NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a>&nbsp;chat,
  @NotNull
  @NotNull <a href="ChatTypeDecoration.html" title="class in net.minestom.server.message">ChatTypeDecoration</a>&nbsp;narration)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="builder(java.lang.String)">
+<section class="detail" id="builder()">
 <h3>builder</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ChatType.Builder.html" title="class in net.minestom.server.message">ChatType.Builder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="builder(net.minestom.server.utils.NamespaceID)">
-<h3>builder</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ChatType.Builder.html" title="class in net.minestom.server.message">ChatType.Builder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace)</span></div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="ChatType.Builder.html" title="class in net.minestom.server.message">ChatType.Builder</a></span>&nbsp;<span class="element-name">builder</span>()</div>
 </section>
 </li>
 <li>
