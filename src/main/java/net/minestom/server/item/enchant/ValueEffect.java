@@ -1,5 +1,6 @@
 package net.minestom.server.item.enchant;
 
+import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -16,11 +17,11 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> createDefaultRegistry() {
         final DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
-        registry.register("add", Add.NBT_TYPE);
-        registry.register("all_of", AllOf.NBT_TYPE);
-        registry.register("multiply", Multiply.NBT_TYPE);
-        registry.register("remove_binomial", RemoveBinomial.NBT_TYPE);
-        registry.register("set", Set.NBT_TYPE);
+        registry.register("add", Add.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("multiply", Multiply.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("remove_binomial", RemoveBinomial.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("set", Set.NBT_TYPE, DataPack.MINECRAFT_CORE);
         return registry;
     }
 

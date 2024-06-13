@@ -2,6 +2,7 @@ package net.minestom.server.item.enchant;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.DynamicRegistry;
@@ -13,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+
 public non-sealed interface EntityEffect extends Enchantment.Effect {
-    //todo all of these + attributes are considered location-based effects
 
     @NotNull BinaryTagSerializer<EntityEffect> NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
             Registries::enchantmentEntityEffects, EntityEffect::nbtType, "type");
@@ -22,19 +23,19 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> createDefaultRegistry() {
         final DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
-        registry.register("all_of", AllOf.NBT_TYPE);
-        registry.register("apply_mob_effect", ApplyPotionEffect.NBT_TYPE);
-        registry.register("damage_entity", DamageEntity.NBT_TYPE);
-        registry.register("damage_item", DamageItem.NBT_TYPE);
-        registry.register("explode", Explode.NBT_TYPE);
-        registry.register("ignite", Ignite.NBT_TYPE);
-        registry.register("play_sound", PlaySound.NBT_TYPE);
-        registry.register("replace_block", ReplaceBlock.NBT_TYPE);
-        registry.register("replace_disk", ReplaceDisc.NBT_TYPE);
-        registry.register("run_function", RunFunction.NBT_TYPE);
-        registry.register("set_block_properties", SetBlockProperties.NBT_TYPE);
-        registry.register("spawn_particles", SpawnParticles.NBT_TYPE);
-        registry.register("summon_entity", SummonEntity.NBT_TYPE);
+        registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("apply_mob_effect", ApplyPotionEffect.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("damage_entity", DamageEntity.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("damage_item", DamageItem.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("explode", Explode.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("ignite", Ignite.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("play_sound", PlaySound.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("replace_block", ReplaceBlock.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("replace_disk", ReplaceDisc.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("run_function", RunFunction.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("set_block_properties", SetBlockProperties.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("spawn_particles", SpawnParticles.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("summon_entity", SummonEntity.NBT_TYPE, DataPack.MINECRAFT_CORE);
         return registry;
     }
 

@@ -228,7 +228,7 @@ public final class Registry {
         BANNER_PATTERNS("banner_patterns.json"),
         WOLF_VARIANTS("wolf_variants.json"),
         CHAT_TYPES("chat_types.json"),
-        ENCHANTMENTS("enchantments.json"),
+        ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
         JUKEBOX_SONGS("jukebox_songs.json");
 
@@ -236,6 +236,10 @@ public final class Registry {
 
         Resource(String name) {
             this.name = name;
+        }
+
+        public @NotNull String fileName() {
+            return name;
         }
     }
 
@@ -580,6 +584,7 @@ public final class Registry {
         public @NotNull DataComponentMap prototype() {
             if (prototype == null) {
                 try {
+                    BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
                     DataComponentMap.Builder builder = DataComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
@@ -587,7 +592,6 @@ public final class Registry {
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
-                        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
                         builder.set(component, component.read(context, tag));
                     }
                     this.prototype = builder.build();

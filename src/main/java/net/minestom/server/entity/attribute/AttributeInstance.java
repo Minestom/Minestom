@@ -115,7 +115,7 @@ public final class AttributeInstance {
     /**
      * Remove a modifier from this instance.
      *
-     * @param uuid The UUID of the modifier to remove
+     * @param id The namespace id of the modifier to remove
      */
     public void removeModifier(@NotNull NamespaceID id) {
         if (modifiers.remove(id) != null) {

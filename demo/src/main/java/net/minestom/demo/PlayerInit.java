@@ -136,7 +136,9 @@ public class PlayerInit {
                 player.getInventory().addItemStack(bundle);
 
                 player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Enchantment.SHARPNESS, 10))
+                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
+                                Enchantment.SHARPNESS, 10
+                        )))
                         .build());
 
                 player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
