@@ -79,6 +79,10 @@ public record BlockPredicates(@NotNull List<BlockPredicate> predicates, boolean 
         this(List.of(predicate), showInTooltip);
     }
 
+    public @NotNull BlockPredicates withTooltip(boolean showInTooltip) {
+        return new BlockPredicates(predicates, showInTooltip);
+    }
+
     @Override
     public boolean test(Block block) {
         for (BlockPredicate predicate : predicates) {
