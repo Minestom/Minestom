@@ -21,11 +21,11 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     @NotNull DataComponentMap EMPTY = new DataComponentMapImpl(new Int2ObjectArrayMap<>(0));
 
     static @NotNull DataComponentMap.Builder builder() {
-        return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>(), false);
+        return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
     }
 
     static @NotNull DataComponentMap.PatchBuilder patchBuilder() {
-        return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>(), true);
+        return new DataComponentMapImpl.PatchBuilderImpl(new Int2ObjectArrayMap<>());
     }
 
     /**
@@ -131,11 +131,11 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
     }
 
-    sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
+    sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
 
-        <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value);
+        <T> @NotNull PatchBuilder set(@NotNull DataComponent<T> component, @NotNull T value);
 
-        @NotNull Builder remove(@NotNull DataComponent<?> component);
+        @NotNull PatchBuilder remove(@NotNull DataComponent<?> component);
 
         @NotNull DataComponentMap build();
 

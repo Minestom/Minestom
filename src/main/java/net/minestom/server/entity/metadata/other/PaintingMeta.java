@@ -84,19 +84,14 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::paintingVariant);
 
         static @NotNull Variant create(
-                @NotNull NamespaceID namespace,
                 @NotNull NamespaceID assetId,
                 int width, int height
         ) {
-            return new VariantImpl(namespace, assetId, width, height, null);
+            return new VariantImpl(assetId, width, height, null);
         }
 
-        static @NotNull Builder builder(@NotNull String namespace) {
-            return builder(NamespaceID.from(namespace));
-        }
-
-        static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-            return new Builder(namespace);
+        static @NotNull Builder builder() {
+            return new Builder();
         }
 
         /**
@@ -122,13 +117,11 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         @Nullable Registry.PaintingVariantEntry registry();
 
         class Builder {
-            private final NamespaceID namespace;
             private NamespaceID assetId;
             private int width;
             private int height;
 
-            private Builder(@NotNull NamespaceID namespace) {
-                this.namespace = namespace;
+            private Builder() {
             }
 
             @Contract(value = "_ -> this", pure = true)
@@ -150,13 +143,12 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
             }
 
             public @NotNull Variant build() {
-                return new VariantImpl(namespace, assetId, width, height, null);
+                return new VariantImpl(assetId, width, height, null);
             }
         }
     }
 
     record VariantImpl(
-            @NotNull NamespaceID namespace,
             @NotNull NamespaceID assetId,
             int width,
             int height,
@@ -175,14 +167,13 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
 
         @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
         VariantImpl {
-            Check.notNull(namespace, "Namespace cannot be null");
-            Check.argCondition(assetId == null, "missing asset id: {0}", namespace);
-            Check.argCondition(width <= 0, "width must be positive: {0}", namespace);
-            Check.argCondition(height <= 0, "height must be positive: {0}", namespace);
+            Check.argCondition(assetId == null, "missing asset id");
+            Check.argCondition(width <= 0, "width must be positive");
+            Check.argCondition(height <= 0, "height must be positive");
         }
 
         VariantImpl(@NotNull Registry.PaintingVariantEntry registry) {
-            this(registry.namespace(), registry.assetId(), registry.width(), registry.height(), registry);
+            this(registry.assetId(), registry.width(), registry.height(), registry);
         }
     }
 

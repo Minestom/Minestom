@@ -26,15 +26,15 @@ record DataComponentImpl<T>(
     }
 
     @Override
-    public @NotNull T read(@NotNull BinaryTag tag) {
+    public @NotNull T read(@NotNull BinaryTagSerializer.Context context, @NotNull BinaryTag tag) {
         Check.notNull(nbt, "{0} cannot be deserialized from NBT", this);
-        return nbt.read(tag);
+        return nbt.read(context, tag);
     }
 
     @Override
-    public @NotNull BinaryTag write(@NotNull T value) {
+    public @NotNull BinaryTag write(@NotNull BinaryTagSerializer.Context context, @NotNull T value) {
         Check.notNull(nbt, "{0} cannot be serialized to NBT", this);
-        return nbt.write(value);
+        return nbt.write(context, value);
     }
 
     @Override

@@ -8,7 +8,6 @@ import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.*;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,12 +19,8 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Enchantment>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::enchantment);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<Enchantment>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::enchantment);
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
-    }
-
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -34,11 +29,11 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry() {
+    static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
         return DynamicRegistry.create(
                 "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE,
                 Registry.Resource.ENCHANTMENTS,
-                (namespace, props) -> new EnchantmentImpl(Registry.enchantment(namespace, props))
+                (namespace, props) -> new EnchantmentImpl(registries, Registry.enchantment(namespace, props))
         );
     }
 
@@ -92,7 +87,6 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     }
 
     class Builder {
-        private final NamespaceID namespace;
         private Component description = Component.empty();
         private ObjectSet<Enchantment> exclusiveSet = ObjectSet.empty();
         private ObjectSet<Material> supportedItems = ObjectSet.empty();
@@ -105,8 +99,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
         private List<EquipmentSlotGroup> slots = List.of();
         private DataComponentMap.Builder effects = DataComponentMap.builder();
 
-        private Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         public @NotNull Builder description(@NotNull Component description) {
@@ -184,7 +177,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
         public @NotNull Enchantment build() {
             return new EnchantmentImpl(
-                    namespace, description, exclusiveSet, supportedItems,
+                    description, exclusiveSet, supportedItems,
                     primaryItems, weight, maxLevel, minCost, maxCost,
                     anvilCost, slots, effects.build(), null
             );

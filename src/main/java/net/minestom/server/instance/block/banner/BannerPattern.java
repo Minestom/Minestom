@@ -17,19 +17,14 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<BannerPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::bannerPattern);
 
     static @NotNull BannerPattern create(
-            @NotNull NamespaceID namespace,
             @NotNull NamespaceID assetId,
             @NotNull String translationKey
     ) {
-        return new BannerPatternImpl(namespace, assetId, translationKey, null);
+        return new BannerPatternImpl(assetId, translationKey, null);
     }
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
-    }
-
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -52,12 +47,10 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @Nullable Registry.BannerPatternEntry registry();
 
     final class Builder {
-        private final NamespaceID namespace;
         private NamespaceID assetId;
         private String translationKey;
 
-        private Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -74,7 +67,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
 
         @Contract(pure = true)
         public @NotNull BannerPattern build() {
-            return new BannerPatternImpl(namespace, assetId, translationKey, null);
+            return new BannerPatternImpl(assetId, translationKey, null);
         }
     }
 }

@@ -6,7 +6,6 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,10 +20,8 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
         return (ObjectSet<T>) ObjectSetImpl.Empty.INSTANCE;
     }
 
-    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<T> entries) {
-        Set<NamespaceID> entrySet = new HashSet<>(entries.size());
-        for (T entry : entries) entrySet.add(entry.namespace());
-        return new ObjectSetImpl.Entries<>(entrySet);
+    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<NamespaceID> entries) {
+        return new ObjectSetImpl.Entries<>(Set.copyOf(entries));
     }
 
     static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Tag tag) {
@@ -43,7 +40,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
      * @param object The object to check for.
      * @return True if this set contains the object, false otherwise.
      */
-    default boolean contains(@NotNull T object) {
+    default boolean contains(@NotNull StaticProtocolObject object) {
         return contains(object.namespace());
     }
 

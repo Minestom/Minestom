@@ -21,7 +21,6 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
-import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.location.RelativeVec;
@@ -40,14 +39,6 @@ public class ArgumentTypeTest {
 
     static {
         MinecraftServer.init();
-    }
-
-    @Test
-    public void testArgumentEnchantment() {
-        var arg = ArgumentType.Enchantment("enchantment");
-        assertInvalidArg(arg, "minecraft:invalid_enchantment");
-        assertArg(arg, Enchantment.SWEEPING_EDGE, Enchantment.SWEEPING_EDGE.name());
-        assertArg(arg, Enchantment.MENDING, Enchantment.MENDING.name());
     }
 
     @Test

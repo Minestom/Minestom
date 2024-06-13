@@ -6,6 +6,7 @@ import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.item.ItemComponent;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ public class ColorTest extends AbstractItemComponentTest<RGBLike> {
 
     @Test
     void namedTextColor() {
-        var tag = ItemComponent.MAP_COLOR.write(NamedTextColor.YELLOW);
+        var tag = ItemComponent.MAP_COLOR.write(BinaryTagSerializer.Context.EMPTY, NamedTextColor.YELLOW);
         assertEquals(IntBinaryTag.intBinaryTag(16777045), tag);
     }
 }

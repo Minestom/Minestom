@@ -17,6 +17,7 @@ public final class TagManager {
     public TagManager() {
         // Load required tags from files
         for (var type : Tag.BasicType.values()) {
+            if (type.getResource() == null || type.getFunction() == null) continue;
             final var json = Registry.load(type.getResource());
             final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
             json.keySet().forEach(tagName -> {

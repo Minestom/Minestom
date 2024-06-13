@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 record TrimMaterialImpl(
-        @NotNull NamespaceID namespace,
         @NotNull String assetName,
         @NotNull Material ingredient,
         float itemModelIndex,
@@ -44,16 +42,15 @@ record TrimMaterialImpl(
 
     @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
     TrimMaterialImpl {
-        Check.notNull(namespace, "Namespace cannot be null");
-        Check.argCondition(assetName == null || assetName.isEmpty(), "missing asset name: {0}", namespace);
-        Check.argCondition(ingredient == null, "missing ingredient: {0}", namespace);
-        Check.argCondition(overrideArmorMaterials == null, "missing override armor materials: {0}", namespace);
-        Check.argCondition(description == null, "missing description: {0}", namespace);
+        Check.argCondition(assetName == null || assetName.isEmpty(), "missing asset name");
+        Check.argCondition(ingredient == null, "missing ingredient");
+        Check.argCondition(overrideArmorMaterials == null, "missing override armor materials");
+        Check.argCondition(description == null, "missing description");
         overrideArmorMaterials = Map.copyOf(overrideArmorMaterials);
     }
 
     TrimMaterialImpl(@NotNull Registry.TrimMaterialEntry registry) {
-        this(registry.namespace(), registry.assetName(), registry.ingredient(),
+        this(registry.assetName(), registry.ingredient(),
                 registry.itemModelIndex(), registry.overrideArmorMaterials(),
                 registry.description(), registry);
     }

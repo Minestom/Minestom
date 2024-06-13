@@ -7,7 +7,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -22,7 +21,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimMaterial>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimMaterial);
 
     static @NotNull TrimMaterial create(
-            @NotNull NamespaceID namespace,
             @NotNull String assetName,
             @NotNull Material ingredient,
             float itemModelIndex,
@@ -30,17 +28,13 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
             @NotNull Component description
     ) {
         return new TrimMaterialImpl(
-                namespace, assetName, ingredient, itemModelIndex,
+                assetName, ingredient, itemModelIndex,
                 overrideArmorMaterials, description, null
         );
     }
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
-    }
-
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -73,15 +67,13 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     @Nullable Registry.TrimMaterialEntry registry();
 
     final class Builder {
-        private final NamespaceID namespace;
         private String assetName;
         private Material ingredient;
         private float itemModelIndex;
         private final Map<String, String> overrideArmorMaterials = new HashMap<>();
         private Component description;
 
-        Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -123,7 +115,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
         @Contract(pure = true)
         public @NotNull TrimMaterial build() {
             return new TrimMaterialImpl(
-                    namespace, assetName, ingredient, itemModelIndex,
+                    assetName, ingredient, itemModelIndex,
                     overrideArmorMaterials, description, null
             );
         }

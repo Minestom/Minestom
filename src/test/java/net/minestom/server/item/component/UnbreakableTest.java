@@ -3,6 +3,7 @@ package net.minestom.server.item.component;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.item.ItemComponent;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ public class UnbreakableTest extends AbstractItemComponentTest<Unbreakable> {
     @Test
     void testDefaultNbtValue() throws IOException {
         var tag = TagStringIOExt.readTag("{}");
-        var value = ItemComponent.UNBREAKABLE.read(tag);
+        var value = ItemComponent.UNBREAKABLE.read(BinaryTagSerializer.Context.EMPTY, tag);
         assertTrue(value.showInTooltip());
     }
 }

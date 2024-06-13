@@ -70,15 +70,15 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
 
     @Override
     public @NotNull Builder toBuilder() {
-        return new BuilderImpl(new Int2ObjectArrayMap<>(components), false);
+        return new BuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
     @Override
     public @NotNull PatchBuilder toPatchBuilder() {
-        return new BuilderImpl(new Int2ObjectArrayMap<>(components), true);
+        return new PatchBuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
-    record BuilderImpl(@NotNull Int2ObjectMap<Object> components, boolean isPatch) implements DataComponentMap.Builder, DataComponentMap.PatchBuilder {
+    record BuilderImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap.Builder {
 
         @Override
         public boolean has(@NotNull DataComponent<?> component) {
@@ -98,8 +98,32 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         }
 
         @Override
-        public @NotNull Builder remove(@NotNull DataComponent<?> component) {
-            Check.stateCondition(!isPatch, "Cannot remove components in a non-patch builder");
+        public @NotNull DataComponentMap build() {
+            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+        }
+    }
+
+    record PatchBuilderImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap.PatchBuilder {
+
+        @Override
+        public boolean has(@NotNull DataComponent<?> component) {
+            return components.get(component.id()) != null;
+        }
+
+        @Override
+        public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+            //noinspection unchecked
+            return (T) components.get(component.id());
+        }
+
+        @Override
+        public <T> @NotNull PatchBuilder set(@NotNull DataComponent<T> component, @NotNull T value) {
+            components.put(component.id(), value);
+            return this;
+        }
+
+        @Override
+        public @NotNull PatchBuilder remove(@NotNull DataComponent<?> component) {
             components.put(component.id(), null);
             return this;
         }
@@ -164,7 +188,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     ) implements BinaryTagSerializer<DataComponentMap> {
 
         @Override
-        public @NotNull BinaryTag write(@NotNull DataComponentMap value) {
+        public @NotNull BinaryTag write(@NotNull Context context, @NotNull DataComponentMap value) {
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
             if (patch.components.isEmpty()) return CompoundBinaryTag.empty();
             CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
@@ -176,14 +200,14 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
                     if (isPatch) builder.put(REMOVAL_PREFIX + type.name(), CompoundBinaryTag.empty());
                     // Removing a component in an absolute (non-patch) builder is a noop because it is not yet present.
                 } else {
-                    builder.put(type.name(), type.write(entry.getValue()));
+                    builder.put(type.name(), type.write(context, entry.getValue()));
                 }
             }
             return builder.build();
         }
 
         @Override
-        public @NotNull DataComponentMap read(@NotNull BinaryTag anyTag) {
+        public @NotNull DataComponentMap read(@NotNull Context context, @NotNull BinaryTag anyTag) {
             if (!(anyTag instanceof CompoundBinaryTag tag))
                 throw new IllegalArgumentException("Component patch must be a compound tag, was: " + anyTag.type());
             if (tag.size() == 0) return EMPTY;
@@ -201,7 +225,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
                     if (isPatch) patch.put(type.id(), null);
                     // Removing a component in an absolute (non-patch) builder is a noop because it is not yet present.
                 } else {
-                    Object value = type.read(entry.getValue());
+                    Object value = type.read(context, entry.getValue());
                     patch.put(type.id(), value);
                 }
             }

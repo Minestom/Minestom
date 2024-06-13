@@ -40,8 +40,8 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
     boolean isSynced();
     boolean isSerialized();
 
-    @NotNull T read(@NotNull BinaryTag tag);
-    @NotNull BinaryTag write(@NotNull T value);
+    @NotNull T read(@NotNull BinaryTagSerializer.Context context, @NotNull BinaryTag tag);
+    @NotNull BinaryTag write(@NotNull BinaryTagSerializer.Context context, @NotNull T value);
 
     @NotNull T read(@NotNull NetworkBuffer reader);
     void write(@NotNull NetworkBuffer writer, @NotNull T value);

@@ -50,6 +50,7 @@ final class EnvImpl implements Env {
 
     void cleanup() {
         this.listeners.forEach(FlexibleListenerImpl::check);
+        this.process.stop();
     }
 
     final class EventCollector<E extends Event> implements Collector<E> {

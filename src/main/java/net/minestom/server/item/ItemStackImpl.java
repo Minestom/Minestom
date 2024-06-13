@@ -1,10 +1,12 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -104,7 +106,9 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         Material material = Material.fromNamespaceId(id);
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
-        DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(tag.getCompound("components"));
+
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+        DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
 
@@ -113,7 +117,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         tag.putString("id", itemStack.material().name());
         tag.putInt("count", itemStack.amount());
 
-        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();

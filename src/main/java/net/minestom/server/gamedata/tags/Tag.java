@@ -1,5 +1,7 @@
 package net.minestom.server.gamedata.tags;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
@@ -9,6 +11,7 @@ import net.minestom.server.registry.FluidRegistries;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +25,7 @@ import java.util.function.Function;
  * Represents a group of items, blocks, fluids, entity types or function.
  * Immutable by design
  */
-public final class Tag implements ProtocolObject {
+public final class Tag implements ProtocolObject, Keyed {
     private final NamespaceID name;
     private final Set<NamespaceID> values;
 
@@ -61,9 +64,19 @@ public final class Tag implements ProtocolObject {
         return Collections.unmodifiableSet(values);
     }
 
-    @Override
     public @NotNull NamespaceID namespace() {
         return name;
+    }
+
+    @Contract(pure = true)
+    public @NotNull String name() {
+        return namespace().asString();
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Key key() {
+        return namespace();
     }
 
     /**
@@ -85,7 +98,8 @@ public final class Tag implements ProtocolObject {
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
-        SOUND_EVENTS("minecraft:sound_event", ), //todo
+        SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
+        POTION_EFFECTS("minecraft:sound_event", null, null), // Seems not to be included in server data
 
         //todo this is cursed. it does not update as the registry changes. Fix later.
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
@@ -97,8 +111,8 @@ public final class Tag implements ProtocolObject {
         private final Function<String, Integer> function;
 
         BasicType(@NotNull String identifier,
-                  @NotNull Registry.Resource resource,
-                  @NotNull Function<String, Integer> function) {
+                  @Nullable Registry.Resource resource,
+                  @Nullable Function<String, Integer> function) {
             this.identifier = identifier;
             this.resource = resource;
             this.function = function;

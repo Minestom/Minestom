@@ -19,21 +19,16 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
 
     static @NotNull TrimPattern create(
-            @NotNull NamespaceID namespace,
             @NotNull NamespaceID assetId,
             @NotNull Material template,
             @NotNull Component description,
             boolean decal
     ) {
-        return new TrimPatternImpl(namespace, assetId, template, description, decal, null);
+        return new TrimPatternImpl(assetId, template, description, decal, null);
     }
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
-    }
-
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -61,14 +56,12 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @Nullable Registry.TrimPatternEntry registry();
 
     final class Builder {
-        private final NamespaceID namespace;
         private NamespaceID assetId;
         private Material template;
         private Component description;
         private boolean decal;
 
-        Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -102,7 +95,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
         @Contract(pure = true)
         public @NotNull TrimPattern build() {
-            return new TrimPatternImpl(namespace, assetId, template, description, decal, null);
+            return new TrimPatternImpl(assetId, template, description, decal, null);
         }
     }
 }
