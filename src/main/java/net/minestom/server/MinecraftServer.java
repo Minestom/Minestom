@@ -16,7 +16,7 @@ import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
-import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.item.enchant.*;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -31,6 +31,7 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionType;
@@ -296,6 +297,22 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static @NotNull DynamicRegistry<JukeboxSong> getJukeboxSongRegistry() {
         return serverProcess.jukeboxSong();
+    }
+
+    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+        return process().enchantmentLevelBasedValues();
+    }
+
+    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+        return process().enchantmentValueEffects();
+    }
+
+    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+        return process().enchantmentEntityEffects();
+    }
+
+    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+        return process().enchantmentLocationEffects();
     }
 
     public static Server getServer() {

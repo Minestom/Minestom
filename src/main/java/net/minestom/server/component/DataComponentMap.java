@@ -2,6 +2,7 @@ package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -111,6 +112,10 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     <T> @NotNull DataComponentMap set(@NotNull DataComponent<T> component, @NotNull T value);
 
+    default @NotNull DataComponentMap set(@NotNull DataComponent<Unit> component) {
+        return set(component, Unit.INSTANCE);
+    }
+
     /**
      * Removes the component from the map (or patch).
      *
@@ -127,6 +132,10 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
         <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value);
 
+        default @NotNull Builder set(@NotNull DataComponent<Unit> component) {
+            return set(component, Unit.INSTANCE);
+        }
+
         @NotNull DataComponentMap build();
 
     }
@@ -134,6 +143,10 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
 
         <T> @NotNull PatchBuilder set(@NotNull DataComponent<T> component, @NotNull T value);
+
+        default @NotNull PatchBuilder set(@NotNull DataComponent<Unit> component) {
+            return set(component, Unit.INSTANCE);
+        }
 
         @NotNull PatchBuilder remove(@NotNull DataComponent<?> component);
 
