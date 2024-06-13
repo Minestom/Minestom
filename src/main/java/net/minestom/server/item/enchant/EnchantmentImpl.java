@@ -92,7 +92,7 @@ record EnchantmentImpl(
 
     private static @NotNull Enchantment fromRawRegistry(@NotNull Registries registries, @NotNull String raw) {
         try {
-            BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries);
+            BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
             return REGISTRY_NBT_TYPE.read(context, TagStringIOExt.readTag(raw));
         } catch (IOException e) {
             throw new RuntimeException(e);

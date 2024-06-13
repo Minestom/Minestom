@@ -104,7 +104,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * @param nbtCompound The nbt representation of the item
      */
     static @NotNull ItemStack fromItemNBT(@NotNull CompoundBinaryTag nbtCompound) {
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
         return NBT_TYPE.read(context, nbtCompound);
     }
 
@@ -197,7 +197,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
     @Contract(value = "_ -> new", pure = true)
     default @NotNull ItemStack withGlowing(boolean glowing) {
-        return with(ItemComponent.ENCHANTMENT_GLINT_OVERRIDE, false);
+        return with(ItemComponent.ENCHANTMENT_GLINT_OVERRIDE, glowing);
     }
 
     @Contract(value = "-> new", pure = true)

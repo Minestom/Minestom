@@ -7,6 +7,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -291,7 +292,11 @@ public interface BinaryTagSerializer<T> {
             public @NotNull BinaryTag write(@NotNull Context context, @NotNull R value) {
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
                 P1 p1 = getter1.apply(value);
-                if (p1 != null) builder.put(param1, serializer1.write(context, p1));
+                if (p1 != null) {
+                    BinaryTag child = serializer1.write(context, p1);
+                    if (child == null) return null;
+                    builder.put(param1, child);
+                }
                 return builder.build();
             }
 
@@ -464,8 +469,11 @@ public interface BinaryTagSerializer<T> {
                 final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) serializerGetter.apply(value);
                 final DynamicRegistry.Key<BinaryTagSerializer<? extends T>> type = registry.getKey(serializer);
                 Check.notNull(type, "Unregistered serializer for: {0}", value);
+                if (context.forClient() && registry.getPack(type) != DataPack.MINECRAFT_CORE)
+                    return null;
 
                 final BinaryTag result = serializer.write(context, value);
+                if (result == null) return null;
                 if (!(result instanceof CompoundBinaryTag resultCompound))
                     throw new IllegalArgumentException("Expected compound tag for tagged union");
 
@@ -497,12 +505,23 @@ public interface BinaryTagSerializer<T> {
             public @Nullable Registries registries() {
                 return null;
             }
+
+            @Override
+            public boolean forClient() {
+                return false;
+            }
         };
 
         @Nullable Registries registries();
+
+        boolean forClient();
     }
 
-    record ContextWithRegistries(@NotNull Registries registries) implements Context {
+    record ContextWithRegistries(@NotNull Registries registries, boolean forClient) implements Context {
+
+        public ContextWithRegistries(@NotNull Registries registries) {
+            this(registries, false);
+        }
     }
 
     default @NotNull BinaryTag write(@NotNull Context context, @NotNull T value) {
@@ -558,7 +577,10 @@ public interface BinaryTagSerializer<T> {
             @Override
             public @NotNull BinaryTag write(@NotNull Context context, @NotNull List<T> value) {
                 ListBinaryTag.Builder<BinaryTag> builder = ListBinaryTag.builder();
-                for (T t : value) builder.add(BinaryTagSerializer.this.write(context, t));
+                for (T t : value) {
+                    BinaryTag entry = BinaryTagSerializer.this.write(context, t);
+                    if (entry != null) builder.add(entry);
+                }
                 return builder.build();
             }
 

@@ -2,6 +2,7 @@ package net.minestom.server.item.enchant;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.NumberBinaryTag;
+import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.MathUtils;
@@ -35,11 +36,11 @@ public interface LevelBasedValue {
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> createDefaultRegistry() {
         final DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
         // Note that constant is omitted from the registry, it has serialization handled out of band above.
-        registry.register("linear", Linear.NBT_TYPE);
-        registry.register("clamped", Clamped.NBT_TYPE);
-        registry.register("fraction", Fraction.NBT_TYPE);
-        registry.register("levels_squared", LevelsSquared.NBT_TYPE);
-        registry.register("lookup", Lookup.NBT_TYPE);
+        registry.register("linear", Linear.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("clamped", Clamped.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("fraction", Fraction.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("levels_squared", LevelsSquared.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("lookup", Lookup.NBT_TYPE, DataPack.MINECRAFT_CORE);
         return registry;
     }
 
@@ -60,10 +61,10 @@ public interface LevelBasedValue {
         }
     }
 
-    record Linear(int base, int perLevelAboveFirst) implements LevelBasedValue {
+    record Linear(float base, float perLevelAboveFirst) implements LevelBasedValue {
         public static final BinaryTagSerializer<Linear> NBT_TYPE = BinaryTagSerializer.object(
-                "base", BinaryTagSerializer.INT, Linear::base,
-                "per_level_above_first", BinaryTagSerializer.INT, Linear::perLevelAboveFirst,
+                "base", BinaryTagSerializer.FLOAT, Linear::base,
+                "per_level_above_first", BinaryTagSerializer.FLOAT, Linear::perLevelAboveFirst,
                 Linear::new
         );
 

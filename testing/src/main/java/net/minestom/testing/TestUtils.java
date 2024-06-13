@@ -1,6 +1,6 @@
 package net.minestom.testing;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
 
 import java.io.IOException;
@@ -32,9 +32,9 @@ public final class TestUtils {
         assertEquals(Set.copyOf(expected), Set.copyOf(actual));
     }
 
-    public static void assertEqualsSNBT(String snbt, CompoundBinaryTag compound) {
+    public static void assertEqualsSNBT(String snbt, BinaryTag compound) {
         try {
-            final var converted = (CompoundBinaryTag) TagStringIOExt.readTag(snbt);
+            final var converted = TagStringIOExt.readTag(snbt);
             assertEquals(converted, compound);
         } catch (IOException e) {
             fail(e);

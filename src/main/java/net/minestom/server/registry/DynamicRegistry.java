@@ -2,6 +2,7 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
+import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -100,6 +101,20 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
         return registry;
     }
 
+    /**
+     * Creates a new empty registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
+            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull Registries registries, @NotNull Registry.Resource resource) {
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
+        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
+        return registry;
+    }
+
     @NotNull String id();
 
     @Nullable T get(int id);
@@ -111,6 +126,11 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     @Nullable Key<T> getKey(int id);
     @Nullable Key<T> getKey(@NotNull T value);
     @Nullable NamespaceID getName(int id);
+    @Nullable DataPack getPack(int id);
+    default @Nullable DataPack getPack(@NotNull Key<T> key) {
+        final int id = getId(key);
+        return id == -1 ? null : getPack(id);
+    }
 
     /**
      * Returns the protocol ID associated with the given {@link NamespaceID}, or -1 if none is registered.
@@ -127,6 +147,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     default int getId(@NotNull Key<T> key) {
         return getId(key.namespace());
     }
+
 
     /**
      * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
@@ -153,10 +174,22 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @return The new ID of the registered object
      */
     default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object) {
-        return register(NamespaceID.from(id), object);
+        return register(NamespaceID.from(id), object, null);
     }
 
-    @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object);
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object) {
+        return register(id, object, null);
+    }
+
+    @ApiStatus.Internal
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
+        return register(NamespaceID.from(id), object, pack);
+    }
+
+    @ApiStatus.Internal
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object, @Nullable DataPack pack) {
+        return register(id, object);
+    }
 
     /**
      * <p>Removes an object from this registry.</p>

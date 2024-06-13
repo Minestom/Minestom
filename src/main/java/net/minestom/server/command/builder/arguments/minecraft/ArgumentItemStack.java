@@ -76,7 +76,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 reader.consume('=');
 
                 final BinaryTag nbt = reader.readTag();
-                BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+                BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
                 //noinspection unchecked
                 components.set((DataComponent<Object>) component, component.read(context, nbt));
 

@@ -110,7 +110,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
 
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
         DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
@@ -120,7 +120,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         tag.putString("id", itemStack.material().name());
         tag.putInt("count", itemStack.amount());
 
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
         CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
