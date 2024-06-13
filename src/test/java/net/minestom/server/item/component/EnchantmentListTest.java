@@ -4,6 +4,8 @@ import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.testing.Env;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -35,14 +37,15 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
     }
 
     @Test
-    void testShorthandNbtSyntax() throws Exception {
+    void testShorthandNbtSyntax(Env env) throws Exception {
         var tag = TagStringIOExt.readTag("""
                 {
                     "sharpness": 1,
                     "punch": 2,
                 }
                 """);
-        var value = component().read(tag);
+        var context = new BinaryTagSerializer.ContextWithRegistries(env.process());
+        var value = component().read(context, tag);
         assertEquals(new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1, Enchantment.PUNCH, 2), true), value);
     }
 }

@@ -1,5 +1,6 @@
 package net.minestom.server.item.component;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
@@ -34,15 +35,24 @@ public record JukeboxPlayable(@NotNull DynamicRegistry.Key<JukeboxSong> song, bo
             return new JukeboxPlayable(song, buffer.read(NetworkBuffer.BOOLEAN));
         }
     };
-    public static final BinaryTagSerializer<JukeboxPlayable> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> new JukeboxPlayable(
-                    JukeboxSong.NBT_TYPE.read(tag.get("song")),
-                    tag.getBoolean("show_in_tooltip")),
-            value -> CompoundBinaryTag.builder()
-                    .put("song", JukeboxSong.NBT_TYPE.write(value.song))
+    public static final BinaryTagSerializer<JukeboxPlayable> NBT_TYPE = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Context context, @NotNull JukeboxPlayable value) {
+            return CompoundBinaryTag.builder()
+                    .put("song", JukeboxSong.NBT_TYPE.write(context, value.song))
                     .putBoolean("show_in_tooltip", value.showInTooltip)
-                    .build()
-    );
+                    .build();
+        }
+
+        @Override
+        public @NotNull JukeboxPlayable read(@NotNull Context context, @NotNull BinaryTag raw) {
+            if (!(raw instanceof CompoundBinaryTag tag)) throw new IllegalArgumentException("expected compound tag");
+            return new JukeboxPlayable(
+                    JukeboxSong.NBT_TYPE.read(context, tag.get("song")),
+                    tag.getBoolean("show_in_tooltip")
+            );
+        }
+    };
 
     public JukeboxPlayable(@NotNull DynamicRegistry.Key<JukeboxSong> song) {
         this(song, true);

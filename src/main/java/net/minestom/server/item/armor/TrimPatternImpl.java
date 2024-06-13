@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record TrimPatternImpl(
-        @NotNull NamespaceID namespace,
         @NotNull NamespaceID assetId,
         @NotNull Material template,
         @NotNull Component description,
@@ -32,14 +31,13 @@ record TrimPatternImpl(
     );
 
     TrimPatternImpl {
-        Check.notNull(namespace, "Namespace cannot be null");
-        Check.notNull(assetId, "missing asset id: {0}", namespace);
-        Check.notNull(template, "missing template: {0}", namespace);
-        Check.notNull(description, "missing description: {0}", namespace);
+        Check.notNull(assetId, "missing asset id");
+        Check.notNull(template, "missing template");
+        Check.notNull(description, "missing description");
     }
 
     TrimPatternImpl(@NotNull Registry.TrimPatternEntry registry) {
-        this(registry.namespace(), registry.assetID(), registry.template(),
+        this(registry.assetID(), registry.template(),
                 registry.description(), registry.decal(), registry);
     }
 }

@@ -7,6 +7,7 @@ import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,10 +20,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApiStatus.Internal
-final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
+final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-remove' to 'true'");
 
-    record KeyImpl<T extends ProtocolObject>(NamespaceID namespace) implements Key<T> {
+    record KeyImpl<T>(@NotNull NamespaceID namespace) implements Key<T> {
 
         @Override
         public String toString() {
@@ -53,18 +54,9 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
     private final String id;
     private final BinaryTagSerializer<T> nbtType;
 
-    DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType) {
+    DynamicRegistryImpl(@NotNull String id, @Nullable BinaryTagSerializer<T> nbtType) {
         this.id = id;
         this.nbtType = nbtType;
-    }
-
-    DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        this(id, nbtType, resource, loader, null);
-    }
-
-    DynamicRegistryImpl(@NotNull String id, BinaryTagSerializer<T> nbtType, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
-        this(id, nbtType);
-        loadStaticRegistry(resource, loader, idComparator);
     }
 
     @Override
@@ -83,6 +75,12 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
     @Override
     public @Nullable T get(@NotNull NamespaceID namespace) {
         return entryByName.get(namespace);
+    }
+
+    @Override
+    public @Nullable Key<T> getKey(@NotNull T value) {
+        int index = entryById.indexOf(value);
+        return index == -1 ? null : getKey(index);
     }
 
     @Override
@@ -110,8 +108,9 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<T> register(@NotNull T object) {
-        Check.stateCondition((MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
+    public @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID namespaceId, @NotNull T object) {
+        // This check is disabled in tests because we remake server processes over and over.
+        Check.stateCondition((!DebugUtils.INSIDE_TEST && MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
                 "Registering an object to a dynamic registry ({0}) after the server is started can lead to " +
                         "registry desync between the client and server. This is usually unwanted behavior. If you " +
                         "know what you're doing and would like this behavior, set the `minestom.registry.late-register` " +
@@ -119,30 +118,30 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
 
         lock.lock();
         try {
-            int id = idByName.indexOf(object.namespace());
+            int id = idByName.indexOf(namespaceId);
             if (id == -1) id = entryById.size();
 
             entryById.add(id, object);
-            entryByName.put(object.namespace(), object);
-            idByName.add(object.namespace());
+            entryByName.put(namespaceId, object);
+            idByName.add(namespaceId);
             vanillaRegistryDataPacket.invalidate();
-            return Key.of(object.namespace());
+            return Key.of(namespaceId);
         } finally {
             lock.unlock();
         }
     }
 
     @Override
-    public boolean remove(@NotNull T object) throws UnsupportedOperationException {
+    public boolean remove(@NotNull NamespaceID namespaceId) throws UnsupportedOperationException {
         if (!ServerFlag.REGISTRY_UNSAFE_OPS) throw UNSAFE_REMOVE_EXCEPTION;
 
         lock.lock();
         try {
-            int id = idByName.indexOf(object.namespace());
+            int id = idByName.indexOf(namespaceId);
             if (id == -1) return false;
 
             entryById.remove(id);
-            entryByName.remove(object.namespace());
+            entryByName.remove(namespaceId);
             idByName.remove(id);
             vanillaRegistryDataPacket.invalidate();
             return true;
@@ -159,8 +158,9 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
     }
 
     private @NotNull RegistryDataPacket createRegistryDataPacket(boolean excludeVanilla) {
-        var entries = new ArrayList<RegistryDataPacket.Entry>(entryById.size());
-        for (var entry : entryById) {
+        Check.notNull(nbtType, "Cannot create registry data packet for server-only registry");
+        List<RegistryDataPacket.Entry> entries = new ArrayList<>(entryById.size());
+        for (int i = 0; i < entryById.size(); i++) {
             CompoundBinaryTag data = null;
             // sorta todo, sorta just a note:
             // Right now we very much only support the minecraft:core (vanilla) 'pack'. Any entry which was not loaded
@@ -170,21 +170,24 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
             // the time of writing). Datagen currently behaves kind of badly in that the registry inspecting generators
             // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
             // static assets (the traditionally dynamic registries), do not generate those assets.
-            if (!excludeVanilla || entry.registry() == null) {
-                data = (CompoundBinaryTag) nbtType.write(entry);
+            T entry = entryById.get(i);
+            if (!excludeVanilla || (entry instanceof ProtocolObject pEntry && pEntry.registry() == null)) {
+                BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+                data = (CompoundBinaryTag) nbtType.write(context, entry);
             }
-            entries.add(new RegistryDataPacket.Entry(entry.name(), data));
+            //noinspection DataFlowIssue
+            entries.add(new RegistryDataPacket.Entry(getKey(i).name(), data));
         }
         return new RegistryDataPacket(id, entries);
     }
 
-    private void loadStaticRegistry(@NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
+    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
         List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
         if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
         for (var entry : entries) {
             final String namespace = entry.getKey();
             final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
-            register(loader.get(namespace, properties));
+            registry.register(namespace, loader.get(namespace, properties));
         }
     }
 }

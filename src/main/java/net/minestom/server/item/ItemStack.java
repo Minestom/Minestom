@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
@@ -100,7 +101,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * @param nbtCompound The nbt representation of the item
      */
     static @NotNull ItemStack fromItemNBT(@NotNull CompoundBinaryTag nbtCompound) {
-        return NBT_TYPE.read(nbtCompound);
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+        return NBT_TYPE.read(context, nbtCompound);
     }
 
     @Contract(pure = true)

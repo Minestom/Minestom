@@ -7,13 +7,19 @@ import org.jetbrains.annotations.Nullable;
 
 public record TargetedConditionalEffect<E extends Enchantment.Effect>(
         @NotNull Enchantment.Target enchanted,
-        @NotNull Enchantment.Target affected,
+        @Nullable Enchantment.Target affected,
         @NotNull E effect,
         @Nullable DataPredicate requirements
 ) implements Enchantment.Effect {
 
     public static <E extends Enchantment.Effect> @NotNull BinaryTagSerializer<TargetedConditionalEffect<E>> nbtType(@NotNull BinaryTagSerializer<E> effectType) {
-        return null; //todo
+        return BinaryTagSerializer.object(
+                "enchanted", Enchantment.Target.NBT_TYPE, TargetedConditionalEffect::enchanted,
+                "affected", Enchantment.Target.NBT_TYPE.optional(), TargetedConditionalEffect::affected,
+                "effect", effectType, TargetedConditionalEffect::effect,
+                "requirements", DataPredicate.NBT_TYPE.optional(), TargetedConditionalEffect::requirements,
+                TargetedConditionalEffect::new
+        );
     }
 
 }

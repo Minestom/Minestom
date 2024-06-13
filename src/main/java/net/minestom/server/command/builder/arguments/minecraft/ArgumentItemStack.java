@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -13,6 +14,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -74,8 +76,9 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 reader.consume('=');
 
                 final BinaryTag nbt = reader.readTag();
+                BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
                 //noinspection unchecked
-                components.set((DataComponent<Object>) component, component.read(nbt));
+                components.set((DataComponent<Object>) component, component.read(context, nbt));
 
                 if (reader.peek() != ']')
                     reader.consume(',');

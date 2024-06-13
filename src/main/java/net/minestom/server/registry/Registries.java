@@ -7,8 +7,7 @@ import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
-import net.minestom.server.item.enchant.Enchantment;
-import net.minestom.server.item.enchant.ValueEffect;
+import net.minestom.server.item.enchant.*;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
@@ -45,8 +44,14 @@ public interface Registries {
 
     @NotNull DynamicRegistry<JukeboxSong> jukeboxSong();
 
-    default @NotNull DynamicRegistry<BinaryTagSerializer<ValueEffect>> enchantmentValueEffects() {
+    // The following are _not_ sent to the client.
 
-    }
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects();
 
 }

@@ -13,9 +13,9 @@ public record CrossbowChargingSounds(
 ) {
     private static final BinaryTagSerializer<ObjectSet<SoundEvent>> SOUND_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.SOUND_EVENTS);
     public static final BinaryTagSerializer<CrossbowChargingSounds> NBT_TYPE = BinaryTagSerializer.object(
-            "start", SOUND_SET_NBT_TYPE, CrossbowChargingSounds::start,
-            "mid", SOUND_SET_NBT_TYPE, CrossbowChargingSounds::mid,
-            "end", SOUND_SET_NBT_TYPE, CrossbowChargingSounds::end,
+            "start", SOUND_SET_NBT_TYPE.optional(), CrossbowChargingSounds::start,
+            "mid", SOUND_SET_NBT_TYPE.optional(), CrossbowChargingSounds::mid,
+            "end", SOUND_SET_NBT_TYPE.optional(), CrossbowChargingSounds::end,
             CrossbowChargingSounds::new
     );
 }

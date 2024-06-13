@@ -10,7 +10,7 @@ public class DataComponentMapTest {
 
     @Test
     void testBasicGet() {
-        var map = DataComponentMap.builder()
+        var map = DataComponentMap.patchBuilder()
                 .set(ItemComponent.CUSTOM_MODEL_DATA, 1)
                 .remove(ItemComponent.CUSTOM_NAME)
                 .build();
@@ -27,12 +27,12 @@ public class DataComponentMapTest {
 
     @Test
     void testPatchedGet() {
-        var prototype = DataComponentMap.builder()
+        var prototype = DataComponentMap.patchBuilder()
                 .set(ItemComponent.ITEM_NAME, Component.text("Hello"))
                 .set(ItemComponent.CUSTOM_MODEL_DATA, 55)
                 .set(ItemComponent.CUSTOM_NAME, Component.text("World"))
                 .build();
-        var map = DataComponentMap.builder()
+        var map = DataComponentMap.patchBuilder()
                 .set(ItemComponent.CUSTOM_MODEL_DATA, 1)
                 .remove(ItemComponent.CUSTOM_NAME)
                 .build();
@@ -56,7 +56,7 @@ public class DataComponentMapTest {
 
     @Test
     void testDiffEmpty() {
-        var prototype = DataComponentMap.builder().set(ItemComponent.CUSTOM_MODEL_DATA, 1).build();
+        var prototype = DataComponentMap.patchBuilder().set(ItemComponent.CUSTOM_MODEL_DATA, 1).build();
         var map = DataComponentMap.EMPTY;
         var diff = DataComponentMap.diff(prototype, map);
 
@@ -65,8 +65,8 @@ public class DataComponentMapTest {
 
     @Test
     void testDiffCompleteDifference() {
-        var prototype = DataComponentMap.builder().set(ItemComponent.CUSTOM_MODEL_DATA, 1).build();
-        var map = DataComponentMap.builder().set(ItemComponent.CUSTOM_NAME, Component.text("Hello")).build();
+        var prototype = DataComponentMap.patchBuilder().set(ItemComponent.CUSTOM_MODEL_DATA, 1).build();
+        var map = DataComponentMap.patchBuilder().set(ItemComponent.CUSTOM_NAME, Component.text("Hello")).build();
         var diff = DataComponentMap.diff(prototype, map);
 
         assertNull(diff.get(ItemComponent.CUSTOM_MODEL_DATA));

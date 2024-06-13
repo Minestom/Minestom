@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,12 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
-    }
-
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -80,15 +75,13 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
                 .waterFogColor(0x50533)
                 .build();
 
-        private final NamespaceID namespace;
         private float temperature = 0.25f;
         private float downfall = 0.8f;
         private BiomeEffects effects = DEFAULT_EFFECTS;
         private Precipitation precipitation = Precipitation.RAIN;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
-        Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -123,7 +116,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(namespace, temperature, downfall, effects, precipitation, temperatureModifier, null);
+            return new BiomeImpl(temperature, downfall, effects, precipitation, temperatureModifier, null);
         }
     }
 }

@@ -11,7 +11,11 @@ public record ConditionalEffect<E extends Enchantment.Effect>(
 ) implements Enchantment.Effect {
 
     public static <E extends Enchantment.Effect> @NotNull BinaryTagSerializer<ConditionalEffect<E>> nbtType(@NotNull BinaryTagSerializer<E> effectType) {
-        return null; //todo
+        return BinaryTagSerializer.object(
+                "effect", effectType, ConditionalEffect::effect,
+                "requirements", DataPredicate.NBT_TYPE.optional(), ConditionalEffect::requirements,
+                ConditionalEffect::new
+        );
     }
 
 }

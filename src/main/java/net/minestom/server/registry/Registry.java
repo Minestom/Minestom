@@ -26,6 +26,7 @@ import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -178,54 +179,6 @@ public final class Registry {
 
         public int toId(@NotNull String namespace) {
             return get(namespace).id();
-        }
-
-        public Collection<T> values() {
-            return namespaces.values();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Container<?> container)) return false;
-            return resource == container.resource;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(resource);
-        }
-
-        public interface Loader<T extends ProtocolObject> {
-            T get(String namespace, Properties properties);
-        }
-    }
-
-    @ApiStatus.Internal
-    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
-        var entries = Registry.load(resource);
-        Map<String, T> namespaces = new HashMap<>(entries.size());
-        for (var entry : entries.entrySet()) {
-            final String namespace = entry.getKey();
-            final Properties properties = Properties.fromMap(entry.getValue());
-            final T value = loader.get(namespace, properties);
-            namespaces.put(value.name(), value);
-        }
-        return new DynamicContainer<>(resource, namespaces);
-    }
-
-    @ApiStatus.Internal
-    public record DynamicContainer<T>(Resource resource, Map<String, T> namespaces) {
-        public DynamicContainer {
-            namespaces = Map.copyOf(namespaces);
-        }
-
-        public T get(@NotNull String namespace) {
-            return namespaces.get(namespace);
-        }
-
-        public T getSafe(@NotNull String namespace) {
-            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
         }
 
         public Collection<T> values() {
@@ -634,7 +587,8 @@ public final class Registry {
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
-                        builder.set(component, component.read(tag));
+                        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process());
+                        builder.set(component, component.read(context, tag));
                     }
                     this.prototype = builder.build();
                 } catch (IOException e) {

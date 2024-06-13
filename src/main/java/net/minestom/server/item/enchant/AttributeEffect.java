@@ -11,7 +11,18 @@ public record AttributeEffect(
         @NotNull Attribute attribute,
         @NotNull LevelBasedValue amount,
         @NotNull AttributeOperation operation
-) implements Enchantment.Effect {
+) implements Enchantment.Effect, LocationEffect {
 
-    public static final BinaryTagSerializer<AttributeEffect> NBT_TYPE = null; //todo
+    public static final BinaryTagSerializer<AttributeEffect> NBT_TYPE = BinaryTagSerializer.object(
+            "id", BinaryTagSerializer.STRING.map(NamespaceID::from, NamespaceID::asString), AttributeEffect::id,
+            "attribute", Attribute.NBT_TYPE, AttributeEffect::attribute,
+            "amount", LevelBasedValue.NBT_TYPE, AttributeEffect::amount,
+            "operation", AttributeOperation.NBT_TYPE, AttributeEffect::operation,
+            AttributeEffect::new
+    );
+
+    @Override
+    public @NotNull BinaryTagSerializer<AttributeEffect> nbtType() {
+        return NBT_TYPE;
+    }
 }
