@@ -37,8 +37,10 @@ public class LightingChunk extends DynamicChunk {
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
     private int[] occlusionMap;
-    final CachedPacket lightCache = new CachedPacket(this::createLightPacket);
-    private LightData lightData;
+    final CachedPacket partialLightCache = new CachedPacket(this::createLightPacket);
+    final CachedPacket fullLightCache = new CachedPacket(this::createLightPacket);
+    private LightData partialLightData;
+    private LightData fullLightData;
 
     private int highestBlock;
     private boolean freezeInvalidation = false;
@@ -86,9 +88,11 @@ public class LightingChunk extends DynamicChunk {
     );
 
     public void invalidate() {
-        this.lightCache.invalidate();
+        this.partialLightCache.invalidate();
+        this.fullLightCache.invalidate();
         this.chunkCache.invalidate();
-        this.lightData = null;
+        this.partialLightData = null;
+        this.fullLightData = null;
     }
 
     public LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
@@ -160,13 +164,14 @@ public class LightingChunk extends DynamicChunk {
         if (doneInit && !freezeInvalidation) {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
-            this.lightCache.invalidate();
+            this.partialLightCache.invalidate();
+            this.fullLightCache.invalidate();
         }
     }
 
     public void sendLighting() {
         if (!isLoaded()) return;
-        sendPacketToViewers(lightCache);
+        sendPacketToViewers(partialLightCache);
     }
 
     @Override
@@ -235,11 +240,18 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    protected LightData createLightData() {
+    protected LightData createLightData(boolean requiredFullChunk) {
         packetGenerationLock.lock();
-        if (lightData != null) {
-            packetGenerationLock.unlock();
-            return lightData;
+        if (requiredFullChunk) {
+            if (fullLightData != null) {
+                packetGenerationLock.unlock();
+                return fullLightData;
+            }
+        } else {
+            if (partialLightData != null) {
+                packetGenerationLock.unlock();
+                return partialLightData;
+            }
         }
 
         BitSet skyMask = new BitSet();
@@ -271,14 +283,14 @@ public class LightingChunk extends DynamicChunk {
             if (section.blockLight().requiresUpdate()) {
                 relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
                 wasUpdatedBlock = true;
-            } else if (section.blockLight().requiresSend()) {
+            } else if (requiredFullChunk || section.blockLight().requiresSend()) {
                 wasUpdatedBlock = true;
             }
 
             if (section.skyLight().requiresUpdate()) {
                 relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
                 wasUpdatedSky = true;
-            } else if (section.skyLight().requiresSend()) {
+            } else if (requiredFullChunk || section.skyLight().requiresSend()) {
                 wasUpdatedSky = true;
             }
 
@@ -308,13 +320,19 @@ public class LightingChunk extends DynamicChunk {
             }
         }
 
-        this.lightData = new LightData(skyMask, blockMask,
+        LightData lightData = new LightData(skyMask, blockMask,
                 emptySkyMask, emptyBlockMask,
                 skyLights, blockLights);
 
+        if (requiredFullChunk) {
+            this.fullLightData = lightData;
+        } else {
+            this.partialLightData = lightData;
+        }
+
         packetGenerationLock.unlock();
 
-        return this.lightData;
+        return lightData;
     }
 
     @Override
