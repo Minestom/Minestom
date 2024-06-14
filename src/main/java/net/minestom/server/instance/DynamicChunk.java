@@ -264,15 +264,15 @@ public class DynamicChunk extends Chunk {
 
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, data, entries),
-                createLightData()
+                createLightData(true)
         );
     }
 
     @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
-    protected LightData createLightData() {
+    protected LightData createLightData(boolean requiredFullChunk) {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();
