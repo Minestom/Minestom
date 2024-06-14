@@ -44,7 +44,9 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
     }
 
     /**
-     * Gets the food eating time in ticks.
+     * Gets the food eating time.
+     * <p>
+     * This is by default {@link Player#getDefaultEatingTime()}.
      *
      * @return the eating time
      */
@@ -55,7 +57,7 @@ public class PlayerPreEatEvent implements ItemEvent, PlayerInstanceEvent, Cancel
     /**
      * Changes the food eating time.
      *
-     * @param eatingTime the new eating time in ticks
+     * @param eatingTime the new eating time
      */
     public void setEatingTime(long eatingTime) {
         this.eatingTime = eatingTime;

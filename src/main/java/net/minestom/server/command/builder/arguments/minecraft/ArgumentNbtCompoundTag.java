@@ -1,21 +1,22 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.IOException;
+import java.io.StringReader;
 
 /**
- * Argument used to retrieve a {@link CompoundBinaryTag} if you need key-value data.
+ * Argument used to retrieve a {@link NBTCompound} if you need key-value data.
  * <p>
  * Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}}
  */
-public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
+public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     public static final int INVALID_NBT = 1;
 
@@ -25,15 +26,15 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
 
     @NotNull
     @Override
-    public CompoundBinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public NBTCompound parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
-            BinaryTag nbt = TagStringIO.get().asCompound(input);
+            NBT nbt = new SNBTParser(new StringReader(input)).parse();
 
-            if (!(nbt instanceof CompoundBinaryTag compound))
+            if (!(nbt instanceof NBTCompound))
                 throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
 
-            return compound;
-        } catch (IOException e) {
+            return (NBTCompound) nbt;
+        } catch (NBTException e) {
             throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }
     }

@@ -2,6 +2,7 @@ package net.minestom.server.event.trait;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Be aware that the entity's instance must be non-null.
  */
+@ApiStatus.Internal
+@ApiStatus.Experimental
 public interface EntityInstanceEvent extends EntityEvent, InstanceEvent {
     @Override
     default @NotNull Instance getInstance() {

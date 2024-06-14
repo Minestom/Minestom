@@ -20,7 +20,7 @@ public abstract class SmeltingRecipe extends Recipe {
             float experience,
             int cookingTime
     ) {
-        super(RecipeType.SMELTING, recipeId);
+        super(Type.SMELTING, recipeId);
         this.group = group;
         this.category = category;
         this.result = result;

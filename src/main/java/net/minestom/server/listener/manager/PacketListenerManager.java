@@ -4,7 +4,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
-import net.minestom.server.listener.common.*;
+import net.minestom.server.listener.common.KeepAliveListener;
+import net.minestom.server.listener.common.PluginMessageListener;
+import net.minestom.server.listener.common.ResourcePackListener;
+import net.minestom.server.listener.common.SettingsListener;
 import net.minestom.server.listener.preplay.ConfigListener;
 import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
@@ -13,7 +16,6 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
-import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
@@ -49,16 +51,13 @@ public final class PacketListenerManager {
         setListener(ConnectionState.LOGIN, ClientEncryptionResponsePacket.class, LoginListener::loginEncryptionResponseListener);
         setListener(ConnectionState.LOGIN, ClientLoginPluginResponsePacket.class, LoginListener::loginPluginResponseListener);
         setListener(ConnectionState.LOGIN, ClientLoginAcknowledgedPacket.class, LoginListener::loginAckListener);
-        setListener(ConnectionState.LOGIN, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
 
         setConfigurationListener(ClientSettingsPacket.class, SettingsListener::listener);
         setConfigurationListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         setConfigurationListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setConfigurationListener(ClientPongPacket.class, (packet, player) -> {/* empty */});
         setConfigurationListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
-        setConfigurationListener(ClientSelectKnownPacksPacket.class, ConfigListener::selectKnownPacks);
         setConfigurationListener(ClientFinishConfigurationPacket.class, ConfigListener::finishConfigListener);
-        setListener(ConnectionState.CONFIGURATION, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
 
         setPlayListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setPlayListener(ClientCommandChatPacket.class, ChatMessageListener::commandChatListener);
@@ -96,8 +95,6 @@ public final class PacketListenerManager {
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
         setPlayListener(ClientPingRequestPacket.class, PlayPingListener::requestListener);
-        setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
-        setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
     }
 
     /**

@@ -1,6 +1,5 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
@@ -14,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent {
     private final Player player;
     private @NotNull Block block;
-    private final BlockVec blockPosition;
+    private final Point blockPosition;
 
-    public PlayerFinishDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition) {
+    public PlayerFinishDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition) {
         this.player = player;
         this.block = block;
         this.blockPosition = blockPosition;
@@ -52,11 +51,9 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
      *
      * @return the block position
      */
-    @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public @NotNull Point getBlockPosition() {
         return blockPosition;
     }
-
     @Override
     public @NotNull Player getPlayer() {
         return player;

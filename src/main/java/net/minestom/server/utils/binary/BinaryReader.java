@@ -1,6 +1,5 @@
 package net.minestom.server.utils.binary;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.coordinate.Point;
@@ -9,6 +8,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 
 import java.io.InputStream;
 import java.nio.BufferUnderflowException;
@@ -187,7 +187,7 @@ public class BinaryReader extends InputStream {
     }
 
     public ItemStack readItemStack() {
-        return buffer.read(ItemStack.NETWORK_TYPE);
+        return buffer.read(ITEM);
     }
 
     public Component readComponent(int maxLength) {
@@ -263,7 +263,7 @@ public class BinaryReader extends InputStream {
         return buffer.readableBytes();
     }
 
-    public BinaryTag readTag() {
+    public NBT readTag() {
         return buffer.read(NBT);
     }
 

@@ -28,14 +28,8 @@ public @interface EnvTest {
         @Override
         public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
             invocation.proceed();
-            Env env = null;
-            for (Object arg : invocationContext.getArguments()) {
-                if (arg instanceof Env) {
-                    env = (Env) arg;
-                    break;
-                }
-            }
-            if (env instanceof EnvImpl envImpl) envImpl.cleanup();
+            EnvImpl env = (EnvImpl) invocationContext.getArguments().get(0);
+            env.cleanup();
         }
     }
 

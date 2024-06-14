@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.MathUtils;
+import net.minestom.server.item.StackingRule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -21,31 +21,32 @@ public interface TransactionType {
      */
     TransactionType ADD = (inventory, itemStack, slotPredicate, start, end, step) -> {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
+        final StackingRule stackingRule = StackingRule.get();
         // Check filled slot (not air)
         for (int i = start; i < end; i += step) {
             ItemStack inventoryItem = inventory.getItemStack(i);
             if (inventoryItem.isAir()) {
                 continue;
             }
-            if (itemStack.isSimilar(inventoryItem)) {
-                final int itemAmount = inventoryItem.amount();
-                final int maxSize = inventoryItem.maxStackSize();
+            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
+                final int itemAmount = stackingRule.getAmount(inventoryItem);
+                final int maxSize = stackingRule.getMaxSize(inventoryItem);
                 if (itemAmount >= maxSize) continue;
                 if (!slotPredicate.test(i, inventoryItem)) {
                     // Cancelled transaction
                     continue;
                 }
 
-                final int itemStackAmount = itemStack.amount();
+                final int itemStackAmount = stackingRule.getAmount(itemStack);
                 final int totalAmount = itemStackAmount + itemAmount;
-                if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) {
+                if (!stackingRule.canApply(itemStack, totalAmount)) {
                     // Slot cannot accept the whole item, reduce amount to 'itemStack'
-                    itemChangesMap.put(i, inventoryItem.withAmount(maxSize));
-                    itemStack = itemStack.withAmount(totalAmount - maxSize);
+                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, maxSize));
+                    itemStack = stackingRule.apply(itemStack, totalAmount - maxSize);
                 } else {
                     // Slot can accept the whole item
-                    itemChangesMap.put(i, inventoryItem.withAmount(totalAmount));
-                    itemStack = ItemStack.AIR;
+                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));
+                    itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
             }
@@ -60,7 +61,7 @@ public interface TransactionType {
             }
             // Fill the slot
             itemChangesMap.put(i, itemStack);
-            itemStack = ItemStack.AIR;
+            itemStack = stackingRule.apply(itemStack, 0);
             break;
         }
         return Pair.of(itemStack, itemChangesMap);
@@ -72,26 +73,27 @@ public interface TransactionType {
      */
     TransactionType TAKE = (inventory, itemStack, slotPredicate, start, end, step) -> {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
+        final StackingRule stackingRule = StackingRule.get();
         for (int i = start; i < end; i += step) {
             final ItemStack inventoryItem = inventory.getItemStack(i);
             if (inventoryItem.isAir()) continue;
-            if (itemStack.isSimilar(inventoryItem)) {
+            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
                 if (!slotPredicate.test(i, inventoryItem)) {
                     // Cancelled transaction
                     continue;
                 }
 
-                final int itemAmount = inventoryItem.amount();
-                final int itemStackAmount = itemStack.amount();
+                final int itemAmount = stackingRule.getAmount(inventoryItem);
+                final int itemStackAmount = stackingRule.getAmount(itemStack);
                 if (itemStackAmount < itemAmount) {
-                    itemChangesMap.put(i, inventoryItem.withAmount(itemAmount - itemStackAmount));
-                    itemStack = ItemStack.AIR;
+                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, itemAmount - itemStackAmount));
+                    itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
-                itemChangesMap.put(i, ItemStack.AIR);
-                itemStack = itemStack.withAmount(itemStackAmount - itemAmount);
-                if (itemStack.amount() == 0) {
-                    itemStack = ItemStack.AIR;
+                itemChangesMap.put(i, stackingRule.apply(inventoryItem, 0));
+                itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
+                if (stackingRule.getAmount(itemStack) == 0) {
+                    itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
             }

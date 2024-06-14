@@ -24,7 +24,7 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public void setSpawnPosition(Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
+        super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 
     @NotNull

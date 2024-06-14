@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredShapelessCraftingRecipe shapeless(@NotNull ShapelessRecipe shapelessRecipe) {
-        return new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(shapelessRecipe.id(),
+        return new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(shapelessRecipe.getRecipeId(),
                 shapelessRecipe.getGroup(),
                 shapelessRecipe.getCategory(),
                 shapelessRecipe.getIngredients(),
@@ -14,7 +14,7 @@ final class RecipeConversion {
     }
 
     static @NotNull DeclareRecipesPacket.DeclaredShapedCraftingRecipe shaped(@NotNull ShapedRecipe shapedRecipe) {
-        return new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(shapedRecipe.id(),
+        return new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(shapedRecipe.getRecipeId(),
                 shapedRecipe.getGroup(),
                 shapedRecipe.getCategory(),
                 shapedRecipe.getWidth(),
@@ -26,7 +26,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredSmeltingRecipe smelting(@NotNull SmeltingRecipe smeltingRecipe) {
         return  new DeclareRecipesPacket.DeclaredSmeltingRecipe(
-                smeltingRecipe.id(),
+                smeltingRecipe.getRecipeId(),
                 smeltingRecipe.getGroup(),
                 smeltingRecipe.getCategory(),
                 smeltingRecipe.getIngredient(),
@@ -37,7 +37,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredBlastingRecipe blasting(@NotNull BlastingRecipe blastingRecipe) {
         return new DeclareRecipesPacket.DeclaredBlastingRecipe(
-                blastingRecipe.id(),
+                blastingRecipe.getRecipeId(),
                 blastingRecipe.getGroup(),
                 blastingRecipe.getCategory(),
                 blastingRecipe.getIngredient(),
@@ -48,7 +48,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredSmokingRecipe smoking(@NotNull SmokingRecipe smokingRecipe) {
         return new DeclareRecipesPacket.DeclaredSmokingRecipe(
-                smokingRecipe.id(),
+                smokingRecipe.getRecipeId(),
                 smokingRecipe.getGroup(),
                 smokingRecipe.getCategory(),
                 smokingRecipe.getIngredient(),
@@ -59,7 +59,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredCampfireCookingRecipe campfire(@NotNull CampfireCookingRecipe campfireCookingRecipe) {
         return new DeclareRecipesPacket.DeclaredCampfireCookingRecipe(
-                campfireCookingRecipe.id(),
+                campfireCookingRecipe.getRecipeId(),
                 campfireCookingRecipe.getGroup(),
                 campfireCookingRecipe.getCategory(),
                 campfireCookingRecipe.getIngredient(),
@@ -70,7 +70,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredStonecutterRecipe stonecutter(@NotNull StonecutterRecipe stonecuttingRecipe) {
         return new DeclareRecipesPacket.DeclaredStonecutterRecipe(
-                stonecuttingRecipe.id(),
+                stonecuttingRecipe.getRecipeId(),
                 stonecuttingRecipe.getGroup(),
                 stonecuttingRecipe.getIngredient(),
                 stonecuttingRecipe.getResult());
@@ -78,7 +78,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredSmithingTransformRecipe smithingTransform(@NotNull SmithingTransformRecipe smithingTransformRecipe) {
         return  new DeclareRecipesPacket.DeclaredSmithingTransformRecipe(
-                smithingTransformRecipe.id(),
+                smithingTransformRecipe.getRecipeId(),
                 smithingTransformRecipe.getTemplate(),
                 smithingTransformRecipe.getBaseIngredient(),
                 smithingTransformRecipe.getAdditionIngredient(),
@@ -87,7 +87,7 @@ final class RecipeConversion {
 
     static @NotNull DeclareRecipesPacket.DeclaredSmithingTrimRecipe smithingTrim(@NotNull SmithingTrimRecipe smithingTrimRecipe) {
         return  new DeclareRecipesPacket.DeclaredSmithingTrimRecipe(
-                smithingTrimRecipe.id(),
+                smithingTrimRecipe.getRecipeId(),
                 smithingTrimRecipe.getTemplate(),
                 smithingTrimRecipe.getBaseIngredient(),
                 smithingTrimRecipe.getAdditionIngredient());

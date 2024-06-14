@@ -10,11 +10,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.TickUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -111,12 +111,15 @@ public class AdventurePacketConvertor {
      * @return the sound packet
      */
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
-        final NamespaceID soundName = NamespaceID.from(sound.name().asString());
-        SoundEvent minestomSound = SoundEvent.fromNamespaceId(soundName);
-        if (minestomSound == null) minestomSound = SoundEvent.of(soundName, null);
-
+        final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         final long seed = sound.seed().orElse(ThreadLocalRandom.current().nextLong());
-        return new SoundEffectPacket(minestomSound, sound.source(), (int) x, (int) y, (int) z, sound.volume(), sound.pitch(), seed);
+        if (minestomSound == null) {
+            return new SoundEffectPacket(sound.name().asString(), null, sound.source(),
+                    new Vec(x, y, z), sound.volume(), sound.pitch(), seed);
+        } else {
+            return new SoundEffectPacket(minestomSound, null, sound.source(),
+                    new Vec(x, y, z), sound.volume(), sound.pitch(), seed);
+        }
     }
 
     /**
@@ -133,12 +136,14 @@ public class AdventurePacketConvertor {
         if (!(emitter instanceof Entity entity))
             throw new IllegalArgumentException("you can only call this method with entities");
 
-        final NamespaceID soundName = NamespaceID.from(sound.name().asString());
-        SoundEvent minestomSound = SoundEvent.fromNamespaceId(soundName);
-        if (minestomSound == null) minestomSound = SoundEvent.of(soundName, null);
-
+        final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         final long seed = sound.seed().orElse(ThreadLocalRandom.current().nextLong());
-        return new EntitySoundEffectPacket(minestomSound, sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), seed);
+
+        if (minestomSound != null) {
+            return new EntitySoundEffectPacket(minestomSound, null, sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), seed);
+        } else {
+            return new EntitySoundEffectPacket(sound.name().asString(), null, sound.source(), entity.getEntityId(), sound.volume(), sound.pitch(), seed);
+        }
     }
 
     /**

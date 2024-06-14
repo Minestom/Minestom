@@ -42,6 +42,7 @@ public final class ServerFlag {
     public static final @NotNull String AUTH_URL = System.getProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined");
 
     // World
+    public static final @Nullable String STACKING_RULE = System.getProperty("minestom.stacking-rule");
     public static final int WORLD_BORDER_SIZE = Integer.getInteger("minestom.world-border-size", 29999984);
 
     // Maps
@@ -49,8 +50,6 @@ public final class ServerFlag {
     public static final @Nullable String MAP_RGB_REDUCTION = System.getProperty("minestom.map.rgbreduction"); // Only used if rgb mapping is "approximate"
 
     // Experimental/Unstable
-    public static final boolean REGISTRY_LATE_REGISTER = Boolean.getBoolean("minestom.registry.late-register");
-    public static final boolean REGISTRY_UNSAFE_OPS = Boolean.getBoolean("minestom.registry.unsafe-ops");
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = Boolean.getBoolean("minestom.event.multiple-parents");
 
     private ServerFlag() {}

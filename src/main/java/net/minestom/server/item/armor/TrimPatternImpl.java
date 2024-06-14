@@ -1,43 +1,41 @@
 package net.minestom.server.item.armor;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.text.Component;
-import net.minestom.server.item.Material;
+import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-record TrimPatternImpl(
-        @NotNull NamespaceID assetId,
-        @NotNull Material template,
-        @NotNull Component description,
-        boolean isDecal,
-        @Nullable Registry.TrimPatternEntry registry
-) implements TrimPattern {
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 
-    static final BinaryTagSerializer<TrimPattern> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> {
-                throw new UnsupportedOperationException("TrimMaterial is read-only");
-            },
-            trimPattern -> CompoundBinaryTag.builder()
-                    .putString("asset_id", trimPattern.assetId().asString())
-                    .put("template_item", Material.NBT_TYPE.write(trimPattern.template()))
-                    .put("description", BinaryTagSerializer.NBT_COMPONENT.write(trimPattern.description()))
-                    .putBoolean("decal", trimPattern.isDecal())
-                    .build()
-    );
+record TrimPatternImpl(Registry.TrimPatternEntry registry, int id) implements TrimPattern {
+    static final AtomicInteger i = new AtomicInteger();
+    private static final Registry.Container<TrimPattern> CONTAINER;
 
-    TrimPatternImpl {
-        Check.notNull(assetId, "missing asset id");
-        Check.notNull(template, "missing template");
-        Check.notNull(description, "missing description");
+    static {
+        CONTAINER = Registry.createStaticContainer(Registry.Resource.TRIM_PATTERNS,
+                (namespace, properties) -> new TrimPatternImpl(Registry.trimPattern(namespace, properties)));
     }
 
-    TrimPatternImpl(@NotNull Registry.TrimPatternEntry registry) {
-        this(registry.assetID(), registry.template(),
-                registry.description(), registry.decal(), registry);
+    public TrimPatternImpl(Registry.TrimPatternEntry registry) {
+        this(registry, i.getAndIncrement());
     }
+
+    public static TrimPattern get(String namespace) {
+        return CONTAINER.get(namespace);
+    }
+
+    static Collection<TrimPattern> values() {
+        return CONTAINER.values();
+    }
+
+    public NBTCompound asNBT() {
+        return NBT.Compound(nbt -> {
+            nbt.setString("asset_id", assetID().asString());
+            nbt.setString("template_item", template().namespace().asString());
+            nbt.set("description", NbtComponentSerializer.nbt().serialize(description()));
+            nbt.setByte("decal", (byte) (decal() ? 1 : 0));
+        });
+    }
+
 }

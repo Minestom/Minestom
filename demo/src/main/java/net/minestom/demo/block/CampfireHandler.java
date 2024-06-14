@@ -1,9 +1,5 @@
 package net.minestom.demo.block;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.BinaryTagTypes;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -14,6 +10,10 @@ import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,17 +22,16 @@ import java.util.List;
 public class CampfireHandler implements BlockHandler {
 
     public static final Tag<List<ItemStack>> ITEMS = Tag.View(new TagSerializer<>() {
-        private final Tag<BinaryTag> internal = Tag.NBT("Items");
+        private final Tag<NBT> internal = Tag.NBT("Items");
 
         @Override
         public @Nullable List<ItemStack> read(@NotNull TagReadable reader) {
-            ListBinaryTag item = (ListBinaryTag) reader.getTag(internal);
+            NBTList<NBTCompound> item = (NBTList<NBTCompound>) reader.getTag(internal);
             if (item == null)
                 return null;
             List<ItemStack> result = new ArrayList<>();
-            item.forEach(childTag -> {
-                CompoundBinaryTag nbtCompound = (CompoundBinaryTag) childTag;
-                int amount = nbtCompound.getByte("Count");
+            item.forEach(nbtCompound -> {
+                int amount = nbtCompound.getAsByte("Count");
                 String id = nbtCompound.getString("id");
                 Material material = Material.fromNamespaceId(id);
                 result.add(ItemStack.of(material, amount));
@@ -46,14 +45,14 @@ public class CampfireHandler implements BlockHandler {
                 writer.removeTag(internal);
                 return;
             }
-            writer.setTag(internal, ListBinaryTag.listBinaryTag(
-                    BinaryTagTypes.COMPOUND,
+            writer.setTag(internal, NBT.List(
+                    NBTType.TAG_Compound,
                     value.stream()
-                            .map(item -> (BinaryTag) CompoundBinaryTag.builder()
-                                    .putByte("Count", (byte) item.amount())
-                                    .putByte("Slot", (byte) 1)
-                                    .putString("id", item.material().name())
-                                    .build())
+                            .map(item -> NBT.Compound(nbt -> {
+                                nbt.setByte("Count", (byte) item.amount());
+                                nbt.setByte("Slot", (byte) 1);
+                                nbt.setString("id", item.material().name());
+                            }))
                             .toList()
             ));
         }

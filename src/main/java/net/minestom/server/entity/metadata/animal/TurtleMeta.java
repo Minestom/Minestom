@@ -19,7 +19,7 @@ public class TurtleMeta extends AnimalMeta {
     }
 
     public void setBlockPosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
+        super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 
     public boolean isHasEgg() {
@@ -43,7 +43,7 @@ public class TurtleMeta extends AnimalMeta {
     }
 
     public void setTravelPosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.BlockPosition(value));
+        super.metadata.setIndex(OFFSET + 3, Metadata.Position(value));
     }
 
     public boolean isGoingHome() {

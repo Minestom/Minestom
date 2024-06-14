@@ -1,16 +1,18 @@
 package net.minestom.server.instance;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -21,9 +23,9 @@ public class BlockClientNbtTest {
     public void basic() {
         assertNull(BlockUtils.extractClientNbt(Block.STONE));
         assertNull(BlockUtils.extractClientNbt(Block.GRASS_BLOCK));
-        assertEquals(CompoundBinaryTag.empty(), BlockUtils.extractClientNbt(Block.CHEST));
+        assertEquals(NBTCompound.EMPTY, BlockUtils.extractClientNbt(Block.CHEST));
 
-        var nbt = CompoundBinaryTag.builder().putString("test", "test").build();
+        var nbt = NBT.Compound(Map.of("test", NBT.String("test")));
         assertEquals(nbt, BlockUtils.extractClientNbt(Block.CHEST.withNbt(nbt)));
     }
 
@@ -41,11 +43,11 @@ public class BlockClientNbtTest {
             }
         };
 
-        var nbt = CompoundBinaryTag.builder().putString("test", "test").build();
+        var nbt = NBT.Compound(Map.of("test", NBT.String("test")));
         assertNull(BlockUtils.extractClientNbt(Block.STONE.withNbt(nbt).withHandler(handler)));
         assertEquals(nbt, BlockUtils.extractClientNbt(Block.CHEST.withNbt(nbt).withHandler(handler)));
         assertEquals(nbt, BlockUtils.extractClientNbt(Block.CHEST
-                .withNbt(CompoundBinaryTag.builder().putString("test", "test").putString("test2", "test2").build())
+                .withNbt(NBT.Compound(Map.of("test", NBT.String("test"), "test2", NBT.String("test"))))
                 .withHandler(handler)));
     }
 }

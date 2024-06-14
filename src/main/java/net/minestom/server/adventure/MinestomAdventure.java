@@ -1,17 +1,20 @@
 package net.minestom.server.adventure;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
+import java.io.StringReader;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.util.Codec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiFunction;
+
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 /**
  * Adventure related constants, etc.
@@ -20,8 +23,8 @@ public final class MinestomAdventure {
     /**
      * A codec to convert between strings and NBT.
      */
-    public static final Codec<CompoundBinaryTag, String, IOException, IOException> NBT_CODEC
-            = Codec.codec(TagStringIO.get()::asCompound, TagStringIO.get()::asString);
+    public static final Codec<NBT, String, NBTException, RuntimeException> NBT_CODEC
+            = Codec.codec(encoded -> new SNBTParser(new StringReader(encoded)).parse(), NBT::toSNBT);
 
     /**
      * If components should be automatically translated in outgoing packets.

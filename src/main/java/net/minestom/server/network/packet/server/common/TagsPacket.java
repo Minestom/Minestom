@@ -35,13 +35,9 @@ public record TagsPacket(
             final var type = entry.getKey();
             final var tags = entry.getValue();
             writer.write(STRING, type.getIdentifier());
-            if (type.getFunction() == null) {
-                writer.write(VAR_INT, 0);
-                continue;
-            }
             writer.write(VAR_INT, tags.size());
             for (var tag : tags) {
-                writer.write(STRING, tag.name());
+                writer.write(STRING, tag.getName().asString());
                 final var values = tag.getValues();
                 writer.write(VAR_INT, values.size());
                 for (var name : values) {

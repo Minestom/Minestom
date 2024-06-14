@@ -5,9 +5,6 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -17,20 +14,14 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.banner.BannerPattern;
-import net.minestom.server.instance.block.jukebox.JukeboxSong;
-import net.minestom.server.item.armor.TrimMaterial;
-import net.minestom.server.item.armor.TrimPattern;
-import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.thread.Acquirable;
@@ -39,9 +30,8 @@ import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.PropertyUtils;
 import net.minestom.server.utils.collection.MappedCollection;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.DimensionTypeManager;
+import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,24 +48,6 @@ final class ServerProcessImpl implements ServerProcess {
     private static final Boolean SHUTDOWN_ON_SIGNAL = PropertyUtils.getBoolean("minestom.shutdown-on-signal", true);
 
     private final ExceptionManager exception;
-
-    private final DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues;
-    private final DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects;
-    private final DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects;
-    private final DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects;
-
-    private final DynamicRegistry<ChatType> chatType;
-    private final DynamicRegistry<DimensionType> dimensionType;
-    private final DynamicRegistry<Biome> biome;
-    private final DynamicRegistry<DamageType> damageType;
-    private final DynamicRegistry<TrimMaterial> trimMaterial;
-    private final DynamicRegistry<TrimPattern> trimPattern;
-    private final DynamicRegistry<BannerPattern> bannerPattern;
-    private final DynamicRegistry<WolfMeta.Variant> wolfVariant;
-    private final DynamicRegistry<Enchantment> enchantment;
-    private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
-    private final DynamicRegistry<JukeboxSong> jukeboxSong;
-
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
     private final PacketProcessor packetProcessor;
@@ -87,10 +59,12 @@ final class ServerProcessImpl implements ServerProcess {
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
     private final BenchmarkManager benchmark;
+    private final DimensionTypeManager dimension;
+    private final BiomeManager biome;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
     private final TagManager tag;
-
+    private final TrimManager trim;
     private final Server server;
 
     private final ThreadDispatcher<Chunk> dispatcher;
@@ -101,30 +75,10 @@ final class ServerProcessImpl implements ServerProcess {
 
     public ServerProcessImpl() throws IOException {
         this.exception = new ExceptionManager();
-
-        // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
-
-        this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
-        this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
-        this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
-        this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
-
-        this.chatType = ChatType.createDefaultRegistry();
-        this.dimensionType = DimensionType.createDefaultRegistry();
-        this.biome = Biome.createDefaultRegistry();
-        this.damageType = DamageType.createDefaultRegistry();
-        this.trimMaterial = TrimMaterial.createDefaultRegistry();
-        this.trimPattern = TrimPattern.createDefaultRegistry();
-        this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.wolfVariant = WolfMeta.Variant.createDefaultRegistry();
-        this.enchantment = Enchantment.createDefaultRegistry(this);
-        this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
-        this.jukeboxSong = JukeboxSong.createDefaultRegistry();
-
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
         this.packetProcessor = new PacketProcessor(packetListener);
-        this.instance = new InstanceManager(this);
+        this.instance = new InstanceManager();
         this.block = new BlockManager();
         this.command = new CommandManager();
         this.recipe = new RecipeManager();
@@ -132,79 +86,16 @@ final class ServerProcessImpl implements ServerProcess {
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
         this.benchmark = new BenchmarkManager();
+        this.dimension = new DimensionTypeManager();
+        this.biome = new BiomeManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
-
+        this.trim = new TrimManager();
         this.server = new Server(packetProcessor);
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
-    }
-
-    @Override
-    public @NotNull ExceptionManager exception() {
-        return exception;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<DamageType> damageType() {
-        return damageType;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<TrimMaterial> trimMaterial() {
-        return trimMaterial;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<TrimPattern> trimPattern() {
-        return trimPattern;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<BannerPattern> bannerPattern() {
-        return bannerPattern;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
-        return wolfVariant;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<Enchantment> enchantment() {
-        return enchantment;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant() {
-        return paintingVariant;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
-        return jukeboxSong;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return enchantmentLevelBasedValues;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
-        return enchantmentValueEffects;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
-        return enchantmentEntityEffects;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
-        return enchantmentLocationEffects;
     }
 
     @Override
@@ -253,6 +144,16 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public @NotNull DimensionTypeManager dimension() {
+        return dimension;
+    }
+
+    @Override
+    public @NotNull BiomeManager biome() {
+        return biome;
+    }
+
+    @Override
     public @NotNull AdvancementManager advancement() {
         return advancement;
     }
@@ -268,18 +169,13 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<ChatType> chatType() {
-        return chatType;
+    public @NotNull TrimManager trim() {
+        return trim;
     }
 
     @Override
-    public @NotNull DynamicRegistry<DimensionType> dimensionType() {
-        return dimensionType;
-    }
-
-    @Override
-    public @NotNull DynamicRegistry<Biome> biome() {
-        return biome;
+    public @NotNull ExceptionManager exception() {
+        return exception;
     }
 
     @Override

@@ -1,19 +1,19 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
-                                    @Nullable CompoundBinaryTag data) implements ServerPacket.Play {
+                                    @Nullable NBTCompound data) implements ServerPacket.Play {
     public BlockEntityDataPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BLOCK_POSITION), reader.read(VAR_INT), (CompoundBinaryTag) reader.read(NBT));
+        this(reader.read(BLOCK_POSITION), reader.read(VAR_INT), (NBTCompound) reader.read(NBT));
     }
 
     @Override

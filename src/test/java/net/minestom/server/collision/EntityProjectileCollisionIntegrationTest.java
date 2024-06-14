@@ -1,7 +1,6 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.ServerFlag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -31,7 +30,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void blockShootAndBlockRemoval(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
+        instance.getWorldBorder().setDiameter(1000.0);
 
         final Entity shooter = new Entity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -75,7 +74,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void entityShoot(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
+        instance.getWorldBorder().setDiameter(1000.0);
 
         final Entity shooter = new Entity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();
@@ -123,7 +122,7 @@ public class EntityProjectileCollisionIntegrationTest {
     @Test
     public void entitySelfShoot(Env env) {
         final Instance instance = env.createFlatInstance();
-        instance.setWorldBorder(WorldBorder.DEFAULT_BORDER.withDiameter(1000));
+        instance.getWorldBorder().setDiameter(1000.0);
 
         final LivingEntity shooter = new LivingEntity(EntityType.SKELETON);
         shooter.setInstance(instance, new Pos(0, 40, 0)).join();

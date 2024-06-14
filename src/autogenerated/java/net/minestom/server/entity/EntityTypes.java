@@ -9,8 +9,6 @@ interface EntityTypes {
 
     EntityType AREA_EFFECT_CLOUD = EntityTypeImpl.get("minecraft:area_effect_cloud");
 
-    EntityType ARMADILLO = EntityTypeImpl.get("minecraft:armadillo");
-
     EntityType ARMOR_STAND = EntityTypeImpl.get("minecraft:armor_stand");
 
     EntityType ARROW = EntityTypeImpl.get("minecraft:arrow");
@@ -27,11 +25,7 @@ interface EntityTypes {
 
     EntityType BOAT = EntityTypeImpl.get("minecraft:boat");
 
-    EntityType BOGGED = EntityTypeImpl.get("minecraft:bogged");
-
     EntityType BREEZE = EntityTypeImpl.get("minecraft:breeze");
-
-    EntityType BREEZE_WIND_CHARGE = EntityTypeImpl.get("minecraft:breeze_wind_charge");
 
     EntityType CAMEL = EntityTypeImpl.get("minecraft:camel");
 
@@ -126,8 +120,6 @@ interface EntityTypes {
     EntityType ITEM_DISPLAY = EntityTypeImpl.get("minecraft:item_display");
 
     EntityType ITEM_FRAME = EntityTypeImpl.get("minecraft:item_frame");
-
-    EntityType OMINOUS_ITEM_SPAWNER = EntityTypeImpl.get("minecraft:ominous_item_spawner");
 
     EntityType FIREBALL = EntityTypeImpl.get("minecraft:fireball");
 

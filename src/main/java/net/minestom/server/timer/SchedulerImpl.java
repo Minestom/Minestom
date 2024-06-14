@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,6 +22,7 @@ final class SchedulerImpl implements Scheduler {
         thread.setDaemon(true);
         return thread;
     });
+    private static final ForkJoinPool EXECUTOR = ForkJoinPool.commonPool();
 
     private final MpscUnboundedArrayQueue<TaskImpl> tasksToExecute = new MpscUnboundedArrayQueue<>(64);
     private final MpscUnboundedArrayQueue<TaskImpl> tickEndTasksToExecute = new MpscUnboundedArrayQueue<>(64);
@@ -66,7 +68,10 @@ final class SchedulerImpl implements Scheduler {
         if (!targetQueue.isEmpty()) {
             targetQueue.drain(task -> {
                 if (!task.isAlive()) return;
-                handleTask(task);
+                switch (task.executionType()) {
+                    case TICK_START, TICK_END, SYNC -> handleTask(task);
+                    case ASYNC -> EXECUTOR.submit(() -> handleTask(task));
+                }
             });
         }
     }
@@ -89,8 +94,14 @@ final class SchedulerImpl implements Scheduler {
         // Prevent the task from being executed in the current thread
         // By either adding the task to the execution queue or submitting it to the pool
         switch (task.executionType()) {
-            case TICK_START -> tasksToExecute.offer(task);
+            case TICK_START, SYNC -> tasksToExecute.offer(task);
             case TICK_END -> tickEndTasksToExecute.offer(task);
+            case ASYNC -> EXECUTOR.submit(() -> {
+                if (!task.isAlive()) {
+                    return;
+                }
+                handleTask(task);
+            });
         }
     }
 
@@ -110,7 +121,7 @@ final class SchedulerImpl implements Scheduler {
             synchronized (this) {
                 final int target = tickState + tickSchedule.tick();
                 var targetTaskQueue = switch (task.executionType()) {
-                    case TICK_START -> tickStartTaskQueue;
+                    case TICK_START, SYNC, ASYNC -> tickStartTaskQueue;
                     case TICK_END -> tickEndTaskQueue;
                 };
                 targetTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);

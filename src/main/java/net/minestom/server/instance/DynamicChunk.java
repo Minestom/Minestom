@@ -1,17 +1,15 @@
 package net.minestom.server.instance;
 
+import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.heightmap.Heightmap;
-import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
-import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
+import net.minestom.server.instance.heightmap.*;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -19,17 +17,17 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +56,7 @@ public class DynamicChunk extends Chunk {
 
     private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
+    private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -71,10 +69,9 @@ public class DynamicChunk extends Chunk {
     public void setBlock(int x, int y, int z, @NotNull Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
-        final DimensionType instanceDim = instance.getCachedDimensionType();
-        if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
+        if(y >= instance.getDimensionType().getMaxY() || y < instance.getDimensionType().getMinY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
-                    instanceDim.minY(), instanceDim.maxY(), y);
+                    instance.getDimensionType().getMinY(), instance.getDimensionType().getMaxY(), y);
             return;
         }
         assertLock();
@@ -82,6 +79,12 @@ public class DynamicChunk extends Chunk {
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
 
+        // Update pathfinder
+        if (columnarSpace != null) {
+            final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
+            final var blockDescription = PFBlock.get(block);
+            columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
+        }
         Section section = getSectionAt(y);
 
         int sectionRelativeX = toSectionRelativeCoordinate(x);
@@ -131,12 +134,12 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
+    public void setBiome(int x, int y, int z, @NotNull Biome biome) {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome.namespace());
+        var id = BIOME_MANAGER.getId(biome);
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
 
         section.biomePalette().set(
@@ -166,13 +169,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void loadHeightmapsFromNBT(CompoundBinaryTag heightmapsNBT) {
-        if (heightmapsNBT.get(motionBlockingHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
-            motionBlockingHeightmap().loadFrom(array.value());
+    public void loadHeightmapsFromNBT(NBTCompound heightmapsNBT) {
+        if (heightmapsNBT.contains(motionBlockingHeightmap().NBTName())) {
+            motionBlockingHeightmap().loadFrom(heightmapsNBT.getLongArray(motionBlockingHeightmap().NBTName()));
         }
 
-        if (heightmapsNBT.get(worldSurfaceHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
-            worldSurfaceHeightmap().loadFrom(array.value());
+        if (heightmapsNBT.contains(worldSurfaceHeightmap().NBTName())) {
+            worldSurfaceHeightmap().loadFrom(heightmapsNBT.getLongArray(worldSurfaceHeightmap().NBTName()));
         }
     }
 
@@ -211,14 +214,17 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
+    public @NotNull Biome getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
 
-        DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
-        Check.notNull(biome, "Biome with id {0} is not registered", id);
+        Biome biome = BIOME_MANAGER.getById(id);
+        if (biome == null) {
+            throw new IllegalStateException("Biome with id " + id + " is not registered");
+        }
+
         return biome;
     }
 
@@ -253,7 +259,7 @@ public class DynamicChunk extends Chunk {
 
     private @NotNull ChunkDataPacket createChunkPacket() {
         final byte[] data;
-        final CompoundBinaryTag heightmapsNBT;
+        final NBTCompound heightmapsNBT;
         synchronized (this) {
             heightmapsNBT = getHeightmapNBT();
 
@@ -264,15 +270,15 @@ public class DynamicChunk extends Chunk {
 
         return new ChunkDataPacket(chunkX, chunkZ,
                 new ChunkData(heightmapsNBT, data, entries),
-                createLightData(true)
+                createLightData()
         );
     }
 
     @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData());
     }
 
-    protected LightData createLightData(boolean requiredFullChunk) {
+    protected LightData createLightData() {
         BitSet skyMask = new BitSet();
         BitSet blockMask = new BitSet();
         BitSet emptySkyMask = new BitSet();
@@ -305,12 +311,12 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    protected CompoundBinaryTag getHeightmapNBT() {
+    private NBTCompound getHeightmapNBT() {
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        return CompoundBinaryTag.builder()
-                .putLongArray(motionBlocking.NBTName(), motionBlocking.getNBT())
-                .putLongArray(worldSurface.NBTName(), worldSurface.getNBT())
-                .build();
+        return NBT.Compound(Map.of(
+                motionBlocking.NBTName(), motionBlocking.getNBT(),
+                worldSurface.NBTName(), worldSurface.getNBT()
+        ));
     }
 
     private void calculateFullHeightmap() {

@@ -1,6 +1,5 @@
 package net.minestom.server.tag;
 
-import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.collection.AutoIncrementMap;
@@ -8,6 +7,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +37,7 @@ public class Tag<T> {
 
     final int index;
     private final String key;
-    final Serializers.Entry<T, BinaryTag> entry;
+    final Serializers.Entry<T, NBT> entry;
     private final Supplier<T> defaultValue;
 
     final Function<?, ?> readComparator;
@@ -44,7 +48,7 @@ public class Tag<T> {
 
     Tag(int index, String key,
         Function<?, ?> readComparator,
-        Serializers.Entry<T, BinaryTag> entry,
+        Serializers.Entry<T, NBT> entry,
         Supplier<T> defaultValue, PathEntry[] path, UnaryOperator<T> copy, int listScope) {
         assert index == INDEX_MAP.get(key);
         this.index = index;
@@ -57,8 +61,8 @@ public class Tag<T> {
         this.listScope = listScope;
     }
 
-    static <T, N extends BinaryTag> Tag<T> tag(@NotNull String key, @NotNull Serializers.Entry<T, N> entry) {
-        return new Tag<>(INDEX_MAP.get(key), key, entry.reader(), (Serializers.Entry<T, BinaryTag>) entry,
+    static <T, N extends NBT> Tag<T> tag(@NotNull String key, @NotNull Serializers.Entry<T, N> entry) {
+        return new Tag<>(INDEX_MAP.get(key), key, entry.reader(), (Serializers.Entry<T, NBT>) entry,
                 null, null, null, 0);
     }
 
@@ -94,11 +98,11 @@ public class Tag<T> {
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
         var entry = this.entry;
-        final Function<BinaryTag, R> readFunction = entry.reader().andThen(t -> {
+        final Function<NBT, R> readFunction = entry.reader().andThen(t -> {
             if (t == null) return null;
             return readMap.apply(t);
         });
-        final Function<R, BinaryTag> writeFunction = writeMap.andThen(entry.writer());
+        final Function<R, NBT> writeFunction = writeMap.andThen(entry.writer());
         return new Tag<>(index, key, readMap,
                 new Serializers.Entry<>(entry.nbtType(), readFunction, writeFunction),
                 // Default value
@@ -116,18 +120,18 @@ public class Tag<T> {
         var entry = this.entry;
         var readFunction = entry.reader();
         var writeFunction = entry.writer();
-        var listEntry = new Serializers.Entry<List<T>, ListBinaryTag>(
-                BinaryTagTypes.LIST,
+        var listEntry = new Serializers.Entry<List<T>, NBTList<?>>(
+                NBTType.TAG_List,
                 read -> {
-                    if (read.size() == 0) return List.of();
-                    return read.stream().map(readFunction).toList();
+                    if (read.isEmpty()) return List.of();
+                    return read.asListView().stream().map(readFunction).toList();
                 },
                 write -> {
                     if (write.isEmpty())
-                        return ListBinaryTag.empty();
-                    final List<BinaryTag> list = write.stream().map(writeFunction).toList();
-                    final BinaryTagType<?> type = list.get(0).type();
-                    return ListBinaryTag.listBinaryTag(type, list);
+                        return NBT.List(NBTType.TAG_String); // String is the default type for lists
+                    final List<NBT> list = write.stream().map(writeFunction).toList();
+                    final NBTType<?> type = list.get(0).getID();
+                    return NBT.List(type, list);
                 });
         UnaryOperator<List<T>> co = this.copy != null ? ts -> {
             final int size = ts.size();
@@ -161,8 +165,8 @@ public class Tag<T> {
         return new Tag<>(index, key, readComparator, entry, defaultValue, pathEntries, copy, listScope);
     }
 
-    public @Nullable T read(@NotNull CompoundBinaryTag nbt) {
-        final BinaryTag readable = isView() ? nbt : nbt.get(key);
+    public @Nullable T read(@NotNull NBTCompoundLike nbt) {
+        final NBT readable = isView() ? nbt.toCompound() : nbt.get(key);
         final T result;
         try {
             if (readable == null || (result = entry.read(readable)) == null)
@@ -173,20 +177,18 @@ public class Tag<T> {
         }
     }
 
-    public void write(@NotNull CompoundBinaryTag.Builder nbtCompound, @Nullable T value) {
+    public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
         if (value != null) {
-            final BinaryTag nbt = entry.write(value);
-            if (isView()) nbtCompound.put((CompoundBinaryTag) nbt);
-            else nbtCompound.put(key, nbt);
+            final NBT nbt = entry.write(value);
+            if (isView()) nbtCompound.copyFrom((NBTCompoundLike) nbt);
+            else nbtCompound.set(key, nbt);
         } else {
-            if (isView()) {
-                // Adventure compound builder doesn't currently have a clear method.
-                nbtCompound.build().keySet().forEach(nbtCompound::remove);
-            } else nbtCompound.remove(key);
+            if (isView()) nbtCompound.clear();
+            else nbtCompound.remove(key);
         }
     }
 
-    public void writeUnsafe(@NotNull CompoundBinaryTag.Builder nbtCompound, @Nullable Object value) {
+    public void writeUnsafe(@NotNull MutableNBTCompound nbtCompound, @Nullable Object value) {
         //noinspection unchecked
         write(nbtCompound, (T) value);
     }
@@ -263,6 +265,7 @@ public class Tag<T> {
         return tag(key, Serializers.STRING);
     }
 
+    @ApiStatus.Experimental
     public static @NotNull Tag<UUID> UUID(@NotNull String key) {
         return tag(key, Serializers.UUID);
     }
@@ -276,11 +279,11 @@ public class Tag<T> {
     }
 
     /**
-     * Creates a flexible tag able to read and write any {@link BinaryTag} objects.
+     * Creates a flexible tag able to read and write any {@link NBT} objects.
      * <p>
      * Specialized tags are recommended if the type is known as conversion will be required both way (read and write).
      */
-    public static @NotNull Tag<BinaryTag> NBT(@NotNull String key) {
+    public static @NotNull Tag<NBT> NBT(@NotNull String key) {
         return tag(key, Serializers.NBT_ENTRY);
     }
 

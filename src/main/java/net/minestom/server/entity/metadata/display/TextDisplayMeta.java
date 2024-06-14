@@ -43,8 +43,8 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
     }
 
-    public byte getTextOpacity() {
-        return super.metadata.getIndex(OFFSET + 3, (byte) -1);
+    public int getTextOpacity() {
+        return super.metadata.getIndex(OFFSET + 3, -1);
     }
 
     public void setTextOpacity(byte value) {

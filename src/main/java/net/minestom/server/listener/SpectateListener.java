@@ -19,7 +19,7 @@ public class SpectateListener {
         }
 
         final UUID targetUuid = packet.target();
-        final Entity target = player.getInstance().getEntityByUuid(targetUuid);
+        final Entity target = Entity.getEntity(targetUuid);
 
         // Check if the target is valid
         if (target == null || target == player) {

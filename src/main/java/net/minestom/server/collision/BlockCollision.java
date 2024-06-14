@@ -43,7 +43,7 @@ final class BlockCollision {
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
             final EntityType type = entity.getEntityType();
-            if (!entity.hasCollision() || type == EntityType.ITEM || type == EntityType.ARROW)
+            if (type == EntityType.ITEM || type == EntityType.ARROW)
                 continue;
             // Marker Armor Stands should not prevent block placement
             if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker())
@@ -90,7 +90,7 @@ final class BlockCollision {
                                              @NotNull Vec velocity, @NotNull Pos entityPosition,
                                              @NotNull Block.Getter getter, boolean singleCollision) {
         // Allocate once and update values
-        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0);
+        SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, null);
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
@@ -114,19 +114,19 @@ final class BlockCollision {
             if (result.collisionX()) {
                 foundCollisionX = true;
                 collisionShapes[0] = finalResult.collidedShape;
-                collidedPoints[0] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
+                collidedPoints[0] = finalResult.collidedPosition;
                 hasCollided = true;
                 if (singleCollision) break;
             } else if (result.collisionZ()) {
                 foundCollisionZ = true;
                 collisionShapes[2] = finalResult.collidedShape;
-                collidedPoints[2] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
+                collidedPoints[2] = finalResult.collidedPosition;
                 hasCollided = true;
                 if (singleCollision) break;
             } else if (result.collisionY()) {
                 foundCollisionY = true;
                 collisionShapes[1] = finalResult.collidedShape;
-                collidedPoints[1] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
+                collidedPoints[1] = finalResult.collidedPosition;
                 hasCollided = true;
                 if (singleCollision) break;
             }
@@ -158,8 +158,7 @@ final class BlockCollision {
                                                 @NotNull SweepResult finalResult) {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
-        // Diagonals are a special case which will work with fast physics
-        if (velocity.length() <= 1 || isDiagonal(velocity)) {
+        if (velocity.length() < 1) {
             fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         } else {
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
@@ -188,19 +187,14 @@ final class BlockCollision {
                 Vec.ZERO, null, null, false, finalResult);
     }
 
-    private static boolean isDiagonal(Vec velocity) {
-        return Math.abs(velocity.x()) == 1 && Math.abs(velocity.z()) == 1;
-    }
-
     private static void slowPhysics(@NotNull BoundingBox boundingBox,
                                     @NotNull Vec velocity, Pos entityPosition,
                                     @NotNull Block.Getter getter,
                                     @NotNull Vec[] allFaces,
                                     @NotNull SweepResult finalResult) {
-        BlockIterator iterator = new BlockIterator();
         // When large moves are done we need to ray-cast to find all blocks that could intersect with the movement
         for (Vec point : allFaces) {
-            iterator.reset(Vec.fromPoint(point.add(entityPosition)), velocity, 0, velocity.length(), false);
+            BlockIterator iterator = new BlockIterator(Vec.fromPoint(point.add(entityPosition)), velocity, 0, velocity.length());
             int timer = -1;
 
             while (iterator.hasNext() && timer != 0) {
@@ -304,7 +298,7 @@ final class BlockCollision {
             // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
             // collision check against the current shape since the below shape isn't tall
             if (belowShape.relativeEnd().y() > 1) {
-                // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
+                // we should always check both shapes, so no short-circuit here, to handle cases where the bounding box
                 // hits the current solid but misses the tall solid
                 return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult) |
                         (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult));

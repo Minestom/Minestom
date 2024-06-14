@@ -1,17 +1,11 @@
 package net.minestom.server.gamedata.tags;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.FluidRegistries;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,14 +19,14 @@ import java.util.function.Function;
  * Represents a group of items, blocks, fluids, entity types or function.
  * Immutable by design
  */
-public final class Tag implements ProtocolObject, Keyed {
+public final class Tag {
     private final NamespaceID name;
     private final Set<NamespaceID> values;
 
     /**
      * Creates a new empty tag. This does not cache the tag.
      */
-    public Tag(@NotNull NamespaceID name) {
+    public Tag(NamespaceID name) {
         this.name = name;
         this.values = new HashSet<>();
     }
@@ -40,7 +34,7 @@ public final class Tag implements ProtocolObject, Keyed {
     /**
      * Creates a new tag with the given values. This does not cache the tag.
      */
-    public Tag(@NotNull NamespaceID name, @NotNull Set<NamespaceID> values) {
+    public Tag(NamespaceID name, Set<NamespaceID> values) {
         this.name = name;
         this.values = new HashSet<>(values);
     }
@@ -51,7 +45,7 @@ public final class Tag implements ProtocolObject, Keyed {
      * @param id the id to check against
      * @return 'true' iif this tag contains the given id
      */
-    public boolean contains(@NotNull NamespaceID id) {
+    public boolean contains(NamespaceID id) {
         return values.contains(id);
     }
 
@@ -60,29 +54,13 @@ public final class Tag implements ProtocolObject, Keyed {
      *
      * @return immutable set of values present in this tag
      */
-    public @NotNull Set<NamespaceID> getValues() {
+    public Set<NamespaceID> getValues() {
         return Collections.unmodifiableSet(values);
-    }
-
-    public @NotNull NamespaceID namespace() {
-        return name;
-    }
-
-    @Contract(pure = true)
-    public @NotNull String name() {
-        return namespace().asString();
-    }
-
-    @Override
-    @Contract(pure = true)
-    public @NotNull Key key() {
-        return namespace();
     }
 
     /**
      * Returns the name of this tag
      */
-    @Deprecated
     public NamespaceID getName() {
         return name;
     }
@@ -93,17 +71,11 @@ public final class Tag implements ProtocolObject, Keyed {
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
                 name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal()),
+                name -> Registries.getFluid(name).ordinal()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal()),
-        SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
-        POTION_EFFECTS("minecraft:sound_event", null, null), // Seems not to be included in server data
-
-        //todo this is cursed. it does not update as the registry changes. Fix later.
-        ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
-                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name)));
+                name -> Registries.getFluid(name).ordinal());
 
         private final static BasicType[] VALUES = values();
         private final String identifier;
@@ -111,8 +83,8 @@ public final class Tag implements ProtocolObject, Keyed {
         private final Function<String, Integer> function;
 
         BasicType(@NotNull String identifier,
-                  @Nullable Registry.Resource resource,
-                  @Nullable Function<String, Integer> function) {
+                  @NotNull Registry.Resource resource,
+                  @NotNull Function<String, Integer> function) {
             this.identifier = identifier;
             this.resource = resource;
             this.function = function;

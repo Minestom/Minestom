@@ -3,38 +3,27 @@ package net.minestom.server.network.packet.server;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ServerPacketIdentifier {
-    private static final AtomicInteger STATUS_ID = new AtomicInteger(0);
-    private static final AtomicInteger LOGIN_ID = new AtomicInteger(0);
-    private static final AtomicInteger CONFIGURATION_ID = new AtomicInteger(0);
     private static final AtomicInteger PLAY_ID = new AtomicInteger(0);
 
-    public static final int STATUS_RESPONSE = nextStatusId();
-    public static final int STATUS_PING_RESPONSE = nextStatusId();
+    public static final int STATUS_RESPONSE = 0x00;
+    public static final int STATUS_PING_RESPONSE = 0x01;
 
-    public static final int LOGIN_DISCONNECT = nextLoginId();
-    public static final int LOGIN_ENCRYPTION_REQUEST = nextLoginId();
-    public static final int LOGIN_SUCCESS = nextLoginId();
-    public static final int LOGIN_SET_COMPRESSION = nextLoginId();
-    public static final int LOGIN_PLUGIN_REQUEST = nextLoginId();
-    public static final int LOGIN_COOKIE_REQUEST = nextLoginId();
+    public static final int LOGIN_DISCONNECT = 0x00;
+    public static final int LOGIN_ENCRYPTION_REQUEST = 0x01;
+    public static final int LOGIN_SUCCESS = 0x02;
+    public static final int LOGIN_SET_COMPRESSION = 0x03;
+    public static final int LOGIN_PLUGIN_REQUEST = 0x04;
 
-    public static final int CONFIGURATION_COOKIE_REQUEST = nextConfigurationId();
-    public static final int CONFIGURATION_PLUGIN_MESSAGE = nextConfigurationId();
-    public static final int CONFIGURATION_DISCONNECT = nextConfigurationId();
-    public static final int CONFIGURATION_FINISH_CONFIGURATION = nextConfigurationId();
-    public static final int CONFIGURATION_KEEP_ALIVE = nextConfigurationId();
-    public static final int CONFIGURATION_PING = nextConfigurationId();
-    public static final int CONFIGURATION_RESET_CHAT = nextConfigurationId();
-    public static final int CONFIGURATION_REGISTRY_DATA = nextConfigurationId();
-    public static final int CONFIGURATION_RESOURCE_PACK_POP = nextConfigurationId();
-    public static final int CONFIGURATION_RESOURCE_PACK_PUSH = nextConfigurationId();
-    public static final int CONFIGURATION_COOKIE_STORE = nextConfigurationId();
-    public static final int CONFIGURATION_TRANSFER = nextConfigurationId();
-    public static final int CONFIGURATION_UPDATE_ENABLED_FEATURES = nextConfigurationId();
-    public static final int CONFIGURATION_TAGS = nextConfigurationId();
-    public static final int CONFIGURATION_SELECT_KNOWN_PACKS = nextConfigurationId();
-    public static final int CONFIGURATION_CUSTOM_REPORT_DETAILS = nextConfigurationId();
-    public static final int CONFIGURATION_SERVER_LINKS = nextConfigurationId();
+    public static final int CONFIGURATION_PLUGIN_MESSAGE = 0x00;
+    public static final int CONFIGURATION_DISCONNECT = 0x01;
+    public static final int CONFIGURATION_FINISH_CONFIGURATION = 0x02;
+    public static final int CONFIGURATION_KEEP_ALIVE = 0x03;
+    public static final int CONFIGURATION_PING = 0x04;
+    public static final int CONFIGURATION_REGISTRY_DATA = 0x05;
+    public static final int CONFIGURATION_RESOURCE_PACK_POP_PACKET = 0x06;
+    public static final int CONFIGURATION_RESOURCE_PACK_PUSH_PACKET = 0x07;
+    public static final int CONFIGURATION_UPDATE_ENABLED_FEATURES = 0x08;
+    public static final int CONFIGURATION_TAGS = 0x09;
 
     public static final int BUNDLE = nextPlayId();
     public static final int SPAWN_ENTITY = nextPlayId();
@@ -58,12 +47,10 @@ public final class ServerPacketIdentifier {
     public static final int WINDOW_ITEMS = nextPlayId();
     public static final int WINDOW_PROPERTY = nextPlayId();
     public static final int SET_SLOT = nextPlayId();
-    public static final int COOKIE_REQUEST = nextPlayId();
     public static final int SET_COOLDOWN = nextPlayId();
     public static final int CUSTOM_CHAT_COMPLETIONS = nextPlayId();
     public static final int PLUGIN_MESSAGE = nextPlayId();
     public static final int DAMAGE_EVENT = nextPlayId();
-    public static final int DEBUG_SAMPLE = nextPlayId();
     public static final int DELETE_CHAT_MESSAGE = nextPlayId();
     public static final int DISCONNECT = nextPlayId();
     public static final int DISGUISED_CHAT = nextPlayId();
@@ -143,7 +130,6 @@ public final class ServerPacketIdentifier {
     public static final int SOUND_EFFECT = nextPlayId();
     public static final int START_CONFIGURATION_PACKET = nextPlayId();
     public static final int STOP_SOUND = nextPlayId();
-    public static final int COOKIE_STORE = nextPlayId();
     public static final int SYSTEM_CHAT = nextPlayId();
     public static final int PLAYER_LIST_HEADER_AND_FOOTER = nextPlayId();
     public static final int NBT_QUERY_RESPONSE = nextPlayId();
@@ -151,27 +137,11 @@ public final class ServerPacketIdentifier {
     public static final int ENTITY_TELEPORT = nextPlayId();
     public static final int TICK_STATE = nextPlayId();
     public static final int TICK_STEP = nextPlayId();
-    public static final int TRANSFER = nextPlayId();
     public static final int ADVANCEMENTS = nextPlayId();
-    public static final int ENTITY_ATTRIBUTES = nextPlayId();
+    public static final int ENTITY_PROPERTIES = nextPlayId();
     public static final int ENTITY_EFFECT = nextPlayId();
     public static final int DECLARE_RECIPES = nextPlayId();
     public static final int TAGS = nextPlayId();
-    public static final int PROJECTILE_POWER = nextPlayId();
-    public static final int CUSTOM_REPORT_DETAILS = nextPlayId();
-    public static final int SERVER_LINKS = nextPlayId();
-
-    private static int nextStatusId() {
-        return STATUS_ID.getAndIncrement();
-    }
-
-    private static int nextLoginId() {
-        return LOGIN_ID.getAndIncrement();
-    }
-
-    private static int nextConfigurationId() {
-        return CONFIGURATION_ID.getAndIncrement();
-    }
 
     private static int nextPlayId() {
         return PLAY_ID.getAndIncrement();

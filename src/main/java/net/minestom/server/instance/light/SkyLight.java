@@ -14,7 +14,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minestom.server.instance.light.LightCompute.*;
 
@@ -25,8 +24,8 @@ final class SkyLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private final AtomicBoolean isValidBorders = new AtomicBoolean(true);
-    private final AtomicBoolean needsSend = new AtomicBoolean(false);
+    private boolean isValidBorders = true;
+    private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
@@ -52,7 +51,7 @@ final class SkyLight implements Light {
 
         if (c instanceof LightingChunk lc) {
             int[] heightmap = lc.getOcclusionMap();
-            int maxY = c.getInstance().getCachedDimensionType().minY() + c.getInstance().getCachedDimensionType().height();
+            int maxY = c.getInstance().getDimensionType().getMinY() + c.getInstance().getDimensionType().getHeight();
             int sectionMaxY = (sectionY + 1) * 16 - 1;
             int sectionMinY = sectionY * 16;
 
@@ -161,7 +160,7 @@ final class SkyLight implements Light {
             this.toUpdateSet = Set.of();
             return this;
         }
-        this.isValidBorders.set(true);
+        this.isValidBorders = true;
 
         // Update single section with base lighting changes
         int queueSize = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE;
@@ -191,10 +190,8 @@ final class SkyLight implements Light {
                     Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
 
                     if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        if (neighborChunk.getSection(neighborPos.blockY()).skyLight() instanceof SkyLight skyLight) {
-                            skyLight.contentPropagation = null;
-                            toUpdate.add(new Vec(neighborChunk.getChunkX(), neighborPos.blockY(), neighborChunk.getChunkZ()));
-                        }
+                        toUpdate.add(new Vec(neighborChunk.getChunkX(), neighborPos.blockY(), neighborChunk.getChunkZ()));
+                        neighborChunk.getSection(neighborPos.blockY()).skyLight().invalidatePropagation();
                     }
                 }
             }
@@ -208,14 +205,12 @@ final class SkyLight implements Light {
 
     @Override
     public void invalidate() {
-        this.needsSend.set(true);
-        this.isValidBorders.set(false);
-        this.contentPropagation = null;
+        invalidatePropagation();
     }
 
     @Override
     public boolean requiresUpdate() {
-        return !isValidBorders.get();
+        return !isValidBorders;
     }
 
     @Override
@@ -223,13 +218,22 @@ final class SkyLight implements Light {
     public void set(byte[] copyArray) {
         this.content = copyArray.clone();
         this.contentPropagation = this.content;
-        this.isValidBorders.set(true);
-        this.needsSend.set(true);
+        this.isValidBorders = true;
+        this.needsSend = true;
     }
 
     @Override
     public boolean requiresSend() {
-        return needsSend.getAndSet(false);
+        boolean res = needsSend;
+        needsSend = false;
+        return res;
+    }
+
+    private void clearCache() {
+        this.contentPropagation = null;
+        isValidBorders = true;
+        needsSend = true;
+        fullyLit = false;
     }
 
     @Override
@@ -243,10 +247,7 @@ final class SkyLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        if (!isValidBorders.get()) {
-            this.toUpdateSet = Set.of();
-            return this;
-        }
+        if (!isValidBorders) clearCache();
 
         Point[] neighbors = Light.getNeighbors(chunk, sectionY);
         Set<Point> toUpdate = new HashSet<>();
@@ -304,6 +305,13 @@ final class SkyLight implements Light {
             lightMax[i] = (byte) (lower | (upper << 4));
         }
         return lightMax;
+    }
+
+    @Override
+    public void invalidatePropagation() {
+        this.isValidBorders = false;
+        this.needsSend = false;
+        this.contentPropagation = null;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -17,23 +16,23 @@ public record ExplosionPacket(double x, double y, double z, float radius,
                               @NotNull BlockInteraction blockInteraction,
                               int smallParticleId, byte @NotNull [] smallParticleData,
                               int largeParticleId, byte @NotNull [] largeParticleData,
-                              @NotNull SoundEvent sound) implements ServerPacket.Play {
-    public static final SoundEvent DEFAULT_SOUND = SoundEvent.ENTITY_GENERIC_EXPLODE;
-
+                              @NotNull String soundName, boolean hasFixedSoundRange, float soundRange) implements ServerPacket.Play {
     private static @NotNull ExplosionPacket fromReader(@NotNull NetworkBuffer reader) {
         double x = reader.read(DOUBLE), y = reader.read(DOUBLE), z = reader.read(DOUBLE);
         float radius = reader.read(FLOAT);
         byte[] records = reader.readBytes(reader.read(VAR_INT) * 3);
         float playerMotionX = reader.read(FLOAT), playerMotionY = reader.read(FLOAT), playerMotionZ = reader.read(FLOAT);
-        BlockInteraction blockInteraction = reader.readEnum(BlockInteraction.class);
+        BlockInteraction blockInteraction = BlockInteraction.values()[reader.read(VAR_INT)];
         int smallParticleId = reader.read(VAR_INT);
         byte[] smallParticleData = readParticleData(reader, Particle.fromId(smallParticleId));
         int largeParticleId = reader.read(VAR_INT);
         byte[] largeParticleData = readParticleData(reader, Particle.fromId(largeParticleId));
-        SoundEvent sound = reader.read(SoundEvent.NETWORK_TYPE);
+        String soundName = reader.read(STRING);
+        boolean hasFixedSoundRange = reader.read(BOOLEAN);
+        float soundRange = hasFixedSoundRange ? reader.read(FLOAT) : 0;
         return new ExplosionPacket(x, y, z, radius, records, playerMotionX, playerMotionY, playerMotionZ,
                 blockInteraction, smallParticleId, smallParticleData, largeParticleId, largeParticleData,
-                sound);
+                soundName, hasFixedSoundRange, soundRange);
     }
 
     private static byte @NotNull [] readParticleData(@NotNull NetworkBuffer reader, Particle particle) {
@@ -54,7 +53,7 @@ public record ExplosionPacket(double x, double y, double z, float radius,
             return writer.toByteArray();
         }
         else if (particle.equals(Particle.ITEM)) {
-            writer.writeItemStack(reader.read(ItemStack.NETWORK_TYPE));
+            writer.writeItemStack(reader.read(ITEM));
         }
         else if (particle.equals(Particle.DUST_COLOR_TRANSITION)) {
             for (int i = 0; i < 7; i++) writer.writeFloat(reader.read(FLOAT));
@@ -75,13 +74,13 @@ public record ExplosionPacket(double x, double y, double z, float radius,
         this(x, y, z, radius, records, playerMotionX, playerMotionY, playerMotionZ,
                 BlockInteraction.DESTROY, Particle.EXPLOSION.id(), new byte[] {},
                 Particle.EXPLOSION_EMITTER.id(), new byte[] {},
-                DEFAULT_SOUND);
+                SoundEvent.ENTITY_GENERIC_EXPLODE.name(), false, 0);
     }
 
     private ExplosionPacket(@NotNull ExplosionPacket packet) {
         this(packet.x, packet.y, packet.z, packet.radius, packet.records, packet.playerMotionX, packet.playerMotionY, packet.playerMotionZ,
                 packet.blockInteraction, packet.smallParticleId, packet.smallParticleData, packet.largeParticleId, packet.largeParticleData,
-                packet.sound);
+                packet.soundName, packet.hasFixedSoundRange, packet.soundRange);
     }
 
     @Override
@@ -100,7 +99,9 @@ public record ExplosionPacket(double x, double y, double z, float radius,
         writer.write(RAW_BYTES, smallParticleData);
         writer.write(VAR_INT, largeParticleId);
         writer.write(RAW_BYTES, largeParticleData);
-        writer.write(SoundEvent.NETWORK_TYPE, sound);
+        writer.write(STRING, soundName);
+        writer.write(BOOLEAN, hasFixedSoundRange);
+        if (hasFixedSoundRange) writer.write(FLOAT, soundRange);
     }
 
     @Override

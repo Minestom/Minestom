@@ -24,7 +24,7 @@ class ItemContainingMeta extends EntityMeta {
     }
 
     public void setItem(@NotNull ItemStack item) {
-        super.metadata.setIndex(OFFSET, Metadata.ItemStack(item));
+        super.metadata.setIndex(OFFSET, Metadata.Slot(item));
     }
 
 }

@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.condition;
 
+
+import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.entity.Player;
@@ -8,47 +10,19 @@ import net.minestom.server.entity.Player;
  * Common command conditions
  */
 public class Conditions {
-    /**
-     * Will only execute if all command conditions succeed.
-     */
-    public static CommandCondition all(CommandCondition... conditions) {
-        return (sender, commandString) -> {
-            for (CommandCondition condition : conditions) {
-                if (!condition.canUse(sender, commandString)) {
-                    return false;
-                }
-            }
-
-            return true;
-        };
-    }
-
-    /**
-     * Will execute if one or more command conditions succeed.
-     */
-    public static CommandCondition any(CommandCondition... conditions) {
-        return (sender, commandString) -> {
-            for (CommandCondition condition : conditions) {
-                if (condition.canUse(sender, commandString)) {
-                    return true;
-                }
-            }
-
-            return false;
-        };
-    }
-
-    /**
-     * Will succeed if the command sender is a player.
-     */
     public static boolean playerOnly(CommandSender sender, String commandString) {
-        return sender instanceof Player;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(Component.text("The command is only available for players"));
+            return false;
+        }
+        return true;
     }
 
-    /**
-     * Will succeed if the command sender is the server console.
-     */
     public static boolean consoleOnly(CommandSender sender, String commandString) {
-        return sender instanceof ConsoleSender;
+        if (!(sender instanceof ConsoleSender)) {
+            sender.sendMessage(Component.text("The command is only available from the console"));
+            return false;
+        }
+        return true;
     }
 }

@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
-import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityMetaDataPacket(int entityId,
                                    @NotNull Map<Integer, Metadata.Entry<?>> entries) implements ServerPacket.Play, ServerPacket.ComponentHolding {
@@ -73,10 +73,12 @@ public record EntityMetaDataPacket(int entityId,
 
             if (v instanceof Component c) {
                 var translated = operator.apply(c);
-                entries.put(key, t == Metadata.TYPE_OPT_CHAT ? Metadata.OptChat(translated) : Metadata.Chat(translated));
+                entries.put(key, t == Metadata.TYPE_OPTCHAT ? Metadata.OptChat(translated) : Metadata.Chat(translated));
             } else {
                 entries.put(key, value);
             }
+
+            entries.put(key, v instanceof Component c ? Metadata.Chat(operator.apply(c)) : value);
         });
 
         return new EntityMetaDataPacket(this.entityId, entries);

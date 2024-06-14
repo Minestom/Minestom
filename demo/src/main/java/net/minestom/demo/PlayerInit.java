@@ -1,6 +1,5 @@
 package net.minestom.demo;
 
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
@@ -27,31 +26,20 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.BlockPredicates;
-import net.minestom.server.item.component.EnchantmentList;
-import net.minestom.server.item.component.PotionContents;
-import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.item.metadata.BundleMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
-import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
-import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.potion.CustomPotionEffect;
-import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -112,48 +100,19 @@ public class PlayerInit {
                 player.setPermissionLevel(4);
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
-                        .set(ItemComponent.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
-                        .set(ItemComponent.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
+                        .meta(itemMetaBuilder ->
+                                itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
+                                        .canDestroy(Set.of(Block.DIAMOND_ORE)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
 
-                player.sendPacket(new CustomReportDetailsPacket(Map.of(
-                        "hello", "world"
-                )));
-
-                player.sendPacket(new ServerLinksPacket(
-                        new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, "https://minestom.net"),
-                        new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.BUG_REPORT, "https://minestom.net"),
-                        new ServerLinksPacket.Entry(Component.text("Hello world!"), "https://minestom.net")
-                ));
-
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-                        .set(ItemComponent.BUNDLE_CONTENTS, List.of(
-                                ItemStack.of(Material.DIAMOND, 5),
-                                ItemStack.of(Material.RABBIT_FOOT, 5)
-                        ))
+                        .meta(BundleMeta.class, bundleMetaBuilder -> {
+                            bundleMetaBuilder.addItem(ItemStack.of(Material.DIAMOND, 5));
+                            bundleMetaBuilder.addItem(ItemStack.of(Material.RABBIT_FOOT, 5));
+                        })
                         .build();
                 player.getInventory().addItemStack(bundle);
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
-                                Enchantment.SHARPNESS, 10
-                        )))
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
-                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
-                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
-                                        45 * 20, false, true, true, null))
-                        )))
-                        .build());
-
 
                 if (event.isFirstSpawn()) {
                     Notification notification = new Notification(
@@ -162,15 +121,12 @@ public class PlayerInit {
                             Material.IRON_SWORD
                     );
                     NotificationCenter.send(notification, event.getPlayer());
-
-                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
                 }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerPacketEvent.class, event -> {
-
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
@@ -179,9 +135,9 @@ public class PlayerInit {
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
 
-                if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
+                if ("false" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
                     block = block.withProperty("waterlogged", "true");
-                } else if ("true".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
+                } else if ("true" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
                     block = block.withProperty("waterlogged", "false");
                 } else return;
 
@@ -203,7 +159,7 @@ public class PlayerInit {
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.setGenerator(unit -> {
             unit.modifier().fillHeight(0, 40, Block.STONE);
 
@@ -248,7 +204,7 @@ public class PlayerInit {
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            if (LAST_TICK.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
+            if (MinecraftServer.getConnectionManager().getOnlinePlayerCount() != 0)
                 return;
 
             long ramUsage = benchmarkManager.getUsedMemory();
@@ -262,6 +218,6 @@ public class PlayerInit {
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+        }).repeat(10, TimeUnit.SERVER_TICK); //.schedule();
     }
 }

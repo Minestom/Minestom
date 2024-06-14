@@ -1,8 +1,6 @@
 package net.minestom.server.network;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -240,8 +237,8 @@ public class NetworkBufferTest {
 
     @Test
     public void nbt() {
-        assertBufferType(NetworkBuffer.NBT, intBinaryTag(5));
-        assertBufferType(NetworkBuffer.NBT, CompoundBinaryTag.from(Map.of("key", intBinaryTag(5))));
+        assertBufferType(NetworkBuffer.NBT, org.jglrxavpok.hephaistos.nbt.NBT.Int(5));
+        assertBufferType(NetworkBuffer.NBT, org.jglrxavpok.hephaistos.nbt.NBT.Compound(Map.of("key", org.jglrxavpok.hephaistos.nbt.NBT.Int(5))));
     }
 
     @Test
@@ -257,9 +254,9 @@ public class NetworkBufferTest {
 
     @Test
     public void item() {
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.AIR);
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.STONE, 1));
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(ItemComponent.DAMAGE, 1));
+        assertBufferType(ITEM, ItemStack.AIR);
+        assertBufferType(ITEM, ItemStack.of(Material.STONE, 1));
+        assertBufferType(ITEM, ItemStack.of(Material.DIAMOND_AXE, 1).withMeta(builder -> builder.damage(1)));
     }
 
     @Test

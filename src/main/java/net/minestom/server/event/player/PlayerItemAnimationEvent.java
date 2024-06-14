@@ -6,7 +6,7 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Used when a {@link Player} starts the animation of an item.
+ * Used when a {@link Player} finish the animation of an item.
  *
  * @see ItemAnimationType
  */
@@ -51,11 +51,7 @@ public class PlayerItemAnimationEvent implements PlayerInstanceEvent, Cancellabl
         CROSSBOW,
         TRIDENT,
         SHIELD,
-        SPYGLASS,
-        HORN,
-        BRUSH,
-        EAT,
-        OTHER
+        EAT
     }
 
     @Override

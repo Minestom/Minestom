@@ -1,26 +1,21 @@
 package net.minestom.server.item;
 
-import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
 
-    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(MaterialImpl::getId, Material::id);
-    BinaryTagSerializer<Material> NBT_TYPE = BinaryTagSerializer.STRING.map(MaterialImpl::getSafe, Material::name);
-
     /**
-     * Returns the raw registry data for the material.
+     * Returns the material registry.
+     *
+     * @return the material registry
      */
     @Contract(pure = true)
     @NotNull Registry.MaterialEntry registry();
@@ -35,24 +30,32 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         return registry().id();
     }
 
+    default int maxStackSize() {
+        return registry().maxStackSize();
+    }
+
+    default boolean isFood() {
+        return registry().isFood();
+    }
+
     default boolean isBlock() {
         return registry().block() != null;
     }
 
-    default @UnknownNullability Block block() {
+    default Block block() {
         return registry().block();
-    }
-
-    default @NotNull DataComponentMap prototype() {
-        return registry().prototype();
     }
 
     default boolean isArmor() {
         return registry().isArmor();
     }
 
-    default int maxStackSize() {
-        return prototype().get(ItemComponent.MAX_STACK_SIZE, 64);
+    default boolean hasState() {
+        if (this == BOW || this == TRIDENT || this == CROSSBOW || this == SHIELD) {
+            return true;
+        } else {
+            return isFood();
+        }
     }
 
     static @NotNull Collection<@NotNull Material> values() {

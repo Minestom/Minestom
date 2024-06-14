@@ -2120,8 +2120,4 @@ interface Blocks {
     Block CRAFTER = BlockImpl.get("minecraft:crafter");
 
     Block TRIAL_SPAWNER = BlockImpl.get("minecraft:trial_spawner");
-
-    Block VAULT = BlockImpl.get("minecraft:vault");
-
-    Block HEAVY_CORE = BlockImpl.get("minecraft:heavy_core");
 }

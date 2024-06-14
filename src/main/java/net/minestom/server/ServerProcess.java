@@ -10,17 +10,19 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.item.armor.TrimManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.world.DimensionTypeManager;
+import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +30,7 @@ import java.net.SocketAddress;
 
 @ApiStatus.Experimental
 @ApiStatus.NonExtendable
-public interface ServerProcess extends Registries, Snapshotable {
+public interface ServerProcess extends Snapshotable {
     /**
      * Handles incoming connections/players.
      */
@@ -75,6 +77,16 @@ public interface ServerProcess extends Registries, Snapshotable {
     @NotNull BenchmarkManager benchmark();
 
     /**
+     * Handles registered dimensions.
+     */
+    @NotNull DimensionTypeManager dimension();
+
+    /**
+     * Handles registered biomes.
+     */
+    @NotNull BiomeManager biome();
+
+    /**
      * Handles registered advancements.
      */
     @NotNull AdvancementManager advancement();
@@ -88,6 +100,8 @@ public interface ServerProcess extends Registries, Snapshotable {
      * Handles registry tags.
      */
     @NotNull TagManager tag();
+
+    @NotNull TrimManager trim();
 
     /**
      * Handles all thrown exceptions from the server.

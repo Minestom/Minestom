@@ -1,8 +1,8 @@
 package net.minestom.server.permission;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,10 +35,10 @@ public class TestPermissions {
         };
 
         permission1 = new Permission("perm.name",
-                CompoundBinaryTag.builder()
-                        .putString("name", "Minestom")
-                        .putInt("amount", 5)
-                        .build()
+                NBT.Compound(nbt -> {
+                    nbt.setString("name", "Minestom");
+                    nbt.setInt("amount", 5);
+                })
         );
 
         permission2 = new Permission("perm.name2");

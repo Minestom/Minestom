@@ -1,16 +1,13 @@
 package net.minestom.server.entity.damage;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,9 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * This class can be extended if you need to include custom fields and/or methods.
  */
 public class Damage implements Taggable {
-    private static final DynamicRegistry<DamageType> DAMAGE_TYPE_REGISTRY = MinecraftServer.getDamageTypeRegistry();
 
-    private final DynamicRegistry.Key<DamageType> typeKey;
     private final DamageType type;
     private final Entity source;
     private final Entity attacker;
@@ -38,10 +33,8 @@ public class Damage implements Taggable {
      * @param type the type of this damage
      * @param amount amount of damage
      */
-    public Damage(@NotNull DynamicRegistry.Key<DamageType> type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
-        this.typeKey = type;
-        this.type = DAMAGE_TYPE_REGISTRY.get(type);
-        Check.argCondition(this.type == null, "Damage type is not registered: {0}", type);
+    public Damage(@NotNull DamageType type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
+        this.type = type;
         this.source = source;
         this.attacker = attacker;
         this.sourcePosition = sourcePosition;
@@ -55,8 +48,8 @@ public class Damage implements Taggable {
      *
      * @return the damage type
      */
-    public @NotNull DynamicRegistry.Key<DamageType> getType() {
-        return typeKey;
+    public @NotNull DamageType getType() {
+        return type;
     }
 
     /**
@@ -135,7 +128,7 @@ public class Damage implements Taggable {
         return new EntityDamage(entity, amount);
     }
 
-    public static @NotNull PositionalDamage fromPosition(@NotNull DynamicRegistry.Key<DamageType> type, @NotNull Point sourcePosition, float amount) {
+    public static @NotNull PositionalDamage fromPosition(@NotNull DamageType type, @NotNull Point sourcePosition, float amount) {
         return new PositionalDamage(type, sourcePosition, amount);
     }
 
@@ -167,7 +160,7 @@ public class Damage implements Taggable {
     }
 
     protected SoundEvent getPlayerSound(@NotNull Player player) {
-        if (DamageType.ON_FIRE.equals(typeKey)) return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
+        if (type == DamageType.ON_FIRE) return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
         return SoundEvent.ENTITY_PLAYER_HURT;
     }
 

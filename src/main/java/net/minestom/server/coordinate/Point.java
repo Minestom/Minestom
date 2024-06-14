@@ -12,7 +12,7 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * Represents a 3D point.
  */
-public sealed interface Point permits Vec, Pos, BlockVec {
+public sealed interface Point permits Vec, Pos {
 
     /**
      * Gets the X coordinate.

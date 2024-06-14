@@ -1,12 +1,15 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.generator.Generator;
-import net.minestom.server.world.biome.Biome;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.world.biomes.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
 public class BiomeIntegrationTest {
-
-    private static int PLAINS_ID, BADLANDS_ID;
+    private static Biome PLAINS;
+    private static int PLAINS_ID;
 
     @BeforeAll
     public static void prepareTest(Env env) {
-        PLAINS_ID = env.process().biome().getId(Biome.PLAINS);
-        BADLANDS_ID = env.process().biome().getId(Biome.BADLANDS);
+        PLAINS = MinecraftServer.getBiomeManager().getByName(NamespaceID.from("minecraft:plains"));
+        PLAINS_ID = MinecraftServer.getBiomeManager().getId(PLAINS);
     }
 
     @Test
@@ -33,17 +36,16 @@ public class BiomeIntegrationTest {
         Section[] sections = new Section[sectionCount];
         Arrays.setAll(sections, i -> new Section());
         var chunkUnits = GeneratorImpl.chunk(minSection, maxSection, List.of(sections), chunkX, chunkZ);
-        Generator generator = unit -> {
-            var modifier = unit.modifier();
-            modifier.setBiome(48, -16, -32, Biome.BADLANDS);
-            modifier.setBiome(48 + 8, 0, -32, Biome.BADLANDS);
+        Generator generator = chunk -> {
+            var modifier = chunk.modifier();
+            modifier.setBiome(48, 0, -32, PLAINS);
+            modifier.setBiome(48 + 8, 0, -32, PLAINS);
         };
         generator.generate(chunkUnits);
 
-        // Reminder because I (matt) forgot: biome palettes are 4x4x4 sections, so x=2 is really x=8 in the chunk.
-        assertEquals(BADLANDS_ID, sections[0].biomePalette().get(0, 0, 0));
-        assertEquals(PLAINS_ID, sections[1].biomePalette().get(1, 0, 0));
-        assertEquals(BADLANDS_ID, sections[1].biomePalette().get(2, 0, 0));
+        assertEquals(PLAINS_ID, sections[0].biomePalette().get(0, 0, 0));
+        assertEquals(0, sections[0].biomePalette().get(1, 0, 0));
+        assertEquals(PLAINS_ID, sections[0].biomePalette().get(2, 0, 0));
     }
 
     @Test
@@ -58,7 +60,7 @@ public class BiomeIntegrationTest {
         var chunkUnits = GeneratorImpl.chunk(minSection, maxSection, List.of(sections), chunkX, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
-            modifier.fillBiome(Biome.PLAINS);
+            modifier.fillBiome(PLAINS);
         };
         generator.generate(chunkUnits);
         for (var section : sections) {

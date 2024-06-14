@@ -1,23 +1,23 @@
 package net.minestom.server.permission;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Objects;
 
 /**
  * Representation of a permission granted to a {@link CommandSender}.
  * Each permission has a string representation used as an identifier, and an optional
- * {@link CompoundBinaryTag} used to store additional data.
+ * {@link NBTCompound} used to store additional data.
  * <p>
  * The class is immutable.
  */
 public class Permission {
 
     private final String permissionName;
-    private final CompoundBinaryTag data;
+    private final NBTCompound data;
 
     /**
      * Creates a new permission object with optional data.
@@ -25,7 +25,7 @@ public class Permission {
      * @param permissionName the name of the permission
      * @param data           the optional data of the permission
      */
-    public Permission(@NotNull String permissionName, @Nullable CompoundBinaryTag data) {
+    public Permission(@NotNull String permissionName, @Nullable NBTCompound data) {
         this.permissionName = permissionName;
         this.data = data;
     }
@@ -55,7 +55,7 @@ public class Permission {
      * @return the nbt data of this permission, can be null if not any
      */
     @Nullable
-    public CompoundBinaryTag getNBTData() {
+    public NBTCompound getNBTData() {
         return data;
     }
 

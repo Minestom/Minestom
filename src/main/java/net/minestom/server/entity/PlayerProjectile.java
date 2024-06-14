@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PlayerProjectile extends Entity {
+public class PlayerProjectile extends LivingEntity {
     private final Entity shooter;
     private long cooldown = 0;
 
@@ -112,9 +112,9 @@ public class PlayerProjectile extends Entity {
 
         while (iterator.hasNext()) {
             var block = iterator.next();
-            Block b = instance.getBlock(block.blockX(), block.blockY(), block.blockZ());
-            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block.x(), block.y(), block.z()), this.getBoundingBox());
-            if (hit) return new Pos(block.blockX(), block.blockY(), block.blockZ());
+            Block b = instance.getBlock(block);
+            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block), this.getBoundingBox());
+            if (hit) return Pos.fromPoint(block);
         }
 
         return null;

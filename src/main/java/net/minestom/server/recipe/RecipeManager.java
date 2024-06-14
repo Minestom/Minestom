@@ -45,7 +45,7 @@ public class RecipeManager {
     private @NotNull DeclareRecipesPacket createDeclareRecipesPacket() {
         var entries = new ArrayList<DeclareRecipesPacket.DeclaredRecipe>();
         for (var recipe : recipes) {
-            entries.add(switch (recipe.type) {
+            entries.add(switch (recipe.recipeType) {
                 case SHAPELESS -> RecipeConversion.shapeless((ShapelessRecipe) recipe);
                 case SHAPED -> RecipeConversion.shaped((ShapedRecipe) recipe);
                 case SMELTING -> RecipeConversion.smelting((SmeltingRecipe) recipe);
@@ -55,7 +55,6 @@ public class RecipeManager {
                 case STONECUTTING -> RecipeConversion.stonecutter((StonecutterRecipe) recipe);
                 case SMITHING_TRANSFORM -> RecipeConversion.smithingTransform((SmithingTransformRecipe) recipe);
                 case SMITHING_TRIM -> RecipeConversion.smithingTrim((SmithingTrimRecipe) recipe);
-                default -> throw new IllegalStateException("Unhandled recipe type : " + recipe.type);
             });
         }
         return new DeclareRecipesPacket(entries);

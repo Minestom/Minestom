@@ -1,9 +1,10 @@
 package net.minestom.testing;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.IOException;
+import java.io.StringReader;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Set;
@@ -32,11 +33,11 @@ public final class TestUtils {
         assertEquals(Set.copyOf(expected), Set.copyOf(actual));
     }
 
-    public static void assertEqualsSNBT(String snbt, BinaryTag compound) {
+    public static void assertEqualsSNBT(String snbt, NBTCompound compound) {
         try {
-            final var converted = TagStringIOExt.readTag(snbt);
+            final var converted = (NBTCompound) new SNBTParser(new StringReader(snbt)).parse();
             assertEquals(converted, compound);
-        } catch (IOException e) {
+        } catch (NBTException e) {
             fail(e);
         }
     }

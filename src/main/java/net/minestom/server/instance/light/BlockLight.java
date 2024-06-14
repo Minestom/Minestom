@@ -10,10 +10,10 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minestom.server.instance.light.LightCompute.*;
 
@@ -24,8 +24,8 @@ final class BlockLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private final AtomicBoolean isValidBorders = new AtomicBoolean(true);
-    private final AtomicBoolean needsSend = new AtomicBoolean(false);
+    private boolean isValidBorders = true;
+    private boolean needsSend = true;
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
@@ -83,7 +83,7 @@ final class BlockLight implements Light {
                 neighborSections[face.ordinal()] = otherSection;
             }
 
-            Light otherLight = otherSection.blockLight();
+            var otherLight = otherSection.blockLight();
 
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {
@@ -145,13 +145,13 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
-        this.isValidBorders.set(true);
-
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
             this.toUpdateSet = Set.of();
             return this;
         }
+
+        this.isValidBorders = true;
 
         Set<Point> toUpdate = new HashSet<>();
 
@@ -171,8 +171,8 @@ final class BlockLight implements Light {
                     Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
 
                     if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        if (neighborChunk.getSection(neighborPos.blockY()).blockLight() instanceof BlockLight blockLight)
-                            blockLight.contentPropagation = null;
+                        toUpdate.add(new Vec(neighborChunk.getChunkX(), neighborPos.blockY(), neighborChunk.getChunkZ()));
+                        neighborChunk.getSection(neighborPos.blockY()).blockLight().invalidatePropagation();
                     }
                 }
             }
@@ -186,14 +186,12 @@ final class BlockLight implements Light {
 
     @Override
     public void invalidate() {
-        this.needsSend.set(true);
-        this.isValidBorders.set(false);
-        this.contentPropagation = null;
+        invalidatePropagation();
     }
 
     @Override
     public boolean requiresUpdate() {
-        return !isValidBorders.get();
+        return !isValidBorders;
     }
 
     @Override
@@ -201,13 +199,21 @@ final class BlockLight implements Light {
     public void set(byte[] copyArray) {
         this.content = copyArray.clone();
         this.contentPropagation = this.content;
-        this.isValidBorders.set(true);
-        this.needsSend.set(true);
+        this.isValidBorders = true;
+        this.needsSend = true;
     }
 
     @Override
     public boolean requiresSend() {
-        return needsSend.getAndSet(false);
+        boolean res = needsSend;
+        needsSend = false;
+        return res;
+    }
+
+    private void clearCache() {
+        this.contentPropagation = null;
+        isValidBorders = true;
+        needsSend = true;
     }
 
     @Override
@@ -221,10 +227,7 @@ final class BlockLight implements Light {
 
     @Override
     public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
-        if (!isValidBorders.get()) {
-            this.toUpdateSet = Set.of();
-            return this;
-        }
+        if (!isValidBorders) clearCache();
 
         Point[] neighbors = Light.getNeighbors(chunk, sectionY);
 
@@ -275,6 +278,13 @@ final class BlockLight implements Light {
             lightMax[i] = (byte) (lower | (upper << 4));
         }
         return lightMax;
+    }
+
+    @Override
+    public void invalidatePropagation() {
+        this.isValidBorders = false;
+        this.needsSend = false;
+        this.contentPropagation = null;
     }
 
     @Override

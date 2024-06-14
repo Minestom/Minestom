@@ -20,7 +20,7 @@ public class EndCrystalMeta extends EntityMeta {
     }
 
     public void setBeamTarget(@Nullable Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.OptBlockPosition(value));
+        super.metadata.setIndex(OFFSET, Metadata.OptPosition(value));
     }
 
     public boolean isShowingBottom() {

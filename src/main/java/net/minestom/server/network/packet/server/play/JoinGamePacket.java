@@ -15,10 +15,9 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record JoinGamePacket(
         int entityId, boolean isHardcore, List<String> worlds, int maxPlayers,
         int viewDistance, int simulationDistance, boolean reducedDebugInfo, boolean enableRespawnScreen,
-        boolean doLimitedCrafting, int dimensionType,
-        String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
-        boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation, int portalCooldown,
-        boolean enforcesSecureChat
+        boolean doLimitedCrafting,
+        String dimensionType, String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
+        boolean isDebug, boolean isFlat, WorldPos deathLocation, int portalCooldown
 ) implements ServerPacket.Play {
     public static final int MAX_WORLDS = Short.MAX_VALUE;
 
@@ -37,16 +36,16 @@ public record JoinGamePacket(
                 reader.read(BOOLEAN),
                 reader.read(BOOLEAN),
                 reader.read(BOOLEAN),
-                reader.read(VAR_INT),
+
+                reader.read(STRING),
                 reader.read(STRING),
                 reader.read(LONG),
                 GameMode.fromId(reader.read(BYTE)),
                 getNullableGameMode(reader.read(BYTE)),
                 reader.read(BOOLEAN),
                 reader.read(BOOLEAN),
-                reader.readOptional(WorldPos.NETWORK_TYPE),
-                reader.read(VAR_INT),
-                reader.read(BOOLEAN)
+                reader.read(DEATH_LOCATION),
+                reader.read(VAR_INT)
         );
     }
 
@@ -61,7 +60,8 @@ public record JoinGamePacket(
         writer.write(BOOLEAN, reducedDebugInfo);
         writer.write(BOOLEAN, enableRespawnScreen);
         writer.write(BOOLEAN, doLimitedCrafting);
-        writer.write(VAR_INT, dimensionType);
+
+        writer.write(STRING, dimensionType);
         writer.write(STRING, world);
         writer.write(LONG, hashedSeed);
         writer.write(BYTE, gameMode.id());
@@ -72,9 +72,8 @@ public record JoinGamePacket(
         }
         writer.write(BOOLEAN, isDebug);
         writer.write(BOOLEAN, isFlat);
-        writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
+        writer.write(DEATH_LOCATION, deathLocation);
         writer.write(VAR_INT, portalCooldown);
-        writer.write(BOOLEAN, enforcesSecureChat);
     }
 
     @Override

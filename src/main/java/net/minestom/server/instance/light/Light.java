@@ -10,6 +10,8 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static net.minestom.server.instance.light.LightCompute.SECTION_SIZE;
@@ -33,6 +35,9 @@ public interface Light {
 
     @ApiStatus.Internal
     Light calculateExternal(Instance instance, Chunk chunk, int sectionY);
+
+    @ApiStatus.Internal
+    void invalidatePropagation();
 
     int getLevel(int x, int y, int z);
 
