@@ -2,88 +2,123 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
-public interface TrimMaterial extends StaticProtocolObject {
-    static @NotNull TrimMaterial create(@NotNull NamespaceID namespace,
-                                        @NotNull String assetName,
-                                        @NotNull Material ingredient,
-                                        float itemModelIndex,
-                                        @NotNull Map<String, String> overrideArmorMaterials,
-                                        @NotNull Component description,
-                                        Registry.Properties custom) {
+public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimMaterial>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimMaterial);
+    @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimMaterial>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimMaterial);
+
+    static @NotNull TrimMaterial create(
+            @NotNull String assetName,
+            @NotNull Material ingredient,
+            float itemModelIndex,
+            @NotNull Map<String, String> overrideArmorMaterials,
+            @NotNull Component description
+    ) {
         return new TrimMaterialImpl(
-                new Registry.TrimMaterialEntry(
-                        namespace,
-                        assetName,
-                        ingredient,
-                        itemModelIndex,
-                        overrideArmorMaterials,
-                        description,
-                        custom
-                )
+                assetName, ingredient, itemModelIndex,
+                overrideArmorMaterials, description, null
         );
     }
 
-    static @NotNull TrimMaterial create(@NotNull NamespaceID namespace,
-                                        @NotNull String assetName,
-                                        @NotNull Material ingredient,
-                                        float itemModelIndex,
-                                        @NotNull Map<String, String> overrideArmorMaterials,
-                                        @NotNull Component description) {
-        return new TrimMaterialImpl(
-                new Registry.TrimMaterialEntry(
-                        namespace,
-                        assetName,
-                        ingredient,
-                        itemModelIndex,
-                        overrideArmorMaterials,
-                        description,
-                        null
-                )
+    static @NotNull Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * <p>Creates a new registry for trim materials, loading the vanilla trim materials.</p>
+     *
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
+     */
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
+        return DynamicRegistry.create(
+                "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
+                (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
         );
     }
 
-    static Collection<TrimMaterial> values() {
-        return TrimMaterialImpl.values();
-    }
+    @NotNull String assetName();
 
+    @NotNull Material ingredient();
+
+    float itemModelIndex();
+
+    @NotNull Map<String, String> overrideArmorMaterials();
+
+    @NotNull Component description();
+
+    /**
+     * Returns the raw registry entry of this trim, only if the trim is a vanilla trim. Otherwise, returns null.
+     */
     @Contract(pure = true)
-    @NotNull Registry.TrimMaterialEntry registry();
+    @Nullable Registry.TrimMaterialEntry registry();
 
-    @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    final class Builder {
+        private String assetName;
+        private Material ingredient;
+        private float itemModelIndex;
+        private final Map<String, String> overrideArmorMaterials = new HashMap<>();
+        private Component description;
+
+        private Builder() {
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder assetName(@NotNull String assetName) {
+            this.assetName = assetName;
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder ingredient(@NotNull Material ingredient) {
+            this.ingredient = ingredient;
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder itemModelIndex(float itemModelIndex) {
+            this.itemModelIndex = itemModelIndex;
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder overrideArmorMaterials(@NotNull Map<String, String> overrideArmorMaterials) {
+            this.overrideArmorMaterials.putAll(overrideArmorMaterials);
+            return this;
+        }
+
+        @Contract(value = "_, _ -> this", pure = true)
+        public @NotNull Builder overrideArmorMaterial(@NotNull String slot, @NotNull String material) {
+            this.overrideArmorMaterials.put(slot, material);
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder description(@NotNull Component description) {
+            this.description = description;
+            return this;
+        }
+
+        @Contract(pure = true)
+        public @NotNull TrimMaterial build() {
+            return new TrimMaterialImpl(
+                    assetName, ingredient, itemModelIndex,
+                    overrideArmorMaterials, description, null
+            );
+        }
     }
-
-    default @NotNull String assetName() {
-        return registry().assetName();
-    }
-
-    default @NotNull Material ingredient() {
-        return registry().ingredient();
-    }
-
-    default float itemModelIndex() {
-        return registry().itemModelIndex();
-    }
-
-    default @NotNull Map<String, String> overrideArmorMaterials() {
-        return registry().overrideArmorMaterials();
-    }
-
-    default @NotNull Component description() {
-        return registry().description();
-    }
-
-    NBTCompound asNBT();
 
 }

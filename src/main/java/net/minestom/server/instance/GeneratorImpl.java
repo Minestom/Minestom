@@ -9,8 +9,9 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 import net.minestom.server.instance.generator.UnitModifier;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.BiomeManager;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class GeneratorImpl {
     private static final Vec SECTION_SIZE = new Vec(16);
-    private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
+    private static final DynamicRegistry<Biome> BIOME_MANAGER = MinecraftServer.getBiomeRegistry();
 
     static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ,
                                   boolean fork) {
@@ -217,11 +218,12 @@ final class GeneratorImpl {
     record SectionModifierImpl(Point size, Point start, Point end,
                                Palette blockPalette, Palette biomePalette,
                                Int2ObjectMap<Block> cache, boolean fork) implements GenericModifier {
+
         @Override
-        public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+        public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             var id = BIOME_MANAGER.getId(biome);
-            if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+            Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
 
             this.biomePalette.set(
                     toSectionRelativeCoordinate(x) / 4,
@@ -268,10 +270,10 @@ final class GeneratorImpl {
         }
 
         @Override
-        public void fillBiome(@NotNull Biome biome) {
+        public void fillBiome(@NotNull DynamicRegistry.Key<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
-            var id = MinecraftServer.getBiomeManager().getId(biome);
-            if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+            var id = BIOME_MANAGER.getId(biome);
+            Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
             this.biomePalette.fill(id);
         }
 
@@ -305,7 +307,7 @@ final class GeneratorImpl {
         }
 
         @Override
-        public void setBiome(int x, int y, int z, @NotNull Biome biome) {
+        public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
             checkBorder(x, y, z);
             final GenerationUnit section = findAbsoluteSection(x, y, z);
             y -= start.y();
@@ -357,7 +359,7 @@ final class GeneratorImpl {
         }
 
         @Override
-        public void fillBiome(@NotNull Biome biome) {
+        public void fillBiome(@NotNull DynamicRegistry.Key<Biome> biome) {
             for (GenerationUnit section : sections) {
                 section.modifier().fillBiome(biome);
             }

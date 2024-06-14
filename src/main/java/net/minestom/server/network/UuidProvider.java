@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.minestom.server.network.player.PlayerConnection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -22,5 +23,5 @@ public interface UuidProvider {
      * @param username         the username given by the connection
      * @return the new {@link UUID} for the player
      */
-    UUID provide(PlayerConnection playerConnection, String username);
+    @NotNull UUID provide(@NotNull PlayerConnection playerConnection, @NotNull String username);
 }

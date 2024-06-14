@@ -15,8 +15,8 @@ public class AnimationListener {
         PlayerHandAnimationEvent handAnimationEvent = new PlayerHandAnimationEvent(player, hand);
         EventDispatcher.callCancellable(handAnimationEvent, () -> {
             switch (hand) {
-                case MAIN -> player.swingMainHand();
-                case OFF -> player.swingOffHand();
+                case MAIN -> player.swingMainHand(true);
+                case OFF -> player.swingOffHand(true);
             }
         });
     }

@@ -1,23 +1,22 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
-import java.io.StringReader;
+import java.io.IOException;
 
 /**
- * Argument used to retrieve a {@link NBT} based object, can be any kind of tag like
- * {@link org.jglrxavpok.hephaistos.nbt.NBTCompound}, {@link org.jglrxavpok.hephaistos.nbt.NBTList},
- * {@link org.jglrxavpok.hephaistos.nbt.NBTInt}, etc...
+ * Argument used to retrieve a {@link BinaryTag} based object, can be any kind of tag like
+ * {@link net.kyori.adventure.nbt.CompoundBinaryTag}, {@link net.kyori.adventure.nbt.ListBinaryTag},
+ * {@link net.kyori.adventure.nbt.IntBinaryTag}, etc...
  * <p>
  * Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}} or [{display:{Name:"{\"text\":\"Sword of Power\"}"}}]
  */
-public class ArgumentNbtTag extends Argument<NBT> {
+public class ArgumentNbtTag extends Argument<BinaryTag> {
 
     public static final int INVALID_NBT = 1;
 
@@ -27,10 +26,10 @@ public class ArgumentNbtTag extends Argument<NBT> {
 
     @NotNull
     @Override
-    public NBT parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
+    public BinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
-            return new SNBTParser(new StringReader(input)).parse();
-        } catch (NBTException e) {
+            return TagStringIOExt.readTag(input);
+        } catch (IOException e) {
             throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
         }
     }

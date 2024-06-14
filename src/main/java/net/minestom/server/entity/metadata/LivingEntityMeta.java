@@ -4,8 +4,11 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.Player;
+import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class LivingEntityMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
@@ -52,12 +55,12 @@ public class LivingEntityMeta extends EntityMeta {
         super.metadata.setIndex(OFFSET + 1, Metadata.Float(value));
     }
 
-    public int getPotionEffectColor() {
-        return super.metadata.getIndex(OFFSET + 2, 0);
+    public @NotNull List<Particle> getEffectParticles() {
+        return super.metadata.getIndex(OFFSET + 2, List.of());
     }
 
-    public void setPotionEffectColor(int value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
+    public void setEffectParticles(@NotNull List<Particle> value) {
+        super.metadata.setIndex(OFFSET + 2, Metadata.ParticleList(value));
     }
 
     public boolean isPotionEffectAmbient() {
@@ -74,28 +77,6 @@ public class LivingEntityMeta extends EntityMeta {
 
     public void setArrowCount(int value) {
         super.metadata.setIndex(OFFSET + 4, Metadata.VarInt(value));
-    }
-
-    /**
-     * @deprecated
-     * This returns the bee stinger count, not the absorption heart count
-     * Use {@link #getBeeStingerCount()} instead
-     * @return The number of bee stingers in this entity
-     */
-    @Deprecated
-    public int getHealthAddedByAbsorption() {
-        return super.metadata.getIndex(OFFSET + 5, 0);
-    }
-
-    /**
-     * @deprecated
-     * This sets the bee stinger count, not the absorption heart count
-     * Use {@link #setBeeStingerCount(int)} instead
-     * @param value The number of bee stingers for this entity to have
-     */
-    @Deprecated
-    public void setHealthAddedByAbsorption(int value) {
-        super.metadata.setIndex(OFFSET + 5, Metadata.VarInt(value));
     }
 
     /**
@@ -120,7 +101,7 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     public void setBedInWhichSleepingPosition(@Nullable Point value) {
-        super.metadata.setIndex(OFFSET + 6, Metadata.OptPosition(value));
+        super.metadata.setIndex(OFFSET + 6, Metadata.OptBlockPosition(value));
     }
 
 }

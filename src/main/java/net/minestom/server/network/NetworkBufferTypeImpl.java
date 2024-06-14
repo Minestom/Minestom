@@ -1,30 +1,45 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
-import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
+
+    record UnitType() implements NetworkBufferTypeImpl<Unit> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Unit value) {
+        }
+
+        @Override
+        public Unit read(@NotNull NetworkBuffer buffer) {
+            return Unit.INSTANCE;
+        }
+    }
 
     record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
         @Override
@@ -283,37 +298,31 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record NbtType() implements NetworkBufferTypeImpl<NBT> {
+    record NbtType() implements NetworkBufferTypeImpl<BinaryTag> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, org.jglrxavpok.hephaistos.nbt.NBT value) {
-            NBTWriter nbtWriter = buffer.nbtWriter;
+        public void write(@NotNull NetworkBuffer buffer, BinaryTag value) {
+            BinaryTagWriter nbtWriter = buffer.nbtWriter;
             if (nbtWriter == null) {
-                nbtWriter = new NBTWriter(new OutputStream() {
+                nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
                     @Override
                     public void write(int b) {
                         buffer.write(BYTE, (byte) b);
                     }
-                }, CompressedProcesser.NONE);
+                }));
                 buffer.nbtWriter = nbtWriter;
             }
             try {
-                if (value == NBTEnd.INSTANCE) {
-                    // Kotlin - https://discord.com/channels/706185253441634317/706186227493109860/1163703658341478462
-                    buffer.write(BYTE, (byte) NBTType.TAG_End.getOrdinal());
-                } else {
-                    buffer.write(BYTE, (byte) value.getID().getOrdinal());
-                    nbtWriter.writeRaw(value);
-                }
+                nbtWriter.writeNameless(value);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
         @Override
-        public org.jglrxavpok.hephaistos.nbt.NBT read(@NotNull NetworkBuffer buffer) {
-            NBTReader nbtReader = buffer.nbtReader;
+        public BinaryTag read(@NotNull NetworkBuffer buffer) {
+            BinaryTagReader nbtReader = buffer.nbtReader;
             if (nbtReader == null) {
-                nbtReader = new NBTReader(new InputStream() {
+                nbtReader = new BinaryTagReader(new DataInputStream(new InputStream() {
                     @Override
                     public int read() {
                         return buffer.read(BYTE) & 0xFF;
@@ -323,15 +332,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                     public int available() {
                         return buffer.readableBytes();
                     }
-                }, CompressedProcesser.NONE);
+                }));
                 buffer.nbtReader = nbtReader;
             }
             try {
-                byte tagId = buffer.read(BYTE);
-                if (tagId == NBTType.TAG_End.getOrdinal())
-                    return NBTEnd.INSTANCE;
-                return nbtReader.readRaw(tagId);
-            } catch (IOException | NBTException e) {
+                return nbtReader.readNameless();
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -362,13 +368,13 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Component value) {
-            final NBT nbt = NbtComponentSerializer.nbt().serialize(value);
+            final BinaryTag nbt = NbtComponentSerializer.nbt().serialize(value);
             buffer.write(NBT, nbt);
         }
 
         @Override
         public Component read(@NotNull NetworkBuffer buffer) {
-            final NBT nbt = buffer.read(NBT);
+            final BinaryTag nbt = buffer.read(NBT);
             return NbtComponentSerializer.nbt().deserialize(nbt);
         }
     }
@@ -399,39 +405,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final long mostSignificantBits = buffer.read(LONG);
             final long leastSignificantBits = buffer.read(LONG);
             return new UUID(mostSignificantBits, leastSignificantBits);
-        }
-    }
-
-    record ItemType() implements NetworkBufferTypeImpl<ItemStack> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
-            if (value.isAir()) {
-                buffer.write(BOOLEAN, false);
-                return;
-            }
-            buffer.write(BOOLEAN, true);
-            buffer.write(VAR_INT, value.material().id());
-            buffer.write(BYTE, (byte) value.amount());
-            // Vanilla does not write an empty object, just an end tag.
-            NBTCompound nbt = value.meta().toNBT();
-            buffer.write(NBT, nbt.isEmpty() ? NBTEnd.INSTANCE : nbt);
-        }
-
-        @Override
-        public ItemStack read(@NotNull NetworkBuffer buffer) {
-            final boolean present = buffer.read(BOOLEAN);
-            if (!present) return ItemStack.AIR;
-
-            final int id = buffer.read(VAR_INT);
-            final Material material = Material.fromId(id);
-            if (material == null) throw new RuntimeException("Unknown material id: " + id);
-
-            final int amount = buffer.read(BYTE);
-            final NBT nbt = buffer.read(NBT);
-            if (!(nbt instanceof NBTCompound compound)) {
-                return ItemStack.of(material, amount);
-            }
-            return ItemStack.fromNBT(material, compound, amount);
         }
     }
 
@@ -597,46 +570,95 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ParticleType() implements NetworkBufferTypeImpl<Particle> {
+    // Combinators
+
+    record EnumType<E extends Enum<?>>(@NotNull Class<E> enumClass) implements NetworkBufferTypeImpl<E> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, Particle value) {
-            Check.stateCondition(value.data() != null && !value.data().validate(value.id()), "Particle data {0} is not valid for this particle type {1}", value.data(), value.namespace());
-            Check.stateCondition(value.data() == null && ParticleData.requiresData(value.id()), "Particle data is required for this particle type {0}", value.namespace());
-            buffer.write(VAR_INT, value.id());
-            if (value.data() != null) value.data().write(buffer);
+        public void write(@NotNull NetworkBuffer buffer, E value) {
+            buffer.writeEnum(enumClass, value);
         }
 
         @Override
-        public Particle read(@NotNull NetworkBuffer buffer) {
-            throw new UnsupportedOperationException("Cannot read a particle from the network buffer");
+        public E read(@NotNull NetworkBuffer buffer) {
+            return buffer.readEnum(enumClass);
         }
     }
 
-    static <T extends Enum<?>> NetworkBufferTypeImpl<T> fromEnum(Class<T> enumClass) {
-        return new NetworkBufferTypeImpl<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                buffer.writeEnum(enumClass, value);
-            }
+    record OptionalType<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            buffer.writeOptional(parent, value);
+        }
 
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                return buffer.readEnum(enumClass);
-            }
-        };
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            return buffer.readOptional(parent);
+        }
     }
 
-    static <T> NetworkBufferTypeImpl<T> fromOptional(Type<T> optionalType) {
-        return new NetworkBufferTypeImpl<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, T value) {
-                buffer.writeOptional(optionalType, value);
-            }
+    final class LazyType<T> implements NetworkBufferTypeImpl<T> {
+        private final @NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier;
+        private Type<T> type;
 
-            @Override
-            public T read(@NotNull NetworkBuffer buffer) {
-                return buffer.readOptional(optionalType);
-            }
-        };
+        public LazyType(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
+            this.supplier = supplier;
+        }
+
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            if (type == null) type = supplier.get();
+            type.write(buffer, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            if (type == null) type = supplier.get();
+            return null;
+        }
+    }
+
+    record MappedType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to, @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, S value) {
+            parent.write(buffer, from.apply(value));
+        }
+
+        @Override
+        public S read(@NotNull NetworkBuffer buffer) {
+            return to.apply(parent.read(buffer));
+        }
+    }
+
+    record ListType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, List<T> value) {
+            buffer.writeCollection(parent, value);
+        }
+
+        @Override
+        public List<T> read(@NotNull NetworkBuffer buffer) {
+            return buffer.readCollection(parent, maxSize);
+        }
+    }
+
+    record RegistryTypeType<T extends ProtocolObject>(@NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
+            Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
+            final DynamicRegistry<T> registry = selector.apply(buffer.registries);
+            final int id = registry.getId(value);
+            Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
+            buffer.write(VAR_INT, id);
+        }
+
+        @Override
+        public DynamicRegistry.Key<T> read(@NotNull NetworkBuffer buffer) {
+            Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
+            DynamicRegistry<T> registry = selector.apply(buffer.registries);
+            final int id = buffer.read(VAR_INT);
+            final DynamicRegistry.Key<T> key = registry.getKey(id);
+            Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
+            return key;
+        }
     }
 }

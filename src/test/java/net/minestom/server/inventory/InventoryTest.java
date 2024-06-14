@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
@@ -82,5 +83,27 @@ public class InventoryTest {
             final byte windowId = new Inventory(InventoryType.CHEST_1_ROW, "title").getWindowId();
             assertTrue(windowId > 0);
         }
+    }
+
+    @Test
+    public void testStackSize99() {
+        var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        var item = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 99).amount(99).build();
+
+        assertTrue(inventory.addItemStack(item, TransactionOption.ALL_OR_NOTHING));
+        assertEquals(99, inventory.getItemStack(0).amount());
+    }
+
+    @Test
+    public void testStackSize99OnSmaller() {
+        var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        var item44 = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 44).amount(43).build();
+        var item99 = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 99).amount(99).build();
+
+        // Note this is vanilla behavior not to stack these two because they have different components.
+        assertTrue(inventory.addItemStack(item44, TransactionOption.ALL_OR_NOTHING));
+        assertTrue(inventory.addItemStack(item99, TransactionOption.ALL_OR_NOTHING));
+        assertEquals(43, inventory.getItemStack(0).amount());
+        assertEquals(99, inventory.getItemStack(1).amount());
     }
 }

@@ -19,13 +19,11 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
     private final LoginPluginMessageProcessor pluginMessageProcessor;
 
     private String username;
-    private UUID playerUuid;
 
     public AsyncPlayerPreLoginEvent(@NotNull Player player, @NotNull LoginPluginMessageProcessor pluginMessageProcessor) {
         this.player = player;
         this.pluginMessageProcessor = pluginMessageProcessor;
         this.username = player.getUsername();
-        this.playerUuid = player.getUuid();
     }
 
     /**
@@ -54,16 +52,7 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
      */
     @NotNull
     public UUID getPlayerUuid() {
-        return playerUuid;
-    }
-
-    /**
-     * Changes the player uuid.
-     *
-     * @param playerUuid the new player uuid
-     */
-    public void setPlayerUuid(@NotNull UUID playerUuid) {
-        this.playerUuid = playerUuid;
+        return player.getUuid();
     }
 
     /**

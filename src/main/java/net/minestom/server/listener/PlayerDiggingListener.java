@@ -1,5 +1,7 @@
 package net.minestom.server.listener;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
@@ -15,14 +17,14 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
+import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public final class PlayerDiggingListener {
 
@@ -58,7 +60,7 @@ public final class PlayerDiggingListener {
                 // Refresh block on player screen in case it had special data (like a sign)
                 var registry = diggingResult.block().registry();
                 if (registry.isBlockEntity()) {
-                    final NBTCompound data = BlockUtils.extractClientNbt(diggingResult.block());
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
                     player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }
@@ -82,7 +84,7 @@ public final class PlayerDiggingListener {
         // FIXME: verify mineable tag and enchantment
         final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition, blockFace);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
@@ -92,7 +94,7 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
-        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, blockPosition);
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
@@ -104,7 +106,7 @@ public final class PlayerDiggingListener {
             return new DiggingResult(block, false);
         }
 
-        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, blockPosition);
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerFinishDiggingEvent);
 
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
@@ -117,9 +119,8 @@ public final class PlayerDiggingListener {
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             // Check if the item can break the block with the current item
             final ItemStack itemInMainHand = player.getItemInMainHand();
-            if (!itemInMainHand.meta().canDestroy(block)) {
-                return true;
-            }
+            final BlockPredicates breakPredicate = itemInMainHand.get(ItemComponent.CAN_BREAK, BlockPredicates.NEVER);
+            return !breakPredicate.test(block);
         }
         return false;
     }
@@ -131,16 +132,15 @@ public final class PlayerDiggingListener {
 
     private static void dropSingle(Player player) {
         final ItemStack handItem = player.getInventory().getItemInMainHand();
-        final StackingRule stackingRule = StackingRule.get();
-        final int handAmount = stackingRule.getAmount(handItem);
+        final int handAmount = handItem.amount();
         if (handAmount <= 1) {
             // Drop the whole item without copy
             dropItem(player, handItem, ItemStack.AIR);
         } else {
             // Drop a single item
             dropItem(player,
-                    stackingRule.apply(handItem, 1), // Single dropped item
-                    stackingRule.apply(handItem, handAmount - 1)); // Updated hand
+                    handItem.withAmount(1), // Single dropped item
+                    handItem.withAmount(handAmount - 1)); // Updated hand
         }
     }
 
@@ -149,17 +149,14 @@ public final class PlayerDiggingListener {
         if (meta == null || !meta.isHandActive()) return;
         Player.Hand hand = meta.getActiveHand();
 
-        player.refreshEating(null);
+        player.clearItemUse();
         player.triggerStatus((byte) 9);
 
         ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
-        if (itemUpdateStateEvent == null) {
-            player.refreshActiveHand(true, false, false);
-        } else {
-            final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-            player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
-                    isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
-        }
+
+        final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+        player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
+                isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
     }
 
     private static void swapItemHand(Player player) {

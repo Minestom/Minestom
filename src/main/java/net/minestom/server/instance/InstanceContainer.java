@@ -1,7 +1,9 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -10,6 +12,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -20,6 +23,7 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -29,10 +33,8 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
@@ -86,22 +88,30 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
-        this(uniqueId, dimensionType, null, dimensionType.getName());
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+        this(uniqueId, dimensionType, null, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
         this(uniqueId, dimensionType, null, dimensionName);
     }
 
-    @ApiStatus.Experimental
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader) {
-        this(uniqueId, dimensionType, loader, dimensionType.getName());
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+        this(uniqueId, dimensionType, loader, dimensionType.namespace());
     }
 
-    @ApiStatus.Experimental
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
-        super(uniqueId, dimensionType, dimensionName);
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, loader, dimensionName);
+    }
+
+    public InstanceContainer(
+            @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
+            @NotNull UUID uniqueId,
+            @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
+            @Nullable IChunkLoader loader,
+            @NotNull NamespaceID dimensionName
+    ) {
+        super(dimensionTypeRegistry, uniqueId, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
@@ -133,8 +143,9 @@ public class InstanceContainer extends Instance {
                                               @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
-        if(y >= getDimensionType().getMaxY() || y < getDimensionType().getMinY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", getDimensionType().getMinY(), getDimensionType().getMaxY(), y);
+        final DimensionType dim = getCachedDimensionType();
+        if (y >= dim.maxY() || y < dim.minY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
             return;
         }
 
@@ -158,7 +169,7 @@ public class InstanceContainer extends Instance {
                             this, block, pp.getBlockFace(), blockPosition,
                             new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
                             pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()).meta(),
+                            pp.getPlayer().getItemInHand(pp.getHand()),
                             pp.getPlayer().isSneaking()
                     );
                 } else {
@@ -186,7 +197,7 @@ public class InstanceContainer extends Instance {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
                 var registry = block.registry();
                 if (registry.isBlockEntity()) {
-                    final NBTCompound data = BlockUtils.extractClientNbt(block);
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }
@@ -219,7 +230,7 @@ public class InstanceContainer extends Instance {
             chunk.sendChunk(player);
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition, blockFace);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
         EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
@@ -439,7 +450,7 @@ public class InstanceContainer extends Instance {
     @Override
     public boolean isInVoid(@NotNull Point point) {
         // TODO: more customizable
-        return point.y() < getDimensionType().getMinY() - 64;
+        return point.y() < getCachedDimensionType().minY() - 64;
     }
 
     /**
@@ -628,7 +639,7 @@ public class InstanceContainer extends Instance {
             final int neighborX = blockPosition.blockX() + direction.normalX();
             final int neighborY = blockPosition.blockY() + direction.normalY();
             final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getDimensionType().getMinY() || neighborY > getDimensionType().getTotalHeight())
+            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
                 continue;
             final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.TYPE);
             if (neighborBlock == null)

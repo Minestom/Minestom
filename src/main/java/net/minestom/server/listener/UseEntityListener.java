@@ -13,7 +13,7 @@ import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket
 public class UseEntityListener {
 
     public static void useEntityListener(ClientInteractEntityPacket packet, Player player) {
-        final Entity entity = Entity.getEntity(packet.targetId());
+        final Entity entity = player.getInstance().getEntityById(packet.targetId());
         if (entity == null || !entity.isViewer(player) || player.getDistanceSquared(entity) > 6 * 6)
             return;
 

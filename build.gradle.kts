@@ -13,7 +13,7 @@ plugins {
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
 val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
 
-val shortDescription = "1.20.4 Lightweight Minecraft server"
+val shortDescription = "1.21 Lightweight Minecraft server"
 
 allprojects {
     apply(plugin = "java")
@@ -24,7 +24,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven(url = "https://jitpack.io")
     }
 
     configurations.all {
@@ -36,8 +35,7 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
 
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        toolchain.languageVersion = JavaLanguageVersion.of(21)
     }
 
     tasks.withType<Zip> {
@@ -71,11 +69,7 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
-    api(libs.hydrazine)
-    api(libs.bundles.kotlin)
-    api(libs.bundles.hephaistos)
     implementation(libs.minestomData)
-    implementation(libs.dependencyGetter)
 
     // Performance/data structures
     implementation(libs.caffeine)
@@ -104,7 +98,7 @@ tasks {
             addStringOption("-release", "21")
             // Links to external javadocs
             links("https://docs.oracle.com/en/java/javase/21/docs/api/")
-            links("https://jd.adventure.kyori.net/api/${libs.versions.adventure.get()}/")
+            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
         }
     }
 

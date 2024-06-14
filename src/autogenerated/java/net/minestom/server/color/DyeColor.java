@@ -1,6 +1,8 @@
 package net.minestom.server.color;
 
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,6 +40,10 @@ public enum DyeColor implements RGBLike {
     RED(new Color(0xb02e26), new Color(0xff0000), new Color(0xb3312c), 28),
 
     BLACK(new Color(0x1d1d21), new Color(0x0), new Color(0x1e1b1b), 29);
+
+    public static final NetworkBuffer.Type<DyeColor> NETWORK_TYPE = NetworkBuffer.Enum(DyeColor.class);
+
+    public static final BinaryTagSerializer<DyeColor> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(DyeColor.class);
 
     private final Color textureDiffuseColor;
 

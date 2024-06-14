@@ -1,20 +1,32 @@
 package net.minestom.server.registry;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
+import net.minestom.server.message.ChatTypeDecoration;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +51,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static DimensionTypeEntry dimensionType(String namespace, @NotNull Properties main) {
+        return new DimensionTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static BiomeEntry biome(String namespace, Properties properties) {
         return new BiomeEntry(namespace, properties, null);
     }
@@ -51,11 +68,6 @@ public final class Registry {
     @ApiStatus.Internal
     public static EntityEntry entity(String namespace, @NotNull Properties main) {
         return new EntityEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
-        return new EnchantmentEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -76,6 +88,41 @@ public final class Registry {
     @ApiStatus.Internal
     public static TrimPatternEntry trimPattern(String namespace, @NotNull Properties main) {
         return new TrimPatternEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
+        return new AttributeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static BannerPatternEntry bannerPattern(String namespace, @NotNull Properties main) {
+        return new BannerPatternEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static WolfVariantEntry wolfVariant(String namespace, @NotNull Properties main) {
+        return new WolfVariantEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static ChatTypeEntry chatType(String namespace, @NotNull Properties main) {
+        return new ChatTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
+        return new EnchantmentEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static PaintingVariantEntry paintingVariant(String namespace, @NotNull Properties main) {
+        return new PaintingVariantEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
+        return new JukeboxSongEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -156,59 +203,10 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
-        var entries = Registry.load(resource);
-        Map<String, T> namespaces = new HashMap<>(entries.size());
-        for (var entry : entries.entrySet()) {
-            final String namespace = entry.getKey();
-            final Properties properties = Properties.fromMap(entry.getValue());
-            final T value = loader.get(namespace, properties);
-            namespaces.put(value.name(), value);
-        }
-        return new DynamicContainer<>(resource, namespaces);
-    }
-
-    @ApiStatus.Internal
-    public record DynamicContainer<T>(Resource resource, Map<String, T> namespaces) {
-        public DynamicContainer {
-            namespaces = Map.copyOf(namespaces);
-        }
-
-        public T get(@NotNull String namespace) {
-            return namespaces.get(namespace);
-        }
-
-        public T getSafe(@NotNull String namespace) {
-            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
-        }
-
-        public Collection<T> values() {
-            return namespaces.values();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Container<?> container)) return false;
-            return resource == container.resource;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(resource);
-        }
-
-        public interface Loader<T extends ProtocolObject> {
-            T get(String namespace, Properties properties);
-        }
-    }
-
-    @ApiStatus.Internal
     public enum Resource {
         BLOCKS("blocks.json"),
         ITEMS("items.json"),
         ENTITIES("entities.json"),
-        ENCHANTMENTS("enchantments.json"),
         SOUNDS("sounds.json"),
         COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
@@ -218,17 +216,30 @@ public final class Registry {
         DAMAGE_TYPES("damage_types.json"),
         TRIM_MATERIALS("trim_materials.json"),
         TRIM_PATTERNS("trim_patterns.json"),
-        BLOCK_TAGS("tags/block_tags.json"),
-        ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
-        FLUID_TAGS("tags/fluid_tags.json"),
-        GAMEPLAY_TAGS("tags/gameplay_tags.json"),
-        ITEM_TAGS("tags/item_tags.json"),
-        BIOMES("biomes.json");
+        BLOCK_TAGS("tags/block.json"),
+        ENTITY_TYPE_TAGS("tags/entity_type.json"),
+        FLUID_TAGS("tags/fluid.json"),
+        GAMEPLAY_TAGS("tags/game_event.json"),
+        ITEM_TAGS("tags/item.json"),
+        ENCHANTMENT_TAGS("tags/enchantment.json"),
+        DIMENSION_TYPES("dimension_types.json"),
+        BIOMES("biomes.json"),
+        ATTRIBUTES("attributes.json"),
+        BANNER_PATTERNS("banner_patterns.json"),
+        WOLF_VARIANTS("wolf_variants.json"),
+        CHAT_TYPES("chat_types.json"),
+        ENCHANTMENTS("enchantments.snbt"),
+        PAINTING_VARIANTS("painting_variants.json"),
+        JUKEBOX_SONGS("jukebox_songs.json");
 
         private final String name;
 
         Resource(String name) {
             this.name = name;
+        }
+
+        public @NotNull String fileName() {
+            return name;
         }
     }
 
@@ -390,6 +401,49 @@ public final class Registry {
         }
     }
 
+    public record DimensionTypeEntry(
+            NamespaceID namespace,
+            boolean ultrawarm,
+            boolean natural,
+            double coordinateScale,
+            boolean hasSkylight,
+            boolean hasCeiling,
+            float ambientLight,
+            Long fixedTime,
+            boolean piglinSafe,
+            boolean bedWorks,
+            boolean respawnAnchorWorks,
+            boolean hasRaids,
+            int logicalHeight,
+            int minY,
+            int height,
+            String infiniburn,
+            String effects,
+            Properties custom
+    ) implements Entry {
+
+        public DimensionTypeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getBoolean("ultrawarm"),
+                    main.getBoolean("natural"),
+                    main.getDouble("coordinate_scale"),
+                    main.getBoolean("has_skylight"),
+                    main.getBoolean("has_ceiling"),
+                    main.getFloat("ambient_light"),
+                    (Long) main.asMap().get("fixed_time"),
+                    main.getBoolean("piglin_safe"),
+                    main.getBoolean("bed_works"),
+                    main.getBoolean("respawn_anchor_works"),
+                    main.getBoolean("has_raids"),
+                    main.getInt("logical_height"),
+                    main.getInt("min_y"),
+                    main.getInt("height"),
+                    main.getString("infiniburn"),
+                    main.getString("effects"),
+                    custom);
+        }
+    }
+
     public static final class BiomeEntry implements Entry {
         private final Properties custom;
         private final NamespaceID namespace;
@@ -467,24 +521,22 @@ public final class Registry {
 
     public static final class MaterialEntry implements Entry {
         private final NamespaceID namespace;
+        private final Properties main;
         private final int id;
         private final String translationKey;
-        private final int maxStackSize;
-        private final int maxDamage;
-        private final boolean isFood;
         private final Supplier<Block> blockSupplier;
+        private DataComponentMap prototype;
+
         private final EquipmentSlot equipmentSlot;
         private final EntityType entityType;
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
+            this.main = main;
             this.custom = custom;
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
-            this.maxStackSize = main.getInt("maxStackSize", 64);
-            this.maxDamage = main.getInt("maxDamage", 0);
-            this.isFood = main.getBoolean("edible", false);
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
@@ -521,24 +573,34 @@ public final class Registry {
             return id;
         }
 
-        public String translationKey() {
+        public @NotNull String translationKey() {
             return translationKey;
-        }
-
-        public int maxStackSize() {
-            return maxStackSize;
-        }
-
-        public int maxDamage() {
-            return maxDamage;
-        }
-
-        public boolean isFood() {
-            return isFood;
         }
 
         public @Nullable Block block() {
             return blockSupplier.get();
+        }
+
+        public @NotNull DataComponentMap prototype() {
+            if (prototype == null) {
+                try {
+                    BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
+                    DataComponentMap.Builder builder = DataComponentMap.builder();
+                    for (Map.Entry<String, Object> entry : main.section("components")) {
+                        //noinspection unchecked
+                        DataComponent<Object> component = (DataComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
+                        Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
+
+                        BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
+                        builder.set(component, component.read(context, tag));
+                    }
+                    this.prototype = builder.build();
+                } catch (IOException e) {
+                    throw new RuntimeException("failed to parse material registry: " + namespace, e);
+                }
+            }
+
+            return prototype;
         }
 
         public boolean isArmor() {
@@ -551,6 +613,7 @@ public final class Registry {
 
         /**
          * Gets the entity type this item can spawn. Only present for spawn eggs (e.g. wolf spawn egg, skeleton spawn egg)
+         *
          * @return The entity type it can spawn, or null if it is not a spawn egg
          */
         public @Nullable EntityType spawnEntityType() {
@@ -563,28 +626,85 @@ public final class Registry {
         }
     }
 
-    public record EntityEntry(NamespaceID namespace, int id,
-                              String translationKey,
-                              double width, double height,
-                              double drag, double acceleration,
-                              EntitySpawnType spawnType,
-                              BoundingBox boundingBox,
-                              Properties custom) implements Entry {
+    public static final class EntityEntry implements Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final String translationKey;
+        private final double drag;
+        private final double acceleration;
+        private final EntitySpawnType spawnType;
+        private final double width;
+        private final double height;
+        private final double eyeHeight;
+        private final BoundingBox boundingBox;
+        private final Properties custom;
+
         public EntityEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    main.getString("translationKey"),
-                    main.getDouble("width"),
-                    main.getDouble("height"),
-                    main.getDouble("drag", 0.02),
-                    main.getDouble("acceleration", 0.08),
-                    EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT)),
-                    new BoundingBox(
-                            main.getDouble("width"),
-                            main.getDouble("height"),
-                            main.getDouble("width")),
-                    custom
-            );
+            this.namespace = NamespaceID.from(namespace);
+            this.id = main.getInt("id");
+            this.translationKey = main.getString("translationKey");
+            this.drag = main.getDouble("drag", 0.02);
+            this.acceleration = main.getDouble("acceleration", 0.08);
+            this.spawnType = EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT));
+
+            // Dimensions
+            this.width = main.getDouble("width");
+            this.height = main.getDouble("height");
+            this.eyeHeight = main.getDouble("eyeHeight");
+            this.boundingBox = new BoundingBox(this.width, this.height, this.width);
+
+            // Attachments
+            Properties attachments = main.section("attachments");
+            if (attachments != null) {
+                //todo
+            }
+
+            this.custom = custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
+        }
+
+        public double drag() {
+            return drag;
+        }
+
+        public double acceleration() {
+            return acceleration;
+        }
+
+        public @NotNull EntitySpawnType spawnType() {
+            return spawnType;
+        }
+
+        public double width() {
+            return width;
+        }
+
+        public double height() {
+            return height;
+        }
+
+        public double eyeHeight() {
+            return eyeHeight;
+        }
+
+        public @NotNull BoundingBox boundingBox() {
+            return boundingBox;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
         }
     }
 
@@ -604,11 +724,12 @@ public final class Registry {
                     custom);
         }
     }
+
     public record TrimMaterialEntry(@NotNull NamespaceID namespace,
                                     @NotNull String assetName,
                                     @NotNull Material ingredient,
                                     float itemModelIndex,
-                                    @NotNull Map<String,String> overrideArmorMaterials,
+                                    @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
         public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
@@ -617,7 +738,7 @@ public final class Registry {
                     main.getString("asset_name"),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
                     (float) main.getDouble("item_model_index"),
-                    Objects.requireNonNullElse(main.section("override_armor_materials"),new PropertiesMap(Map.of()))
+                    Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
                     custom
@@ -643,27 +764,6 @@ public final class Registry {
         }
     }
 
-    public record EnchantmentEntry(NamespaceID namespace, int id,
-                                   String translationKey,
-                                   double maxLevel,
-                                   boolean isCursed,
-                                   boolean isDiscoverable,
-                                   boolean isTradeable,
-                                   boolean isTreasureOnly,
-                                   Properties custom) implements Entry {
-        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    main.getString("translationKey"),
-                    main.getDouble("maxLevel"),
-                    main.getBoolean("curse", false),
-                    main.getBoolean("discoverable", true),
-                    main.getBoolean("tradeable", true),
-                    main.getBoolean("treasureOnly", false),
-                    custom);
-        }
-    }
-
     public record PotionEffectEntry(NamespaceID namespace, int id,
                                     String translationKey,
                                     int color,
@@ -675,6 +775,134 @@ public final class Registry {
                     main.getString("translationKey"),
                     main.getInt("color"),
                     main.getBoolean("instantaneous"),
+                    custom);
+        }
+    }
+
+    public record AttributeEntry(NamespaceID namespace, int id,
+                                 String translationKey, double defaultValue,
+                                 boolean clientSync,
+                                 double maxValue, double minValue,
+                                 Properties custom) implements Entry {
+        public AttributeEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    main.getString("translationKey"),
+                    main.getDouble("defaultValue"),
+                    main.getBoolean("clientSync"),
+                    main.getDouble("maxValue"),
+                    main.getDouble("minValue"),
+                    custom);
+        }
+    }
+
+    public record BannerPatternEntry(NamespaceID namespace, NamespaceID assetId, String translationKey, Properties custom) implements Entry {
+        public BannerPatternEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    main.getString("translation_key"),
+                    custom);
+        }
+    }
+
+    public record WolfVariantEntry(NamespaceID namespace, NamespaceID wildTexture, NamespaceID tameTexture, NamespaceID angryTexture, List<String> biomes, Properties custom) implements Entry {
+        public WolfVariantEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("wild_texture")),
+                    NamespaceID.from(main.getString("tame_texture")),
+                    NamespaceID.from(main.getString("angry_texture")),
+                    readBiomesList(main.asMap().get("biomes")),
+                    custom);
+        }
+
+        private static @NotNull List<String> readBiomesList(Object biomes) {
+            if (biomes instanceof List<?> list) {
+                return list.stream().map(Object::toString).collect(Collectors.toList());
+            } else if (biomes instanceof String single) {
+                return List.of(single);
+            } else {
+                throw new IllegalArgumentException("invalid biomes entry: " + biomes);
+            }
+        }
+    }
+
+    public static final class ChatTypeEntry implements Entry {
+        private final NamespaceID namespace;
+        private final ChatTypeDecoration chat;
+        private final ChatTypeDecoration narration;
+        private final Properties custom;
+
+        public ChatTypeEntry(String namespace, Properties main, Properties custom) {
+            this.namespace = NamespaceID.from(namespace);
+            this.chat = readChatTypeDecoration(main.section("chat"));
+            this.narration = readChatTypeDecoration(main.section("narration"));
+            this.custom = custom;
+        }
+
+        public NamespaceID namespace() {
+            return namespace;
+        }
+
+        public ChatTypeDecoration chat() {
+            return chat;
+        }
+
+        public ChatTypeDecoration narration() {
+            return narration;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
+
+        private static @NotNull ChatTypeDecoration readChatTypeDecoration(Properties properties) {
+            List<ChatTypeDecoration.Parameter> parameters = new ArrayList<>();
+            if (properties.asMap().get("parameters") instanceof List<?> paramList) {
+                for (Object param : paramList) {
+                    parameters.add(ChatTypeDecoration.Parameter.valueOf(param.toString().toUpperCase(Locale.ROOT)));
+                }
+            }
+            Style style = Style.empty();
+            if (properties.containsKey("style")) {
+                // This is admittedly a pretty cursed way to handle deserialization here, however I do not want to
+                // write a standalone JSON style deserializer for this one use case.
+                // The methodology is to just convert it to a valid text component and deserialize that, then take the style.
+                Gson gson = GsonComponentSerializer.gson().serializer();
+                JsonObject textComponentJson = gson.toJsonTree(properties.section("style").asMap()).getAsJsonObject();
+                textComponentJson.addProperty("text", "IGNORED_VALUE");
+                Component textComponent = GsonComponentSerializer.gson().deserializeFromTree(textComponentJson);
+                style = textComponent.style();
+            }
+            return new ChatTypeDecoration(properties.getString("translation_key"), parameters, style);
+        }
+
+    }
+
+    public record EnchantmentEntry(NamespaceID namespace, String raw, Properties custom) implements Entry {
+        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace), main.getString("raw"), custom);
+        }
+    }
+
+    public record PaintingVariantEntry(NamespaceID namespace, NamespaceID assetId, int width, int height, Properties custom) implements Entry {
+        public PaintingVariantEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    main.getInt("width"),
+                    main.getInt("height"),
+                    custom);
+        }
+    }
+
+    public record JukeboxSongEntry(NamespaceID namespace, SoundEvent soundEvent, Component description,
+                                   float lengthInSeconds, int comparatorOutput, Properties custom) implements Entry {
+        public JukeboxSongEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    SoundEvent.fromNamespaceId(main.getString("sound_event")),
+                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
+                    (float) main.getDouble("length_in_seconds"),
+                    main.getInt("comparator_output"),
                     custom);
         }
     }
@@ -742,6 +970,17 @@ public final class Registry {
         }
 
         @Override
+        public float getFloat(String name, float defaultValue) {
+            var element = element(name);
+            return element != null ? ((Number) element).floatValue() : defaultValue;
+        }
+
+        @Override
+        public float getFloat(String name) {
+            return ((Number) element(name)).floatValue();
+        }
+
+        @Override
         public boolean getBoolean(String name, boolean defaultValue) {
             var element = element(name);
             return element != null ? (boolean) element : defaultValue;
@@ -778,7 +1017,7 @@ public final class Registry {
         public String toString() {
             AtomicReference<String> string = new AtomicReference<>("{ ");
             this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
-            return string.updateAndGet(s -> s.replaceFirst(" , ","") + "}");
+            return string.updateAndGet(s -> s.replaceFirst(" , ", "") + "}");
         }
 
     }
@@ -799,6 +1038,10 @@ public final class Registry {
         int getInt(String name, int defaultValue);
 
         int getInt(String name);
+
+        float getFloat(String name, float defaultValue);
+
+        float getFloat(String name);
 
         boolean getBoolean(String name, boolean defaultValue);
 

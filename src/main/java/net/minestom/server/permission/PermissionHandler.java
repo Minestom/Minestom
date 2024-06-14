@@ -2,8 +2,6 @@ package net.minestom.server.permission;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -14,8 +12,7 @@ import java.util.regex.Pattern;
  * Permissions are in-memory only by default.
  * You have however the capacity to store them persistently as the {@link Permission} object
  * is serializer-friendly, {@link Permission#getPermissionName()} being a {@link String}
- * and {@link Permission#getNBTData()} serializable into a string using {@link NBTCompound#toSNBT()}
- * and deserialized back with {@link SNBTParser#parse()}.
+ * and {@link Permission#getNBTData()} serializable into a string using {@link net.kyori.adventure.nbt.TagStringIO}.
  */
 public interface PermissionHandler {
 

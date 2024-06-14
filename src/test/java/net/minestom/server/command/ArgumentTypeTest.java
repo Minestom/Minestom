@@ -1,10 +1,15 @@
 package net.minestom.server.command;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.IntArrayBinaryTag;
+import net.kyori.adventure.nbt.IntBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -12,17 +17,16 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.TimeUnit;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -33,12 +37,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ArgumentTypeTest {
 
-    @Test
-    public void testArgumentEnchantment() {
-        var arg = ArgumentType.Enchantment("enchantment");
-        assertInvalidArg(arg, "minecraft:invalid_enchantment");
-        assertArg(arg, Enchantment.SWEEPING, Enchantment.SWEEPING.name());
-        assertArg(arg, Enchantment.MENDING, Enchantment.MENDING.name());
+    static {
+        MinecraftServer.init();
     }
 
     @Test
@@ -165,16 +165,19 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5), "glass_pane[custom_model_data=5]");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).withTag(Tag.String("tag"), "value"), "glass_pane[custom_model_data=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).with(ItemComponent.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
+                "glass_pane[custom_model_data=5,minecraft:custom_data={hi:232}]{tag:value}");
     }
 
     @Test
     public void testArgumentNbtCompoundTag() {
         var arg = ArgumentType.NbtCompound("nbt_compound");
-        assertArg(arg, NBT.Compound(mut -> mut.put("long_array", NBT.LongArray(12, 49, 119))), "{\"long_array\":[L;12L,49L,119L]}");
-        assertArg(arg, NBT.Compound(mut -> mut.put("nested", NBT.Compound(mut2 ->
-                        mut2.put("complex", NBT.IntArray(124, 999, 33256))
-                ))
-        ), "{\"nested\": {\"complex\": [I;124,999,33256]}}");
+        assertArg(arg, CompoundBinaryTag.builder().putLongArray("long_array", new long[]{12, 49, 119}).build(),
+                "{\"long_array\":[L;12L,49L,119L]}");
+        assertArg(arg, CompoundBinaryTag.builder().put("nested", CompoundBinaryTag.builder().putIntArray("complex", new int[]{124, 999, 33256}).build()).build(),
+                "{\"nested\": {\"complex\": [I;124,999,33256]}}");
 
         assertInvalidArg(arg, "string");
         assertInvalidArg(arg, "\"string\"");
@@ -185,11 +188,12 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentNbtTag() {
         var arg = ArgumentType.NBT("nbt");
-        assertArg(arg, NBT.String("string"), "string");
-        assertArg(arg, NBT.String("string"), "\"string\"");
-        assertArg(arg, NBT.Int(44), "44");
-        assertArg(arg, NBT.IntArray(11, 49, 33), "[I;11,49,33]");
-        assertArg(arg, NBT.Compound(mut -> mut.put("long_array", NBT.LongArray(12, 49, 119))), "{\"long_array\":[L;12L,49L,119L]}");
+        assertArg(arg, StringBinaryTag.stringBinaryTag("string"), "string");
+        assertArg(arg, StringBinaryTag.stringBinaryTag("string"), "\"string\"");
+        assertArg(arg, IntBinaryTag.intBinaryTag(44), "44");
+        assertArg(arg, IntArrayBinaryTag.intArrayBinaryTag(11, 49, 33), "[I;11,49,33]");
+        assertArg(arg, CompoundBinaryTag.builder().putLongArray("long_array", new long[]{12, 49, 119}).build(),
+                "{\"long_array\":[L;12L,49L,119L]}");
 
         assertInvalidArg(arg, "\"unbalanced string");
         assertInvalidArg(arg, "dd}");
