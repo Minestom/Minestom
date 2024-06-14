@@ -15,7 +15,7 @@ public class PlayerPositionListener {
 
     public static void playerPacketListener(ClientPlayerPacket packet, Player player) {
         final boolean onGround = packet.onGround();
-        refreshOnGround(player, onGround, true);
+        refreshOnGround(player, onGround);
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
@@ -70,12 +70,12 @@ public class PlayerPositionListener {
         if (packetPosition.equals(eventPosition)) {
             // Event didn't change the position
             player.refreshPosition(eventPosition);
-            refreshOnGround(player, onGround, false);
+            refreshOnGround(player, onGround);
         } else {
             // Position modified by the event
             if (packetPosition.samePoint(eventPosition)) {
                 player.refreshPosition(eventPosition, true);
-                refreshOnGround(player, onGround, false);
+                refreshOnGround(player, onGround);
                 player.setView(eventPosition.yaw(), eventPosition.pitch());
             } else {
                 player.teleport(eventPosition);
@@ -83,11 +83,9 @@ public class PlayerPositionListener {
         }
     }
 
-    private static void refreshOnGround(Player player, boolean onGround, boolean clientSent) {
-        PlayerOnGroundChangeEvent groundChangeEvent = new PlayerOnGroundChangeEvent(player, onGround, clientSent);
+    private static void refreshOnGround(Player player, boolean onGround) {
+        PlayerOnGroundChangeEvent groundChangeEvent = new PlayerOnGroundChangeEvent(player, onGround);
         EventDispatcher.call(groundChangeEvent);
-        if (!groundChangeEvent.isCancelled()) {
-            player.refreshOnGround(onGround);
-        }
+        player.refreshOnGround(onGround);
     }
 }
