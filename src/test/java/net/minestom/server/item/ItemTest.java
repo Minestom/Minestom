@@ -7,6 +7,8 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@EnvTest
 public class ItemTest {
 
     static {
@@ -28,7 +31,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (DataComponent<?> component : DataComponent.values()) {
+        for (DataComponent<?> component : ItemComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -53,7 +56,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (DataComponent<?> component : DataComponent.values()) {
+        for (DataComponent<?> component : ItemComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -83,7 +86,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testFromNbt() {
+    public void testFromNbt(Env env) {
         var itemNbt = createItem().toItemNBT();
         var item = ItemStack.fromItemNBT(itemNbt);
         assertEquals(createItem(), item, "Items must be equal if created from the same item nbt");

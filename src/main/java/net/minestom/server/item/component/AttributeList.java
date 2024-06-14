@@ -1,18 +1,18 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
+import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
-import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.UniqueIdUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInTooltip) {
     public static final AttributeList EMPTY = new AttributeList(List.of(), true);
@@ -20,13 +20,13 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
     public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, AttributeList value) {
-            buffer.writeCollection(value.modifiers);
+            buffer.writeCollection(Modifier.NETWORK_TYPE, value.modifiers);
             buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
         }
 
         @Override
         public AttributeList read(@NotNull NetworkBuffer buffer) {
-            return new AttributeList(buffer.readCollection(Modifier::new, Short.MAX_VALUE),
+            return new AttributeList(buffer.readCollection(Modifier.NETWORK_TYPE, Short.MAX_VALUE),
                     buffer.read(NetworkBuffer.BOOLEAN));
         }
     };
@@ -34,16 +34,9 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
     public static final BinaryTagSerializer<AttributeList> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull AttributeList value) {
-            ListBinaryTag.Builder<CompoundBinaryTag> modifiers = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
+            ListBinaryTag.Builder<BinaryTag> modifiers = ListBinaryTag.builder();
             for (Modifier modifier : value.modifiers) {
-                modifiers.add(CompoundBinaryTag.builder()
-                        .putString("type", modifier.attribute.name())
-                        .putString("slot", modifier.slot.name().toLowerCase(Locale.ROOT))
-                        .put("uuid", UniqueIdUtils.toNbt(modifier.modifier.id()))
-                        .putString("name", modifier.modifier.name())
-                        .putDouble("amount", modifier.modifier.amount())
-                        .putString("operation", modifier.modifier.operation().name().toLowerCase(Locale.ROOT))
-                        .build());
+                modifiers.add(Modifier.NBT_TYPE.write(modifier));
             }
             return CompoundBinaryTag.builder()
                     .put("modifiers", modifiers.build())
@@ -53,50 +46,45 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
 
         @Override
         public @NotNull AttributeList read(@NotNull BinaryTag tag) {
-            boolean showInTooltip = true;
-            ListBinaryTag modifiersTag;
-            if (tag instanceof CompoundBinaryTag compound) {
-                modifiersTag = compound.getList("modifiers", BinaryTagTypes.COMPOUND);
-                showInTooltip = compound.getBoolean("show_in_tooltip", true);
-            } else if (tag instanceof ListBinaryTag list) {
-                modifiersTag = list;
-            } else return EMPTY;
-            List<Modifier> modifiers = new ArrayList<>(modifiersTag.size());
-            for (BinaryTag modifierTagRaw : modifiersTag) {
-                if (!(modifierTagRaw instanceof CompoundBinaryTag modifierTag)) continue;
-                Attribute attribute = Attribute.fromNamespaceId(modifierTag.getString("type"));
-                if (attribute == null) continue; // Unknown attribute, skip
-                AttributeSlot slot = AttributeSlot.valueOf(modifierTag.getString("slot").toUpperCase(Locale.ROOT));
-                AttributeModifier modifier = new AttributeModifier(
-                        UniqueIdUtils.fromNbt((IntArrayBinaryTag) modifierTag.get("uuid")),
-                        modifierTag.getString("name"),
-                        modifierTag.getDouble("amount"),
-                        AttributeOperation.valueOf(modifierTag.getString("operation").toUpperCase(Locale.ROOT))
+            return switch (tag) {
+                case CompoundBinaryTag compound -> new AttributeList(
+                        compound.getList("modifiers", BinaryTagTypes.COMPOUND).stream().map(Modifier.NBT_TYPE::read).toList(),
+                        compound.getBoolean("show_in_tooltip", true)
                 );
-                modifiers.add(new Modifier(attribute, modifier, slot));
-            }
-            return new AttributeList(modifiers, showInTooltip);
+                case ListBinaryTag list -> new AttributeList(list.stream().map(Modifier.NBT_TYPE::read).toList());
+                default -> EMPTY;
+            };
         }
     };
 
-    public record Modifier(
-            @NotNull Attribute attribute,
-            @NotNull AttributeModifier modifier,
-            @NotNull AttributeSlot slot
-    ) implements NetworkBuffer.Writer {
+    public record Modifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier, @NotNull EquipmentSlotGroup slot) {
+        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Modifier value) {
+                buffer.write(Attribute.NETWORK_TYPE, value.attribute);
+                buffer.write(AttributeModifier.NETWORK_TYPE, value.modifier);
+                buffer.writeEnum(EquipmentSlotGroup.class, value.slot);
+            }
 
-        public Modifier(@NotNull NetworkBuffer reader) {
-            this(reader.read(Attribute.NETWORK_TYPE),
-                    new AttributeModifier(reader),
-                    reader.readEnum(AttributeSlot.class));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(Attribute.NETWORK_TYPE, attribute);
-            modifier.write(writer);
-            writer.writeEnum(AttributeSlot.class, slot);
-        }
+            @Override
+            public Modifier read(@NotNull NetworkBuffer buffer) {
+                return new Modifier(buffer.read(Attribute.NETWORK_TYPE),
+                        buffer.read(AttributeModifier.NETWORK_TYPE),
+                        buffer.readEnum(EquipmentSlotGroup.class));
+            }
+        };
+        public static final BinaryTagSerializer<Modifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+                tag -> new Modifier(
+                        Attribute.NBT_TYPE.read(tag.get("type")),
+                        AttributeModifier.NBT_TYPE.read(tag),
+                        tag.get("slot") instanceof BinaryTag slot ? EquipmentSlotGroup.NBT_TYPE.read(slot) : EquipmentSlotGroup.ANY
+                ),
+                modifier -> CompoundBinaryTag.builder()
+                        .put("type", Attribute.NBT_TYPE.write(modifier.attribute))
+                        .put((CompoundBinaryTag) AttributeModifier.NBT_TYPE.write(modifier.modifier))
+                        .put("slot", EquipmentSlotGroup.NBT_TYPE.write(modifier.slot))
+                        .build()
+        );
     }
 
     public AttributeList {

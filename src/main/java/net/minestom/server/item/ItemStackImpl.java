@@ -1,15 +1,19 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.*;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
@@ -94,9 +98,10 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         return (CompoundBinaryTag) NBT_TYPE.write(this);
     }
 
+    @Override
     @Contract(value = "-> new", pure = true)
-    private @NotNull ItemStack.Builder builder() {
-        return new Builder(material, amount, components.toBuilder());
+    public @NotNull ItemStack.Builder builder() {
+        return new Builder(material, amount, components.toPatchBuilder());
     }
 
     static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
@@ -104,7 +109,9 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         Material material = Material.fromNamespaceId(id);
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
-        DataComponentMap patch = DataComponentMap.PATCH_NBT_TYPE.read(tag.getCompound("components"));
+
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
+        DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
 
@@ -113,18 +120,19 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         tag.putString("id", itemStack.material().name());
         tag.putInt("count", itemStack.amount());
 
-        CompoundBinaryTag components = (CompoundBinaryTag) DataComponentMap.PATCH_NBT_TYPE.write(((ItemStackImpl) itemStack).components);
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
+        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();
     }
 
     static final class Builder implements ItemStack.Builder {
-        final Material material;
-        int amount;
-        DataComponentMap.Builder components;
+        private final Material material;
+        private int amount;
+        private DataComponentMap.PatchBuilder components;
 
-        Builder(Material material, int amount, DataComponentMap.Builder components) {
+        Builder(Material material, int amount, DataComponentMap.PatchBuilder components) {
             this.material = material;
             this.amount = amount;
             this.components = components;
@@ -133,7 +141,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         Builder(Material material, int amount) {
             this.material = material;
             this.amount = amount;
-            this.components = DataComponentMap.builder();
+            this.components = DataComponentMap.patchBuilder();
         }
 
         @Override
@@ -157,6 +165,28 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         @Override
         public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
             components.set(ItemComponent.CUSTOM_DATA, components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
+        }
+
+        @Override
+        public ItemStack.@NotNull Builder hideExtraTooltip() {
+            AttributeList attributeModifiers = components.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+            components.set(ItemComponent.ATTRIBUTE_MODIFIERS, attributeModifiers == null
+                    ? new AttributeList(List.of(), false) : attributeModifiers.withTooltip(false));
+            Unbreakable unbreakable = components.get(ItemComponent.UNBREAKABLE);
+            if (unbreakable != null) components.set(ItemComponent.UNBREAKABLE, new Unbreakable(false));
+            ArmorTrim armorTrim = components.get(ItemComponent.TRIM);
+            if (armorTrim != null) components.set(ItemComponent.TRIM, armorTrim.withTooltip(false));
+            BlockPredicates canBreak = components.get(ItemComponent.CAN_BREAK);
+            if (canBreak != null) components.set(ItemComponent.CAN_BREAK, canBreak.withTooltip(false));
+            BlockPredicates canPlaceOn = components.get(ItemComponent.CAN_PLACE_ON);
+            if (canPlaceOn != null) components.set(ItemComponent.CAN_PLACE_ON, canPlaceOn.withTooltip(false));
+            DyedItemColor dyedColor = components.get(ItemComponent.DYED_COLOR);
+            if (dyedColor != null) components.set(ItemComponent.DYED_COLOR, dyedColor.withTooltip(false));
+            EnchantmentList enchantments = components.get(ItemComponent.ENCHANTMENTS);
+            if (enchantments != null) components.set(ItemComponent.ENCHANTMENTS, enchantments.withTooltip(false));
+            JukeboxPlayable jukeboxPlayable = components.get(ItemComponent.JUKEBOX_PLAYABLE);
+            if (jukeboxPlayable != null) components.set(ItemComponent.JUKEBOX_PLAYABLE, jukeboxPlayable.withTooltip(false));
+            return set(ItemComponent.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
         }
 
         @Override

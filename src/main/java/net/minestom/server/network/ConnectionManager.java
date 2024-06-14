@@ -305,6 +305,9 @@ public final class ConnectionManager {
                 player.sendPacket(serverProcess.trimPattern().registryDataPacket(excludeVanilla));
                 player.sendPacket(serverProcess.bannerPattern().registryDataPacket(excludeVanilla));
                 player.sendPacket(serverProcess.wolfVariant().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.enchantment().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.paintingVariant().registryDataPacket(excludeVanilla));
+                player.sendPacket(serverProcess.jukeboxSong().registryDataPacket(excludeVanilla));
 
                 player.sendPacket(TagsPacket.DEFAULT_TAGS);
             }

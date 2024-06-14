@@ -7,6 +7,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +42,7 @@ public class PotionContentsTest extends AbstractItemComponentTest<PotionContents
 
     @Test
     void alternativeNbtSyntax() {
-        var value = ItemComponent.POTION_CONTENTS.read(StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness"));
+        var value = ItemComponent.POTION_CONTENTS.read(BinaryTagSerializer.Context.EMPTY, StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness"));
         var expected = new PotionContents(PotionType.STRONG_SWIFTNESS, null, List.of());
         assertEquals(expected, value);
     }

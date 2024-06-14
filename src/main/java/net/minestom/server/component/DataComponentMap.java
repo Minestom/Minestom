@@ -2,10 +2,14 @@ package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
+import java.util.function.IntFunction;
 
 /**
  * <p>Represents any container of {@link DataComponent}s.</p>
@@ -17,11 +21,42 @@ import org.jetbrains.annotations.Nullable;
 public sealed interface DataComponentMap extends DataComponent.Holder permits DataComponentMapImpl {
     @NotNull DataComponentMap EMPTY = new DataComponentMapImpl(new Int2ObjectArrayMap<>(0));
 
-    @NotNull NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMapImpl.PATCH_NETWORK_TYPE;
-    @NotNull BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMapImpl.PATCH_NBT_TYPE;
-
     static @NotNull DataComponentMap.Builder builder() {
         return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
+    }
+
+    static @NotNull DataComponentMap.PatchBuilder patchBuilder() {
+        return new DataComponentMapImpl.PatchBuilderImpl(new Int2ObjectArrayMap<>());
+    }
+
+    /**
+     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
+     */
+    @ApiStatus.Internal
+    static @NotNull BinaryTagSerializer<DataComponentMap> nbtType(
+            @NotNull IntFunction<DataComponent<?>> idToType,
+            @NotNull Function<String, DataComponent<?>> nameToType
+    ) {
+        return new DataComponentMapImpl.NbtType(idToType, nameToType, false);
+    }
+
+    /**
+     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
+     */
+    @ApiStatus.Internal
+    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) {
+        return new DataComponentMapImpl.PatchNetworkType(idToType);
+    }
+
+    /**
+     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
+     */
+    @ApiStatus.Internal
+    static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(
+            @NotNull IntFunction<DataComponent<?>> idToType,
+            @NotNull Function<String, DataComponent<?>> nameToType
+    ) {
+        return new DataComponentMapImpl.NbtType(idToType, nameToType, true);
     }
 
     static @NotNull DataComponentMap diff(@NotNull DataComponentMap prototype, @NotNull DataComponentMap patch) {
@@ -77,6 +112,10 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     <T> @NotNull DataComponentMap set(@NotNull DataComponent<T> component, @NotNull T value);
 
+    default @NotNull DataComponentMap set(@NotNull DataComponent<Unit> component) {
+        return set(component, Unit.INSTANCE);
+    }
+
     /**
      * Removes the component from the map (or patch).
      *
@@ -87,11 +126,29 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
     @NotNull Builder toBuilder();
 
+    @NotNull PatchBuilder toPatchBuilder();
+
     sealed interface Builder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
 
         <T> @NotNull Builder set(@NotNull DataComponent<T> component, @NotNull T value);
 
-        @NotNull Builder remove(@NotNull DataComponent<?> component);
+        default @NotNull Builder set(@NotNull DataComponent<Unit> component) {
+            return set(component, Unit.INSTANCE);
+        }
+
+        @NotNull DataComponentMap build();
+
+    }
+
+    sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
+
+        <T> @NotNull PatchBuilder set(@NotNull DataComponent<T> component, @NotNull T value);
+
+        default @NotNull PatchBuilder set(@NotNull DataComponent<Unit> component) {
+            return set(component, Unit.INSTANCE);
+        }
+
+        @NotNull PatchBuilder remove(@NotNull DataComponent<?> component);
 
         @NotNull DataComponentMap build();
 

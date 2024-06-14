@@ -40,5 +40,8 @@ public record ArmorTrim(@NotNull DynamicRegistry.Key<TrimMaterial> material, @No
                     .build()
     );
 
+    public @NotNull ArmorTrim withTooltip(boolean showInTooltip) {
+        return new ArmorTrim(material, pattern, showInTooltip);
+    }
 
 }

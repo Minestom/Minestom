@@ -525,8 +525,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         entityMeta.setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(DIMENSION_TYPE_REGISTRY.getId(getDimensionType().namespace()), instance.getDimensionName(),
-                0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
+        sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(), 0, gameMode, gameMode,
+                false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);

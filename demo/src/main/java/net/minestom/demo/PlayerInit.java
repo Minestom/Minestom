@@ -27,18 +27,21 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
-import net.minestom.server.item.component.ItemBlockState;
+import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.component.PotionContents;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
+import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
+import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
@@ -114,6 +117,16 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(itemStack);
 
+                player.sendPacket(new CustomReportDetailsPacket(Map.of(
+                        "hello", "world"
+                )));
+
+                player.sendPacket(new ServerLinksPacket(
+                        new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, "https://minestom.net"),
+                        new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.BUG_REPORT, "https://minestom.net"),
+                        new ServerLinksPacket.Entry(Component.text("Hello world!"), "https://minestom.net")
+                ));
+
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
                         .set(ItemComponent.BUNDLE_CONTENTS, List.of(
                                 ItemStack.of(Material.DIAMOND, 5),
@@ -122,8 +135,13 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_STAIRS)
-                        .set(ItemComponent.BLOCK_STATE, new ItemBlockState(Map.of("facing", "west", "half", "top")))
+                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
+                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
+                                Enchantment.SHARPNESS, 10
+                        )))
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
                         .build());
 
                 player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
@@ -135,6 +153,7 @@ public class PlayerInit {
                                         45 * 20, false, true, true, null))
                         )))
                         .build());
+
 
                 if (event.isFirstSpawn()) {
                     Notification notification = new Notification(
@@ -160,9 +179,9 @@ public class PlayerInit {
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
 
-                if ("false" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
+                if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
                     block = block.withProperty("waterlogged", "true");
-                } else if ("true" .equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
+                } else if ("true".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.BUCKET)) {
                     block = block.withProperty("waterlogged", "false");
                 } else return;
 

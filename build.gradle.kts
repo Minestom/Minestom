@@ -13,7 +13,7 @@ plugins {
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
 val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
 
-val shortDescription = "1.20.6 Lightweight Minecraft server"
+val shortDescription = "1.21 Lightweight Minecraft server"
 
 allprojects {
     apply(plugin = "java")

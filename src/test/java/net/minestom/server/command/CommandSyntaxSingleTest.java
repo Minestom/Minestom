@@ -3,8 +3,8 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.enchant.Enchantment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -112,35 +112,35 @@ public class CommandSyntaxSingleTest {
     public void singleLoopDoubleGroup() {
         List<Argument<?>> groupLoop = List.of(
                 Loop("loop",
-                        Group("group", BlockState("block"), Enchantment("enchant")),
-                        Group("group2", Enchantment("enchant"), BlockState("block"))
+                        Group("group", BlockState("block"), EntityType("entity_type")),
+                        Group("group2", EntityType("entity_type"), BlockState("block"))
                 )
         );
         // block enchant
         {
-            var input = "minecraft:stone minecraft:sharpness";
+            var input = "minecraft:stone minecraft:allay";
             var context = new CommandContext(input);
             context.setArg("block", Block.STONE, "minecraft:stone");
-            context.setArg("enchant", Enchantment.SHARPNESS, "minecraft:sharpness");
+            context.setArg("entity_type", EntityType.ALLAY, "minecraft:allay");
             assertSyntax(groupLoop, input, ExpectedExecution.SYNTAX, Map.of("loop", List.of(context)));
         }
         // enchant block block enchant
         {
-            var context1 = new CommandContext("minecraft:sharpness minecraft:stone");
-            var context2 = new CommandContext("minecraft:grass_block minecraft:efficiency");
+            var context1 = new CommandContext("minecraft:allay minecraft:stone");
+            var context2 = new CommandContext("minecraft:grass_block minecraft:zombie");
 
-            context1.setArg("enchant", Enchantment.SHARPNESS, "minecraft:sharpness");
+            context1.setArg("entity_type", EntityType.ALLAY, "minecraft:allay");
             context1.setArg("block", Block.STONE, "minecraft:stone");
 
             context2.setArg("block", Block.GRASS_BLOCK, "minecraft:grass_block");
-            context2.setArg("enchant", Enchantment.EFFICIENCY, "minecraft:efficiency");
+            context2.setArg("entity_type", EntityType.ZOMBIE, "minecraft:zombie");
 
             var input = context1.getInput() + " " + context2.getInput();
             assertSyntax(groupLoop, input, ExpectedExecution.SYNTAX, Map.of("loop", List.of(context1, context2)));
         }
         // Incomplete loop
-        assertSyntax(groupLoop, "minecraft:sharpness", ExpectedExecution.DEFAULT);
-        assertSyntax(groupLoop, "minecraft:sharpness minecraft:sharpness", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "minecraft:allay", ExpectedExecution.DEFAULT);
+        assertSyntax(groupLoop, "minecraft:allay minecraft:allay", ExpectedExecution.DEFAULT);
         assertSyntax(groupLoop, "minecraft:stone", ExpectedExecution.DEFAULT);
         assertSyntax(groupLoop, "minecraft:stone minecraft:stone", ExpectedExecution.DEFAULT);
     }

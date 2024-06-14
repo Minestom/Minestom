@@ -2,13 +2,11 @@ package net.minestom.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record DimensionTypeImpl(
-        @NotNull NamespaceID namespace,
         boolean ultrawarm,
         boolean natural,
         double coordinateScale,
@@ -60,7 +58,7 @@ record DimensionTypeImpl(
     );
 
     DimensionTypeImpl(@NotNull Registry.DimensionTypeEntry registry) {
-        this(registry.namespace(), registry.ultrawarm(), registry.natural(), registry.coordinateScale(),
+        this(registry.ultrawarm(), registry.natural(), registry.coordinateScale(),
                 registry.hasSkylight(), registry.hasCeiling(), registry.ambientLight(), registry.fixedTime(),
                 registry.piglinSafe(), registry.bedWorks(), registry.respawnAnchorWorks(), registry.hasRaids(),
                 registry.logicalHeight(), registry.minY(), registry.height(), registry.infiniburn(),

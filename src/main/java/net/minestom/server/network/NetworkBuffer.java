@@ -193,6 +193,25 @@ public final class NetworkBuffer {
         return values;
     }
 
+    public <K, V> @NotNull Map<K, V> writeMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, @NotNull Map<K, V> map) {
+        write(VAR_INT, map.size());
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            write(keyType, entry.getKey());
+            write(valueType, entry.getValue());
+        }
+        return map;
+    }
+
+    public <K, V> @NotNull Map<K, V> readMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, int maxSize) {
+        final int size = read(VAR_INT);
+        Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+        final Map<K, V> map = new HashMap<>(size);
+        for (int i = 0; i < size; i++) {
+            map.put(read(keyType), read(valueType));
+        }
+        return map;
+    }
+
     public <E extends Enum<?>> void writeEnum(@NotNull Class<E> enumClass, @NotNull E value) {
         write(VAR_INT, value.ordinal());
     }

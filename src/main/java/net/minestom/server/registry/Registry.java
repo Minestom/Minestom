@@ -20,10 +20,13 @@ import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -68,11 +71,6 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
-        return new EnchantmentEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
     public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
         return new PotionEffectEntry(namespace, main, null);
     }
@@ -110,6 +108,21 @@ public final class Registry {
     @ApiStatus.Internal
     public static ChatTypeEntry chatType(String namespace, @NotNull Properties main) {
         return new ChatTypeEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
+        return new EnchantmentEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static PaintingVariantEntry paintingVariant(String namespace, @NotNull Properties main) {
+        return new PaintingVariantEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
+        return new JukeboxSongEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -190,59 +203,10 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static <T extends ProtocolObject> DynamicContainer<T> createDynamicContainer(Resource resource, Container.Loader<T> loader) {
-        var entries = Registry.load(resource);
-        Map<String, T> namespaces = new HashMap<>(entries.size());
-        for (var entry : entries.entrySet()) {
-            final String namespace = entry.getKey();
-            final Properties properties = Properties.fromMap(entry.getValue());
-            final T value = loader.get(namespace, properties);
-            namespaces.put(value.name(), value);
-        }
-        return new DynamicContainer<>(resource, namespaces);
-    }
-
-    @ApiStatus.Internal
-    public record DynamicContainer<T>(Resource resource, Map<String, T> namespaces) {
-        public DynamicContainer {
-            namespaces = Map.copyOf(namespaces);
-        }
-
-        public T get(@NotNull String namespace) {
-            return namespaces.get(namespace);
-        }
-
-        public T getSafe(@NotNull String namespace) {
-            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
-        }
-
-        public Collection<T> values() {
-            return namespaces.values();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Container<?> container)) return false;
-            return resource == container.resource;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(resource);
-        }
-
-        public interface Loader<T extends ProtocolObject> {
-            T get(String namespace, Properties properties);
-        }
-    }
-
-    @ApiStatus.Internal
     public enum Resource {
         BLOCKS("blocks.json"),
         ITEMS("items.json"),
         ENTITIES("entities.json"),
-        ENCHANTMENTS("enchantments.json"),
         SOUNDS("sounds.json"),
         COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
@@ -252,22 +216,30 @@ public final class Registry {
         DAMAGE_TYPES("damage_types.json"),
         TRIM_MATERIALS("trim_materials.json"),
         TRIM_PATTERNS("trim_patterns.json"),
-        BLOCK_TAGS("tags/block_tags.json"),
-        ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
-        FLUID_TAGS("tags/fluid_tags.json"),
-        GAMEPLAY_TAGS("tags/gameplay_tags.json"),
-        ITEM_TAGS("tags/item_tags.json"),
+        BLOCK_TAGS("tags/block.json"),
+        ENTITY_TYPE_TAGS("tags/entity_type.json"),
+        FLUID_TAGS("tags/fluid.json"),
+        GAMEPLAY_TAGS("tags/game_event.json"),
+        ITEM_TAGS("tags/item.json"),
+        ENCHANTMENT_TAGS("tags/enchantment.json"),
         DIMENSION_TYPES("dimension_types.json"),
         BIOMES("biomes.json"),
         ATTRIBUTES("attributes.json"),
         BANNER_PATTERNS("banner_patterns.json"),
         WOLF_VARIANTS("wolf_variants.json"),
-        CHAT_TYPES("chat_types.json");
+        CHAT_TYPES("chat_types.json"),
+        ENCHANTMENTS("enchantments.snbt"),
+        PAINTING_VARIANTS("painting_variants.json"),
+        JUKEBOX_SONGS("jukebox_songs.json");
 
         private final String name;
 
         Resource(String name) {
             this.name = name;
+        }
+
+        public @NotNull String fileName() {
+            return name;
         }
     }
 
@@ -612,14 +584,15 @@ public final class Registry {
         public @NotNull DataComponentMap prototype() {
             if (prototype == null) {
                 try {
+                    BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
                     DataComponentMap.Builder builder = DataComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
-                        DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromNamespaceId(entry.getKey());
+                        DataComponent<Object> component = (DataComponent<Object>) ItemComponent.fromNamespaceId(entry.getKey());
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), namespace);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
-                        builder.set(component, component.read(tag));
+                        builder.set(component, component.read(context, tag));
                     }
                     this.prototype = builder.build();
                 } catch (IOException e) {
@@ -791,27 +764,6 @@ public final class Registry {
         }
     }
 
-    public record EnchantmentEntry(NamespaceID namespace, int id,
-                                   String translationKey,
-                                   double maxLevel,
-                                   boolean isCursed,
-                                   boolean isDiscoverable,
-                                   boolean isTradeable,
-                                   boolean isTreasureOnly,
-                                   Properties custom) implements Entry {
-        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    main.getString("translationKey"),
-                    main.getDouble("maxLevel"),
-                    main.getBoolean("curse", false),
-                    main.getBoolean("discoverable", true),
-                    main.getBoolean("tradeable", true),
-                    main.getBoolean("treasureOnly", false),
-                    custom);
-        }
-    }
-
     public record PotionEffectEntry(NamespaceID namespace, int id,
                                     String translationKey,
                                     int color,
@@ -925,6 +877,34 @@ public final class Registry {
             return new ChatTypeDecoration(properties.getString("translation_key"), parameters, style);
         }
 
+    }
+
+    public record EnchantmentEntry(NamespaceID namespace, String raw, Properties custom) implements Entry {
+        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace), main.getString("raw"), custom);
+        }
+    }
+
+    public record PaintingVariantEntry(NamespaceID namespace, NamespaceID assetId, int width, int height, Properties custom) implements Entry {
+        public PaintingVariantEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
+                    main.getInt("width"),
+                    main.getInt("height"),
+                    custom);
+        }
+    }
+
+    public record JukeboxSongEntry(NamespaceID namespace, SoundEvent soundEvent, Component description,
+                                   float lengthInSeconds, int comparatorOutput, Properties custom) implements Entry {
+        public JukeboxSongEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    SoundEvent.fromNamespaceId(main.getString("sound_event")),
+                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
+                    (float) main.getDouble("length_in_seconds"),
+                    main.getInt("comparator_output"),
+                    custom);
+        }
     }
 
     public interface Entry {

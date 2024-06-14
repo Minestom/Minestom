@@ -27,7 +27,7 @@ public class TestUseItemListenerIntegration {
 
         var itemStack = ItemStack.of(Material.DIAMOND);
         player.setItemInMainHand(itemStack);
-        UseItemListener.useItemListener(new ClientUseItemPacket(Player.Hand.MAIN, 42), player);
+        UseItemListener.useItemListener(new ClientUseItemPacket(Player.Hand.MAIN, 42, 0f, 0f), player);
 
         useItemCollector.assertSingle(event -> {
             assertEquals(Player.Hand.MAIN, event.getHand());
@@ -43,7 +43,7 @@ public class TestUseItemListenerIntegration {
 
         var boots = ItemStack.of(Material.DIAMOND_BOOTS);
         player.setItemInMainHand(boots);
-        UseItemListener.useItemListener(new ClientUseItemPacket(Player.Hand.MAIN, 42), player);
+        UseItemListener.useItemListener(new ClientUseItemPacket(Player.Hand.MAIN, 42, 0f, 0f), player);
 
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
         assertEquals(boots, player.getEquipment(EquipmentSlot.BOOTS));
@@ -59,7 +59,7 @@ public class TestUseItemListenerIntegration {
 
         var boots = ItemStack.of(Material.DIAMOND_BOOTS);
         player.setItemInMainHand(boots);
-        UseItemListener.useItemListener(new ClientUseItemPacket(Player.Hand.MAIN, 42), player);
+        UseItemListener.useItemListener(new ClientUseItemPacket(Player.Hand.MAIN, 42, 0f, 0f), player);
 
         assertEquals(oldBoots, player.getItemInMainHand());
         assertEquals(boots, player.getEquipment(EquipmentSlot.BOOTS));

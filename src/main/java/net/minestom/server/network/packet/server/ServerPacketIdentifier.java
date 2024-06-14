@@ -33,6 +33,8 @@ public final class ServerPacketIdentifier {
     public static final int CONFIGURATION_UPDATE_ENABLED_FEATURES = nextConfigurationId();
     public static final int CONFIGURATION_TAGS = nextConfigurationId();
     public static final int CONFIGURATION_SELECT_KNOWN_PACKS = nextConfigurationId();
+    public static final int CONFIGURATION_CUSTOM_REPORT_DETAILS = nextConfigurationId();
+    public static final int CONFIGURATION_SERVER_LINKS = nextConfigurationId();
 
     public static final int BUNDLE = nextPlayId();
     public static final int SPAWN_ENTITY = nextPlayId();
@@ -156,6 +158,8 @@ public final class ServerPacketIdentifier {
     public static final int DECLARE_RECIPES = nextPlayId();
     public static final int TAGS = nextPlayId();
     public static final int PROJECTILE_POWER = nextPlayId();
+    public static final int CUSTOM_REPORT_DETAILS = nextPlayId();
+    public static final int SERVER_LINKS = nextPlayId();
 
     private static int nextStatusId() {
         return STATUS_ID.getAndIncrement();

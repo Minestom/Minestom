@@ -1,17 +1,22 @@
 package net.minestom.server.entity.metadata.other;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Locale;
 
 public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
@@ -23,11 +28,11 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         super(entity, metadata);
     }
 
-    public @NotNull Variant getVariant() {
+    public @NotNull DynamicRegistry.Key<Variant> getVariant() {
         return super.metadata.getIndex(OFFSET, Variant.KEBAB);
     }
 
-    public void setVariant(@NotNull Variant value) {
+    public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
         super.metadata.setIndex(OFFSET, Metadata.PaintingVariant(value));
     }
 
@@ -74,90 +79,101 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         }
     }
 
-    public enum Variant implements StaticProtocolObject {
-        KEBAB(16, 16),
-        AZTEC(16, 16),
-        ALBAN(16, 16),
-        AZTEC2(16, 16),
-        BOMB(16, 16),
-        PLANT(16, 16),
-        WASTELAND(16, 16),
-        POOL(32, 16),
-        COURBET(32, 16),
-        SEA(32, 16),
-        SUNSET(32, 16),
-        CREEBET(32, 16),
-        WANDERER(16, 32),
-        GRAHAM(16, 32),
-        MATCH(32, 32),
-        BUST(32, 32),
-        STAGE(32, 32),
-        VOID(32, 32),
-        SKULL_AND_ROSES(32, 32),
-        WITHER(32, 32),
-        FIGHTERS(64, 32),
-        POINTER(64, 64),
-        PIGSCENE(64, 64),
-        BURNING_SKULL(64, 64),
-        SKELETON(64, 48),
-        EARTH(32, 32),
-        WIND(32, 32),
-        WATER(32, 32),
-        FIRE(32, 32),
-        DONKEY_KONG(64, 48);
+    public sealed interface Variant extends ProtocolObject, PaintingVariants permits VariantImpl {
+        @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Variant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::paintingVariant);
+        @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::paintingVariant);
 
-        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
-
-        private static final Variant[] VALUES = values();
-
-        public static @Nullable Variant fromId(int id) {
-            if (id < 0 || id >= VALUES.length) {
-                return null;
-            }
-            return VALUES[id];
+        static @NotNull Variant create(
+                @NotNull NamespaceID assetId,
+                int width, int height
+        ) {
+            return new VariantImpl(assetId, width, height, null);
         }
 
-        public static @Nullable Variant fromNamespaceId(@Nullable String namespaceId) {
-            if (namespaceId == null) return null;
-            return fromNamespaceId(NamespaceID.from(namespaceId));
+        static @NotNull Builder builder() {
+            return new Builder();
         }
 
-        public static @Nullable Variant fromNamespaceId(@Nullable NamespaceID namespaceId) {
-            if (namespaceId == null) return null;
-            for (Variant value : VALUES) {
-                if (value.namespace().equals(namespaceId)) {
-                    return value;
-                }
-            }
-            return null;
+        /**
+         * <p>Creates a new registry for painting variants, loading the vanilla painting variants.</p>
+         *
+         * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
+         */
+        @ApiStatus.Internal
+        static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
+            return DynamicRegistry.create(
+                    "minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.PAINTING_VARIANTS,
+                    (namespace, props) -> new VariantImpl(Registry.paintingVariant(namespace, props))
+            );
         }
 
-        private final NamespaceID namespace;
-        private final int width;
-        private final int height;
+        @NotNull NamespaceID assetId();
 
-        Variant(int width, int height) {
-            this.namespace = NamespaceID.from("minecraft", name().toLowerCase(Locale.ROOT));
-            this.width = width;
-            this.height = height;
-        }
+        int width();
+
+        int height();
 
         @Override
-        public int id() {
-            return ordinal();
+        @Nullable Registry.PaintingVariantEntry registry();
+
+        class Builder {
+            private NamespaceID assetId;
+            private int width;
+            private int height;
+
+            private Builder() {
+            }
+
+            @Contract(value = "_ -> this", pure = true)
+            public @NotNull Builder assetId(@NotNull NamespaceID assetId) {
+                this.assetId = assetId;
+                return this;
+            }
+
+            @Contract(value = "_ -> this", pure = true)
+            public @NotNull Builder width(int width) {
+                this.width = width;
+                return this;
+            }
+
+            @Contract(value = "_ -> this", pure = true)
+            public @NotNull Builder height(int height) {
+                this.height = height;
+                return this;
+            }
+
+            public @NotNull Variant build() {
+                return new VariantImpl(assetId, width, height, null);
+            }
+        }
+    }
+
+    record VariantImpl(
+            @NotNull NamespaceID assetId,
+            int width,
+            int height,
+            @Nullable Registry.PaintingVariantEntry registry
+    ) implements Variant {
+        private static final BinaryTagSerializer<Variant> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+                tag -> {
+                    throw new UnsupportedOperationException("PaintingVariant is read-only");
+                },
+                variant -> CompoundBinaryTag.builder()
+                        .putString("asset_id", variant.assetId().asString())
+                        .putInt("width", variant.width())
+                        .putInt("height", variant.height())
+                        .build()
+        );
+
+        @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
+        VariantImpl {
+            Check.argCondition(assetId == null, "missing asset id");
+            Check.argCondition(width <= 0, "width must be positive");
+            Check.argCondition(height <= 0, "height must be positive");
         }
 
-        public int width() {
-            return width;
-        }
-
-        public int height() {
-            return height;
-        }
-
-        @Override
-        public @NotNull NamespaceID namespace() {
-            return namespace;
+        VariantImpl(@NotNull Registry.PaintingVariantEntry registry) {
+            this(registry.assetId(), registry.width(), registry.height(), registry);
         }
     }
 

@@ -52,10 +52,15 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         list.forEach(itemStack -> {
             components.addAll(itemStack.get(ItemComponent.LORE, List.of()));
 
-            final var displayName = itemStack.get(ItemComponent.CUSTOM_NAME);
-            if (displayName == null) return;
+            final var customName = itemStack.get(ItemComponent.CUSTOM_NAME);
+            if (customName != null) {
+                components.add(customName);
+            }
 
-            components.add(displayName);
+            final var itemName = itemStack.get(ItemComponent.ITEM_NAME);
+            if (itemName != null) {
+                components.add(itemName);
+            }
         });
 
         return components;
@@ -72,10 +77,12 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
                 this.windowId,
                 this.stateId,
                 this.items.stream().map(stack -> stack
+                        .with(ItemComponent.ITEM_NAME, operator)
                         .with(ItemComponent.CUSTOM_NAME, operator)
                         .with(ItemComponent.LORE, loreOperator))
                         .toList(),
                 this.carriedItem
+                        .with(ItemComponent.ITEM_NAME, operator)
                         .with(ItemComponent.CUSTOM_NAME, operator)
                         .with(ItemComponent.LORE, loreOperator)
         );

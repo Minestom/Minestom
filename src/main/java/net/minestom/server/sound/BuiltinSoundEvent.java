@@ -1,5 +1,6 @@
 package net.minestom.server.sound;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
@@ -30,5 +31,15 @@ record BuiltinSoundEvent(NamespaceID namespace, int id) implements StaticProtoco
     @Override
     public String toString() {
         return name();
+    }
+
+    @Override
+    public @NotNull String name() {
+        return StaticProtocolObject.super.name();
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return StaticProtocolObject.super.key();
     }
 }

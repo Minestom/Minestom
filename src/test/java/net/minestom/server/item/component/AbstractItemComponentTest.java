@@ -2,6 +2,9 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +19,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@EnvTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractItemComponentTest<T> {
 
@@ -29,14 +33,15 @@ public abstract class AbstractItemComponentTest<T> {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("directReadWriteMethodSource")
-    public void directReadWriteTest(String testName, @NotNull T entry) {
+    public void directReadWriteTest(String testName, @NotNull T entry, Env env) {
+        var context = new BinaryTagSerializer.ContextWithRegistries(env.process());
         if (component().isSerialized()) {
-            var written1 = component().write(entry);
+            var written1 = component().write(context, entry);
 
-            var read = component().read(written1);
+            var read = component().read(context, written1);
             assertEquals(entry, read);
 
-            var written2 = component().write(read);
+            var written2 = component().write(context, read);
             assertEquals(written1, written2);
         }
 

@@ -1,10 +1,12 @@
 package net.minestom.server.item;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@EnvTest
 public class MaterialReadTest {
 
     static {

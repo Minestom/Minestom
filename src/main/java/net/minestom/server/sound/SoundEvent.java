@@ -1,10 +1,12 @@
 package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +15,7 @@ import java.util.Collection;
 /**
  * Can represent a builtin/vanilla sound or a custom sound.
  */
-public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
+public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
     @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -96,8 +98,18 @@ public sealed interface SoundEvent extends ProtocolObject, Sound.Type, SoundEven
         return new CustomSoundEvent(namespaceID, range);
     }
 
-    @Override
-    default @NotNull Key key() {
-        return ProtocolObject.super.key();
+    @Contract(pure = true)
+    @NotNull NamespaceID namespace();
+
+    @Contract(pure = true)
+    default @NotNull String name() {
+        return namespace().asString();
     }
+
+    @Override
+    @Contract(pure = true)
+    default @NotNull Key key() {
+        return namespace();
+    }
+
 }

@@ -3,7 +3,6 @@ package net.minestom.server.world;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,12 +16,8 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
-    }
-
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -80,7 +75,6 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
 
     final class Builder {
         // Defaults match the vanilla overworld
-        private final NamespaceID namespace;
         private boolean ultrawarm = false;
         private boolean natural = true;
         private double coordinateScale = 1.0;
@@ -98,8 +92,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         private String infiniburn = "#minecraft:infiniburn_overworld";
         private String effects = "minecraft:overworld";
 
-        public Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -201,7 +194,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         @Contract(pure = true)
         public @NotNull DimensionType build() {
             return new DimensionTypeImpl(
-                    namespace, ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
+                    ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
                     infiniburn, effects, null
             );

@@ -2,6 +2,7 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
+import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -25,20 +26,20 @@ import java.util.List;
  *
  * @see Registries
  */
-public sealed interface DynamicRegistry<T extends ProtocolObject> permits DynamicRegistryImpl {
+public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
 
     /**
      * A key for a {@link ProtocolObject} in a {@link DynamicRegistry}.
      *
      * @param <T> Unused, except to provide compile-time safety and self documentation.
      */
-    sealed interface Key<T extends ProtocolObject> extends Keyed permits DynamicRegistryImpl.KeyImpl {
+    sealed interface Key<T> extends Keyed permits DynamicRegistryImpl.KeyImpl {
 
-        static <T extends ProtocolObject> @NotNull Key<T> of(@NotNull String namespace) {
+        static <T> @NotNull Key<T> of(@NotNull String namespace) {
             return new DynamicRegistryImpl.KeyImpl<>(NamespaceID.from(namespace));
         }
 
-        static <T extends ProtocolObject> @NotNull Key<T> of(@NotNull NamespaceID namespace) {
+        static <T> @NotNull Key<T> of(@NotNull NamespaceID namespace) {
             return new DynamicRegistryImpl.KeyImpl<>(namespace);
         }
 
@@ -57,13 +58,18 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
         }
     }
 
+    @ApiStatus.Internal
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id) {
+        return new DynamicRegistryImpl<>(id, null);
+    }
+
     /**
      * Creates a new empty registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
+    static <T> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType) {
         return new DynamicRegistryImpl<>(id, nbtType);
     }
@@ -77,7 +83,7 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
             @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return new DynamicRegistryImpl<>(id, nbtType, resource, loader);
+        return create(id, nbtType, resource, loader, null);
     }
 
     /**
@@ -90,8 +96,26 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
             @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
             @Nullable Comparator<String> idComparator) {
-        return new DynamicRegistryImpl<>(id, nbtType, resource, loader, idComparator);
+        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
+        DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
+        return registry;
     }
+
+    /**
+     * Creates a new empty registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
+            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull Registries registries, @NotNull Registry.Resource resource) {
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
+        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
+        return registry;
+    }
+
+    @NotNull String id();
 
     @Nullable T get(int id);
     @Nullable T get(@NotNull NamespaceID namespace);
@@ -100,23 +124,30 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
     }
 
     @Nullable Key<T> getKey(int id);
+    @Nullable Key<T> getKey(@NotNull T value);
     @Nullable NamespaceID getName(int id);
+    @Nullable DataPack getPack(int id);
+    default @Nullable DataPack getPack(@NotNull Key<T> key) {
+        final int id = getId(key);
+        return id == -1 ? null : getPack(id);
+    }
 
     /**
      * Returns the protocol ID associated with the given {@link NamespaceID}, or -1 if none is registered.
      *
-     * @see #register(ProtocolObject)
+     * @see #register(NamespaceID, T)
      */
     int getId(@NotNull NamespaceID id);
 
     /**
      * Returns the protocol ID associated with the given {@link Key}, or -1 if none is registered.
      *
-     * @see #register(ProtocolObject)
+     * @see #register(NamespaceID, T)
      */
     default int getId(@NotNull Key<T> key) {
         return getId(key.namespace());
     }
+
 
     /**
      * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
@@ -142,7 +173,23 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
      * @param object The entry to register
      * @return The new ID of the registered object
      */
-    @NotNull DynamicRegistry.Key<T> register(@NotNull T object);
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object) {
+        return register(NamespaceID.from(id), object, null);
+    }
+
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object) {
+        return register(id, object, null);
+    }
+
+    @ApiStatus.Internal
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
+        return register(NamespaceID.from(id), object, pack);
+    }
+
+    @ApiStatus.Internal
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object, @Nullable DataPack pack) {
+        return register(id, object);
+    }
 
     /**
      * <p>Removes an object from this registry.</p>
@@ -156,15 +203,15 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
      * <p>Note: the new registry will not be sent to existing players. They must be returned to
      * the configuration phase to receive new registry data. See {@link Player#startConfigurationPhase()}.</p>
      *
-     * @param object The entry to remove
+     * @param namespaceId The id of the entry to remove
      * @return True if the object was removed, false if it was not present
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
-    boolean remove(@NotNull T object) throws UnsupportedOperationException;
+    boolean remove(@NotNull NamespaceID namespaceId) throws UnsupportedOperationException;
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
-     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(ProtocolObject)}.</p>
+     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(NamespaceID, T)}.</p>
      *
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data

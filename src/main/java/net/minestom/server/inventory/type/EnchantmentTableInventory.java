@@ -1,13 +1,17 @@
 package net.minestom.server.inventory.type;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EnchantmentTableInventory extends Inventory {
+    private static final DynamicRegistry<Enchantment> ENCHANTMENT_REGISTRY = MinecraftServer.getEnchantmentRegistry();
 
     private final short[] levelRequirements = new short[EnchantmentSlot.values().length];
     private short seed;
@@ -72,11 +76,10 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @return the enchantment shown in the slot, null if it is hidden
      */
-    public Enchantment getEnchantmentShown(EnchantmentSlot enchantmentSlot) {
-        final short id = enchantmentShown[enchantmentSlot.ordinal()];
-        if (id == -1)
-            return null;
-        return Enchantment.fromId(id);
+    public DynamicRegistry.Key<Enchantment> getEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot) {
+        final int id = enchantmentShown[enchantmentSlot.ordinal()];
+        if (id == -1) return null;
+        return ENCHANTMENT_REGISTRY.getKey(id);
     }
 
     /**
@@ -87,8 +90,8 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @param enchantment     the enchantment
      */
-    public void setEnchantmentShown(EnchantmentSlot enchantmentSlot, Enchantment enchantment) {
-        final short id = enchantment == null ? -1 : (short) enchantment.id();
+    public void setEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot, @Nullable DynamicRegistry.Key<Enchantment> enchantment) {
+        final short id = enchantment == null ? -1 : (short) ENCHANTMENT_REGISTRY.getId(enchantment);
         switch (enchantmentSlot) {
             case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);
             case MIDDLE -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_MIDDLE, id);

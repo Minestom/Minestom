@@ -49,6 +49,7 @@ public final class ServerFlag {
     public static final @Nullable String MAP_RGB_REDUCTION = System.getProperty("minestom.map.rgbreduction"); // Only used if rgb mapping is "approximate"
 
     // Experimental/Unstable
+    public static final boolean REGISTRY_LATE_REGISTER = Boolean.getBoolean("minestom.registry.late-register");
     public static final boolean REGISTRY_UNSAFE_OPS = Boolean.getBoolean("minestom.registry.unsafe-ops");
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = Boolean.getBoolean("minestom.event.multiple-parents");
 

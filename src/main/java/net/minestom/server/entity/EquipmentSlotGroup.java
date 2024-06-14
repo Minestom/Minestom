@@ -1,14 +1,16 @@
-package net.minestom.server.item.attribute;
+package net.minestom.server.entity;
 
-import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public enum AttributeSlot {
+public enum EquipmentSlotGroup {
     ANY(EquipmentSlot.values()),
-    MAINHAND(EquipmentSlot.MAIN_HAND),
-    OFFHAND(EquipmentSlot.OFF_HAND),
+    MAIN_HAND(EquipmentSlot.MAIN_HAND),
+    OFF_HAND(EquipmentSlot.OFF_HAND),
+    HAND(EquipmentSlot.MAIN_HAND, EquipmentSlot.OFF_HAND),
     FEET(EquipmentSlot.BOOTS),
     LEGS(EquipmentSlot.LEGGINGS),
     CHEST(EquipmentSlot.CHESTPLATE),
@@ -16,9 +18,12 @@ public enum AttributeSlot {
     ARMOR(EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS, EquipmentSlot.HELMET),
     BODY(EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS);
 
+    public static final NetworkBuffer.Type<EquipmentSlotGroup> NETWORK_TYPE = NetworkBuffer.Enum(EquipmentSlotGroup.class);
+    public static final BinaryTagSerializer<EquipmentSlotGroup> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(EquipmentSlotGroup.class);
+
     private final List<EquipmentSlot> equipmentSlots;
 
-    AttributeSlot(@NotNull EquipmentSlot... equipmentSlots) {
+    EquipmentSlotGroup(@NotNull EquipmentSlot... equipmentSlots) {
         this.equipmentSlots = List.of(equipmentSlots);
     }
 

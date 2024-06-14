@@ -3,7 +3,6 @@ package net.minestom.server.message;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,20 +10,16 @@ import org.jetbrains.annotations.Nullable;
 public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatTypeImpl {
 
     static @NotNull ChatType create(
-            @NotNull NamespaceID namespace,
             @NotNull ChatTypeDecoration chat,
             @NotNull ChatTypeDecoration narration
     ) {
-        return new ChatTypeImpl(namespace, chat, narration, null);
+        return new ChatTypeImpl(chat, narration, null);
     }
 
-    static @NotNull Builder builder(@NotNull String namespace) {
-        return builder(NamespaceID.from(namespace));
+    static @NotNull Builder builder() {
+        return new Builder();
     }
 
-    static @NotNull Builder builder(@NotNull NamespaceID namespace) {
-        return new Builder(namespace);
-    }
 
     /**
      * <p>Creates a new registry for chat types, loading the vanilla chat types.</p>
@@ -47,12 +42,10 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
     @Nullable Registry.ChatTypeEntry registry();
 
     final class Builder {
-        private final NamespaceID namespace;
         private ChatTypeDecoration chat;
         private ChatTypeDecoration narration;
 
-        public Builder(@NotNull NamespaceID namespace) {
-            this.namespace = namespace;
+        private Builder() {
         }
 
         public Builder chat(@NotNull ChatTypeDecoration chat) {
@@ -66,7 +59,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
         }
 
         public @NotNull ChatType build() {
-            return new ChatTypeImpl(namespace, chat, narration, null);
+            return new ChatTypeImpl(chat, narration, null);
         }
     }
 }

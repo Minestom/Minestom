@@ -2,14 +2,12 @@ package net.minestom.server.message;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record ChatTypeImpl(
-        @NotNull NamespaceID namespace,
         @NotNull ChatTypeDecoration chat,
         @NotNull ChatTypeDecoration narration,
         @Nullable Registry.ChatTypeEntry registry
@@ -26,13 +24,12 @@ record ChatTypeImpl(
     );
 
     ChatTypeImpl {
-        Check.notNull(namespace, "Namespace cannot be null");
-        Check.notNull(chat, "missing chat: {0}", namespace);
-        Check.notNull(narration, "missing narration: {0}", namespace);
+        Check.notNull(chat, "missing chat");
+        Check.notNull(narration, "missing narration");
     }
 
     ChatTypeImpl(@NotNull Registry.ChatTypeEntry registry) {
-        this(registry.namespace(), registry.chat(), registry.narration(), registry);
+        this(registry.chat(), registry.narration(), registry);
     }
 
 }

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record BannerPatternImpl(
-        @NotNull NamespaceID namespace,
         @NotNull NamespaceID assetId,
         @NotNull String translationKey,
         @Nullable Registry.BannerPatternEntry registry
@@ -27,13 +26,12 @@ record BannerPatternImpl(
 
     @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
     BannerPatternImpl {
-        Check.notNull(namespace, "Namespace cannot be null");
-        Check.argCondition(assetId == null, "missing asset id: {0}", namespace);
-        Check.argCondition(translationKey == null || translationKey.isEmpty(), "missing translation key: {0}", namespace);
+        Check.argCondition(assetId == null, "missing asset id");
+        Check.argCondition(translationKey == null || translationKey.isEmpty(), "missing translation key");
     }
 
     BannerPatternImpl(@NotNull Registry.BannerPatternEntry registry) {
-        this(registry.namespace(), registry.assetId(), registry.translationKey(), registry);
+        this(registry.assetId(), registry.translationKey(), registry);
     }
 
 }
