@@ -38,7 +38,6 @@ public class LightingChunk extends DynamicChunk {
 
     private int[] occlusionMap;
     final CachedPacket partialLightCache = new CachedPacket(this::createLightPacket);
-    final CachedPacket fullLightCache = new CachedPacket(this::createLightPacket);
     private LightData partialLightData;
     private LightData fullLightData;
 
@@ -89,7 +88,6 @@ public class LightingChunk extends DynamicChunk {
 
     public void invalidate() {
         this.partialLightCache.invalidate();
-        this.fullLightCache.invalidate();
         this.chunkCache.invalidate();
         this.partialLightData = null;
         this.fullLightData = null;
@@ -165,7 +163,6 @@ public class LightingChunk extends DynamicChunk {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
             this.partialLightCache.invalidate();
-            this.fullLightCache.invalidate();
         }
     }
 
