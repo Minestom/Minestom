@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
+import net.minestom.server.event.player.PlayerOnGroundChangeEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
@@ -13,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerPositionListener {
 
     public static void playerPacketListener(ClientPlayerPacket packet, Player player) {
-        player.refreshOnGround(packet.onGround());
+        final boolean onGround = packet.onGround();
+        refreshOnGround(player, onGround, true);
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
@@ -68,16 +70,24 @@ public class PlayerPositionListener {
         if (packetPosition.equals(eventPosition)) {
             // Event didn't change the position
             player.refreshPosition(eventPosition);
-            player.refreshOnGround(onGround);
+            refreshOnGround(player, onGround, false);
         } else {
             // Position modified by the event
             if (packetPosition.samePoint(eventPosition)) {
                 player.refreshPosition(eventPosition, true);
-                player.refreshOnGround(onGround);
+                refreshOnGround(player, onGround, false);
                 player.setView(eventPosition.yaw(), eventPosition.pitch());
             } else {
                 player.teleport(eventPosition);
             }
+        }
+    }
+
+    private static void refreshOnGround(Player player, boolean onGround, boolean clientSent) {
+        PlayerOnGroundChangeEvent groundChangeEvent = new PlayerOnGroundChangeEvent(player, onGround, clientSent);
+        EventDispatcher.call(groundChangeEvent);
+        if (!groundChangeEvent.isCancelled()) {
+            player.refreshOnGround(onGround);
         }
     }
 }
