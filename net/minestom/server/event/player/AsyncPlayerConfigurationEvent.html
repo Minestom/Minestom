@@ -132,6 +132,17 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addFeatureFlag(net.minestom.server.utils.NamespaceID)" class="member-name-link">addFeatureFlag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Add a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
+ Note: the flag "minecraft:vanilla" is already included by default.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFeatureFlags()" class="member-name-link">getFeatureFlags</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The list of currently added feature flags.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -148,29 +159,35 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isHardcore()" class="member-name-link">isHardcore</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClearChat(boolean)" class="member-name-link">setClearChat</a><wbr>(boolean&nbsp;clearChat)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeFeatureFlag(net.minestom.server.utils.NamespaceID)" class="member-name-link">removeFeatureFlag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Set whether the player's chat will be cleared when exiting the configuration state.</div>
+<div class="block">Remove a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
+ Note: removing the flag "minecraft:vanilla" may result in weird behavior</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHardcore(boolean)" class="member-name-link">setHardcore</a><wbr>(boolean&nbsp;hardcore)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClearChat(boolean)" class="member-name-link">setClearChat</a><wbr>(boolean&nbsp;clearChat)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Set whether the player's chat will be cleared when exiting the configuration state.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSendRegistryData(boolean)" class="member-name-link">setSendRegistryData</a><wbr>(boolean&nbsp;sendRegistryData)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHardcore(boolean)" class="member-name-link">setHardcore</a><wbr>(boolean&nbsp;hardcore)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSpawningInstance(net.minestom.server.instance.Instance)" class="member-name-link">setSpawningInstance</a><wbr>(@Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawningInstance)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSendRegistryData(boolean)" class="member-name-link">setSendRegistryData</a><wbr>(boolean&nbsp;sendRegistryData)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#willClearChat()" class="member-name-link">willClearChat</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSpawningInstance(net.minestom.server.instance.Instance)" class="member-name-link">setSpawningInstance</a><wbr>(@Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawningInstance)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#willClearChat()" class="member-name-link">willClearChat</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">If true, the player's chat will be cleared when exiting the configuration state, otherwise
  it will be preserved.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#willSendRegistryData()" class="member-name-link">willSendRegistryData</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#willSendRegistryData()" class="member-name-link">willSendRegistryData</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -239,6 +256,64 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <section class="detail" id="setHardcore(boolean)">
 <h3>setHardcore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setHardcore</span><wbr><span class="parameters">(boolean&nbsp;hardcore)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addFeatureFlag(net.minestom.server.utils.NamespaceID)">
+<h3>addFeatureFlag</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addFeatureFlag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</span></div>
+<div class="block">Add a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
+ Note: the flag "minecraft:vanilla" is already included by default.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>feature</code> - A minecraft feature flag</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../network/packet/server/configuration/UpdateEnabledFeaturesPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>UpdateEnabledFeaturesPacket</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="removeFeatureFlag(net.minestom.server.utils.NamespaceID)">
+<h3>removeFeatureFlag</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeFeatureFlag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</span></div>
+<div class="block">Remove a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
+ Note: removing the flag "minecraft:vanilla" may result in weird behavior</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>feature</code> - A minecraft feature flag</dd>
+<dt>Returns:</dt>
+<dd>if the feature specified existed prior to being removed</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../network/packet/server/configuration/UpdateEnabledFeaturesPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>UpdateEnabledFeaturesPacket</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getFeatureFlags()">
+<h3>getFeatureFlags</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</span>&nbsp;<span class="element-name">getFeatureFlags</span>()</div>
+<div class="block">The list of currently added feature flags. This is an unmodifiable copy of what will be sent to the client.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable set of feature flags</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../network/packet/server/configuration/UpdateEnabledFeaturesPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>UpdateEnabledFeaturesPacket</code></a></li>
+</ul>
+</dd>
+</dl>
 </section>
 </li>
 <li>
