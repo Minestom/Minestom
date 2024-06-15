@@ -1041,8 +1041,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void setHealth(float health) {
-        super.setHealth(health);
         sendPacket(new UpdateHealthPacket(health, food, foodSaturation));
+        super.setHealth(health);
     }
 
     /**
