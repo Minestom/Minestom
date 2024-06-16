@@ -15,9 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.List;
 import static net.minestom.server.entity.Player.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class PlayerIntegrationTest {
 
     /**
@@ -231,7 +232,7 @@ class PlayerIntegrationTest {
     }
 
     @Test
-    public void setView(Env env) {
+    void setView(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Pos startingPlayerPos = new Pos(0, 42, 0);
@@ -248,7 +249,7 @@ class PlayerIntegrationTest {
     }
 
     @Test
-    public void lookAt(Env env) {
+    void lookAt(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(FacePlayerPacket.class);

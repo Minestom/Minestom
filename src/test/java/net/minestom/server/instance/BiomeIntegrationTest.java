@@ -5,18 +5,18 @@ import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
-public class BiomeIntegrationTest {
+@ExtendWith(MicrotusExtension.class)
+class BiomeIntegrationTest {
     private static Biome PLAINS;
     private static int PLAINS_ID;
 
@@ -27,7 +27,7 @@ public class BiomeIntegrationTest {
     }
 
     @Test
-    public void chunkBiomeSet(Env env) {
+    void chunkBiomeSet(Env env) {
         final int minSection = -1;
         final int maxSection = 5;
         final int chunkX = 3;
@@ -49,7 +49,7 @@ public class BiomeIntegrationTest {
     }
 
     @Test
-    public void chunkBiomeFill(Env env) {
+    void chunkBiomeFill(Env env) {
         final int minSection = -1;
         final int maxSection = 5;
         final int chunkX = 3;

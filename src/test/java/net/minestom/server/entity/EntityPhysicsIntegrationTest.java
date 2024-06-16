@@ -3,16 +3,17 @@ package net.minestom.server.entity;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
-public class EntityPhysicsIntegrationTest
-{
+
+@ExtendWith(MicrotusExtension.class)
+class EntityPhysicsIntegrationTest {
     @Test
-    public void onGround(Env env) {
+    void onGround(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 40, 1, Block.STONE);
 

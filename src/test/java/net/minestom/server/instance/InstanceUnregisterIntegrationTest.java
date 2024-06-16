@@ -6,15 +6,16 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class InstanceUnregisterIntegrationTest {
 
     @Test
