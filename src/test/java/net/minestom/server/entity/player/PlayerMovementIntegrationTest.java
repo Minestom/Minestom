@@ -8,10 +8,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Collector;
@@ -136,5 +138,32 @@ public class PlayerMovementIntegrationTest {
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
+    }
+
+    @Test
+    public void testSettingsViewDistanceExpansionAndShrink(Env env) {
+        int startingViewDistance = 8;
+        byte endViewDistance = 12;
+        byte finalViewDistance = 10;
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos).join();
+
+        var tracker = connection.trackIncoming(ChunkDataPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket("en_US", endViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        // Need to add a tick call, otherwise the assertCount() call will fail due to chunks being sent off the main thread (and also rate limited by tick)
+        env.tick();
+        player.interpretPacketQueue();
+
+        int chunkDifference = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(startingViewDistance);
+        tracker.assertCount(chunkDifference);
+
+        var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket("en_US", finalViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.interpretPacketQueue();
+
+        int chunkDifference1 = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(finalViewDistance);
+        tracker1.assertCount(chunkDifference1);
     }
 }

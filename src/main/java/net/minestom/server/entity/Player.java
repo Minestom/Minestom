@@ -2469,6 +2469,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                             byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
             // Clamp viewDistance to valid bounds
+            byte previousViewDistance = this.viewDistance;
             this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
             this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
@@ -2476,6 +2477,24 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
             this.enableTextFiltering = enableTextFiltering;
             this.allowServerListings = allowServerListings;
+
+            // Load/unload chunks if necessary due to view distance changes
+            if (previousViewDistance < this.viewDistance) {
+                // View distance expanded, send chunks
+                ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), this.viewDistance, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
+                        chunkAdder.accept(chunkX, chunkZ);
+                    }
+                });
+            } else if (previousViewDistance > this.viewDistance) {
+                // View distance shrunk, unload chunks
+                ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - position.chunkX()) > this.viewDistance || Math.abs(chunkZ - position.chunkZ()) > this.viewDistance) {
+                        chunkRemover.accept(chunkX, chunkZ);
+                    }
+                });
+            }
+            // Else previous and current are equal, do nothing
 
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
             PlayerMeta playerMeta = getPlayerMeta();
