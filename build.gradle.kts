@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.blossom)
     signing
     jacoco
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 group = "net.onelitefeather.microtus"
@@ -124,4 +125,11 @@ dependencies {
 
     // BStats
     api(libs.bstats.base)
+}
+sonar {
+    properties {
+        property("sonar.projectKey", "OneLiteFeatherNET_Microtus")
+        property("sonar.organization", "onelitefeathernet")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
