@@ -1519,17 +1519,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param packet the packet to send
      */
-    @ApiStatus.Experimental
     public void sendPacket(@NotNull SendablePacket packet) {
         this.playerConnection.sendPacket(packet);
     }
 
-    @ApiStatus.Experimental
     public void sendPackets(@NotNull SendablePacket... packets) {
         this.playerConnection.sendPackets(packets);
     }
 
-    @ApiStatus.Experimental
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
         this.playerConnection.sendPackets(packets);
     }
