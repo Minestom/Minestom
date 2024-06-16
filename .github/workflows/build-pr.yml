@@ -17,8 +17,20 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Build on ${{ matrix.os }}
-        run: |
-          git config --global user.email "no-reply@github.com"
-          git config --global user.name "Github Actions"
-          ./gradlew test jacocoTestReport
+        run: ./gradlew test jacocoTestReport sonar --info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
