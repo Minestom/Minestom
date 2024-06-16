@@ -23,6 +23,8 @@ import net.minestom.testing.TestConnection;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -150,13 +152,14 @@ public class PlayerMovementIntegrationTest {
         Pos startingPlayerPos = new Pos(0, 42, 0);
         var player = connection.connect(instance, startingPlayerPos).join();
 
+        int chunkDifference = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(startingViewDistance);
+
+        // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
+        ChunkUtils.forChunksInRange(0, 0, endViewDistance, instance::loadChunk);
+
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket("en_US", endViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
-        // Need to add a tick call, otherwise the assertCount() call will fail due to chunks being sent off the main thread (and also rate limited by tick)
-        env.tick();
         player.interpretPacketQueue();
-
-        int chunkDifference = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(startingViewDistance);
         tracker.assertCount(chunkDifference);
 
         var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
