@@ -6,11 +6,12 @@ plugins {
     id("minestom.native-conventions")
     alias(libs.plugins.blossom)
     signing
+    jacoco
 }
 
 group = "net.onelitefeather.microtus"
 
-version = System.getenv("TAG_VERSION") ?: "1.4.0-SNAPSHOT"
+version = System.getenv("TAG_VERSION") ?: "1.5.0-SNAPSHOT"
 
 allprojects {
     group = "net.onelitefeather.microtus"
@@ -73,7 +74,11 @@ tasks {
         minHeapSize = "512m"
         maxHeapSize = "1024m"
     }
-
+    jacocoTestReport {
+        reports {
+            xml.required = true
+        }
+    }
 
 }
 
