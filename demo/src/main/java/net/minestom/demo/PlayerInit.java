@@ -152,6 +152,7 @@ public class PlayerInit {
                                 new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
                                         45 * 20, false, true, true, null))
                         )))
+                        .customName(Component.text("Sharpness 10 Sword").append(Component.space()).append(Component.text("§c§l[LEGENDARY]")))
                         .build());
 
 

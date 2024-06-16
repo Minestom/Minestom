@@ -88,7 +88,7 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         }
 
         // Children
-        var extra = compound.getList("extra", BinaryTagTypes.COMPOUND);
+        var extra = compound.getList("extra");
         if (extra.size() > 0) {
             var list = new ArrayList<ComponentLike>();
             for (var child : extra) list.add(deserializeAnyComponent(child));
