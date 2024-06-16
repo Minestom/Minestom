@@ -65,12 +65,10 @@ public abstract class PlayerConnection {
      */
     public abstract void sendPacket(@NotNull SendablePacket packet);
 
-    @ApiStatus.Experimental
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
         packets.forEach(this::sendPacket);
     }
 
-    @ApiStatus.Experimental
     public void sendPackets(@NotNull SendablePacket... packets) {
         sendPackets(List.of(packets));
     }
