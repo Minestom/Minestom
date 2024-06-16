@@ -6,6 +6,7 @@ plugins {
     id("minestom.native-conventions")
     alias(libs.plugins.blossom)
     signing
+    jacoco
 }
 
 group = "net.onelitefeather.microtus"
@@ -73,7 +74,11 @@ tasks {
         minHeapSize = "512m"
         maxHeapSize = "1024m"
     }
-
+    jacocoTestReport {
+        reports {
+            xml.required = true
+        }
+    }
 
 }
 
@@ -120,4 +125,3 @@ dependencies {
     // BStats
     api(libs.bstats.base)
 }
-
