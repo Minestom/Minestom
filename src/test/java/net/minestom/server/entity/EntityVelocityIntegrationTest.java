@@ -2,23 +2,24 @@ package net.minestom.server.entity;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
-public class EntityVelocityIntegrationTest {
+@ExtendWith(MicrotusExtension.class)
+class EntityVelocityIntegrationTest {
     @Test
-    public void gravity(Env env) {
+    void gravity(Env env) {
         var instance = env.createFlatInstance();
         loadChunks(instance);
 
@@ -37,7 +38,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     @Test
-    public void singleKnockback(Env env) {
+    void singleKnockback(Env env) {
         var instance = env.createFlatInstance();
         loadChunks(instance);
 
@@ -68,7 +69,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     @Test
-    public void doubleKnockback(Env env) {
+    void doubleKnockback(Env env) {
         var instance = env.createFlatInstance();
         loadChunks(instance);
 
@@ -103,7 +104,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     @Test
-    public void flyingVelocity(Env env) {
+    void flyingVelocity(Env env) {
         var instance = env.createFlatInstance();
         loadChunks(instance);
 
@@ -128,7 +129,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     @Test
-    public void flyingPlayerMovement(Env env) {
+    void flyingPlayerMovement(Env env) {
         // Player movement should not send velocity packets as already client predicted
         var instance = env.createFlatInstance();
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
@@ -142,7 +143,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     @Test
-    public void testHasVelocity(Env env) {
+    void testHasVelocity(Env env) {
         var instance = env.createFlatInstance();
         loadChunks(instance);
 
@@ -169,7 +170,7 @@ public class EntityVelocityIntegrationTest {
     }
 
     @Test
-    public void countVelocityPackets(Env env) {
+    void countVelocityPackets(Env env) {
         var instance = env.createFlatInstance();
         var viewerConnection = env.createConnection();
         viewerConnection.connect(instance, new Pos(1, 40, 1)).join();

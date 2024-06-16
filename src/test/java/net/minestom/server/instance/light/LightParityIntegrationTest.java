@@ -9,8 +9,9 @@ import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,8 +22,8 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
-public class LightParityIntegrationTest {
+@ExtendWith(MicrotusExtension.class)
+class LightParityIntegrationTest {
     private static final int REGION_SIZE = 3;
 
     @Test

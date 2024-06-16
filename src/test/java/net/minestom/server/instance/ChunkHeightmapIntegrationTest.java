@@ -2,15 +2,16 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
-public class ChunkHeightmapIntegrationTest {
+@ExtendWith(MicrotusExtension.class)
+class ChunkHeightmapIntegrationTest {
     @Test
-    public void testChunkHeightmap(Env env) {
+    void testChunkHeightmap(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
         var chunk = instance.getChunk(0, 0);
@@ -20,7 +21,7 @@ public class ChunkHeightmapIntegrationTest {
     }
 
     @Test
-    public void heightMapPlaceTest(Env env) {
+    void heightMapPlaceTest(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
         var chunk = instance.getChunk(0, 0);
@@ -39,7 +40,7 @@ public class ChunkHeightmapIntegrationTest {
     }
 
     @Test
-    public void heightMapRemoveTest(Env env) {
+    void heightMapRemoveTest(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
         var chunk = instance.getChunk(0, 0);

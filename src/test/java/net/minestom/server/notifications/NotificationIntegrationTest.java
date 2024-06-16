@@ -9,13 +9,16 @@ import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.annotations.EnvironmentTest;
+import net.minestom.testing.environment.TestEnvironmentParameterResolver;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvironmentTest
+@ExtendWith(MicrotusExtension.class)
 class NotificationIntegrationTest {
 
     @Test

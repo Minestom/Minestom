@@ -1,14 +1,15 @@
 package net.minestom.server.instance;
 
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@EnvTest
-public class WorldBorderIntegrationTest {
+@ExtendWith(MicrotusExtension.class)
+class WorldBorderIntegrationTest {
 
     @Test
     public void setWorldborderSize(Env env) {

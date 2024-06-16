@@ -3,7 +3,6 @@ package net.minestom.server.inventory;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
@@ -11,11 +10,13 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class InventoryIntegrationTest {
 
     private static final Component TITLE = Component.text("title");
@@ -181,7 +182,7 @@ class InventoryIntegrationTest {
     }
 
     @Test
-    public void testInnerInventorySlotSending(Env env) {
+    void testInnerInventorySlotSending(Env env) {
         // Inner inventory changes are sent along with the open inventory
         // Otherwise, they are sent separately
 
