@@ -277,6 +277,14 @@ public final class ConnectionManager {
             var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
+            if (event.getConfigurationResult() != AsyncPlayerConfigurationEvent.ConfigurationResult.ALLOW) {
+                if (Component.IS_NOT_EMPTY.test(event.getKickMessage())) {
+                    player.kick(event.getKickMessage());
+                } else {
+                    player.kick(event.getConfigurationResult().getDefaultMessage());
+                }
+                return;
+            }
 
             player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags())); // send player features that were enabled or disabled during async config event
 
