@@ -69,7 +69,7 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.OTHER;
         }
 
-        if (itemUseTime > 0 || itemUseTime == -1) {
+        if (itemUseTime != 0) {
             player.refreshItemUse(hand, itemUseTime);
 
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
