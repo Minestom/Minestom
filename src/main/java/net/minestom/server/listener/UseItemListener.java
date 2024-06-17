@@ -69,7 +69,7 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.OTHER;
         }
 
-        if (itemUseTime > 0) {
+        if (itemUseTime > 0 || itemUseTime == -1) {
             player.refreshItemUse(hand, itemUseTime);
 
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
@@ -83,6 +83,14 @@ public class UseItemListener {
     private static int defaultUseItemTime(@NotNull ItemStack itemStack) {
         final Food food = itemStack.get(ItemComponent.FOOD);
         if (food != null) return food.eatDurationTicks();
-        return itemStack.material() == Material.POTION ? PotionContents.POTION_DRINK_TIME : 0;
+        else if (itemStack.material() == Material.POTION) return PotionContents.POTION_DRINK_TIME;
+        else if (itemStack.material() == Material.BOW) return -1;
+        else if (itemStack.material() == Material.CROSSBOW) return -1;
+        else if (itemStack.material() == Material.SHIELD) return -1;
+        else if (itemStack.material() == Material.TRIDENT) return -1;
+        else if (itemStack.material() == Material.SPYGLASS) return -1;
+        else if (itemStack.material() == Material.GOAT_HORN) return -1;
+        else if (itemStack.material() == Material.BRUSH) return -1;
+        return 0;
     }
 }

@@ -436,7 +436,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Eating animation
         if (isUsingItem()) {
-            if (instance.getWorldAge() - startItemUseTime >= itemUseTime) {
+            if (instance.getWorldAge() - startItemUseTime >= itemUseTime && itemUseTime > 0) {
                 triggerStatus((byte) 9); // Mark item use as finished
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
