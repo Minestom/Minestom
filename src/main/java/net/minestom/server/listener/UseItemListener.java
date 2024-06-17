@@ -84,13 +84,13 @@ public class UseItemListener {
         final Food food = itemStack.get(ItemComponent.FOOD);
         if (food != null) return food.eatDurationTicks();
         else if (itemStack.material() == Material.POTION) return PotionContents.POTION_DRINK_TIME;
-        else if (itemStack.material() == Material.BOW) return -1;
-        else if (itemStack.material() == Material.CROSSBOW) return -1;
-        else if (itemStack.material() == Material.SHIELD) return -1;
-        else if (itemStack.material() == Material.TRIDENT) return -1;
-        else if (itemStack.material() == Material.SPYGLASS) return -1;
-        else if (itemStack.material() == Material.GOAT_HORN) return -1;
-        else if (itemStack.material() == Material.BRUSH) return -1;
+        else if (itemStack.material() == Material.BOW
+                || itemStack.material() == Material.CROSSBOW
+                || itemStack.material() == Material.SHIELD
+                || itemStack.material() == Material.TRIDENT
+                || itemStack.material() == Material.SPYGLASS
+                || itemStack.material() == Material.GOAT_HORN
+                || itemStack.material() == Material.BRUSH) return -1;
         return 0;
     }
 }
