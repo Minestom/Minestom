@@ -25,6 +25,7 @@ public class Generators {
         new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
         new ParticleGenerator(resource("particles.json"), outputFolder).generate();
         new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
+        new FeatureFlagGenerator(resource("feature_flags.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 

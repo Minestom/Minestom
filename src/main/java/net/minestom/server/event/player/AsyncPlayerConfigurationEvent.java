@@ -71,6 +71,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @param feature A minecraft feature flag
      *
      * @see UpdateEnabledFeaturesPacket
+     * @see net.minestom.server.FeatureFlags
      */
     public void addFeatureFlag(@NotNull NamespaceID feature) {
         this.featureFlags.add(feature);
@@ -84,6 +85,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @return if the feature specified existed prior to being removed
      *
      * @see UpdateEnabledFeaturesPacket
+     * @see net.minestom.server.FeatureFlags
      */
     public boolean removeFeatureFlag(@NotNull NamespaceID feature) {
         return this.featureFlags.remove(feature); // Should this have sanity checking to see if the feature was actually contained in the list?
@@ -95,6 +97,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @return An unmodifiable set of feature flags
      *
      * @see UpdateEnabledFeaturesPacket
+     * @see net.minestom.server.FeatureFlags
      */
     public @NotNull Set<NamespaceID> getFeatureFlags() {
         return ObjectSets.unmodifiable(this.featureFlags);
