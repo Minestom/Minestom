@@ -71,6 +71,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static FeatureFlagEntry featureFlag(String namespace, @NotNull Properties main) {
+        return new FeatureFlagEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
         return new PotionEffectEntry(namespace, main, null);
     }
@@ -207,6 +212,7 @@ public final class Registry {
         BLOCKS("blocks.json"),
         ITEMS("items.json"),
         ENTITIES("entities.json"),
+        FEATURE_FLAGS("feature_flags.json"),
         SOUNDS("sounds.json"),
         COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
@@ -705,6 +711,15 @@ public final class Registry {
         @Override
         public Properties custom() {
             return custom;
+        }
+    }
+
+    public record FeatureFlagEntry(NamespaceID namespace, int id, Properties custom) implements Entry {
+        public FeatureFlagEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    null
+            );
         }
     }
 

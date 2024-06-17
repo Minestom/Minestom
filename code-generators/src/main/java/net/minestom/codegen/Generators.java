@@ -25,7 +25,7 @@ public class Generators {
         new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
         new ParticleGenerator(resource("particles.json"), outputFolder).generate();
         new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
-        new FeatureFlagGenerator(resource("feature_flags.json"), outputFolder).generate();
+        //new FeatureFlagGenerator(resource("feature_flags.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 
@@ -38,6 +38,7 @@ public class Generators {
         generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents");
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
         generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
+        generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
 
         // Dynamic registries
         generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType", "ChatTypes");
