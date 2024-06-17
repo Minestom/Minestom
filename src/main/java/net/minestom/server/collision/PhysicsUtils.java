@@ -44,7 +44,23 @@ public final class PhysicsUtils {
                 physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.hasCollision(), physicsResult.res());
     }
 
-    private static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics,
+    /**
+     * Calculates an updated velocity for an entity
+     * <p>
+     * If the position has not changed then the x and z values will not be touched, and only gravity will be accounted for if the entity is not flying.
+     * Otherwise, the velocity will be adjusted by applying air resistance, gravity, and friction (only if the entity is on the ground).
+     *
+     * @param entityPosition the current entity position
+     * @param currentVelocity the current entity velocity in blocks/tick
+     * @param blockGetter the block getter to test block collisions against
+     * @param aerodynamics the current entity aerodynamics
+     * @param positionChanged whether the position changed for the entity
+     * @param entityFlying whether the entity is flying
+     * @param entityOnGround whether the entity is on the ground
+     * @param entityNoGravity whether the entity has gravity
+     * @return the updated velocity or {@link Vec#ZERO} if the entity is flying
+     */
+    public static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics,
                                                boolean positionChanged, boolean entityFlying, boolean entityOnGround, boolean entityNoGravity) {
         if (!positionChanged) {
             if (entityFlying) return Vec.ZERO;
