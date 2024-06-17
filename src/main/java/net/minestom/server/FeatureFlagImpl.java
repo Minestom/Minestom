@@ -4,7 +4,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-public record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
+record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
 
     private static final Registry.Container<FeatureFlagImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.FEATURE_FLAGS,
             (namespace, properties) -> new FeatureFlagImpl(Registry.featureFlag(namespace, properties)));
