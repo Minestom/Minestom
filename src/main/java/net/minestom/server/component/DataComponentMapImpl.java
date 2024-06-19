@@ -2,14 +2,20 @@ package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.text.event.DataComponentValue;
+import net.minestom.server.adventure.item.MinestomDataComponentValue;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -69,6 +75,25 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     @Override
+    public @NotNull Map<Key, DataComponentValue> toDataComponentValueMap() {
+        Map<NamespaceID, MinestomDataComponentValue<?>> componentValueMap = new HashMap<>();
+
+        for (int key : this.components.keySet()) {
+            DataComponent<?> component = ItemComponent.fromId(key);
+
+            if (component == null) {
+                throw new IllegalArgumentException("Could not find an item component with id of: " + key);
+            }
+
+            MinestomDataComponentValue<?> value = this.toDataComponentValue(component);
+            if (value == null) continue;
+            componentValueMap.put(component.namespace(), value);
+        }
+
+        return Map.copyOf(componentValueMap);
+    }
+
+    @Override
     public @NotNull Builder toBuilder() {
         return new BuilderImpl(new Int2ObjectArrayMap<>(components));
     }
@@ -76,6 +101,12 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     @Override
     public @NotNull PatchBuilder toPatchBuilder() {
         return new PatchBuilderImpl(new Int2ObjectArrayMap<>(components));
+    }
+
+    private <T> @Nullable MinestomDataComponentValue<T> toDataComponentValue(@NotNull DataComponent<T> component) {
+        T value = this.get(component);
+        if (value == null) return null;
+        return new MinestomDataComponentValue<>(component, value);
     }
 
     record BuilderImpl(@NotNull Int2ObjectMap<Object> components) implements DataComponentMap.Builder {

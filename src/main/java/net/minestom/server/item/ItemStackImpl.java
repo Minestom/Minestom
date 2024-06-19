@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
 
@@ -125,6 +127,13 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();
+    }
+
+    @Override
+    public @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(
+                material(), amount(), this.components.toDataComponentValueMap()
+        )));
     }
 
     static final class Builder implements ItemStack.Builder {

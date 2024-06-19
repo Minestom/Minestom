@@ -1,6 +1,8 @@
 package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -8,6 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -123,6 +126,15 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @return A new map with the component removed
      */
     @NotNull DataComponentMap remove(@NotNull DataComponent<?> component);
+
+    /**
+     * Creates a new {@linkplain Map map}, with values mapped from a {@linkplain Key key} to
+     * a {@linkplain DataComponentValue data component value} using {@linkplain DataComponent data components}
+     * put into this component map.
+     *
+     * @return the map
+     */
+    @NotNull Map<Key, DataComponentValue> toDataComponentValueMap();
 
     @NotNull Builder toBuilder();
 
