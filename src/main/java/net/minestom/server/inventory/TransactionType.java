@@ -58,10 +58,20 @@ public interface TransactionType {
                 // Cancelled transaction
                 continue;
             }
-            // Fill the slot
-            itemChangesMap.put(i, itemStack);
-            itemStack = ItemStack.AIR;
-            break;
+
+            final int maxSize = itemStack.maxStackSize();
+            final int currentSize = itemStack.amount();
+
+            if (!MathUtils.isBetween(currentSize, 0, maxSize)) {
+                // Slot cannot accept the whole item, reduce amount to 'itemStack'
+                itemChangesMap.put(i, itemStack.withAmount(maxSize));
+                itemStack = itemStack.withAmount(currentSize - maxSize);
+            } else {
+                // Slot can accept the whole item
+                itemChangesMap.put(i, itemStack.withAmount(currentSize));
+                itemStack = ItemStack.AIR;
+                break;
+            }
         }
         return Pair.of(itemStack, itemChangesMap);
     };

@@ -297,7 +297,7 @@ public final class ConnectionManager {
                 } catch (ExecutionException e) {
                     throw new RuntimeException("Error receiving known packs", e);
                 }
-                boolean excludeVanilla = !knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
+                boolean excludeVanilla = knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
                 var serverProcess = MinecraftServer.process();
                 player.sendPacket(serverProcess.chatType().registryDataPacket(excludeVanilla));
