@@ -6,3 +6,4 @@ include("code-generators")
 //include("jcstress-tests")
 
 include("demo")
+include("bootstrap")
