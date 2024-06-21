@@ -297,6 +297,11 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public @NotNull PluginManager pluginManager() {
+        return this.pluginManager;
+    }
+
+    @Override
     public @NotNull Server server() {
         return server;
     }
