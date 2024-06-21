@@ -394,6 +394,9 @@ public class Team implements PacketGroupingAudience {
         return Collections.unmodifiableSet(members);
     }
 
+    protected @NotNull Set<String> getMembersObject() {
+        return this.members;
+    }
     /**
      * Gets the display name of the team.
      *
@@ -464,6 +467,14 @@ public class Team implements PacketGroupingAudience {
         final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
                 nameTagVisibility, collisionRule, teamColor, prefix, suffix);
         PacketUtils.broadcastPlayPacket(new TeamsPacket(teamName, info));
+    }
+
+    public boolean isPlayerMembersUpToDate() {
+        return isPlayerMembersUpToDate;
+    }
+
+    public void setPlayerMembersUpToDate(boolean playerMembersUpToDate) {
+        isPlayerMembersUpToDate = playerMembersUpToDate;
     }
 
     @Override

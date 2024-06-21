@@ -16,6 +16,8 @@ val shortDescription = "1.21 Lightweight Minecraft server"
 
 allprojects {
     apply(plugin = "java")
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
 
     group = "net.minestom"
     version = rootProject.version
