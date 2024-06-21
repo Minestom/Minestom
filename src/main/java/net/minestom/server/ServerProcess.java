@@ -15,6 +15,7 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.plugins.PluginManager;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.scoreboard.TeamManager;
@@ -105,6 +106,10 @@ public interface ServerProcess extends Registries, Snapshotable {
      * Can be used if you want to convert a buffer to a client packet object.
      */
     @NotNull PacketProcessor packetProcessor();
+
+
+    @NotNull
+    PluginManager pluginManager();
 
     /**
      * Exposed socket server.

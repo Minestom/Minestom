@@ -29,6 +29,8 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.plugins.Plugin;
+import net.minestom.server.plugins.PluginManager;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
@@ -89,6 +91,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
+    private final PluginManager pluginManager;
     private final TagManager tag;
 
     private final Server server;
@@ -135,6 +138,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
+        this.pluginManager = new PluginManager();
 
         this.server = new Server(packetProcessor);
 

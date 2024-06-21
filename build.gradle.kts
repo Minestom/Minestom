@@ -91,7 +91,9 @@ sourceSets {
 
 dependencies {
     // Core dependencies
-    api(libs.slf4j)
+    implementation(libs.slf4j)
+    implementation(libs.log4j)
+
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
     implementation(libs.minestomData)
