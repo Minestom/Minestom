@@ -11,10 +11,10 @@ dependencies {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "net.minestom.bootstrap.MinestomBootstrap"
+        attributes["Main-Class"] = "net.bytemc.minestom.bootstrap.MinestomBootstrap"
     }
 
-    dependsOn(":common:shadowJar")
+    dependsOn(":" + rootProject.path + ":shadowJar")
 }
 
 tasks.withType<ShadowJar> {

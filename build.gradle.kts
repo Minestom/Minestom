@@ -6,6 +6,7 @@ plugins {
 
     `maven-publish`
     alias(libs.plugins.nexuspublish)
+    id ("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 // Read env vars (used for publishing generally)
@@ -109,6 +110,8 @@ dependencies {
     testImplementation(libs.bundles.junit)
     testImplementation(project(":testing"))
 }
+
+
 
 tasks {
     jar {
