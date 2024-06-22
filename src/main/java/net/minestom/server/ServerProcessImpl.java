@@ -144,6 +144,8 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
+
+        this.pluginManager.loadPlugins();
     }
 
     @Override

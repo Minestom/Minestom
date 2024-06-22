@@ -20,6 +20,7 @@ import java.util.List;
 
 public final class PluginManager {
 
+    private static final Path PLUGIN_DIR = Path.of("plugins");
     private final PluginClassLoader pluginClassLoader = new PluginClassLoader(this.getClass().getClassLoader());
 
     private static final Gson PLUGIN_GSON = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
@@ -27,20 +28,20 @@ public final class PluginManager {
     private boolean loaded = false;
 
     public PluginManager() {
-
+        if (!Files.exists(PLUGIN_DIR)) {
+            try {
+                Files.createDirectory(PLUGIN_DIR);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void loadPlugins() {
         Check.stateCondition(loaded, "Plugins have already been loaded!");
 
-        var pluginDirectory = Path.of("plugins");
-
         try {
-            if (!Files.exists(pluginDirectory)) {
-                Files.createDirectory(pluginDirectory);
-            }
-
-            Files.list(pluginDirectory).filter(path -> path.toString().endsWith(".jar")).forEach(path -> plugins.add(new PluginInfo(path.toFile())));
+            Files.list(PLUGIN_DIR).filter(path -> path.toString().endsWith(".jar")).forEach(path -> plugins.add(new PluginInfo(path.toFile())));
 
             // load all meta data
             for (var plugin : plugins) {
