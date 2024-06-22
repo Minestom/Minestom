@@ -2,8 +2,6 @@ import java.time.Duration
 
 plugins {
     `java-library`
-    alias(libs.plugins.blossom)
-
     `maven-publish`
     alias(libs.plugins.nexuspublish)
     id ("com.github.johnrengelman.shadow") version "8.1.1"
@@ -130,19 +128,5 @@ tasks {
             links("https://docs.oracle.com/en/java/javase/21/docs/api/")
             links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
         }
-    }
-
-    blossom {
-        val gitFile = "src/main/java/net/minestom/server/Git.java"
-
-        val gitCommit = System.getenv("GIT_COMMIT")
-        val gitBranch = System.getenv("GIT_BRANCH")
-        val group = System.getenv("GROUP")
-        val artifact = System.getenv("ARTIFACT")
-
-        replaceToken("\"&COMMIT\"", if (gitCommit == null) "null" else "\"${gitCommit}\"", gitFile)
-        replaceToken("\"&BRANCH\"", if (gitBranch == null) "null" else "\"${gitBranch}\"", gitFile)
-        replaceToken("\"&GROUP\"", if (group == null) "null" else "\"${group}\"", gitFile)
-        replaceToken("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"", gitFile)
     }
 }
