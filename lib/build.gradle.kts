@@ -15,6 +15,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     api(libs.jetbrainsAnnotations)
+    api(libs.bundles.adventure)
 }
 
 tasks.test {

@@ -840,47 +840,47 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     protected void updatePose() {
-        Pose oldPose = getPose();
-        Pose newPose;
+        EntityPose oldPose = getPose();
+        EntityPose newPose;
 
         // Figure out their expected state
         var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
-            newPose = Pose.FALL_FLYING;
+            newPose = EntityPose.FALL_FLYING;
         } else if (false) { // When should they be sleeping? We don't have any in-bed state...
-            newPose = Pose.SLEEPING;
+            newPose = EntityPose.SLEEPING;
         } else if (meta.isSwimming()) {
-            newPose = Pose.SWIMMING;
+            newPose = EntityPose.SWIMMING;
         } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            newPose = Pose.SPIN_ATTACK;
+            newPose = EntityPose.SPIN_ATTACK;
         } else if (isSneaking() && !isFlying()) {
-            newPose = Pose.SNEAKING;
+            newPose = EntityPose.SNEAKING;
         } else {
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         // Try to put them in their expected state, or the closest if they don't fit.
         if (canFitWithBoundingBox(newPose)) {
             // Use expected state
-        } else if (canFitWithBoundingBox(Pose.SNEAKING)) {
-            newPose = Pose.SNEAKING;
-        } else if (canFitWithBoundingBox(Pose.SWIMMING)) {
-            newPose = Pose.SWIMMING;
+        } else if (canFitWithBoundingBox(EntityPose.SNEAKING)) {
+            newPose = EntityPose.SNEAKING;
+        } else if (canFitWithBoundingBox(EntityPose.SWIMMING)) {
+            newPose = EntityPose.SWIMMING;
         } else {
             // If they can't fit anywhere, just use standing
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         if (newPose != oldPose) setPose(newPose);
     }
 
     /**
-     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.Entity.Pose}, false otherwise.
+     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.EntityPose}, false otherwise.
      *
      * @param pose The pose to check
      */
-    private boolean canFitWithBoundingBox(@NotNull Pose pose) {
-        BoundingBox bb = pose == Pose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
+    private boolean canFitWithBoundingBox(@NotNull EntityPose pose) {
+        BoundingBox bb = pose == EntityPose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
         if (bb == null) return false;
 
         var position = getPosition();
@@ -1996,12 +1996,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshFlying(boolean flying) {
         //When the player starts or stops flying, their pose needs to change
         if (this.flying != flying) {
-            Pose pose = getPose();
-
-            if (this.isSneaking() && pose == Pose.STANDING) {
-                setPose(Pose.SNEAKING);
-            } else if (pose == Pose.SNEAKING) {
-                setPose(Pose.STANDING);
+            EntityPose pose = getPose();
+            if (this.isSneaking() && pose == EntityPose.STANDING) {
+                setPose(EntityPose.SNEAKING);
+            } else if (pose == EntityPose.SNEAKING) {
+                setPose(EntityPose.STANDING);
             }
         }
 

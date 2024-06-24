@@ -253,7 +253,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
-        setPose(Pose.DYING);
+        setPose(EntityPose.DYING);
         setHealth(0);
 
         // Reset velocity

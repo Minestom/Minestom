@@ -1107,7 +1107,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return the entity pose
      */
-    public @NotNull Pose getPose() {
+    public @NotNull EntityPose getPose() {
         return this.entityMeta.getPose();
     }
 
@@ -1119,21 +1119,21 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param pose the new entity pose
      */
-    public void setPose(@NotNull Pose pose) {
+    public void setPose(@NotNull EntityPose pose) {
         this.entityMeta.setPose(pose);
     }
 
     protected void updatePose() {
         if (entityMeta.isFlyingWithElytra()) {
-            setPose(Pose.FALL_FLYING);
+            setPose(EntityPose.FALL_FLYING);
         } else if (entityMeta.isSwimming()) {
-            setPose(Pose.SWIMMING);
+            setPose(EntityPose.SWIMMING);
         } else if (entityMeta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            setPose(Pose.SPIN_ATTACK);
+            setPose(EntityPose.SPIN_ATTACK);
         } else if (entityMeta.isSneaking()) {
-            setPose(Pose.SNEAKING);
+            setPose(EntityPose.SNEAKING);
         } else {
-            setPose(Pose.STANDING);
+            setPose(EntityPose.STANDING);
         }
     }
 
@@ -1334,7 +1334,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return getPose() == Pose.SLEEPING ? 0.2 : entityType.registry().eyeHeight();
+        return getPose() == EntityPose.SLEEPING ? 0.2 : entityType.registry().eyeHeight();
     }
 
     /**
@@ -1724,26 +1724,5 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     public boolean hasCollision() {
         return hasCollision;
-    }
-
-    public enum Pose {
-        STANDING,
-        FALL_FLYING,
-        SLEEPING,
-        SWIMMING,
-        SPIN_ATTACK,
-        SNEAKING,
-        LONG_JUMPING,
-        DYING,
-        CROAKING,
-        USING_TONGUE,
-        SITTING,
-        ROARING,
-        SNIFFING,
-        EMERGING,
-        DIGGING,
-        SLIDING,
-        SHOOTING,
-        INHALING;
     }
 }

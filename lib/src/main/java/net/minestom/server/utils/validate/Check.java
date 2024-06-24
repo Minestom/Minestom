@@ -13,7 +13,6 @@ import java.util.Objects;
 public final class Check {
 
     private Check() {
-
     }
 
     @Contract("null, _ -> fail")
