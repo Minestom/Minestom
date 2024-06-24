@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     // Core dependencies
+    implementation(libs.minestomData)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
 

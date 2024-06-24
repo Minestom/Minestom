@@ -68,7 +68,6 @@ dependencies {
     // Core dependencies
     api(libs.slf4j)
     api(project(":lib"))
-    implementation(libs.minestomData)
 
     // Performance/data structures
     implementation(libs.caffeine)
