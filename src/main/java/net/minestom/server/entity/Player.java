@@ -82,6 +82,7 @@ import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.timer.Scheduler;
+import net.minestom.server.utils.ChunkRangeUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.PropertyUtils;
@@ -537,7 +538,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+        ChunkRangeUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
         this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getEffectiveViewDistance(),
@@ -603,7 +604,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
+        ChunkRangeUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketUtils.broadcastPlayPacket(getRemovePlayerToList());
 
@@ -660,7 +661,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
+        ChunkRangeUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -733,7 +734,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
-                ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
+                ChunkRangeUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
@@ -748,7 +749,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
-            ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+            ChunkRangeUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
@@ -2384,7 +2385,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int newZ = newChunk.getChunkZ();
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
-            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
+            ChunkRangeUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
                     settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
