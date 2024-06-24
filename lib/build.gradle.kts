@@ -17,6 +17,7 @@ dependencies {
 
     // Performance/data structures
     implementation(libs.caffeine)
+    api(libs.fastutil)
     api(libs.gson)
 
     // Testing
