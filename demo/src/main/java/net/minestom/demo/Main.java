@@ -21,8 +21,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeCategory;
+import net.minestom.server.timer.TimeUnit;
 import net.minestom.server.utils.identity.NamedAndIdentified;
-import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
 import java.util.List;

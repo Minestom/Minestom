@@ -1,6 +1,6 @@
 package net.minestom.server.item.enchant;
 
-import net.minestom.server.gamedata.DataPack;
+import net.minestom.server.registry.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;

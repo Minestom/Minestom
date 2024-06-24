@@ -55,5 +55,5 @@ jobs:
           MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
           MINESTOM_CHANNEL: snapshot
         run: |
-          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+          ./gradlew publishAllPublicationsToSonatypeRepository closeAndReleaseSonatypeStagingRepository
           echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY

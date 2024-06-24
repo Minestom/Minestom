@@ -1,7 +1,7 @@
 package net.minestom.server.extras.lan;
 
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.timer.TimeUnit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

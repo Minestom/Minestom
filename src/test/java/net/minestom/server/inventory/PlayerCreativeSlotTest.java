@@ -6,7 +6,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.CreativeInventoryActionListener;
 import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.SlotUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class PlayerCreativeSlotTest {
         assertEquals(instance, player.getInstance());
 
         player.setGameMode(GameMode.CREATIVE);
-        player.addPacketToQueue(new ClientCreativeInventoryActionPacket((short) PlayerInventoryUtils.OFFHAND_SLOT, ItemStack.of(Material.STICK)));
+        player.addPacketToQueue(new ClientCreativeInventoryActionPacket((short) SlotUtils.OFFHAND_SLOT, ItemStack.of(Material.STICK)));
         player.interpretPacketQueue();
         assertEquals(Material.STICK, player.getInventory().getItemInOffHand().material());
     }

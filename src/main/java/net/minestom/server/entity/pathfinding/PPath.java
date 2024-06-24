@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PPath {
+public final class PPath {
     private final Runnable onComplete;
     private final List<PNode> nodes = new ArrayList<>();
 
     private final double pathVariance;
     private final double maxDistance;
     private int index = 0;
-    private final AtomicReference<PathState> state = new AtomicReference<>(PathState.CALCULATING);
+    private final AtomicReference<State> state = new AtomicReference<>(State.CALCULATING);
 
     public Point getNext() {
         if (index + 1 >= nodes.size()) return null;
@@ -24,17 +24,18 @@ public class PPath {
         return new Vec(current.x(), current.y(), current.z());
     }
 
-    public void setState(@NotNull PathState newState) {
+    public void setState(@NotNull PPath.State newState) {
         state.set(newState);
     }
 
-    public enum PathState {
+    public enum State {
         CALCULATING,
         FOLLOWING,
         TERMINATING, TERMINATED, COMPUTED, BEST_EFFORT, INVALID
     }
 
-    @NotNull PathState getState() {
+    @NotNull
+    public PPath.State getState() {
         return state.get();
     }
 
@@ -58,20 +59,20 @@ public class PPath {
     }
 
     @Nullable
-    PNode.NodeType getCurrentType() {
+    public PNode.Type getCurrentType() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);
         return current.getType();
     }
 
     @Nullable
-    Point getCurrent() {
+    public Point getCurrent() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);
         return new Vec(current.x(), current.y(), current.z());
     }
 
-    void next() {
+    public void next() {
         if (index >= nodes.size()) return;
         index++;
     }

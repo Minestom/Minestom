@@ -2,7 +2,6 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
-import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;

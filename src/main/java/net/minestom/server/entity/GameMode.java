@@ -7,8 +7,6 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 
 /**
  * Represents the game mode of a player.
- * <p>
- * Can be set with {@link Player#setGameMode(GameMode)}.
  */
 public enum GameMode {
     SURVIVAL((byte) 0, true),

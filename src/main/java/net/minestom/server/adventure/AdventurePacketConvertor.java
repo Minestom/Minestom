@@ -14,17 +14,19 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.timer.ClientTime;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.TickUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Utility methods to convert adventure enums to their packet values.
  */
-public class AdventurePacketConvertor {
+public final class AdventurePacketConvertor {
     private static final Object2IntMap<NamedTextColor> NAMED_TEXT_COLOR_ID_MAP = new Object2IntArrayMap<>(16);
 
     static {
@@ -192,11 +194,16 @@ public class AdventurePacketConvertor {
         } else if (part == TitlePart.TIMES) {
             Title.Times times = (Title.Times) value;
             return new SetTitleTimePacket(
-                    TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
-                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
-                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS));
+                    fromDuration(times.fadeIn(), ClientTime.TICK_MS),
+                    fromDuration(times.stay(), ClientTime.TICK_MS),
+                    fromDuration(times.fadeOut(), ClientTime.TICK_MS));
         } else {
             throw new IllegalArgumentException("Unknown TitlePart " + part);
         }
+    }
+
+    private static int fromDuration(@NotNull Duration duration, int msPerTick) {
+        Check.argCondition(duration.isNegative(), "Duration cannot be negative");
+        return (int) (duration.toMillis() / msPerTick);
     }
 }

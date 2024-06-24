@@ -53,6 +53,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static net.minestom.server.coordinate.CoordConversionUtils.globalToChunk;
+import static net.minestom.server.coordinate.CoordConversionUtils.globalToSectionRelative;
+
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
  * <p>
@@ -580,7 +583,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private @NotNull WorldBorder transitionWorldBorder(long remainingTicks) {
         if (remainingTicks <= 1) return worldBorder.withDiameter(targetBorderDiameter);
-        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double)remainingTicks));
+        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double) remainingTicks));
     }
 
     /**
@@ -717,7 +720,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(double x, double z) {
-        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
+        return getChunk(globalToChunk(x), globalToChunk(z));
     }
 
     /**
@@ -923,11 +926,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.blockLight();
-        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+        int sectionCoordinate = globalToChunk(blockY);
 
-        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
-        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
-        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+        final int coordX = globalToSectionRelative(blockX);
+        final int coordY = globalToSectionRelative(blockY);
+        final int coordZ = globalToSectionRelative(blockZ);
 
         if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
@@ -938,11 +941,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.skyLight();
-        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+        int sectionCoordinate = globalToChunk(blockY);
 
-        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
-        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
-        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+        final int coordX = globalToSectionRelative(blockX);
+        final int coordY = globalToSectionRelative(blockY);
+        final int coordZ = globalToSectionRelative(blockZ);
 
         if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);

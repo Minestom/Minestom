@@ -316,10 +316,12 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         @NotNull Builder hideExtraTooltip();
 
         @Contract(value = "_, _ -> this")
-        <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value);
+        <T> @NotNull Builder tag(@NotNull Tag<T> tag, @Nullable T value);
 
-        default <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
-            set(tag, value);
+        @Deprecated()
+        @Contract(value = "_, _ -> this")
+        default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
+            return tag(tag, value);
         }
 
         @Contract(value = "-> new", pure = true)

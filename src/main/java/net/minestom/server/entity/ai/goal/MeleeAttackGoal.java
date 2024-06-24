@@ -6,8 +6,8 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.timer.Cooldown;
+import net.minestom.server.timer.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;

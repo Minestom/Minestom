@@ -3,11 +3,11 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.Viewable;
+import net.minestom.server.coordinate.CoordConversionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,9 +25,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static net.minestom.server.coordinate.ChunkRangeUtils.forChunksInRange;
+import static net.minestom.server.coordinate.ChunkRangeUtils.forDifferingChunksInRange;
+import static net.minestom.server.coordinate.CoordConversionUtils.chunkIndex;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 final class EntityTrackerImpl implements EntityTracker {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityTrackerImpl.class);
@@ -51,7 +53,7 @@ final class EntityTrackerImpl implements EntityTracker {
         EntityTrackerEntry prevEntryWithUuid = entriesByEntityUuid.putIfAbsent(entity.getUuid(), newEntry);
         Check.isTrue(prevEntryWithUuid == null, "There is already an entity registered with uuid {0}", entity.getUuid());
 
-        final long index = getChunkIndex(point);
+        final long index = chunkIndex(point);
         for (TargetEntry<Entity> targetEntry : targetEntries) {
             if (targetEntry.target.type().isInstance(entity)) {
                 targetEntry.entities.add(entity);
@@ -75,7 +77,7 @@ final class EntityTrackerImpl implements EntityTracker {
         final Point point = entry == null ? null : entry.getLastPosition();
         if (point == null) return;
 
-        final long index = getChunkIndex(point);
+        final long index = chunkIndex(point);
         for (TargetEntry<Entity> targetEntry : targetEntries) {
             if (targetEntry.target.type().isInstance(entity)) {
                 targetEntry.entities.remove(entity);
@@ -114,8 +116,8 @@ final class EntityTrackerImpl implements EntityTracker {
         Point oldPoint = entry.getLastPosition();
         entry.setLastPosition(newPoint);
         if (oldPoint == null || oldPoint.sameChunk(newPoint)) return;
-        final long oldIndex = getChunkIndex(oldPoint);
-        final long newIndex = getChunkIndex(newPoint);
+        final long oldIndex = chunkIndex(oldPoint);
+        final long newIndex = chunkIndex(newPoint);
         for (TargetEntry<Entity> targetEntry : targetEntries) {
             if (targetEntry.target.type().isInstance(entity)) {
                 targetEntry.addToChunk(newIndex, entity);
@@ -142,7 +144,7 @@ final class EntityTrackerImpl implements EntityTracker {
     public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, @NotNull Target<T> target) {
         final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
         //noinspection unchecked
-        var chunkEntities = (List<T>) entry.chunkEntities(getChunkIndex(chunkX, chunkZ));
+        var chunkEntities = (List<T>) entry.chunkEntities(chunkIndex(chunkX, chunkZ));
         return Collections.unmodifiableList(chunkEntities);
     }
 
@@ -151,14 +153,14 @@ final class EntityTrackerImpl implements EntityTracker {
         final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
         if (chunkRange == 0) {
             // Single chunk
-            final var chunkEntities = (List<T>) entities.get(getChunkIndex(point));
+            final var chunkEntities = (List<T>) entities.get(chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(query);
             }
         } else {
             // Multiple chunks
             forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
+                final var chunkEntities = (List<T>) entities.get(chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(query);
             });
@@ -168,14 +170,14 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public <T extends Entity> void nearbyEntities(@NotNull Point point, double range, @NotNull Target<T> target, @NotNull Consumer<T> query) {
         final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
-        final int minChunkX = ChunkUtils.getChunkCoordinate(point.x() - range);
-        final int minChunkZ = ChunkUtils.getChunkCoordinate(point.z() - range);
-        final int maxChunkX = ChunkUtils.getChunkCoordinate(point.x() + range);
-        final int maxChunkZ = ChunkUtils.getChunkCoordinate(point.z() + range);
+        final int minChunkX = CoordConversionUtils.globalToChunk(point.x() - range);
+        final int minChunkZ = CoordConversionUtils.globalToChunk(point.z() - range);
+        final int maxChunkX = CoordConversionUtils.globalToChunk(point.x() + range);
+        final int maxChunkZ = CoordConversionUtils.globalToChunk(point.z() + range);
         final double squaredRange = range * range;
         if (minChunkX == maxChunkX && minChunkZ == maxChunkZ) {
             // Single chunk
-            final var chunkEntities = (List<T>) entities.get(getChunkIndex(point));
+            final var chunkEntities = (List<T>) entities.get(chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(entity -> {
                     final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
@@ -186,7 +188,7 @@ final class EntityTrackerImpl implements EntityTracker {
             // Multiple chunks
             final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
             forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                final var chunkEntities = (List<T>) entities.get(getChunkIndex(chunkX, chunkZ));
+                final var chunkEntities = (List<T>) entities.get(chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
                     final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
@@ -239,12 +241,12 @@ final class EntityTrackerImpl implements EntityTracker {
         forDifferingChunksInRange(newPoint.chunkX(), newPoint.chunkZ(), oldPoint.chunkX(), oldPoint.chunkZ(),
                 ServerFlag.ENTITY_VIEW_DISTANCE, (chunkX, chunkZ) -> {
                     // Add
-                    final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
+                    final List<Entity> entities = entry.chunkEntities.get(chunkIndex(chunkX, chunkZ));
                     if (entities == null || entities.isEmpty()) return;
                     for (Entity entity : entities) update.add((T) entity);
                 }, (chunkX, chunkZ) -> {
                     // Remove
-                    final List<Entity> entities = entry.chunkEntities.get(getChunkIndex(chunkX, chunkZ));
+                    final List<Entity> entities = entry.chunkEntities.get(chunkIndex(chunkX, chunkZ));
                     if (entities == null || entities.isEmpty()) return;
                     for (Entity entity : entities) update.remove((T) entity);
                 });

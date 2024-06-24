@@ -6,7 +6,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.timer.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

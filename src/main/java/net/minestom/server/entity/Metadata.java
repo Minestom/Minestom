@@ -218,7 +218,6 @@ public final class Metadata {
 
         int type();
 
-        @UnknownNullability
-        T value();
+        @UnknownNullability T value();
     }
 }
