@@ -16,7 +16,7 @@ public final class PositionUtils {
 
     public static float getLookYaw(double dx, double dz) {
         final double radians = Math.atan2(dz, dx);
-        final float degrees = (float)Math.toDegrees(radians) - 90;
+        final float degrees = (float) Math.toDegrees(radians) - 90;
         if (degrees < -180) return degrees + 360;
         if (degrees > 180) return degrees - 360;
         return degrees;
@@ -28,11 +28,11 @@ public final class PositionUtils {
     }
 
     public static @NotNull Pos getPositionWithRelativeFlags(@NotNull Pos start, @NotNull Pos modifier, @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
-        double x = (flags & RelativeFlags.X) == 0 ? modifier.x() : start.x() + modifier.x();
-        double y = (flags & RelativeFlags.Y) == 0 ? modifier.y() : start.y() + modifier.y();
-        double z = (flags & RelativeFlags.Z) == 0 ? modifier.z() : start.z() + modifier.z();
-        float yaw = (flags & RelativeFlags.YAW) == 0 ? modifier.yaw() : start.yaw() + modifier.yaw();
-        float pitch = (flags & RelativeFlags.PITCH) == 0 ? modifier.pitch() : start.pitch() + modifier.pitch();
+        final double x = (flags & RelativeFlags.X) == 0 ? modifier.x() : start.x() + modifier.x();
+        final double y = (flags & RelativeFlags.Y) == 0 ? modifier.y() : start.y() + modifier.y();
+        final double z = (flags & RelativeFlags.Z) == 0 ? modifier.z() : start.z() + modifier.z();
+        final float yaw = (flags & RelativeFlags.YAW) == 0 ? modifier.yaw() : start.yaw() + modifier.yaw();
+        final float pitch = (flags & RelativeFlags.PITCH) == 0 ? modifier.pitch() : start.pitch() + modifier.pitch();
         return new Pos(x, y, z, yaw, pitch);
     }
 }

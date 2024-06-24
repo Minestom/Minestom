@@ -69,6 +69,7 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
+    api(project(":lib"))
     implementation(libs.minestomData)
 
     // Performance/data structures
