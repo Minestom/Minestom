@@ -1,6 +1,5 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.utils.mojang.MojangUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

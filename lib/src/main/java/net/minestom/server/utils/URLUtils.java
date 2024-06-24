@@ -1,4 +1,6 @@
-package net.minestom.server.utils.url;
+package net.minestom.server.utils;
+
+import org.jetbrains.annotations.Blocking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +12,22 @@ import java.net.URL;
 public final class URLUtils {
 
     private URLUtils() {
-
     }
 
+    @Blocking
     public static String getText(String url) throws IOException {
+        final InputStream inputStream = getInputStream(url);
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
+        StringBuilder response = new StringBuilder();
+        String currentLine;
+        while ((currentLine = in.readLine()) != null) response.append(currentLine);
+        in.close();
+
+        return response.toString();
+    }
+
+    private static InputStream getInputStream(String url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         //add headers to the connection, or check the status if desired..
 
@@ -25,19 +39,6 @@ public final class URLUtils {
         } else {
             inputStream = connection.getErrorStream();
         }
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        inputStream));
-
-        StringBuilder response = new StringBuilder();
-        String currentLine;
-
-        while ((currentLine = in.readLine()) != null)
-            response.append(currentLine);
-
-        in.close();
-
-        return response.toString();
+        return inputStream;
     }
 }

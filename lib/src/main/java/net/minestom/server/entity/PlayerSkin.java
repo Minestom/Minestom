@@ -3,16 +3,13 @@ package net.minestom.server.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minestom.server.utils.mojang.MojangUtils;
+import net.minestom.server.utils.MojangUtils;
 import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains all the data required to store a skin.
- * <p>
- * Can be applied to a player with {@link Player#setSkin(PlayerSkin)}
- * or in the linked event {@link net.minestom.server.event.player.PlayerSkinInitEvent}.
  */
 public record PlayerSkin(String textures, String signature) {
 

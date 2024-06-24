@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the game mode of a player.
- * <p>
- * Can be set with {@link Player#setGameMode(GameMode)}.
  */
 public enum GameMode {
     SURVIVAL((byte) 0, true),
