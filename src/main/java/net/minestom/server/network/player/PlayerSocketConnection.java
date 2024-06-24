@@ -7,7 +7,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.*;
@@ -78,7 +78,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.remoteAddress = remoteAddress;
     }
 
-    public void processPackets(BinaryBuffer readBuffer, PacketProcessor packetProcessor) {
+    public void processPackets(BinaryBuffer readBuffer, PacketParser packetParser) {
         // Decrypt data
         {
             final EncryptionContext encryptionContext = this.encryptionContext;
@@ -100,7 +100,17 @@ public class PlayerSocketConnection extends PlayerConnection {
                             return; // Prevent packet corruption
                         ClientPacket packet = null;
                         try {
-                            packet = packetProcessor.process(this, id, payload);
+                            packet = packetParser.parse(getConnectionState(), id, payload);
+                            switch (getConnectionState()) {
+                                // Process all pre-config packets immediately
+                                case HANDSHAKE, STATUS, LOGIN -> MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
+                                // Process config and play packets on the next tick
+                                case CONFIGURATION, PLAY -> {
+                                    final Player player = getPlayer();
+                                    assert player != null;
+                                    player.addPacketToQueue(packet);
+                                }
+                            }
                         } catch (Exception e) {
                             // Error while reading the packet
                             MinecraftServer.getExceptionManager().handleException(e);

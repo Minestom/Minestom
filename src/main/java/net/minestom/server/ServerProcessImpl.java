@@ -27,7 +27,7 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.PacketParser;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
@@ -78,7 +78,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketProcessor packetProcessor;
+    private final PacketParser packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -123,7 +123,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
-        this.packetProcessor = new PacketProcessor(packetListener);
+        this.packetParser = new PacketParser();
         this.instance = new InstanceManager(this);
         this.block = new BlockManager();
         this.command = new CommandManager();
@@ -136,7 +136,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.bossBar = new BossBarManager();
         this.tag = new TagManager();
 
-        this.server = new Server(packetProcessor);
+        this.server = new Server(packetParser);
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
@@ -288,8 +288,8 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull PacketProcessor packetProcessor() {
-        return packetProcessor;
+    public @NotNull PacketParser packetParser() {
+        return packetParser;
     }
 
     @Override
