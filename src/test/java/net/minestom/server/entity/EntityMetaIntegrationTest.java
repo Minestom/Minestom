@@ -47,7 +47,7 @@ public class EntityMetaIntegrationTest {
             } else if (entry.type() == Metadata.TYPE_BOOLEAN) {
                 assertTrue((boolean) content);
             } else if (entry.type() == Metadata.TYPE_POSE) {
-                assertEquals(Entity.Pose.SNEAKING, content);
+                assertEquals(EntityPose.SNEAKING, content);
             } else {
                 Assertions.fail("Invalid MetaData entry");
             }
@@ -66,7 +66,7 @@ public class EntityMetaIntegrationTest {
             } else if (entry.type() == Metadata.TYPE_BOOLEAN) {
                 assertFalse((boolean) content);
             } else if (entry.type() == Metadata.TYPE_POSE) {
-                assertEquals(Entity.Pose.STANDING, content);
+                assertEquals(EntityPose.STANDING, content);
             } else {
                 Assertions.fail("Invalid MetaData entry");
             }

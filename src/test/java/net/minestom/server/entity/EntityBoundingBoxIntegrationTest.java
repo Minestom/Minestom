@@ -1,13 +1,13 @@
 package net.minestom.server.entity;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,16 +22,16 @@ public class EntityBoundingBoxIntegrationTest {
 
         // Bounding box should be from the registry
         assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
-        player.setPose(Entity.Pose.STANDING);
+        player.setPose(EntityPose.STANDING);
         assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
 
-        player.setPose(Entity.Pose.SLEEPING);
+        player.setPose(EntityPose.SLEEPING);
         assertEquals(new BoundingBox(0.2, 0.2, 0.2), player.getBoundingBox());
 
-        player.setPose(Entity.Pose.SNEAKING);
+        player.setPose(EntityPose.SNEAKING);
         assertEquals(new BoundingBox(0.6, 1.5, 0.6), player.getBoundingBox());
 
-        player.setPose(Entity.Pose.FALL_FLYING);
+        player.setPose(EntityPose.FALL_FLYING);
         assertEquals(new BoundingBox(0.6, 0.6, 0.6), player.getBoundingBox());
     }
 
@@ -43,13 +43,13 @@ public class EntityBoundingBoxIntegrationTest {
 
         assertEquals(1.62, player.getEyeHeight());
 
-        player.setPose(Entity.Pose.SLEEPING);
+        player.setPose(EntityPose.SLEEPING);
         assertEquals(0.2, player.getEyeHeight());
 
-        player.setPose(Entity.Pose.SNEAKING);
+        player.setPose(EntityPose.SNEAKING);
         assertEquals(1.27, player.getEyeHeight());
 
-        player.setPose(Entity.Pose.FALL_FLYING);
+        player.setPose(EntityPose.FALL_FLYING);
         assertEquals(0.4, player.getEyeHeight());
     }
 

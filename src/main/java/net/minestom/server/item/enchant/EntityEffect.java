@@ -2,9 +2,9 @@ package net.minestom.server.item.enchant;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.registry.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
