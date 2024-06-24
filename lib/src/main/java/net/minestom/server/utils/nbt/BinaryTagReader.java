@@ -11,8 +11,7 @@ import java.util.Map;
 
 // Based on net.kyori.adventure.nbt.BinaryTagReaderImpl licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/BinaryTagReaderImpl.java
-public class BinaryTagReader {
-
+public final class BinaryTagReader {
     static {
         BinaryTagTypes.COMPOUND.id(); // Force initialization
     }
