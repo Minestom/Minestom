@@ -8,6 +8,21 @@ import org.jetbrains.annotations.NotNull;
  * Helper class to iterate over chunks within a range.
  */
 public final class ChunkRangeUtils {
+
+    /**
+     * Get the amount of chunks in a square range.
+     *
+     * @param range the range
+     * @return the amount of chunks in the square range
+     */
+    public static int chunkCountFromRange(int range) {
+        if (range < 0) {
+            throw new IllegalArgumentException("Range cannot be negative");
+        }
+        final int square = range * 2 + 1;
+        return square * square;
+    }
+
     public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
                                                  int oldChunkX, int oldChunkZ,
                                                  int range, @NotNull IntegerBiConsumer callback) {

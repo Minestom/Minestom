@@ -138,14 +138,6 @@ public final class ChunkUtils {
         return (int) index;
     }
 
-    public static int getChunkCount(int range) {
-        if (range < 0) {
-            throw new IllegalArgumentException("Range cannot be negative");
-        }
-        final int square = range * 2 + 1;
-        return square * square;
-    }
-
     /**
      * Gets the block index of a position.
      *

@@ -1,27 +1,41 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.utils.chunk.ChunkUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.Assertions;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ChunkUtilsTest {
+import static net.minestom.server.utils.ChunkRangeUtils.chunkCountFromRange;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class ChunkRangeTest {
+
+    @Test
+    public void chunkCount() {
+        assertEquals(289, chunkCountFromRange(8));
+        assertEquals(169, chunkCountFromRange(6));
+        assertEquals(121, chunkCountFromRange(5));
+        assertEquals(9, chunkCountFromRange(1));
+        assertEquals(1, chunkCountFromRange(0));
+        assertThrows(IllegalArgumentException.class, () -> chunkCountFromRange(-1));
+    }
 
     @ParameterizedTest
     @MethodSource("testForDifferingChunksInRangeParams")
     public void testForDifferingChunksInRange(int nx, int nz, int ox, int oz, int r) {
         final Set<ChunkCoordinate> n = new HashSet<>();
         final Set<ChunkCoordinate> o = new HashSet<>();
-        ChunkUtils.forChunksInRange(nx, nz, r, (x, z) -> n.add(new ChunkCoordinate(x, z)));
-        ChunkUtils.forChunksInRange(ox, oz, r, (x, z) -> o.add(new ChunkCoordinate(x, z)));
+        ChunkRangeUtils.forChunksInRange(nx, nz, r, (x, z) -> n.add(new ChunkCoordinate(x, z)));
+        ChunkRangeUtils.forChunksInRange(ox, oz, r, (x, z) -> o.add(new ChunkCoordinate(x, z)));
 
         final List<ChunkCoordinate> actualNew = new ArrayList<>();
         final List<ChunkCoordinate> actualOld = new ArrayList<>();
-        ChunkUtils.forDifferingChunksInRange(nx, nz, ox, oz, r, ((x, z) -> actualNew.add(new ChunkCoordinate(x, z))),
+        ChunkRangeUtils.forDifferingChunksInRange(nx, nz, ox, oz, r, ((x, z) -> actualNew.add(new ChunkCoordinate(x, z))),
                 ((x, z) -> actualOld.add(new ChunkCoordinate(x, z))));
 
         final Comparator<ChunkCoordinate> sorter = Comparator.comparingInt(ChunkCoordinate::x).thenComparingInt(ChunkCoordinate::z);
@@ -47,5 +61,6 @@ public class ChunkUtilsTest {
         );
     }
 
-    private record ChunkCoordinate(int x, int z) {}
+    private record ChunkCoordinate(int x, int z) {
+    }
 }
