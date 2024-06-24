@@ -1,4 +1,4 @@
-package net.minestom.server.utils.position;
+package net.minestom.server.utils;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.RelativeFlags;

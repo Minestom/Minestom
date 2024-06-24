@@ -46,13 +46,12 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PositionUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
-import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.MagicConstant;
@@ -450,7 +449,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (entity.isViewer(player)) {
                 player.sendPacket(entity.getAttachEntityPacket());
             }
-        };
+        }
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
@@ -572,7 +571,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
         velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
-        if (!PlayerUtils.isSocketClient(this)) {
+        if (!(this instanceof Player)) {
             onGround = physicsResult.isOnGround();
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
         }

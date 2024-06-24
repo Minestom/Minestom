@@ -2,7 +2,7 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.position.PositionUtils;
+import net.minestom.server.utils.PositionUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
