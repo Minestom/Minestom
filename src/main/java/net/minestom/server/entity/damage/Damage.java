@@ -7,7 +7,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.validate.Check;
@@ -156,28 +155,6 @@ public class Damage implements Taggable {
      */
     public @Nullable Component buildDeathScreenText(@NotNull Player killed) {
         return Component.translatable("death.attack." + type.messageId());
-    }
-
-    /**
-     * Sound event to play when the given entity is hit by this damage. Possible to return null if no sound should be played
-     *
-     * @param entity the entity hit by this damage
-     * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
-     */
-    public @Nullable SoundEvent getSound(@NotNull LivingEntity entity) {
-        if (entity instanceof Player) {
-            return getPlayerSound((Player) entity);
-        }
-        return getGenericSound(entity);
-    }
-
-    protected SoundEvent getGenericSound(@NotNull LivingEntity entity) {
-        return SoundEvent.ENTITY_GENERIC_HURT;
-    }
-
-    protected SoundEvent getPlayerSound(@NotNull Player player) {
-        if (DamageType.ON_FIRE.equals(typeKey)) return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
-        return SoundEvent.ENTITY_PLAYER_HURT;
     }
 
     @Override
