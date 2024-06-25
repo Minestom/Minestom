@@ -35,8 +35,11 @@ public class Damage implements Taggable {
     /**
      * Creates a new damage type.
      *
+     * @param attacker The attacker that initiated this damage
+     * @param source The source of the damage. For direct hits (melee), this will be the same as the attacker. For indirect hits (projectiles), this will be the projectile
      * @param type the type of this damage
      * @param amount amount of damage
+     * @param sourcePosition The position of the source of damage
      */
     public Damage(@NotNull DynamicRegistry.Key<DamageType> type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
         this.typeKey = type;
@@ -51,13 +54,19 @@ public class Damage implements Taggable {
     /**
      * Gets the type of this damage.
      * <p>
-     * It does not have to be unique to this object.o
+     * It does not have to be unique to this object.
      *
      * @return the damage type
      */
     public @NotNull DynamicRegistry.Key<DamageType> getType() {
         return typeKey;
     }
+
+    /**
+     * Gets the integer id of the damage type that has been set
+     * @return The integer id of the damage type
+     */
+    public int getTypeId() { return DAMAGE_TYPE_REGISTRY.getId(typeKey); }
 
     /**
      * Gets the "attacker" of the damage.
