@@ -50,7 +50,6 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -1259,16 +1258,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerHeightOffset(Entity, Entity)}
+     * Sets the coordinates of the passenger to the appropriate offset coordinates for this vehicle
      *
      * @param newPosition the new position of this vehicle
      * @param passenger   the passenger to be moved
      */
     private void updatePassengerPosition(Point newPosition, Entity passenger) {
         final Pos oldPassengerPos = passenger.position;
-        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
-                newPosition.z());
+        final Vec vehicleAttachment = EntityUtils.getVehicleAttachment(passenger);
+        final Vec passengerAttachment = EntityUtils.getPassengerAttachment(this, passenger);
+
+        final Pos newPassengerPos = oldPassengerPos.withCoord(
+                newPosition.x() + passengerAttachment.x(),
+                newPosition.y() + passengerAttachment.y() - vehicleAttachment.y(),
+                newPosition.z() + passengerAttachment.z());
         passenger.position = newPassengerPos;
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);

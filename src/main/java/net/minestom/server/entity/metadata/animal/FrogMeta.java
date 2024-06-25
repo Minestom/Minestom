@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.AbstractAgeableMeta;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,11 @@ public class FrogMeta extends AnimalMeta {
 
     public FrogMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
+    }
+
+    @Override
+    public void setBaby(boolean value) {
+        super.metadata.setIndex(AbstractAgeableMeta.OFFSET, Metadata.Boolean(value));
     }
 
     public Variant getVariant() {
