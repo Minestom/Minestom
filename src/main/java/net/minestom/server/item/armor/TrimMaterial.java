@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -45,8 +45,8 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
-                (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
+                "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.TRIM_MATERIALS,
+                (namespace, props) -> new TrimMaterialImpl(StaticRegistryData.trimMaterial(namespace, props))
         );
     }
 
@@ -64,7 +64,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
      * Returns the raw registry entry of this trim, only if the trim is a vanilla trim. Otherwise, returns null.
      */
     @Contract(pure = true)
-    @Nullable Registry.TrimMaterialEntry registry();
+    @Nullable StaticRegistryData.TrimMaterialEntry registry();
 
     final class Builder {
         private String assetName;

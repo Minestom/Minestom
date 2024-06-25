@@ -201,19 +201,19 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new RegistryDataPacket(id, entries);
     }
 
-    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
-        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
+    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull StaticRegistryData.Resource resource, @NotNull StaticRegistryData.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
+        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(StaticRegistryData.load(resource).entrySet());
         if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
         for (var entry : entries) {
             final String namespace = entry.getKey();
-            final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
+            final StaticRegistryData.Properties properties = StaticRegistryData.Properties.fromMap(entry.getValue());
             registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
         }
     }
 
-    static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
+    static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull StaticRegistryData.Resource resource) {
         Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.fileName())) {
+        try (InputStream resourceStream = StaticRegistryData.class.getClassLoader().getResourceAsStream(resource.fileName())) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
             final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
             if (!(tag instanceof CompoundBinaryTag compound)) {

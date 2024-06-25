@@ -3,7 +3,7 @@ package net.minestom.server.item;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -23,7 +23,7 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
      * Returns the raw registry data for the material.
      */
     @Contract(pure = true)
-    @NotNull Registry.MaterialEntry registry();
+    @NotNull StaticRegistryData.MaterialEntry registry();
 
     @Override
     default @NotNull NamespaceID namespace() {

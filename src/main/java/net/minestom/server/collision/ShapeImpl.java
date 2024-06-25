@@ -6,7 +6,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ public final class ShapeImpl implements Shape {
     private final byte blockOcclusion;
     private final byte airOcclusion;
 
-    private final Registry.BlockEntry blockEntry;
+    private final StaticRegistryData.BlockEntry blockEntry;
     private Block block;
 
-    private ShapeImpl(BoundingBox[] boundingBoxes, BoundingBox[] occlusionBoundingBoxes, Registry.BlockEntry blockEntry) {
+    private ShapeImpl(BoundingBox[] boundingBoxes, BoundingBox[] occlusionBoundingBoxes, StaticRegistryData.BlockEntry blockEntry) {
         this.collisionBoundingBoxes = boundingBoxes;
         this.occlusionBoundingBoxes = occlusionBoundingBoxes;
         this.blockEntry = blockEntry;
@@ -122,7 +122,7 @@ public final class ShapeImpl implements Shape {
         return 1;
     }
 
-    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, Registry.BlockEntry blockEntry) {
+    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, StaticRegistryData.BlockEntry blockEntry) {
         BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
         BoundingBox[] occlusionBoundingBoxes = blockEntry.occludes() ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
         return new ShapeImpl(collisionBoundingBoxes, occlusionBoundingBoxes, blockEntry);

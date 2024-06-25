@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
  */
-public final class Registry {
+public final class StaticRegistryData {
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Properties main) {
         return new BlockEntry(namespace, main, null);
@@ -128,7 +128,7 @@ public final class Registry {
     @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
+        try (InputStream resourceStream = StaticRegistryData.class.getClassLoader().getResourceAsStream(resource.name)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
             try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
                 reader.beginObject();
@@ -143,7 +143,7 @@ public final class Registry {
 
     @ApiStatus.Internal
     public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
-        var entries = Registry.load(resource);
+        var entries = StaticRegistryData.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
         for (var entry : entries.entrySet()) {

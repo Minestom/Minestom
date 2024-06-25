@@ -3,7 +3,7 @@ package net.minestom.server.item.armor;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -15,7 +15,7 @@ record TrimPatternImpl(
         @NotNull Material template,
         @NotNull Component description,
         boolean isDecal,
-        @Nullable Registry.TrimPatternEntry registry
+        @Nullable StaticRegistryData.TrimPatternEntry registry
 ) implements TrimPattern {
 
     static final BinaryTagSerializer<TrimPattern> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -36,7 +36,7 @@ record TrimPatternImpl(
         Check.notNull(description, "missing description");
     }
 
-    TrimPatternImpl(@NotNull Registry.TrimPatternEntry registry) {
+    TrimPatternImpl(@NotNull StaticRegistryData.TrimPatternEntry registry) {
         this(registry.assetID(), registry.template(),
                 registry.description(), registry.decal(), registry);
     }

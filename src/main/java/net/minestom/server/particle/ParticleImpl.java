@@ -4,14 +4,14 @@ import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 final class ParticleImpl {
-    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
+    private static final StaticRegistryData.Container<Particle> CONTAINER = StaticRegistryData.createStaticContainer(StaticRegistryData.Resource.PARTICLES,
             (namespace, properties) -> defaultParticle(NamespaceID.from(namespace), properties.getInt("id")));
 
     static Particle get(@NotNull String namespace) {

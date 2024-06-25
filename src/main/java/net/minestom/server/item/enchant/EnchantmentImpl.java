@@ -10,7 +10,7 @@ import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ record EnchantmentImpl(
         int anvilCost,
         @NotNull List<EquipmentSlotGroup> slots,
         @NotNull DataComponentMap effects,
-        @Nullable Registry.EnchantmentEntry registry
+        @Nullable StaticRegistryData.EnchantmentEntry registry
 ) implements Enchantment {
 
     private static final BinaryTagSerializer<ObjectSet<Enchantment>> ENCHANTMENT_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ENCHANTMENTS);
@@ -78,11 +78,11 @@ record EnchantmentImpl(
         slots = List.copyOf(slots);
     }
 
-    EnchantmentImpl(@NotNull Registries registries, @NotNull Registry.EnchantmentEntry registry) {
+    EnchantmentImpl(@NotNull Registries registries, @NotNull StaticRegistryData.EnchantmentEntry registry) {
         this(fromRawRegistry(registries, registry.raw()), registry);
     }
 
-    EnchantmentImpl(@NotNull Enchantment enchantment, @NotNull Registry.EnchantmentEntry registry) {
+    EnchantmentImpl(@NotNull Enchantment enchantment, @NotNull StaticRegistryData.EnchantmentEntry registry) {
         this(enchantment.description(), enchantment.exclusiveSet(),
                 enchantment.supportedItems(), enchantment.primaryItems(),
                 enchantment.weight(), enchantment.maxLevel(), enchantment.minCost(),

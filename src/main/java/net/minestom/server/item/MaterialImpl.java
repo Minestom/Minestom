@@ -1,13 +1,13 @@
 package net.minestom.server.item;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-record MaterialImpl(Registry.MaterialEntry registry) implements Material {
-    private static final Registry.Container<Material> CONTAINER = Registry.createStaticContainer(Registry.Resource.ITEMS,
-            (namespace, properties) -> new MaterialImpl(Registry.material(namespace, properties)));
+record MaterialImpl(StaticRegistryData.MaterialEntry registry) implements Material {
+    private static final StaticRegistryData.Container<Material> CONTAINER = StaticRegistryData.createStaticContainer(StaticRegistryData.Resource.ITEMS,
+            (namespace, properties) -> new MaterialImpl(StaticRegistryData.material(namespace, properties)));
 
     static Material get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

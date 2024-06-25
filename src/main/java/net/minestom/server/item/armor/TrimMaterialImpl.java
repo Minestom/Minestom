@@ -3,7 +3,7 @@ package net.minestom.server.item.armor;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ record TrimMaterialImpl(
         float itemModelIndex,
         @NotNull Map<String, String> overrideArmorMaterials,
         @NotNull Component description,
-        @Nullable Registry.TrimMaterialEntry registry
+        @Nullable StaticRegistryData.TrimMaterialEntry registry
 ) implements TrimMaterial {
 
     static final BinaryTagSerializer<TrimMaterial> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -49,7 +49,7 @@ record TrimMaterialImpl(
         overrideArmorMaterials = Map.copyOf(overrideArmorMaterials);
     }
 
-    TrimMaterialImpl(@NotNull Registry.TrimMaterialEntry registry) {
+    TrimMaterialImpl(@NotNull StaticRegistryData.TrimMaterialEntry registry) {
         this(registry.assetName(), registry.ingredient(),
                 registry.itemModelIndex(), registry.overrideArmorMaterials(),
                 registry.description(), registry);

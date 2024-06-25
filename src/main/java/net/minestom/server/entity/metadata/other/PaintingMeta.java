@@ -9,7 +9,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -102,8 +102,8 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         @ApiStatus.Internal
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             return DynamicRegistry.create(
-                    "minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.PAINTING_VARIANTS,
-                    (namespace, props) -> new VariantImpl(Registry.paintingVariant(namespace, props))
+                    "minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.PAINTING_VARIANTS,
+                    (namespace, props) -> new VariantImpl(StaticRegistryData.paintingVariant(namespace, props))
             );
         }
 
@@ -114,7 +114,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         int height();
 
         @Override
-        @Nullable Registry.PaintingVariantEntry registry();
+        @Nullable StaticRegistryData.PaintingVariantEntry registry();
 
         class Builder {
             private NamespaceID assetId;
@@ -152,7 +152,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
             @NotNull NamespaceID assetId,
             int width,
             int height,
-            @Nullable Registry.PaintingVariantEntry registry
+            @Nullable StaticRegistryData.PaintingVariantEntry registry
     ) implements Variant {
         private static final BinaryTagSerializer<Variant> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> {
@@ -172,7 +172,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
             Check.argCondition(height <= 0, "height must be positive");
         }
 
-        VariantImpl(@NotNull Registry.PaintingVariantEntry registry) {
+        VariantImpl(@NotNull StaticRegistryData.PaintingVariantEntry registry) {
             this(registry.assetId(), registry.width(), registry.height(), registry);
         }
     }

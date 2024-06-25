@@ -1,6 +1,6 @@
 package net.minestom.server.gamedata.tags;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +18,7 @@ public final class TagManager {
         // Load required tags from files
         for (var type : Tag.BasicType.values()) {
             if (type.getResource() == null || type.getFunction() == null) continue;
-            final var json = Registry.load(type.getResource());
+            final var json = StaticRegistryData.load(type.getResource());
             final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
             json.keySet().forEach(tagName -> {
                 final var tag = new Tag(NamespaceID.from(tagName), getValues(json, tagName));

@@ -2,7 +2,7 @@ package net.minestom.server.instance.block.jukebox;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -14,7 +14,7 @@ record JukeboxSongImpl(
         @NotNull Component description,
         float lengthInSeconds,
         int comparatorOutput,
-        @Nullable Registry.JukeboxSongEntry registry
+        @Nullable StaticRegistryData.JukeboxSongEntry registry
 ) implements JukeboxSong {
 
     static final BinaryTagSerializer<JukeboxSong> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -35,7 +35,7 @@ record JukeboxSongImpl(
         Check.argCondition(description == null, "missing description");
     }
 
-    JukeboxSongImpl(@NotNull Registry.JukeboxSongEntry registry) {
+    JukeboxSongImpl(@NotNull StaticRegistryData.JukeboxSongEntry registry) {
         this(registry.soundEvent(), registry.description(), registry.lengthInSeconds(), registry.comparatorOutput(), registry);
     }
 

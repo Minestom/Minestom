@@ -3,7 +3,7 @@ package net.minestom.server.entity.damage;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -33,8 +33,8 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
-                (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
+                "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.DAMAGE_TYPES,
+                (namespace, props) -> new DamageTypeImpl(StaticRegistryData.damageType(namespace, props))
         );
     }
 
@@ -44,7 +44,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
 
     @NotNull String scaling();
 
-    @Nullable Registry.DamageTypeEntry registry();
+    @Nullable StaticRegistryData.DamageTypeEntry registry();
 
     final class Builder {
         private float exhaustion = 0f;

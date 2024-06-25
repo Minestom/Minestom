@@ -4,7 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -35,8 +35,8 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.BANNER_PATTERNS,
-                (namespace, props) -> new BannerPatternImpl(Registry.bannerPattern(namespace, props))
+                "minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.BANNER_PATTERNS,
+                (namespace, props) -> new BannerPatternImpl(StaticRegistryData.bannerPattern(namespace, props))
         );
     }
 
@@ -44,7 +44,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
 
     @NotNull String translationKey();
 
-    @Nullable Registry.BannerPatternEntry registry();
+    @Nullable StaticRegistryData.BannerPatternEntry registry();
 
     final class Builder {
         private NamespaceID assetId;

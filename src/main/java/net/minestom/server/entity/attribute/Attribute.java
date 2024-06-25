@@ -1,7 +1,7 @@
 package net.minestom.server.entity.attribute;
 
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -16,7 +16,7 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
     @NotNull BinaryTagSerializer<Attribute> NBT_TYPE =  BinaryTagSerializer.STRING.map(AttributeImpl::get, Attribute::name);
 
     @Contract(pure = true)
-    @NotNull Registry.AttributeEntry registry();
+    @NotNull StaticRegistryData.AttributeEntry registry();
 
     @Override
     default @NotNull NamespaceID namespace() {

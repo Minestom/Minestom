@@ -5,7 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -137,7 +137,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the block registry
      */
     @Contract(pure = true)
-    @NotNull Registry.BlockEntry registry();
+    @NotNull StaticRegistryData.BlockEntry registry();
 
     @Override
     default @NotNull NamespaceID namespace() {
