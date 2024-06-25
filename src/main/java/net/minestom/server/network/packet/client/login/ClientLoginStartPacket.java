@@ -18,6 +18,11 @@ public record ClientLoginStartPacket(@NotNull String username,
     }
 
     @Override
+    public boolean processImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         if (username.length() > 16)
             throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");

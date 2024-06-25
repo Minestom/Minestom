@@ -27,6 +27,11 @@ public record ClientCookieResponsePacket(
     }
 
     @Override
+    public boolean processImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(NetworkBuffer.STRING, key);
         writer.writeOptional(NetworkBuffer.BYTE_ARRAY, value);

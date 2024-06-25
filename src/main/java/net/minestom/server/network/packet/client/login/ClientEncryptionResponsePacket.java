@@ -14,6 +14,11 @@ public record ClientEncryptionResponsePacket(byte[] sharedSecret,
     }
 
     @Override
+    public boolean processImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(BYTE_ARRAY, sharedSecret);
         writer.write(BYTE_ARRAY, encryptedVerifyToken);

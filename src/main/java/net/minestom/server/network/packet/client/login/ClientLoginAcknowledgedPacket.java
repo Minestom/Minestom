@@ -11,6 +11,11 @@ public record ClientLoginAcknowledgedPacket() implements ClientPacket {
     }
 
     @Override
+    public boolean processImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
     }
 
