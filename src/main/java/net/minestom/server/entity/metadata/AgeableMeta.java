@@ -4,9 +4,11 @@ public interface AgeableMeta {
     boolean isBaby();
 
     /**
-     * Forcefully sets the bounding box of this entity to the bounding box
-     * which the client expects.
-     * @param value true if setting this entity to a baby
+     * Sets the {@link AgeableMeta#isBaby()} metadata of this entity.
+     * <p>
+     * Note: this will forcefully set the bounding box of this entity to the bounding box
+     * that the client expects.
+     * @param value true if setting to a baby, false otherwise
      */
     void setBaby(boolean value);
 }
