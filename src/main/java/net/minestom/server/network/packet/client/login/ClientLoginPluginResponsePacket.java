@@ -14,6 +14,11 @@ public record ClientLoginPluginResponsePacket(int messageId, byte @Nullable [] d
     }
 
     @Override
+    public boolean processImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, messageId);
         writer.writeOptional(RAW_BYTES, data);

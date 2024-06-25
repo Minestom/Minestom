@@ -12,6 +12,11 @@ public record ClientPingRequestPacket(long number) implements ClientPacket {
     }
 
     @Override
+    public boolean processImmediately() {
+        return true;
+    }
+
+    @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(LONG, number);
     }
