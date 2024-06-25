@@ -385,7 +385,7 @@ public class AnvilLoader implements IChunkLoader {
             final Section section = chunk.getSection(sectionY);
 
             final CompoundBinaryTag.Builder sectionData = CompoundBinaryTag.builder();
-            sectionData.putInt("Y", sectionY);
+            sectionData.putByte("Y", (byte) sectionY);
 
             // Lighting
             byte[] skyLight = section.skyLight().array();
