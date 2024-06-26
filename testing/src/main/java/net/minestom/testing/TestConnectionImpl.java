@@ -64,6 +64,8 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     final class PlayerConnectionImpl extends PlayerConnection {
+        private boolean online = true;
+
         @Override
         public void sendPacket(@NotNull SendablePacket packet) {
             final var serverPacket = this.extractPacket(packet);
@@ -92,8 +94,13 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         @Override
-        public void disconnect() {
+        public boolean isOnline() {
+            return online;
+        }
 
+        @Override
+        public void disconnect() {
+            online = false;
         }
     }
 
