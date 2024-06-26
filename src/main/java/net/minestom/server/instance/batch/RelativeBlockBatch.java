@@ -48,6 +48,55 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         this.options = options;
     }
 
+    public RelativeBlockBatch diff(RelativeBlockBatch other) {
+        RelativeBlockBatch diff = new RelativeBlockBatch();
+
+        for (var entry : this.blockIdMap.long2ObjectEntrySet()) {
+            long pos = entry.getLongKey();
+            final int relZ = (short) (pos & 0xFFFF) + this.offsetZ;
+            final int relY = (short) ((pos >> 16) & 0xFFFF) + this.offsetY;
+            final int relX = (short) ((pos >> 32) & 0xFFFF) + this.offsetX;
+
+            Block otherBlock = other.getBlock(relX, relY, relZ);
+            Block selfBlock = entry.getValue();
+
+            if (otherBlock == null || !otherBlock.equals(selfBlock)) {
+                diff.setBlock(relX, relY, relZ, selfBlock);
+            }
+        }
+
+        for (var entry : other.blockIdMap.long2ObjectEntrySet()) {
+            long pos = entry.getLongKey();
+            final int relZ = (short) (pos & 0xFFFF) + other.offsetZ;
+            final int relY = (short) ((pos >> 16) & 0xFFFF) + other.offsetY;
+            final int relX = (short) ((pos >> 32) & 0xFFFF) + other.offsetX;
+            Block selfBlock = this.getBlock(relX, relY, relZ);
+
+            if (selfBlock == null) {
+                diff.setBlock(relX, relY, relZ, Block.AIR);
+            }
+        }
+
+        return diff;
+    }
+
+    public void join(RelativeBlockBatch relativeBlockBatch) {
+        for (var entry : relativeBlockBatch.blockIdMap.long2ObjectEntrySet()) {
+            long pos = entry.getLongKey();
+            final int relZ = (short) (pos & 0xFFFF) + relativeBlockBatch.offsetZ;
+            final int relY = (short) ((pos >> 16) & 0xFFFF) + relativeBlockBatch.offsetY;
+            final int relX = (short) ((pos >> 32) & 0xFFFF) + relativeBlockBatch.offsetX;
+            this.setBlock(relX, relY, relZ, entry.getValue());
+        }
+    }
+
+    public @Nullable Block getBlock(int x, int y, int z) {
+        long pos = Short.toUnsignedLong((short)(x - this.offsetX));
+        pos = (pos << 16) | Short.toUnsignedLong((short)(y - this.offsetY));
+        pos = (pos << 16) | Short.toUnsignedLong((short)(z - this.offsetZ));
+        return blockIdMap.get(pos);
+    }
+
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         // Save the offsets if it is the first entry
