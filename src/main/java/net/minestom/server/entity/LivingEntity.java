@@ -411,7 +411,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Sets the heal of the entity as its max health.
+     * Sets the health of the entity to its max health.
      * <p>
      * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
      */

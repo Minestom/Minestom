@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -83,6 +84,9 @@ public class InstanceContainer extends Instance {
 
     // used to supply a new chunk object at a position when requested
     private ChunkSupplier chunkSupplier;
+
+    // The number of blocks below the minimum Y before any entities are considered 'in the void'
+    private int voidThreshold = 64;
 
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
@@ -240,7 +244,7 @@ public class InstanceContainer extends Instance {
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketUtils.sendGroupedPacket(chunk.getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
+                    new EffectPacket(Effects.BLOCK_BREAK.getId(), blockPosition, block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
@@ -449,8 +453,29 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean isInVoid(@NotNull Point point) {
-        // TODO: more customizable
-        return point.y() < getCachedDimensionType().minY() - 64;
+        return point.y() < getCachedDimensionType().minY() - voidThreshold;
+    }
+
+    /**
+     * Sets the new void threshold
+     * <p>
+     * The void threshold is the number of blocks added to the minimum y value to determine when entities are considered 'in the void'.
+     * <p>
+     * Positive numbers indicate that the void threshold is that many blocks below the instance's minimum y (defined by dimension type), negative values indicate that the void is inside the buildable area of the instance.
+     * @param newVoidThreshold The new number of blocks to be considered
+     */
+    public void setVoidThreshold(int newVoidThreshold) {
+        this.voidThreshold = newVoidThreshold;
+    }
+
+    /**
+     * Gets the current void threshold
+     * <p>
+     * The void threshold is the number of blocks added to the minimum y value to determine when entities are considered 'in the void'.
+     * @return The current void threshold
+     */
+    public int getVoidThreshold() {
+        return voidThreshold;
     }
 
     /**
