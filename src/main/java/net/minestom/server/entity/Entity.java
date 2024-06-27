@@ -279,17 +279,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *                 can be null or empty to only load the chunk at {@code position}
      * @param flags    flags used to teleport the entity relatively rather than absolutely
      *                 use {@link RelativeFlags} to see available flags
+     * @param shouldConfirm if false, the teleportation will be done without confirmation
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+                                                     boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -306,6 +308,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             endCallback.run();
             return AsyncUtils.empty();
         }
+    }
+
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        return teleport(position, chunks, flags, true);
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {

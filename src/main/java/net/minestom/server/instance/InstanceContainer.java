@@ -641,8 +641,8 @@ public class InstanceContainer extends Instance {
             final int neighborZ = blockPosition.blockZ() + direction.normalZ();
             if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
                 continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.TYPE);
-            if (neighborBlock == null)
+            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
+            if (neighborBlock == null || neighborBlock.isAir())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
             if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance()) continue;

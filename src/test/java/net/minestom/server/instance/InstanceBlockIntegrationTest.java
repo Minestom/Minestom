@@ -1,11 +1,17 @@
 package net.minestom.server.instance;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.SuspiciousGravelBlockHandler;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.tag.Tag;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -72,5 +78,31 @@ public class InstanceBlockIntegrationTest {
         // Different block type
         instance.setBlock(point, Block.GRASS_BLOCK.withTag(tag, 8));
         assertEquals(8, instance.getBlock(point).getTag(tag));
+    }
+
+    @Test
+    public void handlerPresentInPlacementRuleUpdate(Env env) {
+
+        AtomicReference<Block> currentBlock = new AtomicReference<>();
+        env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getNamespaceId(), () -> SuspiciousGravelBlockHandler.INSTANCE);
+        env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SUSPICIOUS_GRAVEL) {
+            @Override
+            public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
+                return block;
+            }
+
+            @Override
+            public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
+                currentBlock.set(updateState.currentBlock());
+                return super.blockUpdate(updateState);
+            }
+        });
+
+        var instance = env.createFlatInstance();
+        var theBlock = Block.SUSPICIOUS_GRAVEL.withHandler(SuspiciousGravelBlockHandler.INSTANCE);
+        instance.setBlock(0, 50, 0, theBlock);
+        instance.setBlock(1, 50, 0, theBlock);
+
+        assertEquals(theBlock, currentBlock.get());
     }
 }

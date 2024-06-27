@@ -6,6 +6,8 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
+import net.minestom.server.entity.attribute.AttributeModifier;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -26,6 +28,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -41,6 +44,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
+
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(NamespaceID.from("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
 
     // ItemStack pickup
     protected boolean canPickupItem;
@@ -97,6 +102,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         this.chestplate = ItemStack.AIR;
         this.leggings = ItemStack.AIR;
         this.boots = ItemStack.AIR;
+    }
+
+    @Override
+    public void setSprinting(boolean sprinting) {
+        super.setSprinting(sprinting);
+
+        // We must set the sprinting attribute serverside because when we resend modifiers it overwrites what
+        // the client has, meaning if they are sprinting and we send no modifiers, they will no longer be
+        // getting the speed boost of sprinting.
+        final AttributeInstance speed = getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        if (sprinting) speed.addModifier(SPRINTING_SPEED_MODIFIER);
+        else speed.removeModifier(SPRINTING_SPEED_MODIFIER);
     }
 
     @NotNull
