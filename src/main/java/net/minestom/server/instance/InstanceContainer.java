@@ -25,6 +25,7 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -84,10 +85,7 @@ public class InstanceContainer extends Instance {
 
     // used to supply a new chunk object at a position when requested
     private ChunkSupplier chunkSupplier;
-
-    // The number of blocks below the minimum Y before any entities are considered 'in the void'
-    private int voidThreshold = 64;
-
+    
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
@@ -453,29 +451,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean isInVoid(@NotNull Point point) {
-        return point.y() < getCachedDimensionType().minY() - voidThreshold;
-    }
-
-    /**
-     * Sets the new void threshold
-     * <p>
-     * The void threshold is the number of blocks added to the minimum y value to determine when entities are considered 'in the void'.
-     * <p>
-     * Positive numbers indicate that the void threshold is that many blocks below the instance's minimum y (defined by dimension type), negative values indicate that the void is inside the buildable area of the instance.
-     * @param newVoidThreshold The new number of blocks to be considered
-     */
-    public void setVoidThreshold(int newVoidThreshold) {
-        this.voidThreshold = newVoidThreshold;
-    }
-
-    /**
-     * Gets the current void threshold
-     * <p>
-     * The void threshold is the number of blocks added to the minimum y value to determine when entities are considered 'in the void'.
-     * @return The current void threshold
-     */
-    public int getVoidThreshold() {
-        return voidThreshold;
+        return point.y() < getCachedDimensionType().minY() - 64;
     }
 
     /**
