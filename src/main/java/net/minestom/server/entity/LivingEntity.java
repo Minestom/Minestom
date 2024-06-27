@@ -7,7 +7,10 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.attribute.AttributeModifier;
+<<<<<<< Updated upstream
 import net.minestom.server.entity.attribute.AttributeOperation;
+=======
+>>>>>>> Stashed changes
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -20,7 +23,9 @@ import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -125,8 +130,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setItemInMainHand(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.mainHandItem;
         this.mainHandItem = getEquipmentItem(itemStack, EquipmentSlot.MAIN_HAND);
         syncEquipment(EquipmentSlot.MAIN_HAND);
+        updateEquipmentAttributes(oldItem, this.mainHandItem, EquipmentSlot.MAIN_HAND);
     }
 
     @NotNull
@@ -137,8 +144,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setItemInOffHand(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.offHandItem;
         this.offHandItem = getEquipmentItem(itemStack, EquipmentSlot.OFF_HAND);
         syncEquipment(EquipmentSlot.OFF_HAND);
+        updateEquipmentAttributes(oldItem, this.offHandItem, EquipmentSlot.OFF_HAND);
     }
 
     @NotNull
@@ -149,8 +158,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setHelmet(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.helmet;
         this.helmet = getEquipmentItem(itemStack, EquipmentSlot.HELMET);
         syncEquipment(EquipmentSlot.HELMET);
+        updateEquipmentAttributes(oldItem, this.helmet, EquipmentSlot.HELMET);
     }
 
     @NotNull
@@ -161,8 +172,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setChestplate(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.chestplate;
         this.chestplate = getEquipmentItem(itemStack, EquipmentSlot.CHESTPLATE);
         syncEquipment(EquipmentSlot.CHESTPLATE);
+        updateEquipmentAttributes(oldItem, this.chestplate, EquipmentSlot.CHESTPLATE);
     }
 
     @NotNull
@@ -173,8 +186,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setLeggings(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.leggings;
         this.leggings = getEquipmentItem(itemStack, EquipmentSlot.LEGGINGS);
         syncEquipment(EquipmentSlot.LEGGINGS);
+        updateEquipmentAttributes(oldItem, this.leggings, EquipmentSlot.LEGGINGS);
     }
 
     @NotNull
@@ -185,14 +200,48 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.boots;
         this.boots = getEquipmentItem(itemStack, EquipmentSlot.BOOTS);
         syncEquipment(EquipmentSlot.BOOTS);
+        updateEquipmentAttributes(oldItem, this.boots, EquipmentSlot.BOOTS);
     }
 
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
         EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
+    }
+
+
+    /**
+     * Updates the current attributes of the living entity based on
+     * @param oldItemStack The ItemStack that has been removed, modifiers on this stack will be removed from the entity
+     * @param newItemStack The ItemStack that has been added, modifiers on this stack will be added to the entity
+     * @param slot The slot that changed, this will determine what modifiers are actually changed
+     */
+    private void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
+        AttributeList oldAttributes = oldItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        // Remove old attributes
+        if (oldAttributes != null) {
+            for (AttributeList.Modifier modifier : oldAttributes.modifiers()) {
+                // If the modifier currently modifies the slot we are updating
+                if (modifier.slot().contains(slot)) {
+                    AttributeInstance attributeInstance = attributeModifiers.get(modifier.attribute().name());
+                    attributeInstance.removeModifier(modifier.modifier().id());
+                }
+            }
+        }
+        AttributeList newAttributes = newItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        // Add new attributes
+        if (newAttributes != null) {
+            for (AttributeList.Modifier modifier : newAttributes.modifiers()) {
+                // If the modifier currently modifies the slot we are updating
+                if (modifier.slot().contains(slot)) {
+                    AttributeInstance attributeInstance = attributeModifiers.get(modifier.attribute().name());
+                    attributeInstance.addModifier(modifier.modifier());
+                }
+            }
+        }
     }
 
     @Override
