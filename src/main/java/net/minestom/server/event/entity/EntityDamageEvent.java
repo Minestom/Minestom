@@ -1,5 +1,6 @@
 package net.minestom.server.event.entity;
 
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.damage.Damage;
@@ -16,12 +17,12 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
 
     private final Entity entity;
     private final Damage damage;
-    private SoundEvent sound;
+    private Sound sound;
     private boolean animation = true;
 
     private boolean cancelled;
 
-    public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull Damage damage, @Nullable SoundEvent sound) {
+    public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull Damage damage, @Nullable Sound sound) {
         this.entity = entity;
         this.damage = damage;
         this.sound = sound;
@@ -49,7 +50,7 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
      * @return the damage sound
      */
     @Nullable
-    public SoundEvent getSound() {
+    public Sound getSound() {
         return sound;
     }
 
@@ -58,7 +59,7 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
      *
      * @param sound the new damage sound
      */
-    public void setSound(@Nullable SoundEvent sound) {
+    public void setSound(@Nullable Sound sound) {
         this.sound = sound;
     }
 
