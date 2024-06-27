@@ -757,7 +757,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
-        synchronizePositionAfterTeleport(spawnPosition, 0, false); // So the player doesn't get stuck
+        synchronizePositionAfterTeleport(spawnPosition, 0, true); // So the player doesn't get stuck
 
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
@@ -835,7 +835,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // In the vanilla server they have an anticheat which teleports the client back if they enter the floor,
             // but since Minestom does not have an anticheat this provides a similar effect.
             if (needsChunkPositionSync) {
-                synchronizePositionAfterTeleport(getPosition(), RelativeFlags.NONE, false);
+                synchronizePositionAfterTeleport(getPosition(), RelativeFlags.NONE, true);
                 needsChunkPositionSync = false;
             }
         } finally {
@@ -1853,11 +1853,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param position the position used by {@link PlayerPositionAndLookPacket}
      *                 this may not be the same as the {@link Entity#position}
      * @param relativeFlags byte flags used by {@link PlayerPositionAndLookPacket}
-     * @param noConfirm if true, the teleportation will be done without confirmation
+     * @param shouldConfirm if false, the teleportation will be done without confirmation
      */
     @ApiStatus.Internal
-    void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags, boolean noConfirm) {
-        int teleportId = noConfirm ? -1 : getNextTeleportId();
+    void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags, boolean shouldConfirm) {
+        int teleportId = shouldConfirm ? getNextTeleportId() : -1;
         sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, teleportId));
         super.synchronizePosition();
     }
