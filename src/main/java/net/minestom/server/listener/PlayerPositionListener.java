@@ -44,8 +44,7 @@ public class PlayerPositionListener {
             return;
         }
         // Prevent the player from moving during a teleport
-        int lastSentTeleportId = player.getLastSentTeleportId();
-        if (lastSentTeleportId > 0 && lastSentTeleportId != player.getLastReceivedTeleportId()) {
+        if (player.getLastSentTeleportId() != player.getLastReceivedTeleportId()) {
             return;
         }
         // Try to move in an unloaded chunk, prevent it
