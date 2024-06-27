@@ -7,10 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.attribute.AttributeModifier;
-<<<<<<< Updated upstream
 import net.minestom.server.entity.attribute.AttributeOperation;
-=======
->>>>>>> Stashed changes
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
