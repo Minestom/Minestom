@@ -2,6 +2,8 @@ package net.minestom.server.event.player;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
@@ -31,6 +33,8 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private boolean clearChat;
     private boolean sendRegistryData;
     private Instance spawningInstance;
+    private ConfigurationResult configurationResult;
+    private Component kickMessage;
 
     public AsyncPlayerConfigurationEvent(@NotNull Player player, boolean isFirstConfig) {
         this.player = player;
@@ -42,6 +46,8 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
         this.clearChat = false;
         this.sendRegistryData = isFirstConfig;
         this.spawningInstance = null;
+        this.configurationResult = ConfigurationResult.ALLOW;
+        this.kickMessage = Component.empty();
     }
 
     @Override
@@ -137,5 +143,40 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
 
     public void setSpawningInstance(@Nullable Instance spawningInstance) {
         this.spawningInstance = spawningInstance;
+    }
+
+    public @NotNull ConfigurationResult getConfigurationResult() {
+        return configurationResult;
+    }
+
+    public void setConfigurationResult(@NotNull ConfigurationResult configurationResult) {
+        this.configurationResult = configurationResult;
+    }
+
+    public @NotNull Component getKickMessage() {
+        return kickMessage;
+    }
+
+    public void setKickMessage(@NotNull Component kickMessage) {
+        this.kickMessage = kickMessage;
+    }
+
+    public enum ConfigurationResult {
+        ALLOW(Component.empty()), // Player is allowed to join
+        DENY_SERVER_FULL(Component.text("Failed to join, the server is full", NamedTextColor.RED)), // Player is not allowed to join due to the server being full
+        DENY_BANNED(Component.text("You are banned from this server", NamedTextColor.RED)), // Player is not allowed to join due to them being banned
+        DENY_NOT_ALLOWLISTED(Component.text("You are not allowlisted on this server", NamedTextColor.RED)), // Player is not allowed to join due to not being allowlisted/whitelisted
+        DENY_GENERIC(Component.text("You cannot join this server.", NamedTextColor.RED)) // Player is not allowed to join for some other reason
+        ;
+
+        private final Component defaultMessage;
+
+        ConfigurationResult(@NotNull Component defaultMessage) {
+            this.defaultMessage = defaultMessage;
+        }
+
+        public @NotNull Component getDefaultMessage() {
+            return defaultMessage;
+        }
     }
 }
