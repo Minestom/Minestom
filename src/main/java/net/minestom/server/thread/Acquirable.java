@@ -22,14 +22,11 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return the entities ticked in the current thread
      */
     static @NotNull Stream<@NotNull Entity> currentEntities() {
-        final Thread currentThread = Thread.currentThread();
-        if (currentThread instanceof TickThread) {
-            return ((TickThread) currentThread).entries().stream()
-                    .flatMap(partitionEntry -> partitionEntry.elements().stream())
-                    .filter(tickable -> tickable instanceof Entity)
-                    .map(tickable -> (Entity) tickable);
-        }
-        return Stream.empty();
+        if (!(Thread.currentThread() instanceof TickThread tickThread)) return Stream.empty();
+        return tickThread.entries().stream()
+                .flatMap(partitionEntry -> partitionEntry.elements().stream())
+                .filter(tickable -> tickable instanceof Entity)
+                .map(tickable -> (Entity) tickable);
     }
 
     /**
@@ -73,14 +70,13 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * is already present/ticked in the current thread.
      * <p>
      * Useful when you want only want to acquire an element when you are guaranteed
-     * to do not create a huge performance impact.
+     * to do not access any external thread.
      *
-     * @return an optional containing the acquired element if safe,
+     * @return an optional containing the acquired element if safe
      * {@link Optional#empty()} otherwise
      */
     default @NotNull Optional<T> local() {
-        if (isLocal()) return Optional.of(unwrap());
-        return Optional.empty();
+        return isLocal() ? Optional.of(unwrap()) : Optional.empty();
     }
 
     /**
@@ -90,6 +86,32 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      */
     default boolean isLocal() {
         return Thread.currentThread() == assignedThread();
+    }
+
+    /**
+     * Retrieves the acquirable value if and only if the element
+     * is already acquired/owned.
+     * <p>
+     * Useful when you want only want to acquire an element without depending
+     * on any more lock.
+     * <p>
+     * Less strict than {@link #local()} as using an owned element may create contention.
+     *
+     * @return an optional containing the acquired element if safe
+     * {@link Optional#empty()} otherwise
+     */
+    default @NotNull Optional<T> owned() {
+        return isOwned() ? Optional.of(unwrap()) : Optional.empty();
+    }
+
+    /**
+     * Gets if the acquirable element is owned by this thread.
+     * Either by being local, or by already being acquired in the current scope.
+     *
+     * @return true if the element is linked to the current thread
+     */
+    default boolean isOwned() {
+        return AcquirableImpl.isOwnedImpl(assignedThread());
     }
 
     /**
