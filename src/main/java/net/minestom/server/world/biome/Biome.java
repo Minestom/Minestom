@@ -3,7 +3,7 @@ package net.minestom.server.world.biome;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +23,8 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
-                (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props)),
+                "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.BIOMES,
+                (namespace, props) -> new BiomeImpl(StaticRegistryData.biome(namespace, props)),
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
                 (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0
@@ -41,7 +41,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
     @NotNull TemperatureModifier temperatureModifier();
 
-    @Nullable Registry.BiomeEntry registry();
+    @Nullable StaticRegistryData.BiomeEntry registry();
 
     enum Precipitation {
         NONE, RAIN, SNOW;

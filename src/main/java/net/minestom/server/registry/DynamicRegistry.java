@@ -2,7 +2,6 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
-import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -82,7 +81,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
+            @NotNull StaticRegistryData.Resource resource, @NotNull StaticRegistryData.Container.Loader<T> loader) {
         return create(id, nbtType, resource, loader, null);
     }
 
@@ -94,7 +93,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
+            @NotNull StaticRegistryData.Resource resource, @NotNull StaticRegistryData.Container.Loader<T> loader,
             @Nullable Comparator<String> idComparator) {
         final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
         DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
@@ -109,7 +108,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registries registries, @NotNull Registry.Resource resource) {
+            @NotNull Registries registries, @NotNull StaticRegistryData.Resource resource) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
         DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
         return registry;

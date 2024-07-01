@@ -1,7 +1,7 @@
 package net.minestom.server.entity.damage;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +11,7 @@ record DamageTypeImpl(
         float exhaustion,
         @NotNull String messageId,
         @NotNull String scaling,
-        @Nullable Registry.DamageTypeEntry registry
+        @Nullable StaticRegistryData.DamageTypeEntry registry
 ) implements DamageType {
 
     static final BinaryTagSerializer<DamageType> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -31,7 +31,7 @@ record DamageTypeImpl(
         Check.argCondition(scaling == null || scaling.isEmpty(), "missing scaling");
     }
 
-    DamageTypeImpl(@NotNull Registry.DamageTypeEntry registry) {
+    DamageTypeImpl(@NotNull StaticRegistryData.DamageTypeEntry registry) {
         this(registry.exhaustion(), registry.messageId(), registry.scaling(), registry);
     }
 

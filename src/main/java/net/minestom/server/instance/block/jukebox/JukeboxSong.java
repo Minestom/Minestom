@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -38,8 +38,8 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, Registry.Resource.JUKEBOX_SONGS,
-                (namespace, props) -> new JukeboxSongImpl(Registry.jukeboxSong(namespace, props))
+                "minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.JUKEBOX_SONGS,
+                (namespace, props) -> new JukeboxSongImpl(StaticRegistryData.jukeboxSong(namespace, props))
         );
     }
 
@@ -52,7 +52,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     int comparatorOutput();
 
     @Override
-    @Nullable Registry.JukeboxSongEntry registry();
+    @Nullable StaticRegistryData.JukeboxSongEntry registry();
 
     final class Builder {
         private SoundEvent soundEvent;

@@ -6,6 +6,7 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.ChunkRangeUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -44,7 +45,7 @@ public class PathfinderIntegrationTest {
     public void testTall(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRangeUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -66,7 +67,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLine(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRangeUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -85,7 +86,7 @@ public class PathfinderIntegrationTest {
     public void testShort(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRangeUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -105,7 +106,7 @@ public class PathfinderIntegrationTest {
     public void testBug(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRangeUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -142,7 +143,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLineBlocked(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRangeUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -192,7 +193,7 @@ public class PathfinderIntegrationTest {
     public void testGravitySnap(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRangeUtils.forChunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 

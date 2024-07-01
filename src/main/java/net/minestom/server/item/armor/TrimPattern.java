@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
@@ -39,8 +39,8 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_PATTERNS,
-                (namespace, props) -> new TrimPatternImpl(Registry.trimPattern(namespace, props))
+                "minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.TRIM_PATTERNS,
+                (namespace, props) -> new TrimPatternImpl(StaticRegistryData.trimPattern(namespace, props))
         );
     }
 
@@ -53,7 +53,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     boolean isDecal();
 
     @Contract(pure = true)
-    @Nullable Registry.TrimPatternEntry registry();
+    @Nullable StaticRegistryData.TrimPatternEntry registry();
 
     final class Builder {
         private NamespaceID assetId;

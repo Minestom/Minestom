@@ -83,6 +83,7 @@ import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.timer.Scheduler;
+import net.minestom.server.utils.ChunkRangeUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.PropertyUtils;
@@ -542,7 +543,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+        ChunkRangeUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
         this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getEffectiveViewDistance(),
@@ -608,7 +609,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
+        ChunkRangeUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketUtils.broadcastPlayPacket(getRemovePlayerToList());
 
@@ -665,7 +666,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
+        ChunkRangeUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -738,7 +739,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
-                ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
+                ChunkRangeUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
@@ -753,7 +754,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
-            ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+            ChunkRangeUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
@@ -845,47 +846,47 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     protected void updatePose() {
-        Pose oldPose = getPose();
-        Pose newPose;
+        EntityPose oldPose = getPose();
+        EntityPose newPose;
 
         // Figure out their expected state
         var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
-            newPose = Pose.FALL_FLYING;
+            newPose = EntityPose.FALL_FLYING;
         } else if (false) { // When should they be sleeping? We don't have any in-bed state...
-            newPose = Pose.SLEEPING;
+            newPose = EntityPose.SLEEPING;
         } else if (meta.isSwimming()) {
-            newPose = Pose.SWIMMING;
+            newPose = EntityPose.SWIMMING;
         } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            newPose = Pose.SPIN_ATTACK;
+            newPose = EntityPose.SPIN_ATTACK;
         } else if (isSneaking() && !isFlying()) {
-            newPose = Pose.SNEAKING;
+            newPose = EntityPose.SNEAKING;
         } else {
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         // Try to put them in their expected state, or the closest if they don't fit.
         if (canFitWithBoundingBox(newPose)) {
             // Use expected state
-        } else if (canFitWithBoundingBox(Pose.SNEAKING)) {
-            newPose = Pose.SNEAKING;
-        } else if (canFitWithBoundingBox(Pose.SWIMMING)) {
-            newPose = Pose.SWIMMING;
+        } else if (canFitWithBoundingBox(EntityPose.SNEAKING)) {
+            newPose = EntityPose.SNEAKING;
+        } else if (canFitWithBoundingBox(EntityPose.SWIMMING)) {
+            newPose = EntityPose.SWIMMING;
         } else {
             // If they can't fit anywhere, just use standing
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         if (newPose != oldPose) setPose(newPose);
     }
 
     /**
-     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.Entity.Pose}, false otherwise.
+     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.EntityPose}, false otherwise.
      *
      * @param pose The pose to check
      */
-    private boolean canFitWithBoundingBox(@NotNull Pose pose) {
-        BoundingBox bb = pose == Pose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
+    private boolean canFitWithBoundingBox(@NotNull EntityPose pose) {
+        BoundingBox bb = pose == EntityPose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
         if (bb == null) return false;
 
         var position = getPosition();
@@ -2009,12 +2010,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshFlying(boolean flying) {
         //When the player starts or stops flying, their pose needs to change
         if (this.flying != flying) {
-            Pose pose = getPose();
-
-            if (this.isSneaking() && pose == Pose.STANDING) {
-                setPose(Pose.SNEAKING);
-            } else if (pose == Pose.SNEAKING) {
-                setPose(Pose.STANDING);
+            EntityPose pose = getPose();
+            if (this.isSneaking() && pose == EntityPose.STANDING) {
+                setPose(EntityPose.SNEAKING);
+            } else if (pose == EntityPose.SNEAKING) {
+                setPose(EntityPose.STANDING);
             }
         }
 
@@ -2398,7 +2398,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int newZ = newChunk.getChunkZ();
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
-            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
+            ChunkRangeUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
                     settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }

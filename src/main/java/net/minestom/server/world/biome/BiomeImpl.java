@@ -1,7 +1,7 @@
 package net.minestom.server.world.biome;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ record BiomeImpl(
         @NotNull BiomeEffects effects,
         @NotNull Precipitation precipitation,
         @NotNull TemperatureModifier temperatureModifier,
-        @Nullable Registry.BiomeEntry registry
+        @Nullable StaticRegistryData.BiomeEntry registry
 ) implements Biome {
     // https://minecraft.wiki/w/Rain
     private final static Double SNOW_TEMPERATURE = 0.15;
@@ -37,7 +37,7 @@ record BiomeImpl(
             }
     );
 
-    BiomeImpl(Registry.BiomeEntry entry) {
+    BiomeImpl(StaticRegistryData.BiomeEntry entry) {
         this(entry.temperature(), entry.downfall(), getBuilder(entry).build(),
                 entry.hasPrecipitation()
                         ? entry.temperature() < SNOW_TEMPERATURE
@@ -50,7 +50,7 @@ record BiomeImpl(
     }
 
     @NotNull
-    private static BiomeEffects.Builder getBuilder(Registry.BiomeEntry entry) {
+    private static BiomeEffects.Builder getBuilder(StaticRegistryData.BiomeEntry entry) {
         BiomeEffects.Builder effectsBuilder = BiomeEffects.builder();
         if (entry.foliageColor() != null) effectsBuilder.foliageColor(entry.foliageColor());
         if (entry.grassColor() != null) effectsBuilder.grassColor(entry.grassColor());

@@ -1,13 +1,13 @@
 package net.minestom.server.potion;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 record PotionTypeImpl(NamespaceID namespace, int id) implements PotionType {
-    private static final Registry.Container<PotionType> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_TYPES,
+    private static final StaticRegistryData.Container<PotionType> CONTAINER = StaticRegistryData.createStaticContainer(StaticRegistryData.Resource.POTION_TYPES,
             (namespace, properties) -> new PotionTypeImpl(NamespaceID.from(namespace), properties.getInt("id")));
 
     static PotionType get(@NotNull String namespace) {

@@ -1,7 +1,7 @@
 package net.minestom.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,7 @@ record DimensionTypeImpl(
         int height,
         @NotNull String infiniburn,
         @NotNull String effects,
-        @Nullable Registry.DimensionTypeEntry registry
+        @Nullable StaticRegistryData.DimensionTypeEntry registry
 ) implements DimensionType {
 
     static final BinaryTagSerializer<DimensionType> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -57,7 +57,7 @@ record DimensionTypeImpl(
             }
     );
 
-    DimensionTypeImpl(@NotNull Registry.DimensionTypeEntry registry) {
+    DimensionTypeImpl(@NotNull StaticRegistryData.DimensionTypeEntry registry) {
         this(registry.ultrawarm(), registry.natural(), registry.coordinateScale(),
                 registry.hasSkylight(), registry.hasCeiling(), registry.ambientLight(), registry.fixedTime(),
                 registry.piglinSafe(), registry.bedWorks(), registry.respawnAnchorWorks(), registry.hasRaids(),

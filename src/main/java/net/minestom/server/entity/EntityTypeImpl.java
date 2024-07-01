@@ -33,16 +33,16 @@ import net.minestom.server.entity.metadata.water.DolphinMeta;
 import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.*;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
-    private static final Registry.Container<EntityType> CONTAINER = Registry.createStaticContainer(Registry.Resource.ENTITIES,
-            (namespace, properties) -> new EntityTypeImpl(Registry.entity(namespace, properties)));
+record EntityTypeImpl(StaticRegistryData.EntityEntry registry) implements EntityType {
+    private static final StaticRegistryData.Container<EntityType> CONTAINER = StaticRegistryData.createStaticContainer(StaticRegistryData.Resource.ENTITIES,
+            (namespace, properties) -> new EntityTypeImpl(StaticRegistryData.entity(namespace, properties)));
     static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
     static EntityType get(@NotNull String namespace) {

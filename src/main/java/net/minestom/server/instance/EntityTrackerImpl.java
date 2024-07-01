@@ -27,7 +27,9 @@ import java.util.function.Function;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
+import static net.minestom.server.utils.ChunkRangeUtils.forChunksInRange;
+import static net.minestom.server.utils.ChunkRangeUtils.forDifferingChunksInRange;
+import static net.minestom.server.utils.chunk.ChunkUtils.getChunkIndex;
 
 final class EntityTrackerImpl implements EntityTracker {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityTrackerImpl.class);

@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
      * @return the entity registry
      */
     @Contract(pure = true)
-    @NotNull Registry.EntityEntry registry();
+    @NotNull StaticRegistryData.EntityEntry registry();
 
     @Override
     default @NotNull NamespaceID namespace() {

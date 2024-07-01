@@ -1,7 +1,7 @@
 package net.minestom.server.message;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 record ChatTypeImpl(
         @NotNull ChatTypeDecoration chat,
         @NotNull ChatTypeDecoration narration,
-        @Nullable Registry.ChatTypeEntry registry
+        @Nullable StaticRegistryData.ChatTypeEntry registry
 ) implements ChatType {
 
     static final BinaryTagSerializer<ChatType> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
@@ -28,7 +28,7 @@ record ChatTypeImpl(
         Check.notNull(narration, "missing narration");
     }
 
-    ChatTypeImpl(@NotNull Registry.ChatTypeEntry registry) {
+    ChatTypeImpl(@NotNull StaticRegistryData.ChatTypeEntry registry) {
         this(registry.chat(), registry.narration(), registry);
     }
 

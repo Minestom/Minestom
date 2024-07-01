@@ -2,7 +2,7 @@ package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.PacketParser;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ public final class Server {
     private volatile boolean stop;
 
     private final Selector selector = Selector.open();
-    private final PacketProcessor packetProcessor;
+    private final PacketParser packetParser;
     private final List<Worker> workers;
     private int index;
 
@@ -36,8 +36,8 @@ public final class Server {
     private String address;
     private int port;
 
-    public Server(PacketProcessor packetProcessor) throws IOException {
-        this.packetProcessor = packetProcessor;
+    public Server(PacketParser packetParser) throws IOException {
+        this.packetParser = packetParser;
         Worker[] workers = new Worker[ServerFlag.WORKER_COUNT];
         Arrays.setAll(workers, value -> new Worker(this));
         this.workers = List.of(workers);
@@ -127,8 +127,8 @@ public final class Server {
     }
 
     @ApiStatus.Internal
-    public @NotNull PacketProcessor packetProcessor() {
-        return packetProcessor;
+    public @NotNull PacketParser packetParser() {
+        return packetParser;
     }
 
     public SocketAddress socketAddress() {

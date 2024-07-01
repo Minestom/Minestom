@@ -2,7 +2,7 @@ package net.minestom.server.message;
 
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +29,8 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
-                (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
+                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.CHAT_TYPES,
+                (namespace, props) -> new ChatTypeImpl(StaticRegistryData.chatType(namespace, props))
         );
     }
 
@@ -39,7 +39,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
     @NotNull ChatTypeDecoration narration();
 
     @Override
-    @Nullable Registry.ChatTypeEntry registry();
+    @Nullable StaticRegistryData.ChatTypeEntry registry();
 
     final class Builder {
         private ChatTypeDecoration chat;

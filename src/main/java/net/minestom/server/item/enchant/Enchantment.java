@@ -32,7 +32,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
         return DynamicRegistry.create(
                 "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE,
-                registries, Registry.Resource.ENCHANTMENTS
+                registries, StaticRegistryData.Resource.ENCHANTMENTS
         );
     }
 
@@ -59,7 +59,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     @NotNull DataComponentMap effects();
 
     @Override
-    @Nullable Registry.EnchantmentEntry registry();
+    @Nullable StaticRegistryData.EnchantmentEntry registry();
 
     enum Target {
         ATTACKER,

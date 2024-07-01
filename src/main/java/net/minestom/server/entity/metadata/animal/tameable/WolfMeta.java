@@ -9,7 +9,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -86,8 +86,8 @@ public class WolfMeta extends TameableAnimalMeta {
         @ApiStatus.Internal
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             return DynamicRegistry.create(
-                    "minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.WOLF_VARIANTS,
-                    (namespace, props) -> new WolfMeta.VariantImpl(Registry.wolfVariant(namespace, props))
+                    "minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, StaticRegistryData.Resource.WOLF_VARIANTS,
+                    (namespace, props) -> new WolfMeta.VariantImpl(StaticRegistryData.wolfVariant(namespace, props))
             );
         }
 
@@ -100,7 +100,7 @@ public class WolfMeta extends TameableAnimalMeta {
         @NotNull List<String> biomes();
 
         @Override
-        @Nullable Registry.WolfVariantEntry registry();
+        @Nullable StaticRegistryData.WolfVariantEntry registry();
 
         final class Builder {
             private NamespaceID wildTexture;
@@ -147,7 +147,7 @@ public class WolfMeta extends TameableAnimalMeta {
             @NotNull NamespaceID tameTexture,
             @NotNull NamespaceID angryTexture,
             @NotNull List<String> biomes,
-            @Nullable Registry.WolfVariantEntry registry
+            @Nullable StaticRegistryData.WolfVariantEntry registry
     ) implements Variant {
 
         private static final BinaryTagSerializer<List<String>> BIOMES_NBT_TYPE = BinaryTagSerializer.STRING.list();
@@ -179,7 +179,7 @@ public class WolfMeta extends TameableAnimalMeta {
             Check.notNull(biomes, "missing biomes");
         }
 
-        VariantImpl(@NotNull Registry.WolfVariantEntry registry) {
+        VariantImpl(@NotNull StaticRegistryData.WolfVariantEntry registry) {
             this(registry.wildTexture(), registry.tameTexture(),
                     registry.angryTexture(), registry.biomes(), registry);
         }

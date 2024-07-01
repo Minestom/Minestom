@@ -1,7 +1,7 @@
 package net.minestom.server.potion;
 
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticRegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
@@ -15,7 +15,7 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
     NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(PotionEffectImpl::getId, PotionEffect::id);
 
     @Contract(pure = true)
-    @NotNull Registry.PotionEffectEntry registry();
+    @NotNull StaticRegistryData.PotionEffectEntry registry();
 
     @Override
     default @NotNull NamespaceID namespace() {
