@@ -1160,7 +1160,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public long getCurrentItemUseTime() {
         if (!isUsingItem()) return 0;
-        return instance.getWorldAge() - startItemUseTime;
+        return getAliveTicks() - startItemUseTime;
     }
 
     @Override
@@ -2209,7 +2209,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshItemUse(@Nullable Hand itemUseHand, long itemUseTimeTicks) {
         this.itemUseHand = itemUseHand;
         if (itemUseHand != null) {
-            this.startItemUseTime = instance.getWorldAge();
+            this.startItemUseTime = getAliveTicks();
             this.itemUseTime = itemUseTimeTicks;
         } else {
             this.startItemUseTime = 0;
