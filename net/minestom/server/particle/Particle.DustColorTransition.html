@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Particle.DustColorTransition</span>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, int&nbsp;id, @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color, float&nbsp;scale, @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Particle.DustColorTransition</span>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, int&nbsp;id, @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color, @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor, float&nbsp;scale)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></span></div>
 </section>
@@ -465,11 +465,11 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,int,net.kyori.adventure.util.RGBLike,float,net.kyori.adventure.util.RGBLike)" class="member-name-link">DustColorTransition</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,int,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,float)" class="member-name-link">DustColorTransition</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
  int&nbsp;id,
  @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color,
- float&nbsp;scale,
- @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor)</code></div>
+ @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor,
+ float&nbsp;scale)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>DustColorTransition</code> record class.</div>
 </div>
@@ -534,9 +534,9 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withColor(net.kyori.adventure.util.RGBLike)" class="member-name-link">withColor</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Particle.DustColorTransition.html" title="class in net.minestom.server.particle">Particle.DustColorTransition</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withProperties(net.kyori.adventure.util.RGBLike,float,net.kyori.adventure.util.RGBLike)" class="member-name-link">withProperties</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color,
- float&nbsp;scale,
- @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withProperties(net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,float)" class="member-name-link">withProperties</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color,
+ @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor,
+ float&nbsp;scale)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Particle.DustColorTransition.html" title="class in net.minestom.server.particle">Particle.DustColorTransition</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withScale(float)" class="member-name-link">withScale</a><wbr>(float&nbsp;scale)</code></div>
@@ -1233,24 +1233,24 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,int,net.kyori.adventure.util.RGBLike,float,net.kyori.adventure.util.RGBLike)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,int,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,float)">
 <h3>DustColorTransition</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DustColorTransition</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
  int&nbsp;id,
  @NotNull
  @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color,
- float&nbsp;scale,
  @NotNull
- @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor)</span></div>
+ @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor,
+ float&nbsp;scale)</span></div>
 <div class="block">Creates an instance of a <code>DustColorTransition</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>namespace</code> - the value for the <code>namespace</code> record component</dd>
 <dd><code>id</code> - the value for the <code>id</code> record component</dd>
 <dd><code>color</code> - the value for the <code>color</code> record component</dd>
-<dd><code>scale</code> - the value for the <code>scale</code> record component</dd>
 <dd><code>transitionColor</code> - the value for the <code>transitionColor</code> record component</dd>
+<dd><code>scale</code> - the value for the <code>scale</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -1263,15 +1263,15 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="withProperties(net.kyori.adventure.util.RGBLike,float,net.kyori.adventure.util.RGBLike)">
+<section class="detail" id="withProperties(net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,float)">
 <h3>withProperties</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Particle.DustColorTransition.html" title="class in net.minestom.server.particle">Particle.DustColorTransition</a></span>&nbsp;<span class="element-name">withProperties</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;color,
- float&nbsp;scale,
  @NotNull
- @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor)</span></div>
+ @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;transitionColor,
+ float&nbsp;scale)</span></div>
 </section>
 </li>
 <li>
@@ -1404,17 +1404,6 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 </section>
 </li>
 <li>
-<section class="detail" id="scale()">
-<h3>scale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">scale</span>()</div>
-<div class="block">Returns the value of the <code>scale</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>scale</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="transitionColor()">
 <h3>transitionColor</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -1423,6 +1412,17 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>transitionColor</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="scale()">
+<h3>scale</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">scale</span>()</div>
+<div class="block">Returns the value of the <code>scale</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>scale</code> record component</dd>
 </dl>
 </section>
 </li>
