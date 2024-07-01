@@ -1,9 +1,12 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.AbstractAgeableMeta;
+import net.minestom.server.entity.metadata.PathfinderMobMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class TurtleMeta extends AnimalMeta {
@@ -20,6 +23,17 @@ public class TurtleMeta extends AnimalMeta {
 
     public void setBlockPosition(@NotNull Point value) {
         super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
+    }
+
+    @Override
+    public void setBaby(boolean value) {
+        if (isBaby() == value) return;
+        this.consumeEntity((entity) -> {
+            BoundingBox bb = entity.getEntityType().registry().boundingBox();
+            if (value) entity.setBoundingBox(bb.width() * 0.3, bb.height() * 0.3, bb.depth() * 0.3);
+            else entity.setBoundingBox(bb);
+        });
+        super.metadata.setIndex(AbstractAgeableMeta.OFFSET, Metadata.Boolean(value));
     }
 
     public boolean isHasEgg() {

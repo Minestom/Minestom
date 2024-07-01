@@ -14,12 +14,12 @@ public class SlimeMeta extends MobMeta {
     }
 
     public int getSize() {
-        return super.metadata.getIndex(OFFSET, 0);
+        return super.metadata.getIndex(OFFSET, 1);
     }
 
     public void setSize(int value) {
         this.consumeEntity((entity) -> {
-            float boxSize = 0.51000005f * value;
+            double boxSize = entity.getEntityType().registry().height() * value;
             entity.setBoundingBox(boxSize, boxSize, boxSize);
         });
         super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
