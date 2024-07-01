@@ -28,6 +28,7 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.IntProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -417,6 +418,8 @@ public final class Registry {
             int logicalHeight,
             int minY,
             int height,
+            @NotNull IntProvider monsterSpawnLightLevel,
+            int monsterSpawnBlockLightLimit,
             String infiniburn,
             String effects,
             Properties custom
@@ -438,6 +441,9 @@ public final class Registry {
                     main.getInt("logical_height"),
                     main.getInt("min_y"),
                     main.getInt("height"),
+                    // Have to convert to map since it can be a long or a hashmap
+                    IntProvider.createIntProvider(main.asMap().get("monster_spawn_light_level")),
+                    main.getInt("monster_spawn_block_light_limit"),
                     main.getString("infiniburn"),
                     main.getString("effects"),
                     custom);

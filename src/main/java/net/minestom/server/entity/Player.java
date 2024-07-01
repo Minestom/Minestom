@@ -135,7 +135,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Magic values: https://wiki.vg/Entity_statuses#Player
     private static final int STATUS_ENABLE_REDUCED_DEBUG_INFO = 22;
     private static final int STATUS_DISABLE_REDUCED_DEBUG_INFO = 23;
-    private static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
+    public static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
