@@ -148,6 +148,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
+            this.player.updateEquipmentAttributes(this.itemStacks[slot], itemStack, equipmentSlot);
         }
         this.itemStacks[slot] = itemStack;
 
