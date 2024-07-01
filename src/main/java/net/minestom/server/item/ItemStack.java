@@ -1,12 +1,10 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.CustomData;
@@ -22,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
@@ -249,16 +246,6 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * @return The nbt representation of the item
      */
     @NotNull CompoundBinaryTag toItemNBT();
-
-    @Override
-    default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        try {
-            BinaryTagHolder tagHolder = BinaryTagHolder.encode((CompoundBinaryTag) NBT_TYPE.write(this), MinestomAdventure.NBT_CODEC);
-            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
-        } catch (IOException e) {
-            throw new RuntimeException("failed to encode itemstack nbt", e);
-        }
-    }
 
     sealed interface Builder extends TagWritable permits ItemStackImpl.Builder {
 

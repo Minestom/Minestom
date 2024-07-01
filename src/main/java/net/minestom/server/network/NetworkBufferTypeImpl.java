@@ -3,7 +3,7 @@ package net.minestom.server.network;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.kyori.adventure.text.serializer.nbt.NBTComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
@@ -368,14 +368,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Component value) {
-            final BinaryTag nbt = NbtComponentSerializer.nbt().serialize(value);
+            final BinaryTag nbt = NBTComponentSerializer.nbt().serialize(value);
             buffer.write(NBT, nbt);
         }
 
         @Override
         public Component read(@NotNull NetworkBuffer buffer) {
             final BinaryTag nbt = buffer.read(NBT);
-            return NbtComponentSerializer.nbt().deserialize(nbt);
+            return NBTComponentSerializer.nbt().deserialize(nbt);
         }
     }
 
