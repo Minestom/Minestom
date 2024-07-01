@@ -205,11 +205,11 @@ public class Sidebar implements Scoreboard {
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
-
-        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+        if (result) {
+            ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+            player.sendPacket(scoreboardObjectivePacket);
+        }
         DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
-
-        player.sendPacket(scoreboardObjectivePacket); // Creative objective
         player.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
         for (ScoreboardLine line : lines) {
             player.sendPacket(line.sidebarTeam.getCreationPacket());
@@ -221,13 +221,14 @@ public class Sidebar implements Scoreboard {
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
+        if (!result) return false;
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
         player.sendPacket(scoreboardObjectivePacket);
         for (ScoreboardLine line : lines) {
             player.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
             player.sendPacket(line.sidebarTeam.getDestructionPacket());
         }
-        return result;
+        return true;
     }
 
     @NotNull

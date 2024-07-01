@@ -146,26 +146,26 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record DustColorTransition(@NotNull NamespaceID namespace, int id, @NotNull RGBLike color, float scale, @NotNull RGBLike transitionColor) implements Particle {
+    record DustColorTransition(@NotNull NamespaceID namespace, int id, @NotNull RGBLike color, @NotNull RGBLike transitionColor, float scale) implements Particle {
 
         @Contract (pure = true)
-        public @NotNull DustColorTransition withProperties(@NotNull RGBLike color, float scale, @NotNull RGBLike transitionColor) {
-            return new DustColorTransition(namespace, id, color, scale, transitionColor);
+        public @NotNull DustColorTransition withProperties(@NotNull RGBLike color, @NotNull RGBLike transitionColor, float scale) {
+            return new DustColorTransition(namespace, id, color, transitionColor, scale);
         }
 
         @Contract(pure = true)
         public @NotNull DustColorTransition withColor(@NotNull RGBLike color) {
-            return this.withProperties(color, scale, transitionColor);
+            return this.withProperties(color, transitionColor, scale);
         }
 
         @Contract(pure = true)
         public @NotNull DustColorTransition withScale(float scale) {
-            return this.withProperties(color, scale, transitionColor);
+            return this.withProperties(color, transitionColor, scale);
         }
 
         @Contract(pure = true)
         public @NotNull DustColorTransition withTransitionColor(@NotNull RGBLike transitionColor) {
-            return this.withProperties(color, scale, transitionColor);
+            return this.withProperties(color, transitionColor, scale);
         }
 
         @Override
@@ -174,11 +174,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
                     (int) (reader.read(NetworkBuffer.FLOAT) * 255),
                     (int) (reader.read(NetworkBuffer.FLOAT) * 255),
                     (int) (reader.read(NetworkBuffer.FLOAT) * 255)
-            ), reader.read(NetworkBuffer.FLOAT), new Color(
+            ), new Color(
                     (int) (reader.read(NetworkBuffer.FLOAT) * 255),
                     (int) (reader.read(NetworkBuffer.FLOAT) * 255),
                     (int) (reader.read(NetworkBuffer.FLOAT) * 255)
-            ));
+            ), reader.read(NetworkBuffer.FLOAT));
         }
 
         @Override
@@ -186,10 +186,10 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             writer.write(NetworkBuffer.FLOAT, color.red() / 255f);
             writer.write(NetworkBuffer.FLOAT, color.green() / 255f);
             writer.write(NetworkBuffer.FLOAT, color.blue() / 255f);
-            writer.write(NetworkBuffer.FLOAT, scale);
             writer.write(NetworkBuffer.FLOAT, transitionColor.red() / 255f);
             writer.write(NetworkBuffer.FLOAT, transitionColor.green() / 255f);
             writer.write(NetworkBuffer.FLOAT, transitionColor.blue() / 255f);
+            writer.write(NetworkBuffer.FLOAT, scale);
         }
     }
 

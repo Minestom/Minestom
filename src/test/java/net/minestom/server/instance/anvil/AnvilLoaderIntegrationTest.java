@@ -16,9 +16,11 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class AnvilLoaderIntegrationTest {
@@ -50,6 +52,27 @@ public class AnvilLoaderIntegrationTest {
                 instance.unloadChunk(chunk);
             }
         }
+    }
+
+    @Test
+    public void parallelSaveNonexistentFiles(Env env) throws Exception {
+        var worldFolder = Files.createTempDirectory("minestom-test-world-parallel-save");
+        AnvilLoader chunkLoader = new AnvilLoader(worldFolder);
+        Instance instance = env.createFlatInstance(chunkLoader);
+
+        for (int chunkX = 0; chunkX < 32; chunkX++) {
+            for (int chunkZ = 0; chunkZ < 32; chunkZ++) {
+                instance.loadChunk(chunkX, chunkZ).join();
+            }
+        }
+
+        AtomicReference<Throwable> exception = new AtomicReference<>();
+        env.process().exception().setExceptionHandler((throwable) -> {
+            exception.set(throwable);
+            throwable.printStackTrace();
+        });
+        instance.saveChunksToStorage().join();
+        assertNull(exception.get());
     }
 
     @Test
