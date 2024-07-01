@@ -98,7 +98,8 @@ public final class AttributeInstance {
      * @param modifier the modifier to add
      */
     public void addModifier(@NotNull AttributeModifier modifier) {
-        if (modifiers.putIfAbsent(modifier.id(), modifier) == null) {
+        AttributeModifier previousModifier = modifiers.put(modifier.id(), modifier);
+        if (previousModifier == null || previousModifier.amount() != modifier.amount()) {
             refreshCachedValue();
         }
     }
