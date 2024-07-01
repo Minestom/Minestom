@@ -216,7 +216,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param newItemStack The ItemStack that has been added, modifiers on this stack will be added to the entity
      * @param slot The slot that changed, this will determine what modifiers are actually changed
      */
-    private void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
+    @ApiStatus.Internal
+    public void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
         AttributeList oldAttributes = oldItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
         // Remove old attributes
         if (oldAttributes != null) {
