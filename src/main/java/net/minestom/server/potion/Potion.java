@@ -59,6 +59,13 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     public static final int INFINITE_DURATION = -1;
 
     /**
+     * @see #Potion(PotionEffect, byte, int, byte)
+     */
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, int flags) {
+        this(effect, amplifier, duration, (byte) flags);
+    }
+
+    /**
      * Creates a new Potion with no flags.
      *
      * @see #Potion(PotionEffect, byte, int, byte)
