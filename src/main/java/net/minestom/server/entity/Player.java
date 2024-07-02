@@ -144,7 +144,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
 
-    private int latency;
+    private volatile int latency;
     private Component displayName;
     private PlayerSkin skin;
 
