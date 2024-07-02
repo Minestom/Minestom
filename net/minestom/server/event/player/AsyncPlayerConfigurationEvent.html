@@ -133,12 +133,12 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addFeatureFlag(net.minestom.server.utils.NamespaceID)" class="member-name-link">addFeatureFlag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addFeatureFlag(net.minestom.server.FeatureFlag)" class="member-name-link">addFeatureFlag</a><wbr>(@NotNull <a href="../../FeatureFlag.html" title="interface in net.minestom.server">FeatureFlag</a>&nbsp;feature)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Add a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
  Note: the flag "minecraft:vanilla" is already included by default.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../../FeatureFlag.html" title="interface in net.minestom.server">FeatureFlag</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFeatureFlags()" class="member-name-link">getFeatureFlags</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The list of currently added feature flags.</div>
@@ -160,7 +160,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isHardcore()" class="member-name-link">isHardcore</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeFeatureFlag(net.minestom.server.utils.NamespaceID)" class="member-name-link">removeFeatureFlag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeFeatureFlag(net.minestom.server.FeatureFlag)" class="member-name-link">removeFeatureFlag</a><wbr>(@NotNull <a href="../../FeatureFlag.html" title="interface in net.minestom.server">FeatureFlag</a>&nbsp;feature)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Remove a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
  Note: removing the flag "minecraft:vanilla" may result in weird behavior</div>
@@ -259,10 +259,10 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="addFeatureFlag(net.minestom.server.utils.NamespaceID)">
+<section class="detail" id="addFeatureFlag(net.minestom.server.FeatureFlag)">
 <h3>addFeatureFlag</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addFeatureFlag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</span></div>
+ @NotNull <a href="../../FeatureFlag.html" title="interface in net.minestom.server">FeatureFlag</a>&nbsp;feature)</span></div>
 <div class="block">Add a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
  Note: the flag "minecraft:vanilla" is already included by default.</div>
 <dl class="notes">
@@ -272,16 +272,17 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <dd>
 <ul class="tag-list">
 <li><a href="../../network/packet/server/configuration/UpdateEnabledFeaturesPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>UpdateEnabledFeaturesPacket</code></a></li>
+<li><a href="../../FeatureFlag.html" title="interface in net.minestom.server"><code>FeatureFlag</code></a></li>
 </ul>
 </dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="removeFeatureFlag(net.minestom.server.utils.NamespaceID)">
+<section class="detail" id="removeFeatureFlag(net.minestom.server.FeatureFlag)">
 <h3>removeFeatureFlag</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeFeatureFlag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;feature)</span></div>
+ @NotNull <a href="../../FeatureFlag.html" title="interface in net.minestom.server">FeatureFlag</a>&nbsp;feature)</span></div>
 <div class="block">Remove a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
  Note: removing the flag "minecraft:vanilla" may result in weird behavior</div>
 <dl class="notes">
@@ -293,6 +294,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <dd>
 <ul class="tag-list">
 <li><a href="../../network/packet/server/configuration/UpdateEnabledFeaturesPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>UpdateEnabledFeaturesPacket</code></a></li>
+<li><a href="../../FeatureFlag.html" title="interface in net.minestom.server"><code>FeatureFlag</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -302,7 +304,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <section class="detail" id="getFeatureFlags()">
 <h3>getFeatureFlags</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</span>&nbsp;<span class="element-name">getFeatureFlags</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../FeatureFlag.html" title="interface in net.minestom.server">FeatureFlag</a>&gt;</span>&nbsp;<span class="element-name">getFeatureFlags</span>()</div>
 <div class="block">The list of currently added feature flags. This is an unmodifiable copy of what will be sent to the client.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -311,6 +313,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <dd>
 <ul class="tag-list">
 <li><a href="../../network/packet/server/configuration/UpdateEnabledFeaturesPacket.html" title="class in net.minestom.server.network.packet.server.configuration"><code>UpdateEnabledFeaturesPacket</code></a></li>
+<li><a href="../../FeatureFlag.html" title="interface in net.minestom.server"><code>FeatureFlag</code></a></li>
 </ul>
 </dd>
 </dl>
