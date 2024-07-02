@@ -23,6 +23,7 @@ public final class TickSchedulerThread extends MinestomThread {
     public void run() {
         long ticks = 0;
         long baseTime = System.nanoTime();
+
         while (serverProcess.isAlive()) {
             final long tickStart = System.nanoTime();
             try {
@@ -32,16 +33,20 @@ public final class TickSchedulerThread extends MinestomThread {
             }
 
             ticks++;
-            long nextTickTime = baseTime + ticks * TICK_TIME_NANOS;
-            waitUntilNextTick(nextTickTime);
-            // Check if the server can not keep up with the tickrate
-            // if it gets too far behind, reset the ticks & baseTime
-            // to avoid running too many ticks at once
-            if (System.nanoTime() > nextTickTime + TICK_TIME_NANOS * ServerFlag.SERVER_MAX_TICK_CATCH_UP) {
-                baseTime = System.nanoTime();
-                ticks = 0;
+            // don't wait next tick if server is stopping/stopped
+            if (serverProcess.isAlive()) {
+                long nextTickTime = baseTime + ticks * TICK_TIME_NANOS;
+                waitUntilNextTick(nextTickTime);
+                // Check if the server can not keep up with the tickrate
+                // if it gets too far behind, reset the ticks & baseTime
+                // to avoid running too many ticks at once
+                if (System.nanoTime() > nextTickTime + TICK_TIME_NANOS * ServerFlag.SERVER_MAX_TICK_CATCH_UP) {
+                    baseTime = System.nanoTime();
+                    ticks = 0;
+                }
             }
         }
+        serverProcess.shutdown();
     }
 
     private void waitUntilNextTick(long nextTickTimeNanos) {

@@ -97,6 +97,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final Ticker ticker;
 
     private final AtomicBoolean started = new AtomicBoolean();
+    private final AtomicBoolean stopping = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
     public ServerProcessImpl() throws IOException {
@@ -334,6 +335,13 @@ final class ServerProcessImpl implements ServerProcess {
 
     @Override
     public void stop() {
+        if (!stopping.compareAndSet(false, true))
+            return;
+        LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server...");
+    }
+
+    @Override
+    public void shutdown() {
         if (!stopped.compareAndSet(false, true))
             return;
         LOGGER.info("Stopping " + MinecraftServer.getBrandName() + " server.");
@@ -347,8 +355,13 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
+    public boolean isStopped() {
+        return stopped.get();
+    }
+
+    @Override
     public boolean isAlive() {
-        return started.get() && !stopped.get();
+        return started.get() && !stopping.get() && !stopped.get();
     }
 
     @Override
