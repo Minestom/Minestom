@@ -198,6 +198,10 @@ public final class ShapeImpl implements Shape {
         return block;
     }
 
+    BoundingBox @NotNull [] getCollisionBoundingBoxes() {
+        return collisionBoundingBoxes;
+    }
+
     private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, BoundingBox[] boundingBoxes) {
         List<Rectangle> rSet = new ArrayList<>();
         for (BoundingBox boundingBox : boundingBoxes) {
