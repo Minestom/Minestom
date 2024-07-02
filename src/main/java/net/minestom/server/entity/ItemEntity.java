@@ -5,9 +5,11 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -215,5 +217,12 @@ public class ItemEntity extends Entity {
      */
     public long getSpawnTime() {
         return spawnTime;
+    }
+
+    @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Acquirable<? extends ItemEntity> getAcquirable() {
+        return (Acquirable<? extends ItemEntity>) super.getAcquirable();
     }
 }

@@ -41,6 +41,7 @@ import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.Acquirable;
+import net.minestom.server.thread.AcquirableSource;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -78,7 +79,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
+        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     // Certain entities should only have their position packets sent during synchronization
@@ -1569,11 +1570,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return HoverEvent.showEntity(ShowEntity.showEntity(this.entityType, this.uuid));
     }
 
-    @ApiStatus.Experimental
-    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
-        return (Acquirable<T>) acquirable;
-    }
-
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
@@ -1731,6 +1727,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     public boolean hasCollision() {
         return hasCollision;
+    }
+
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends Entity> getAcquirable() {
+        return acquirable;
     }
 
     public enum Pose {

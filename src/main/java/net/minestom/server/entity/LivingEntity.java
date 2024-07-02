@@ -28,6 +28,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
@@ -671,5 +672,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void takeKnockback(float strength, final double x, final double z) {
         strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends LivingEntity> getAcquirable() {
+        return (Acquirable<? extends LivingEntity>) super.getAcquirable();
     }
 }
