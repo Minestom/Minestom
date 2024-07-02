@@ -23,6 +23,7 @@ allprojects {
     description = shortDescription
 
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 

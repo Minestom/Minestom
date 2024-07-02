@@ -4,7 +4,7 @@ metadata.format.version = "1.1"
 
 # Important dependencies
 data = "1.21"
-adventure = "4.17.0"
+adventure = "4.18.0-SNAPSHOT"
 jetbrainsAnnotations = "23.0.0"
 slf4j = "2.0.7"
 
@@ -39,6 +39,7 @@ nexuspublish = "1.3.0"
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-nbt = { group = "net.kyori", name = "adventure-nbt", version.ref = "adventure" }
 adventure-serializer-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
+adventure-serializer-nbt = { group = "net.kyori", name = "adventure-text-serializer-nbt", version.ref = "adventure" }
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logger-slf4j", version.ref = "adventure" }
@@ -76,7 +77,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 [bundles]
 
 flare = ["flare", "flare-fastutil"]
-adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
+adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-nbt", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
 junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine"]
 logback = ["logback-core", "logback-classic"]
 

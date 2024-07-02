@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.kyori.adventure.text.serializer.nbt.NBTComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.gamedata.DataPack;
@@ -213,23 +213,26 @@ public interface BinaryTagSerializer<T> {
     BinaryTagSerializer<Component> NBT_COMPONENT = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Component value) {
-            return NbtComponentSerializer.nbt().serialize(value);
+            return NBTComponentSerializer.nbt().serialize(value);
         }
 
         @Override
         public @NotNull Component read(@NotNull BinaryTag tag) {
-            return NbtComponentSerializer.nbt().deserialize(tag);
+            return NBTComponentSerializer.nbt().deserialize(tag);
         }
     };
     BinaryTagSerializer<Style> NBT_COMPONENT_STYLE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Style value) {
-            return NbtComponentSerializer.nbt().serializeStyle(value);
+            return NBTComponentSerializer.nbt().serializeStyle(value);
         }
 
         @Override
         public @NotNull Style read(@NotNull BinaryTag tag) {
-            return NbtComponentSerializer.nbt().deserializeStyle(tag);
+            if (!(tag instanceof CompoundBinaryTag compound)) {
+                throw new IllegalArgumentException("The binary tag has to be a compound");
+            }
+            return NBTComponentSerializer.nbt().deserializeStyle(compound);
         }
     };
     BinaryTagSerializer<ItemStack> ITEM = COMPOUND.map(ItemStack::fromItemNBT, ItemStack::toItemNBT);
