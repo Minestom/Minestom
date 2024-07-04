@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -215,7 +216,7 @@ final class BlockLight implements Light {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
         var res = bake(contentPropagation, content);
-        if (res == emptyContent) return new byte[0];
+        if (Arrays.equals(res, emptyContent)) return new byte[0];
         return res;
     }
 
@@ -254,7 +255,7 @@ final class BlockLight implements Light {
 
     private byte[] bake(byte[] content1, byte[] content2) {
         if (content1 == null && content2 == null) return emptyContent;
-        if (content1 == emptyContent && content2 == emptyContent) return emptyContent;
+        if (Arrays.equals(content1, emptyContent) && Arrays.equals(content2, emptyContent)) return emptyContent;
 
         if (content1 == null) return content2;
         if (content2 == null) return content1;
