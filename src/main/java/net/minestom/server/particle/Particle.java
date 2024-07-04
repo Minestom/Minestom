@@ -1,6 +1,7 @@
 package net.minestom.server.particle;
 
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
@@ -255,21 +256,26 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record EntityEffect(@NotNull NamespaceID namespace, int id, @NotNull RGBLike color) implements Particle {
+    record EntityEffect(@NotNull NamespaceID namespace, int id, @NotNull AlphaColor color) implements Particle {
 
         @Contract(pure = true)
-        public @NotNull EntityEffect withColor(@NotNull RGBLike color) {
+        public @NotNull EntityEffect withColor(@NotNull AlphaColor color) {
             return new EntityEffect(namespace(), id(), color);
+        }
+
+        @Contract(pure = true)
+        public @NotNull EntityEffect withColor(int alpha, @NotNull RGBLike color) {
+            return new EntityEffect(namespace(), id(), new AlphaColor(alpha, color));
         }
 
         @Override
         public @NotNull EntityEffect readData(@NotNull NetworkBuffer reader) {
-            return withColor(reader.read(Color.NETWORK_TYPE));
+            return withColor(reader.read(AlphaColor.NETWORK_TYPE));
         }
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(Color.NETWORK_TYPE, color);
+            writer.write(AlphaColor.NETWORK_TYPE, color);
         }
     }
 
