@@ -148,7 +148,7 @@ public final class AttributeInstance {
      *                  value
      * @return the attribute value
      */
-    public double getValueWithBase(double baseValue) {
+    public double applyModifiers(double baseValue) {
         return computeValue(baseValue);
     }
 
