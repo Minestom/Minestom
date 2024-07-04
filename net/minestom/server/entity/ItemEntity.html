@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../collision/Shape.html" title="interface in net.minestom.server.collision">Shape</a></code>, <code><a href="../event/EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;<a href="../event/trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>&gt;</code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../collision/Shape.html" title="interface in net.minestom.server.collision">Shape</a></code>, <code><a href="../event/EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;<a href="../event/trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>&gt;</code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../thread/AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ItemEntity</span>
@@ -144,91 +144,96 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="metadata/item/ItemEntityMeta.html" title="class in net.minestom.server.entity.metadata.item">ItemEntityMeta</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEntityMeta()" class="member-name-link">getEntityMeta</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a><wbr>&lt;? extends <a href="ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acquirable()" class="member-name-link">acquirable</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtains an <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="metadata/item/ItemEntityMeta.html" title="class in net.minestom.server.entity.metadata.item">ItemEntityMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEntityMeta()" class="member-name-link">getEntityMeta</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets metadata of this entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemStack()" class="member-name-link">getItemStack</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItemStack()" class="member-name-link">getItemStack</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the item stack on ground.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getMergeDelay()" class="member-name-link">getMergeDelay</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getMergeDelay()" class="member-name-link">getMergeDelay</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Gets the update option for the merging feature.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMergeRange()" class="member-name-link">getMergeRange</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMergeRange()" class="member-name-link">getMergeRange</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the merge range.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPickupDelay()" class="member-name-link">getPickupDelay</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPickupDelay()" class="member-name-link">getPickupDelay</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the pickup delay in milliseconds, defined by <a href="#setPickupDelay(java.time.Duration)"><code>setPickupDelay(Duration)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSpawnTime()" class="member-name-link">getSpawnTime</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSpawnTime()" class="member-name-link">getSpawnTime</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Used to know if the ItemEntity can be pickup.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isMergeable()" class="member-name-link">isMergeable</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isMergeable()" class="member-name-link">isMergeable</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the item is mergeable.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPickable()" class="member-name-link">isPickable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPickable()" class="member-name-link">isPickable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the item is currently pickable.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemStack(net.minestom.server.item.ItemStack)" class="member-name-link">setItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setItemStack(net.minestom.server.item.ItemStack)" class="member-name-link">setItemStack</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the item stack on ground.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMergeable(boolean)" class="member-name-link">setMergeable</a><wbr>(boolean&nbsp;mergeable)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMergeable(boolean)" class="member-name-link">setMergeable</a><wbr>(boolean&nbsp;mergeable)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">When set to true, close <a href="ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> will try to merge together as a single entity
  when their <a href="#getItemStack()"><code>getItemStack()</code></a> is similar and allowed to stack together.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setMergeDelay(java.time.Duration)" class="member-name-link">setMergeDelay</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;delay)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setMergeDelay(java.time.Duration)" class="member-name-link">setMergeDelay</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;delay)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Changes the merge delay.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMergeRange(float)" class="member-name-link">setMergeRange</a><wbr>(float&nbsp;mergeRange)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMergeRange(float)" class="member-name-link">setMergeRange</a><wbr>(float&nbsp;mergeRange)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the merge range.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPickable(boolean)" class="member-name-link">setPickable</a><wbr>(boolean&nbsp;pickable)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPickable(boolean)" class="member-name-link">setPickable</a><wbr>(boolean&nbsp;pickable)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Makes the item pickable.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPickupDelay(long,java.time.temporal.TemporalUnit)" class="member-name-link">setPickupDelay</a><wbr>(long&nbsp;delay,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/temporal/TemporalUnit.html" title="class or interface in java.time.temporal" class="external-link">TemporalUnit</a>&nbsp;temporalUnit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the pickup delay of the ItemEntity.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPickupDelay(java.time.Duration)" class="member-name-link">setPickupDelay</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;delay)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPickupDelay(long,java.time.temporal.TemporalUnit)" class="member-name-link">setPickupDelay</a><wbr>(long&nbsp;delay,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/temporal/TemporalUnit.html" title="class or interface in java.time.temporal" class="external-link">TemporalUnit</a>&nbsp;temporalUnit)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the pickup delay of the ItemEntity.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#spawn()" class="member-name-link">spawn</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPickupDelay(java.time.Duration)" class="member-name-link">setPickupDelay</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;delay)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the pickup delay of the ItemEntity.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#spawn()" class="member-name-link">spawn</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a new instance is set.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long)" class="member-name-link">update</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long)" class="member-name-link">update</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called each tick.</div>
 </div>
 </div>
@@ -486,6 +491,26 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the time in milliseconds since this entity has spawn</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="acquirable()">
+<h3>acquirable</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;? extends <a href="ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&gt;</span>&nbsp;<span class="element-name">acquirable</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../thread/AcquirableSource.html#acquirable()">AcquirableSource</a></code></span></div>
+<div class="block">Obtains an <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a>. To safely perform operations on this object, the user must call
+ <a href="../thread/Acquirable.html#sync(java.util.function.Consumer)"><code>Acquirable.sync(Consumer)</code></a>, <a href="../thread/Acquirable.html#async(java.util.function.Consumer)"><code>Acquirable.async(Consumer)</code></a>, or <a href="../thread/Acquirable.html#lock()"><code>Acquirable.lock()</code></a> (followed by
+ a subsequent unlock) on the Acquirable instance.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../thread/AcquirableSource.html#acquirable()">acquirable</a></code>&nbsp;in interface&nbsp;<code><a href="../thread/AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="Entity.html#acquirable()">acquirable</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+<dt>Returns:</dt>
+<dd>an Acquirable which can be used to synchronize access to this object</dd>
 </dl>
 </section>
 </li>

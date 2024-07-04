@@ -95,7 +95,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../collision/Shape.html" title="interface in net.minestom.server.collision">Shape</a></code>, <code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code>, <code><a href="pathfinding/NavigableEntity.html" title="interface in net.minestom.server.entity.pathfinding">NavigableEntity</a></code>, <code><a href="../event/EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;<a href="../event/trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>&gt;</code>, <code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../collision/Shape.html" title="interface in net.minestom.server.collision">Shape</a></code>, <code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code>, <code><a href="pathfinding/NavigableEntity.html" title="interface in net.minestom.server.entity.pathfinding">NavigableEntity</a></code>, <code><a href="../event/EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;<a href="../event/trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>&gt;</code>, <code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../thread/AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EntityCreature</span>
@@ -154,59 +154,64 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attack(net.minestom.server.entity.Entity)" class="member-name-link">attack</a><wbr>(@NotNull <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a><wbr>&lt;? extends <a href="EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acquirable()" class="member-name-link">acquirable</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Calls a <a href="../event/entity/EntityAttackEvent.html" title="class in net.minestom.server.event.entity"><code>EntityAttackEvent</code></a> with this entity as the source and <code>target</code> as the target.</div>
+<div class="block">Obtains an <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attack(net.minestom.server.entity.Entity,boolean)" class="member-name-link">attack</a><wbr>(@NotNull <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target,
- boolean&nbsp;swingHand)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attack(net.minestom.server.entity.Entity)" class="member-name-link">attack</a><wbr>(@NotNull <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Calls a <a href="../event/entity/EntityAttackEvent.html" title="class in net.minestom.server.event.entity"><code>EntityAttackEvent</code></a> with this entity as the source and <code>target</code> as the target.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="ai/EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAIGroups()" class="member-name-link">getAIGroups</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attack(net.minestom.server.entity.Entity,boolean)" class="member-name-link">attack</a><wbr>(@NotNull <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target,
+ boolean&nbsp;swingHand)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Calls a <a href="../event/entity/EntityAttackEvent.html" title="class in net.minestom.server.event.entity"><code>EntityAttackEvent</code></a> with this entity as the source and <code>target</code> as the target.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="ai/EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAIGroups()" class="member-name-link">getAIGroups</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the AI groups of this entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="pathfinding/Navigator.html" title="class in net.minestom.server.entity.pathfinding">Navigator</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNavigator()" class="member-name-link">getNavigator</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRemovalAnimationDelay()" class="member-name-link">getRemovalAnimationDelay</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="pathfinding/Navigator.html" title="class in net.minestom.server.entity.pathfinding">Navigator</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNavigator()" class="member-name-link">getNavigator</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRemovalAnimationDelay()" class="member-name-link">getRemovalAnimationDelay</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the kill animation delay before vanishing the entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTarget()" class="member-name-link">getTarget</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the entity target.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#kill()" class="member-name-link">kill</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#kill()" class="member-name-link">kill</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Kills the entity, trigger the <a href="../event/entity/EntityDeathEvent.html" title="class in net.minestom.server.event.entity"><code>EntityDeathEvent</code></a> event.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInstance(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos)" class="member-name-link">setInstance</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInstance(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos)" class="member-name-link">setInstance</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the entity instance, i.e.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemovalAnimationDelay(int)" class="member-name-link">setRemovalAnimationDelay</a><wbr>(int&nbsp;removalAnimationDelay)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRemovalAnimationDelay(int)" class="member-name-link">setRemovalAnimationDelay</a><wbr>(int&nbsp;removalAnimationDelay)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the removal animation delay of the entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTarget(net.minestom.server.entity.Entity)" class="member-name-link">setTarget</a><wbr>(@Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTarget(net.minestom.server.entity.Entity)" class="member-name-link">setTarget</a><wbr>(@Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the entity target.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long)" class="member-name-link">update</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long)" class="member-name-link">update</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called each tick.</div>
 </div>
 </div>
@@ -423,6 +428,26 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>target</code> - the entity target</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="acquirable()">
+<h3>acquirable</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;? extends <a href="EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&gt;</span>&nbsp;<span class="element-name">acquirable</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../thread/AcquirableSource.html#acquirable()">AcquirableSource</a></code></span></div>
+<div class="block">Obtains an <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a>. To safely perform operations on this object, the user must call
+ <a href="../thread/Acquirable.html#sync(java.util.function.Consumer)"><code>Acquirable.sync(Consumer)</code></a>, <a href="../thread/Acquirable.html#async(java.util.function.Consumer)"><code>Acquirable.async(Consumer)</code></a>, or <a href="../thread/Acquirable.html#lock()"><code>Acquirable.lock()</code></a> (followed by
+ a subsequent unlock) on the Acquirable instance.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../thread/AcquirableSource.html#acquirable()">acquirable</a></code>&nbsp;in interface&nbsp;<code><a href="../thread/AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="LivingEntity.html#acquirable()">acquirable</a></code>&nbsp;in class&nbsp;<code><a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></dd>
+<dt>Returns:</dt>
+<dd>an Acquirable which can be used to synchronize access to this object</dd>
 </dl>
 </section>
 </li>

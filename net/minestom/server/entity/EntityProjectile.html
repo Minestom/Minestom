@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../collision/Shape.html" title="interface in net.minestom.server.collision">Shape</a></code>, <code><a href="../event/EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;<a href="../event/trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>&gt;</code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/sound/Sound.Emitter.html" title="class or interface in net.kyori.adventure.sound" class="external-link">Sound.Emitter</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEventSource.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEventSource</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html" title="class or interface in net.kyori.adventure.text.event" class="external-link">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../collision/Shape.html" title="interface in net.minestom.server.collision">Shape</a></code>, <code><a href="../event/EventHandler.html" title="interface in net.minestom.server.event">EventHandler</a>&lt;<a href="../event/trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>&gt;</code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../snapshot/Snapshotable.html" title="interface in net.minestom.server.snapshot">Snapshotable</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../thread/AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../timer/Schedulable.html" title="interface in net.minestom.server.timer">Schedulable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EntityProjectile</span>
@@ -145,17 +145,22 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getShooter()" class="member-name-link">getShooter</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shoot(net.minestom.server.coordinate.Point,double,double)" class="member-name-link">shoot</a><wbr>(<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;to,
- double&nbsp;power,
- double&nbsp;spread)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a><wbr>&lt;? extends <a href="EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acquirable()" class="member-name-link">acquirable</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtains an <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getShooter()" class="member-name-link">getShooter</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shoot(net.minestom.server.coordinate.Point,double,double)" class="member-name-link">shoot</a><wbr>(<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;to,
+ double&nbsp;power,
+ double&nbsp;spread)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tick(long)" class="member-name-link">tick</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates the entity, called every tick.</div>
 </div>
 </div>
@@ -240,6 +245,26 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Entity.html#tick(long)">tick</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>time</code> - the update time in milliseconds</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="acquirable()">
+<h3>acquirable</h3>
+<div class="member-signature"><span class="annotations">@Experimental
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread">Acquirable</a>&lt;? extends <a href="EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a>&gt;</span>&nbsp;<span class="element-name">acquirable</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../thread/AcquirableSource.html#acquirable()">AcquirableSource</a></code></span></div>
+<div class="block">Obtains an <a href="../thread/Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a>. To safely perform operations on this object, the user must call
+ <a href="../thread/Acquirable.html#sync(java.util.function.Consumer)"><code>Acquirable.sync(Consumer)</code></a>, <a href="../thread/Acquirable.html#async(java.util.function.Consumer)"><code>Acquirable.async(Consumer)</code></a>, or <a href="../thread/Acquirable.html#lock()"><code>Acquirable.lock()</code></a> (followed by
+ a subsequent unlock) on the Acquirable instance.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../thread/AcquirableSource.html#acquirable()">acquirable</a></code>&nbsp;in interface&nbsp;<code><a href="../thread/AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="Entity.html#acquirable()">acquirable</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+<dt>Returns:</dt>
+<dd>an Acquirable which can be used to synchronize access to this object</dd>
 </dl>
 </section>
 </li>

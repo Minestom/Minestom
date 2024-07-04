@@ -93,28 +93,35 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AcquirableCollection.html" title="class in net.minestom.server.thread">AcquirableCollection</a>&lt;E&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Acquired.html" title="class in net.minestom.server.thread">Acquired</a>&lt;T&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AcquirableSource.html" title="interface in net.minestom.server.thread">AcquirableSource</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">An object that is a source of <a href="Acquirable.html" title="interface in net.minestom.server.thread"><code>Acquirable</code></a> objects, and can be synchronized within a <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread"><code>ThreadDispatcher</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Acquired.html" title="class in net.minestom.server.thread">Acquired</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents an object that has been safely acquired and can be freed again.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a>&lt;P&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Used to link chunks into multiple groups.</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MinestomThread.html" title="class in net.minestom.server.thread">MinestomThread</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a>&lt;P&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">ThreadDispatcher can be used to dispatch updates (ticks) across a number of "partitions" (such as chunks) that
+ house <a href="../Tickable.html" title="interface in net.minestom.server"><code>Tickable</code></a> instances (such as entities).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ThreadDispatcher.Partition.html" title="class in net.minestom.server.thread">ThreadDispatcher.Partition</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;T&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="ThreadProvider.RefreshType.html" title="enum class in net.minestom.server.thread">ThreadProvider.RefreshType</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ThreadDispatcher.Partition.html" title="class in net.minestom.server.thread">ThreadDispatcher.Partition</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">A data structure which may contain <a href="../Tickable.html" title="interface in net.minestom.server"><code>Tickable</code></a>s, and is assigned a single <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="ThreadProvider.RefreshType.html" title="enum class in net.minestom.server.thread">ThreadProvider.RefreshType</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">Defines how often chunks thread should be refreshed.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TickSchedulerThread.html" title="class in net.minestom.server.thread">TickSchedulerThread</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TickSchedulerThread.html" title="class in net.minestom.server.thread">TickSchedulerThread</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Thread responsible for ticking <a href="../instance/Chunk.html" title="class in net.minestom.server.instance"><code>chunks</code></a> and <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a>.</div>
 </div>
 </div>

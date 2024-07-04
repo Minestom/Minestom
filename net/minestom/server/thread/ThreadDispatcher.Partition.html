@@ -96,6 +96,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name type-name-label">ThreadDispatcher.Partition</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">A data structure which may contain <a href="../Tickable.html" title="interface in net.minestom.server"><code>Tickable</code></a>s, and is assigned a single <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,10 +113,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elements()" class="member-name-link">elements</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The <a href="../Tickable.html" title="interface in net.minestom.server"><code>Tickable</code></a>s assigned to this partition.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#thread()" class="member-name-link">thread</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a> used by this partition.</div>
+</div>
 </div>
 </div>
 </div>
@@ -136,8 +141,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="thread()">
 <h3>thread</h3>
-<div class="member-signature"><span class="annotations">@NotNull
+<div class="member-signature"><span class="annotations">@Internal
+@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a></span>&nbsp;<span class="element-name">thread</span>()</div>
+<div class="block">The <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a> used by this partition.
+ <p>
+ This method is marked internal to reflect <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a>s own internal status.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the TickThread used by this partition</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -145,6 +158,11 @@ loadScripts(document, 'script');</script>
 <h3>elements</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>&gt;</span>&nbsp;<span class="element-name">elements</span>()</div>
+<div class="block">The <a href="../Tickable.html" title="interface in net.minestom.server"><code>Tickable</code></a>s assigned to this partition.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the tickables assigned to this partition</dd>
+</dl>
 </section>
 </li>
 </ul>
