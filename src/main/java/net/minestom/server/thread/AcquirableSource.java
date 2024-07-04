@@ -19,5 +19,5 @@ public interface AcquirableSource<T> {
      *
      * @return an Acquirable which can be used to synchronize access to this object
      */
-    @NotNull Acquirable<? extends T> getAcquirable();
+    @NotNull Acquirable<? extends T> acquirable();
 }

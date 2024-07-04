@@ -151,7 +151,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     @SuppressWarnings("unchecked")
     @ApiStatus.Experimental
     @Override
-    public @NotNull Acquirable<? extends EntityCreature> getAcquirable() {
-        return (Acquirable<? extends EntityCreature>) super.getAcquirable();
+    public @NotNull Acquirable<? extends EntityCreature> acquirable() {
+        return (Acquirable<? extends EntityCreature>) super.acquirable();
     }
 }

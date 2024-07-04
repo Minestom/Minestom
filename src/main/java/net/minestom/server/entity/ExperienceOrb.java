@@ -112,7 +112,7 @@ public class ExperienceOrb extends Entity {
     @ApiStatus.Experimental
     @SuppressWarnings("unchecked")
     @Override
-    public @NotNull Acquirable<? extends ExperienceOrb> getAcquirable() {
-        return (Acquirable<? extends ExperienceOrb>) super.getAcquirable();
+    public @NotNull Acquirable<? extends ExperienceOrb> acquirable() {
+        return (Acquirable<? extends ExperienceOrb>) super.acquirable();
     }
 }

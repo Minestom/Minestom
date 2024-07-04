@@ -1729,9 +1729,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return hasCollision;
     }
 
+    /**
+     * Acquires this entity.
+     *
+     * @deprecated It's preferred to use {@link AcquirableSource#acquirable()} instead, as it is overridden by
+     * subclasses
+     * @return the acquirable for this entity
+     * @param <T> the type of object to be acquired
+     */
+    @Deprecated
+    @ApiStatus.Experimental
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
     @ApiStatus.Experimental
     @Override
-    public @NotNull Acquirable<? extends Entity> getAcquirable() {
+    public @NotNull Acquirable<? extends Entity> acquirable() {
         return acquirable;
     }
 

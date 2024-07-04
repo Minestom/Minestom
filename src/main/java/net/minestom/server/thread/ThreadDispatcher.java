@@ -273,7 +273,7 @@ public final class ThreadDispatcher<P> {
             this.elements.put(tickable, partitionEntry);
             partitionEntry.elements.add(tickable);
             if (tickable instanceof AcquirableSource<?> acquirableSource) {
-                ((AcquirableImpl<?>) acquirableSource.getAcquirable()).updateThread(partitionEntry.thread());
+                ((AcquirableImpl<?>) acquirableSource.acquirable()).updateThread(partitionEntry.thread());
             }
         }
     }

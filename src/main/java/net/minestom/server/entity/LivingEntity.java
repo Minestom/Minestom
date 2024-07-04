@@ -677,7 +677,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @SuppressWarnings("unchecked")
     @ApiStatus.Experimental
     @Override
-    public @NotNull Acquirable<? extends LivingEntity> getAcquirable() {
-        return (Acquirable<? extends LivingEntity>) super.getAcquirable();
+    public @NotNull Acquirable<? extends LivingEntity> acquirable() {
+        return (Acquirable<? extends LivingEntity>) super.acquirable();
     }
 }

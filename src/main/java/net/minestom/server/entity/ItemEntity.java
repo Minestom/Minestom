@@ -222,7 +222,7 @@ public class ItemEntity extends Entity {
     @ApiStatus.Experimental
     @SuppressWarnings("unchecked")
     @Override
-    public @NotNull Acquirable<? extends ItemEntity> getAcquirable() {
-        return (Acquirable<? extends ItemEntity>) super.getAcquirable();
+    public @NotNull Acquirable<? extends ItemEntity> acquirable() {
+        return (Acquirable<? extends ItemEntity>) super.acquirable();
     }
 }

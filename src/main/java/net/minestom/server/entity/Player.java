@@ -2570,7 +2570,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @SuppressWarnings("unchecked")
     @ApiStatus.Experimental
     @Override
-    public @NotNull Acquirable<? extends Player> getAcquirable() {
-        return (Acquirable<? extends Player>) super.getAcquirable();
+    public @NotNull Acquirable<? extends Player> acquirable() {
+        return (Acquirable<? extends Player>) super.acquirable();
     }
 }

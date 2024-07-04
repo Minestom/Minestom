@@ -184,7 +184,7 @@ public class PlayerProjectile extends Entity {
     @ApiStatus.Experimental
     @SuppressWarnings("unchecked")
     @Override
-    public @NotNull Acquirable<? extends PlayerProjectile> getAcquirable() {
-        return (Acquirable<? extends PlayerProjectile>) super.getAcquirable();
+    public @NotNull Acquirable<? extends PlayerProjectile> acquirable() {
+        return (Acquirable<? extends PlayerProjectile>) super.acquirable();
     }
 }
