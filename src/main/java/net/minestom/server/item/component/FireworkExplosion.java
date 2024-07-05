@@ -56,10 +56,10 @@ public record FireworkExplosion(
                 for (int color : tag.getIntArray("colors"))
                     colors.add(new Color(color));
                 List<RGBLike> fadeColors = new ArrayList<>();
-                for (int fadeColor : tag.getIntArray("fadeColors"))
+                for (int fadeColor : tag.getIntArray("fade_colors"))
                     fadeColors.add(new Color(fadeColor));
-                boolean hasTrail = tag.getBoolean("hasTrail");
-                boolean hasTwinkle = tag.getBoolean("hasTwinkle");
+                boolean hasTrail = tag.getBoolean("has_trail");
+                boolean hasTwinkle = tag.getBoolean("has_twinkle");
                 return new FireworkExplosion(shape, colors, fadeColors, hasTrail, hasTwinkle);
             },
             value -> {
@@ -75,10 +75,10 @@ public record FireworkExplosion(
                     int[] fadeColors = new int[value.fadeColors.size()];
                     for (int i = 0; i < value.fadeColors.size(); i++)
                         fadeColors[i] = Color.fromRGBLike(value.fadeColors.get(i)).asRGB();
-                    builder.putIntArray("fadeColors", fadeColors);
+                    builder.putIntArray("fade_colors", fadeColors);
                 }
-                if (value.hasTrail) builder.putBoolean("hasTrail", value.hasTrail);
-                if (value.hasTwinkle) builder.putBoolean("hasTwinkle", value.hasTwinkle);
+                if (value.hasTrail) builder.putBoolean("has_trail", value.hasTrail);
+                if (value.hasTwinkle) builder.putBoolean("has_twinkle", value.hasTwinkle);
                 return builder.build();
             }
     );

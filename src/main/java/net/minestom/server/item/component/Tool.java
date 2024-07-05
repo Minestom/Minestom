@@ -83,7 +83,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
                 tag -> new Rule(
                         BlockTypeFilter.NBT_TYPE.read(Objects.requireNonNull(tag.get("blocks"))),
                         tag.get("speed") instanceof FloatBinaryTag speed ? speed.floatValue() : null,
-                        tag.get("correctForDrops") instanceof ByteBinaryTag correctForDrops ? correctForDrops.value() != 0 : null
+                        tag.get("correct_for_drops") instanceof ByteBinaryTag correctForDrops ? correctForDrops.value() != 0 : null
                 ),
                 rule -> {
                     CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
