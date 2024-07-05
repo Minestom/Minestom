@@ -8,6 +8,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,11 @@ import java.util.regex.Pattern;
 
 public final class ShapeImpl implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
-    private final BoundingBox[] collisionBoundingBoxes;
+    private final List<BoundingBox> collisionBoundingBoxes;
     private final Point relativeStart, relativeEnd;
     private final byte fullFaces;
 
-    private final BoundingBox[] occlusionBoundingBoxes;
+    private final List<BoundingBox> occlusionBoundingBoxes;
     private final byte blockOcclusion;
     private final byte airOcclusion;
 
@@ -28,12 +29,12 @@ public final class ShapeImpl implements Shape {
     private Block block;
 
     private ShapeImpl(BoundingBox[] boundingBoxes, BoundingBox[] occlusionBoundingBoxes, Registry.BlockEntry blockEntry) {
-        this.collisionBoundingBoxes = boundingBoxes;
-        this.occlusionBoundingBoxes = occlusionBoundingBoxes;
+        this.collisionBoundingBoxes = List.of(boundingBoxes);
+        this.occlusionBoundingBoxes = List.of(occlusionBoundingBoxes);
         this.blockEntry = blockEntry;
 
         // Find bounds of collision
-        if (collisionBoundingBoxes.length > 0) {
+        if (!collisionBoundingBoxes.isEmpty()) {
             double minX = 1, minY = 1, minZ = 1;
             double maxX = 0, maxY = 0, maxZ = 0;
             for (BoundingBox blockSection : collisionBoundingBoxes) {
@@ -63,7 +64,7 @@ public final class ShapeImpl implements Shape {
         byte airFaces = 0;
         byte fullFaces = 0;
         for (BlockFace f : BlockFace.values()) {
-            final byte res = isFaceCovered(computeOcclusionSet(f, occlusionBoundingBoxes));
+            final byte res = isFaceCovered(computeOcclusionSet(f, this.occlusionBoundingBoxes));
             airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
             fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
         }
@@ -198,7 +199,26 @@ public final class ShapeImpl implements Shape {
         return block;
     }
 
-    private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, BoundingBox[] boundingBoxes) {
+    /**
+     * Gets the collision bounding boxes for this block. There will be more than one bounds for more complex shapes e.g.
+     * stairs.
+     *
+     * @return the collision bounding boxes for this block
+     */
+    public @NotNull @Unmodifiable List<BoundingBox> collisionBoundingBoxes() {
+        return collisionBoundingBoxes;
+    }
+
+    /**
+     * Gets the occlusion bounding boxes for this block.
+     *
+     * @return the occlusion bounding boxes for this block
+     */
+    public @NotNull @Unmodifiable List<BoundingBox> occlusionBoundingBoxes() {
+        return occlusionBoundingBoxes;
+    }
+
+    private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, List<BoundingBox> boundingBoxes) {
         List<Rectangle> rSet = new ArrayList<>();
         for (BoundingBox boundingBox : boundingBoxes) {
             switch (face) {
