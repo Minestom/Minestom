@@ -71,6 +71,7 @@ allprojects {
             maven {
                 name = "bytemc"
                 url = uri("http://192.168.200.1:12192/repository/maven-snapshots/")
+                isAllowInsecureProtocol = true
 
                 credentials {
                     username = System.getenv("BYTEMC_REPO_USER")
