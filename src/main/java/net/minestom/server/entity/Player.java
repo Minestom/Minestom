@@ -2288,7 +2288,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param connection the connection to show the player to
      */
-    protected void showPlayer(@NotNull PlayerConnection connection) {
+    public void showPlayer(@NotNull PlayerConnection connection) {
         connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
