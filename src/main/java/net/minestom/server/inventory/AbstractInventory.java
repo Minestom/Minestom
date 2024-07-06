@@ -53,7 +53,19 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "Inventory does not have the slot " + slot);
-        safeItemInsert(slot, itemStack);
+        safeItemInsert(slot, itemStack, true, true);
+    }
+
+    /**
+     * Sets an {@link ItemStack} at the specified slot and send relevant update to the viewer(s).
+     *
+     * @param slot      the slot to set the item
+     * @param itemStack the item to set
+     */
+    public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack, boolean sendPacket, boolean callEvent) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+                "Inventory does not have the slot " + slot);
+        safeItemInsert(slot, itemStack, sendPacket, callEvent);
     }
 
     /**
@@ -66,7 +78,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param itemStack the item to insert (use air instead of null)
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      */
-    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
+    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket, boolean callEvent) {
         ItemStack previous;
         synchronized (this) {
             Check.argCondition(
@@ -78,15 +90,17 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
             UNSAFE_itemInsert(slot, itemStack, sendPacket);
         }
-        if (this instanceof PlayerInventory inv) {
-            EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
-        } else if (this instanceof Inventory inv) {
-            EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
+        if (callEvent) {
+            if (this instanceof PlayerInventory inv) {
+                EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
+            } else if (this instanceof Inventory inv) {
+                EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
+            }
         }
     }
 
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        safeItemInsert(slot, itemStack, true);
+        safeItemInsert(slot, itemStack, true, true);
     }
 
     protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket);
@@ -167,7 +181,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public synchronized void clear() {
         // Clear the item array
         for (int i = 0; i < size; i++) {
-            safeItemInsert(i, ItemStack.AIR, false);
+            safeItemInsert(i, ItemStack.AIR, false, true);
         }
         // Send the cleared inventory to viewers
         update();
