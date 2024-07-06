@@ -26,6 +26,3 @@ jobs:
         filter_mode: added
         # Exit code for reviewdog when errors are found [true,false].
         fail_on_error: false
-        # Checkstyle config file
-        checkstyle_config: minestom_checks.xml
-        checkstyle_version: "8.42"
