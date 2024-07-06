@@ -8,7 +8,7 @@ plugins {
 }
 
 // Read env vars (used for publishing generally)
-version = System.getenv("MINESTOM_VERSION") ?: "dev"
+version = "1.21.0-SNAPSHOT"
 val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
 
 val shortDescription = "1.21 Lightweight Minecraft server"
@@ -70,11 +70,11 @@ allprojects {
         repositories {
             maven {
                 name = "bytemc"
-                url = uri("https://nexus.bytemc.de/repository/maven-public/")
+                url = uri("http://192.168.200.1:12192/repository/maven-snapshots/")
 
                 credentials {
-                    username = System.getenv("BYTEMC_PUBLIC_USER")
-                    password = System.getenv("BYTEMC_PUBLIC_PASSWORD")
+                    username = System.getenv("BYTEMC_REPO_USER")
+                    password = System.getenv("BYTEMC_REPO_PASSWORD")
                 }
             }
         }
