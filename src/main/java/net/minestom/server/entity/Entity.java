@@ -41,6 +41,7 @@ import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.Acquirable;
+import net.minestom.server.thread.AcquirableSource;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -78,7 +79,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
+        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     // Certain entities should only have their position packets sent during synchronization
@@ -279,17 +280,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *                 can be null or empty to only load the chunk at {@code position}
      * @param flags    flags used to teleport the entity relatively rather than absolutely
      *                 use {@link RelativeFlags} to see available flags
+     * @param shouldConfirm if false, the teleportation will be done without confirmation
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+                                                     boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -306,6 +309,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             endCallback.run();
             return AsyncUtils.empty();
         }
+    }
+
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        return teleport(position, chunks, flags, true);
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
@@ -1562,11 +1570,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return HoverEvent.showEntity(ShowEntity.showEntity(this.entityType, this.uuid));
     }
 
-    @ApiStatus.Experimental
-    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
-        return (Acquirable<T>) acquirable;
-    }
-
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
@@ -1724,6 +1727,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     public boolean hasCollision() {
         return hasCollision;
+    }
+
+    /**
+     * Acquires this entity.
+     *
+     * @deprecated It's preferred to use {@link AcquirableSource#acquirable()} instead, as it is overridden by
+     * subclasses
+     * @return the acquirable for this entity
+     * @param <T> the type of object to be acquired
+     */
+    @Deprecated
+    @ApiStatus.Experimental
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends Entity> acquirable() {
+        return acquirable;
     }
 
     public enum Pose {

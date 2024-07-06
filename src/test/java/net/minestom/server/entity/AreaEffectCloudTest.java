@@ -53,7 +53,7 @@ public class AreaEffectCloudTest {
 
         float size = 0.1f;
 
-        Particle particle = Particle.DUST_COLOR_TRANSITION.withProperties(new Color(r, g, b), size, new Color(r2, g2, b2));
+        Particle particle = Particle.DUST_COLOR_TRANSITION.withProperties(new Color(r, g, b), new Color(r2, g2, b2), size);
 
         Entity entity = new Entity(EntityTypes.AREA_EFFECT_CLOUD);
         AreaEffectCloudMeta meta = (AreaEffectCloudMeta) entity.getEntityMeta();

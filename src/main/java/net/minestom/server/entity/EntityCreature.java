@@ -8,7 +8,9 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -146,4 +148,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         attack(target, false);
     }
 
+    @SuppressWarnings("unchecked")
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends EntityCreature> acquirable() {
+        return (Acquirable<? extends EntityCreature>) super.acquirable();
+    }
 }

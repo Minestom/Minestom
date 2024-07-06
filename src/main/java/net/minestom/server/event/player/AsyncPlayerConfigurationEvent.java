@@ -2,12 +2,12 @@ package net.minestom.server.event.player;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
+import net.minestom.server.FeatureFlag;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
 import net.minestom.server.network.packet.server.configuration.UpdateEnabledFeaturesPacket;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +26,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     private final Player player;
     private final boolean isFirstConfig;
 
-    private final ObjectArraySet<NamespaceID> featureFlags = new ObjectArraySet<>();
+    private final ObjectArraySet<FeatureFlag> featureFlags = new ObjectArraySet<>();
     private boolean hardcore;
     private boolean clearChat;
     private boolean sendRegistryData;
@@ -36,7 +36,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
         this.player = player;
         this.isFirstConfig = isFirstConfig;
 
-        this.featureFlags.add(NamespaceID.from("minecraft:vanilla")); // Vanilla feature-set, without this you get nothing at all. Kinda wacky!
+        this.featureFlags.add(FeatureFlag.VANILLA); // Vanilla feature-set, without this you get nothing at all. Kinda wacky!
 
         this.hardcore = false;
         this.clearChat = false;
@@ -71,8 +71,9 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @param feature A minecraft feature flag
      *
      * @see UpdateEnabledFeaturesPacket
+     * @see net.minestom.server.FeatureFlag
      */
-    public void addFeatureFlag(@NotNull NamespaceID feature) {
+    public void addFeatureFlag(@NotNull FeatureFlag feature) {
         this.featureFlags.add(feature);
     }
 
@@ -84,8 +85,9 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @return if the feature specified existed prior to being removed
      *
      * @see UpdateEnabledFeaturesPacket
+     * @see net.minestom.server.FeatureFlag
      */
-    public boolean removeFeatureFlag(@NotNull NamespaceID feature) {
+    public boolean removeFeatureFlag(@NotNull FeatureFlag feature) {
         return this.featureFlags.remove(feature); // Should this have sanity checking to see if the feature was actually contained in the list?
     }
 
@@ -95,8 +97,9 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
      * @return An unmodifiable set of feature flags
      *
      * @see UpdateEnabledFeaturesPacket
+     * @see net.minestom.server.FeatureFlag
      */
-    public @NotNull Set<NamespaceID> getFeatureFlags() {
+    public @NotNull Set<FeatureFlag> getFeatureFlags() {
         return ObjectSets.unmodifiable(this.featureFlags);
     }
 

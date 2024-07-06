@@ -14,6 +14,8 @@ import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEve
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.thread.Acquirable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -177,5 +179,12 @@ public class PlayerProjectile extends Entity {
             var e = new ProjectileCollideWithBlockEvent(this, Pos.fromPoint(hitPoint), hitBlock);
             MinecraftServer.getGlobalEventHandler().call(e);
         }
+    }
+
+    @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Acquirable<? extends PlayerProjectile> acquirable() {
+        return (Acquirable<? extends PlayerProjectile>) super.acquirable();
     }
 }
