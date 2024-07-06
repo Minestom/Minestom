@@ -39,7 +39,7 @@ public class TeamBuilder {
      * @param team        The new team
      * @param teamManager The manager for the team
      */
-    private TeamBuilder(Team team, TeamManager teamManager) {
+    protected TeamBuilder(Team team, TeamManager teamManager) {
         this.team = team;
         this.teamManager = teamManager;
         this.updateTeam = false;

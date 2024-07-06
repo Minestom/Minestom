@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * An object which manages all the {@link Team}'s
  */
-public final class TeamManager {
+public class TeamManager {
 
     /**
      * Represents all registered teams
