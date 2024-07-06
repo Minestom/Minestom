@@ -43,6 +43,7 @@ adventure-serializer-gson = { group = "net.kyori", name = "adventure-text-serial
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logger-slf4j", version.ref = "adventure" }
+adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 
 # Miscellaneous
 minestomData = { group = "net.minestom", name = "data", version.ref = "data" }
@@ -80,7 +81,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 [bundles]
 
 flare = ["flare", "flare-fastutil"]
-adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
+adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j", "adventure-text-minimessage"]
 junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine"]
 logback = ["logback-core", "logback-classic"]
 
