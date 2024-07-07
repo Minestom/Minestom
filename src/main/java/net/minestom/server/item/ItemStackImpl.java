@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
@@ -154,6 +155,21 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         public <T> ItemStack.@NotNull Builder set(@NotNull DataComponent<T> component, T value) {
             components.set(component, value);
             return this;
+        }
+
+        @Override
+        public <T> @Nullable T get(@NotNull DataComponent<T> component) {
+            return components.get(component);
+        }
+
+        @Override
+        public <T> @NotNull T get(@NotNull DataComponent<T> component, T value) {
+            return components.get(component, value);
+        }
+
+        @Override
+        public <T> boolean has(@NotNull DataComponent<T> component) {
+            return components.has(component);
         }
 
         @Override

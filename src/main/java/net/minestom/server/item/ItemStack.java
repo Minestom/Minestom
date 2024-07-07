@@ -274,6 +274,15 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         }
 
         @Contract(value = "_ -> this")
+        <T> @Nullable T get(@NotNull DataComponent<T> component);
+
+        @Contract(value = "_, _ -> this")
+        <T> @NotNull T get(@NotNull DataComponent<T> component, T value);
+
+        @Contract(value = "_ -> this")
+        <T> boolean has(@NotNull DataComponent<T> component);
+
+        @Contract(value = "_ -> this")
         @NotNull Builder remove(@NotNull DataComponent<?> component);
 
         default @NotNull Builder customName(@NotNull Component customName) {
