@@ -128,7 +128,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     static final class Builder implements ItemStack.Builder {
-        private final Material material;
+        private Material material;
         private int amount;
         private DataComponentMap.PatchBuilder components;
 
@@ -142,6 +142,12 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
             this.material = material;
             this.amount = amount;
             this.components = DataComponentMap.patchBuilder();
+        }
+
+        @Override
+        public ItemStack.@NotNull Builder material(@NotNull Material material) {
+            this.material = material;
+            return this;
         }
 
         @Override
