@@ -37,7 +37,8 @@ import java.util.function.UnaryOperator;
 public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 
-    @NotNull NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    @NotNull
+    NetworkBuffer.Type<ItemStack> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
             if (value.isAir()) {
@@ -59,19 +60,22 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
             return ItemStackImpl.create(material, amount, components);
         }
     };
-    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
+    @NotNull
+    NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
         Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
         return itemStack;
     }, itemStack -> {
         Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
         return itemStack;
     });
-    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
+    @NotNull
+    BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
-    @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
+    @NotNull
+    ItemStack AIR = ItemStack.of(Material.AIR);
 
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Builder builder(@NotNull Material material) {
@@ -109,19 +113,23 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     }
 
     @Contract(pure = true)
-    @NotNull Material material();
+    @NotNull
+    Material material();
 
     @Contract(pure = true)
     int amount();
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> consumer);
+    @NotNull
+    ItemStack with(@NotNull Consumer<@NotNull Builder> consumer);
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack withMaterial(@NotNull Material material);
+    @NotNull
+    ItemStack withMaterial(@NotNull Material material);
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack withAmount(int amount);
+    @NotNull
+    ItemStack withAmount(int amount);
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
@@ -151,13 +159,27 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * Applies a transformation to the value of a component, only if present.
      *
      * @param component The component type to modify
-     * @param operator The transformation function
+     * @param operator  The transformation function
+     * @param <T>       The component type
      * @return A new ItemStack if the component was transformed, otherwise this.
-     * @param <T> The component type
      */
     default <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, @NotNull UnaryOperator<T> operator) {
         T value = get(component);
         if (value == null) return this;
+        return with(component, operator.apply(value));
+    }
+
+    /**
+     * Applies a transformation to the value of a component, if not present, uses the supplied default value.
+     *
+     * @param component    The component type to modify
+     * @param defaultValue The value which is used if not present
+     * @param operator     The transformation function
+     * @param <T>          The component type
+     * @return A new ItemStack if the component was transformed, otherwise this.
+     */
+    default <T> @NotNull ItemStack with(@NotNull DataComponent<T> component, T defaultValue, @NotNull UnaryOperator<T> operator) {
+        T value = get(component, defaultValue);
         return with(component, operator.apply(value));
     }
 
@@ -173,7 +195,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * @return A new ItemStack without the given component
      */
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack without(@NotNull DataComponent<?> component);
+    @NotNull
+    ItemStack without(@NotNull DataComponent<?> component);
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withCustomName(@NotNull Component customName) {
@@ -227,7 +250,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     }
 
     @Contract(value = "_, -> new", pure = true)
-    @NotNull ItemStack consume(int amount);
+    @NotNull
+    ItemStack consume(int amount);
 
     @Contract(pure = true)
     default boolean isAir() {
@@ -239,16 +263,19 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
     /**
      * Converts this itemstack back into a builder (starting from the current state).
+     *
      * @return this itemstack, as a builder.
      */
-    @NotNull ItemStack.Builder builder();
+    @NotNull
+    ItemStack.Builder builder();
 
     /**
      * Converts this item to an NBT tag containing the id (material), count (amount), and components (diff)
      *
      * @return The nbt representation of the item
      */
-    @NotNull CompoundBinaryTag toItemNBT();
+    @NotNull
+    CompoundBinaryTag toItemNBT();
 
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
@@ -263,7 +290,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     sealed interface Builder extends TagWritable permits ItemStackImpl.Builder {
 
         @Contract(value = "_ -> this")
-        @NotNull Builder amount(int amount);
+        @NotNull
+        Builder amount(int amount);
 
         @Contract(value = "_, _ -> this")
         <T> @NotNull Builder set(@NotNull DataComponent<T> component, T value);
@@ -283,7 +311,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         <T> boolean has(@NotNull DataComponent<T> component);
 
         @Contract(value = "_ -> this")
-        @NotNull Builder remove(@NotNull DataComponent<?> component);
+        @NotNull
+        Builder remove(@NotNull DataComponent<?> component);
 
         default @NotNull Builder customName(@NotNull Component customName) {
             return set(ItemComponent.CUSTOM_NAME, customName);
@@ -320,7 +349,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
          * present. This is because armor flags in tooltips use attribute modifiers show flag to display or not, but
          * are not actually based on the attribute modifiers component.</p>
          */
-        @NotNull Builder hideExtraTooltip();
+        @NotNull
+        Builder hideExtraTooltip();
 
         @Contract(value = "_, _ -> this")
         default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
@@ -329,7 +359,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         }
 
         @Contract(value = "-> new", pure = true)
-        @NotNull ItemStack build();
+        @NotNull
+        ItemStack build();
 
     }
 }
