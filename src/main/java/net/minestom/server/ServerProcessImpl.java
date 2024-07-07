@@ -144,8 +144,6 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.dispatcher = ThreadDispatcher.singleThread();
         this.ticker = new TickerImpl();
-
-        this.pluginManager.loadPlugins();
     }
 
     @Override
@@ -325,6 +323,9 @@ final class ServerProcessImpl implements ServerProcess {
         }
 
         LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Loading plugins...");
+
+        pluginManager.loadPlugins();
 
         // Init server
         try {
