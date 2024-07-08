@@ -1,5 +1,6 @@
 package net.minestom.server.particle;
 
+import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -43,7 +44,7 @@ final class ParticleImpl {
             case "minecraft:item" -> new Particle.Item(namespace, id, ItemStack.AIR);
             case "minecraft:vibration" -> new Particle.Vibration(namespace, id, Particle.Vibration.SourceType.BLOCK, Vec.ZERO, 0, 0, 0);
             case "minecraft:shriek" -> new Particle.Shriek(namespace, id, 0);
-            case "minecraft:entity_effect" -> new Particle.EntityEffect(namespace, id, new Color(0));
+            case "minecraft:entity_effect" -> new Particle.EntityEffect(namespace, id, new AlphaColor(255, 0, 0, 0));
             default -> new Particle.Simple(namespace, id);
         };
     }
