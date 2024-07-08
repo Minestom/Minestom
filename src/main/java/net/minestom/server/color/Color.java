@@ -80,6 +80,10 @@ public class Color implements RGBLike {
         return new Color(red, green, blue);
     }
 
+    public @NotNull AlphaColor withAlpha(int alpha) {
+        return new AlphaColor(alpha, red, green, blue);
+    }
+
     /**
      * Gets the color as an RGB integer.
      *

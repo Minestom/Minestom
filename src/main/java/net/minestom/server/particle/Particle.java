@@ -264,6 +264,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Contract(pure = true)
+        public @NotNull EntityEffect withColor(@NotNull RGBLike color) {
+            return new EntityEffect(namespace(), id(), new AlphaColor(1, color));
+        }
+
+        @Contract(pure = true)
         public @NotNull EntityEffect withColor(int alpha, @NotNull RGBLike color) {
             return new EntityEffect(namespace(), id(), new AlphaColor(alpha, color));
         }
