@@ -103,7 +103,9 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 
  <p>The spawning instance <b>must</b> be set for the player to join.</p>
 
- <p>The event is called off the tick threads, so it is safe to block here</p></div>
+ <p>The event is called off the tick threads, so it is safe to block here</p>
+
+ <p>It is valid to kick a player using <a href="../../entity/Player.html#kick(net.kyori.adventure.text.Component)"><code>Player.kick(net.kyori.adventure.text.Component)</code></a> during this event.</p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
