@@ -114,30 +114,40 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#block()" class="member-name-link">block</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectBox(net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">intersectBox</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
- @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionBoundingBoxes()" class="member-name-link">collisionBoundingBoxes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Checks if two bounding boxes intersect.</div>
+<div class="block">Gets the collision bounding boxes for this block.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectBoxSwept(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox,net.minestom.server.collision.SweepResult)" class="member-name-link">intersectBoxSwept</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayStart,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectBox(net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">intersectBox</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Checks if two bounding boxes intersect.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#intersectBoxSwept(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox,net.minestom.server.collision.SweepResult)" class="member-name-link">intersectBoxSwept</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayStart,
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;rayDirection,
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;shapePos,
  @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;moving,
  @NotNull <a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a>&nbsp;finalResult)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks if a moving bounding box will hit this shape.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFaceFull(net.minestom.server.instance.block.BlockFace)" class="member-name-link">isFaceFull</a><wbr>(@NotNull <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFaceFull(net.minestom.server.instance.block.BlockFace)" class="member-name-link">isFaceFull</a><wbr>(@NotNull <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns true if the given block face is completely covered by this shape, false otherwise.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isOccluded(net.minestom.server.collision.Shape,net.minestom.server.instance.block.BlockFace)" class="member-name-link">isOccluded</a><wbr>(@NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>&nbsp;shape,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isOccluded(net.minestom.server.collision.Shape,net.minestom.server.instance.block.BlockFace)" class="member-name-link">isOccluded</a><wbr>(@NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>&nbsp;shape,
  @NotNull <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#occlusionBoundingBoxes()" class="member-name-link">occlusionBoundingBoxes</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the occlusion bounding boxes for this block.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relativeEnd()" class="member-name-link">relativeEnd</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -279,6 +289,31 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 <section class="detail" id="block()">
 <h3>block</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></span>&nbsp;<span class="element-name">block</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="collisionBoundingBoxes()">
+<h3>collisionBoundingBoxes</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&gt;</span>&nbsp;<span class="element-name">collisionBoundingBoxes</span>()</div>
+<div class="block">Gets the collision bounding boxes for this block. There will be more than one bounds for more complex shapes e.g.
+ stairs.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the collision bounding boxes for this block</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="occlusionBoundingBoxes()">
+<h3>occlusionBoundingBoxes</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&gt;</span>&nbsp;<span class="element-name">occlusionBoundingBoxes</span>()</div>
+<div class="block">Gets the occlusion bounding boxes for this block.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the occlusion bounding boxes for this block</dd>
+</dl>
 </section>
 </li>
 </ul>
