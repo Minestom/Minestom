@@ -429,8 +429,15 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Called each tick.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateNewViewer(net.minestom.server.entity.Player)" class="member-name-link">updateNewViewer</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateEquipmentAttributes(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.entity.EquipmentSlot)" class="member-name-link">updateEquipmentAttributes</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;oldItemStack,
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;newItemStack,
+ @NotNull <a href="EquipmentSlot.html" title="enum class in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Updates the current attributes of the living entity based on</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateNewViewer(net.minestom.server.entity.Player)" class="member-name-link">updateNewViewer</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a new viewer must be shown.</div>
 </div>
 </div>
@@ -733,6 +740,25 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <dd><code><a href="../inventory/EquipmentHandler.html#setBoots(net.minestom.server.item.ItemStack)">setBoots</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>itemStack</code> - the boots</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateEquipmentAttributes(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.entity.EquipmentSlot)">
+<h3>updateEquipmentAttributes</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateEquipmentAttributes</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;oldItemStack,
+ @NotNull
+ @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;newItemStack,
+ @NotNull
+ @NotNull <a href="EquipmentSlot.html" title="enum class in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</span></div>
+<div class="block">Updates the current attributes of the living entity based on</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>oldItemStack</code> - The ItemStack that has been removed, modifiers on this stack will be removed from the entity</dd>
+<dd><code>newItemStack</code> - The ItemStack that has been added, modifiers on this stack will be added to the entity</dd>
+<dd><code>slot</code> - The slot that changed, this will determine what modifiers are actually changed</dd>
 </dl>
 </section>
 </li>
