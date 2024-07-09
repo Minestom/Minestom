@@ -18,7 +18,7 @@ public class AcquirableTest {
             @Override
             public void tick(long time) {
                 super.tick(time);
-                tickThread.set(getAcquirable().assignedThread());
+                tickThread.set(acquirable().assignedThread());
             }
         };
         Object first = new Object();

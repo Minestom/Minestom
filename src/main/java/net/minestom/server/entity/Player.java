@@ -82,6 +82,7 @@ import net.minestom.server.snapshot.PlayerSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.statistic.PlayerStatistic;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -2201,8 +2202,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param slot the new held slot
      */
     public void refreshHeldSlot(byte slot) {
+        byte oldHeldSlot = this.heldSlot;
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
+        updateEquipmentAttributes(inventory.getItemStack(oldHeldSlot), inventory.getItemStack(this.heldSlot), EquipmentSlot.MAIN_HAND);
         clearItemUse();
     }
 
@@ -2566,4 +2569,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return Integer.compare(chunkDistanceA, chunkDistanceB);
     }
 
+    @SuppressWarnings("unchecked")
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends Player> acquirable() {
+        return (Acquirable<? extends Player>) super.acquirable();
+    }
 }

@@ -263,6 +263,9 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     sealed interface Builder extends TagWritable permits ItemStackImpl.Builder {
 
         @Contract(value = "_ -> this")
+        @NotNull Builder material(@NotNull Material material);
+
+        @Contract(value = "_ -> this")
         @NotNull Builder amount(int amount);
 
         @Contract(value = "_, _ -> this")

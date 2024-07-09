@@ -99,12 +99,9 @@ public final class AttributeInstance {
      * @return the old modifier, or null if none
      */
     public AttributeModifier addModifier(@NotNull AttributeModifier modifier) {
-        final AttributeModifier old = modifiers.putIfAbsent(modifier.id(), modifier);
-        if (old == null) {
-            refreshCachedValue();
-        }
-
-        return old;
+        final AttributeModifier previousModifier = modifiers.put(modifier.id(), modifier);
+        if (!modifier.equals(previousModifier)) refreshCachedValue();
+        return previousModifier;
     }
 
     /**

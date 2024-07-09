@@ -7,12 +7,14 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * A general purpose class for representing colors.
  * <p>
  * Colors must be in the range of 0-255.
  */
-public record Color(int red, int green, int blue) implements RGBLike {
+public class Color implements RGBLike {
     private static final int BIT_MASK = 0xff;
 
     public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = new NetworkBuffer.Type<RGBLike>() {
@@ -28,16 +30,17 @@ public record Color(int red, int green, int blue) implements RGBLike {
     };
     public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
             .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
+    private final int red;
+    private final int green;
+    private final int blue;
 
-    public static @NotNull Color fromRGBLike(@NotNull RGBLike rgbLike) {
-        if (rgbLike instanceof Color color) return color;
-        return new Color(rgbLike.red(), rgbLike.green(), rgbLike.blue());
-    }
-
-    public Color {
+    public Color(int red, int green, int blue) {
         Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
         Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
         Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
 
     /**
@@ -60,6 +63,11 @@ public record Color(int red, int green, int blue) implements RGBLike {
         this(rgbLike.red(), rgbLike.green(), rgbLike.blue());
     }
 
+    public static @NotNull Color fromRGBLike(@NotNull RGBLike rgbLike) {
+        if (rgbLike instanceof Color color) return color;
+        return new Color(rgbLike.red(), rgbLike.green(), rgbLike.blue());
+    }
+
     public @NotNull Color withRed(int red) {
         return new Color(red, green, blue);
     }
@@ -70,6 +78,10 @@ public record Color(int red, int green, int blue) implements RGBLike {
 
     public @NotNull Color withBlue(int blue) {
         return new Color(red, green, blue);
+    }
+
+    public @NotNull AlphaColor withAlpha(int alpha) {
+        return new AlphaColor(alpha, red, green, blue);
     }
 
     /**
@@ -137,5 +149,43 @@ public record Color(int red, int green, int blue) implements RGBLike {
     @Deprecated
     public int getBlue() {
         return this.blue;
+    }
+
+    @Override
+    public int red() {
+        return red;
+    }
+
+    @Override
+    public int green() {
+        return green;
+    }
+
+    @Override
+    public int blue() {
+        return blue;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Color) obj;
+        return this.red == that.red &&
+                this.green == that.green &&
+                this.blue == that.blue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(red, green, blue);
+    }
+
+    @Override
+    public String toString() {
+        return "Color[" +
+                "red=" + red + ", " +
+                "green=" + green + ", " +
+                "blue=" + blue + ']';
     }
 }

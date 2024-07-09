@@ -19,6 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface IChunkLoader {
 
+    static @NotNull IChunkLoader noop() {
+        return NoopChunkLoaderImpl.INSTANCE;
+    }
+
     /**
      * Loads instance data from the loader.
      *
