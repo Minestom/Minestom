@@ -420,6 +420,15 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Gets the entity max health.
+     *
+     * @return the entity max health
+     */
+    public float getMaxHealth() {
+        return (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH);
+    }
+
+    /**
      * Gets the last damage source which damaged of this entity.
      *
      * @return the last damage source, null if not any
