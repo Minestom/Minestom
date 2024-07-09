@@ -182,6 +182,10 @@ public class InstanceContainer extends Instance {
 
                 block = blockPlacementRule.blockPlace(rulePlacement);
                 if (block == null) block = Block.AIR;
+
+                if (placement instanceof BlockHandler.PlayerPlacement pp && block.handler() != null) {
+                    block.handler().setPlacedBy(pp);
+                }
             }
 
             // Set the block

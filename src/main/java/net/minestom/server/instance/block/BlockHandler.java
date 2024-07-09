@@ -49,6 +49,16 @@ public interface BlockHandler {
     }
 
     /**
+     * Called when a blocked has been placed by a player.
+     * <p>
+     * This can be used to update skulls, place bed heads, door tops...
+     *
+     * @param placement the placement details
+     */
+    default void setPlacedBy(@NotNull PlayerPlacement placement) {
+    }
+
+    /**
      * Defines custom behaviour for entities touching this block.
      *
      * @param touch the contact details
