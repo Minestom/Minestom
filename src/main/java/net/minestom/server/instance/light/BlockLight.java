@@ -216,7 +216,7 @@ final class BlockLight implements Light {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
         var res = bake(contentPropagation, content);
-        if (Arrays.equals(res, emptyContent)) return new byte[0];
+        if (res == emptyContent) return new byte[0];
         return res;
     }
 
@@ -255,10 +255,12 @@ final class BlockLight implements Light {
 
     private byte[] bake(byte[] content1, byte[] content2) {
         if (content1 == null && content2 == null) return emptyContent;
-        if (Arrays.equals(content1, emptyContent) && Arrays.equals(content2, emptyContent)) return emptyContent;
+        if (content1 == emptyContent && content2 == emptyContent) return emptyContent;
 
         if (content1 == null) return content2;
         if (content2 == null) return content1;
+
+        if (Arrays.equals(content1, emptyContent) && Arrays.equals(content2, emptyContent)) return emptyContent;
 
         byte[] lightMax = new byte[LIGHT_LENGTH];
         for (int i = 0; i < content1.length; i++) {
