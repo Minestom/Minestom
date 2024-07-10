@@ -12,6 +12,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -287,6 +288,8 @@ final class SkyLight implements Light {
 
         if (content1 == null) return content2;
         if (content2 == null) return content1;
+
+        if (Arrays.equals(content1, emptyContent) && Arrays.equals(content2, emptyContent)) return emptyContent;
 
         byte[] lightMax = new byte[LIGHT_LENGTH];
         for (int i = 0; i < content1.length; i++) {
