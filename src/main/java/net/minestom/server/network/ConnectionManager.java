@@ -381,6 +381,11 @@ public final class ConnectionManager {
             playPlayers.add(player);
             keepAlivePlayers.add(player);
 
+            // This fixes a bug with Geyser. They do not reply to keep alive during config, meaning that
+            // `Player#didAnswerKeepAlive()` will always be false when entering the play state, so a new keep
+            // alive will never be sent and they will disconnect themselves or we will kick them for not replying.
+            player.refreshAnswerKeepAlive(true);
+
             // Spawn the player at Player#getRespawnPoint
             CompletableFuture<Void> spawnFuture = player.UNSAFE_init();
 
