@@ -121,7 +121,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the default block
      */
     @Contract(pure = true)
-    @NotNull Block original();
+    @NotNull Block defaultState();
 
     /**
      * Returns a property value from {@link #properties()}.

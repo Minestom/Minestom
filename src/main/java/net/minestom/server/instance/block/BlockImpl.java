@@ -178,8 +178,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     }
 
     @Override
-    public @NotNull Block original() {
-        return Block.fromNamespaceId(name());
+    public @NotNull Block defaultState() {
+        return Block.fromBlockId(id());
     }
 
     @Override
