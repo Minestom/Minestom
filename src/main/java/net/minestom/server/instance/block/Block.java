@@ -115,6 +115,15 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @NotNull Map<String, String> properties();
 
     /**
+     * Returns this block type with default properties, no tags and no handler.
+     * As found in the {@link Blocks} listing.
+     *
+     * @return the default block
+     */
+    @Contract(pure = true)
+    @NotNull Block original();
+
+    /**
      * Returns a property value from {@link #properties()}.
      *
      * @param property the property name

@@ -178,6 +178,11 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     }
 
     @Override
+    public @NotNull Block original() {
+        return Block.fromNamespaceId(name());
+    }
+
+    @Override
     public @NotNull Collection<@NotNull Block> possibleStates() {
         return Collection.class.cast(possibleProperties().values());
     }
