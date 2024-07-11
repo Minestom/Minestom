@@ -72,4 +72,22 @@ public class EntityAttributeTest {
         player.setItemInMainHand(ItemStack.AIR);
         assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth));
     }
+
+    @Test
+    public void testDirectlyAddAttributes(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 1)).join();
+
+        double baseHealth = 20;
+        double addition = 10;
+        // Don't compare against base health first (that will initialize the attribute, and we want to make sure we don't error when we add an item with attribute modifiers)
+
+        ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
+                new AttributeList(new AttributeList.Modifier(Attribute.GENERIC_MAX_HEALTH,
+                        new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
+
+        player.setItemInMainHand(itemStack);
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth + addition));
+    }
 }
