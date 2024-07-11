@@ -16,6 +16,7 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
@@ -643,6 +644,8 @@ public final class Registry {
         private final double height;
         private final double eyeHeight;
         private final BoundingBox boundingBox;
+        private final Vec passengerAttachment;
+        private final Vec vehicleAttachment;
         private final Properties custom;
 
         public EntityEntry(String namespace, Properties main, Properties custom) {
@@ -661,9 +664,8 @@ public final class Registry {
 
             // Attachments
             Properties attachments = main.section("attachments");
-            if (attachments != null) {
-                //todo
-            }
+            vehicleAttachment = createAttachmentPoint(attachments, "VEHICLE", Vec.ZERO);
+            passengerAttachment = createAttachmentPoint(attachments, "PASSENGER", new Vec(0, height, 0));
 
             this.custom = custom;
         }
@@ -708,9 +710,28 @@ public final class Registry {
             return boundingBox;
         }
 
+        public @NotNull Vec passengerAttachment() {
+            return passengerAttachment;
+        }
+
+        public @NotNull Vec vehicleAttachment() {
+            return vehicleAttachment;
+        }
+
         @Override
         public Properties custom() {
             return custom;
+        }
+
+        private static @NotNull Vec createAttachmentPoint(@Nullable Properties attachments, @NotNull String name,
+                                                          @NotNull Vec defaultAttachment) {
+            if (attachments == null) return defaultAttachment;
+            // For some reason the points come packed in a List<Double>, always size 1
+            List<List<Double>> list = attachments.getList(name);
+            if (list == null || list.isEmpty()) return defaultAttachment;
+
+            List<Double> points = list.getFirst();
+            return new Vec(points.get(0), points.get(1), points.get(2));
         }
     }
 
@@ -1007,6 +1028,11 @@ public final class Registry {
         }
 
         @Override
+        public <T> List<T> getList(String name) {
+            return element(name);
+        }
+
+        @Override
         public Properties section(String name) {
             Map<String, Object> map = element(name);
             if (map == null) return null;
@@ -1061,6 +1087,8 @@ public final class Registry {
         boolean getBoolean(String name, boolean defaultValue);
 
         boolean getBoolean(String name);
+
+        <T> List<T> getList(String name);
 
         Properties section(String name);
 

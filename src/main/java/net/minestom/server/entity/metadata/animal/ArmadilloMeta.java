@@ -1,7 +1,10 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.AbstractAgeableMeta;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,6 +14,17 @@ public class ArmadilloMeta extends AnimalMeta {
 
     public ArmadilloMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
+    }
+
+    @Override
+    public void setBaby(boolean value) {
+        if (isBaby() == value) return;
+        this.consumeEntity((entity) -> {
+            BoundingBox bb = entity.getEntityType().registry().boundingBox();
+            if (value) entity.setBoundingBox(bb.width() * 0.6, bb.height() * 0.6, bb.depth() * 0.6);
+            else entity.setBoundingBox(bb);
+        });
+        super.metadata.setIndex(AbstractAgeableMeta.OFFSET, Metadata.Boolean(value));
     }
 
     @NotNull
