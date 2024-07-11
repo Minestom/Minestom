@@ -234,6 +234,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final Identity identity;
     private final Pointers pointers;
 
+    private String clientBrand = "vanilla";
+
     // Resource packs
     record PendingResourcePack(boolean required, @NotNull ResourcePackCallback callback) {
     }
@@ -2424,6 +2426,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
         chunkUpdateLimitChecker.clearHistory();
         return super.teleport(position, chunks, flags);
+    }
+
+
+    @ApiStatus.Internal
+    public void refreshClientBrand(String clientBrand) {
+        this.clientBrand = clientBrand;
+    }
+
+    /**
+     * @return the brand sent by the client
+     */
+    public String getClientBrand() {
+        return clientBrand;
     }
 
     /**
