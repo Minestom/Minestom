@@ -48,6 +48,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -92,7 +93,6 @@ import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
-import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -647,7 +647,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         final Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
-        if (InstanceUtils.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
+        if (SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
             spawnPlayer(instance, spawnPosition, false, false, false);
@@ -1861,8 +1861,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
      * in properties where a {@link PlayerPositionAndLookPacket} is required
      *
-     * @param position the position used by {@link PlayerPositionAndLookPacket}
-     *                 this may not be the same as the {@link Entity#position}
+     * @param position      the position used by {@link PlayerPositionAndLookPacket}
+     *                      this may not be the same as the {@link Entity#position}
      * @param relativeFlags byte flags used by {@link PlayerPositionAndLookPacket}
      * @param shouldConfirm if false, the teleportation will be done without confirmation
      */
