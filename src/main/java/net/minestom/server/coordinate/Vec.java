@@ -227,6 +227,10 @@ public record Vec(double x, double y, double z) implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec normalize() {
+        if (isNormalized()) {
+            return this;
+        }
+
         final double length = length();
         return new Vec(x / length, y / length, z / length);
     }
@@ -237,7 +241,7 @@ public record Vec(double x, double y, double z) implements Point {
      * @return whether the vector is normalised
      */
     public boolean isNormalized() {
-        return Math.abs(lengthSquared() - 1) < EPSILON;
+        return length() < EPSILON;
     }
 
     /**
