@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ public class AbstractArrowMeta extends EntityMeta {
     private final static byte CRITICAL_BIT = 0x01;
     private final static byte NO_CLIP_BIT = 0x02;
 
-    protected AbstractArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    protected AbstractArrowMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

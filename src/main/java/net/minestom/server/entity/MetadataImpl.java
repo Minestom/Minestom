@@ -29,7 +29,7 @@ final class MetadataImpl {
     static {
         EMPTY_VALUES.set(TYPE_BYTE, Byte((byte) 0));
         EMPTY_VALUES.set(TYPE_VARINT, VarInt(0));
-        EMPTY_VALUES.set(TYPE_LONG, Long(0L));
+        EMPTY_VALUES.set(TYPE_LONG, VarLong(0L));
         EMPTY_VALUES.set(TYPE_FLOAT, Float(0f));
         EMPTY_VALUES.set(TYPE_STRING, String(""));
         EMPTY_VALUES.set(TYPE_CHAT, Chat(Component.empty()));

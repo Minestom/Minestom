@@ -43,7 +43,7 @@ import java.util.function.BiFunction;
 record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
     private static final Registry.Container<EntityType> CONTAINER = Registry.createStaticContainer(Registry.Resource.ENTITIES,
             (namespace, properties) -> new EntityTypeImpl(Registry.entity(namespace, properties)));
-    static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
+    static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
     static EntityType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -61,7 +61,7 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
         return CONTAINER.values();
     }
 
-    static EntityMeta createMeta(EntityType entityType, Entity entity, Metadata metadata) {
+    static EntityMeta createMeta(EntityType entityType, Entity entity, MetadataHolder metadata) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
@@ -70,8 +70,8 @@ record EntityTypeImpl(Registry.EntityEntry registry) implements EntityType {
         return name();
     }
 
-    private static Map<String, BiFunction<Entity, Metadata, EntityMeta>> createMetaMap() {
-        return Map.<String, BiFunction<Entity, Metadata, EntityMeta>>ofEntries(
+    private static Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> createMetaMap() {
+        return Map.<String, BiFunction<Entity, MetadataHolder, EntityMeta>>ofEntries(
                 Map.entry("minecraft:allay", AllayMeta::new),
                 Map.entry("minecraft:area_effect_cloud", AreaEffectCloudMeta::new),
                 Map.entry("minecraft:armadillo", ArmadilloMeta::new),

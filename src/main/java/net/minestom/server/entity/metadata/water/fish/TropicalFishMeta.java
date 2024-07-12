@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class TropicalFishMeta extends AbstractFishMeta implements ObjectDataProv
     public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    public TropicalFishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public TropicalFishMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

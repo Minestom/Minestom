@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.ambient;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class BatMeta extends AmbientCreatureMeta {
@@ -10,7 +10,7 @@ public class BatMeta extends AmbientCreatureMeta {
 
     private final static byte IS_HANGING_BIT = 0x01;
 
-    public BatMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public BatMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

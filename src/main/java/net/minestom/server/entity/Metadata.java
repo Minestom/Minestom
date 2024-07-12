@@ -12,18 +12,17 @@ import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Metadata {
@@ -35,7 +34,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, NetworkBuffer.VAR_INT);
     }
 
-    public static Entry<Long> Long(long value) {
+    public static Entry<Long> VarLong(long value) {
         return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.VAR_LONG);
     }
 
@@ -114,9 +113,13 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, Particle.NETWORK_TYPE.list(Short.MAX_VALUE));
     }
 
+    public static Entry<int[]> VillagerData(int[] data) {
+        Check.argCondition(data.length != 3, "Villager data array must have a length of 3");
+        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, NetworkBuffer.VILLAGER_DATA);
+    }
+
     public static Entry<int[]> VillagerData(int villagerType, int villagerProfession, int level) {
-        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, new int[]{villagerType, villagerProfession, level},
-                NetworkBuffer.VILLAGER_DATA);
+        return VillagerData(new int[]{villagerType, villagerProfession, level});
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {
@@ -134,7 +137,7 @@ public final class Metadata {
         });
     }
 
-    public static Entry<Entity.Pose> Pose(@NotNull Entity.Pose value) {
+    public static Entry<Entity.Pose> Pose(Entity.@NotNull Pose value) {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
@@ -208,91 +211,6 @@ public final class Metadata {
 
     private static byte nextId() {
         return (byte) NEXT_ID.getAndIncrement();
-    }
-
-    private static final VarHandle NOTIFIED_CHANGES;
-
-    static {
-        try {
-            NOTIFIED_CHANGES = MethodHandles.lookup().findVarHandle(Metadata.class, "notifyAboutChanges", boolean.class);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private final Entity entity;
-    private volatile Entry<?>[] entries = new Entry<?>[0];
-    private volatile Map<Integer, Entry<?>> entryMap = null;
-
-    @SuppressWarnings("FieldMayBeFinal")
-    private volatile boolean notifyAboutChanges = true;
-    private final Map<Integer, Entry<?>> notNotifiedChanges = new HashMap<>();
-
-    public Metadata(@Nullable Entity entity) {
-        this.entity = entity;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final Entry<?>[] entries = this.entries;
-        if (index < 0 || index >= entries.length) return defaultValue;
-        final Entry<?> entry = entries[index];
-        return entry != null ? (T) entry.value() : defaultValue;
-    }
-
-    public void setIndex(int index, @NotNull Entry<?> entry) {
-        Entry<?>[] entries = this.entries;
-        // Resize array if necessary
-        if (index >= entries.length) {
-            final int newLength = Math.max(entries.length * 2, index + 1);
-            this.entries = entries = Arrays.copyOf(entries, newLength);
-        }
-        entries[index] = entry;
-        this.entryMap = null;
-        // Send metadata packet to update viewers and self
-        final Entity entity = this.entity;
-        if (entity != null && entity.isActive()) {
-            if (!this.notifyAboutChanges) {
-                synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
-                }
-            } else {
-                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
-            }
-        }
-    }
-
-    public void setNotifyAboutChanges(boolean notifyAboutChanges) {
-        if (!NOTIFIED_CHANGES.compareAndSet(this, !notifyAboutChanges, notifyAboutChanges))
-            return;
-        if (!notifyAboutChanges) {
-            // Ask future metadata changes to be cached
-            return;
-        }
-        final Entity entity = this.entity;
-        if (entity == null || !entity.isActive()) return;
-        Map<Integer, Entry<?>> entries;
-        synchronized (this.notNotifiedChanges) {
-            Map<Integer, Entry<?>> awaitingChanges = this.notNotifiedChanges;
-            if (awaitingChanges.isEmpty()) return;
-            entries = Map.copyOf(awaitingChanges);
-            awaitingChanges.clear();
-        }
-        entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
-    }
-
-    public @NotNull Map<Integer, Entry<?>> getEntries() {
-        Map<Integer, Entry<?>> map = entryMap;
-        if (map == null) {
-            map = new HashMap<>();
-            final Entry<?>[] entries = this.entries;
-            for (int i = 0; i < entries.length; i++) {
-                final Entry<?> entry = entries[i];
-                if (entry != null) map.put(i, entry);
-            }
-            this.entryMap = Map.copyOf(map);
-        }
-        return map;
     }
 
     public sealed interface Entry<T> extends NetworkBuffer.Writer
