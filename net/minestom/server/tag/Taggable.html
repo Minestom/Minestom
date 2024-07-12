@@ -115,6 +115,16 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getAndSetTag(net.minestom.server.tag.Tag,T)" class="member-name-link">getAndSetTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ T&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Reads the current value, and then write the new one.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">getAndUpdateTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;@UnknownNullability T</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getTag(net.minestom.server.tag.Tag)" class="member-name-link">getTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
@@ -137,6 +147,14 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">updateAndGetTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">updateTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -222,6 +240,68 @@ extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code>&nbsp;in interface&nbsp;<code><a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getAndSetTag(net.minestom.server.tag.Tag,T)">
+<h3 id="getAndSetTag(net.minestom.server.tag.Tag,java.lang.Object)">getAndSetTag</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">getAndSetTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @Nullable
+ T&nbsp;value)</span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="TagWritable.html#getAndSetTag(net.minestom.server.tag.Tag,T)">TagWritable</a></code></span></div>
+<div class="block">Reads the current value, and then write the new one.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TagWritable.html#getAndSetTag(net.minestom.server.tag.Tag,T)">getAndSetTag</a></code>&nbsp;in interface&nbsp;<code><a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - the tag type</dd>
+<dt>Parameters:</dt>
+<dd><code>tag</code> - the tag to write</dd>
+<dd><code>value</code> - the tag value, null to remove</dd>
+<dt>Returns:</dt>
+<dd>the previous tag value, null if not present</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>updateTag</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TagWritable.html#updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">updateTag</a></code>&nbsp;in interface&nbsp;<code><a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>updateAndGetTag</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">updateAndGetTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TagWritable.html#updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">updateAndGetTag</a></code>&nbsp;in interface&nbsp;<code><a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>getAndUpdateTag</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getAndUpdateTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TagWritable.html#getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">getAndUpdateTag</a></code>&nbsp;in interface&nbsp;<code><a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 </section>
 </li>

@@ -87,15 +87,20 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>All Superinterfaces:</dt>
+<dd><code><a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></dd>
+</dl>
+<dl class="notes">
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../item/ItemStack.Builder.html" title="interface in net.minestom.server.item">ItemStack.Builder</a></code>, <code><a href="Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></dd>
+<dd><code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
 <dd><code><a href="../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code>, <code><a href="../inventory/type/AnvilInventory.html" title="class in net.minestom.server.inventory.type">AnvilInventory</a></code>, <code><a href="../inventory/type/BeaconInventory.html" title="class in net.minestom.server.inventory.type">BeaconInventory</a></code>, <code><a href="../inventory/type/BrewingStandInventory.html" title="class in net.minestom.server.inventory.type">BrewingStandInventory</a></code>, <code><a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code>, <code><a href="../command/ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code>, <code><a href="../entity/damage/Damage.html" title="class in net.minestom.server.entity.damage">Damage</a></code>, <code><a href="../instance/DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></code>, <code><a href="../inventory/type/EnchantmentTableInventory.html" title="class in net.minestom.server.inventory.type">EnchantmentTableInventory</a></code>, <code><a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code>, <code><a href="../entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code>, <code><a href="../entity/damage/EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code>, <code><a href="../entity/EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a></code>, <code><a href="../entity/damage/EntityProjectileDamage.html" title="class in net.minestom.server.entity.damage">EntityProjectileDamage</a></code>, <code><a href="../entity/ExperienceOrb.html" title="class in net.minestom.server.entity">ExperienceOrb</a></code>, <code><a href="../inventory/type/FurnaceInventory.html" title="class in net.minestom.server.inventory.type">FurnaceInventory</a></code>, <code><a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code>, <code><a href="../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code>, <code><a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code>, <code><a href="../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code>, <code><a href="../instance/LightingChunk.html" title="class in net.minestom.server.instance">LightingChunk</a></code>, <code><a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code>, <code><a href="../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></code>, <code><a href="../entity/PlayerProjectile.html" title="class in net.minestom.server.entity">PlayerProjectile</a></code>, <code><a href="../entity/damage/PositionalDamage.html" title="class in net.minestom.server.entity.damage">PositionalDamage</a></code>, <code><a href="../command/ServerSender.html" title="class in net.minestom.server.command">ServerSender</a></code>, <code><a href="../instance/SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code>, <code><a href="../inventory/type/VillagerInventory.html" title="class in net.minestom.server.inventory.type">VillagerInventory</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">TagWritable</span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">TagWritable</span><span class="extends-implements">
+extends <a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></span></div>
 <div class="block">Represents an element which can write <a href="Tag.html" title="class in net.minestom.server.tag"><code>tags</code></a>.</div>
 </section>
 <section class="summary">
@@ -111,6 +116,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAndSetTag(net.minestom.server.tag.Tag,T)" class="member-name-link">getAndSetTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ T&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Reads the current value, and then write the new one.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">getAndUpdateTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#removeTag(net.minestom.server.tag.Tag)" class="member-name-link">removeTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
@@ -120,9 +135,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Writes the specified type.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">updateAndGetTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)" class="member-name-link">updateTag</a><wbr>(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-net.minestom.server.tag.TagReadable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
+<code><a href="TagReadable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></div>
 </section>
 </li>
 </ul>
@@ -156,6 +182,53 @@ loadScripts(document, 'script');</script>
 <h3>removeTag</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeTag</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getAndSetTag(net.minestom.server.tag.Tag,T)">
+<h3 id="getAndSetTag(net.minestom.server.tag.Tag,java.lang.Object)">getAndSetTag</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">getAndSetTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @Nullable
+ T&nbsp;value)</span></div>
+<div class="block">Reads the current value, and then write the new one.</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - the tag type</dd>
+<dt>Parameters:</dt>
+<dd><code>tag</code> - the tag to write</dd>
+<dd><code>value</code> - the tag value, null to remove</dd>
+<dt>Returns:</dt>
+<dd>the previous tag value, null if not present</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>updateTag</h3>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>updateAndGetTag</h3>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">updateAndGetTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">
+<h3>getAndUpdateTag</h3>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">getAndUpdateTag</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;@UnknownNullability T&gt;&nbsp;value)</span></div>
 </section>
 </li>
 </ul>
