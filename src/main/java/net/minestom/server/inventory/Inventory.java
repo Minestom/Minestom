@@ -1,8 +1,14 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventHandler;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
@@ -11,6 +17,7 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -26,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public non-sealed class Inventory extends AbstractInventory implements Viewable {
+public non-sealed class Inventory extends AbstractInventory implements Viewable, EventHandler<InventoryEvent> {
     private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
     // the id of this inventory
@@ -37,6 +44,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     private Component title;
 
     private final int offset;
+
+    private final EventNode<InventoryEvent> eventNode;
 
     // the players currently viewing this inventory
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -51,6 +60,14 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         this.title = title;
 
         this.offset = getSize();
+
+        final ServerProcess process = MinecraftServer.process();
+        if (process != null) {
+            this.eventNode = process.eventHandler().map(this, EventFilter.INVENTORY);
+        } else {
+            // Local nodes require a server process
+            this.eventNode = null;
+        }
     }
 
     public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
@@ -390,5 +407,11 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     private void updateAll(Player player) {
         player.getInventory().update();
         update(player);
+    }
+
+    @Override
+    @ApiStatus.Experimental
+    public @NotNull EventNode<InventoryEvent> eventNode() {
+        return eventNode;
     }
 }
