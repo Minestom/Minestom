@@ -1,9 +1,12 @@
 package net.minestom.server.network;
 
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
-import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
+import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
+import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
@@ -20,7 +23,7 @@ final class AntiCheatImpl implements AntiCheat {
     private int estimatedLatency = 300;
     private long lastKeepAlive = -1;
 
-    private Player player = new Player(null);
+    private Player player = new Player();
     private final List<Change> changes = new ArrayList<>();
 
     @Override
@@ -28,6 +31,7 @@ final class AntiCheatImpl implements AntiCheat {
         switch (serverPacket) {
             case JoinGamePacket joinGamePacket -> {
                 this.joined = true;
+                addChange(new Change.SetEntityId(joinGamePacket.entityId()));
                 addChange(new Change.SetGameMode(joinGamePacket.gameMode()));
             }
             case KeepAlivePacket keepAlivePacket -> {
@@ -55,6 +59,97 @@ final class AntiCheatImpl implements AntiCheat {
         if (!joined) return new Action.InvalidCritical("Client packet received before join game packet.");
 
         return switch (clientPacket) {
+            case ClientAnimationPacket packet -> {
+                addChange(new Change.SetArmSwing(true));
+                yield VALID;
+            }
+            case ClientNameItemPacket packet -> {
+                if (packet.itemName().length() > 50) {
+                    yield new Action.InvalidCritical("Item name too long.");
+                }
+                yield VALID;
+            }
+            case ClientSettingsPacket packet -> {
+                if (packet.viewDistance() < 2 || packet.viewDistance() > 32) {
+                    yield new Action.InvalidIgnore("Invalid view distance.");
+                }
+                String locale = packet.locale();
+                int localeLength = locale.length();
+                if (localeLength < 4 || localeLength > 6) {
+                    yield new Action.InvalidIgnore("Locale setting received is too short or too big.");
+                }
+                addChange(new Change.SetSettings(new Settings(packet.chatMessageType(), packet.viewDistance())));
+                yield VALID;
+            }
+            case ClientEntityActionPacket packet -> {
+                var action = packet.action();
+                var jumpBoost = packet.horseJumpBoost();
+                if (jumpBoost < 0 || jumpBoost > 100) {
+                    yield new Action.InvalidCritical("Invalid horse jump boost.");
+                }
+                if (jumpBoost != 0 && action != ClientEntityActionPacket.Action.START_JUMP_HORSE) {
+                    yield new Action.InvalidCritical("Horse jump boost without starting jump.");
+                }
+                yield VALID;
+            }
+            case ClientSpectatePacket packet -> {
+                if (gameMode() != GameMode.SPECTATOR) {
+                    yield new Action.InvalidCritical("Spectate packet received in non-spectator game mode.");
+                }
+                yield VALID;
+            }
+            case ClientInteractEntityPacket packet -> {
+                if (packet.type() instanceof ClientInteractEntityPacket.Attack) {
+                    if (!player.swungHand) {
+                        yield new Action.InvalidCritical("Attack packet received while already attacking.");
+                    }
+                    addChange(new Change.SetArmSwing(false));
+                }
+                if (packet.targetId() == player.entityId) { // Impossible to interact with self.
+                    yield new Action.InvalidCritical("Interact entity packet received with self as target.");
+                }
+                yield VALID;
+            }
+            case ClientHeldItemChangePacket packet -> {
+                if (packet.slot() < 0 || packet.slot() > 8) {
+                    yield new Action.InvalidCritical("Invalid held item slot.");
+                }
+                if (packet.slot() == player.lastHeldSlot) {
+                    yield new Action.InvalidIgnore("Held item change packet received with the same slot.");
+                }
+                addChange(new Change.SetLastHeldSlot(packet.slot()));
+                yield VALID;
+            }
+            case ClientPluginMessagePacket packet -> {
+                if (packet.channel().startsWith("minecraft:brand")) {
+                    if (packet.data().length == 0) {
+                        yield new Action.InvalidCritical("Invalid brand plugin message packet.");
+                    }
+                    byte[] minusLength = new byte[packet.data().length - 1];
+                    System.arraycopy(packet.data(), 1, minusLength, 0, minusLength.length);
+                    String brand = new String(minusLength)
+                            .replace(" (Velocity)", "");
+                    if (!brand.equals("vanilla")) {
+                        yield new Action.InvalidIgnore("Non-vanilla client brand received");
+                    }
+                }
+                yield VALID;
+            }
+            // Very basic yaw pitch verification.
+            case ClientPlayerPositionAndRotationPacket packet -> verifyRotationState(packet.position().pitch(), packet.position().yaw());
+            case ClientPlayerRotationPacket packet -> verifyRotationState(packet.pitch(), packet.yaw());
+
+            case ClientChatMessagePacket packet -> {
+                // The vanilla client cannot send a chat message if they do not have chat visible, or if they are sneaking or sprinting.
+                if (settings() == null)
+                    yield new Action.InvalidCritical("Chat message packet received before settings packet.");
+                if (settings().chatMessageType  == ChatMessageType.NONE)
+                    yield new Action.InvalidIgnore("Chat message packet received with chat visibility set to NONE.");
+                if (sneaking() || sprinting()) {
+                    yield new Action.InvalidCritical("Chat message packet received while sneaking or sprinting.");
+                }
+                yield VALID;
+            }
             case ClientCreativeInventoryActionPacket packet -> {
                 if (gameMode() != GameMode.CREATIVE)
                     yield new Action.InvalidCritical("Creative inventory action packet received in non-creative game mode.");
@@ -71,6 +166,19 @@ final class AntiCheatImpl implements AntiCheat {
         };
     }
 
+    private Action verifyRotationState(float pitch, float yaw) {
+        if (pitch > 90 || pitch < -90) {
+            return new Action.InvalidCritical("Pitch out of bounds.");
+        }
+        if (Math.abs(pitch) > 90) {
+            return new Action.InvalidCritical("Pitch out of bounds.");
+        }
+        if (!Float.isFinite(pitch) || !Float.isFinite(yaw)) {
+            return new Action.InvalidCritical("Pitch or yaw is not finite.");
+        }
+        return VALID;
+    }
+
     private void addChange(Change change) {
         this.changes.add(change);
         // TODO: delay
@@ -78,25 +186,69 @@ final class AntiCheatImpl implements AntiCheat {
         this.changes.clear();
     }
 
+    Settings settings() {
+        return player.settings;
+    }
+
     GameMode gameMode() {
         // TODO: account for latency, loop over changes if not empty
         return player.gameMode;
     }
 
-    record Player(GameMode gameMode) {
+    boolean sneaking() {
+        return player.movementState.sneaking;
+    }
+
+    boolean sprinting() {
+        return player.movementState.sprinting;
+    }
+
+    record Player(
+            int entityId,
+            Settings settings,
+            GameMode gameMode,
+            MovementState movementState,
+            int lastHeldSlot,
+            boolean swungHand
+    ) {
+
+        public Player() {
+            this(Integer.MIN_VALUE, null, null, null, 0, false);
+        }
+
         Player merge(List<Change> changes) {
-            Player result = this;
+            GameMode gameMode = this.gameMode;
+            Settings settings = this.settings;
+            MovementState movementState = this.movementState;
+            int lastHeldSlot = this.lastHeldSlot;
+            int entityId = this.entityId;
+            var swingsArm = this.swungHand;
             for (Change change : changes) {
                 switch (change) {
-                    case Change.SetGameMode setGameMode -> result = new Player(setGameMode.gameMode());
+                    case Change.SetGameMode setGameMode -> gameMode = setGameMode.gameMode;
+                    case Change.SetSettings setSettings ->  settings =setSettings.settings();
+                    case Change.SetMovementState setMovementState -> movementState = setMovementState.movementState();
+                    case Change.SetLastHeldSlot setLastHeldSlot -> lastHeldSlot = setLastHeldSlot.slot();
+                    case Change.SetEntityId setEntityId -> entityId = setEntityId.entityId();
+                    case Change.SetArmSwing setArmSwing -> swingsArm = setArmSwing.swung;
                 }
             }
-            return result;
+            return new Player(entityId, settings, gameMode, movementState, lastHeldSlot, swingsArm);
         }
     }
 
+
+    record Settings(ChatMessageType chatMessageType, int viewDistance) {
+
+    }
+    record MovementState(boolean sneaking, boolean sprinting) {}
+
     sealed interface Change {
-        record SetGameMode(GameMode gameMode) implements Change {
-        }
+        record SetMovementState(MovementState movementState) implements Change {}
+        record SetGameMode(GameMode gameMode) implements Change {}
+        record SetSettings(Settings settings) implements Change {}
+        record SetLastHeldSlot(int slot) implements Change {}
+        record SetEntityId(int entityId) implements Change {}
+        record SetArmSwing(boolean swung) implements Change {}
     }
 }
