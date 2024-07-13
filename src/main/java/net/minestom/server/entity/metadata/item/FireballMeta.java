@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.Material;
@@ -14,7 +14,7 @@ public class FireballMeta extends ItemContainingMeta implements ObjectDataProvid
 
     private Entity shooter;
 
-    public FireballMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public FireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata, Material.AIR);
     }
 

@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ public class AbstractWindChargeMeta extends EntityMeta implements ObjectDataProv
 
     private Entity shooter;
 
-    public AbstractWindChargeMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
+    public AbstractWindChargeMeta(@Nullable Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

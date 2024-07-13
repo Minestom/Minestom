@@ -158,7 +158,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
-    protected Metadata metadata = new Metadata(this);
+    protected MetadataHolder metadata = new MetadataHolder(this);
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
@@ -505,7 +505,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public synchronized void switchEntityType(@NotNull EntityType entityType) {
         this.entityType = entityType;
-        this.metadata = new Metadata(this);
+        this.metadata = new MetadataHolder(this);
         this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||

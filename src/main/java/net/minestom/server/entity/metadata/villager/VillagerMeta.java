@@ -2,13 +2,14 @@ package net.minestom.server.entity.metadata.villager;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class VillagerMeta extends AbstractVillagerMeta {
     public static final byte OFFSET = AbstractVillagerMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    public VillagerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public VillagerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

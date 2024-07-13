@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,7 @@ public class PlayerMeta extends LivingEntityMeta {
     private final static byte RIGHT_LEG_BIT = 0x20;
     private final static byte HAT_BIT = 0x40;
 
-    public PlayerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PlayerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

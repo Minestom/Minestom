@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -23,7 +24,7 @@ public class WolfMeta extends TameableAnimalMeta {
     public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 4;
 
-    public WolfMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public WolfMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -2,9 +2,9 @@ package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +14,7 @@ public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, P
 
     private Entity shooter;
 
-    public WitherSkullMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public WitherSkullMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

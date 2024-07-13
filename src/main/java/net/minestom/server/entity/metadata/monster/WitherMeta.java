@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ public class WitherMeta extends MonsterMeta {
     private Entity leftHead;
     private Entity rightHead;
 
-    public WitherMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public WitherMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.display;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
     public static final byte OFFSET = AbstractDisplayMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 2;
 
-    public ItemDisplayMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public ItemDisplayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
