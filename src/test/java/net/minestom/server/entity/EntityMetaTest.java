@@ -15,7 +15,7 @@ public class EntityMetaTest {
         for (var field : EntityTypes.class.getDeclaredFields()) {
             final EntityType entityType = (EntityType) field.get(this);
             final String name = entityType.name();
-            if (EntityTypeImpl.ENTITY_META_SUPPLIER.get(name) == null) {
+            if (MetadataHolder.ENTITY_META_SUPPLIER.get(name) == null) {
                 list.add(name);
             }
         }

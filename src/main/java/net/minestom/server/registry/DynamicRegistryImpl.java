@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @ApiStatus.Internal
 final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
-    private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-remove' to 'true'");
+    private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
 
     record KeyImpl<T>(@NotNull NamespaceID namespace) implements Key<T> {
 
