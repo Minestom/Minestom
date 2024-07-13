@@ -120,21 +120,6 @@ final class AntiCheatImpl implements AntiCheat {
                 addChange(new Change.SetLastHeldSlot(packet.slot()));
                 yield VALID;
             }
-            case ClientPluginMessagePacket packet -> {
-                if (packet.channel().startsWith("minecraft:brand")) {
-                    if (packet.data().length == 0) {
-                        yield new Action.InvalidCritical("Invalid brand plugin message packet.");
-                    }
-                    byte[] minusLength = new byte[packet.data().length - 1];
-                    System.arraycopy(packet.data(), 1, minusLength, 0, minusLength.length);
-                    String brand = new String(minusLength)
-                            .replace(" (Velocity)", "");
-                    if (!brand.equals("vanilla")) {
-                        yield new Action.InvalidIgnore("Non-vanilla client brand received");
-                    }
-                }
-                yield VALID;
-            }
             // Very basic yaw pitch verification.
             case ClientPlayerPositionAndRotationPacket packet -> verifyRotationState(packet.position().pitch(), packet.position().yaw());
             case ClientPlayerRotationPacket packet -> verifyRotationState(packet.pitch(), packet.yaw());
