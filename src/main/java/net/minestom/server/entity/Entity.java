@@ -176,7 +176,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+        this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
         setBoundingBox(entityType.registry().boundingBox());
 
@@ -506,7 +506,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public synchronized void switchEntityType(@NotNull EntityType entityType) {
         this.entityType = entityType;
         this.metadata = new MetadataHolder(this);
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+        this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
                 type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
