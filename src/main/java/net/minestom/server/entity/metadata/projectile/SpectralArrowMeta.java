@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +12,7 @@ public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataPr
 
     private Entity shooter;
 
-    public SpectralArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public SpectralArrowMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

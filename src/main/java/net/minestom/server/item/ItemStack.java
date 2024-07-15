@@ -13,7 +13,6 @@ import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -260,7 +259,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         }
     }
 
-    sealed interface Builder extends TagWritable permits ItemStackImpl.Builder {
+    sealed interface Builder permits ItemStackImpl.Builder {
 
         @Contract(value = "_ -> this")
         @NotNull Builder material(@NotNull Material material);
@@ -317,13 +316,13 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         @NotNull Builder hideExtraTooltip();
 
         @Contract(value = "_, _ -> this")
-        default <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
-            setTag(tag, value);
-            return this;
+        <T> @NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value);
+
+        default <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+            set(tag, value);
         }
 
         @Contract(value = "-> new", pure = true)
         @NotNull ItemStack build();
-
     }
 }

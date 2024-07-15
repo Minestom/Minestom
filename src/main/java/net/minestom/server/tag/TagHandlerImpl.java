@@ -82,6 +82,11 @@ final class TagHandlerImpl implements TagHandler {
     }
 
     @Override
+    public <T> @Nullable T getAndSetTag(@NotNull Tag<T> tag, @Nullable T value) {
+        return updateTag0(tag, t -> value, true);
+    }
+
+    @Override
     public <T> void updateTag(@NotNull Tag<T> tag, @NotNull UnaryOperator<@UnknownNullability T> value) {
         updateTag0(tag, value, false);
     }

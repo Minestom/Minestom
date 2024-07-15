@@ -52,7 +52,6 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -159,7 +158,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
-    protected Metadata metadata = new Metadata(this);
+    protected MetadataHolder metadata = new MetadataHolder(this);
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
@@ -177,7 +176,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+        this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
         setBoundingBox(entityType.registry().boundingBox());
 
@@ -274,12 +273,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Teleports the entity only if the chunk at {@code position} is loaded or if
      * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
      *
-     * @param position the teleport position
-     * @param chunks   the chunk indexes to load before teleporting the entity,
-     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
-     *                 can be null or empty to only load the chunk at {@code position}
-     * @param flags    flags used to teleport the entity relatively rather than absolutely
-     *                 use {@link RelativeFlags} to see available flags
+     * @param position      the teleport position
+     * @param chunks        the chunk indexes to load before teleporting the entity,
+     *                      indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                      can be null or empty to only load the chunk at {@code position}
+     * @param flags         flags used to teleport the entity relatively rather than absolutely
+     *                      use {@link RelativeFlags} to see available flags
      * @param shouldConfirm if false, the teleportation will be done without confirmation
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
@@ -458,7 +457,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (entity.isViewer(player)) {
                 player.sendPacket(entity.getAttachEntityPacket());
             }
-        };
+        }
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
@@ -506,8 +505,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public synchronized void switchEntityType(@NotNull EntityType entityType) {
         this.entityType = entityType;
-        this.metadata = new Metadata(this);
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+        this.metadata = new MetadataHolder(this);
+        this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
                 type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
@@ -580,7 +579,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
         velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
-        if (!PlayerUtils.isSocketClient(this)) {
+        if (!(this instanceof Player)) {
             onGround = physicsResult.isOnGround();
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
         }
@@ -1732,10 +1731,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Acquires this entity.
      *
+     * @param <T> the type of object to be acquired
+     * @return the acquirable for this entity
      * @deprecated It's preferred to use {@link AcquirableSource#acquirable()} instead, as it is overridden by
      * subclasses
-     * @return the acquirable for this entity
-     * @param <T> the type of object to be acquired
      */
     @Deprecated
     @ApiStatus.Experimental

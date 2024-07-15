@@ -45,6 +45,15 @@ public class TagTest {
     }
 
     @Test
+    public void getAndSet() {
+        var handler = TagHandler.newHandler();
+        var tag = Tag.Integer("key");
+        assertNull(handler.getTag(tag));
+        assertNull(handler.getAndSetTag(tag, 5));
+        assertEquals(5, handler.getAndSetTag(tag, 6));
+    }
+
+    @Test
     public void snbt() {
         var compound = CompoundBinaryTag.builder().putInt("key", 5).build();
         var reader = TagHandler.fromCompound(compound);

@@ -27,7 +27,6 @@ import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
@@ -207,7 +206,7 @@ public final class ConnectionManager {
         final Player player = playerProvider.createPlayer(uuid, username, connection);
         this.connectionPlayerMap.put(connection, player);
         var future = transitionLoginToConfig(player);
-        if (DebugUtils.INSIDE_TEST) future.join();
+        if (ServerFlag.INSIDE_TEST) future.join();
         return player;
     }
 
@@ -390,7 +389,7 @@ public final class ConnectionManager {
             CompletableFuture<Void> spawnFuture = player.UNSAFE_init();
 
             // Required to get the exact moment the player spawns
-            if (DebugUtils.INSIDE_TEST) spawnFuture.join();
+            if (ServerFlag.INSIDE_TEST) spawnFuture.join();
         });
     }
 

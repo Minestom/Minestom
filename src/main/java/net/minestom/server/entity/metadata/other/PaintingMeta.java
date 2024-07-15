@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.other;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.network.NetworkBuffer;
@@ -24,7 +25,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
 
     private Orientation orientation = null;
 
-    public PaintingMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PaintingMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

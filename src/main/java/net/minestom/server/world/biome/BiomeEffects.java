@@ -9,7 +9,7 @@ import java.util.Locale;
 public record BiomeEffects(int fogColor, int skyColor, int waterColor, int waterFogColor, int foliageColor,
                            int grassColor,
                            GrassColorModifier grassColorModifier, BiomeParticle biomeParticle,
-                           NamespaceID ambientSound, MoodSound moodSound, AdditionsSound additionsSound,
+                           AmbientSound ambientSound, MoodSound moodSound, AdditionsSound additionsSound,
                            Music music) {
 
     public static Builder builder() {
@@ -31,7 +31,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         if (biomeParticle != null)
             builder.put("particle", biomeParticle.toNbt());
         if (ambientSound != null)
-            builder.putString("ambient_sound", ambientSound.toString());
+            builder.put("ambient_sound", ambientSound.toNbt());
         if (moodSound != null)
             builder.put("mood_sound", moodSound.toNbt());
         if (additionsSound != null)
@@ -48,7 +48,9 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
     public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("sound", sound.toString())
+                    .put("sound", CompoundBinaryTag.builder()
+                            .putString("sound_id", sound.toString())
+                            .build())
                     .putInt("tick_delay", tickDelay)
                     .putInt("block_search_extent", blockSearchExtent)
                     .putDouble("offset", offset)
@@ -59,16 +61,34 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
     public record AdditionsSound(NamespaceID sound, double tickChance) {
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("sound", sound.toString())
+                    .put("sound", CompoundBinaryTag.builder()
+                            .putString("sound_id", sound.toString())
+                            .build())
                     .putDouble("tick_chance", tickChance)
                     .build();
+        }
+    }
+
+    public record AmbientSound(NamespaceID sound, Float range) {
+        public AmbientSound(NamespaceID sound) {
+            this(sound, null);
+        }
+
+        public @NotNull CompoundBinaryTag toNbt() {
+            var builder = CompoundBinaryTag.builder()
+                    .putString("sound_id", sound.toString());
+
+            if (range != null) builder.putFloat("range", range);
+            return builder.build();
         }
     }
 
     public record Music(NamespaceID sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("sound", sound.toString())
+                    .put("sound", CompoundBinaryTag.builder()
+                            .putString("sound_id", sound.toString())
+                            .build())
                     .putInt("min_delay", minDelay)
                     .putInt("max_delay", maxDelay)
                     .putBoolean("replace_current_music", replaceCurrentMusic)
@@ -85,7 +105,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         private int grassColor = -1;
         private GrassColorModifier grassColorModifier;
         private BiomeParticle biomeParticle;
-        private NamespaceID ambientSound;
+        private AmbientSound ambientSound;
         private MoodSound moodSound;
         private AdditionsSound additionsSound;
         private Music music;
@@ -133,7 +153,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
             return this;
         }
 
-        public Builder ambientSound(NamespaceID ambientSound) {
+        public Builder ambientSound(AmbientSound ambientSound) {
             this.ambientSound = ambientSound;
             return this;
         }

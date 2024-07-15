@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.Player;
 import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class LivingEntityMeta extends EntityMeta {
     private final static byte ACTIVE_HAND_BIT = 0x02;
     private final static byte IS_IN_SPIN_ATTACK_BIT = 0x04;
 
-    protected LivingEntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    protected LivingEntityMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -81,6 +82,7 @@ public class LivingEntityMeta extends EntityMeta {
 
     /**
      * Gets the amount of bee stingers in this entity
+     *
      * @return The amount of bee stingers
      */
     public int getBeeStingerCount() {
@@ -89,6 +91,7 @@ public class LivingEntityMeta extends EntityMeta {
 
     /**
      * Sets the amount of bee stingers in this entity
+     *
      * @param value The amount of bee stingers to set, use 0 to clear all stingers
      */
     public void setBeeStingerCount(int value) {

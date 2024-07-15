@@ -224,7 +224,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             for (AttributeList.Modifier modifier : oldAttributes.modifiers()) {
                 // If the modifier currently modifies the slot we are updating
                 if (modifier.slot().contains(slot)) {
-                    AttributeInstance attributeInstance = attributeModifiers.get(modifier.attribute().name());
+                    AttributeInstance attributeInstance = getAttribute(modifier.attribute());
                     attributeInstance.removeModifier(modifier.modifier().id());
                 }
             }
@@ -235,7 +235,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             for (AttributeList.Modifier modifier : newAttributes.modifiers()) {
                 // If the modifier currently modifies the slot we are updating
                 if (modifier.slot().contains(slot)) {
-                    AttributeInstance attributeInstance = attributeModifiers.get(modifier.attribute().name());
+                    AttributeInstance attributeInstance = getAttribute(modifier.attribute());
                     attributeInstance.addModifier(modifier.modifier());
                 }
             }

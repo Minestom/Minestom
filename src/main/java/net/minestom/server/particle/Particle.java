@@ -1,5 +1,9 @@
 package net.minestom.server.particle;
 
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.FloatBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
@@ -57,6 +61,8 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     void writeData(@NotNull NetworkBuffer writer);
 
+    @NotNull CompoundBinaryTag toNbt();
+
     record Simple(@NotNull NamespaceID namespace, int id) implements Particle {
         @Override
         public @NotNull Particle readData(@NotNull NetworkBuffer reader) {
@@ -65,6 +71,13 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .build();
         }
     }
 
@@ -88,6 +101,10 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
         }
 
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            throw new UnsupportedOperationException("Block particle cannot be serialized to NBT");
+        }
     }
 
     record BlockMarker(@NotNull NamespaceID namespace, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
@@ -108,6 +125,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            throw new UnsupportedOperationException("BlockMarker particle cannot be serialized to NBT");
         }
 
     }
@@ -144,6 +166,21 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             writer.write(NetworkBuffer.FLOAT, color.green() / 255f);
             writer.write(NetworkBuffer.FLOAT, color.blue() / 255f);
             writer.write(NetworkBuffer.FLOAT, scale);
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            ListBinaryTag colorTag = ListBinaryTag.builder(BinaryTagTypes.FLOAT)
+                    .add(FloatBinaryTag.floatBinaryTag(color.red() / 255f))
+                    .add(FloatBinaryTag.floatBinaryTag(color.green() / 255f))
+                    .add(FloatBinaryTag.floatBinaryTag(color.blue() / 255f))
+                    .build();
+
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .put("color", colorTag)
+                    .putFloat("scale", scale)
+                    .build();
         }
     }
 
@@ -192,6 +229,28 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             writer.write(NetworkBuffer.FLOAT, transitionColor.blue() / 255f);
             writer.write(NetworkBuffer.FLOAT, scale);
         }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            ListBinaryTag fromColorTag = ListBinaryTag.builder(BinaryTagTypes.FLOAT)
+                    .add(FloatBinaryTag.floatBinaryTag(color.red() / 255f))
+                    .add(FloatBinaryTag.floatBinaryTag(color.green() / 255f))
+                    .add(FloatBinaryTag.floatBinaryTag(color.blue() / 255f))
+                    .build();
+
+            ListBinaryTag toColorTag = ListBinaryTag.builder(BinaryTagTypes.FLOAT)
+                    .add(FloatBinaryTag.floatBinaryTag(transitionColor.red() / 255f))
+                    .add(FloatBinaryTag.floatBinaryTag(transitionColor.green() / 255f))
+                    .add(FloatBinaryTag.floatBinaryTag(transitionColor.blue() / 255f))
+                    .build();
+
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .putFloat("scale", scale)
+                    .put("from_color", fromColorTag)
+                    .put("to_color", toColorTag)
+                    .build();
+        }
     }
 
     record DustPillar(@NotNull NamespaceID namespace, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
@@ -212,6 +271,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            throw new UnsupportedOperationException("DustPillar particle cannot be serialized to NBT");
         }
 
     }
@@ -236,6 +300,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
         }
 
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            throw new UnsupportedOperationException("FallingDust particle cannot be serialized to NBT");
+        }
+
     }
 
     record Item(@NotNull NamespaceID namespace, int id, @NotNull ItemStack item) implements Particle {
@@ -253,6 +322,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(ItemStack.NETWORK_TYPE, item);
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .put("item", item.toItemNBT())
+                    .build();
         }
     }
 
@@ -282,6 +359,16 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(AlphaColor.NETWORK_TYPE, color);
         }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            int color = (0xFF << 24) | (color().red() << 16) | (color().green() << 8) | color().blue();
+
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .putInt("color", color)
+                    .build();
+        }
     }
 
     record SculkCharge(@NotNull NamespaceID namespace, int id, float roll) implements Particle {
@@ -301,6 +388,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             writer.write(NetworkBuffer.FLOAT, roll);
 
         }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .putFloat("roll", roll)
+                    .build();
+        }
     }
 
     record Shriek(@NotNull NamespaceID namespace, int id, int delay) implements Particle {
@@ -318,6 +413,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(NetworkBuffer.VAR_INT, delay);
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .putInt("delay", delay)
+                    .build();
         }
     }
 
@@ -362,6 +465,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
                 writer.write(NetworkBuffer.VAR_INT, travelTicks);
             }
 
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            throw new UnsupportedOperationException("Vibration particle cannot be serialized to NBT");
         }
 
         public enum SourceType {
