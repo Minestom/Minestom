@@ -149,10 +149,10 @@ public final class PlayerDiggingListener {
         if (meta == null || !meta.isHandActive()) return;
         Player.Hand hand = meta.getActiveHand();
 
+        ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
+
         player.clearItemUse();
         player.triggerStatus((byte) 9);
-
-        ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
 
         final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
         player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
