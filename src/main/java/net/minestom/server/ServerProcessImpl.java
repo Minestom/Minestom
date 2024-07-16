@@ -35,6 +35,7 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
+import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.collection.MappedCollection;
@@ -136,7 +137,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.server = new Server(packetProcessor);
 
-        this.dispatcher = ThreadDispatcher.singleThread();
+        this.dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
         this.ticker = new TickerImpl();
     }
 
