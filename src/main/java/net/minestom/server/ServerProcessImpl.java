@@ -6,6 +6,7 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
+import net.minestom.server.config.FloatProvider;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
@@ -69,6 +70,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final ExceptionManager exception;
 
     private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
+    private final DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders;
     private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
     private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
     private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
@@ -122,6 +124,7 @@ final class ServerProcessImpl implements ServerProcess {
         var ignoredForInit = DataComponents.ITEM_NAME;
 
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
+        this.enchantmentFloatProviders = FloatProvider.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
@@ -249,6 +252,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return enchantmentLevelBasedValues;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders() {
+        return enchantmentFloatProviders;
     }
 
     @Override
