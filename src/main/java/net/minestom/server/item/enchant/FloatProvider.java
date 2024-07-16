@@ -34,7 +34,6 @@ public interface FloatProvider {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends FloatProvider>> createDefaultRegistry() {
         final DynamicRegistry<BinaryTagSerializer<? extends FloatProvider>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
-        // Note that constant is omitted from the registry, it has serialization handled out of band above.
         registry.register("constant", FloatProvider.Constant.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("uniform", FloatProvider.Uniform.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("clamped_normal", FloatProvider.ClampedNormal.NBT_TYPE, DataPack.MINECRAFT_CORE);
