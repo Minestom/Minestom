@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
+sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
 
-    record Empty<T extends ProtocolObject>() implements ObjectSetImpl<T> {
-        static final Empty<?> INSTANCE = new Empty<>();
+    record Empty() implements ObjectSetImpl {
+        static final Empty INSTANCE = new Empty();
 
         @Override
         public boolean contains(@NotNull Key namespace) {
@@ -23,7 +23,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record Entries<T extends ProtocolObject>(@NotNull List<Key> entries) implements ObjectSetImpl<T> {
+    record Entries(@NotNull List<Key> entries) implements ObjectSetImpl {
 
         public Entries {
             entries = List.copyOf(entries);
@@ -35,7 +35,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    final class Tag<T extends ProtocolObject> implements ObjectSetImpl<T> {
+    final class Tag implements ObjectSetImpl {
         private final net.minestom.server.gamedata.tags.Tag.BasicType tagType;
         private final String name;
         private volatile Set<Key> value = null;
@@ -73,32 +73,32 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record NetworkType<T extends ProtocolObject>(
+    record NetworkType(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
-    ) implements NetworkBuffer.Type<ObjectSet<T>> {
+    ) implements NetworkBuffer.Type<ObjectSet> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ObjectSet<T> value) {
+        public void write(@NotNull NetworkBuffer buffer, ObjectSet value) {
             throw new UnsupportedOperationException("todo");
         }
 
         @Override
-        public ObjectSet<T> read(@NotNull NetworkBuffer buffer) {
+        public ObjectSet read(@NotNull NetworkBuffer buffer) {
             throw new UnsupportedOperationException("todo");
         }
     }
 
-    record CodecImpl<T extends ProtocolObject>(
+    record CodecImpl(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
-    ) implements Codec<ObjectSet<T>> {
-        private static final Codec<Entries<?>> ENTRIES_CODEC = Codec.KEY.list()
+    ) implements Codec<ObjectSet> {
+        private static final Codec<Entries> ENTRIES_CODEC = Codec.KEY.list()
                 .transform(Entries::new, Entries::entries);
 
         @Override
-        public @NotNull <D> Result<ObjectSet<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final Result<Entries<?>> entriesResult = ENTRIES_CODEC.decode(coder, value);
-            if (entriesResult instanceof Result.Ok(Entries<?> entries)) {
+        public @NotNull Result<ObjectSet> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<Entries> entriesResult = ENTRIES_CODEC.decode(coder, value);
+            if (entriesResult instanceof Result.Ok(Entries entries)) {
                 //noinspection unchecked
-                return new Result.Ok<>((ObjectSet<T>) entries);
+                return new Result.Ok<>((ObjectSet) entries);
             }
 
             final Result<String> stringResult = coder.getString(value);
@@ -108,16 +108,16 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
 
             // Could be a tag or a block name depending if it starts with a #
             return new Result.Ok<>(string.startsWith("#")
-                    ? new Tag<>(tagType(), string.substring(1))
-                    : new Entries<>(List.of(Key.key(string))));
+                    ? new Tag(tagType(), string.substring(1))
+                    : new Entries(List.of(Key.key(string))));
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet<T> value) {
+        public @NotNull Result encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet value) {
             if (value == null) return new Result.Error<>("null");
             return new Result.Ok<>(switch (value) {
-                case Empty<T> empty -> coder.emptyList();
-                case Entries<T> entries -> {
+                case Empty empty -> coder.emptyList();
+                case Entries entries -> {
                     if (entries.entries.size() == 1)
                         yield coder.createString(entries.entries.stream().findFirst().get().asString());
                     final Transcoder.ListBuilder<D> list = coder.createList(entries.entries.size());
@@ -125,7 +125,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
                         list.add(coder.createString(entry.asString()));
                     yield list.build();
                 }
-                case Tag<T> tag -> coder.createString("#" + tag.name());
+                case Tag tag -> coder.createString("#" + tag.name());
             });
         }
     }
