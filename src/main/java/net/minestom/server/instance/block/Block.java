@@ -3,6 +3,7 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
@@ -12,6 +13,7 @@ import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.*;
 
 import java.util.Collection;
@@ -34,11 +36,13 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     BinaryTagSerializer<Block> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Context context, @NotNull Block value) {
+            final CompoundBinaryTag properties = writeProperties(value);
+            if (properties.size() == 0)
+                return BinaryTagSerializer.STRING.write(context, value.namespace().asString());
+
             CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
             builder.putString("Name", value.namespace().asString());
-
-            final CompoundBinaryTag properties = writeProperties(value);
-            if (properties.size() != 0) builder.put("Properties", properties);
+            builder.put("Properties", properties);
 
             return builder.build();
         }
@@ -60,7 +64,11 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
 
         @Override
         public @NotNull Block read(@NotNull Context context, @NotNull BinaryTag tag) {
-            final CompoundBinaryTag compound = (CompoundBinaryTag) tag;
+            if (!(tag instanceof CompoundBinaryTag compound)) {
+                Block block = Block.fromNamespaceId(((StringBinaryTag) tag).value());
+                Check.notNull(block, "Invalid block NBT");
+                return block;
+            }
 
             Block block = Block.fromKey(compound.getString("Name"));
             assert block != null;
