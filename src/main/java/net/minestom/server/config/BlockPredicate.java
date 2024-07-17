@@ -49,8 +49,8 @@ public interface BlockPredicate {
 
     @NotNull BinaryTagSerializer<? extends BlockPredicate> nbtType();
 
-    class True implements BlockPredicate {
-        public static final BinaryTagSerializer<True> NBT_TYPE = new BinaryTagSerializer<True>() {
+    record True() implements BlockPredicate {
+        public static final BinaryTagSerializer<True> NBT_TYPE = new BinaryTagSerializer<>() {
             @Override
             public @NotNull BinaryTag write(@NotNull Context context, @NotNull True value) {
                 return CompoundBinaryTag.empty();
@@ -63,8 +63,6 @@ public interface BlockPredicate {
         };
 
         public static final True INSTANCE = new True();
-
-        private True() {}
 
         @Override
         public boolean test(Instance instance, Point blockPosition) {
