@@ -40,6 +40,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.EnchantmentList;
+import net.minestom.server.item.component.LodestoneTracker;
 import net.minestom.server.item.component.PotionContents;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -155,6 +156,10 @@ public class PlayerInit {
                         ))
                         .build();
                 player.getInventory().addItemStack(bundle);
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.COMPASS)
+                        .set(ItemComponent.LODESTONE_TRACKER, new LodestoneTracker(player.getInstance().getDimensionName(), new Vec(10, 10, 10), true))
+                        .build());
 
                 player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
                         .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
