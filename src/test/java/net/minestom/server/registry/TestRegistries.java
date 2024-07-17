@@ -1,6 +1,9 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.config.BlockStateProvider;
+import net.minestom.server.config.FloatProvider;
+import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -44,10 +47,12 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
     public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
-    public DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders = null;
     public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
+    public DynamicRegistry<StructCodec<? extends IntProvider>> intProviders = null;
+    public DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders = null;
+    public DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders = null;
 
     public TestRegistries() {
 
@@ -153,11 +158,6 @@ public class TestRegistries implements Registries {
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders() {
-        return Objects.requireNonNull(enchantmentFloatProviders);
-    }
-
-    @Override
     public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return Objects.requireNonNull(enchantmentValueEffects);
     }
@@ -170,5 +170,20 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return Objects.requireNonNull(enchantmentLocationEffects);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProviders() {
+        return Objects.requireNonNull(intProviders);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders() {
+        return Objects.requireNonNull(floatProviders);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders() {
+        return Objects.requireNonNull(blockStateProviders);
     }
 }
