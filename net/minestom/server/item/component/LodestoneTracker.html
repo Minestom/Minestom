@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LodestoneTracker</span>(@NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target, boolean&nbsp;tracked)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">LodestoneTracker</span>(@Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target, boolean&nbsp;tracked)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
  boolean&nbsp;tracked)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.play.data.WorldPos,boolean)" class="member-name-link">LodestoneTracker</a><wbr>(@NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.play.data.WorldPos,boolean)" class="member-name-link">LodestoneTracker</a><wbr>(@Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target,
  boolean&nbsp;tracked)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates an instance of a <code>LodestoneTracker</code> record class.</div>
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#target()" class="member-name-link">target</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>target</code> record component.</div>
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the value of the <code>tracked</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="LodestoneTracker.html" title="class in net.minestom.server.item.component">LodestoneTracker</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTarget(net.minestom.server.network.packet.server.play.data.WorldPos)" class="member-name-link">withTarget</a><wbr>(@NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTarget(net.minestom.server.network.packet.server.play.data.WorldPos)" class="member-name-link">withTarget</a><wbr>(@Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="LodestoneTracker.html" title="class in net.minestom.server.item.component">LodestoneTracker</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withTracked(boolean)" class="member-name-link">withTracked</a><wbr>(boolean&nbsp;tracked)</code></div>
@@ -227,8 +227,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.network.packet.server.play.data.WorldPos,boolean)">
 <h3>LodestoneTracker</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LodestoneTracker</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">LodestoneTracker</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target,
  boolean&nbsp;tracked)</span></div>
 <div class="block">Creates an instance of a <code>LodestoneTracker</code> record class.</div>
 <dl class="notes">
@@ -250,8 +250,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="withTarget(net.minestom.server.network.packet.server.play.data.WorldPos)">
 <h3>withTarget</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="LodestoneTracker.html" title="class in net.minestom.server.item.component">LodestoneTracker</a></span>&nbsp;<span class="element-name">withTarget</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="LodestoneTracker.html" title="class in net.minestom.server.item.component">LodestoneTracker</a></span>&nbsp;<span class="element-name">withTarget</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a>&nbsp;target)</span></div>
 </section>
 </li>
 <li>
@@ -305,8 +305,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="target()">
 <h3>target</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">target</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../network/packet/server/play/data/WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">target</span>()</div>
 <div class="block">Returns the value of the <code>target</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
