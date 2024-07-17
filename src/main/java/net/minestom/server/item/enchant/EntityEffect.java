@@ -2,6 +2,7 @@ package net.minestom.server.item.enchant;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.config.FloatProvider;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.gamedata.DataPack;
