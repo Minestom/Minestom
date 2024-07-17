@@ -5,9 +5,10 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.config.BlockPredicate;
+import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.config.FloatProvider;
-import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
@@ -78,6 +79,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<StructCodec<? extends IntProvider>> intProviders;
     private final DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders;
     private final DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders;
+    private final DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<DimensionType> dimensionType;
@@ -134,6 +136,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.intProviders = IntProvider.createDefaultRegistry();
         this.floatProviders = FloatProvider.createDefaultRegistry();
         this.blockStateProviders = BlockStateProvider.createDefaultRegistry();
+        this.blockPredicates = BlockPredicate.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dimensionType = DimensionType.createDefaultRegistry();
@@ -288,6 +291,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders() {
         return blockStateProviders;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates() {
+        return blockPredicates;
     }
 
     @Override

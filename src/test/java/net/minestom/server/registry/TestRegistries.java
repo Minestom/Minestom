@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.config.BlockPredicate;
 import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.config.FloatProvider;
 import net.minestom.server.config.IntProvider;
@@ -53,6 +54,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<StructCodec<? extends IntProvider>> intProviders = null;
     public DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders = null;
     public DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders = null;
+    public DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates = null;
 
     public TestRegistries() {
 
@@ -185,5 +187,10 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders() {
         return Objects.requireNonNull(blockStateProviders);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates() {
+        return Objects.requireNonNull(blockPredicates);
     }
 }

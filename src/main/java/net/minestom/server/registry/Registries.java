@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.config.BlockPredicate;
 import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.config.FloatProvider;
 import net.minestom.server.config.IntProvider;
@@ -83,6 +84,8 @@ public interface Registries {
     @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders();
 
     @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders();
+
+    @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates();
 
     @FunctionalInterface
     interface Selector<T> {
