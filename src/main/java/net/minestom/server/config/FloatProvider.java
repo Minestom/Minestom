@@ -1,4 +1,4 @@
-package net.minestom.server.item.enchant;
+package net.minestom.server.config;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.NumberBinaryTag;
@@ -16,7 +16,7 @@ import static net.kyori.adventure.nbt.FloatBinaryTag.floatBinaryTag;
 public interface FloatProvider {
 
     @NotNull BinaryTagSerializer<FloatProvider> TAGGED_NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
-            Registries::enchantmentFloatProviders, FloatProvider::nbtType, "type");
+            Registries::floatProviders, FloatProvider::nbtType, "type");
     @NotNull BinaryTagSerializer<FloatProvider> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Context context, @NotNull FloatProvider value) {
@@ -33,7 +33,7 @@ public interface FloatProvider {
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends FloatProvider>> createDefaultRegistry() {
-        final DynamicRegistry<BinaryTagSerializer<? extends FloatProvider>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
+        final DynamicRegistry<BinaryTagSerializer<? extends FloatProvider>> registry = DynamicRegistry.create("minestom:float_provider");
         registry.register("constant", FloatProvider.Constant.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("uniform", FloatProvider.Uniform.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("clamped_normal", FloatProvider.ClampedNormal.NBT_TYPE, DataPack.MINECRAFT_CORE);
@@ -58,7 +58,7 @@ public interface FloatProvider {
 
         @Override
         public @NotNull BinaryTagSerializer<Constant> nbtType() {
-            throw new UnsupportedOperationException("Constant values are serialized as a special case, see FloatProvider.NBT_TYPE");
+            return NBT_TYPE;
         }
     }
 

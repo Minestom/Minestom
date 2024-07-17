@@ -1,6 +1,9 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.config.BlockStateProvider;
+import net.minestom.server.config.FloatProvider;
+import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -69,17 +72,20 @@ public interface Registries {
 
     @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues();
 
-    @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders();
-
     @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects();
 
     @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects();
 
     @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
 
+    @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProviders();
+
+    @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders();
+
+    @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders();
+
     @FunctionalInterface
     interface Selector<T> {
         @NotNull DynamicRegistry<T> select(@NotNull Registries registries);
     }
-
 }

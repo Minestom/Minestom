@@ -7,6 +7,8 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.config.FloatProvider;
+import net.minestom.server.config.BlockStateProvider;
+import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
@@ -70,10 +72,12 @@ final class ServerProcessImpl implements ServerProcess {
     private final ExceptionManager exception;
 
     private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
-    private final DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders;
     private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
     private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
     private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
+    private final DynamicRegistry<StructCodec<? extends IntProvider>> intProviders;
+    private final DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders;
+    private final DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<DimensionType> dimensionType;
@@ -124,10 +128,12 @@ final class ServerProcessImpl implements ServerProcess {
         var ignoredForInit = DataComponents.ITEM_NAME;
 
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
-        this.enchantmentFloatProviders = FloatProvider.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
+        this.intProviders = IntProvider.createDefaultRegistry();
+        this.floatProviders = FloatProvider.createDefaultRegistry();
+        this.blockStateProviders = BlockStateProvider.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dimensionType = DimensionType.createDefaultRegistry();
@@ -255,11 +261,6 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders() {
-        return enchantmentFloatProviders;
-    }
-
-    @Override
     public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return enchantmentValueEffects;
     }
@@ -272,6 +273,21 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProviders() {
+        return intProviders;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders() {
+        return floatProviders;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders() {
+        return blockStateProviders;
     }
 
     @Override
