@@ -6,10 +6,10 @@ import net.kyori.adventure.nbt.*;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
-public record Noise(int firstOctave, DoubleList amplitudes) {
-    public static final BinaryTagSerializer<Noise> NBT_TYPE = new BinaryTagSerializer<>() {
+public record NoiseConfig(int firstOctave, DoubleList amplitudes) {
+    public static final BinaryTagSerializer<NoiseConfig> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull Noise value) {
+        public @NotNull BinaryTag write(@NotNull Context context, @NotNull NoiseConfig value) {
             CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
             ListBinaryTag.Builder<DoubleBinaryTag> list = ListBinaryTag.builder(BinaryTagTypes.DOUBLE);
             for (double amplitude : value.amplitudes()) {
@@ -23,7 +23,7 @@ public record Noise(int firstOctave, DoubleList amplitudes) {
         }
 
         @Override
-        public @NotNull Noise read(@NotNull Context context, @NotNull BinaryTag tag) {
+        public @NotNull NoiseConfig read(@NotNull Context context, @NotNull BinaryTag tag) {
             if (!(tag instanceof CompoundBinaryTag compound))
                 throw new IllegalArgumentException("Compound expected for Noise");
 
@@ -33,7 +33,7 @@ public record Noise(int firstOctave, DoubleList amplitudes) {
                 amplitudes.add(((NumberBinaryTag) binaryTag).doubleValue());
             }
 
-            return new Noise(compound.getInt("firstOctave"), amplitudes);
+            return new NoiseConfig(compound.getInt("firstOctave"), amplitudes);
         }
     };
 }

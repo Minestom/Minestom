@@ -96,7 +96,7 @@ public interface IntProvider {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<? extends IntProvider> nbtType() {
+        public @NotNull BinaryTagSerializer<BiasedToBottom> nbtType() {
             return NBT_TYPE;
         }
     }
@@ -115,7 +115,7 @@ public interface IntProvider {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<? extends IntProvider> nbtType() {
+        public @NotNull BinaryTagSerializer<Clamped> nbtType() {
             return NBT_TYPE;
         }
     }
@@ -135,7 +135,7 @@ public interface IntProvider {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<? extends IntProvider> nbtType() {
+        public @NotNull BinaryTagSerializer<ClampedNormal> nbtType() {
             return NBT_TYPE;
         }
     }
@@ -165,7 +165,7 @@ public interface IntProvider {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<? extends IntProvider> nbtType() {
+        public @NotNull BinaryTagSerializer<WeightedList> nbtType() {
             return NBT_TYPE;
         }
 
