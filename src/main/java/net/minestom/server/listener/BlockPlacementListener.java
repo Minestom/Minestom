@@ -161,7 +161,7 @@ public class BlockPlacementListener {
         }
 
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, new BlockVec(placementPosition), packet.hand());
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, new BlockVec(placementPosition), cursorPosition, packet.hand());
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
