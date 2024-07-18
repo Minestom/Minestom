@@ -1,7 +1,7 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.condition.BlockPredicate;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.config.BlockPredicate;
 import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.config.FloatProvider;
 import net.minestom.server.config.IntProvider;

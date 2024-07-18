@@ -5,7 +5,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.config.BlockPredicate;
+import net.minestom.server.condition.BlockPredicate;
 import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.config.FloatProvider;

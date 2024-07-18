@@ -3,7 +3,7 @@ package net.minestom.server.item.enchant;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.config.BlockPredicate;
+import net.minestom.server.condition.BlockPredicate;
 import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.config.FloatProvider;
 import net.minestom.server.coordinate.Point;
@@ -304,7 +304,6 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             @NotNull ObjectSet entity,
             boolean joinTeam
     ) implements EntityEffect, LocationEffect {
-        private static final Codec<ObjectSet> ENTITY_CODEC = ObjectSet.codec(Tag.BasicType.ENTITY_TYPES);
         public static final StructCodec<SummonEntity> CODEC = StructCodec.struct(
                 "entity", ObjectSet.codec(Tag.BasicType.ENTITY_TYPES), SummonEntity::entity,
                 "join_team", Codec.BOOLEAN.optional(false), SummonEntity::joinTeam,
