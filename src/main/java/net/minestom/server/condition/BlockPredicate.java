@@ -44,6 +44,7 @@ public interface BlockPredicate {
         registry.register("replaceable", Replaceable.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("solid", Solid.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("would_survive", WouldSurvive.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("unobstructed", Unobstructed.NBT_TYPE, DataPack.MINECRAFT_CORE);
         return registry;
     }
 
