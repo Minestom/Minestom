@@ -22,9 +22,9 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Codec<Enchantment> REGISTRY_CODEC = StructCodec.struct(
             "description", Codec.COMPONENT, Enchantment::description,
-            "exclusive_set", ObjectSet.<Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
+            "exclusive_set", ObjectSet.codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
             "supported_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
-            "primary_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
+            "primary_items", ObjectSet.codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
             "weight", Codec.INT, Enchantment::weight,
             "max_level", Codec.INT, Enchantment::maxLevel,
             "min_cost", Cost.CODEC, Enchantment::minCost,
@@ -50,11 +50,11 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Component description();
 
-    @NotNull ObjectSet<Enchantment> exclusiveSet();
+    @NotNull ObjectSet exclusiveSet();
 
-    @NotNull ObjectSet<Material> supportedItems();
+    @NotNull ObjectSet supportedItems();
 
-    @Nullable ObjectSet<Material> primaryItems();
+    @Nullable ObjectSet primaryItems();
 
     int weight();
 
@@ -93,9 +93,9 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     class Builder {
         private Component description = Component.empty();
-        private ObjectSet<Enchantment> exclusiveSet = ObjectSet.empty();
-        private ObjectSet<Material> supportedItems = ObjectSet.empty();
-        private ObjectSet<Material> primaryItems = ObjectSet.empty();
+        private ObjectSet exclusiveSet = ObjectSet.empty();
+        private ObjectSet supportedItems = ObjectSet.empty();
+        private ObjectSet primaryItems = ObjectSet.empty();
         private int weight = 1;
         private int maxLevel = 1;
         private Cost minCost = Cost.DEFAULT;
@@ -112,17 +112,17 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
             return this;
         }
 
-        public @NotNull Builder exclusiveSet(@NotNull ObjectSet<Enchantment> exclusiveSet) {
+        public @NotNull Builder exclusiveSet(@NotNull ObjectSet exclusiveSet) {
             this.exclusiveSet = exclusiveSet;
             return this;
         }
 
-        public @NotNull Builder supportedItems(@NotNull ObjectSet<Material> supportedItems) {
+        public @NotNull Builder supportedItems(@NotNull ObjectSet supportedItems) {
             this.supportedItems = supportedItems;
             return this;
         }
 
-        public @NotNull Builder primaryItems(@NotNull ObjectSet<Material> primaryItems) {
+        public @NotNull Builder primaryItems(@NotNull ObjectSet primaryItems) {
             this.primaryItems = primaryItems;
             return this;
         }
