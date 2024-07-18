@@ -109,10 +109,11 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.BlockVec,net.minestom.server.entity.Player.Hand)" class="member-name-link">PlayerBlockPlaceEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.BlockVec,net.minestom.server.coordinate.Point,net.minestom.server.entity.Player.Hand)" class="member-name-link">PlayerBlockPlaceEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
  @NotNull <a href="../../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
  @NotNull <a href="../../coordinate/BlockVec.html" title="class in net.minestom.server.coordinate">BlockVec</a>&nbsp;blockPosition,
+ @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition,
  <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -152,39 +153,42 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the block position.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHand()" class="member-name-link">getHand</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCursorPosition()" class="member-name-link">getCursorPosition</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHand()" class="member-name-link">getHand</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the hand with which the player is trying to place.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(net.minestom.server.instance.block.Block)" class="member-name-link">setBlock</a><wbr>(@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setBlock(net.minestom.server.instance.block.Block)" class="member-name-link">setBlock</a><wbr>(@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the block to be placed.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCancelled(boolean)" class="member-name-link">setCancelled</a><wbr>(boolean&nbsp;cancel)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCancelled(boolean)" class="member-name-link">setCancelled</a><wbr>(boolean&nbsp;cancel)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDoBlockUpdates(boolean)" class="member-name-link">setDoBlockUpdates</a><wbr>(boolean&nbsp;doBlockUpdates)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDoBlockUpdates(boolean)" class="member-name-link">setDoBlockUpdates</a><wbr>(boolean&nbsp;doBlockUpdates)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Should the place trigger updates (on self and neighbors)</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shouldDoBlockUpdates()" class="member-name-link">shouldDoBlockUpdates</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shouldDoBlockUpdates()" class="member-name-link">shouldDoBlockUpdates</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Should the place trigger updates (on self and neighbors)</div>
 </div>
 </div>
@@ -211,7 +215,7 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.BlockVec,net.minestom.server.entity.Player.Hand)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.coordinate.BlockVec,net.minestom.server.coordinate.Point,net.minestom.server.entity.Player.Hand)">
 <h3>PlayerBlockPlaceEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerBlockPlaceEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
@@ -221,6 +225,8 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
  @NotNull <a href="../../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
  @NotNull
  @NotNull <a href="../../coordinate/BlockVec.html" title="class in net.minestom.server.coordinate">BlockVec</a>&nbsp;blockPosition,
+ @NotNull
+ @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;cursorPosition,
  @NotNull
  <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</span></div>
 </section>
@@ -278,6 +284,13 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <dt>Returns:</dt>
 <dd>the block position</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getCursorPosition()">
+<h3>getCursorPosition</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">getCursorPosition</span>()</div>
 </section>
 </li>
 <li>
