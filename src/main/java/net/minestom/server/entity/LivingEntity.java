@@ -384,57 +384,57 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(@NotNull Damage damage) {
-        if (isDead())
-            return false;
-        if (isInvulnerable() || isImmune(damage.getType())) {
-            return false;
-        }
+        if (isDead() || isInvulnerable()) return false;
 
         EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, damage, damage.getSound(this));
-        EventDispatcher.callCancellable(entityDamageEvent, () -> {
-            // Set the last damage type since the event is not cancelled
-            this.lastDamage = entityDamageEvent.getDamage();
+        EventDispatcher.call(entityDamageEvent);
+        if (entityDamageEvent.isCancelled()) return false;
 
-            float remainingDamage = entityDamageEvent.getDamage().getAmount();
+        damage = entityDamageEvent.getDamage();
+        if (isImmune(damage.getType())) return false;
 
-            if (entityDamageEvent.shouldAnimate()) {
-                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
-            }
+        // Set the last damage type since the event is not cancelled
+        this.lastDamage = damage;
 
-            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getTypeId(), damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1, damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
+        float remainingDamage = damage.getAmount();
 
-            // Additional hearts support
-            if (this instanceof Player player) {
-                final float additionalHearts = player.getAdditionalHearts();
-                if (additionalHearts > 0) {
-                    if (remainingDamage > additionalHearts) {
-                        remainingDamage -= additionalHearts;
-                        player.setAdditionalHearts(0);
-                    } else {
-                        player.setAdditionalHearts(additionalHearts - remainingDamage);
-                        remainingDamage = 0;
-                    }
-                }
-            }
+        if (entityDamageEvent.shouldAnimate()) {
+            sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+        }
 
-            // Set the final entity health
-            setHealth(getHealth() - remainingDamage);
+        sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getTypeId(), damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1, damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
 
-            // play damage sound
-            final SoundEvent sound = entityDamageEvent.getSound();
-            if (sound != null) {
-                Source soundCategory;
-                if (this instanceof Player) {
-                    soundCategory = Source.PLAYER;
+        // Additional hearts support
+        if (this instanceof Player player) {
+            final float additionalHearts = player.getAdditionalHearts();
+            if (additionalHearts > 0) {
+                if (remainingDamage > additionalHearts) {
+                    remainingDamage -= additionalHearts;
+                    player.setAdditionalHearts(0);
                 } else {
-                    // TODO: separate living entity categories
-                    soundCategory = Source.HOSTILE;
+                    player.setAdditionalHearts(additionalHearts - remainingDamage);
+                    remainingDamage = 0;
                 }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory, getPosition(), 1.0f, 1.0f, 0));
             }
-        });
+        }
 
-        return !entityDamageEvent.isCancelled();
+        // Set the final entity health
+        setHealth(getHealth() - remainingDamage);
+
+        // play damage sound
+        final SoundEvent sound = entityDamageEvent.getSound();
+        if (sound != null) {
+            Source soundCategory;
+            if (this instanceof Player) {
+                soundCategory = Source.PLAYER;
+            } else {
+                // TODO: separate living entity categories
+                soundCategory = Source.HOSTILE;
+            }
+            sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory, getPosition(), 1.0f, 1.0f, 0));
+        }
+
+        return true;
     }
 
     /**

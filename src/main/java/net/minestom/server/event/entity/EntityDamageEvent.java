@@ -9,13 +9,15 @@ import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * Called with {@link LivingEntity#damage(net.minestom.server.registry.DynamicRegistry.Key, float)}.
  */
 public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
-    private final Damage damage;
+    private Damage damage;
     private SoundEvent sound;
     private boolean animation = true;
 
@@ -41,6 +43,15 @@ public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent 
     @NotNull
     public Damage getDamage() {
         return damage;
+    }
+
+    /**
+     * Sets the damage that this entity will actually take.
+     *
+     * @param damage the new damage
+     */
+    public void setDamage(@NotNull Damage damage) {
+        this.damage = Objects.requireNonNull(damage);
     }
 
     /**
