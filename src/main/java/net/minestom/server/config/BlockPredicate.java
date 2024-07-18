@@ -3,10 +3,14 @@ package net.minestom.server.config;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.collision.Shape;
+import net.minestom.server.collision.ShapeImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -20,6 +24,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface BlockPredicate {
@@ -308,6 +313,30 @@ public interface BlockPredicate {
 
         @Override
         public @NotNull BinaryTagSerializer<WouldSurvive> nbtType() {
+            return NBT_TYPE;
+        }
+    }
+
+    record Unobstructed(@Nullable Point offset) implements BlockPredicate {
+        public static final BinaryTagSerializer<Unobstructed> NBT_TYPE = BinaryTagSerializer.object(
+                "offset", BinaryTagSerializer.BLOCK_POSITION, Unobstructed::offset,
+                Unobstructed::new
+        );
+
+        @Override
+        public boolean test(Instance instance, Point blockPosition) {
+            Point position = blockPosition.add(offset == null ? Vec.ZERO : offset);
+            Shape fullBlock = Block.STONE.registry().collisionShape();
+            for (Entity entity : instance.getNearbyEntities(blockPosition, 3)) {
+                if (fullBlock.intersectBox(entity.getPosition().sub(position), entity.getBoundingBox()))
+                    return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public @NotNull BinaryTagSerializer<Unobstructed> nbtType() {
             return NBT_TYPE;
         }
     }
