@@ -12,6 +12,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerBlockUpdateEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -19,6 +20,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
@@ -194,11 +196,23 @@ public class InstanceContainer extends Instance {
 
             // Refresh player chunk block
             {
-                chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
+                final CachedPacket cachedBlockChangePacket =
+                        new CachedPacket(new BlockChangePacket(blockPosition, block.stateId()));
+                final CachedPacket blockEntityPacket;
                 var registry = block.registry();
                 if (registry.isBlockEntity()) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                    blockEntityPacket = new CachedPacket(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                }
+                else {
+                    blockEntityPacket = null;
+                }
+
+                for (Player viewer : chunk.getViewers()) {
+                    EventDispatcher.callCancellable(new PlayerBlockUpdateEvent(viewer, block, blockPosition), () -> {
+                        viewer.sendPacket(cachedBlockChangePacket);
+                        if (blockEntityPacket != null) viewer.sendPacket(blockEntityPacket);
+                    });
                 }
             }
         }
