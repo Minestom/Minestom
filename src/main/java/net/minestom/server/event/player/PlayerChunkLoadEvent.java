@@ -15,7 +15,7 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
     private final int chunkX, chunkZ;
     private Chunk chunk;
 
-    public PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ, @Nullable Chunk chunk) {
+    private PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ, @Nullable Chunk chunk) {
         validateChunk(chunk, chunkX, chunkZ);
         this.player = player;
         this.chunkX = chunkX;
