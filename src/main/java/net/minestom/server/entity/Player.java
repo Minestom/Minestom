@@ -355,9 +355,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(recipeManager.getDeclareRecipesPacket());
 
             List<String> recipesIdentifier = new ArrayList<>();
-            for (Recipe recipe : recipeManager.getRecipes()) {
-                if (!recipe.shouldShow(this))
-                    continue;
+            for (Recipe recipe : recipeManager.consumeRecipes(this)) {
                 recipesIdentifier.add(recipe.id());
             }
             if (!recipesIdentifier.isEmpty()) {
