@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        final Player.Hand hand = packet.hand();
+        final PlayerHand hand = packet.hand();
         final ItemStack itemStack = player.getInventory().getItemInHand(hand);
         final Material material = itemStack.material();
 
@@ -74,7 +75,7 @@ public class UseItemListener {
 
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
-                player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
+                player.refreshActiveHand(true, hand == PlayerHand.OFF, false);
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
         }
