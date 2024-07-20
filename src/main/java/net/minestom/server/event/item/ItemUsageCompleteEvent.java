@@ -1,6 +1,7 @@
 package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
@@ -12,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 public class ItemUsageCompleteEvent implements PlayerInstanceEvent, ItemEvent {
 
     private final Player player;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private final ItemStack itemStack;
 
-    public ItemUsageCompleteEvent(@NotNull Player player, @NotNull Player.Hand hand,
+    public ItemUsageCompleteEvent(@NotNull Player player, @NotNull PlayerHand hand,
                                   @NotNull ItemStack itemStack) {
         this.player = player;
         this.hand = hand;
@@ -23,7 +24,7 @@ public class ItemUsageCompleteEvent implements PlayerInstanceEvent, ItemEvent {
     }
 
     @NotNull
-    public Player.Hand getHand() {
+    public PlayerHand getHand() {
         return hand;
     }
 
