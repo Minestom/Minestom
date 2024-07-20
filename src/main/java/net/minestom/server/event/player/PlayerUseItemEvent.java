@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
@@ -14,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
-    private final Player.Hand hand;
+    private final PlayerHand hand;
     private final ItemStack itemStack;
 
     private long itemUseTime;
     private boolean cancelled;
 
-    public PlayerUseItemEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack, long itemUseTime) {
+    public PlayerUseItemEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long itemUseTime) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -32,7 +33,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      *
      * @return the hand used
      */
-    public @NotNull Player.Hand getHand() {
+    public @NotNull PlayerHand getHand() {
         return hand;
     }
 
