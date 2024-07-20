@@ -1,9 +1,8 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -31,14 +30,14 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
         int id();
     }
 
-    public record Interact(Player.@NotNull Hand hand) implements Type {
+    public record Interact(@NotNull PlayerHand hand) implements Type {
         public Interact(@NotNull NetworkBuffer reader) {
-            this(reader.readEnum(Player.Hand.class));
+            this(reader.readEnum(PlayerHand.class));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
-            writer.writeEnum(Player.Hand.class, hand);
+            writer.writeEnum(PlayerHand.class, hand);
         }
 
         @Override
@@ -60,10 +59,10 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
     }
 
     public record InteractAt(float targetX, float targetY, float targetZ,
-                             Player.@NotNull Hand hand) implements Type {
+                             @NotNull PlayerHand hand) implements Type {
         public InteractAt(@NotNull NetworkBuffer reader) {
             this(reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT),
-                    reader.readEnum(Player.Hand.class));
+                    reader.readEnum(PlayerHand.class));
         }
 
         @Override
@@ -71,7 +70,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
             writer.write(FLOAT, targetX);
             writer.write(FLOAT, targetY);
             writer.write(FLOAT, targetZ);
-            writer.writeEnum(Player.Hand.class, hand);
+            writer.writeEnum(PlayerHand.class, hand);
         }
 
         @Override

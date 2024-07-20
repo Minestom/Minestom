@@ -190,7 +190,7 @@ public class PlayerInit {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN) return;
+                if (event.getHand() != PlayerHand.MAIN) return;
 
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
