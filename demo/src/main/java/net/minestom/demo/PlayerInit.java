@@ -5,8 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.advancements.notifications.Notification;
-import net.minestom.server.advancements.notifications.NotificationCenter;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
@@ -174,12 +173,11 @@ public class PlayerInit {
 
 
                 if (event.isFirstSpawn()) {
-                    Notification notification = new Notification(
+                    event.getPlayer().sendNotification(new Notification(
                             Component.text("Welcome!"),
                             FrameType.TASK,
                             Material.IRON_SWORD
-                    );
-                    NotificationCenter.send(notification, event.getPlayer());
+                    ));
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
                 }
