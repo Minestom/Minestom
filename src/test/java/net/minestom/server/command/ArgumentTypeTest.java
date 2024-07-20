@@ -144,12 +144,12 @@ public class ArgumentTypeTest {
     public void testArgumentIntRange() {
         var arg = ArgumentType.IntRange("int_range");
 
-        assertArg(arg, new Range.Integer(0, 50), "0..50");
-        assertArg(arg, new Range.Integer(0, 0), "0..0");
-        assertArg(arg, new Range.Integer(-50, 0), "-50..0");
-        assertArg(arg, new Range.Integer(Integer.MIN_VALUE, 50), "..50");
-        assertArg(arg, new Range.Integer(0, Integer.MAX_VALUE), "0..");
-        assertArg(arg, new Range.Integer(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
+        assertArg(arg, new Range.Int(0, 50), "0..50");
+        assertArg(arg, new Range.Int(0, 0), "0..0");
+        assertArg(arg, new Range.Int(-50, 0), "-50..0");
+        assertArg(arg, new Range.Int(Integer.MIN_VALUE, 50), "..50");
+        assertArg(arg, new Range.Int(0, Integer.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Int(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
 
         assertInvalidArg(arg, "..");
         assertInvalidArg(arg, "-2147483649..2147483647");

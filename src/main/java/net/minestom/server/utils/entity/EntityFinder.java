@@ -37,7 +37,7 @@ public class EntityFinder {
     // Position
     private Point startPosition;
     private Float dx, dy, dz;
-    private Range.Integer distance;
+    private Range.Int distance;
 
     // By traits
     private Integer limit;
@@ -50,7 +50,7 @@ public class EntityFinder {
 
     // Players specific
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
-    private Range.Integer level;
+    private Range.Int level;
 
     public EntityFinder setTargetSelector(@NotNull TargetSelector targetSelector) {
         this.targetSelector = targetSelector;
@@ -67,7 +67,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setDistance(@NotNull Range.Integer distance) {
+    public EntityFinder setDistance(@NotNull Range.Int distance) {
         this.distance = distance;
         return this;
     }
@@ -77,7 +77,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setLevel(@NotNull Range.Integer level) {
+    public EntityFinder setLevel(@NotNull Range.Int level) {
         this.level = level;
         return this;
     }
