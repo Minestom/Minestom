@@ -9,8 +9,6 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 /**
  * Event raised before an individual block is sent to the client. Cancelling this event will cause the client to not
  * receive the update (see {@link net.minestom.server.network.packet.server.play.BlockChangePacket}), though the block
@@ -18,9 +16,9 @@ import java.util.Objects;
  */
 public class PlayerBlockUpdateEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
     private final Player player;
+    private final Block block;
     private final BlockVec blockPosition;
 
-    private Block block;
     private boolean cancelled;
 
     public PlayerBlockUpdateEvent(@NotNull Player player, @NotNull Block block, @NotNull Point position) {
@@ -37,15 +35,6 @@ public class PlayerBlockUpdateEvent implements PlayerInstanceEvent, BlockEvent, 
     @Override
     public @NotNull Block getBlock() {
         return block;
-    }
-
-    /**
-     * Sets the block that will be seen by this client.
-     *
-     * @param block the block that will be seen by this client
-     */
-    public void setBlock(@NotNull Block block) {
-        this.block = Objects.requireNonNull(block);
     }
 
     @Override

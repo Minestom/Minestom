@@ -20,7 +20,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
@@ -196,25 +196,31 @@ public class InstanceContainer extends Instance {
 
             // Refresh player chunk block
             {
-                final CachedPacket cachedBlockChangePacket =
-                        new CachedPacket(new BlockChangePacket(blockPosition, block.stateId()));
-                final CachedPacket blockEntityPacket;
-                var registry = block.registry();
-                if (registry.isBlockEntity()) {
-                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                    blockEntityPacket = new CachedPacket(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
-                }
-                else {
-                    blockEntityPacket = null;
-                }
-
-                for (Player viewer : chunk.getViewers()) {
-                    EventDispatcher.callCancellable(new PlayerBlockUpdateEvent(viewer, block, blockPosition), () -> {
-                        viewer.sendPacket(cachedBlockChangePacket);
-                        if (blockEntityPacket != null) viewer.sendPacket(blockEntityPacket);
-                    });
-                }
+                updateClientBlock(chunk, block, blockPosition);
             }
+        }
+    }
+
+    private void updateClientBlock(Chunk chunk, Block block, Point blockPosition) {
+        final SendablePacket blockChangePacket =
+                PacketUtils.cachePacketIfEnabled(new BlockChangePacket(blockPosition, block.stateId()));
+        final SendablePacket blockEntityPacket;
+
+        var registry = block.registry();
+        if (registry.isBlockEntity()) {
+            final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+            blockEntityPacket = PacketUtils.cachePacketIfEnabled(new BlockEntityDataPacket(blockPosition,
+                    registry.blockEntityId(), data));
+        }
+        else {
+            blockEntityPacket = null;
+        }
+
+        for (Player viewer : chunk.getViewers()) {
+            EventDispatcher.callCancellable(new PlayerBlockUpdateEvent(viewer, block, blockPosition), () -> {
+                viewer.sendPacket(blockChangePacket);
+                if (blockEntityPacket != null) viewer.sendPacket(blockEntityPacket);
+            });
         }
     }
 

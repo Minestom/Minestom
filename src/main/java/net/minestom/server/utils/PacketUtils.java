@@ -102,11 +102,22 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final var sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+        final var sendablePacket = cachePacketIfEnabled(packet);
 
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
+    }
+
+    /**
+     * If the packet should be cached, wraps it in a {@link CachedPacket} and returns it. Otherwise, returns
+     * {@code serverPacket}.
+     *
+     * @param serverPacket the ServerPacket to optionally cache
+     * @return a potentially-cached packet
+     */
+    public static @NotNull SendablePacket cachePacketIfEnabled(@NotNull ServerPacket serverPacket) {
+        return shouldUseCachePacket(serverPacket) ? new CachedPacket(serverPacket) : serverPacket;
     }
 
     /**
