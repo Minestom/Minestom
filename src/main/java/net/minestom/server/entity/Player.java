@@ -24,6 +24,7 @@ import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
@@ -2359,6 +2360,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
         chunkUpdateLimitChecker.clearHistory();
         return super.teleport(position, chunks, flags);
+    }
+
+    /**
+     * Send a {@link Notification} to the player.
+     * @param notification the {@link Notification} to send
+     */
+    public void sendNotification(@NotNull Notification notification) {
+        sendPacket(notification.buildAddPacket());
+        sendPacket(notification.buildRemovePacket());
     }
 
     /**
