@@ -10,10 +10,7 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.ItemEntity;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
@@ -199,7 +196,7 @@ public class PlayerInit {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN) return;
+                if (event.getHand() != PlayerHand.MAIN) return;
 
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());

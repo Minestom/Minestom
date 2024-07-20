@@ -2,7 +2,7 @@ package net.minestom.server.entity.player;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
@@ -39,7 +39,7 @@ public class PlayerBlockPlacementIntegrationTest {
         player.setItemInMainHand(ItemStack.builder(Material.WHITE_WOOL).set(ItemComponent.CAN_PLACE_ON, canPlaceOn).build());
 
         var packet = new ClientPlayerBlockPlacementPacket(
-                Player.Hand.MAIN, new Pos(2, 41, 0), BlockFace.WEST,
+                PlayerHand.MAIN, new Pos(2, 41, 0), BlockFace.WEST,
                 1f, 1f, 1f,
                 false, 0
         );
