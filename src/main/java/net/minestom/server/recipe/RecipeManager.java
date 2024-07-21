@@ -1,64 +1,54 @@
 package net.minestom.server.recipe;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
-public class RecipeManager {
+public final class RecipeManager {
     private final CachedPacket declareRecipesPacket = new CachedPacket(this::createDeclareRecipesPacket);
-    private final Set<Recipe> recipes = new CopyOnWriteArraySet<>();
+    private final Map<Recipe, Predicate<Player>> recipes = new ConcurrentHashMap<>();
 
-    public void addRecipes(@NotNull Recipe... recipe) {
-        if (recipes.addAll(List.of(recipe))) {
+    public void addRecipe(@NotNull Recipe recipe, @NotNull Predicate<Player> predicate) {
+        var previous = recipes.put(recipe, predicate);
+        if (previous == null) {
             declareRecipesPacket.invalidate();
         }
     }
 
     public void addRecipe(@NotNull Recipe recipe) {
-        if (this.recipes.add(recipe)) {
-            declareRecipesPacket.invalidate();
-        }
+        addRecipe(recipe, player -> true);
     }
 
     public void removeRecipe(@NotNull Recipe recipe) {
-        if (this.recipes.remove(recipe)) {
+        if (this.recipes.remove(recipe) != null) {
             declareRecipesPacket.invalidate();
         }
     }
 
-    @NotNull
-    public Set<Recipe> getRecipes() {
-        return recipes;
+    public List<Recipe> consumeRecipes(Player player) {
+        return recipes.entrySet().stream()
+                .filter(entry -> entry.getValue().test(player))
+                .map(Map.Entry::getKey)
+                .toList();
     }
 
-    @NotNull
-    public SendablePacket getDeclareRecipesPacket() {
+    public @NotNull Set<Recipe> getRecipes() {
+        return recipes.keySet();
+    }
+
+    public @NotNull SendablePacket getDeclareRecipesPacket() {
         return declareRecipesPacket;
     }
 
     private @NotNull DeclareRecipesPacket createDeclareRecipesPacket() {
-        var entries = new ArrayList<DeclareRecipesPacket.DeclaredRecipe>();
-        for (var recipe : recipes) {
-            entries.add(switch (recipe.type) {
-                case SHAPELESS -> RecipeConversion.shapeless((ShapelessRecipe) recipe);
-                case SHAPED -> RecipeConversion.shaped((ShapedRecipe) recipe);
-                case SMELTING -> RecipeConversion.smelting((SmeltingRecipe) recipe);
-                case BLASTING -> RecipeConversion.blasting((BlastingRecipe) recipe);
-                case SMOKING -> RecipeConversion.smoking((SmokingRecipe) recipe);
-                case CAMPFIRE_COOKING -> RecipeConversion.campfire((CampfireCookingRecipe) recipe);
-                case STONECUTTING -> RecipeConversion.stonecutter((StonecutterRecipe) recipe);
-                case SMITHING_TRANSFORM -> RecipeConversion.smithingTransform((SmithingTransformRecipe) recipe);
-                case SMITHING_TRIM -> RecipeConversion.smithingTrim((SmithingTrimRecipe) recipe);
-                default -> throw new IllegalStateException("Unhandled recipe type : " + recipe.type);
-            });
-        }
-        return new DeclareRecipesPacket(entries);
+        return new DeclareRecipesPacket(List.copyOf(recipes.keySet()));
     }
-
 }
