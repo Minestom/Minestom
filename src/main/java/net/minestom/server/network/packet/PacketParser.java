@@ -48,9 +48,12 @@ public sealed interface PacketParser<T> {
             PacketRegistry<ClientPacket> playRegistry
     ) implements PacketParser<ClientPacket> {
         public Client() {
-            this(new PacketRegistry.ClientHandshake(),
-                    new PacketRegistry.ClientStatus(), new PacketRegistry.ClientLogin(),
-                    new PacketRegistry.ClientConfiguration(), new PacketRegistry.ClientPlay()
+            this(
+                    new PacketRegistry.ClientHandshake(),
+                    new PacketRegistry.ClientStatus(),
+                    new PacketRegistry.ClientLogin(),
+                    new PacketRegistry.ClientConfiguration(),
+                    new PacketRegistry.ClientPlay()
             );
         }
     }
@@ -63,9 +66,12 @@ public sealed interface PacketParser<T> {
             PacketRegistry<ServerPacket> playRegistry
     ) implements PacketParser<ServerPacket> {
         public Server() {
-            this(new PacketRegistry.ServerHandshake(),
-                    new PacketRegistry.ServerStatus(), new PacketRegistry.ServerLogin(),
-                    new PacketRegistry.ServerConfiguration(), new PacketRegistry.ServerPlay()
+            this(
+                    new PacketRegistry.ServerHandshake(),
+                    new PacketRegistry.ServerStatus(),
+                    new PacketRegistry.ServerLogin(),
+                    new PacketRegistry.ServerConfiguration(),
+                    new PacketRegistry.ServerPlay()
             );
         }
     }
