@@ -20,8 +20,8 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
+import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeCategory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -81,45 +81,44 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new CraftRecipeResponse((byte) 2, "recipe"));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
         SERVER_PACKETS.add(new DeclareRecipesPacket(
-                List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
+                List.of(new Recipe(
                                 "minecraft:sticks",
-                                "sticks",
-                                RecipeCategory.Crafting.MISC,
-                                List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
-                                ItemStack.of(Material.STICK)
+                                new Recipe.Shapeless("sticks", RecipeCategory.Crafting.MISC,
+                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
+                                        ItemStack.of(Material.STICK))
                         ),
-                        new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
+                        new Recipe(
                                 "minecraft:torch",
-                                "",
-                                RecipeCategory.Crafting.MISC,
-                                1,
-                                2,
-                                List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                        new Ingredient(List.of(ItemStack.of(Material.STICK)))),
-                                ItemStack.of(Material.TORCH),
-                                true
+                                new Recipe.Shaped("",
+                                        RecipeCategory.Crafting.MISC,
+                                        1,
+                                        2,
+                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
+                                                new Recipe.Ingredient(List.of(ItemStack.of(Material.STICK)))),
+                                        ItemStack.of(Material.TORCH),
+                                        true)
                         ),
-                        new DeclareRecipesPacket.DeclaredBlastingRecipe(
+                        new Recipe(
                                 "minecraft:coal",
-                                "forging",
-                                RecipeCategory.Cooking.MISC,
-                                new Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                ItemStack.of(Material.IRON_INGOT),
-                                5,
-                                5
+                                new Recipe.Blasting("forging",
+                                        RecipeCategory.Cooking.MISC,
+                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
+                                        ItemStack.of(Material.IRON_INGOT),
+                                        5,
+                                        5)
                         ),
-                        new DeclareRecipesPacket.DeclaredSmithingTransformRecipe(
+                        new Recipe(
                                 "minecraft:iron_to_diamond",
-                                new Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-                                new Ingredient(List.of(ItemStack.of(Material.DIAMOND))),
-                                new Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                                ItemStack.of(Material.DIAMOND)
+                                new Recipe.SmithingTransform(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
+                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.DIAMOND))),
+                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+                                        ItemStack.of(Material.DIAMOND))
                         ),
-                        new DeclareRecipesPacket.DeclaredSmithingTrimRecipe(
+                        new Recipe(
                                 "minecraft:iron_to_coast",
-                                new Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                                new Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-                                new Ingredient(List.of(ItemStack.of(Material.COAL)))
+                                new Recipe.SmithingTrim(new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
+                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))))
                         )
                 )));
 
