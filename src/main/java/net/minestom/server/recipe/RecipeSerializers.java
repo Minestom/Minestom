@@ -206,6 +206,19 @@ public final class RecipeSerializers {
         return (Type) switch (type) {
             case SHAPED -> SHAPED;
             case SHAPELESS -> SHAPELESS;
+            case SPECIAL_ARMORDYE -> ARMOR_DYE;
+            case SPECIAL_BOOKCLONING -> BOOK_CLONING;
+            case SPECIAL_MAPCLONING -> MAP_CLONING;
+            case SPECIAL_MAPEXTENDING -> MAP_EXTENDING;
+            case SPECIAL_FIREWORK_ROCKET -> FIREWORK_ROCKET;
+            case SPECIAL_FIREWORK_STAR -> FIREWORK_STAR;
+            case SPECIAL_FIREWORK_STAR_FADE -> FIREWORK_STAR_FADE;
+            case SPECIAL_TIPPEDARROW -> TIPPED_ARROW;
+            case SPECIAL_BANNERDUPLICATE -> BANNER_DUPLICATE;
+            case SPECIAL_SHIELDDECORATION -> SHIELD_DECORATION;
+            case SPECIAL_SHULKERBOXCOLORING -> SPECIAL_SHULKER_BOX_COLORING;
+            case SPECIAL_SUSPICIOUSSTEW -> SUSPICIOUS_STEW;
+            case SPECIAL_REPAIRITEM -> REPAIR_ITEM;
             case SMELTING -> SMELTING;
             case BLASTING -> BLASTING;
             case SMOKING -> SMOKING;
@@ -213,7 +226,7 @@ public final class RecipeSerializers {
             case STONECUTTING -> STONECUTTING;
             case SMITHING_TRANSFORM -> SMITHING_TRANSFORM;
             case SMITHING_TRIM -> SMITHING_TRIM;
-            default -> throw new UnsupportedOperationException("Unrecognized type: " + type);
+            case DECORATED_POT -> DECORATED_POT;
         };
     }
 
