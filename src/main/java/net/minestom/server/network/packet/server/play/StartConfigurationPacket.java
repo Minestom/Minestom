@@ -4,9 +4,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public record StartConfigurationPacket() implements ServerPacket.Play {
+    public StartConfigurationPacket(NetworkBuffer reader) {
+        this();
+    }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
