@@ -22,10 +22,6 @@ public class SocketWriteTest {
             writer.write(INT, value);
         }
 
-        @Override
-        public int playId() {
-            return 1;
-        }
     }
 
     record CompressiblePacket(String value) implements ServerPacket.Play {
@@ -34,10 +30,6 @@ public class SocketWriteTest {
             writer.write(STRING, value);
         }
 
-        @Override
-        public int playId() {
-            return 1;
-        }
     }
 
     @Test

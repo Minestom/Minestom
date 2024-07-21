@@ -4,7 +4,6 @@ import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,16 +37,6 @@ public record ResourcePackPushPacket(
         writer.write(STRING, hash);
         writer.write(BOOLEAN, forced);
         writer.writeOptional(COMPONENT, prompt);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_RESOURCE_PACK_PUSH;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.RESOURCE_PACK_PUSH;
     }
 
     @Override

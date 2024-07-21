@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,8 +32,4 @@ public record EntityVelocityPacket(int entityId, short velocityX, short velocity
         writer.write(SHORT, velocityZ);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_VELOCITY;
-    }
 }

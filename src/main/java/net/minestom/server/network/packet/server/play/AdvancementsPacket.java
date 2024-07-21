@@ -6,7 +6,6 @@ import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,11 +40,6 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         writer.writeCollection(advancementMappings);
         writer.writeCollection(STRING, identifiersToRemove);
         writer.writeCollection(progressMappings);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ADVANCEMENTS;
     }
 
     // TODO is the display-item needed to be updated?

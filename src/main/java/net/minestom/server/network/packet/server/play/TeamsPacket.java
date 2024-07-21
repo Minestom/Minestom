@@ -5,9 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -210,16 +208,6 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         public int id() {
             return 4;
         }
-    }
-
-    /**
-     * Gets the identifier of the packet
-     *
-     * @return the identifier
-     */
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TEAMS;
     }
 
     /**

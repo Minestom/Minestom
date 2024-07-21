@@ -3,9 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,11 +32,6 @@ public record TabCompletePacket(int transactionId, int start, int length,
         writer.write(VAR_INT, start);
         writer.write(VAR_INT, length);
         writer.writeCollection(matches);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TAB_COMPLETE;
     }
 
     @Override

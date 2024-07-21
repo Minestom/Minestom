@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,8 +23,4 @@ public record LoginPluginRequestPacket(int messageId, @NotNull String channel,
         }
     }
 
-    @Override
-    public int loginId() {
-        return ServerPacketIdentifier.LOGIN_PLUGIN_REQUEST;
-    }
 }

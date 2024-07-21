@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +20,4 @@ public record UpdateLightPacket(int chunkX, int chunkZ,
         writer.write(lightData);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.UPDATE_LIGHT;
-    }
 }

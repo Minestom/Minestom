@@ -18,7 +18,10 @@ public sealed interface PacketParser<T> {
     @NotNull T parse(@NotNull ConnectionState connectionState,
                      int packetId, @NotNull NetworkBuffer buffer);
 
+    @NotNull PacketRegistry<T> stateRegistry(@NotNull ConnectionState connectionState);
+
     record Client(
+            PacketRegistry.Client handshakeHandler,
             PacketRegistry.Client statusHandler,
             PacketRegistry.Client loginHandler,
             PacketRegistry.Client configurationHandler,
@@ -26,7 +29,8 @@ public sealed interface PacketParser<T> {
     ) implements PacketParser<ClientPacket> {
 
         public Client() {
-            this(new PacketRegistry.ClientStatus(), new PacketRegistry.ClientLogin(),
+            this(new PacketRegistry.ClientHanshake(),
+                    new PacketRegistry.ClientStatus(), new PacketRegistry.ClientLogin(),
                     new PacketRegistry.ClientConfiguration(), new PacketRegistry.ClientPlay()
             );
         }
@@ -43,6 +47,17 @@ public sealed interface PacketParser<T> {
                 case LOGIN -> loginHandler.create(packetId, buffer);
                 case CONFIGURATION -> configurationHandler.create(packetId, buffer);
                 case PLAY -> playHandler.create(packetId, buffer);
+            };
+        }
+
+        @Override
+        public @NotNull PacketRegistry<ClientPacket> stateRegistry(@NotNull ConnectionState connectionState) {
+            return switch (connectionState) {
+                case HANDSHAKE -> handshakeHandler;
+                case STATUS -> statusHandler;
+                case LOGIN -> loginHandler;
+                case CONFIGURATION -> configurationHandler;
+                case PLAY -> playHandler;
             };
         }
     }
@@ -69,6 +84,17 @@ public sealed interface PacketParser<T> {
                 case LOGIN -> loginHandler.create(packetId, buffer);
                 case CONFIGURATION -> configurationHandler.create(packetId, buffer);
                 case PLAY -> playHandler.create(packetId, buffer);
+            };
+        }
+
+        @Override
+        public @NotNull PacketRegistry<ServerPacket> stateRegistry(@NotNull ConnectionState connectionState) {
+            return switch (connectionState) {
+                case HANDSHAKE -> throw new UnsupportedOperationException("No client-bound Handshake packet");
+                case STATUS -> statusHandler;
+                case LOGIN -> loginHandler;
+                case CONFIGURATION -> configurationHandler;
+                case PLAY -> playHandler;
             };
         }
     }

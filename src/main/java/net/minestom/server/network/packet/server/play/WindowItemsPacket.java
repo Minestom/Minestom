@@ -5,7 +5,6 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,11 +34,6 @@ public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemSt
         writer.write(VAR_INT, stateId);
         writer.writeCollection(ItemStack.NETWORK_TYPE, items);
         writer.write(ItemStack.NETWORK_TYPE, carriedItem);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.WINDOW_ITEMS;
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
@@ -17,11 +16,6 @@ public record EntityAnimationPacket(int entityId, @NotNull Animation animation) 
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, entityId);
         writer.write(BYTE, (byte) animation.ordinal());
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_ANIMATION;
     }
 
     public enum Animation {
