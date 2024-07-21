@@ -44,12 +44,12 @@ import java.util.stream.Collectors;
  */
 public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
-    private static CachedPacket defaultTags;
+    private CachedPacket defaultTags;
 
-    private static CachedPacket getDefaultTags() {
-        var defaultTags = ConnectionManager.defaultTags;
+    private CachedPacket getDefaultTags() {
+        var defaultTags = this.defaultTags;
         if (defaultTags == null) {
-            ConnectionManager.defaultTags = defaultTags = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
+            this.defaultTags = defaultTags = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
         }
         return defaultTags;
     }

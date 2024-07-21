@@ -120,7 +120,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
         this.jukeboxSong = JukeboxSong.createDefaultRegistry();
 
-        this.tag = new TagManager();
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
         this.packetProcessor = new PacketProcessor(packetListener);
@@ -134,6 +133,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
+        this.tag = new TagManager();
 
         this.server = new Server(packetProcessor);
 
