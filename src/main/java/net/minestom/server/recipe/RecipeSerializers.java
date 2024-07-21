@@ -3,6 +3,7 @@ package net.minestom.server.recipe;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,15 +14,17 @@ import static net.minestom.server.recipe.Recipe.*;
 import static net.minestom.server.recipe.RecipeCategory.Cooking;
 import static net.minestom.server.recipe.RecipeCategory.Crafting;
 
+@ApiStatus.Internal
 public final class RecipeSerializers {
-    public static final NetworkBuffer.Type<Recipe> RECIPE = new NetworkBuffer.Type<>() {
+    public static final Type<Recipe> RECIPE = new Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer writer, Recipe shaped) {
             writer.write(STRING, shaped.id());
-            writer.write(RecipeType.NETWORK_TYPE, shaped.data().type());
-            var serializer = RecipeSerializers.dataSerializer(shaped.data().type());
+            final RecipeType recipeType = recipeToType(shaped.data());
+            writer.write(RecipeType.NETWORK_TYPE, recipeType);
+            var serializer = RecipeSerializers.dataSerializer(recipeType);
             if (serializer == null)
-                throw new UnsupportedOperationException("Unrecognized type: " + shaped.data().type());
+                throw new UnsupportedOperationException("Unrecognized type: " + recipeType);
             serializer.write(writer, shaped.data());
         }
 
@@ -36,12 +39,12 @@ public final class RecipeSerializers {
         }
     };
 
-    public static final NetworkBuffer.Type<Ingredient> INGREDIENT = NetworkBufferTemplate.template(
+    public static final Type<Ingredient> INGREDIENT = NetworkBufferTemplate.template(
             ItemStack.STRICT_NETWORK_TYPE.list(MAX_INGREDIENTS), Ingredient::items,
             Ingredient::new
     );
 
-    public static final NetworkBuffer.Type<Shaped> SHAPED = new NetworkBuffer.Type<>() {
+    public static final Type<Shaped> SHAPED = new Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer writer, Shaped shaped) {
             writer.write(STRING, shaped.group());
@@ -71,7 +74,7 @@ public final class RecipeSerializers {
         }
     };
 
-    public static final NetworkBuffer.Type<Shapeless> SHAPELESS = NetworkBufferTemplate.template(
+    public static final Type<Shapeless> SHAPELESS = NetworkBufferTemplate.template(
             STRING, Shapeless::group,
             Enum(Crafting.class), Shapeless::category,
             INGREDIENT.list(MAX_INGREDIENTS), Shapeless::ingredients,
@@ -79,7 +82,7 @@ public final class RecipeSerializers {
             Shapeless::new
     );
 
-    public static final NetworkBuffer.Type<Smelting> SMELTING = NetworkBufferTemplate.template(
+    public static final Type<Smelting> SMELTING = NetworkBufferTemplate.template(
             STRING, Smelting::group,
             Enum(Cooking.class), Smelting::category,
             INGREDIENT, Smelting::ingredient,
@@ -89,7 +92,7 @@ public final class RecipeSerializers {
             Smelting::new
     );
 
-    public static final NetworkBuffer.Type<Blasting> BLASTING = NetworkBufferTemplate.template(
+    public static final Type<Blasting> BLASTING = NetworkBufferTemplate.template(
             STRING, Blasting::group,
             Enum(Cooking.class), Blasting::category,
             INGREDIENT, Blasting::ingredient,
@@ -99,7 +102,7 @@ public final class RecipeSerializers {
             Blasting::new
     );
 
-    public static final NetworkBuffer.Type<Smoking> SMOKING = NetworkBufferTemplate.template(
+    public static final Type<Smoking> SMOKING = NetworkBufferTemplate.template(
             STRING, Smoking::group,
             Enum(Cooking.class), Smoking::category,
             INGREDIENT, Smoking::ingredient,
@@ -109,7 +112,7 @@ public final class RecipeSerializers {
             Smoking::new
     );
 
-    public static final NetworkBuffer.Type<CampfireCooking> CAMPFIRE_COOKING = NetworkBufferTemplate.template(
+    public static final Type<CampfireCooking> CAMPFIRE_COOKING = NetworkBufferTemplate.template(
             STRING, CampfireCooking::group,
             Enum(Cooking.class), CampfireCooking::category,
             INGREDIENT, CampfireCooking::ingredient,
@@ -119,14 +122,14 @@ public final class RecipeSerializers {
             CampfireCooking::new
     );
 
-    public static final NetworkBuffer.Type<Stonecutting> STONECUTTING = NetworkBufferTemplate.template(
+    public static final Type<Stonecutting> STONECUTTING = NetworkBufferTemplate.template(
             STRING, Stonecutting::group,
             INGREDIENT, Stonecutting::ingredient,
             ItemStack.STRICT_NETWORK_TYPE, Stonecutting::result,
             Stonecutting::new
     );
 
-    public static final NetworkBuffer.Type<SmithingTransform> SMITHING_TRANSFORM = NetworkBufferTemplate.template(
+    public static final Type<SmithingTransform> SMITHING_TRANSFORM = NetworkBufferTemplate.template(
             INGREDIENT, SmithingTransform::template,
             INGREDIENT, SmithingTransform::base,
             INGREDIENT, SmithingTransform::addition,
@@ -134,15 +137,72 @@ public final class RecipeSerializers {
             SmithingTransform::new
     );
 
-    public static final NetworkBuffer.Type<SmithingTrim> SMITHING_TRIM = NetworkBufferTemplate.template(
+    public static final Type<SmithingTrim> SMITHING_TRIM = NetworkBufferTemplate.template(
             INGREDIENT, SmithingTrim::template,
             INGREDIENT, SmithingTrim::base,
             INGREDIENT, SmithingTrim::addition,
             SmithingTrim::new
     );
 
+    public static final Type<SpecialArmorDye> ARMOR_DYE = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialArmorDye::category, SpecialArmorDye::new
+    );
+
+    public static final Type<SpecialBookCloning> BOOK_CLONING = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialBookCloning::category, SpecialBookCloning::new
+    );
+
+    public static final Type<SpecialMapCloning> MAP_CLONING = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialMapCloning::category, SpecialMapCloning::new
+    );
+
+    public static final Type<SpecialMapExtending> MAP_EXTENDING = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialMapExtending::category, SpecialMapExtending::new
+    );
+
+    public static final Type<SpecialFireworkRocket> FIREWORK_ROCKET = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialFireworkRocket::category, SpecialFireworkRocket::new
+    );
+
+    public static final Type<SpecialFireworkStar> FIREWORK_STAR = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialFireworkStar::category, SpecialFireworkStar::new
+    );
+
+    public static final Type<SpecialFireworkStarFade> FIREWORK_STAR_FADE = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialFireworkStarFade::category, SpecialFireworkStarFade::new
+    );
+
+    public static final Type<SpecialTippedArrow> TIPPED_ARROW = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialTippedArrow::category, SpecialTippedArrow::new
+    );
+
+    public static final Type<SpecialBannerDuplicate> BANNER_DUPLICATE = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialBannerDuplicate::category, SpecialBannerDuplicate::new
+    );
+
+    public static final Type<SpecialShieldDecoration> SHIELD_DECORATION = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialShieldDecoration::category, SpecialShieldDecoration::new
+    );
+
+    public static final Type<SpecialShulkerBoxColoring> SPECIAL_SHULKER_BOX_COLORING = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialShulkerBoxColoring::category, SpecialShulkerBoxColoring::new
+    );
+
+    public static final Type<SpecialSuspiciousStew> SUSPICIOUS_STEW = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialSuspiciousStew::category, SpecialSuspiciousStew::new
+    );
+
+    public static final Type<SpecialRepairItem> REPAIR_ITEM = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialRepairItem::category, SpecialRepairItem::new
+    );
+
+    public static final Type<SpecialDecoratedPot> DECORATED_POT = NetworkBufferTemplate.template(
+            Enum(Crafting.class), SpecialDecoratedPot::category, SpecialDecoratedPot::new
+    );
+
+
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static NetworkBuffer.Type<Data> dataSerializer(RecipeType type) {
+    public static Type<Data> dataSerializer(RecipeType type) {
         return (Type) switch (type) {
             case SHAPED -> SHAPED;
             case SHAPELESS -> SHAPELESS;
@@ -154,6 +214,34 @@ public final class RecipeSerializers {
             case SMITHING_TRANSFORM -> SMITHING_TRANSFORM;
             case SMITHING_TRIM -> SMITHING_TRIM;
             default -> throw new UnsupportedOperationException("Unrecognized type: " + type);
+        };
+    }
+
+    public static RecipeType recipeToType(Data data) {
+        return switch (data) {
+            case Shaped ignored -> RecipeType.SHAPED;
+            case Shapeless ignored -> RecipeType.SHAPELESS;
+            case Smelting ignored -> RecipeType.SMELTING;
+            case Blasting ignored -> RecipeType.BLASTING;
+            case Smoking ignored -> RecipeType.SMOKING;
+            case CampfireCooking ignored -> RecipeType.CAMPFIRE_COOKING;
+            case Stonecutting ignored -> RecipeType.STONECUTTING;
+            case SmithingTransform ignored -> RecipeType.SMITHING_TRANSFORM;
+            case SmithingTrim ignored -> RecipeType.SMITHING_TRIM;
+            case SpecialArmorDye ignored -> RecipeType.SPECIAL_ARMORDYE;
+            case SpecialBannerDuplicate ignored -> RecipeType.SPECIAL_BANNERDUPLICATE;
+            case SpecialBookCloning ignored -> RecipeType.SPECIAL_BOOKCLONING;
+            case SpecialDecoratedPot ignored -> RecipeType.DECORATED_POT;
+            case SpecialFireworkRocket ignored -> RecipeType.SPECIAL_FIREWORK_ROCKET;
+            case SpecialFireworkStar ignored -> RecipeType.SPECIAL_FIREWORK_STAR;
+            case SpecialFireworkStarFade ignored -> RecipeType.SPECIAL_FIREWORK_STAR_FADE;
+            case SpecialMapCloning ignored -> RecipeType.SPECIAL_MAPCLONING;
+            case SpecialMapExtending ignored -> RecipeType.SPECIAL_MAPEXTENDING;
+            case SpecialRepairItem ignored -> RecipeType.SPECIAL_REPAIRITEM;
+            case SpecialShieldDecoration ignored -> RecipeType.SPECIAL_SHIELDDECORATION;
+            case SpecialShulkerBoxColoring ignored -> RecipeType.SPECIAL_SHULKERBOXCOLORING;
+            case SpecialSuspiciousStew ignored -> RecipeType.SPECIAL_SUSPICIOUSSTEW;
+            case SpecialTippedArrow ignored -> RecipeType.SPECIAL_TIPPEDARROW;
         };
     }
 }
