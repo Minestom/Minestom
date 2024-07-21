@@ -1,12 +1,9 @@
 package net.minestom.server.network.packet.server.common;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
@@ -17,9 +14,6 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record TagsPacket(
         @NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket.Configuration, ServerPacket.Play {
-    @ApiStatus.Internal
-    public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
-
     public TagsPacket {
         tagsMap = Map.copyOf(tagsMap);
     }
