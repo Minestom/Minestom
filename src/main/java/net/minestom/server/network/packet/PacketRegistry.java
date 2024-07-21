@@ -22,8 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public interface PacketRegistry<T> {
-    @UnknownNullability
-    T create(int packetId, @NotNull NetworkBuffer reader);
+    @UnknownNullability T create(int packetId, @NotNull NetworkBuffer reader);
 
     int packetId(@NotNull Class<? extends T> packetClass);
 
@@ -34,8 +33,8 @@ public interface PacketRegistry<T> {
         }
     }
 
-    final class ClientHanshake extends Client {
-        public ClientHanshake() {
+    final class ClientHandshake extends Client {
+        public ClientHandshake() {
             super(
                     entry(ClientHandshakePacket.class, ClientHandshakePacket::new)
             );
@@ -147,6 +146,12 @@ public interface PacketRegistry<T> {
         @SafeVarargs
         Server(Entry<ServerPacket>... suppliers) {
             super(suppliers);
+        }
+    }
+
+    final class ServerHandshake extends Server {
+        public ServerHandshake() {
+            super();
         }
     }
 

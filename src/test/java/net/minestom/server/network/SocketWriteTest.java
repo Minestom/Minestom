@@ -37,7 +37,7 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, false);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, -1);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -49,8 +49,8 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, false);
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, false);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, -1);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, -1);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -66,7 +66,7 @@ public class SocketWriteTest {
         var packet = new CompressiblePacket(string);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + payload
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -78,7 +78,7 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -90,8 +90,8 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, true);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
+        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
