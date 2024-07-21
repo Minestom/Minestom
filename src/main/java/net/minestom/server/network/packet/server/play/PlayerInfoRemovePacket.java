@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -28,8 +27,4 @@ public record PlayerInfoRemovePacket(@NotNull List<@NotNull UUID> uuids) impleme
         writer.writeCollection(NetworkBuffer.UUID, uuids);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PLAYER_INFO_REMOVE;
-    }
 }

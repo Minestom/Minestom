@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -33,11 +32,6 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
         writer.write(VAR_INT, experience);
         writer.write(BOOLEAN, regularVillager);
         writer.write(BOOLEAN, canRestock);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TRADE_LIST;
     }
 
     public record Trade(ItemStack inputItem1, ItemStack result,

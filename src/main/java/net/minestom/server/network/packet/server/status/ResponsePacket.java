@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.status;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
@@ -17,8 +16,4 @@ public record ResponsePacket(@NotNull String jsonResponse) implements ServerPack
         writer.write(STRING, jsonResponse);
     }
 
-    @Override
-    public int statusId() {
-        return ServerPacketIdentifier.STATUS_RESPONSE;
-    }
 }

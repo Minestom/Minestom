@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -25,13 +24,4 @@ public record CustomReportDetailsPacket(
         writer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, details);
     }
 
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_CUSTOM_REPORT_DETAILS;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.CUSTOM_REPORT_DETAILS;
-    }
 }

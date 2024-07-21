@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
@@ -18,8 +17,4 @@ public record WorldBorderCenterPacket(double x, double z) implements ServerPacke
         writer.write(DOUBLE, z);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.WORLD_BORDER_CENTER;
-    }
 }

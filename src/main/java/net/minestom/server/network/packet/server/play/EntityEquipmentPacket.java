@@ -6,7 +6,6 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -42,11 +41,6 @@ public record EntityEquipmentPacket(int entityId,
             writer.write(BYTE, slotEnum);
             writer.write(ItemStack.NETWORK_TYPE, entry.getValue());
         }
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
 
     @Override
