@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +20,4 @@ public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potio
         writer.write(VAR_INT, potionEffect.id());
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.REMOVE_ENTITY_EFFECT;
-    }
 }

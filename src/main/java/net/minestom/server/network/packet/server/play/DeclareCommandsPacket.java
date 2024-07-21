@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,11 +31,6 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
     public void write(@NotNull NetworkBuffer writer) {
         writer.writeCollection(nodes);
         writer.write(VAR_INT, rootIndex);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
     public static final class Node implements NetworkBuffer.Writer {

@@ -5,7 +5,6 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,8 +49,4 @@ public record SoundEffectPacket(
         writer.write(LONG, seed);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SOUND_EFFECT;
-    }
 }

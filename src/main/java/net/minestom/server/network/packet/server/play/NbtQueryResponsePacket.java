@@ -1,10 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -25,8 +23,4 @@ public record NbtQueryResponsePacket(int transactionId, CompoundBinaryTag data) 
         }
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.NBT_QUERY_RESPONSE;
-    }
 }

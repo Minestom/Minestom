@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -17,8 +16,4 @@ public record SetCompressionPacket(int threshold) implements ServerPacket.Login 
         writer.write(VAR_INT, threshold);
     }
 
-    @Override
-    public int loginId() {
-        return ServerPacketIdentifier.LOGIN_SET_COMPRESSION;
-    }
 }

@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -19,8 +18,4 @@ public record OpenHorseWindowPacket(byte windowId, int slotCount, int entityId) 
         writer.write(INT, entityId);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.OPEN_HORSE_WINDOW;
-    }
 }

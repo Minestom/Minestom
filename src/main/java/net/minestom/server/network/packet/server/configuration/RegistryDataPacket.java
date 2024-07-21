@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.configuration;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,11 +24,6 @@ public record RegistryDataPacket(
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(STRING, registryId);
         writer.writeCollection(entries);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_REGISTRY_DATA;
     }
 
     public record Entry(
