@@ -1,7 +1,5 @@
 package net.minestom.server.network.packet;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
@@ -321,15 +319,19 @@ public interface PacketRegistry<T> {
 
     sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
         private final Entry<T>[] suppliers;
-        private final Object2IntMap<Class<? extends T>> packetIds = new Object2IntOpenHashMap<>();
+        private final ClassValue<Integer> packetIds = new ClassValue<>() {
+            @Override
+            protected Integer computeValue(@NotNull Class<?> type) {
+                for (int i = 0; i < suppliers.length; i++) {
+                    if (suppliers[i].type == type) return i;
+                }
+                throw new IllegalStateException("Packet type " + type + " isn't registered!");
+            }
+        };
 
         @SafeVarargs
         PacketRegistryTemplate(Entry<T>... suppliers) {
             this.suppliers = suppliers;
-            for (int i = 0; i < suppliers.length; i++) {
-                final Entry<T> entry = suppliers[i];
-                if (entry != null) packetIds.put(entry.type, i);
-            }
         }
 
         public @UnknownNullability T create(int packetId, @NotNull NetworkBuffer reader) {
@@ -342,7 +344,7 @@ public interface PacketRegistry<T> {
 
         @Override
         public int packetId(@NotNull Class<? extends T> packetClass) {
-            return packetIds.getInt(packetClass);
+            return packetIds.get(packetClass);
         }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Reader<T> reader) {

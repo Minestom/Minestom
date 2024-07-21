@@ -28,7 +28,6 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
-import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
@@ -78,7 +77,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser.Client packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -288,7 +287,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull PacketParser<ClientPacket> packetParser() {
+    public @NotNull PacketParser.Client packetParser() {
         return packetParser;
     }
 

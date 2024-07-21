@@ -79,7 +79,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.remoteAddress = remoteAddress;
     }
 
-    public void processPackets(BinaryBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
+    public void processPackets(BinaryBuffer readBuffer, PacketParser.Client packetParser) {
         // Decrypt data
         {
             final EncryptionContext encryptionContext = this.encryptionContext;
