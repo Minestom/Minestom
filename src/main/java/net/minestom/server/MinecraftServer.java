@@ -108,7 +108,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketUtils.broadcastPlayPacket(PluginMessagePacket.getBrandPacket());
+        PacketUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
 
     /**
