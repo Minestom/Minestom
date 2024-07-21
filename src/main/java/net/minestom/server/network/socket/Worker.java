@@ -100,7 +100,7 @@ public final class Worker extends MinestomThread {
                             connection.consumeCache(readBuffer);
                             // Read & process
                             readBuffer.readChannel(channel);
-                            connection.processPackets(readBuffer, server.packetProcessor());
+                            connection.processPackets(readBuffer, server.packetParser());
                         }
                     } catch (IOException e) {
                         // TODO print exception? (should ignore disconnection)
