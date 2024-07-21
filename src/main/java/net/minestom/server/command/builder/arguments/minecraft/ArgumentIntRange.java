@@ -1,16 +1,16 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.utils.math.IntRange;
+import net.minestom.server.utils.Range;
 
 /**
- * Represents an argument which will give you an {@link IntRange}.
+ * Represents an argument which will give you an {@link Range.Int}.
  * <p>
  * Example: ..3, 3.., 5..10, 15
  */
-public class ArgumentIntRange extends ArgumentRange<IntRange, Integer> {
+public class ArgumentIntRange extends ArgumentRange<Range.Int, Integer> {
 
     public ArgumentIntRange(String id) {
-        super(id, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer::parseInt, IntRange::new);
+        super(id, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer::parseInt, Range.Int::new);
     }
 
     @Override
