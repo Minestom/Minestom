@@ -4,9 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
 import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,11 +43,6 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
         writer.write(VAR_INT, msgTypeId);
         writer.write(COMPONENT, msgTypeName);
         writer.writeOptional(COMPONENT, msgTypeTarget);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PLAYER_CHAT;
     }
 
     @Override

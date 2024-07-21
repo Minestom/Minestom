@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -29,8 +28,4 @@ public record EncryptionRequestPacket(
         writer.write(BOOLEAN, shouldAuthenticate);
     }
 
-    @Override
-    public int loginId() {
-        return ServerPacketIdentifier.LOGIN_ENCRYPTION_REQUEST;
-    }
 }

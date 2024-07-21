@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeSerializers;
 import org.jetbrains.annotations.NotNull;
@@ -25,8 +24,4 @@ public record DeclareRecipesPacket(@NotNull List<Recipe> recipes) implements Ser
         writer.writeCollection(RecipeSerializers.RECIPE, recipes);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DECLARE_RECIPES;
-    }
 }

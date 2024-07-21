@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -20,8 +19,4 @@ public record EntityRotationPacket(int entityId, float yaw, float pitch, boolean
         writer.write(BOOLEAN, onGround);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_ROTATION;
-    }
 }

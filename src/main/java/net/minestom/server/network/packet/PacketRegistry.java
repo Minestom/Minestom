@@ -5,6 +5,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
+import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
@@ -29,6 +30,14 @@ public interface PacketRegistry<T> {
         @SafeVarargs
         Client(Entry<ClientPacket>... suppliers) {
             super(suppliers);
+        }
+    }
+
+    final class ClientHandshake extends Client {
+        public ClientHandshake() {
+            super(
+                    entry(ClientHandshakePacket.class, ClientHandshakePacket::new)
+            );
         }
     }
 
@@ -137,6 +146,12 @@ public interface PacketRegistry<T> {
         @SafeVarargs
         Server(Entry<ServerPacket>... suppliers) {
             super(suppliers);
+        }
+    }
+
+    final class ServerHandshake extends Server {
+        public ServerHandshake() {
+            super();
         }
     }
 
@@ -323,7 +338,8 @@ public interface PacketRegistry<T> {
             @Override
             protected Integer computeValue(@NotNull Class<?> type) {
                 for (int i = 0; i < suppliers.length; i++) {
-                    if (suppliers[i].type == type) return i;
+                    final Entry<T> entry = suppliers[i];
+                    if (entry != null && entry.type == type) return i;
                 }
                 throw new IllegalStateException("Packet type " + type + " isn't registered!");
             }

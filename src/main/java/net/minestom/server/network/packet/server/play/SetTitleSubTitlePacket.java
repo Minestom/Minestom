@@ -2,9 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -21,11 +19,6 @@ public record SetTitleSubTitlePacket(@NotNull Component subtitle) implements Ser
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(COMPONENT, subtitle);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SET_TITLE_SUBTITLE;
     }
 
     @Override

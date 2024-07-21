@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,11 +23,6 @@ public record DamageEventPacket(int targetEntityId, int damageTypeId, int source
 
     public DamageEventPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readOptional(VECTOR3D));
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DAMAGE_EVENT;
     }
 
     @Override
