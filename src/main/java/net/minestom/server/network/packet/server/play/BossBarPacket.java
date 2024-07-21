@@ -5,9 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -198,8 +196,4 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
         }
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.BOSS_BAR;
-    }
 }

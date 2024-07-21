@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -28,8 +27,4 @@ public record BlockActionPacket(@NotNull Point blockPosition, byte actionId,
         writer.write(VAR_INT, blockId);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.BLOCK_ACTION;
-    }
 }

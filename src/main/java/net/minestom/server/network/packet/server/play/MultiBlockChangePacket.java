@@ -2,10 +2,10 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.VAR_LONG_ARRAY;
 
 public record MultiBlockChangePacket(long chunkSectionPosition, long[] blocks) implements ServerPacket.Play {
     public MultiBlockChangePacket(int chunkX, int section, int chunkZ,
@@ -23,8 +23,4 @@ public record MultiBlockChangePacket(long chunkSectionPosition, long[] blocks) i
         writer.write(VAR_LONG_ARRAY, blocks);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.MULTI_BLOCK_CHANGE;
-    }
 }

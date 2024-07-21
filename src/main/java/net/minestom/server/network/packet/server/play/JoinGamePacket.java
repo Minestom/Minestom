@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,11 +74,6 @@ public record JoinGamePacket(
         writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
         writer.write(VAR_INT, portalCooldown);
         writer.write(BOOLEAN, enforcesSecureChat);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.JOIN_GAME;
     }
 
     /**

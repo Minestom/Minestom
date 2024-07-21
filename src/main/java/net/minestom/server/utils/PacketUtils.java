@@ -20,6 +20,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -51,6 +53,9 @@ import java.util.zip.Inflater;
  */
 public final class PacketUtils {
     private static final ThreadLocal<Deflater> LOCAL_DEFLATER = ThreadLocal.withInitial(Deflater::new);
+
+
+    private static final PacketParser.Server SERVER_PACKET_PARSER = new PacketParser.Server();
 
     // Viewable packets
     private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
@@ -248,8 +253,9 @@ public final class PacketUtils {
                                          @NotNull ByteBuffer buffer,
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
-        writeFramedPacket(buffer, packet.getId(state), packet,
-                compression ? MinecraftServer.getCompressionThreshold() : 0);
+        PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
+        final int id = registry.packetId(packet.getClass());
+        writeFramedPacket(buffer, id, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
