@@ -1404,7 +1404,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param entity the entity to spectate
      */
     public void spectate(@NotNull Entity entity) {
-        sendPacket(new CameraPacket(entity));
+        sendPacket(new CameraPacket(entity.getEntityId()));
     }
 
     /**

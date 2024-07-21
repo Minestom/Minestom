@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.entity.Entity;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -11,10 +10,6 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public record CameraPacket(int cameraId) implements ServerPacket.Play {
     public CameraPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(VAR_INT));
-    }
-
-    public CameraPacket(@NotNull Entity camera) {
-        this(camera.getEntityId());
     }
 
     @Override
