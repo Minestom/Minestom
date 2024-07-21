@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,8 +27,4 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
         }
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.BLOCK_ENTITY_DATA;
-    }
 }

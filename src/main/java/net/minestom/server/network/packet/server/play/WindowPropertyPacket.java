@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
@@ -20,8 +19,4 @@ public record WindowPropertyPacket(byte windowId, short property, short value) i
         writer.write(SHORT, value);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.WINDOW_PROPERTY;
-    }
 }

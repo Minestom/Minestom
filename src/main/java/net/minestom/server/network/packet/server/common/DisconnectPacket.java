@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.common;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -21,16 +20,6 @@ public record DisconnectPacket(@NotNull Component message) implements ServerPack
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(COMPONENT, message);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_DISCONNECT;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DISCONNECT;
     }
 
     @Override

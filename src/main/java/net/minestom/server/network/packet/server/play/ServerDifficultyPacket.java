@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.world.Difficulty;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,8 +18,4 @@ public record ServerDifficultyPacket(@NotNull Difficulty difficulty, boolean loc
         writer.write(BOOLEAN, locked);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SERVER_DIFFICULTY;
-    }
 }

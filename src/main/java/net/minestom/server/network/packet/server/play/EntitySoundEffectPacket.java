@@ -4,7 +4,6 @@ import net.kyori.adventure.sound.Sound;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,8 +37,4 @@ public record EntitySoundEffectPacket(
         writer.write(LONG, seed);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_SOUND_EFFECT;
-    }
 }

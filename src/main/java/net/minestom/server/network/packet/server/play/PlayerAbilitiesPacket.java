@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
@@ -25,8 +24,4 @@ public record PlayerAbilitiesPacket(byte flags, float flyingSpeed, float walking
         writer.write(FLOAT, walkingSpeed);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PLAYER_ABILITIES;
-    }
 }

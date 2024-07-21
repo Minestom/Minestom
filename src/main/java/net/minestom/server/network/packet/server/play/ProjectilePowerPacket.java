@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public record ProjectilePowerPacket(
@@ -17,11 +16,6 @@ public record ProjectilePowerPacket(
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(NetworkBuffer.VAR_INT, entityId);
         writer.write(NetworkBuffer.DOUBLE, accelerationPower);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PROJECTILE_POWER;
     }
 
 }

@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,8 +17,4 @@ public record SelectAdvancementTabPacket(@Nullable String identifier) implements
         writer.writeOptional(STRING, identifier);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SELECT_ADVANCEMENT_TAB;
-    }
 }

@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -24,11 +23,6 @@ public record EntityPositionAndRotationPacket(int entityId, short deltaX, short 
         writer.write(BYTE, (byte) (yaw * 256 / 360));
         writer.write(BYTE, (byte) (pitch * 256 / 360));
         writer.write(BOOLEAN, onGround);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_POSITION_AND_ROTATION;
     }
 
     public static EntityPositionAndRotationPacket getPacket(int entityId,
