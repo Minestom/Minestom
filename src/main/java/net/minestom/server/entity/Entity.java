@@ -482,7 +482,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 if (passenger != player) passenger.updateOldViewer(player);
             }
         }
-        leashedEntities.forEach(entity -> player.sendPacket(new AttachEntityPacket(entity, null)));
+        leashedEntities.forEach(entity -> player.sendPacket(new AttachEntityPacket(entity.getEntityId(), -1)));
         player.sendPacket(destroyPacketCache);
     }
 
@@ -1014,7 +1014,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected @NotNull AttachEntityPacket getAttachEntityPacket() {
-        return new AttachEntityPacket(this, leashHolder);
+        Entity leashHolder = this.leashHolder;
+        return new AttachEntityPacket(getEntityId(), leashHolder != null ? leashHolder.getEntityId() : -1);
     }
 
     /**
