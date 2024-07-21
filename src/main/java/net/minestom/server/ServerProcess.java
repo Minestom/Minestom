@@ -13,7 +13,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.Registries;
@@ -99,11 +99,11 @@ public interface ServerProcess extends Registries, Snapshotable {
     @NotNull PacketListenerManager packetListener();
 
     /**
-     * Gets the object handling the client packets processing.
+     * Gets the object handling the client packets parsing.
      * <p>
      * Can be used if you want to convert a buffer to a client packet object.
      */
-    @NotNull PacketProcessor packetProcessor();
+    @NotNull PacketParser.Client packetParser();
 
     /**
      * Exposed socket server.
