@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -45,6 +46,7 @@ public final class NetworkBuffer {
     public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
     public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
     public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
+    public static final Type<Pos> POS = new NetworkBufferTypeImpl.PosType();
 
     public static final Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
     public static final Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();
@@ -322,6 +324,7 @@ public final class NetworkBuffer {
 
     public interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
+
         T read(@NotNull NetworkBuffer buffer);
 
         default <S> @NotNull Type<S> map(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
@@ -330,6 +333,10 @@ public final class NetworkBuffer {
 
         default @NotNull Type<List<T>> list(int maxSize) {
             return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
+        }
+
+        default @NotNull Type<T> optional() {
+            return new NetworkBufferTypeImpl.OptionalTypeImpl<>(this);
         }
     }
 

@@ -47,6 +47,19 @@ public final class NetworkBufferTemplate {
         R apply(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8);
     }
 
+    public static <R> Type<R> empty() {
+        return new NetworkBufferTypeImpl<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, R value) {
+            }
+
+            @Override
+            public R read(@NotNull NetworkBuffer buffer) {
+                return null;
+            }
+        };
+    }
+
     public static <P1, R> Type<R> template(Type<P1> p1, Function<R, P1> g1, F1<P1, R> reader) {
         return new NetworkBufferTypeImpl<>() {
             @Override

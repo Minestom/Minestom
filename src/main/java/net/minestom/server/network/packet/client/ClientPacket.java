@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.client;
 
-import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -8,10 +7,11 @@ import org.jetbrains.annotations.ApiStatus;
  * <p>
  * Packets are value-based, and should therefore not be reliant on identity.
  */
-public interface ClientPacket extends NetworkBuffer.Writer {
+public interface ClientPacket {
     /**
      * Determines whether this packet should be processed immediately
      * or wait until the next server tick.
+     *
      * @return true if this packet should process immediately
      */
     @ApiStatus.Internal
