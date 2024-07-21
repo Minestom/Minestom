@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -23,8 +22,4 @@ public record LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username,
         writer.write(BOOLEAN, strictErrorHandling);
     }
 
-    @Override
-    public int loginId() {
-        return ServerPacketIdentifier.LOGIN_SUCCESS;
-    }
 }

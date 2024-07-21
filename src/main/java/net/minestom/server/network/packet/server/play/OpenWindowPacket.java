@@ -2,9 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -25,11 +23,6 @@ public record OpenWindowPacket(int windowId, int windowType,
         writer.write(VAR_INT, windowId);
         writer.write(VAR_INT, windowType);
         writer.write(COMPONENT, title);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.OPEN_WINDOW;
     }
 
     @Override

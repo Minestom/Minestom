@@ -5,7 +5,6 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,11 +27,6 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
         writer.write(VAR_INT, stateId);
         writer.write(SHORT, slot);
         writer.write(ItemStack.NETWORK_TYPE, itemStack);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SET_SLOT;
     }
 
     @Override

@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,8 +63,4 @@ public record ParticlePacket(@NotNull Particle particle, boolean longDistance, d
         particle.writeData(writer);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PARTICLE;
-    }
 }

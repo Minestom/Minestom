@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.common;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,16 +27,6 @@ public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerP
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(Entry.LIST_NETWORK_TYPE, entries);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_SERVER_LINKS;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SERVER_LINKS;
     }
 
     public record Entry(@Nullable KnownLinkType knownType, @Nullable Component customType, @NotNull String link) {
