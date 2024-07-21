@@ -196,8 +196,8 @@ public final class RecipeSerializers {
             Enum(Crafting.class), SpecialRepairItem::category, SpecialRepairItem::new
     );
 
-    public static final Type<SpecialDecoratedPot> DECORATED_POT = NetworkBufferTemplate.template(
-            Enum(Crafting.class), SpecialDecoratedPot::category, SpecialDecoratedPot::new
+    public static final Type<DecoratedPot> DECORATED_POT = NetworkBufferTemplate.template(
+            Enum(Crafting.class), DecoratedPot::category, DecoratedPot::new
     );
 
 
@@ -244,7 +244,7 @@ public final class RecipeSerializers {
             case SpecialArmorDye ignored -> RecipeType.SPECIAL_ARMORDYE;
             case SpecialBannerDuplicate ignored -> RecipeType.SPECIAL_BANNERDUPLICATE;
             case SpecialBookCloning ignored -> RecipeType.SPECIAL_BOOKCLONING;
-            case SpecialDecoratedPot ignored -> RecipeType.DECORATED_POT;
+            case DecoratedPot ignored -> RecipeType.DECORATED_POT;
             case SpecialFireworkRocket ignored -> RecipeType.SPECIAL_FIREWORK_ROCKET;
             case SpecialFireworkStar ignored -> RecipeType.SPECIAL_FIREWORK_STAR;
             case SpecialFireworkStarFade ignored -> RecipeType.SPECIAL_FIREWORK_STAR_FADE;

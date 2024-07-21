@@ -136,7 +136,7 @@ public record Recipe(@NotNull String id, @NotNull Data data) {
         public static final NetworkBuffer.Type<SpecialRepairItem> SERIALIZER = RecipeSerializers.REPAIR_ITEM;
     }
 
-    public record SpecialDecoratedPot(RecipeCategory.Crafting category) implements Data {
-        public static final NetworkBuffer.Type<SpecialDecoratedPot> SERIALIZER = RecipeSerializers.DECORATED_POT;
+    public record DecoratedPot(RecipeCategory.Crafting category) implements Data {
+        public static final NetworkBuffer.Type<DecoratedPot> SERIALIZER = RecipeSerializers.DECORATED_POT;
     }
 }
