@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -101,11 +100,6 @@ public record ExplosionPacket(double x, double y, double z, float radius,
         writer.write(VAR_INT, largeParticleId);
         writer.write(RAW_BYTES, largeParticleData);
         writer.write(SoundEvent.NETWORK_TYPE, sound);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.EXPLOSION;
     }
 
     public enum BlockInteraction {

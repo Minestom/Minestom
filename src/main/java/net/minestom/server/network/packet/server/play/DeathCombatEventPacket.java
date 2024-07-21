@@ -2,16 +2,15 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record DeathCombatEventPacket(int playerId, @NotNull Component message) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public DeathCombatEventPacket(@NotNull NetworkBuffer reader) {
@@ -22,11 +21,6 @@ public record DeathCombatEventPacket(int playerId, @NotNull Component message) i
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(VAR_INT, playerId);
         writer.write(COMPONENT, message);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DEATH_COMBAT_EVENT;
     }
 
     @Override

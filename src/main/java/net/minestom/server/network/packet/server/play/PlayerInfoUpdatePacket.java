@@ -5,7 +5,6 @@ import net.minestom.server.crypto.ChatSession;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.player.GameProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,11 +69,6 @@ public final class PlayerInfoUpdatePacket implements ServerPacket.Play {
                 action.writer.write(buffer, entry);
             }
         });
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PLAYER_INFO_UPDATE;
     }
 
     public @NotNull EnumSet<Action> actions() {

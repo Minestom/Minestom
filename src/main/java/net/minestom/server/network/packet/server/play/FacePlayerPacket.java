@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -30,11 +29,6 @@ public record FacePlayerPacket(FacePosition facePosition,
             writer.write(VAR_INT, entityId);
             writer.writeEnum(FacePosition.class, entityFacePosition);
         }
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.FACE_PLAYER;
     }
 
     public enum FacePosition {

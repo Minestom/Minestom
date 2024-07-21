@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.common;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
@@ -43,16 +42,6 @@ public record TagsPacket(
                 }
             }
         }
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_TAGS;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TAGS;
     }
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {
