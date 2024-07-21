@@ -44,6 +44,15 @@ import java.util.stream.Collectors;
  */
 public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
+    private CachedPacket defaultTags;
+
+    private CachedPacket getDefaultTags() {
+        var defaultTags = this.defaultTags;
+        if (defaultTags == null) {
+            this.defaultTags = defaultTags = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
+        }
+        return defaultTags;
+    }
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -270,7 +279,7 @@ public final class ConnectionManager {
         final PlayerConnection connection = player.getPlayerConnection();
         connection.setConnectionState(ConnectionState.CONFIGURATION);
 
-        player.sendPacket(PluginMessagePacket.getBrandPacket());
+        player.sendPacket(PluginMessagePacket.brandPacket(MinecraftServer.getBrandName()));
         // Request known packs immediately, but don't wait for the response until required (sending registry data).
         final var knownPacksFuture = connection.requestKnownPacks(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
 
@@ -313,7 +322,7 @@ public final class ConnectionManager {
                 player.sendPacket(serverProcess.paintingVariant().registryDataPacket(excludeVanilla));
                 player.sendPacket(serverProcess.jukeboxSong().registryDataPacket(excludeVanilla));
 
-                player.sendPacket(TagsPacket.DEFAULT_TAGS);
+                player.sendPacket(getDefaultTags());
             }
 
             // Wait for pending resource packs if any
