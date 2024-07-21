@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,8 +22,4 @@ public record ServerDataPacket(@Nullable Component motd, byte @Nullable [] iconB
         writer.write(BOOLEAN, enforcesSecureChat);
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SERVER_DATA;
-    }
 }

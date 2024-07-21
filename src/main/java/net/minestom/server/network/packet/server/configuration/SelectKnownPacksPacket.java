@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.configuration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,11 +27,6 @@ public record SelectKnownPacksPacket(
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.writeCollection(entries);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_SELECT_KNOWN_PACKS;
     }
 
     public record Entry(

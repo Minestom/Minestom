@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.login;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -21,11 +20,6 @@ public record LoginDisconnectPacket(@NotNull Component kickMessage) implements S
     @Override
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(JSON_COMPONENT, kickMessage);
-    }
-
-    @Override
-    public int loginId() {
-        return ServerPacketIdentifier.LOGIN_DISCONNECT;
     }
 
     @Override

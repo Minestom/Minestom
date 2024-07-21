@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -42,13 +41,4 @@ public record CookieStorePacket(
        writer.write(NetworkBuffer.BYTE_ARRAY, value);
     }
 
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_COOKIE_STORE;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.COOKIE_STORE;
-    }
 }

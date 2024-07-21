@@ -4,7 +4,6 @@ import net.kyori.adventure.sound.Sound;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,8 +39,4 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
         }
     }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.STOP_SOUND;
-    }
 }

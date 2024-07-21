@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public record TransferPacket(
@@ -20,13 +19,4 @@ public record TransferPacket(
         writer.write(NetworkBuffer.VAR_INT, port);
     }
 
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_TRANSFER;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TRANSFER;
-    }
 }

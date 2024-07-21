@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,11 +59,6 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         } else {
             writer.write(BYTE, (byte) 0);
         }
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.MAP_DATA;
     }
 
     public record Icon(int type, byte x, byte z, byte direction,
