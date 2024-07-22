@@ -22,27 +22,27 @@ public record SoundEffectPacket(
 ) implements ServerPacket.Play {
     public static NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, SoundEffectPacket value) {
-            writer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
-            writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source()));
-            writer.write(INT, value.x() * 8);
-            writer.write(INT, value.y() * 8);
-            writer.write(INT, value.z() * 8);
-            writer.write(FLOAT, value.volume());
-            writer.write(FLOAT, value.pitch());
-            writer.write(LONG, value.seed());
+        public void write(@NotNull NetworkBuffer buffer, SoundEffectPacket value) {
+            buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
+            buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source()));
+            buffer.write(INT, value.x() * 8);
+            buffer.write(INT, value.y() * 8);
+            buffer.write(INT, value.z() * 8);
+            buffer.write(FLOAT, value.volume());
+            buffer.write(FLOAT, value.pitch());
+            buffer.write(LONG, value.seed());
         }
 
         @Override
-        public SoundEffectPacket read(@NotNull NetworkBuffer reader) {
-            return new SoundEffectPacket(reader.read(SoundEvent.NETWORK_TYPE),
-                    reader.readEnum(Source.class),
-                    reader.read(INT) * 8,
-                    reader.read(INT) * 8,
-                    reader.read(INT) * 8,
-                    reader.read(FLOAT),
-                    reader.read(FLOAT),
-                    reader.read(LONG));
+        public SoundEffectPacket read(@NotNull NetworkBuffer buffer) {
+            return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
+                    buffer.readEnum(Source.class),
+                    buffer.read(INT) * 8,
+                    buffer.read(INT) * 8,
+                    buffer.read(INT) * 8,
+                    buffer.read(FLOAT),
+                    buffer.read(FLOAT),
+                    buffer.read(LONG));
         }
     };
 

@@ -24,20 +24,20 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public static NetworkBuffer.Type<AdvancementsPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, AdvancementsPacket value) {
-            writer.write(BOOLEAN, value.reset);
-            writer.writeCollection(value.advancementMappings);
-            writer.writeCollection(STRING, value.identifiersToRemove);
-            writer.writeCollection(value.progressMappings);
+        public void write(@NotNull NetworkBuffer buffer, AdvancementsPacket value) {
+            buffer.write(BOOLEAN, value.reset);
+            buffer.writeCollection(value.advancementMappings);
+            buffer.writeCollection(STRING, value.identifiersToRemove);
+            buffer.writeCollection(value.progressMappings);
         }
 
         @Override
-        public AdvancementsPacket read(@NotNull NetworkBuffer reader) {
+        public AdvancementsPacket read(@NotNull NetworkBuffer buffer) {
             return new AdvancementsPacket(
-                    reader.read(BOOLEAN),
-                    reader.readCollection(AdvancementMapping::new, MAX_ADVANCEMENTS),
-                    reader.readCollection(STRING, MAX_ADVANCEMENTS),
-                    reader.readCollection(ProgressMapping::new, MAX_ADVANCEMENTS)
+                    buffer.read(BOOLEAN),
+                    buffer.readCollection(AdvancementMapping::new, MAX_ADVANCEMENTS),
+                    buffer.readCollection(STRING, MAX_ADVANCEMENTS),
+                    buffer.readCollection(ProgressMapping::new, MAX_ADVANCEMENTS)
             );
         }
     };

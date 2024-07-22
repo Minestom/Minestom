@@ -19,23 +19,23 @@ public record EntitySoundEffectPacket(
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntitySoundEffectPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, EntitySoundEffectPacket value) {
-            writer.write(SoundEvent.NETWORK_TYPE, value.soundEvent);
-            writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source));
-            writer.write(VAR_INT, value.entityId);
-            writer.write(FLOAT, value.volume);
-            writer.write(FLOAT, value.pitch);
-            writer.write(LONG, value.seed);
+        public void write(@NotNull NetworkBuffer buffer, EntitySoundEffectPacket value) {
+            buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent);
+            buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source));
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(FLOAT, value.volume);
+            buffer.write(FLOAT, value.pitch);
+            buffer.write(LONG, value.seed);
         }
 
         @Override
-        public EntitySoundEffectPacket read(@NotNull NetworkBuffer reader) {
-            return new EntitySoundEffectPacket(reader.read(SoundEvent.NETWORK_TYPE),
-                    reader.readEnum(Sound.Source.class),
-                    reader.read(VAR_INT),
-                    reader.read(FLOAT),
-                    reader.read(FLOAT),
-                    reader.read(LONG));
+        public EntitySoundEffectPacket read(@NotNull NetworkBuffer buffer) {
+            return new EntitySoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
+                    buffer.readEnum(Sound.Source.class),
+                    buffer.read(VAR_INT),
+                    buffer.read(FLOAT),
+                    buffer.read(FLOAT),
+                    buffer.read(LONG));
         }
     };
 }

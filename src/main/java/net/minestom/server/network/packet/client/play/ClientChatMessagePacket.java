@@ -15,20 +15,20 @@ public record ClientChatMessagePacket(String message, long timestamp,
                                       int ackOffset, BitSet ackList) implements ClientPacket {
     public static NetworkBuffer.Type<ClientChatMessagePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientChatMessagePacket value) {
-            writer.write(STRING, value.message);
-            writer.write(LONG, value.timestamp);
-            writer.write(LONG, value.salt);
-            writer.writeOptional(BYTE_ARRAY, value.signature);
-            writer.write(VAR_INT, value.ackOffset);
-            writer.write(RAW_BYTES, Arrays.copyOf(value.ackList.toByteArray(), 3));
+        public void write(@NotNull NetworkBuffer buffer, ClientChatMessagePacket value) {
+            buffer.write(STRING, value.message);
+            buffer.write(LONG, value.timestamp);
+            buffer.write(LONG, value.salt);
+            buffer.writeOptional(BYTE_ARRAY, value.signature);
+            buffer.write(VAR_INT, value.ackOffset);
+            buffer.write(RAW_BYTES, Arrays.copyOf(value.ackList.toByteArray(), 3));
         }
 
         @Override
-        public ClientChatMessagePacket read(@NotNull NetworkBuffer reader) {
-            return new ClientChatMessagePacket(reader.read(STRING), reader.read(LONG),
-                    reader.read(LONG), reader.readOptional(r -> r.readBytes(256)),
-                    reader.read(VAR_INT), BitSet.valueOf(reader.readBytes(3)));
+        public ClientChatMessagePacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientChatMessagePacket(buffer.read(STRING), buffer.read(LONG),
+                    buffer.read(LONG), buffer.readOptional(r -> r.readBytes(256)),
+                    buffer.read(VAR_INT), BitSet.valueOf(buffer.readBytes(3)));
         }
     };
 }

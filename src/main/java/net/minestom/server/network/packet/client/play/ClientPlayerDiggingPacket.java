@@ -13,17 +13,17 @@ public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point b
 
     public static NetworkBuffer.Type<ClientPlayerDiggingPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientPlayerDiggingPacket value) {
-            writer.writeEnum(Status.class, value.status);
-            writer.write(BLOCK_POSITION, value.blockPosition);
-            writer.write(BYTE, (byte) value.blockFace.ordinal());
-            writer.write(VAR_INT, value.sequence);
+        public void write(@NotNull NetworkBuffer buffer, ClientPlayerDiggingPacket value) {
+            buffer.writeEnum(Status.class, value.status);
+            buffer.write(BLOCK_POSITION, value.blockPosition);
+            buffer.write(BYTE, (byte) value.blockFace.ordinal());
+            buffer.write(VAR_INT, value.sequence);
         }
 
         @Override
-        public ClientPlayerDiggingPacket read(@NotNull NetworkBuffer reader) {
-            return new ClientPlayerDiggingPacket(reader.readEnum(Status.class), reader.read(BLOCK_POSITION),
-                    BlockFace.values()[reader.read(BYTE)], reader.read(VAR_INT));
+        public ClientPlayerDiggingPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientPlayerDiggingPacket(buffer.readEnum(Status.class), buffer.read(BLOCK_POSITION),
+                    BlockFace.values()[buffer.read(BYTE)], buffer.read(VAR_INT));
         }
     };
 

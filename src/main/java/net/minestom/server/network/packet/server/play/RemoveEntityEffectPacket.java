@@ -12,14 +12,14 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public record RemoveEntityEffectPacket(int entityId, @NotNull PotionEffect potionEffect) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<RemoveEntityEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, RemoveEntityEffectPacket value) {
-            writer.write(VAR_INT, value.entityId);
-            writer.write(VAR_INT, value.potionEffect.id());
+        public void write(@NotNull NetworkBuffer buffer, RemoveEntityEffectPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(VAR_INT, value.potionEffect.id());
         }
 
         @Override
-        public RemoveEntityEffectPacket read(@NotNull NetworkBuffer reader) {
-            return new RemoveEntityEffectPacket(reader.read(VAR_INT), Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))));
+        public RemoveEntityEffectPacket read(@NotNull NetworkBuffer buffer) {
+            return new RemoveEntityEffectPacket(buffer.read(VAR_INT), Objects.requireNonNull(PotionEffect.fromId(buffer.read(VAR_INT))));
         }
     };
 }

@@ -13,17 +13,17 @@ public record ClientSetBeaconEffectPacket(@Nullable PotionType primaryEffect,
                                           @Nullable PotionType secondaryEffect) implements ClientPacket {
     public static NetworkBuffer.Type<ClientSetBeaconEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientSetBeaconEffectPacket value) {
-            writer.write(BOOLEAN, value.primaryEffect != null);
-            if (value.primaryEffect != null) writer.write(VAR_INT, value.primaryEffect.id());
-            writer.write(BOOLEAN, value.secondaryEffect != null);
-            if (value.secondaryEffect != null) writer.write(VAR_INT, value.secondaryEffect.id());
+        public void write(@NotNull NetworkBuffer buffer, ClientSetBeaconEffectPacket value) {
+            buffer.write(BOOLEAN, value.primaryEffect != null);
+            if (value.primaryEffect != null) buffer.write(VAR_INT, value.primaryEffect.id());
+            buffer.write(BOOLEAN, value.secondaryEffect != null);
+            if (value.secondaryEffect != null) buffer.write(VAR_INT, value.secondaryEffect.id());
         }
 
         @Override
-        public ClientSetBeaconEffectPacket read(@NotNull NetworkBuffer reader) {
-            return new ClientSetBeaconEffectPacket(reader.read(BOOLEAN) ? PotionType.fromId(reader.read(VAR_INT)) : null,
-                    reader.read(BOOLEAN) ? PotionType.fromId(reader.read(VAR_INT)) : null);
+        public ClientSetBeaconEffectPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientSetBeaconEffectPacket(buffer.read(BOOLEAN) ? PotionType.fromId(buffer.read(VAR_INT)) : null,
+                    buffer.read(BOOLEAN) ? PotionType.fromId(buffer.read(VAR_INT)) : null);
         }
     };
 }

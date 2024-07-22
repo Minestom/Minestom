@@ -27,36 +27,36 @@ public record ParticlePacket(@NotNull Particle particle, boolean longDistance, d
 
     public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ParticlePacket value) {
-            writer.write(BOOLEAN, value.longDistance);
-            writer.write(DOUBLE, value.x);
-            writer.write(DOUBLE, value.y);
-            writer.write(DOUBLE, value.z);
-            writer.write(FLOAT, value.offsetX);
-            writer.write(FLOAT, value.offsetY);
-            writer.write(FLOAT, value.offsetZ);
-            writer.write(FLOAT, value.maxSpeed);
-            writer.write(INT, value.particleCount);
-            writer.write(VAR_INT, value.particle.id());
-            value.particle.writeData(writer);
+        public void write(@NotNull NetworkBuffer buffer, ParticlePacket value) {
+            buffer.write(BOOLEAN, value.longDistance);
+            buffer.write(DOUBLE, value.x);
+            buffer.write(DOUBLE, value.y);
+            buffer.write(DOUBLE, value.z);
+            buffer.write(FLOAT, value.offsetX);
+            buffer.write(FLOAT, value.offsetY);
+            buffer.write(FLOAT, value.offsetZ);
+            buffer.write(FLOAT, value.maxSpeed);
+            buffer.write(INT, value.particleCount);
+            buffer.write(VAR_INT, value.particle.id());
+            value.particle.writeData(buffer);
         }
 
         @Override
-        public ParticlePacket read(@NotNull NetworkBuffer reader) {
-            Boolean longDistance = reader.read(BOOLEAN);
-            Double x = reader.read(DOUBLE);
-            Double y = reader.read(DOUBLE);
-            Double z = reader.read(DOUBLE);
-            Float offsetX = reader.read(FLOAT);
-            Float offsetY = reader.read(FLOAT);
-            Float offsetZ = reader.read(FLOAT);
-            Float maxSpeed = reader.read(FLOAT);
-            Integer particleCount = reader.read(INT);
+        public ParticlePacket read(@NotNull NetworkBuffer buffer) {
+            Boolean longDistance = buffer.read(BOOLEAN);
+            Double x = buffer.read(DOUBLE);
+            Double y = buffer.read(DOUBLE);
+            Double z = buffer.read(DOUBLE);
+            Float offsetX = buffer.read(FLOAT);
+            Float offsetY = buffer.read(FLOAT);
+            Float offsetZ = buffer.read(FLOAT);
+            Float maxSpeed = buffer.read(FLOAT);
+            Integer particleCount = buffer.read(INT);
 
-            Particle particle = Particle.fromId(reader.read(VAR_INT));
+            Particle particle = Particle.fromId(buffer.read(VAR_INT));
             Objects.requireNonNull(particle);
 
-            return new ParticlePacket(particle.readData(reader), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
+            return new ParticlePacket(particle.readData(buffer), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
         }
     };
 }

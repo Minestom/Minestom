@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 public record ClientChatSessionUpdatePacket(@NotNull ChatSession chatSession) implements ClientPacket {
     public static NetworkBuffer.Type<ClientChatSessionUpdatePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientChatSessionUpdatePacket value) {
-            writer.write(value.chatSession);
+        public void write(@NotNull NetworkBuffer buffer, ClientChatSessionUpdatePacket value) {
+            buffer.write(value.chatSession);
         }
 
         @Override
-        public ClientChatSessionUpdatePacket read(@NotNull NetworkBuffer reader) {
-            return new ClientChatSessionUpdatePacket(new ChatSession(reader));
+        public ClientChatSessionUpdatePacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientChatSessionUpdatePacket(new ChatSession(buffer));
         }
     };
 }

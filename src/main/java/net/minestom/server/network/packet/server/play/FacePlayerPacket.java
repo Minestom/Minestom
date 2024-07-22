@@ -14,25 +14,25 @@ public record FacePlayerPacket(FacePosition facePosition,
 
     public static final NetworkBuffer.Type<FacePlayerPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, @NotNull FacePlayerPacket value) {
-            writer.write(VAR_INT, value.facePosition.ordinal());
-            writer.write(DOUBLE, value.target.x());
-            writer.write(DOUBLE, value.target.y());
-            writer.write(DOUBLE, value.target.z());
+        public void write(@NotNull NetworkBuffer buffer, @NotNull FacePlayerPacket value) {
+            buffer.write(VAR_INT, value.facePosition.ordinal());
+            buffer.write(DOUBLE, value.target.x());
+            buffer.write(DOUBLE, value.target.y());
+            buffer.write(DOUBLE, value.target.z());
             final boolean isEntity = value.entityId > 0;
-            writer.write(BOOLEAN, isEntity);
+            buffer.write(BOOLEAN, isEntity);
             if (isEntity) {
-                writer.write(VAR_INT, value.entityId);
-                writer.writeEnum(FacePosition.class, value.entityFacePosition);
+                buffer.write(VAR_INT, value.entityId);
+                buffer.writeEnum(FacePosition.class, value.entityFacePosition);
             }
         }
 
         @Override
-        public @NotNull FacePlayerPacket read(@NotNull NetworkBuffer reader) {
-            return new FacePlayerPacket(FacePosition.values()[reader.read(VAR_INT)],
-                    new Vec(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE)),
-                    reader.read(BOOLEAN) ? reader.read(VAR_INT) : 0,
-                    reader.readableBytes() > 0 ? reader.readEnum(FacePosition.class) : null);
+        public @NotNull FacePlayerPacket read(@NotNull NetworkBuffer buffer) {
+            return new FacePlayerPacket(FacePosition.values()[buffer.read(VAR_INT)],
+                    new Vec(buffer.read(DOUBLE), buffer.read(DOUBLE), buffer.read(DOUBLE)),
+                    buffer.read(BOOLEAN) ? buffer.read(VAR_INT) : 0,
+                    buffer.readableBytes() > 0 ? buffer.readEnum(FacePosition.class) : null);
         }
     };
 

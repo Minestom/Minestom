@@ -9,16 +9,16 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 public record UnloadChunkPacket(int chunkX, int chunkZ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<UnloadChunkPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, UnloadChunkPacket value) {
+        public void write(@NotNull NetworkBuffer buffer, UnloadChunkPacket value) {
             // Client reads this as a single long in big endian, so we have to write it backwards
-            writer.write(INT, value.chunkZ);
-            writer.write(INT, value.chunkX);
+            buffer.write(INT, value.chunkZ);
+            buffer.write(INT, value.chunkX);
         }
 
         @Override
-        public UnloadChunkPacket read(@NotNull NetworkBuffer reader) {
-            int z = reader.read(INT);
-            int x = reader.read(INT);
+        public UnloadChunkPacket read(@NotNull NetworkBuffer buffer) {
+            int z = buffer.read(INT);
+            int x = buffer.read(INT);
             return new UnloadChunkPacket(x, z);
         }
     };

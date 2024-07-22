@@ -21,36 +21,36 @@ public record ExplosionPacket(double x, double y, double z, float radius,
 
     public static final NetworkBuffer.Type<ExplosionPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ExplosionPacket value) {
-            writer.write(DOUBLE, value.x);
-            writer.write(DOUBLE, value.y);
-            writer.write(DOUBLE, value.z);
-            writer.write(FLOAT, value.radius);
-            writer.write(VAR_INT, value.records.length / 3); // each record is 3 bytes long
-            writer.write(RAW_BYTES, value.records);
-            writer.write(FLOAT, value.playerMotionX);
-            writer.write(FLOAT, value.playerMotionY);
-            writer.write(FLOAT, value.playerMotionZ);
-            writer.write(VAR_INT, value.blockInteraction.ordinal());
-            writer.write(VAR_INT, value.smallParticleId);
-            writer.write(RAW_BYTES, value.smallParticleData);
-            writer.write(VAR_INT, value.largeParticleId);
-            writer.write(RAW_BYTES, value.largeParticleData);
-            writer.write(SoundEvent.NETWORK_TYPE, value.sound);
+        public void write(@NotNull NetworkBuffer buffer, ExplosionPacket value) {
+            buffer.write(DOUBLE, value.x);
+            buffer.write(DOUBLE, value.y);
+            buffer.write(DOUBLE, value.z);
+            buffer.write(FLOAT, value.radius);
+            buffer.write(VAR_INT, value.records.length / 3); // each record is 3 bytes long
+            buffer.write(RAW_BYTES, value.records);
+            buffer.write(FLOAT, value.playerMotionX);
+            buffer.write(FLOAT, value.playerMotionY);
+            buffer.write(FLOAT, value.playerMotionZ);
+            buffer.write(VAR_INT, value.blockInteraction.ordinal());
+            buffer.write(VAR_INT, value.smallParticleId);
+            buffer.write(RAW_BYTES, value.smallParticleData);
+            buffer.write(VAR_INT, value.largeParticleId);
+            buffer.write(RAW_BYTES, value.largeParticleData);
+            buffer.write(SoundEvent.NETWORK_TYPE, value.sound);
         }
 
         @Override
-        public ExplosionPacket read(@NotNull NetworkBuffer reader) {
-            double x = reader.read(DOUBLE), y = reader.read(DOUBLE), z = reader.read(DOUBLE);
-            float radius = reader.read(FLOAT);
-            byte[] records = reader.readBytes(reader.read(VAR_INT) * 3);
-            float playerMotionX = reader.read(FLOAT), playerMotionY = reader.read(FLOAT), playerMotionZ = reader.read(FLOAT);
-            BlockInteraction blockInteraction = reader.readEnum(BlockInteraction.class);
-            int smallParticleId = reader.read(VAR_INT);
-            byte[] smallParticleData = readParticleData(reader, Particle.fromId(smallParticleId));
-            int largeParticleId = reader.read(VAR_INT);
-            byte[] largeParticleData = readParticleData(reader, Particle.fromId(largeParticleId));
-            SoundEvent sound = reader.read(SoundEvent.NETWORK_TYPE);
+        public ExplosionPacket read(@NotNull NetworkBuffer buffer) {
+            double x = buffer.read(DOUBLE), y = buffer.read(DOUBLE), z = buffer.read(DOUBLE);
+            float radius = buffer.read(FLOAT);
+            byte[] records = buffer.readBytes(buffer.read(VAR_INT) * 3);
+            float playerMotionX = buffer.read(FLOAT), playerMotionY = buffer.read(FLOAT), playerMotionZ = buffer.read(FLOAT);
+            BlockInteraction blockInteraction = buffer.readEnum(BlockInteraction.class);
+            int smallParticleId = buffer.read(VAR_INT);
+            byte[] smallParticleData = readParticleData(buffer, Particle.fromId(smallParticleId));
+            int largeParticleId = buffer.read(VAR_INT);
+            byte[] largeParticleData = readParticleData(buffer, Particle.fromId(largeParticleId));
+            SoundEvent sound = buffer.read(SoundEvent.NETWORK_TYPE);
             return new ExplosionPacket(x, y, z, radius, records, playerMotionX, playerMotionY, playerMotionZ,
                     blockInteraction, smallParticleId, smallParticleData, largeParticleId, largeParticleData,
                     sound);

@@ -13,14 +13,14 @@ public record ClientResourcePackStatusPacket(
 ) implements ClientPacket {
     public static NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientResourcePackStatusPacket value) {
-            writer.write(NetworkBuffer.UUID, value.id);
-            writer.writeEnum(ResourcePackStatus.class, value.status); // FIXME: enum seems wrong
+        public void write(@NotNull NetworkBuffer buffer, ClientResourcePackStatusPacket value) {
+            buffer.write(NetworkBuffer.UUID, value.id);
+            buffer.writeEnum(ResourcePackStatus.class, value.status); // FIXME: enum seems wrong
         }
 
         @Override
-        public ClientResourcePackStatusPacket read(@NotNull NetworkBuffer reader) {
-            return new ClientResourcePackStatusPacket(reader.read(NetworkBuffer.UUID), readStatus(reader));
+        public ClientResourcePackStatusPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientResourcePackStatusPacket(buffer.read(NetworkBuffer.UUID), readStatus(buffer));
         }
     };
 

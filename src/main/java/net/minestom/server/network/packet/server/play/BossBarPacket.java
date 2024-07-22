@@ -19,10 +19,10 @@ public record BossBarPacket(@NotNull UUID uuid,
                             @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, BossBarPacket value) {
-            writer.write(NetworkBuffer.UUID, value.uuid);
-            writer.write(VAR_INT, value.action.id());
-            writer.write(value.action);
+        public void write(@NotNull NetworkBuffer buffer, BossBarPacket value) {
+            buffer.write(NetworkBuffer.UUID, value.uuid);
+            buffer.write(VAR_INT, value.action.id());
+            buffer.write(value.action);
         }
 
         @Override

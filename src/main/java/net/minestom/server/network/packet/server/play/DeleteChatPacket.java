@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<DeleteChatPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, DeleteChatPacket value) {
-            writer.write(value.signature);
+        public void write(@NotNull NetworkBuffer buffer, DeleteChatPacket value) {
+            buffer.write(value.signature);
         }
 
         @Override
-        public DeleteChatPacket read(@NotNull NetworkBuffer reader) {
-            return new DeleteChatPacket(new MessageSignature(reader));
+        public DeleteChatPacket read(@NotNull NetworkBuffer buffer) {
+            return new DeleteChatPacket(new MessageSignature(buffer));
         }
     };
 }

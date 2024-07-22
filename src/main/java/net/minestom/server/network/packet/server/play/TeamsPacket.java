@@ -23,20 +23,20 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
 
     public static final NetworkBuffer.Type<TeamsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, TeamsPacket value) {
-            writer.write(STRING, value.teamName);
-            writer.write(BYTE, (byte) value.action.id());
-            writer.write(value.action);
+        public void write(@NotNull NetworkBuffer buffer, TeamsPacket value) {
+            buffer.write(STRING, value.teamName);
+            buffer.write(BYTE, (byte) value.action.id());
+            buffer.write(value.action);
         }
 
         @Override
-        public @NotNull TeamsPacket read(@NotNull NetworkBuffer reader) {
-            return new TeamsPacket(reader.read(STRING), switch (reader.read(BYTE)) {
-                case 0 -> new CreateTeamAction(reader);
+        public @NotNull TeamsPacket read(@NotNull NetworkBuffer buffer) {
+            return new TeamsPacket(buffer.read(STRING), switch (buffer.read(BYTE)) {
+                case 0 -> new CreateTeamAction(buffer);
                 case 1 -> new RemoveTeamAction();
-                case 2 -> new UpdateTeamAction(reader);
-                case 3 -> new AddEntitiesToTeamAction(reader);
-                case 4 -> new RemoveEntitiesToTeamAction(reader);
+                case 2 -> new UpdateTeamAction(buffer);
+                case 3 -> new AddEntitiesToTeamAction(buffer);
+                case 4 -> new RemoveEntitiesToTeamAction(buffer);
                 default -> throw new RuntimeException("Unknown action id");
             });
         }

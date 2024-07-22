@@ -13,14 +13,14 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
                                     @Nullable CompoundBinaryTag data) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, BlockEntityDataPacket value) {
-            writer.write(BLOCK_POSITION, value.blockPosition);
-            writer.write(VAR_INT, value.action);
+        public void write(@NotNull NetworkBuffer buffer, BlockEntityDataPacket value) {
+            buffer.write(BLOCK_POSITION, value.blockPosition);
+            buffer.write(VAR_INT, value.action);
             if (value.data != null) {
-                writer.write(NBT, value.data);
+                buffer.write(NBT, value.data);
             } else {
                 // TAG_End
-                writer.write(BYTE, (byte) 0x00);
+                buffer.write(BYTE, (byte) 0x00);
             }
         }
 

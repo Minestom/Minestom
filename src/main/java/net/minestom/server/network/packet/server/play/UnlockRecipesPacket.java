@@ -25,36 +25,36 @@ public record UnlockRecipesPacket(int mode,
 
     public static final NetworkBuffer.Type<UnlockRecipesPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, UnlockRecipesPacket value) {
-            writer.write(VAR_INT, value.mode);
-            writer.write(BOOLEAN, value.craftingRecipeBookOpen);
-            writer.write(BOOLEAN, value.craftingRecipeBookFilterActive);
-            writer.write(BOOLEAN, value.smeltingRecipeBookOpen);
-            writer.write(BOOLEAN, value.smeltingRecipeBookFilterActive);
-            writer.write(BOOLEAN, value.blastFurnaceRecipeBookOpen);
-            writer.write(BOOLEAN, value.blastFurnaceRecipeBookFilterActive);
-            writer.write(BOOLEAN, value.smokerRecipeBookOpen);
-            writer.write(BOOLEAN, value.smokerRecipeBookFilterActive);
+        public void write(@NotNull NetworkBuffer buffer, UnlockRecipesPacket value) {
+            buffer.write(VAR_INT, value.mode);
+            buffer.write(BOOLEAN, value.craftingRecipeBookOpen);
+            buffer.write(BOOLEAN, value.craftingRecipeBookFilterActive);
+            buffer.write(BOOLEAN, value.smeltingRecipeBookOpen);
+            buffer.write(BOOLEAN, value.smeltingRecipeBookFilterActive);
+            buffer.write(BOOLEAN, value.blastFurnaceRecipeBookOpen);
+            buffer.write(BOOLEAN, value.blastFurnaceRecipeBookFilterActive);
+            buffer.write(BOOLEAN, value.smokerRecipeBookOpen);
+            buffer.write(BOOLEAN, value.smokerRecipeBookFilterActive);
 
-            writer.writeCollection(STRING, value.recipeIds);
+            buffer.writeCollection(STRING, value.recipeIds);
             if (value.mode == 0) {
-                writer.writeCollection(STRING, value.initRecipeIds);
+                buffer.writeCollection(STRING, value.initRecipeIds);
             }
         }
 
         @Override
-        public UnlockRecipesPacket read(@NotNull NetworkBuffer reader) {
-            var mode = reader.read(VAR_INT);
-            var craftingRecipeBookOpen = reader.read(BOOLEAN);
-            var craftingRecipeBookFilterActive = reader.read(BOOLEAN);
-            var smeltingRecipeBookOpen = reader.read(BOOLEAN);
-            var smeltingRecipeBookFilterActive = reader.read(BOOLEAN);
-            var blastFurnaceRecipeBookOpen = reader.read(BOOLEAN);
-            var blastFurnaceRecipeBookFilterActive = reader.read(BOOLEAN);
-            var smokerRecipeBookOpen = reader.read(BOOLEAN);
-            var smokerRecipeBookFilterActive = reader.read(BOOLEAN);
-            var recipeIds = reader.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES);
-            var initRecipeIds = mode == 0 ? reader.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES) : null;
+        public UnlockRecipesPacket read(@NotNull NetworkBuffer buffer) {
+            var mode = buffer.read(VAR_INT);
+            var craftingRecipeBookOpen = buffer.read(BOOLEAN);
+            var craftingRecipeBookFilterActive = buffer.read(BOOLEAN);
+            var smeltingRecipeBookOpen = buffer.read(BOOLEAN);
+            var smeltingRecipeBookFilterActive = buffer.read(BOOLEAN);
+            var blastFurnaceRecipeBookOpen = buffer.read(BOOLEAN);
+            var blastFurnaceRecipeBookFilterActive = buffer.read(BOOLEAN);
+            var smokerRecipeBookOpen = buffer.read(BOOLEAN);
+            var smokerRecipeBookFilterActive = buffer.read(BOOLEAN);
+            var recipeIds = buffer.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES);
+            var initRecipeIds = mode == 0 ? buffer.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES) : null;
             return new UnlockRecipesPacket(mode,
                     craftingRecipeBookOpen, craftingRecipeBookFilterActive,
                     smeltingRecipeBookOpen, smeltingRecipeBookFilterActive,

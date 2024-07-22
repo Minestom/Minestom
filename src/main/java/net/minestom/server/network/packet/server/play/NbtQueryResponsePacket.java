@@ -10,19 +10,19 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record NbtQueryResponsePacket(int transactionId, CompoundBinaryTag data) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<NbtQueryResponsePacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, NbtQueryResponsePacket value) {
-            writer.write(VAR_INT, value.transactionId);
+        public void write(@NotNull NetworkBuffer buffer, NbtQueryResponsePacket value) {
+            buffer.write(VAR_INT, value.transactionId);
             if (value.data != null) {
-                writer.write(NBT, value.data);
+                buffer.write(NBT, value.data);
             } else {
                 // TAG_End
-                writer.write(BYTE, (byte) 0x00);
+                buffer.write(BYTE, (byte) 0x00);
             }
         }
 
         @Override
-        public NbtQueryResponsePacket read(@NotNull NetworkBuffer reader) {
-            return new NbtQueryResponsePacket(reader.read(VAR_INT), (CompoundBinaryTag) reader.read(NBT));
+        public NbtQueryResponsePacket read(@NotNull NetworkBuffer buffer) {
+            return new NbtQueryResponsePacket(buffer.read(VAR_INT), (CompoundBinaryTag) buffer.read(NBT));
         }
     };
 }

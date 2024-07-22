@@ -13,18 +13,18 @@ public record ChunkDataPacket(int chunkX, int chunkZ,
                               @NotNull LightData lightData) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ChunkDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ChunkDataPacket value) {
-            writer.write(INT, value.chunkX);
-            writer.write(INT, value.chunkZ);
-            writer.write(value.chunkData);
-            writer.write(value.lightData);
+        public void write(@NotNull NetworkBuffer buffer, ChunkDataPacket value) {
+            buffer.write(INT, value.chunkX);
+            buffer.write(INT, value.chunkZ);
+            buffer.write(value.chunkData);
+            buffer.write(value.lightData);
         }
 
         @Override
-        public ChunkDataPacket read(@NotNull NetworkBuffer reader) {
-            return new ChunkDataPacket(reader.read(INT), reader.read(INT),
-                    new ChunkData(reader),
-                    new LightData(reader));
+        public ChunkDataPacket read(@NotNull NetworkBuffer buffer) {
+            return new ChunkDataPacket(buffer.read(INT), buffer.read(INT),
+                    new ChunkData(buffer),
+                    new LightData(buffer));
         }
     };
 }

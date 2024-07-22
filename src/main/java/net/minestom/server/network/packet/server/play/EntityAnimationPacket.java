@@ -10,9 +10,9 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public record EntityAnimationPacket(int entityId, @NotNull Animation animation) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntityAnimationPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, EntityAnimationPacket value) {
-            writer.write(VAR_INT, value.entityId);
-            writer.write(BYTE, (byte) value.animation.ordinal());
+        public void write(@NotNull NetworkBuffer buffer, EntityAnimationPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(BYTE, (byte) value.animation.ordinal());
         }
 
         @Override

@@ -22,18 +22,18 @@ public record EntityMetaDataPacket(int entityId,
 
     public static final NetworkBuffer.Type<EntityMetaDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, EntityMetaDataPacket value) {
-            writer.write(VAR_INT, value.entityId);
+        public void write(@NotNull NetworkBuffer buffer, EntityMetaDataPacket value) {
+            buffer.write(VAR_INT, value.entityId);
             for (var entry : value.entries.entrySet()) {
-                writer.write(BYTE, entry.getKey().byteValue());
-                writer.write(entry.getValue());
+                buffer.write(BYTE, entry.getKey().byteValue());
+                buffer.write(entry.getValue());
             }
-            writer.write(BYTE, (byte) 0xFF); // End
+            buffer.write(BYTE, (byte) 0xFF); // End
         }
 
         @Override
-        public EntityMetaDataPacket read(@NotNull NetworkBuffer reader) {
-            return new EntityMetaDataPacket(reader.read(VAR_INT), readEntries(reader));
+        public EntityMetaDataPacket read(@NotNull NetworkBuffer buffer) {
+            return new EntityMetaDataPacket(buffer.read(VAR_INT), readEntries(buffer));
         }
     };
 

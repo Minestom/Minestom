@@ -22,18 +22,18 @@ public record UpdateScorePacket(
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, @NotNull UpdateScorePacket value) {
-            writer.write(STRING, value.entityName);
-            writer.write(STRING, value.objectiveName);
-            writer.write(VAR_INT, value.score);
-            writer.writeOptional(COMPONENT, value.displayName);
-            writer.writeOptional(value.numberFormat);
+        public void write(@NotNull NetworkBuffer buffer, @NotNull UpdateScorePacket value) {
+            buffer.write(STRING, value.entityName);
+            buffer.write(STRING, value.objectiveName);
+            buffer.write(VAR_INT, value.score);
+            buffer.writeOptional(COMPONENT, value.displayName);
+            buffer.writeOptional(value.numberFormat);
         }
 
         @Override
-        public @NotNull UpdateScorePacket read(@NotNull NetworkBuffer reader) {
-            return new UpdateScorePacket(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
-                    reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
+        public @NotNull UpdateScorePacket read(@NotNull NetworkBuffer buffer) {
+            return new UpdateScorePacket(buffer.read(STRING), buffer.read(STRING), buffer.read(VAR_INT),
+                    buffer.readOptional(COMPONENT), buffer.readOptional(Sidebar.NumberFormat::new));
         }
     };
 }

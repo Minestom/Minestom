@@ -12,18 +12,18 @@ public record ClientAdvancementTabPacket(@NotNull AdvancementAction action,
                                          @Nullable String tabIdentifier) implements ClientPacket {
     public static NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientAdvancementTabPacket value) {
-            writer.writeEnum(AdvancementAction.class, value.action);
+        public void write(@NotNull NetworkBuffer buffer, ClientAdvancementTabPacket value) {
+            buffer.writeEnum(AdvancementAction.class, value.action);
             if (value.action == AdvancementAction.OPENED_TAB) {
                 assert value.tabIdentifier != null;
-                writer.write(STRING, value.tabIdentifier);
+                buffer.write(STRING, value.tabIdentifier);
             }
         }
 
         @Override
-        public ClientAdvancementTabPacket read(@NotNull NetworkBuffer reader) {
-            var action = reader.readEnum(AdvancementAction.class);
-            var tabIdentifier = action == AdvancementAction.OPENED_TAB ? reader.read(STRING) : null;
+        public ClientAdvancementTabPacket read(@NotNull NetworkBuffer buffer) {
+            var action = buffer.readEnum(AdvancementAction.class);
+            var tabIdentifier = action == AdvancementAction.OPENED_TAB ? buffer.read(STRING) : null;
             return new ClientAdvancementTabPacket(action, tabIdentifier);
         }
     };

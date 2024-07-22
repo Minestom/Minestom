@@ -28,21 +28,21 @@ public record EntityEquipmentPacket(int entityId,
 
     public static final NetworkBuffer.Type<EntityEquipmentPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, EntityEquipmentPacket value) {
-            writer.write(VAR_INT, value.entityId);
+        public void write(@NotNull NetworkBuffer buffer, EntityEquipmentPacket value) {
+            buffer.write(VAR_INT, value.entityId);
             int index = 0;
             for (var entry : value.equipments.entrySet()) {
                 final boolean last = index++ == value.equipments.size() - 1;
                 byte slotEnum = (byte) entry.getKey().ordinal();
                 if (!last) slotEnum |= 0x80;
-                writer.write(BYTE, slotEnum);
-                writer.write(ItemStack.NETWORK_TYPE, entry.getValue());
+                buffer.write(BYTE, slotEnum);
+                buffer.write(ItemStack.NETWORK_TYPE, entry.getValue());
             }
         }
 
         @Override
-        public EntityEquipmentPacket read(@NotNull NetworkBuffer reader) {
-            return new EntityEquipmentPacket(reader.read(VAR_INT), readEquipments(reader));
+        public EntityEquipmentPacket read(@NotNull NetworkBuffer buffer) {
+            return new EntityEquipmentPacket(buffer.read(VAR_INT), readEquipments(buffer));
         }
     };
 

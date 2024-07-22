@@ -27,25 +27,25 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
 
     public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, @NotNull PlayerChatMessagePacket value) {
-            writer.write(UUID, value.sender);
-            writer.write(VAR_INT, value.index);
-            writer.writeOptional(RAW_BYTES, value.signature);
-            writer.write(value.messageBody);
-            writer.writeOptional(COMPONENT, value.unsignedContent);
-            writer.write(value.filterMask);
-            writer.write(VAR_INT, value.msgTypeId);
-            writer.write(COMPONENT, value.msgTypeName);
-            writer.writeOptional(COMPONENT, value.msgTypeTarget);
+        public void write(@NotNull NetworkBuffer buffer, @NotNull PlayerChatMessagePacket value) {
+            buffer.write(UUID, value.sender);
+            buffer.write(VAR_INT, value.index);
+            buffer.writeOptional(RAW_BYTES, value.signature);
+            buffer.write(value.messageBody);
+            buffer.writeOptional(COMPONENT, value.unsignedContent);
+            buffer.write(value.filterMask);
+            buffer.write(VAR_INT, value.msgTypeId);
+            buffer.write(COMPONENT, value.msgTypeName);
+            buffer.writeOptional(COMPONENT, value.msgTypeTarget);
         }
 
         @Override
-        public @NotNull PlayerChatMessagePacket read(@NotNull NetworkBuffer reader) {
-            return new PlayerChatMessagePacket(reader.read(UUID), reader.read(VAR_INT), reader.readOptional(r -> r.readBytes(256)),
-                    new SignedMessageBody.Packed(reader),
-                    reader.readOptional(COMPONENT), new FilterMask(reader),
-                    reader.read(VAR_INT), reader.read(COMPONENT),
-                    reader.readOptional(COMPONENT));
+        public @NotNull PlayerChatMessagePacket read(@NotNull NetworkBuffer buffer) {
+            return new PlayerChatMessagePacket(buffer.read(UUID), buffer.read(VAR_INT), buffer.readOptional(r -> r.readBytes(256)),
+                    new SignedMessageBody.Packed(buffer),
+                    buffer.readOptional(COMPONENT), new FilterMask(buffer),
+                    buffer.read(VAR_INT), buffer.read(COMPONENT),
+                    buffer.readOptional(COMPONENT));
         }
     };
 

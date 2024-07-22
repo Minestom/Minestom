@@ -19,31 +19,31 @@ public record TagsPacket(
 
     public static NetworkBuffer.Type<TagsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, TagsPacket packet) {
-            writer.write(VAR_INT, packet.tagsMap.size());
+        public void write(@NotNull NetworkBuffer buffer, TagsPacket packet) {
+            buffer.write(VAR_INT, packet.tagsMap.size());
             for (var entry : packet.tagsMap.entrySet()) {
                 final var type = entry.getKey();
                 final var tags = entry.getValue();
-                writer.write(STRING, type.getIdentifier());
+                buffer.write(STRING, type.getIdentifier());
                 if (type.getFunction() == null) {
-                    writer.write(VAR_INT, 0);
+                    buffer.write(VAR_INT, 0);
                     continue;
                 }
-                writer.write(VAR_INT, tags.size());
+                buffer.write(VAR_INT, tags.size());
                 for (var tag : tags) {
-                    writer.write(STRING, tag.name());
+                    buffer.write(STRING, tag.name());
                     final var values = tag.getValues();
-                    writer.write(VAR_INT, values.size());
+                    buffer.write(VAR_INT, values.size());
                     for (var name : values) {
-                        writer.write(VAR_INT, type.getFunction().apply(name.asString()));
+                        buffer.write(VAR_INT, type.getFunction().apply(name.asString()));
                     }
                 }
             }
         }
 
         @Override
-        public TagsPacket read(@NotNull NetworkBuffer reader) {
-            return new TagsPacket(readTagsMap(reader));
+        public TagsPacket read(@NotNull NetworkBuffer buffer) {
+            return new TagsPacket(readTagsMap(buffer));
         }
     };
 

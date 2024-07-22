@@ -13,13 +13,13 @@ public record CustomReportDetailsPacket(
 
     public static NetworkBuffer.Type<CustomReportDetailsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, CustomReportDetailsPacket packet) {
-            writer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, packet.details);
+        public void write(@NotNull NetworkBuffer buffer, CustomReportDetailsPacket packet) {
+            buffer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, packet.details);
         }
 
         @Override
-        public CustomReportDetailsPacket read(@NotNull NetworkBuffer reader) {
-            return new CustomReportDetailsPacket(reader.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
+        public CustomReportDetailsPacket read(@NotNull NetworkBuffer buffer) {
+            return new CustomReportDetailsPacket(buffer.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
         }
     };
 

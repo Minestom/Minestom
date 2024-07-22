@@ -10,14 +10,14 @@ import static net.minestom.server.network.NetworkBuffer.FLOAT;
 public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ChangeGameStatePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ChangeGameStatePacket value) {
-            writer.write(BYTE, (byte) value.reason.ordinal());
-            writer.write(FLOAT, value.value);
+        public void write(@NotNull NetworkBuffer buffer, ChangeGameStatePacket value) {
+            buffer.write(BYTE, (byte) value.reason.ordinal());
+            buffer.write(FLOAT, value.value);
         }
 
         @Override
-        public ChangeGameStatePacket read(@NotNull NetworkBuffer reader) {
-            return new ChangeGameStatePacket(Reason.values()[reader.read(BYTE)], reader.read(FLOAT));
+        public ChangeGameStatePacket read(@NotNull NetworkBuffer buffer) {
+            return new ChangeGameStatePacket(Reason.values()[buffer.read(BYTE)], buffer.read(FLOAT));
         }
     };
 

@@ -18,24 +18,24 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
 
     public static NetworkBuffer.Type<ClientHandshakePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, ClientHandshakePacket value) {
-            writer.write(VAR_INT, value.protocolVersion);
+        public void write(@NotNull NetworkBuffer buffer, ClientHandshakePacket value) {
+            buffer.write(VAR_INT, value.protocolVersion);
             int maxLength = getMaxHandshakeLength();
             if (value.serverAddress.length() > maxLength) {
                 throw new IllegalArgumentException("serverAddress is " + value.serverAddress.length() + " characters long, maximum allowed is " + maxLength);
             }
-            writer.write(STRING, value.serverAddress);
-            writer.write(UNSIGNED_SHORT, value.serverPort);
+            buffer.write(STRING, value.serverAddress);
+            buffer.write(UNSIGNED_SHORT, value.serverPort);
             // Not a writeEnum call because the indices are not 0-based
-            writer.write(VAR_INT, value.intent.id());
+            buffer.write(VAR_INT, value.intent.id());
         }
 
         @Override
-        public @NotNull ClientHandshakePacket read(@NotNull NetworkBuffer reader) {
-            return new ClientHandshakePacket(reader.read(VAR_INT), reader.read(STRING),
-                    reader.read(UNSIGNED_SHORT),
+        public @NotNull ClientHandshakePacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientHandshakePacket(buffer.read(VAR_INT), buffer.read(STRING),
+                    buffer.read(UNSIGNED_SHORT),
                     // Not a readEnum call because the indices are not 0-based
-                    Intent.fromId(reader.read(VAR_INT)));
+                    Intent.fromId(buffer.read(VAR_INT)));
         }
     };
 

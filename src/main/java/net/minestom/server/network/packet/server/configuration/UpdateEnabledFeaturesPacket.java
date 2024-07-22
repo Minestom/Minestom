@@ -14,13 +14,13 @@ public record UpdateEnabledFeaturesPacket(@NotNull Set<NamespaceID> features) im
 
     public static NetworkBuffer.Type<UpdateEnabledFeaturesPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, UpdateEnabledFeaturesPacket packet) {
-            writer.writeCollection(packet.features, (b, feature) -> b.write(STRING, feature.asString()));
+        public void write(@NotNull NetworkBuffer buffer, UpdateEnabledFeaturesPacket packet) {
+            buffer.writeCollection(packet.features, (b, feature) -> b.write(STRING, feature.asString()));
         }
 
         @Override
-        public UpdateEnabledFeaturesPacket read(@NotNull NetworkBuffer reader) {
-            return new UpdateEnabledFeaturesPacket(Set.copyOf(reader.readCollection((b) -> NamespaceID.from(b.read(STRING)), MAX_FEATURES)));
+        public UpdateEnabledFeaturesPacket read(@NotNull NetworkBuffer buffer) {
+            return new UpdateEnabledFeaturesPacket(Set.copyOf(buffer.readCollection((b) -> NamespaceID.from(b.read(STRING)), MAX_FEATURES)));
         }
     };
 }

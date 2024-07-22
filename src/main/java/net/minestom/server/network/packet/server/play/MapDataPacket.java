@@ -22,33 +22,33 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
 
     public static final NetworkBuffer.Type<MapDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, MapDataPacket value) {
-            writer.write(VAR_INT, value.mapId);
-            writer.write(BYTE, value.scale);
-            writer.write(BOOLEAN, value.locked);
-            writer.write(BOOLEAN, value.trackingPosition);
-            if (value.trackingPosition) writer.writeCollection(Icon.SERIALIZER, value.icons);
+        public void write(@NotNull NetworkBuffer buffer, MapDataPacket value) {
+            buffer.write(VAR_INT, value.mapId);
+            buffer.write(BYTE, value.scale);
+            buffer.write(BOOLEAN, value.locked);
+            buffer.write(BOOLEAN, value.trackingPosition);
+            if (value.trackingPosition) buffer.writeCollection(Icon.SERIALIZER, value.icons);
             if (value.colorContent != null) {
-                writer.write(ColorContent.SERIALIZER, value.colorContent);
+                buffer.write(ColorContent.SERIALIZER, value.colorContent);
             } else {
-                writer.write(BYTE, (byte) 0);
+                buffer.write(BYTE, (byte) 0);
             }
         }
 
         @Override
-        public MapDataPacket read(@NotNull NetworkBuffer reader) {
-            var mapId = reader.read(VAR_INT);
-            var scale = reader.read(BYTE);
-            var locked = reader.read(BOOLEAN);
-            var trackingPosition = reader.read(BOOLEAN);
-            List<Icon> icons = trackingPosition ? reader.readCollection(Icon.SERIALIZER, MAX_ICONS) : List.of();
+        public MapDataPacket read(@NotNull NetworkBuffer buffer) {
+            var mapId = buffer.read(VAR_INT);
+            var scale = buffer.read(BYTE);
+            var locked = buffer.read(BOOLEAN);
+            var trackingPosition = buffer.read(BOOLEAN);
+            List<Icon> icons = trackingPosition ? buffer.readCollection(Icon.SERIALIZER, MAX_ICONS) : List.of();
 
-            var columns = reader.read(BYTE);
+            var columns = buffer.read(BYTE);
             if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);
-            byte rows = reader.read(BYTE);
-            byte x = reader.read(BYTE);
-            byte z = reader.read(BYTE);
-            byte[] data = reader.read(BYTE_ARRAY);
+            byte rows = buffer.read(BYTE);
+            byte x = buffer.read(BYTE);
+            byte z = buffer.read(BYTE);
+            byte[] data = buffer.read(BYTE_ARRAY);
             return new MapDataPacket(mapId, scale, locked,
                     trackingPosition, icons, new ColorContent(columns, rows, x, z,
                     data));

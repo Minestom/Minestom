@@ -22,27 +22,27 @@ public record RespawnPacket(
 
     public static final NetworkBuffer.Type<RespawnPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, @NotNull RespawnPacket value) {
-            writer.write(VAR_INT, value.dimensionType);
-            writer.write(STRING, value.worldName);
-            writer.write(LONG, value.hashedSeed);
-            writer.write(BYTE, value.gameMode.id());
-            writer.write(BYTE, value.previousGameMode.id());
-            writer.write(BOOLEAN, value.isDebug);
-            writer.write(BOOLEAN, value.isFlat);
-            writer.writeOptional(value.deathLocation);
-            writer.write(VAR_INT, value.portalCooldown);
-            writer.write(BYTE, (byte) value.copyData);
+        public void write(@NotNull NetworkBuffer buffer, @NotNull RespawnPacket value) {
+            buffer.write(VAR_INT, value.dimensionType);
+            buffer.write(STRING, value.worldName);
+            buffer.write(LONG, value.hashedSeed);
+            buffer.write(BYTE, value.gameMode.id());
+            buffer.write(BYTE, value.previousGameMode.id());
+            buffer.write(BOOLEAN, value.isDebug);
+            buffer.write(BOOLEAN, value.isFlat);
+            buffer.writeOptional(value.deathLocation);
+            buffer.write(VAR_INT, value.portalCooldown);
+            buffer.write(BYTE, (byte) value.copyData);
         }
 
         @Override
-        public @NotNull RespawnPacket read(@NotNull NetworkBuffer reader) {
-            return new RespawnPacket(reader.read(VAR_INT), reader.read(STRING),
-                    reader.read(LONG), GameMode.fromId(reader.read(BYTE)),
-                    GameMode.fromId(reader.read(BYTE)),
-                    reader.read(BOOLEAN), reader.read(BOOLEAN),
-                    reader.readOptional(WorldPos.NETWORK_TYPE),
-                    reader.read(VAR_INT), reader.read(BYTE));
+        public @NotNull RespawnPacket read(@NotNull NetworkBuffer buffer) {
+            return new RespawnPacket(buffer.read(VAR_INT), buffer.read(STRING),
+                    buffer.read(LONG), GameMode.fromId(buffer.read(BYTE)),
+                    GameMode.fromId(buffer.read(BYTE)),
+                    buffer.read(BOOLEAN), buffer.read(BOOLEAN),
+                    buffer.readOptional(WorldPos.NETWORK_TYPE),
+                    buffer.read(VAR_INT), buffer.read(BYTE));
         }
     };
 }

@@ -21,18 +21,18 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
 
     public static final NetworkBuffer.Type<DeclareCommandsPacket> SERIALIZER = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, DeclareCommandsPacket value) {
-            writer.writeCollection(value.nodes);
-            writer.write(VAR_INT, value.rootIndex);
+        public void write(@NotNull NetworkBuffer buffer, DeclareCommandsPacket value) {
+            buffer.writeCollection(value.nodes);
+            buffer.write(VAR_INT, value.rootIndex);
         }
 
         @Override
-        public DeclareCommandsPacket read(@NotNull NetworkBuffer reader) {
-            return new DeclareCommandsPacket(reader.readCollection(r -> {
+        public DeclareCommandsPacket read(@NotNull NetworkBuffer buffer) {
+            return new DeclareCommandsPacket(buffer.readCollection(r -> {
                 Node node = new Node();
                 node.read(r);
                 return node;
-            }, MAX_NODES), reader.read(VAR_INT));
+            }, MAX_NODES), buffer.read(VAR_INT));
         }
     };
 
