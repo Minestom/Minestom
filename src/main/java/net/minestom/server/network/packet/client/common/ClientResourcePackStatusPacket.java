@@ -11,15 +11,18 @@ public record ClientResourcePackStatusPacket(
         @NotNull UUID id,
         @NotNull ResourcePackStatus status
 ) implements ClientPacket {
-    public ClientResourcePackStatusPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), readStatus(reader));
-    }
+    public static NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, ClientResourcePackStatusPacket value) {
+            writer.write(NetworkBuffer.UUID, value.id);
+            writer.writeEnum(ResourcePackStatus.class, value.status); // FIXME: enum seems wrong
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, id);
-        writer.writeEnum(ResourcePackStatus.class, status);
-    }
+        @Override
+        public ClientResourcePackStatusPacket read(@NotNull NetworkBuffer reader) {
+            return new ClientResourcePackStatusPacket(reader.read(NetworkBuffer.UUID), readStatus(reader));
+        }
+    };
 
     private static @NotNull ResourcePackStatus readStatus(@NotNull NetworkBuffer reader) {
         var ordinal = reader.read(NetworkBuffer.VAR_INT);

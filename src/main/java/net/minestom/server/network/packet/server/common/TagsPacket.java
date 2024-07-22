@@ -17,32 +17,35 @@ public record TagsPacket(
         tagsMap = Map.copyOf(tagsMap);
     }
 
-    public TagsPacket(@NotNull NetworkBuffer reader) {
-        this(readTagsMap(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, tagsMap.size());
-        for (var entry : tagsMap.entrySet()) {
-            final var type = entry.getKey();
-            final var tags = entry.getValue();
-            writer.write(STRING, type.getIdentifier());
-            if (type.getFunction() == null) {
-                writer.write(VAR_INT, 0);
-                continue;
-            }
-            writer.write(VAR_INT, tags.size());
-            for (var tag : tags) {
-                writer.write(STRING, tag.name());
-                final var values = tag.getValues();
-                writer.write(VAR_INT, values.size());
-                for (var name : values) {
-                    writer.write(VAR_INT, type.getFunction().apply(name.asString()));
+    public static NetworkBuffer.Type<TagsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, TagsPacket packet) {
+            writer.write(VAR_INT, packet.tagsMap.size());
+            for (var entry : packet.tagsMap.entrySet()) {
+                final var type = entry.getKey();
+                final var tags = entry.getValue();
+                writer.write(STRING, type.getIdentifier());
+                if (type.getFunction() == null) {
+                    writer.write(VAR_INT, 0);
+                    continue;
+                }
+                writer.write(VAR_INT, tags.size());
+                for (var tag : tags) {
+                    writer.write(STRING, tag.name());
+                    final var values = tag.getValues();
+                    writer.write(VAR_INT, values.size());
+                    for (var name : values) {
+                        writer.write(VAR_INT, type.getFunction().apply(name.asString()));
+                    }
                 }
             }
         }
-    }
+
+        @Override
+        public TagsPacket read(@NotNull NetworkBuffer reader) {
+            return new TagsPacket(readTagsMap(reader));
+        }
+    };
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {
         Map<Tag.BasicType, List<Tag>> tagsMap = new EnumMap<>(Tag.BasicType.class);

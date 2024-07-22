@@ -13,20 +13,22 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientChatMessagePacket(String message, long timestamp,
                                       long salt, byte @Nullable [] signature,
                                       int ackOffset, BitSet ackList) implements ClientPacket {
+    public static NetworkBuffer.Type<ClientChatMessagePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, ClientChatMessagePacket value) {
+            writer.write(STRING, value.message);
+            writer.write(LONG, value.timestamp);
+            writer.write(LONG, value.salt);
+            writer.writeOptional(BYTE_ARRAY, value.signature);
+            writer.write(VAR_INT, value.ackOffset);
+            writer.write(RAW_BYTES, Arrays.copyOf(value.ackList.toByteArray(), 3));
+        }
 
-    public ClientChatMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(LONG),
-                reader.read(LONG), reader.readOptional(r -> r.readBytes(256)),
-                reader.read(VAR_INT), BitSet.valueOf(reader.readBytes(3)));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, message);
-        writer.write(LONG, timestamp);
-        writer.write(LONG, salt);
-        writer.writeOptional(BYTE_ARRAY, signature);
-        writer.write(VAR_INT, ackOffset);
-        writer.write(RAW_BYTES, Arrays.copyOf(ackList.toByteArray(), 3));
-    }
+        @Override
+        public ClientChatMessagePacket read(@NotNull NetworkBuffer reader) {
+            return new ClientChatMessagePacket(reader.read(STRING), reader.read(LONG),
+                    reader.read(LONG), reader.readOptional(r -> r.readBytes(256)),
+                    reader.read(VAR_INT), BitSet.valueOf(reader.readBytes(3)));
+        }
+    };
 }

@@ -26,22 +26,25 @@ public record EntityEquipmentPacket(int entityId,
             throw new IllegalArgumentException("Equipments cannot be empty");
     }
 
-    public EntityEquipmentPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), readEquipments(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        int index = 0;
-        for (var entry : equipments.entrySet()) {
-            final boolean last = index++ == equipments.size() - 1;
-            byte slotEnum = (byte) entry.getKey().ordinal();
-            if (!last) slotEnum |= 0x80;
-            writer.write(BYTE, slotEnum);
-            writer.write(ItemStack.NETWORK_TYPE, entry.getValue());
+    public static final NetworkBuffer.Type<EntityEquipmentPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, EntityEquipmentPacket value) {
+            writer.write(VAR_INT, value.entityId);
+            int index = 0;
+            for (var entry : value.equipments.entrySet()) {
+                final boolean last = index++ == value.equipments.size() - 1;
+                byte slotEnum = (byte) entry.getKey().ordinal();
+                if (!last) slotEnum |= 0x80;
+                writer.write(BYTE, slotEnum);
+                writer.write(ItemStack.NETWORK_TYPE, entry.getValue());
+            }
         }
-    }
+
+        @Override
+        public EntityEquipmentPacket read(@NotNull NetworkBuffer reader) {
+            return new EntityEquipmentPacket(reader.read(VAR_INT), readEquipments(reader));
+        }
+    };
 
     @Override
     public @NotNull Collection<Component> components() {

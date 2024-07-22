@@ -323,9 +323,9 @@ public final class NetworkBuffer {
 
 
     public interface Type<T> {
-        void write(@NotNull NetworkBuffer buffer, T value);
+        void write(@NotNull NetworkBuffer writer, T value);
 
-        T read(@NotNull NetworkBuffer buffer);
+        T read(@NotNull NetworkBuffer reader);
 
         default <S> @NotNull Type<S> map(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
             return new NetworkBufferTypeImpl.MappedType<>(this, to, from);

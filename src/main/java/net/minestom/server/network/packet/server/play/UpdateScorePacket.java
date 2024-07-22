@@ -20,18 +20,20 @@ public record UpdateScorePacket(
         @Nullable Component displayName,
         @Nullable Sidebar.NumberFormat numberFormat
 ) implements ServerPacket.Play {
-    public UpdateScorePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
-                reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
-    }
+    public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, @NotNull UpdateScorePacket value) {
+            writer.write(STRING, value.entityName);
+            writer.write(STRING, value.objectiveName);
+            writer.write(VAR_INT, value.score);
+            writer.writeOptional(COMPONENT, value.displayName);
+            writer.writeOptional(value.numberFormat);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, entityName);
-        writer.write(STRING, objectiveName);
-        writer.write(VAR_INT, score);
-        writer.writeOptional(COMPONENT, displayName);
-        writer.writeOptional(numberFormat);
-    }
-
+        @Override
+        public @NotNull UpdateScorePacket read(@NotNull NetworkBuffer reader) {
+            return new UpdateScorePacket(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
+                    reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
+        }
+    };
 }

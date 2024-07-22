@@ -17,40 +17,35 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
                                         @Nullable Component objectiveValue,
                                         @Nullable Type type,
                                         @Nullable Sidebar.NumberFormat numberFormat) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public ScoreboardObjectivePacket(@NotNull NetworkBuffer reader) {
-        this(read(reader));
-    }
-
-    private ScoreboardObjectivePacket(ScoreboardObjectivePacket packet) {
-        this(packet.objectiveName, packet.mode, packet.objectiveValue, packet.type, packet.numberFormat);
-    }
-
-    private static ScoreboardObjectivePacket read(@NotNull NetworkBuffer reader) {
-        String objectiveName = reader.read(STRING);
-        byte mode = reader.read(BYTE);
-        Component objectiveValue = null;
-        Type type = null;
-        Sidebar.NumberFormat numberFormat = null;
-        if (mode == 0 || mode == 2) {
-            objectiveValue = reader.read(COMPONENT);
-            type = Type.values()[reader.read(VAR_INT)];
-            numberFormat = reader.readOptional(Sidebar.NumberFormat::new);
+    public static final NetworkBuffer.Type<ScoreboardObjectivePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, ScoreboardObjectivePacket value) {
+            writer.write(STRING, value.objectiveName);
+            writer.write(BYTE, value.mode);
+            if (value.mode == 0 || value.mode == 2) {
+                assert value.objectiveValue != null;
+                writer.write(COMPONENT, value.objectiveValue);
+                assert value.type != null;
+                writer.write(VAR_INT, value.type.ordinal());
+                writer.writeOptional(value.numberFormat);
+            }
         }
-        return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type, numberFormat);
-    }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, objectiveName);
-        writer.write(BYTE, mode);
-        if (mode == 0 || mode == 2) {
-            assert objectiveValue != null;
-            writer.write(COMPONENT, objectiveValue);
-            assert type != null;
-            writer.write(VAR_INT, type.ordinal());
-            writer.writeOptional(numberFormat);
+        @Override
+        public ScoreboardObjectivePacket read(@NotNull NetworkBuffer reader) {
+            String objectiveName = reader.read(STRING);
+            byte mode = reader.read(BYTE);
+            Component objectiveValue = null;
+            Type type = null;
+            Sidebar.NumberFormat numberFormat = null;
+            if (mode == 0 || mode == 2) {
+                objectiveValue = reader.read(COMPONENT);
+                type = Type.values()[reader.read(VAR_INT)];
+                numberFormat = reader.readOptional(Sidebar.NumberFormat::new);
+            }
+            return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type, numberFormat);
         }
-    }
+    };
 
     @Override
     public @NotNull Collection<Component> components() {

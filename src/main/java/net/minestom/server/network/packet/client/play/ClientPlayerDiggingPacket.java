@@ -10,18 +10,22 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point blockPosition,
                                         @NotNull BlockFace blockFace, int sequence) implements ClientPacket {
-    public ClientPlayerDiggingPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readEnum(Status.class), reader.read(BLOCK_POSITION),
-                BlockFace.values()[reader.read(BYTE)], reader.read(VAR_INT));
-    }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeEnum(Status.class, status);
-        writer.write(BLOCK_POSITION, blockPosition);
-        writer.write(BYTE, (byte) blockFace.ordinal());
-        writer.write(VAR_INT, sequence);
-    }
+    public static NetworkBuffer.Type<ClientPlayerDiggingPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, ClientPlayerDiggingPacket value) {
+            writer.writeEnum(Status.class, value.status);
+            writer.write(BLOCK_POSITION, value.blockPosition);
+            writer.write(BYTE, (byte) value.blockFace.ordinal());
+            writer.write(VAR_INT, value.sequence);
+        }
+
+        @Override
+        public ClientPlayerDiggingPacket read(@NotNull NetworkBuffer reader) {
+            return new ClientPlayerDiggingPacket(reader.readEnum(Status.class), reader.read(BLOCK_POSITION),
+                    BlockFace.values()[reader.read(BYTE)], reader.read(VAR_INT));
+        }
+    };
 
     public enum Status {
         STARTED_DIGGING,

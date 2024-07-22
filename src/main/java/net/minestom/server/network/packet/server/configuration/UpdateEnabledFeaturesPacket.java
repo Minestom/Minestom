@@ -12,13 +12,15 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 public record UpdateEnabledFeaturesPacket(@NotNull Set<NamespaceID> features) implements ServerPacket.Configuration {
     public static final int MAX_FEATURES = 1024;
 
-    public UpdateEnabledFeaturesPacket(@NotNull NetworkBuffer buffer) {
-        this(Set.copyOf(buffer.readCollection((b) -> NamespaceID.from(b.read(STRING)), MAX_FEATURES)));
-    }
+    public static NetworkBuffer.Type<UpdateEnabledFeaturesPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, UpdateEnabledFeaturesPacket packet) {
+            writer.writeCollection(packet.features, (b, feature) -> b.write(STRING, feature.asString()));
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeCollection(features, (b, feature) -> b.write(STRING, feature.asString()));
-    }
-
+        @Override
+        public UpdateEnabledFeaturesPacket read(@NotNull NetworkBuffer reader) {
+            return new UpdateEnabledFeaturesPacket(Set.copyOf(reader.readCollection((b) -> NamespaceID.from(b.read(STRING)), MAX_FEATURES)));
+        }
+    };
 }

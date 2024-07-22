@@ -20,27 +20,29 @@ public record RespawnPacket(
     public static final int COPY_METADATA = 0x2;
     public static final int COPY_ALL = COPY_ATTRIBUTES | COPY_METADATA;
 
-    public RespawnPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(STRING),
-                reader.read(LONG), GameMode.fromId(reader.read(BYTE)),
-                GameMode.fromId(reader.read(BYTE)),
-                reader.read(BOOLEAN), reader.read(BOOLEAN),
-                reader.readOptional(WorldPos.NETWORK_TYPE),
-                reader.read(VAR_INT), reader.read(BYTE));
-    }
+    public static final NetworkBuffer.Type<RespawnPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, @NotNull RespawnPacket value) {
+            writer.write(VAR_INT, value.dimensionType);
+            writer.write(STRING, value.worldName);
+            writer.write(LONG, value.hashedSeed);
+            writer.write(BYTE, value.gameMode.id());
+            writer.write(BYTE, value.previousGameMode.id());
+            writer.write(BOOLEAN, value.isDebug);
+            writer.write(BOOLEAN, value.isFlat);
+            writer.writeOptional(value.deathLocation);
+            writer.write(VAR_INT, value.portalCooldown);
+            writer.write(BYTE, (byte) value.copyData);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, dimensionType);
-        writer.write(STRING, worldName);
-        writer.write(LONG, hashedSeed);
-        writer.write(BYTE, gameMode.id());
-        writer.write(BYTE, previousGameMode.id());
-        writer.write(BOOLEAN, isDebug);
-        writer.write(BOOLEAN, isFlat);
-        writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
-        writer.write(VAR_INT, portalCooldown);
-        writer.write(BYTE, (byte) copyData);
-    }
-
+        @Override
+        public @NotNull RespawnPacket read(@NotNull NetworkBuffer reader) {
+            return new RespawnPacket(reader.read(VAR_INT), reader.read(STRING),
+                    reader.read(LONG), GameMode.fromId(reader.read(BYTE)),
+                    GameMode.fromId(reader.read(BYTE)),
+                    reader.read(BOOLEAN), reader.read(BOOLEAN),
+                    reader.readOptional(WorldPos.NETWORK_TYPE),
+                    reader.read(VAR_INT), reader.read(BYTE));
+        }
+    };
 }
