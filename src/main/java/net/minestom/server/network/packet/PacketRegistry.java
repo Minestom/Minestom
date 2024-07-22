@@ -25,9 +25,9 @@ public interface PacketRegistry<T> {
     @UnknownNullability
     T create(int packetId, @NotNull NetworkBuffer reader);
 
-    PacketInfo<? extends T> packetInfo(Class<? extends T> packetClass);
+    PacketInfo<T> packetInfo(Class<? extends T> packetClass);
 
-    record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<? extends T> serializer) {
+    record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
     sealed class Client extends PacketRegistryTemplate<ClientPacket> {
@@ -344,7 +344,8 @@ public interface PacketRegistry<T> {
                 for (int i = 0; i < suppliers.length; i++) {
                     final Entry<? extends T> entry = suppliers[i];
                     if (entry != null && entry.type == type) {
-                        return new PacketInfo<T>(entry.type, i, entry.reader);
+                        //noinspection unchecked
+                        return new PacketInfo<T>(entry.type, i, (NetworkBuffer.Type<T>) entry.reader);
                     }
                 }
                 throw new IllegalStateException("Packet type " + type + " isn't registered!");
@@ -369,7 +370,7 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public PacketInfo<? extends T> packetInfo(Class<? extends T> packetClass) {
+        public PacketInfo<T> packetInfo(Class<? extends T> packetClass) {
             return packetIds.get(packetClass);
         }
 
