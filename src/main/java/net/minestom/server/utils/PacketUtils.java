@@ -253,9 +253,17 @@ public final class PacketUtils {
                                          @NotNull ByteBuffer buffer,
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
-        PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
-        final int id = registry.packetId(packet.getClass());
-        writeFramedPacket(buffer, id, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
+        final PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
+        final PacketRegistry.PacketInfo<? extends ServerPacket> packetInfo = registry.packetInfo(packet.getClass());
+        final int id = packetInfo.id();
+        final NetworkBuffer.Type<ServerPacket> serializer = (NetworkBuffer.Type<ServerPacket>) packetInfo.serializer();
+        var writer = new NetworkBuffer.Writer() {
+            @Override
+            public void write(@NotNull NetworkBuffer writer) {
+                serializer.write(writer, packet);
+            }
+        };
+        writeFramedPacket(buffer, id, writer, compression ? MinecraftServer.getCompressionThreshold() : 0);
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,

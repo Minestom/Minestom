@@ -25,7 +25,10 @@ public interface PacketRegistry<T> {
     @UnknownNullability
     T create(int packetId, @NotNull NetworkBuffer reader);
 
-    int packetId(@NotNull Class<? extends T> packetClass);
+    PacketInfo<? extends T> packetInfo(Class<? extends T> packetClass);
+
+    record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<? extends T> serializer) {
+    }
 
     sealed class Client extends PacketRegistryTemplate<ClientPacket> {
         @SafeVarargs
@@ -335,12 +338,14 @@ public interface PacketRegistry<T> {
 
     sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
         private final Entry<? extends T>[] suppliers;
-        private final ClassValue<Integer> packetIds = new ClassValue<>() {
+        private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
-            protected Integer computeValue(@NotNull Class<?> type) {
+            protected PacketInfo<T> computeValue(@NotNull Class<?> type) {
                 for (int i = 0; i < suppliers.length; i++) {
                     final Entry<? extends T> entry = suppliers[i];
-                    if (entry != null && entry.type == type) return i;
+                    if (entry != null && entry.type == type) {
+                        return new PacketInfo<T>(entry.type, i, entry.reader);
+                    }
                 }
                 throw new IllegalStateException("Packet type " + type + " isn't registered!");
             }
@@ -353,14 +358,18 @@ public interface PacketRegistry<T> {
 
         public @UnknownNullability T create(int packetId, @NotNull NetworkBuffer reader) {
             final Entry<? extends T> entry = suppliers[packetId];
-            final NetworkBuffer.Type<? extends T> supplier = entry.reader;
-            if (supplier == null)
+            if (entry == null)
                 throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
-            return supplier.read(reader);
+            final NetworkBuffer.Type<? extends T> supplier = entry.reader;
+            final T packet = supplier.read(reader);
+            if (packet == null) {
+                throw new IllegalStateException("Packet " + entry.type + " failed to read!");
+            }
+            return packet;
         }
 
         @Override
-        public int packetId(@NotNull Class<? extends T> packetClass) {
+        public PacketInfo<? extends T> packetInfo(Class<? extends T> packetClass) {
             return packetIds.get(packetClass);
         }
 

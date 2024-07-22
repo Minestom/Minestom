@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
 public record StatusRequestPacket() implements ClientPacket {
-    public static final NetworkBuffer.Type<StatusRequestPacket> SERIALIZER = NetworkBufferTemplate.empty();
+    public static final NetworkBuffer.Type<StatusRequestPacket> SERIALIZER = NetworkBufferTemplate.template(StatusRequestPacket::new);
 
     @Override
     public boolean processImmediately() {

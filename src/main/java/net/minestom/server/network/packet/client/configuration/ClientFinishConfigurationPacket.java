@@ -5,5 +5,5 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
 public record ClientFinishConfigurationPacket() implements ClientPacket {
-    public static final NetworkBuffer.Type<ClientFinishConfigurationPacket> SERIALIZER = NetworkBufferTemplate.empty();
+    public static final NetworkBuffer.Type<ClientFinishConfigurationPacket> SERIALIZER = NetworkBufferTemplate.template(ClientFinishConfigurationPacket::new);
 }

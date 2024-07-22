@@ -20,19 +20,22 @@ public record EntityMetaDataPacket(int entityId,
         entries = Map.copyOf(entries);
     }
 
-    public EntityMetaDataPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), readEntries(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        for (var entry : entries.entrySet()) {
-            writer.write(BYTE, entry.getKey().byteValue());
-            writer.write(entry.getValue());
+    public static final NetworkBuffer.Type<EntityMetaDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer writer, EntityMetaDataPacket value) {
+            writer.write(VAR_INT, value.entityId);
+            for (var entry : value.entries.entrySet()) {
+                writer.write(BYTE, entry.getKey().byteValue());
+                writer.write(entry.getValue());
+            }
+            writer.write(BYTE, (byte) 0xFF); // End
         }
-        writer.write(BYTE, (byte) 0xFF); // End
-    }
+
+        @Override
+        public EntityMetaDataPacket read(@NotNull NetworkBuffer reader) {
+            return new EntityMetaDataPacket(reader.read(VAR_INT), readEntries(reader));
+        }
+    };
 
     private static Map<Integer, Metadata.Entry<?>> readEntries(@NotNull NetworkBuffer reader) {
         Map<Integer, Metadata.Entry<?>> entries = new HashMap<>();
