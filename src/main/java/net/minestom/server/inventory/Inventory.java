@@ -41,8 +41,6 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     // the players currently viewing this inventory
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    // (player -> cursor item) map, used by the click listeners
-    private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
     public Inventory(@NotNull InventoryType inventoryType, @NotNull Component title) {
         super(inventoryType.getSize());
@@ -105,7 +103,6 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
 
     @Override
     public synchronized void clear() {
-        this.cursorPlayersItem.clear();
         super.clear();
     }
 
@@ -156,38 +153,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
-        setCursorItem(player, ItemStack.AIR);
         this.clickProcessor.clearCache(player);
         return result;
-    }
-
-    /**
-     * Gets the cursor item of a viewer.
-     *
-     * @param player the player to get the cursor item from
-     * @return the player cursor item, air item if the player is not a viewer
-     */
-    public @NotNull ItemStack getCursorItem(@NotNull Player player) {
-        return cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-    }
-
-    /**
-     * Changes the cursor item of a viewer,
-     * does nothing if <code>player</code> is not a viewer.
-     *
-     * @param player     the player to change the cursor item
-     * @param cursorItem the new player cursor item
-     */
-    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        if (!currentCursorItem.equals(cursorItem)) {
-            player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
-        }
-        if (!cursorItem.isAir()) {
-            this.cursorPlayersItem.put(player, cursorItem);
-        } else {
-            this.cursorPlayersItem.remove(player);
-        }
     }
 
     @Override
@@ -197,7 +164,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     }
 
     private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
-        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), cursorPlayersItem.getOrDefault(player, ItemStack.AIR));
+        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), player.getInventory().getCursorItem());
     }
 
     /**
@@ -214,7 +181,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
-        final ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = playerInventory.getCursorItem();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
@@ -229,7 +196,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        this.cursorPlayersItem.put(player, clickResult.getCursor());
+        playerInventory.setCursorItem(clickResult.getCursor());
         callClickEvent(player, isInWindow ? this : null, slot, ClickType.LEFT_CLICK, clicked, cursor);
         return true;
     }
@@ -237,7 +204,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
     @Override
     public boolean rightClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
-        final ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = playerInventory.getCursorItem();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
@@ -252,7 +219,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        this.cursorPlayersItem.put(player, clickResult.getCursor());
+        playerInventory.setCursorItem(clickResult.getCursor());
         callClickEvent(player, isInWindow ? this : null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
         return true;
     }
@@ -263,7 +230,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final ItemStack cursor = getCursorItem(player); // Isn't used in the algorithm
+        final ItemStack cursor = playerInventory.getCursorItem(); // Isn't used in the algorithm
         final InventoryClickResult clickResult = clickProcessor.shiftClick(
                 isInWindow ? this : playerInventory,
                 isInWindow ? playerInventory : this,
@@ -279,7 +246,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         updateAll(player); // FIXME: currently not properly client-predicted
-        this.cursorPlayersItem.put(player, clickResult.getCursor());
+        playerInventory.setCursorItem(clickResult.getCursor());
         return true;
     }
 
@@ -303,7 +270,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         playerInventory.setItemStack(convertedKey, clickResult.getCursor());
-        callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
+        callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, playerInventory.getCursorItem());
         return true;
     }
 
@@ -322,7 +289,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = outsideDrop ?
                 ItemStack.AIR : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot));
-        final ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = playerInventory.getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.drop(player,
                 isInWindow ? this : playerInventory, all, clickSlot, button, clicked, cursor);
         if (clickResult.isCancel()) {
@@ -337,7 +304,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 playerInventory.setItemStack(clickSlot, resultClicked);
             }
         }
-        this.cursorPlayersItem.put(player, clickResult.getCursor());
+        playerInventory.setCursorItem(clickResult.getCursor());
         return true;
     }
 
@@ -349,7 +316,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final ItemStack clicked = slot != -999 ?
                 (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot)) :
                 ItemStack.AIR;
-        final ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = playerInventory.getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.dragging(player,
                 slot != -999 ? (isInWindow ? this : playerInventory) : null,
                 clickSlot, button,
@@ -358,7 +325,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             updateAll(player);
             return false;
         }
-        this.cursorPlayersItem.put(player, clickResult.getCursor());
+        playerInventory.setCursorItem(clickResult.getCursor());
         updateAll(player); // FIXME: currently not properly client-predicted
         return true;
     }
@@ -371,14 +338,14 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final ItemStack clicked = slot != -999 ?
                 (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot)) :
                 ItemStack.AIR;
-        final ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = playerInventory.getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
                 this, player, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
         }
-        this.cursorPlayersItem.put(player, clickResult.getCursor());
+        playerInventory.setCursorItem(clickResult.getCursor());
         updateAll(player); // FIXME: currently not properly client-predicted
         return true;
     }
