@@ -30,6 +30,7 @@ public final class ServerFlag {
     public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
     public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 30_000);
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000);
+    public static final boolean MISSING_BLOCK_HANDLER_WARNING = booleanProperty("minestom.missing-block-handler-warning", true);
 
     // Chunk update
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);

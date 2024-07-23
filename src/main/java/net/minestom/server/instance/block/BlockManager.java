@@ -2,6 +2,7 @@ package net.minestom.server.instance.block;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
@@ -42,7 +43,7 @@ public final class BlockManager {
     public @NotNull BlockHandler getHandlerOrDummy(@NotNull String namespace) {
         BlockHandler handler = getHandler(namespace);
         if (handler == null) {
-            if (dummyWarning.add(namespace)) {
+            if (ServerFlag.MISSING_BLOCK_HANDLER_WARNING && dummyWarning.add(namespace)) {
                 LOGGER.warn("""
                         Block {} does not have any corresponding handler, default to dummy.
                         You may want to register a handler for this namespace to prevent any data loss.""", namespace);
