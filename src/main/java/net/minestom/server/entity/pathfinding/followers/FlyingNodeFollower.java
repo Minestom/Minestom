@@ -70,7 +70,7 @@ public class FlyingNodeFollower implements NodeFollower {
     @Override
     public double movementSpeed() {
         if (entity instanceof LivingEntity living) {
-            return living.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
+            return living.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue();
         }
 
         return 0.1f;
