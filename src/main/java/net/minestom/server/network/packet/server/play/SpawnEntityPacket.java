@@ -12,32 +12,34 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record SpawnEntityPacket(int entityId, @NotNull UUID uuid, int type,
                                 @NotNull Pos position, float headRot, int data,
                                 short velocityX, short velocityY, short velocityZ) implements ServerPacket.Play {
-    public SpawnEntityPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(UUID), reader.read(VAR_INT),
-                new Pos(reader.read(DOUBLE), reader.read(DOUBLE), reader.read(DOUBLE),
-                        reader.read(BYTE) * 360f / 256f, reader.read(BYTE) * 360f / 256f), reader.read(BYTE) * 360f / 256f,
-                reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT));
-    }
+    public static final NetworkBuffer.Type<SpawnEntityPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @NotNull SpawnEntityPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(UUID, value.uuid);
+            buffer.write(VAR_INT, value.type);
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        writer.write(UUID, uuid);
-        writer.write(VAR_INT, type);
+            buffer.write(DOUBLE, value.position.x());
+            buffer.write(DOUBLE, value.position.y());
+            buffer.write(DOUBLE, value.position.z());
 
-        writer.write(DOUBLE, position.x());
-        writer.write(DOUBLE, position.y());
-        writer.write(DOUBLE, position.z());
+            buffer.write(BYTE, (byte) (value.position.pitch() * 256 / 360));
+            buffer.write(BYTE, (byte) (value.position.yaw() * 256 / 360));
+            buffer.write(BYTE, (byte) (value.headRot * 256 / 360));
 
-        writer.write(BYTE, (byte) (position.pitch() * 256 / 360));
-        writer.write(BYTE, (byte) (position.yaw() * 256 / 360));
-        writer.write(BYTE, (byte) (headRot * 256 / 360));
+            buffer.write(VAR_INT, value.data);
 
-        writer.write(VAR_INT, data);
+            buffer.write(SHORT, value.velocityX);
+            buffer.write(SHORT, value.velocityY);
+            buffer.write(SHORT, value.velocityZ);
+        }
 
-        writer.write(SHORT, velocityX);
-        writer.write(SHORT, velocityY);
-        writer.write(SHORT, velocityZ);
-    }
-
+        @Override
+        public @NotNull SpawnEntityPacket read(@NotNull NetworkBuffer buffer) {
+            return new SpawnEntityPacket(buffer.read(VAR_INT), buffer.read(UUID), buffer.read(VAR_INT),
+                    new Pos(buffer.read(DOUBLE), buffer.read(DOUBLE), buffer.read(DOUBLE),
+                            buffer.read(BYTE) * 360f / 256f, buffer.read(BYTE) * 360f / 256f), buffer.read(BYTE) * 360f / 256f,
+                    buffer.read(VAR_INT), buffer.read(SHORT), buffer.read(SHORT), buffer.read(SHORT));
+        }
+    };
 }

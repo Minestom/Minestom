@@ -10,57 +10,53 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) implements ServerPacket.Play {
-    private ParticlePacket(ParticlePacket copy) {
-        this(copy.particle, copy.longDistance, copy.x, copy.y, copy.z, copy.offsetX, copy.offsetY, copy.offsetZ, copy.maxSpeed, copy.particleCount);
-    }
-
-    public ParticlePacket(@NotNull NetworkBuffer reader) {
-        this(readPacket(reader));
-    }
-
+public record ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z,
+                             float offsetX, float offsetY, float offsetZ, float maxSpeed,
+                             int particleCount) implements ServerPacket.Play {
     public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
         this(particle, false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
     }
 
     public ParticlePacket(@NotNull Particle particle, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
-        this(particle, longDistance, position.x(), position.y(), position.z(), (float)offset.x(), (float)offset.y(), (float)offset.z(), maxSpeed, particleCount);
+        this(particle, longDistance, position.x(), position.y(), position.z(), (float) offset.x(), (float) offset.y(), (float) offset.z(), maxSpeed, particleCount);
     }
 
     public ParticlePacket(@NotNull Particle particle, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
         this(particle, false, position, offset, maxSpeed, particleCount);
     }
 
-    private static ParticlePacket readPacket(NetworkBuffer reader) {
-        Boolean longDistance = reader.read(BOOLEAN);
-        Double x = reader.read(DOUBLE);
-        Double y = reader.read(DOUBLE);
-        Double z = reader.read(DOUBLE);
-        Float offsetX = reader.read(FLOAT);
-        Float offsetY = reader.read(FLOAT);
-        Float offsetZ = reader.read(FLOAT);
-        Float maxSpeed = reader.read(FLOAT);
-        Integer particleCount = reader.read(INT);
+    public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ParticlePacket value) {
+            buffer.write(BOOLEAN, value.longDistance);
+            buffer.write(DOUBLE, value.x);
+            buffer.write(DOUBLE, value.y);
+            buffer.write(DOUBLE, value.z);
+            buffer.write(FLOAT, value.offsetX);
+            buffer.write(FLOAT, value.offsetY);
+            buffer.write(FLOAT, value.offsetZ);
+            buffer.write(FLOAT, value.maxSpeed);
+            buffer.write(INT, value.particleCount);
+            buffer.write(VAR_INT, value.particle.id());
+            value.particle.writeData(buffer);
+        }
 
-        Particle particle = Particle.fromId(reader.read(VAR_INT));
-        Objects.requireNonNull(particle);
+        @Override
+        public ParticlePacket read(@NotNull NetworkBuffer buffer) {
+            Boolean longDistance = buffer.read(BOOLEAN);
+            Double x = buffer.read(DOUBLE);
+            Double y = buffer.read(DOUBLE);
+            Double z = buffer.read(DOUBLE);
+            Float offsetX = buffer.read(FLOAT);
+            Float offsetY = buffer.read(FLOAT);
+            Float offsetZ = buffer.read(FLOAT);
+            Float maxSpeed = buffer.read(FLOAT);
+            Integer particleCount = buffer.read(INT);
 
-        return new ParticlePacket(particle.readData(reader), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
-    }
+            Particle particle = Particle.fromId(buffer.read(VAR_INT));
+            Objects.requireNonNull(particle);
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BOOLEAN, longDistance);
-        writer.write(DOUBLE, x);
-        writer.write(DOUBLE, y);
-        writer.write(DOUBLE, z);
-        writer.write(FLOAT, offsetX);
-        writer.write(FLOAT, offsetY);
-        writer.write(FLOAT, offsetZ);
-        writer.write(FLOAT, maxSpeed);
-        writer.write(INT, particleCount);
-        writer.write(VAR_INT, particle.id());
-        particle.writeData(writer);
-    }
-
+            return new ParticlePacket(particle.readData(buffer), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
+        }
+    };
 }

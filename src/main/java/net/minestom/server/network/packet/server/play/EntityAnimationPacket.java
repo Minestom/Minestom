@@ -8,15 +8,18 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityAnimationPacket(int entityId, @NotNull Animation animation) implements ServerPacket.Play {
-    public EntityAnimationPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), Animation.values()[reader.read(BYTE)]);
-    }
+    public static final NetworkBuffer.Type<EntityAnimationPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, EntityAnimationPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(BYTE, (byte) value.animation.ordinal());
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        writer.write(BYTE, (byte) animation.ordinal());
-    }
+        @Override
+        public EntityAnimationPacket read(@NotNull NetworkBuffer buffer) {
+            return new EntityAnimationPacket(buffer.read(VAR_INT), Animation.values()[buffer.read(BYTE)]);
+        }
+    };
 
     public enum Animation {
         SWING_MAIN_ARM,
