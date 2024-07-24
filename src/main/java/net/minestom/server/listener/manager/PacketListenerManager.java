@@ -1,6 +1,7 @@
 package net.minestom.server.listener.manager;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
@@ -9,6 +10,7 @@ import net.minestom.server.listener.preplay.ConfigListener;
 import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
+import net.minestom.server.network.AntiCheat;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
@@ -120,7 +122,24 @@ public final class PacketListenerManager {
 
         // Event
         if (state == ConnectionState.PLAY) {
-            PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(connection.getPlayer(), packet);
+            Player player = connection.getPlayer();
+            if (player != null && player.getAntiCheat() != null) {
+                AntiCheat.Action result = player.getAntiCheat().consume(packet);
+
+                switch (result) {
+                    case AntiCheat.Action.InvalidCritical action -> {
+                        MinecraftServer.LOGGER.info("Critical: {}", action.message());
+                    }
+                    case AntiCheat.Action.InvalidIgnore action -> {
+                        // TODO: make a anticheat event thing
+                        MinecraftServer.LOGGER.info("Ignoring: {}", action.message());
+                        return;
+                    }
+                    case AntiCheat.Action.Valid ignored -> {}
+                }
+            }
+
+            PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
             EventDispatcher.call(playerPacketEvent);
             if (playerPacketEvent.isCancelled()) {
                 return;

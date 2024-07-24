@@ -19,6 +19,11 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.AntiCheat;
+import net.minestom.server.network.AntiCheatImpl;
+import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeCategory;
@@ -39,6 +44,8 @@ public class Main {
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
+
+        MinecraftServer.getConnectionManager().setAntiCheatProvider((uuid, connection) -> new AntiCheatImpl());
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
