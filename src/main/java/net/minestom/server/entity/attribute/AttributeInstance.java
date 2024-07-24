@@ -6,10 +6,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 /**
- * Represents an instance of an attribute and its modifiers.
+ * Represents an instance of an attribute and its modifiers. This class is thread-safe (you do not need to acquire the
+ * entity to modify its attributes).
  */
 public final class AttributeInstance {
     public static final NetworkBuffer.Type<AttributeInstance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
@@ -30,10 +33,10 @@ public final class AttributeInstance {
     private final Attribute attribute;
     private final Map<NamespaceID, AttributeModifier> modifiers;
     private final Collection<AttributeModifier> unmodifiableModifiers;
-    private double baseValue;
+    private final AtomicLong baseValueBits;
 
     private final Consumer<AttributeInstance> propertyChangeListener;
-    private double cachedValue = 0.0f;
+    private volatile double cachedValue = 0.0D;
 
     public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
         this(attribute, attribute.defaultValue(), new ArrayList<>(), listener);
@@ -41,13 +44,13 @@ public final class AttributeInstance {
 
     public AttributeInstance(@NotNull Attribute attribute, double baseValue, @NotNull Collection<AttributeModifier> modifiers, @Nullable Consumer<AttributeInstance> listener) {
         this.attribute = attribute;
-        this.modifiers = new HashMap<>();
+        this.modifiers = new ConcurrentHashMap<>();
         for (var modifier : modifiers) this.modifiers.put(modifier.id(), modifier);
         this.unmodifiableModifiers = Collections.unmodifiableCollection(this.modifiers.values());
-        this.baseValue = baseValue;
+        this.baseValueBits = new AtomicLong(Double.doubleToLongBits(baseValue));
 
         this.propertyChangeListener = listener;
-        refreshCachedValue();
+        refreshCachedValue(baseValue);
     }
 
     /**
@@ -66,7 +69,7 @@ public final class AttributeInstance {
      * @see #setBaseValue(double)
      */
     public double getBaseValue() {
-        return baseValue;
+        return Double.longBitsToDouble(baseValueBits.get());
     }
 
     /**
@@ -76,9 +79,10 @@ public final class AttributeInstance {
      * @see #getBaseValue()
      */
     public void setBaseValue(double baseValue) {
-        if (this.baseValue != baseValue) {
-            this.baseValue = baseValue;
-            refreshCachedValue();
+        long newBits = Double.doubleToLongBits(baseValue);
+        long oldBits = this.baseValueBits.getAndSet(newBits);
+        if (oldBits != newBits) {
+            refreshCachedValue(baseValue);
         }
     }
 
@@ -100,7 +104,7 @@ public final class AttributeInstance {
      */
     public AttributeModifier addModifier(@NotNull AttributeModifier modifier) {
         final AttributeModifier previousModifier = modifiers.put(modifier.id(), modifier);
-        if (!modifier.equals(previousModifier)) refreshCachedValue();
+        if (!modifier.equals(previousModifier)) refreshCachedValue(getBaseValue());
         return previousModifier;
     }
 
@@ -123,7 +127,7 @@ public final class AttributeInstance {
     public AttributeModifier removeModifier(@NotNull NamespaceID id) {
         final AttributeModifier removed = modifiers.remove(id);
         if (removed != null) {
-            refreshCachedValue();
+            refreshCachedValue(getBaseValue());
         }
 
         return removed;
@@ -150,7 +154,7 @@ public final class AttributeInstance {
     }
 
     private double computeValue(double base) {
-        final Collection<AttributeModifier> modifiers = getModifiers();
+        final Collection<AttributeModifier> modifiers = modifiers();
 
         for (var modifier : modifiers.stream().filter(mod -> mod.operation() == AttributeOperation.ADD_VALUE).toArray(AttributeModifier[]::new)) {
             base += modifier.amount();
@@ -171,8 +175,8 @@ public final class AttributeInstance {
     /**
      * Recalculate the value of this attribute instance using the modifiers.
      */
-    private void refreshCachedValue() {
-        this.cachedValue = computeValue(getBaseValue());
+    private void refreshCachedValue(double baseValue) {
+        this.cachedValue = computeValue(baseValue);
 
         // Signal entity
         if (propertyChangeListener != null) {
