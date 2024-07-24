@@ -7,9 +7,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.event.FullQueryEvent;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -158,13 +157,13 @@ public class Query {
                 CHALLENGE_TOKENS.put(challengeToken, packet.getSocketAddress());
 
                 // send the response
-                BinaryWriter response = new BinaryWriter(32);
-                response.writeByte((byte) 9);
-                response.writeInt(sessionID);
-                response.writeNullTerminatedString(String.valueOf(challengeToken), CHARSET);
+                final byte[] responseData = NetworkBuffer.makeArray(response -> {
+                    response.write(NetworkBuffer.BYTE, (byte) 9);
+                    response.write(NetworkBuffer.INT, sessionID);
+                    response.write(NetworkBuffer.STRING_TERMINATED, String.valueOf(challengeToken));
+                });
 
                 try {
-                    byte[] responseData = response.toByteArray();
                     socket.send(new DatagramPacket(responseData, responseData.length, packet.getSocketAddress()));
                 } catch (IOException e) {
                     if (!started) {
@@ -195,17 +194,14 @@ public class Query {
         }
     }
 
-    private static void sendResponse(@NotNull Writeable queryResponse, int sessionID, @NotNull SocketAddress sender) {
-        // header
-        BinaryWriter response = new BinaryWriter();
-        response.writeByte((byte) 0);
-        response.writeInt(sessionID);
-
-        // payload
-        queryResponse.write(response);
-
-        // send!
-        byte[] responseData = response.toByteArray();
+    private static void sendResponse(@NotNull NetworkBuffer.Writer queryResponse, int sessionID, @NotNull SocketAddress sender) {
+        final byte[] responseData = NetworkBuffer.makeArray(buffer -> {
+            // header
+            buffer.write(NetworkBuffer.BYTE, (byte) 0);
+            buffer.write(NetworkBuffer.INT, sessionID);
+            // payload
+            buffer.write(queryResponse);
+        });
         try {
             socket.send(new DatagramPacket(responseData, responseData.length, sender));
         } catch (IOException e) {
