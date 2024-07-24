@@ -140,6 +140,22 @@ final class AntiCheatImpl implements AntiCheat {
                     yield new Action.InvalidCritical("Creative inventory action packet received in non-creative game mode.");
                 yield VALID;
             }
+            case ClientPlayerBlockPlacementPacket packet -> {
+                if (packet.cursorPositionX() > 1.0 || packet.cursorPositionY() > 1.0 || packet.cursorPositionZ() > 1.0)
+                    yield new Action.InvalidCritical("Invalid block cursor position.");
+                if (packet.cursorPositionX() < 0.0 || packet.cursorPositionY() < 0.0 || packet.cursorPositionZ() < 0.0)
+                    yield new Action.InvalidCritical("Invalid block cursor position.");
+
+                yield VALID;
+            }
+            case ClientVehicleMovePacket packet -> {
+                // TODO: do the update to set this boolean
+                if (!player.inVehicle) {
+                    yield new Action.InvalidIgnore("Vehicle move packet received while not in vehicle.");
+                }
+
+                yield VALID;
+            }
             case ClientKeepAlivePacket packet -> {
                 final long lastKeepAlive = this.lastKeepAlive;
                 if (lastKeepAlive == -1) yield new Action.InvalidIgnore("Stray keep alive packet received.");
@@ -194,11 +210,12 @@ final class AntiCheatImpl implements AntiCheat {
             GameMode gameMode,
             MovementState movementState,
             int lastHeldSlot,
-            boolean swungHand
+            boolean swungHand,
+            boolean inVehicle
     ) {
 
         public Player() {
-            this(Integer.MIN_VALUE, null, null, null, 0, false);
+            this(Integer.MIN_VALUE, null, null, null, 0, false, false);
         }
 
         Player merge(List<Change> changes) {
@@ -208,6 +225,7 @@ final class AntiCheatImpl implements AntiCheat {
             int lastHeldSlot = this.lastHeldSlot;
             int entityId = this.entityId;
             var swingsArm = this.swungHand;
+            var inVehicle = this.inVehicle;
             for (Change change : changes) {
                 switch (change) {
                     case Change.SetGameMode setGameMode -> gameMode = setGameMode.gameMode;
@@ -216,9 +234,10 @@ final class AntiCheatImpl implements AntiCheat {
                     case Change.SetLastHeldSlot setLastHeldSlot -> lastHeldSlot = setLastHeldSlot.slot();
                     case Change.SetEntityId setEntityId -> entityId = setEntityId.entityId();
                     case Change.SetArmSwing setArmSwing -> swingsArm = setArmSwing.swung;
+                    case Change.SetInVehicle setInVehicle -> inVehicle = setInVehicle.inVehicle;
                 }
             }
-            return new Player(entityId, settings, gameMode, movementState, lastHeldSlot, swingsArm);
+            return new Player(entityId, settings, gameMode, movementState, lastHeldSlot, swingsArm, inVehicle);
         }
     }
 
@@ -235,5 +254,6 @@ final class AntiCheatImpl implements AntiCheat {
         record SetLastHeldSlot(int slot) implements Change {}
         record SetEntityId(int entityId) implements Change {}
         record SetArmSwing(boolean swung) implements Change {}
+        record SetInVehicle(boolean inVehicle) implements Change {}
     }
 }
