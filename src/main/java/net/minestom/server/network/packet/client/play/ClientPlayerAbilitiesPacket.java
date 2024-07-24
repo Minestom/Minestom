@@ -8,5 +8,6 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 
 public record ClientPlayerAbilitiesPacket(byte flags) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPlayerAbilitiesPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, ClientPlayerAbilitiesPacket::flags, ClientPlayerAbilitiesPacket::new);
+            BYTE, ClientPlayerAbilitiesPacket::flags,
+            ClientPlayerAbilitiesPacket::new);
 }

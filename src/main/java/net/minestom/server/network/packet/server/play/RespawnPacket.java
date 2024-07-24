@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import org.jetbrains.annotations.NotNull;
@@ -13,36 +14,23 @@ public record RespawnPacket(
         int dimensionType, @NotNull String worldName,
         long hashedSeed, @NotNull GameMode gameMode, @NotNull GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
-        int portalCooldown, int copyData
+        int portalCooldown, byte copyData
 ) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
     public static final int COPY_ATTRIBUTES = 0x1;
     public static final int COPY_METADATA = 0x2;
     public static final int COPY_ALL = COPY_ATTRIBUTES | COPY_METADATA;
 
-    public static final NetworkBuffer.Type<RespawnPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, @NotNull RespawnPacket value) {
-            buffer.write(VAR_INT, value.dimensionType);
-            buffer.write(STRING, value.worldName);
-            buffer.write(LONG, value.hashedSeed);
-            buffer.write(BYTE, value.gameMode.id());
-            buffer.write(BYTE, value.previousGameMode.id());
-            buffer.write(BOOLEAN, value.isDebug);
-            buffer.write(BOOLEAN, value.isFlat);
-            buffer.writeOptional(value.deathLocation);
-            buffer.write(VAR_INT, value.portalCooldown);
-            buffer.write(BYTE, (byte) value.copyData);
-        }
-
-        @Override
-        public @NotNull RespawnPacket read(@NotNull NetworkBuffer buffer) {
-            return new RespawnPacket(buffer.read(VAR_INT), buffer.read(STRING),
-                    buffer.read(LONG), GameMode.fromId(buffer.read(BYTE)),
-                    GameMode.fromId(buffer.read(BYTE)),
-                    buffer.read(BOOLEAN), buffer.read(BOOLEAN),
-                    buffer.readOptional(WorldPos.NETWORK_TYPE),
-                    buffer.read(VAR_INT), buffer.read(BYTE));
-        }
-    };
+    public static final NetworkBuffer.Type<RespawnPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, RespawnPacket::dimensionType,
+            STRING, RespawnPacket::worldName,
+            LONG, RespawnPacket::hashedSeed,
+            GameMode.NETWORK_TYPE, RespawnPacket::gameMode,
+            GameMode.NETWORK_TYPE, RespawnPacket::previousGameMode,
+            BOOLEAN, RespawnPacket::isDebug,
+            BOOLEAN, RespawnPacket::isFlat,
+            WorldPos.NETWORK_TYPE.optional(), RespawnPacket::deathLocation,
+            VAR_INT, RespawnPacket::portalCooldown,
+            BYTE, RespawnPacket::copyData,
+            RespawnPacket::new);
 }

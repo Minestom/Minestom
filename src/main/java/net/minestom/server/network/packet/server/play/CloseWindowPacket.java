@@ -8,5 +8,6 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 
 public record CloseWindowPacket(byte windowId) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<CloseWindowPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, CloseWindowPacket::windowId, CloseWindowPacket::new);
+            BYTE, CloseWindowPacket::windowId,
+            CloseWindowPacket::new);
 }

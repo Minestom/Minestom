@@ -13,7 +13,8 @@ import static net.minestom.server.network.NetworkBuffer.UUID;
 public record ClientLoginStartPacket(@NotNull String username,
                                      @NotNull UUID profileId) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientLoginStartPacket> SERIALIZER = NetworkBufferTemplate.template(
-            STRING, ClientLoginStartPacket::username, UUID, ClientLoginStartPacket::profileId,
+            STRING, ClientLoginStartPacket::username,
+            UUID, ClientLoginStartPacket::profileId,
             ClientLoginStartPacket::new);
 
     public ClientLoginStartPacket {

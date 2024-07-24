@@ -8,5 +8,6 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record CameraPacket(int cameraId) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<CameraPacket> SERIALIZER = NetworkBufferTemplate.template(
-            VAR_INT, CameraPacket::cameraId, CameraPacket::new);
+            VAR_INT, CameraPacket::cameraId,
+            CameraPacket::new);
 }

@@ -16,7 +16,8 @@ public record ClientCookieResponsePacket(
         byte @Nullable [] value
 ) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientCookieResponsePacket> SERIALIZER = NetworkBufferTemplate.template(
-            STRING, ClientCookieResponsePacket::key, BYTE_ARRAY.optional(), ClientCookieResponsePacket::value,
+            STRING, ClientCookieResponsePacket::key,
+            BYTE_ARRAY.optional(), ClientCookieResponsePacket::value,
             ClientCookieResponsePacket::new);
 
     public ClientCookieResponsePacket {

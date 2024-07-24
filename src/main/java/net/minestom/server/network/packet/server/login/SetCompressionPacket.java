@@ -8,5 +8,6 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record SetCompressionPacket(int threshold) implements ServerPacket.Login {
     public static final NetworkBuffer.Type<SetCompressionPacket> SERIALIZER = NetworkBufferTemplate.template(
-            VAR_INT, SetCompressionPacket::threshold, SetCompressionPacket::new);
+            VAR_INT, SetCompressionPacket::threshold,
+            SetCompressionPacket::new);
 }

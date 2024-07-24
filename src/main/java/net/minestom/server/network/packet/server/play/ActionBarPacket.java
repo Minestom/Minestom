@@ -14,7 +14,8 @@ import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
 public record ActionBarPacket(@NotNull Component text) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<ActionBarPacket> SERIALIZER = NetworkBufferTemplate.template(
-            COMPONENT, ActionBarPacket::text, ActionBarPacket::new);
+            COMPONENT, ActionBarPacket::text,
+            ActionBarPacket::new);
 
     @Override
     public @NotNull Collection<Component> components() {
