@@ -15,7 +15,7 @@ public record ClientResourcePackStatusPacket(
         @Override
         public void write(@NotNull NetworkBuffer buffer, ClientResourcePackStatusPacket value) {
             buffer.write(NetworkBuffer.UUID, value.id);
-            buffer.writeEnum(ResourcePackStatus.class, value.status); // FIXME: enum seems wrong
+            buffer.write(NetworkBuffer.VAR_INT, statusId(value.status));
         }
 
         @Override
@@ -36,6 +36,19 @@ public record ClientResourcePackStatusPacket(
             case 6 -> ResourcePackStatus.FAILED_RELOAD;
             case 7 -> ResourcePackStatus.DISCARDED;
             default -> throw new IllegalStateException("Unexpected resource pack status: " + ordinal);
+        };
+    }
+
+    private static int statusId(@NotNull ResourcePackStatus status) {
+        return switch (status) {
+            case SUCCESSFULLY_LOADED -> 0;
+            case DECLINED -> 1;
+            case FAILED_DOWNLOAD -> 2;
+            case ACCEPTED -> 3;
+            case DOWNLOADED -> 4;
+            case INVALID_URL -> 5;
+            case FAILED_RELOAD -> 6;
+            case DISCARDED -> 7;
         };
     }
 }
