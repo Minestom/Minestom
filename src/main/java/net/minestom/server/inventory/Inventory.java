@@ -101,11 +101,6 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         return id;
     }
 
-    @Override
-    public synchronized void clear() {
-        super.clear();
-    }
-
     /**
      * Refreshes the inventory for all viewers.
      */
@@ -155,6 +150,28 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final boolean result = this.viewers.remove(player);
         this.clickProcessor.clearCache(player);
         return result;
+    }
+
+    /**
+     * Gets the cursor item of a player.
+     *
+     * @deprecated normal inventories no longer store cursor items
+     * @see <a href="https://github.com/Minestom/Minestom/pull/2294/files">...</a>
+     */
+    @Deprecated
+    public @NotNull ItemStack getCursorItem(@NotNull Player player) {
+        return player.getInventory().getCursorItem();
+    }
+
+    /**
+     * Changes the cursor item of a player.
+     *
+     * @deprecated normal inventories no longer store cursor items
+     * @see <a href="https://github.com/Minestom/Minestom/pull/2294/files">...</a>
+     */
+    @Deprecated
+    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
+        player.getInventory().setCursorItem(cursorItem);
     }
 
     @Override
