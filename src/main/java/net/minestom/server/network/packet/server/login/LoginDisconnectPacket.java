@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.login;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,14 +14,9 @@ import static net.minestom.server.network.NetworkBuffer.JSON_COMPONENT;
 
 public record LoginDisconnectPacket(@NotNull Component kickMessage) implements ServerPacket.Login,
         ServerPacket.ComponentHolding {
-    public LoginDisconnectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(JSON_COMPONENT));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(JSON_COMPONENT, kickMessage);
-    }
+    public static final NetworkBuffer.Type<LoginDisconnectPacket> SERIALIZER = NetworkBufferTemplate.template(
+            JSON_COMPONENT, LoginDisconnectPacket::kickMessage,
+            LoginDisconnectPacket::new);
 
     @Override
     public @NotNull Collection<Component> components() {

@@ -3,8 +3,8 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -16,25 +16,14 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public record EntityAttributesPacket(int entityId, List<Property> properties) implements ServerPacket.Play {
     public static final int MAX_ENTRIES = 1024;
 
+    public static final NetworkBuffer.Type<EntityAttributesPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, EntityAttributesPacket::entityId,
+            Property.NETWORK_TYPE.list(MAX_ENTRIES), EntityAttributesPacket::properties,
+            EntityAttributesPacket::new);
+
     public EntityAttributesPacket {
         properties = List.copyOf(properties);
     }
-
-    public EntityAttributesPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.readCollection(Property.NETWORK_TYPE, MAX_ENTRIES));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        writer.writeCollection(Property.NETWORK_TYPE, properties);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_ATTRIBUTES;
-    }
-
 
     public record Property(Attribute attribute, double value, Collection<AttributeModifier> modifiers) {
         public static final NetworkBuffer.Type<Property> NETWORK_TYPE = new NetworkBuffer.Type<>() {

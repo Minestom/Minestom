@@ -11,18 +11,20 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 public record ChunkDataPacket(int chunkX, int chunkZ,
                               @NotNull ChunkData chunkData,
                               @NotNull LightData lightData) implements ServerPacket.Play {
-    public ChunkDataPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(INT), reader.read(INT),
-                new ChunkData(reader),
-                new LightData(reader));
-    }
+    public static final NetworkBuffer.Type<ChunkDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ChunkDataPacket value) {
+            buffer.write(INT, value.chunkX);
+            buffer.write(INT, value.chunkZ);
+            buffer.write(value.chunkData);
+            buffer.write(value.lightData);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(INT, chunkX);
-        writer.write(INT, chunkZ);
-        writer.write(chunkData);
-        writer.write(lightData);
-    }
-
+        @Override
+        public ChunkDataPacket read(@NotNull NetworkBuffer buffer) {
+            return new ChunkDataPacket(buffer.read(INT), buffer.read(INT),
+                    new ChunkData(buffer),
+                    new LightData(buffer));
+        }
+    };
 }

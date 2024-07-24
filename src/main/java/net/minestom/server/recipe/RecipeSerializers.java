@@ -18,23 +18,23 @@ import static net.minestom.server.recipe.RecipeCategory.Crafting;
 public final class RecipeSerializers {
     public static final Type<Recipe> RECIPE = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, Recipe shaped) {
-            writer.write(STRING, shaped.id());
+        public void write(@NotNull NetworkBuffer buffer, Recipe shaped) {
+            buffer.write(STRING, shaped.id());
             final RecipeType recipeType = recipeToType(shaped.data());
-            writer.write(RecipeType.NETWORK_TYPE, recipeType);
+            buffer.write(RecipeType.NETWORK_TYPE, recipeType);
             var serializer = RecipeSerializers.dataSerializer(recipeType);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + recipeType);
-            serializer.write(writer, shaped.data());
+            serializer.write(buffer, shaped.data());
         }
 
         @Override
-        public Recipe read(@NotNull NetworkBuffer reader) {
-            final String identifier = reader.read(STRING);
-            final RecipeType type = reader.read(RecipeType.NETWORK_TYPE);
+        public Recipe read(@NotNull NetworkBuffer buffer) {
+            final String identifier = buffer.read(STRING);
+            final RecipeType type = buffer.read(RecipeType.NETWORK_TYPE);
             var serializer = RecipeSerializers.dataSerializer(type);
             if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + type);
-            final Data data = serializer.read(reader);
+            final Data data = serializer.read(buffer);
             return new Recipe(identifier, data);
         }
     };
@@ -46,30 +46,30 @@ public final class RecipeSerializers {
 
     public static final Type<Shaped> SHAPED = new Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer writer, Shaped shaped) {
-            writer.write(STRING, shaped.group());
-            writer.writeEnum(Crafting.class, shaped.category());
-            writer.write(VAR_INT, shaped.width());
-            writer.write(VAR_INT, shaped.height());
+        public void write(@NotNull NetworkBuffer buffer, Shaped shaped) {
+            buffer.write(STRING, shaped.group());
+            buffer.writeEnum(Crafting.class, shaped.category());
+            buffer.write(VAR_INT, shaped.width());
+            buffer.write(VAR_INT, shaped.height());
             for (Ingredient ingredient : shaped.ingredients()) {
-                writer.write(INGREDIENT, ingredient);
+                buffer.write(INGREDIENT, ingredient);
             }
-            writer.write(ItemStack.STRICT_NETWORK_TYPE, shaped.result());
-            writer.write(BOOLEAN, shaped.showNotification());
+            buffer.write(ItemStack.STRICT_NETWORK_TYPE, shaped.result());
+            buffer.write(BOOLEAN, shaped.showNotification());
         }
 
         @Override
-        public Shaped read(@NotNull NetworkBuffer reader) {
-            String group = reader.read(STRING);
-            Crafting category = reader.readEnum(Crafting.class);
-            int width = reader.read(VAR_INT);
-            int height = reader.read(VAR_INT);
+        public Shaped read(@NotNull NetworkBuffer buffer) {
+            String group = buffer.read(STRING);
+            Crafting category = buffer.readEnum(Crafting.class);
+            int width = buffer.read(VAR_INT);
+            int height = buffer.read(VAR_INT);
             List<Ingredient> ingredients = new ArrayList<>();
             for (int slot = 0; slot < width * height; slot++) {
-                ingredients.add(reader.read(INGREDIENT));
+                ingredients.add(buffer.read(INGREDIENT));
             }
-            ItemStack result = reader.read(ItemStack.STRICT_NETWORK_TYPE);
-            boolean showNotification = reader.read(BOOLEAN);
+            ItemStack result = buffer.read(ItemStack.STRICT_NETWORK_TYPE);
+            boolean showNotification = buffer.read(BOOLEAN);
             return new Shaped(group, category, width, height, ingredients, result, showNotification);
         }
     };
