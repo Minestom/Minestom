@@ -15,25 +15,29 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public BossBarPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), switch (reader.read(VAR_INT)) {
-            case 0 -> new AddAction(reader);
-            case 1 -> new RemoveAction();
-            case 2 -> new UpdateHealthAction(reader);
-            case 3 -> new UpdateTitleAction(reader);
-            case 4 -> new UpdateStyleAction(reader);
-            case 5 -> new UpdateFlagsAction(reader);
-            default -> throw new RuntimeException("Unknown action id");
-        });
-    }
+public record BossBarPacket(@NotNull UUID uuid,
+                            @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+    public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BossBarPacket value) {
+            buffer.write(NetworkBuffer.UUID, value.uuid);
+            buffer.write(VAR_INT, value.action.id());
+            buffer.write(value.action);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, uuid);
-        writer.write(VAR_INT, action.id());
-        writer.write(action);
-    }
+        @Override
+        public BossBarPacket read(@NotNull NetworkBuffer buffer) {
+            return new BossBarPacket(buffer.read(NetworkBuffer.UUID), switch (buffer.read(VAR_INT)) {
+                case 0 -> new AddAction(buffer);
+                case 1 -> new RemoveAction();
+                case 2 -> new UpdateHealthAction(buffer);
+                case 3 -> new UpdateTitleAction(buffer);
+                case 4 -> new UpdateStyleAction(buffer);
+                case 5 -> new UpdateFlagsAction(buffer);
+                default -> throw new RuntimeException("Unknown action id");
+            });
+        }
+    };
 
     @Override
     public @NotNull Collection<Component> components() {

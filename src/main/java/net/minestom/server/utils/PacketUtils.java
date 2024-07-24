@@ -253,21 +253,24 @@ public final class PacketUtils {
                                          @NotNull ByteBuffer buffer,
                                          @NotNull ServerPacket packet,
                                          boolean compression) {
-        PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
-        final int id = registry.packetId(packet.getClass());
-        writeFramedPacket(buffer, id, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
+        final PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
+        final PacketRegistry.PacketInfo<ServerPacket> packetInfo = registry.packetInfo(packet.getClass());
+        final int id = packetInfo.id();
+        final NetworkBuffer.Type<ServerPacket> serializer = packetInfo.serializer();
+        writeFramedPacket(buffer, id, serializer, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          int id,
-                                         @NotNull NetworkBuffer.Writer writer,
+                                         @NotNull NetworkBuffer.Type<ServerPacket> type,
+                                         @NotNull ServerPacket packet,
                                          int compressionThreshold) {
         NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = networkBuffer.skipWrite(3);
             networkBuffer.write(NetworkBuffer.VAR_INT, id);
-            networkBuffer.write(writer);
+            type.write(networkBuffer, packet);
             final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
             buffer.position(networkBuffer.writeIndex());
@@ -279,7 +282,7 @@ public final class PacketUtils {
 
         final int contentStart = networkBuffer.writeIndex();
         networkBuffer.write(NetworkBuffer.VAR_INT, id);
-        networkBuffer.write(writer);
+        type.write(networkBuffer, packet);
         final int packetSize = networkBuffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {

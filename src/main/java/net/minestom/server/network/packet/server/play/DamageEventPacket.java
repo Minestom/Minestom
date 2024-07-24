@@ -2,8 +2,8 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -20,17 +20,11 @@ import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
  */
 public record DamageEventPacket(int targetEntityId, int damageTypeId, int sourceEntityId, int sourceDirectId,
                                 @Nullable Point sourcePos) implements ServerPacket.Play {
-
-    public DamageEventPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.read(VAR_INT), reader.readOptional(VECTOR3D));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, targetEntityId);
-        writer.write(VAR_INT, damageTypeId);
-        writer.write(VAR_INT, sourceEntityId);
-        writer.write(VAR_INT, sourceDirectId);
-        writer.writeOptional(VECTOR3D, sourcePos);
-    }
+    public static final NetworkBuffer.Type<DamageEventPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, DamageEventPacket::targetEntityId,
+            VAR_INT, DamageEventPacket::damageTypeId,
+            VAR_INT, DamageEventPacket::sourceEntityId,
+            VAR_INT, DamageEventPacket::sourceDirectId,
+            VECTOR3D.optional(), DamageEventPacket::sourcePos,
+            DamageEventPacket::new);
 }
