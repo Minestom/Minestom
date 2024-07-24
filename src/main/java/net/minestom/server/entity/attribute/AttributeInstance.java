@@ -127,7 +127,7 @@ public final class AttributeInstance {
      */
     public void clearModifiers() {
         this.modifiers.values().removeIf(modifier -> !LivingEntity.PROTECTED_MODIFIERS.contains(modifier.id()));
-        refreshCachedValue();
+        refreshCachedValue(getBaseValue());
     }
 
     /**
