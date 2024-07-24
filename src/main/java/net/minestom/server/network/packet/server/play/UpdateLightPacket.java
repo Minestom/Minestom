@@ -9,15 +9,17 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record UpdateLightPacket(int chunkX, int chunkZ,
                                 @NotNull LightData lightData) implements ServerPacket.Play {
-    public UpdateLightPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(VAR_INT), new LightData(reader));
-    }
+    public static final NetworkBuffer.Type<UpdateLightPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, UpdateLightPacket value) {
+            buffer.write(VAR_INT, value.chunkX);
+            buffer.write(VAR_INT, value.chunkZ);
+            buffer.write(value.lightData);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, chunkX);
-        writer.write(VAR_INT, chunkZ);
-        writer.write(lightData);
-    }
-
+        @Override
+        public UpdateLightPacket read(@NotNull NetworkBuffer buffer) {
+            return new UpdateLightPacket(buffer.read(VAR_INT), buffer.read(VAR_INT), new LightData(buffer));
+        }
+    };
 }

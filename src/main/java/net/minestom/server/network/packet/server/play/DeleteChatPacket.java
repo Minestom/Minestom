@@ -6,13 +6,15 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
 public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket.Play {
-    public DeleteChatPacket(@NotNull NetworkBuffer reader) {
-        this(new MessageSignature(reader));
-    }
+    public static final NetworkBuffer.Type<DeleteChatPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DeleteChatPacket value) {
+            buffer.write(value.signature);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(signature);
-    }
-
+        @Override
+        public DeleteChatPacket read(@NotNull NetworkBuffer buffer) {
+            return new DeleteChatPacket(new MessageSignature(buffer));
+        }
+    };
 }

@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,14 +14,8 @@ import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
 public record DisconnectPacket(@NotNull Component message) implements ServerPacket.Configuration, ServerPacket.Play,
         ServerPacket.ComponentHolding {
-    public DisconnectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(COMPONENT));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(COMPONENT, message);
-    }
+    public static final NetworkBuffer.Type<DisconnectPacket> SERIALIZER = NetworkBufferTemplate.template(
+            COMPONENT, DisconnectPacket::message, DisconnectPacket::new);
 
     @Override
     public @NotNull Collection<Component> components() {
