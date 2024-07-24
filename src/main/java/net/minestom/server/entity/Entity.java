@@ -763,6 +763,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.isActive = true;
         this.position = spawnPosition;
         this.previousPosition = spawnPosition;
+        this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
