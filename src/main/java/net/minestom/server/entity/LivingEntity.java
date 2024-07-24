@@ -38,6 +38,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.time.Duration;
 import java.util.*;
@@ -46,6 +47,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LivingEntity extends Entity implements EquipmentHandler {
 
     private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(NamespaceID.from("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
+
+    /**
+     * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
+     */
+    @ApiStatus.Internal
+    public static final Set<NamespaceID> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
 
     // ItemStack pickup
     protected boolean canPickupItem;
@@ -59,6 +66,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected BoundingBox expandedBoundingBox;
 
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>();
+    private final Collection<AttributeInstance> unmodifiableModifiers =
+            Collections.unmodifiableCollection(attributeModifiers.values());
 
     // Abilities
     protected boolean invulnerable;
@@ -497,8 +506,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return a collection of all attribute instances on this entity
      */
-    public @NotNull Collection<AttributeInstance> getAttributeInstances() {
-        return attributeModifiers.values();
+    public @NotNull @UnmodifiableView Collection<AttributeInstance> getAttributes() {
+        return unmodifiableModifiers;
     }
 
     /**

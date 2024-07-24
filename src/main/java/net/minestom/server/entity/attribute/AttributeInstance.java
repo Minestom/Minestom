@@ -1,5 +1,6 @@
 package net.minestom.server.entity.attribute;
 
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -121,10 +122,11 @@ public final class AttributeInstance {
     }
 
     /**
-     * Clears all modifiers on this instance.
+     * Clears all modifiers on this instance, excepting those whose ID is defined in
+     * {@link LivingEntity#PROTECTED_MODIFIERS}.
      */
     public void clearModifiers() {
-        this.modifiers.clear();
+        this.modifiers.values().removeIf(modifier -> !LivingEntity.PROTECTED_MODIFIERS.contains(modifier.id()));
         refreshCachedValue();
     }
 
