@@ -1,9 +1,7 @@
 package net.minestom.server.extras.query.response;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extras.query.Query;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -11,7 +9,7 @@ import java.util.Objects;
 /**
  * A basic query response containing a fixed set of responses.
  */
-public class BasicQueryResponse implements Writeable {
+public class BasicQueryResponse implements NetworkBuffer.Writer {
     private String motd, gametype, map, numPlayers, maxPlayers;
 
     /**
@@ -136,13 +134,13 @@ public class BasicQueryResponse implements Writeable {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeNullTerminatedString(this.motd, Query.CHARSET);
-        writer.writeNullTerminatedString(this.gametype, Query.CHARSET);
-        writer.writeNullTerminatedString(this.map, Query.CHARSET);
-        writer.writeNullTerminatedString(this.numPlayers, Query.CHARSET);
-        writer.writeNullTerminatedString(this.maxPlayers, Query.CHARSET);
-        writer.writeShort((short) MinecraftServer.getServer().getPort()); // TODO little endian?
-        writer.writeNullTerminatedString(Objects.requireNonNullElse(MinecraftServer.getServer().getAddress(), ""), Query.CHARSET);
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(NetworkBuffer.STRING_TERMINATED, this.motd);
+        writer.write(NetworkBuffer.STRING_TERMINATED, this.gametype);
+        writer.write(NetworkBuffer.STRING_TERMINATED, this.map);
+        writer.write(NetworkBuffer.STRING_TERMINATED, this.numPlayers);
+        writer.write(NetworkBuffer.STRING_TERMINATED, this.maxPlayers);
+        writer.write(NetworkBuffer.SHORT, (short) MinecraftServer.getServer().getPort()); // TODO little endian?
+        writer.write(NetworkBuffer.STRING_TERMINATED, Objects.requireNonNullElse(MinecraftServer.getServer().getAddress(), ""));
     }
 }
