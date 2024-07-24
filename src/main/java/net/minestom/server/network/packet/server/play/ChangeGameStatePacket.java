@@ -8,15 +8,18 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
 public record ChangeGameStatePacket(@NotNull Reason reason, float value) implements ServerPacket.Play {
-    public ChangeGameStatePacket(@NotNull NetworkBuffer reader) {
-        this(Reason.values()[reader.read(BYTE)], reader.read(FLOAT));
-    }
+    public static final NetworkBuffer.Type<ChangeGameStatePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ChangeGameStatePacket value) {
+            buffer.write(BYTE, (byte) value.reason.ordinal());
+            buffer.write(FLOAT, value.value);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BYTE, (byte) reason.ordinal());
-        writer.write(FLOAT, value);
-    }
+        @Override
+        public ChangeGameStatePacket read(@NotNull NetworkBuffer buffer) {
+            return new ChangeGameStatePacket(Reason.values()[buffer.read(BYTE)], buffer.read(FLOAT));
+        }
+    };
 
     public enum Reason {
         NO_RESPAWN_BLOCK,
