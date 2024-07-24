@@ -1,26 +1,25 @@
 package net.minestom.server.network.packet.server.configuration;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record UpdateEnabledFeaturesPacket(@NotNull Set<NamespaceID> features) implements ServerPacket.Configuration {
+public record UpdateEnabledFeaturesPacket(@NotNull List<String> features) implements ServerPacket.Configuration {
     public static final int MAX_FEATURES = 1024;
 
-    public static NetworkBuffer.Type<UpdateEnabledFeaturesPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, UpdateEnabledFeaturesPacket packet) {
-            buffer.writeCollection(packet.features, (b, feature) -> b.write(STRING, feature.asString()));
-        }
+    public UpdateEnabledFeaturesPacket {
+        if (features.size() > MAX_FEATURES)
+            throw new IllegalArgumentException("Too many features");
+        features = List.copyOf(features);
+    }
 
-        @Override
-        public UpdateEnabledFeaturesPacket read(@NotNull NetworkBuffer buffer) {
-            return new UpdateEnabledFeaturesPacket(Set.copyOf(buffer.readCollection((b) -> NamespaceID.from(b.read(STRING)), MAX_FEATURES)));
-        }
-    };
+    public static NetworkBuffer.Type<UpdateEnabledFeaturesPacket> SERIALIZER = NetworkBufferTemplate.template(
+            STRING.list(MAX_FEATURES), UpdateEnabledFeaturesPacket::features,
+            UpdateEnabledFeaturesPacket::new
+    );
 }
