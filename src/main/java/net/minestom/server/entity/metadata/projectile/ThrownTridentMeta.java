@@ -13,12 +13,12 @@ public class ThrownTridentMeta extends AbstractArrowMeta {
         super(entity, metadata);
     }
 
-    public int getLoyaltyLevel() {
-        return super.metadata.getIndex(OFFSET, 0);
+    public byte getLoyaltyLevel() {
+        return super.metadata.getIndex(OFFSET, (byte) 0);
     }
 
-    public void setLoyaltyLevel(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+    public void setLoyaltyLevel(byte value) {
+        super.metadata.setIndex(OFFSET, Metadata.Byte(value));
     }
 
     public boolean isHasEnchantmentGlint() {
