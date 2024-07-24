@@ -40,10 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
@@ -493,6 +490,15 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
+    }
+
+    /**
+     * Retrieves all {@link AttributeInstance}s on this entity.
+     *
+     * @return a collection of all attribute instances on this entity
+     */
+    public @NotNull Collection<AttributeInstance> getAttributeInstances() {
+        return attributeModifiers.values();
     }
 
     /**

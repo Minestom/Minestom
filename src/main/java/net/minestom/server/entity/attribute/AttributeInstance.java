@@ -4,6 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -92,6 +93,7 @@ public final class AttributeInstance {
      * @return an immutable collection of the modifiers applied to this attribute.
      */
     @NotNull
+    @UnmodifiableView
     public Collection<AttributeModifier> modifiers() {
         return unmodifiableModifiers;
     }
@@ -116,6 +118,14 @@ public final class AttributeInstance {
      */
     public AttributeModifier removeModifier(@NotNull AttributeModifier modifier) {
         return removeModifier(modifier.id());
+    }
+
+    /**
+     * Clears all modifiers on this instance.
+     */
+    public void clearModifiers() {
+        this.modifiers.clear();
+        refreshCachedValue();
     }
 
     /**
