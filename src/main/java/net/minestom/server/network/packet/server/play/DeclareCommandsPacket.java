@@ -19,19 +19,22 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         nodes = List.copyOf(nodes);
     }
 
-    public DeclareCommandsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(r -> {
-            Node node = new Node();
-            node.read(r);
-            return node;
-        }, MAX_NODES), reader.read(VAR_INT));
-    }
+    public static final NetworkBuffer.Type<DeclareCommandsPacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DeclareCommandsPacket value) {
+            buffer.writeCollection(value.nodes);
+            buffer.write(VAR_INT, value.rootIndex);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeCollection(nodes);
-        writer.write(VAR_INT, rootIndex);
-    }
+        @Override
+        public DeclareCommandsPacket read(@NotNull NetworkBuffer buffer) {
+            return new DeclareCommandsPacket(buffer.readCollection(r -> {
+                Node node = new Node();
+                node.read(r);
+                return node;
+            }, MAX_NODES), buffer.read(VAR_INT));
+        }
+    };
 
     public static final class Node implements NetworkBuffer.Writer {
         public byte flags;

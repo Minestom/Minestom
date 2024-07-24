@@ -8,22 +8,26 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boolean sneaking) implements ClientPacket {
-    public ClientInteractEntityPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), switch (reader.read(VAR_INT)) {
-            case 0 -> new Interact(reader);
-            case 1 -> new Attack();
-            case 2 -> new InteractAt(reader);
-            default -> throw new RuntimeException("Unknown action id");
-        }, reader.read(BOOLEAN));
-    }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, targetId);
-        writer.write(VAR_INT, type.id());
-        writer.write(type);
-        writer.write(BOOLEAN, sneaking);
-    }
+    public static NetworkBuffer.Type<ClientInteractEntityPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ClientInteractEntityPacket value) {
+            buffer.write(VAR_INT, value.targetId);
+            buffer.write(VAR_INT, value.type.id());
+            buffer.write(value.type);
+            buffer.write(BOOLEAN, value.sneaking);
+        }
+
+        @Override
+        public ClientInteractEntityPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientInteractEntityPacket(buffer.read(VAR_INT), switch (buffer.read(VAR_INT)) {
+                case 0 -> new Interact(buffer);
+                case 1 -> new Attack();
+                case 2 -> new InteractAt(buffer);
+                default -> throw new RuntimeException("Unknown action id");
+            }, buffer.read(BOOLEAN));
+        }
+    };
 
     public sealed interface Type extends Writer
             permits Interact, Attack, InteractAt {

@@ -11,17 +11,19 @@ public record CustomReportDetailsPacket(
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_DETAILS = 32;
 
+    public static NetworkBuffer.Type<CustomReportDetailsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, CustomReportDetailsPacket packet) {
+            buffer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, packet.details);
+        }
+
+        @Override
+        public CustomReportDetailsPacket read(@NotNull NetworkBuffer buffer) {
+            return new CustomReportDetailsPacket(buffer.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
+        }
+    };
+
     public CustomReportDetailsPacket {
         details = Map.copyOf(details);
     }
-
-    public CustomReportDetailsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, details);
-    }
-
 }
